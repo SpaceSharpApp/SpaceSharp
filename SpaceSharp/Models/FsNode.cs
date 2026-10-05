@@ -88,6 +88,9 @@ public sealed class FsNode
     public bool IsDirectory => Kind == NodeKind.Directory;
     public bool IsFreeSpace => Kind == NodeKind.FreeSpace;
     public bool IsGroup => Kind == NodeKind.Group;
+
+    /// <summary>For a group pseudo node: the real children it stands for, so the group can be laid out inside its own box when it gets room.</summary>
+    public IReadOnlyList<FsNode>? GroupMembers { get; internal set; }
     /// <summary>True for a real file or folder on disk (not free space or a group).</summary>
     public bool IsReal => Kind is NodeKind.File or NodeKind.Directory;
 

@@ -96,7 +96,8 @@ public sealed partial class TreemapControl
             shown = only;
         }
 
-        bool hasHeader = shown.IsDirectory && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= MinHeaderHeight * _labelScale;
+        bool container = shown.IsDirectory || shown.GroupMembers is not null;
+        bool hasHeader = container && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= MinHeaderHeight * _labelScale;
         var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch);
         _items.Add(item);
 
@@ -107,7 +108,7 @@ public sealed partial class TreemapControl
             if (ReferenceEquals(n, node)) break;
         }
 
-        if (!shown.IsDirectory || shown.Children.Count == 0) return;
+        if (!container || ChildrenOf(shown).Count == 0) return;
 
         // Small boxes get thinner frames; tiny ones aren't subdivided at all, so narrow folders
         // don't turn into a pile of nested outlines.
@@ -137,23 +138,32 @@ public sealed partial class TreemapControl
         }
     }
 
+    /// <summary>A folder's children, or the members a group pseudo node stands for.</summary>
+    private static IReadOnlyList<FsNode> ChildrenOf(FsNode node) => node.GroupMembers ?? node.Children;
+
     /// <summary>
-    /// The folder's child layout for this content area, from the cache when the set of children is the
-    /// same. Grouping depends on how many pixels the folder has, so zooming in can split a "312 files"
-    /// box into its members; that folder is then laid out afresh, and only that folder.
+    /// The container's child layout, from the cache after the first time. Which children are grouped is
+    /// decided from the data alone (their share of the whole scan), never from the current zoom, so a box
+    /// keeps its place however far you zoom: a "312 files" group that gets room lays its members out inside
+    /// its own rectangle instead of the parent being laid out again.
     /// </summary>
     private CachedChildLayout ChildLayout(FsNode folder, Rect content)
     {
-        int cutoff = _groupSmall ? GroupCutoff(folder, content) : folder.Children.Count;
+        var all = ChildrenOf(folder);
+        // Groups are laid out flat: their members are the small items by definition, and grouping them again
+        // would only wrap the same box in another header. A cutoff of 0 would group every child, which is the
+        // folder itself; leave those flat too.
+        int cutoff = _groupSmall && !folder.IsGroup ? GroupCutoff(all) : all.Count;
+        if (cutoff == 0) cutoff = all.Count;
         if (_layoutCache.TryGetValue(folder, out var cached) && cached.Cutoff == cutoff)
             return cached;
 
-        IReadOnlyList<FsNode> children = folder.Children;
+        IReadOnlyList<FsNode> children = all;
         FsNode? group = null;
         bool groupMatched = false;
-        if (cutoff < folder.Children.Count)
+        if (cutoff < all.Count)
         {
-            var grouped = GroupSmallChildren(folder, cutoff, out group, out groupMatched);
+            var grouped = GroupSmallChildren(folder, all, cutoff, out group, out groupMatched);
             if (grouped is not null) children = grouped;
             // Fewer than two small children: nothing to group; the requested cutoff stays the cache key.
         }
@@ -174,15 +184,18 @@ public sealed partial class TreemapControl
         return cached;
     }
 
-    /// <summary>Index of the first child that would get fewer than <see cref="GroupBelowArea"/> pixels.</summary>
-    private int GroupCutoff(FsNode folder, Rect content)
-    {
-        var children = folder.Children;
-        double total = 0;
-        foreach (var c in children) total += c.SizeFor(_measure);
-        if (total <= 0) return children.Count;
+    /// <summary>The whole map's area at a reference size; grouping is judged against it, not the live window or zoom.</summary>
+    private const double ReferenceArea = 1200.0 * 760.0;
 
-        double pixelsPerByte = content.Width * content.Height / total;
+    /// <summary>
+    /// Index of the first child that would get fewer than <see cref="GroupBelowArea"/> pixels if the whole
+    /// scan filled the reference area at zoom 1. A pure function of the data (and density), so stable.
+    /// </summary>
+    private int GroupCutoff(IReadOnlyList<FsNode> children)
+    {
+        double whole = _root?.SizeFor(_measure) ?? 0;
+        if (whole <= 0) return children.Count;
+        double pixelsPerByte = ReferenceArea / whole;
         for (int i = 0; i < children.Count; i++)
             if (children[i].SizeFor(_measure) * pixelsPerByte < GroupBelowArea)
                 return i;
@@ -194,9 +207,8 @@ public sealed partial class TreemapControl
     /// boxes. Children that would get less than <see cref="GroupBelowArea"/> pixels are replaced by one
     /// "312 files" box. Zooming in gives them more pixels, so they appear individually again.
     /// </summary>
-    private IReadOnlyList<FsNode>? GroupSmallChildren(FsNode folder, int cutoff, out FsNode? group, out bool groupMatched)
+    private IReadOnlyList<FsNode>? GroupSmallChildren(FsNode folder, IReadOnlyList<FsNode> children, int cutoff, out FsNode? group, out bool groupMatched)
     {
-        var children = folder.Children;
         group = null;
         groupMatched = false;
 
@@ -215,11 +227,14 @@ public sealed partial class TreemapControl
         if (count < 2) return null;
 
         string kind = folders == 0 ? Strings.Get("Group_Files") : folders == count ? Strings.Get("Group_Folders") : Strings.Get("Group_Items");
-        group = new FsNode($"{count:N0} {kind}", folder.FullPath, NodeKind.Group, folder)
+        var members = new List<FsNode>(children.Count - cutoff);
+        for (int i = cutoff; i < children.Count; i++) if (children[i].SizeFor(_measure) > 0) members.Add(children[i]);
+        group = new FsNode($"{count:N0} {kind}", folder.FullPath, NodeKind.Group, folder.IsGroup ? folder.Parent : folder)
         {
             Size = size,
             Allocated = allocated,
-            FileCount = files
+            FileCount = files,
+            GroupMembers = members
         };
         if (_filterMatches is not null)
         {

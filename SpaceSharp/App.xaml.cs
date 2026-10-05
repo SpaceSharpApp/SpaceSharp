@@ -1,6 +1,7 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Threading;
+using SpaceSharp.Services;
 using SpaceSharp.Util;
 
 namespace SpaceSharp;
@@ -13,10 +14,22 @@ public partial class App : Application
     /// <summary>Everything the app was started with; see <see cref="CommandLine"/>.</summary>
     public static CommandLine Args { get; private set; } = new();
 
+    /// <summary>The one-instance guard; <see cref="MainWindow"/> listens on it and releases it before a planned restart.</summary>
+    public static SingleInstance Instance { get; } = new();
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
         Args = CommandLine.Parse(e.Args);
+
+        // Second instance: hand the arguments to the one already running and leave. If it cannot be reached
+        // (it is shutting down, say), carry on and become the instance.
+        if (!Instance.TryClaim() && SingleInstance.SendArguments(e.Args))
+        {
+            Shutdown();
+            return;
+        }
+
         DispatcherUnhandledException += OnDispatcherUnhandledException;
 
         AppLanguages.Apply(AppSettings.Current.Language);   // before any window, so every string and format follows it

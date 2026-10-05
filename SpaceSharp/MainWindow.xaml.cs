@@ -114,8 +114,30 @@ public partial class MainWindow : Window
             Loaded += async (_, _) => await ReopenLastScanAsync(last);
 
         Loaded += async (_, _) => await CheckForUpdatesAsync();
-        Loaded += (_, _) => Task.Run(() => ScanFile.Prune(_settings.KeepScansDays)); // old automatic saves go quietly in the background
+        Loaded += (_, _) => Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
+
+        // Another launch while we're open: bring this window forward and do what its command line asked.
+        App.Instance.ArgumentsReceived += args => Dispatcher.BeginInvoke(() => _ = HandleForwardedArgumentsAsync(args));
+        App.Instance.Listen(); // old automatic saves go quietly in the background
         if (_settings.ExplorerMenu) ExplorerIntegration.Install(Strings.Get("Explorer_ScanWith")); // keep the entry pointing at this exe
+    }
+
+    // ============================================================ second instance
+
+    private async Task HandleForwardedArgumentsAsync(string[] rawArgs)
+    {
+        if (WindowState == WindowState.Minimized) WindowState = WindowState.Normal;
+        Activate();
+        Topmost = true; Topmost = false; // the reliable way to get in front of the window that launched us
+        var args = CommandLine.Parse(rawArgs);
+        if (args.ShowHelp) { Dialog.Info(this, "SpaceSharp", CommandLine.HelpText.TrimEnd()); return; }
+        if (IsScanning) return;
+        if (args.OpenFile is { } file) await OpenScanFileAsync(file);
+        else if (args.ScanPath is { } path)
+        {
+            await StartScanAsync(path);
+            if (args.CompareFile is { } compare && _root is not null) await CompareWithFileAsync(compare);
+        }
     }
 
     // ============================================================ saved scans
@@ -755,6 +777,7 @@ public partial class MainWindow : Window
     {
         if (Environment.ProcessPath is not { } exe) return;
         _settings.Save();
+        App.Instance.Release();
         try
         {
             Process.Start(new ProcessStartInfo(exe) { UseShellExecute = true });
@@ -772,12 +795,15 @@ public partial class MainWindow : Window
         try
         {
             string args = _lastScanPath is null ? string.Empty : $"\"{_lastScanPath}\"";
+            App.Instance.Release(); // so the elevated copy can become the instance
             Process.Start(new ProcessStartInfo(exe, args) { UseShellExecute = true, Verb = "runas" });
             Application.Current.Shutdown();
         }
         catch (System.ComponentModel.Win32Exception)
         {
-            // The UAC prompt was cancelled; keep running as we are.
+            // The UAC prompt was cancelled; keep running as we are, and take the instance back.
+            if (!App.Instance.TryClaim()) { /* something else grabbed it meanwhile; nothing to do */ }
+            else App.Instance.Listen();
         }
     }
 

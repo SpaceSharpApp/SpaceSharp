@@ -40,13 +40,16 @@ public sealed partial class TreemapControl
     private static readonly Pen HoverOutlinePen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)), 4)); // keeps the hover frame visible on light fills
     private static readonly Brush FreeSpaceBrush = Frozen(new SolidColorBrush(Color.FromRgb(0x4E, 0x4E, 0x5A)));
     // One relative-coordinate gradient works for every box: WPF stretches it to each rectangle's bounds.
+    // Classic's shading: a light top-left, a quiet middle, a slightly darker bottom-right. Kept gentle on purpose;
+    // the old version ran from white to near-black across the box and read as stripes when many boxes sat together.
     private static readonly Brush CushionBrush = Frozen(new LinearGradientBrush(
         new GradientStopCollection
         {
-            new(Color.FromArgb(0x48, 0xFF, 0xFF, 0xFF), 0.0),
-            new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.55),
-            new(Color.FromArgb(0x50, 0x00, 0x00, 0x00), 1.0)
-        }, new Point(0, 0), new Point(1, 1)));
+            new(Color.FromArgb(0x26, 0xFF, 0xFF, 0xFF), 0.0),
+            new(Color.FromArgb(0x08, 0xFF, 0xFF, 0xFF), 0.35),
+            new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.6),
+            new(Color.FromArgb(0x22, 0x00, 0x00, 0x00), 1.0)
+        }, new Point(0, 0), new Point(0.7, 1)));
     private static readonly Pen SelectionPen = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0xF5, 0xB8, 0x2E)), 3));
 
     private readonly Dictionary<Brush, Brush> _dimmed = new();
@@ -133,8 +136,8 @@ public sealed partial class TreemapControl
         var pen = _mapStyle switch { MapStyle.Classic => BorderPen, MapStyle.Flat => FaintPen, MapStyle.Bands => FaintPen, _ => null };
         if (pen is not null) dc.DrawRectangle(null, pen, box);
 
-        // ---- folder title
-        if (node.IsDirectory)
+        // ---- folder title (a group that has room for its members gets one too)
+        if (node.IsDirectory || (node.IsGroup && item.HasHeader))
         {
             if (!item.HasHeader) return;
             double headerHeight = HeaderHeight;

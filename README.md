@@ -253,6 +253,8 @@ Comments and trailing commas are allowed in the files. A file that can't be read
 | `SpaceSharp.exe --compare old.sscan D:\` | Scan `D:\` and compare it with a saved scan |
 | `SpaceSharp.exe --help` | Show these options |
 
+Only one SpaceSharp runs at a time: starting it again brings the open window forward and passes it the drive, folder or saved scan you asked for.
+
 Settings › Windows › **"Scan with SpaceSharp" in Explorer** adds an entry to the right-click menu of folders, drives and the folder background in File Explorer. It is written for the current Windows user only and needs no administrator rights; turn it off before moving the portable exe, since the entry points at the file.
 
 ## Keyboard and mouse
@@ -343,7 +345,7 @@ The same steps by hand, if you prefer:
 ```powershell
 dotnet publish .\SpaceSharp\SpaceSharp.csproj -p:PublishProfile=Velopack
 vpk download github --repoUrl https://github.com/ClearanceClarence/SpaceSharp
-vpk pack --packId SpaceSharp --packVersion 1.5.0 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png --msi --instLocation Either --instWelcome .\installer\welcome.md --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.md
+vpk pack --packId SpaceSharp --packVersion 1.5.1 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png --msi --instLocation Either --instWelcome .\installer\welcome.md --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.md
 .\installer\brand-msi.ps1
 ```
 
@@ -488,7 +490,7 @@ Nothing is written anywhere else, and nothing leaves the machine except the upda
 
 - Duplicate file finder, tied into filter and batch delete
 - Command-line arguments and an Explorer context-menu entry
-- More translations
+- Norwegian translation, once the strings move to resource files
 
 ## Feedback
 
@@ -509,4 +511,4 @@ Nothing is written anywhere else, and nothing leaves the machine except the upda
 
 SpaceSharp is released under the [MIT License](LICENSE). You're free to use, modify and share it, including in commercial projects, as long as the copyright notice is kept.
 
-Made by ClearanceClarence.
+Made by ClearanceClarence.

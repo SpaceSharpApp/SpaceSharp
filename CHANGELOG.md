@@ -2,6 +2,15 @@
 
 All notable changes to SpaceSharp. The newest release is at the top.
 
+## 1.5.1
+
+### Fixes
+- Boxes never move when you zoom. Which small items are grouped into a "312 files" box is now decided from the data alone, not from how many pixels the folder has on screen, so zooming in no longer lays a folder out again. A group that gets room shows its members inside its own box, laid out flat under one title.
+- Classic's shading is softer: a light top-left and a slightly darker bottom-right instead of a white-to-black sweep, which read as stripes when many boxes sat together.
+
+### Changes
+- Only one SpaceSharp runs per session. Starting it again, from Explorer, a shortcut or the command line, brings the open window forward and hands it the request (a drive to scan, a saved scan to open), so a second window never appears. Restarting as administrator or for a language switch hands the instance to the new copy.
+
 ## 1.5.0
 
 ### Treemap options
