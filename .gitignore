@@ -32,3 +32,6 @@ Desktop.ini
 
 # Downloaded by tools/make-assets.py
 tools/fonts/
+SpaceSharp/Resources/Strings.nb.tracking.json
+SpaceSharp/Resources/Strings.resx.project.json
+tools/__pycache__/make-assets.cpython-312.pyc

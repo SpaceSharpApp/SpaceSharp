@@ -88,6 +88,17 @@
   .tip .n { font-weight:600; } .tip .p { color:var(--dim); font-size:11px; margin:1px 0 6px; }
   .tip table { border-collapse:collapse; font-size:12px; } .tip td { padding:1px 14px 1px 0; } .tip td:first-child { color:var(--dim); }
   .tip .hint { color:var(--dim); font-size:11px; margin-top:6px; }
+  .tip .t { display:flex; align-items:baseline; gap:12px; } .tip .t .n { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .tip .t .z { font-size:14px; font-weight:600; }
+  .tip .l { color:var(--dim); font-size:12px; margin-top:3px; } .tip .l b { color:var(--accent); font-weight:600; } .tip .l .grew { color:#E87A4F; font-weight:600; }
+  .dialog.inspect .ih { padding:16px 24px 16px; border-bottom:1px solid var(--stroke); } .dialog.inspect .crumbs { font-size:11px; color:var(--dim); display:flex; gap:4px; margin-bottom:8px; } .dialog.inspect .crumbs a { color:var(--accent); }
+  .dialog.inspect .nm2 { display:flex; align-items:center; gap:12px; } .dialog.inspect .nm2 .g { width:22px; height:22px; color:var(--accent); } .dialog.inspect .nm2 .n { font-size:19px; font-weight:600; line-height:1.1; } .dialog.inspect .nm2 .k { font-size:12px; color:var(--dim); margin-top:2px; } .dialog.inspect .nm2 .z { margin-left:auto; font-size:30px; font-weight:600; letter-spacing:-.5px; }
+  .dialog.inspect .ctx { margin-top:14px; display:grid; grid-template-columns:22px 1fr; row-gap:7px; column-gap:0; font-size:12.5px; align-items:start; } .dialog.inspect .ctx svg { width:14px; height:14px; color:var(--dim); margin-top:3px; } .dialog.inspect .ctx b { color:var(--accent); font-weight:600; } .dialog.inspect .ctx .d { color:var(--dim); }
+  .dialog.inspect .ib { padding:14px 24px 20px; } .dialog.inspect .callout { background:var(--panel); border-left:3px solid var(--accent); padding:9px 12px; font-size:12.5px; margin-bottom:4px; } .dialog.inspect .callout b { color:var(--accent); font-weight:600; }
+  .dialog.inspect .charts { display:grid; grid-template-columns:1fr 1fr; gap:20px; } .dialog.inspect h6 { font-size:12px; font-weight:400; color:var(--dim); margin:18px 0 8px; }
+  .dialog.inspect .donut { display:flex; gap:14px; align-items:center; } .dialog.inspect .donut svg { width:104px; height:104px; flex:none; } .dialog.inspect .lg { display:grid; grid-template-columns:10px 1fr 46px; gap:8px; align-items:center; font-size:12px; padding:3px 4px; flex:1; } .dialog.inspect .lg i { width:10px; height:10px; border-radius:2px; display:block; } .dialog.inspect .lg .p { text-align:right; color:var(--dim); }
+  .dialog.inspect .wr { display:grid; grid-template-columns:200px 1fr 66px 44px; gap:12px; align-items:center; padding:7px 0; border-bottom:1px solid var(--control); font-size:13px; } .dialog.inspect .wr:last-of-type { border-bottom:0; } .dialog.inspect .wr .nmx { display:flex; gap:8px; align-items:center; min-width:0; } .dialog.inspect .wr .nmx svg { width:13px; height:13px; color:var(--dim); flex:none; } .dialog.inspect .wr .nmx span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dialog.inspect .wr .bar { height:6px; border-radius:3px; background:var(--control); position:relative; } .dialog.inspect .wr .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:3px; background:var(--accent); } .dialog.inspect .wr .s { text-align:right; } .dialog.inspect .wr .p { text-align:right; color:var(--dim); }
+  .dialog.inspect .rem { font-size:11px; color:var(--dim); margin-top:8px; }
   .cmenu { background:var(--menubg, #1C2128); border:1px solid var(--stroke); border-radius:8px; padding:6px; width:290px; box-shadow:0 8px 22px rgba(0,0,0,.5); }
   .cmenu .mi { display:flex; align-items:center; gap:10px; height:30px; padding:0 10px 0 8px; border-radius:5px; white-space:nowrap; }
   .cmenu .mi.on { background:var(--hover); } .cmenu .mi.off { opacity:.4; } .cmenu .mi b { font-weight:600; }
@@ -173,7 +184,7 @@
 <div class="fit"><div class="fit-inner" id="fitInner"><div class="stage" id="stage">
   <div class="win" id="win">
     <div class="titlebar">
-      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.5.1</div>
+      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.6.0</div>
       <div class="caption"><span><svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg></span><span><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></span><span><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10"/></svg></span></div>
     </div>
     <div class="toolbar">
@@ -520,7 +531,7 @@
         if (state.cushion) { const g = ctx.createLinearGradient(it.x, it.y, it.x + it.w, it.y + it.h); g.addColorStop(0, "rgba(255,255,255,.28)"); g.addColorStop(.55, "rgba(128,128,128,0)"); g.addColorStop(1, "rgba(0,0,0,.31)"); ctx.fillStyle = g; ctx.fillRect(it.x, it.y, it.w, it.h); }
         if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.19)"; ctx.fillRect(it.x, it.y, it.w, it.h); }
         ctx.strokeStyle = "rgba(16,16,20,.69)"; ctx.lineWidth = 1; ctx.strokeRect(it.x + .5, it.y + .5, it.w - 1, it.h - 1);
-        if (it.header) { ctx.fillStyle = "rgba(0,0,0,.19)"; ctx.fillRect(it.x, it.y, it.w, 17); label(ctx, it, textFor(c), "600 11px", 4, 2, "left", `${chainName(it)}  —  ${fmt(it.node.size)}`); }
+        if (it.header) { ctx.fillStyle = "rgba(0,0,0,.19)"; ctx.fillRect(it.x, it.y, it.w, 17); label(ctx, it, textFor(c), "600 11px", 4, 2, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`); }
         else fileLabel(ctx, it, textFor(c), it);
       } },
 
@@ -567,7 +578,7 @@
         ctx.fillStyle = rgb(body); ctx.fillRect(it.x, it.y, it.w, it.h);
         if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(it.x, it.y, it.w, it.h); }
         ctx.strokeStyle = "rgba(0,0,0,.22)"; ctx.lineWidth = 1; ctx.strokeRect(it.x + .5, it.y + .5, it.w - 1, it.h - 1);
-        if (it.header) { const band = mix(c, [0, 0, 0], .35); ctx.fillStyle = rgb(band); ctx.fillRect(it.x, it.y, it.w, 18); label(ctx, it, "#F5F5F8", "700 11px", 5, 3, "left", `${chainName(it)}  —  ${fmt(it.node.size)}`); }
+        if (it.header) { const band = mix(c, [0, 0, 0], .35); ctx.fillStyle = rgb(band); ctx.fillRect(it.x, it.y, it.w, 18); label(ctx, it, "#F5F5F8", "700 11px", 5, 3, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`); }
         else fileLabel(ctx, it, textFor(body), it);
       } },
 
@@ -697,6 +708,8 @@
   const focusFile = files.find(f => isVideo(f) && f.size > 500 * 1024 ** 2) || files[0];
   const sameFolder = files.filter(f => f.parent === focusFile.parent).slice(0, 3);
   const dateOf = n => { const d = new Date(2026, 8, 27 - Math.round(3 + (n.size % 900))); const days = Math.round((Date.UTC(2026, 8, 27) - d) / 864e5); return `${d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}  (${days < 30 ? days + " days ago" : days < 365 ? Math.round(days / 30) + " months ago" : (days / 365).toFixed(1) + " years ago"})`; };
+  const countFiles = n => n.dir ? n.children.reduce((a, c) => a + countFiles(c), 0) : 1;
+  const agoOf = n => { const days = 3 + (n.size % 900); return days < 30 ? days + " days ago" : days < 365 ? Math.round(days / 30) + " months ago" : (days / 365).toFixed(1) + " years ago"; };
   const typeOf = n => { const m = /\.([^.]+)$/.exec(n.name); return m ? `${m[1].toUpperCase()} file (${CATS[category(n.name)].toLowerCase()})` : "File"; };
   const pct = (a, b) => (100 * a / b).toFixed(1).replace(/\.0$/, "") + "%";
   const mapOrigin = () => { const map = document.getElementById("map"), body = map.parentElement; return [map.offsetLeft + body.offsetLeft, map.offsetTop + body.offsetTop]; };
@@ -746,10 +759,9 @@
     const find = n => items.find(i => i.node === n);
     if (state.scene === "hover") {
       const it = find(focusFile); if (!it) return;
-      tip.innerHTML = `<div class="n">${focusFile.name}</div><div class="p">${focusFile.parent.path}</div><table>
-        <tr><td>Size</td><td>${fmt(focusFile.size)}</td></tr><tr><td>Type</td><td>${typeOf(focusFile)}</td></tr><tr><td>Modified</td><td>${dateOf(focusFile)}</td></tr>
-        <tr><td>Share</td><td>${pct(focusFile.size, focusFile.parent.size)} of ${focusFile.parent.name}</td></tr><tr><td>Of drive</td><td>${pct(focusFile.size, root.size)} of C:\\</td></tr></table>
-        <div class="hint">Right-click for actions · Ctrl+I to inspect</div>`;
+      tip.innerHTML = `<div class="t"><div class="n">${focusFile.name}</div><div class="z">${fmt(focusFile.size)}</div></div>
+        <div class="l">${typeOf(focusFile)} · <b>${pct(focusFile.size, focusFile.parent.size)}</b> of ${focusFile.parent.name}</div>
+        <div class="l">Modified ${agoOf(focusFile)}</div>`;
       tip.hidden = false; place(tip, it.x + it.w * .55 + 16, it.y + it.h * .5 + 20);
       showInfo(focusFile);
     }
@@ -771,6 +783,43 @@
     document.getElementById("startScreen").hidden = state.scene !== "start";
     document.getElementById("statusScan").style.visibility = state.scene === "start" ? "hidden" : "";
     if (state.scene === "start") { document.getElementById("startMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="44" height="44"'); }
+    if (state.scene === "about") {
+      const rows = [["info","Version " + APP_VERSION,"Portable. Updates are not automatic; the newest version is on GitHub.",false],["file","What's new","Changes in this version",true],["keyboard","Shortcuts","Every key and mouse action",true],["bug","Report a bug","Opens GitHub with your version and system filled in",true],["idea","Suggest a feature","",true],["globe","Source on GitHub","MIT license",true],["book","Credits","Treemap algorithm, SpaceMonger, icons",true]];
+      document.getElementById("dialog").className = "dialog about";
+      document.getElementById("dialog").innerHTML = `
+        <div class="dt"><span id="dlgIcon"></span>About SpaceSharp<span class="x">✕</span></div>
+        <div class="about-head"><span id="aboutMark"></span><div><div class="t">SpaceSharp</div><div class="s">See where your disk space went.</div></div></div>
+        <div class="about-list">${rows.map(([ic,t,sub,chev]) => `<div class="about-row"><svg data-i="${ic}"></svg><div><div>${t}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>${chev ? '<span class="c">›</span>' : ""}</div>`).join("")}</div>
+        <div class="about-copy">© 2026 ClearanceClarence  ·  .NET 10 on Windows 11 (x64)</div>
+        <div class="df"><div class="btn"><svg data-i="copy"></svg>Copy version info</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
+      document.getElementById("dialog").querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
+      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
+      document.getElementById("aboutMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="64" height="64"');
+      scrim.hidden = false;
+    }
+    if (state.scene === "update" || state.scene === "whatsnew") {
+      const next = APP_VERSION, cur = APP_VERSION.replace(/\.(\d+)\.(\d+)$/, (m, a, b) => `.${Math.max(0, +a - 1)}.0`);
+      const notes = `INSPECT, REDRAWN
+•  The Inspect window is built around the question you opened it for: size, share and rank, what the folder is made of, how old it is, where the space is, and donuts by type and by age.
+•  The hover tooltip is three lines: name and size, what it is and its share, what it mostly holds and when it changed.
+
+CHANGES
+•  The fast NTFS scan no longer needs a restart as administrator; a small elevated helper reads the file table and hands the map back.
+•  The side panel and the Drives list can be resized by dragging. Title bars take the theme colors on Windows 11.
+…`;
+      document.getElementById("dialog").className = "dialog " + (state.scene === "update" ? "update" : "notes");
+      document.getElementById("dialog").innerHTML = state.scene === "update" ? `
+        <div class="dt"><span id="dlgIcon"></span>Update available<span class="x">✕</span></div>
+        <div class="ub"><svg class="g" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><div class="t">SpaceSharp ${next} is available. You have ${cur}.</div><div class="h">Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</div></div></div>
+        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M3 3h10v10H3zM5.5 6h5M5.5 8.5h5M5.5 11h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>What's new</div><span class="spacer"></span><div class="btn">Later</div><div class="btn accent">Install and restart</div></div>`
+      : `
+        <div class="dt"><span id="dlgIcon"></span>What's new in ${next}<span class="x">✕</span></div>
+        <div class="nb">${notes}</div>
+        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>See all changes on GitHub</div><span class="spacer"></span><div class="btn accent">OK</div></div>`;
+      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
+      scrim.hidden = false;
+    }
     if (state.scene === "settings") {
       const combo = (v) => `<div class="st-combo">${v}<i></i></div>`;
       const row = (t, d, c) => `<div class="st-row"><div><div class="t">${t}</div><div class="d">${d}</div></div>${c}</div>`;
@@ -795,65 +844,44 @@
       document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
       scrim.hidden = false;
     }
-    if (state.scene === "about") {
-      const rows = [["info","Version " + APP_VERSION,"Portable. Updates are not automatic; the newest version is on GitHub.",false],["file","What's new","Changes in this version",true],["keyboard","Shortcuts","Every key and mouse action",true],["bug","Report a bug","Opens GitHub with your version and system filled in",true],["idea","Suggest a feature","",true],["globe","Source on GitHub","MIT license",true],["book","Credits","Treemap algorithm, SpaceMonger, icons",true]];
-      document.getElementById("dialog").className = "dialog about";
-      document.getElementById("dialog").innerHTML = `
-        <div class="dt"><span id="dlgIcon"></span>About SpaceSharp<span class="x">✕</span></div>
-        <div class="about-head"><span id="aboutMark"></span><div><div class="t">SpaceSharp</div><div class="s">See where your disk space went.</div></div></div>
-        <div class="about-list">${rows.map(([ic,t,sub,chev]) => `<div class="about-row"><svg data-i="${ic}"></svg><div><div>${t}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>${chev ? '<span class="c">›</span>' : ""}</div>`).join("")}</div>
-        <div class="about-copy">© 2026 ClearanceClarence  ·  .NET 10 on Windows 11 (x64)</div>
-        <div class="df"><div class="btn"><svg data-i="copy"></svg>Copy version info</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
-      document.getElementById("dialog").querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      document.getElementById("aboutMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="64" height="64"');
-      scrim.hidden = false;
-    }
-    if (state.scene === "update" || state.scene === "whatsnew") {
-      const next = APP_VERSION, cur = APP_VERSION.replace(/\.(\d+)\.(\d+)$/, (m, a, b) => `.${Math.max(0, +a - 1)}.0`);
-      const notes = `TREEMAP OPTIONS
-•  Density, Bias, Padding, Border, Font, and what file boxes and folder titles show, on a Treemap page in Settings.
-
-CHANGES
-•  Settings is split into tabs. About is a short list with the shortcuts in their own window.
-•  The start screen lists your recent saved scans; one click reopens yesterday's map.
-•  Saved scans are kept for a period you choose, 3 months by default.
-•  The update notice is a dialog with What's new and the release notes inside.
-…`;
-      document.getElementById("dialog").className = "dialog " + (state.scene === "update" ? "update" : "notes");
-      document.getElementById("dialog").innerHTML = state.scene === "update" ? `
-        <div class="dt"><span id="dlgIcon"></span>Update available<span class="x">✕</span></div>
-        <div class="ub"><svg class="g" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div><div class="t">SpaceSharp ${next} is available. You have ${cur}.</div><div class="h">Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</div></div></div>
-        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M3 3h10v10H3zM5.5 6h5M5.5 8.5h5M5.5 11h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>What's new</div><span class="spacer"></span><div class="btn">Later</div><div class="btn accent">Install and restart</div></div>`
-      : `
-        <div class="dt"><span id="dlgIcon"></span>What's new in ${next}<span class="x">✕</span></div>
-        <div class="nb">${notes}</div>
-        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>See all changes on GitHub</div><span class="spacer"></span><div class="btn accent">OK</div></div>`;
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      scrim.hidden = false;
-    }
     if (state.scene === "inspect") {
-      const f = largestFolder, kids = [...f.children].sort((a, b) => b.size - a.size).slice(0, 6);
-      const types = {}; (function walk(n) { for (const c of n.children) c.dir ? walk(c) : (types[CATS[category(c.name)]] = (types[CATS[category(c.name)]] || 0) + c.size); })(f);
-      const typeRows = Object.entries(types).sort((a, b) => b[1] - a[1]).slice(0, 5);
-      const bars = (rows, total) => { const max = rows[0][1]; return rows.map(([n, b]) => `<div class="br"><span>${n}</span><span class="s">${fmt(b)}</span><span class="p">${pct(b, total)}</span><div class="bar"><i style="width:${(100 * b / max).toFixed(1)}%"></i></div></div>`).join(""); };
-      let dirs = 0; (function count(n) { for (const c of n.children) if (c.dir) { dirs++; count(c); } })(f);
-      document.getElementById("dialog").className = "dialog";
+      const f = largestFolder;
+      // Where the space is: the largest things anywhere inside, skipping folders that are nearly all one child.
+      const cands = []; (function walk(n) { for (const c of n.children) { if (c.dir) { walk(c); const big = Math.max(...c.children.map(k => k.size), 0); if (big >= c.size * .9) continue; } cands.push(c); } })(f);
+      const isAnc = (a, b) => { for (let n = b.parent; n; n = n.parent) if (n === a) return true; return false; };
+      const rows = []; for (const c of cands.sort((a, b) => b.size - a.size)) { if (rows.some(r => isAnc(r, c) || isAnc(c, r))) continue; rows.push(c); if (rows.length === 5) break; }
+      const rel = n => { const parts = []; for (let x = n; x && x !== f; x = x.parent) parts.unshift(x.name); return parts.join("\\"); };
+      const types = {}; let files = 0, dirs = 0; const sizes = []; const ages = [0, 0, 0, 0];
+      (function walk(n) { for (const c of n.children) { if (c.dir) { dirs++; walk(c); } else { files++; sizes.push(c.size); types[category(c.name)] = (types[category(c.name)] || 0) + c.size; const d = 3 + (c.size % 900); ages[d < 30 ? 0 : d < 365 ? 1 : d < 1095 ? 2 : 3] += c.size; } } })(f);
+      sizes.sort((a, b) => a - b); const median = sizes.length ? sizes[sizes.length >> 1] : 0;
+      const typeRows = Object.entries(types).map(([k, v]) => [+k, v]).sort((a, b) => (a[0] === 7) - (b[0] === 7) || b[1] - a[1]);
+      const cols = catColors(); const ageCol = [hex("#F5B82E"), hex("#C48F22"), hex("#8A6519"), hex("#4E5A68")];
+      const donut = (parts, center, label) => { let off = 25; return `<svg viewBox="0 0 42 42">${parts.map(([v, col]) => { const len = 100 * v / f.size; const o = off; off -= len; return `<circle cx="21" cy="21" r="15.9" fill="none" stroke="${rgb(col)}" stroke-width="7" stroke-dasharray="${Math.max(0, len - 1.5)} ${100 - Math.max(0, len - 1.5)}" stroke-dashoffset="${o - .75}"/>`; }).join("")}<text x="21" y="20.5" text-anchor="middle" font-size="5.5" font-weight="600" fill="currentColor">${center}</text><text x="21" y="26" text-anchor="middle" font-size="3.6" fill="var(--dim)">${label}</text></svg>`; };
+      const legend = rowsIn => rowsIn.map(([n, v, col]) => `<div class="lg"><i style="background:${rgb(col)}"></i><span>${n}</span><span class="p">${pct(v, f.size)}</span></div>`).join("");
+      const ageNames = ["This month", "This year", "1 to 3 years", "Older"]; const old = ages[2] + ages[3];
+      const top = rows[0]; const dominant = top && top.size >= f.size * .4;
+      const siblings = f.parent.children.filter(c => c.dir).sort((a, b) => b.size - a.size); const rank = siblings.indexOf(f) + 1;
+      document.getElementById("dialog").className = "dialog inspect";
       document.getElementById("dialog").innerHTML = `
-        <div class="dt"><span id="dlgIcon"></span>Inspect: ${f.name}<span class="x">✕</span></div>
-        <div class="db">
-          <div class="head"><svg class="g" viewBox="0 0 16 16">${ICONS.folder}</svg><div><div class="nm">${f.name}</div><div class="pt">${f.path}</div><div class="kd">Folder</div></div></div>
-          <table><tr><td>Size</td><td>${fmt(f.size)}  (${f.size.toLocaleString("en-US")} bytes)</td></tr>
-          <tr><td>Share of C:\\</td><td>${pct(f.size, root.size)}</td></tr>
-          <tr><td>Contains</td><td>${f.files.toLocaleString("en-US")} files, ${dirs.toLocaleString("en-US")} folders</td></tr>
-          <tr><td>Directly inside</td><td>${f.children.filter(c => !c.dir).length} files, ${f.children.filter(c => c.dir).length} folders</td></tr>
-          <tr><td>Average file</td><td>${fmt(f.size / Math.max(1, f.files))}</td></tr>
-          <tr><td>Newest change</td><td>${dateOf(kids[0])}</td></tr>
-          <tr><td>Since last scan</td><td>Grew by ${fmt(Math.round(f.size * .06))} (was ${fmt(Math.round(f.size * .94))})</td></tr>
-          <tr><td>Depth</td><td>1 level below the scan root</td></tr></table>
-          <h5>Largest inside</h5>${bars(kids.map(k => [k.name + (k.dir ? "\\" : ""), k.size]), f.size)}
-          <h5>By file type</h5>${bars(typeRows, f.size)}
+        <div class="dt"><span id="dlgIcon"></span>Inspect: ${f.path}<span class="x">✕</span></div>
+        <div class="ih">
+          <div class="crumbs"><a>C:\\</a><span>›</span><span>${f.name}</span></div>
+          <div class="nm2"><svg class="g" viewBox="0 0 16 16">${ICONS.folder}</svg><div><div class="n">${f.name}</div><div class="k">Folder · ${files.toLocaleString("en-US")} files, ${dirs.toLocaleString("en-US")} folders</div></div><div class="z">${fmt(f.size)}</div></div>
+          <div class="ctx">
+            <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 2v6l4.2 2.4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><div><b>${pct(f.size, root.size)}</b> of C:\\, ${rank === 1 ? "the largest of its " + siblings.length + " folders" : "number " + rank + " of " + siblings.length + " folders by size"}</div>
+            <svg viewBox="0 0 16 16">${ICONS.file}</svg><div>Mostly <b>${CATS[typeRows[0][0]].toLowerCase()}</b> (${fmt(typeRows[0][1])})${typeRows[1] ? ` and ${CATS[typeRows[1][0]].toLowerCase()} (${fmt(typeRows[1][1])})` : ""} <span class="d">· median file ${fmt(median)}</span></div>
+            <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><div>Last changed <b>${agoOf(rows[0] || f.children[0])}</b>, ${pct(old, f.size)} untouched for over a year <span class="d">· grew ${fmt(Math.round(f.size * .06))} since the last scan</span></div>
+          </div>
+        </div>
+        <div class="ib">
+          ${dominant ? `<div class="callout"><b>${pct(top.size, f.size)}</b> of this folder is one thing: ${rel(top)} at ${fmt(top.size)}.</div>` : ""}
+          <div class="charts">
+            <div><h6>By type</h6><div class="donut">${donut(typeRows.map(([k, v]) => [v, cols[k]]), fmt(typeRows[0][1]), CATS[typeRows[0][0]])}<div>${legend(typeRows.map(([k, v]) => [CATS[k], v, cols[k]]))}</div></div></div>
+            <div><h6>By age</h6><div class="donut">${donut(ages.map((v, i) => [v, ageCol[i]]), fmt(old), "over a year old")}<div>${legend(ages.map((v, i) => [ageNames[i], v, ageCol[i]]))}</div></div></div>
+          </div>
+          <h6>Where the space is</h6>
+          ${rows.map(r => `<div class="wr"><div class="nmx"><svg viewBox="0 0 16 16">${r.dir ? ICONS.folder : ICONS.file}</svg><span>${rel(r)}${r.dir ? "\\" : ""}</span></div><div class="bar"><i style="width:${(100 * r.size / f.size).toFixed(1)}%"></i></div><span class="s">${fmt(r.size)}</span><span class="p">${pct(r.size, f.size)}</span></div>`).join("")}
+          <div class="rem">These ${rows.length} are ${pct(rows.reduce((a, r) => a + r.size, 0), f.size)} of the folder. The other ${(files - rows.reduce((a, r) => a + (r.dir ? countFiles(r) : 1), 0)).toLocaleString("en-US")} files share ${fmt(f.size - rows.reduce((a, r) => a + r.size, 0))}.</div>
         </div>
         <div class="df"><div class="btn"><svg viewBox="0 0 16 16">${ICONS.copy}</svg>Copy details</div><div class="btn"><svg viewBox="0 0 16 16">${ICONS.folderOpen}</svg>Show in Explorer</div><div class="btn"><svg viewBox="0 0 16 16">${ICONS.props}</svg>Properties</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
       document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;

@@ -39,7 +39,7 @@
     <td align="center" width="50%"><a href="docs/shot-change.png"><img src="docs/shot-change.png" alt="Color by change: what grew, shrank or appeared since the last scan"></a><br><sub><b>What changed.</b> Every scan is saved; the Change mode shows what grew, shrank or appeared since last time.</sub></td>
   </tr>
   <tr>
-    <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window for a folder"></a><br><sub><b>Inspect.</b> Exact sizes, shares, dates, the largest items inside and a breakdown by file type.</sub></td>
+    <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window for a folder"></a><br><sub><b>Inspect.</b> Size and shares, where the space is inside, and donuts by type and by age, with a callout when something stands out.</sub></td>
     <td align="center"><a href="docs/shot-start.png"><img src="docs/shot-start.png" alt="The start screen with recent saved scans"></a><br><sub><b>Pick up where you left off.</b> Recent scans reopen in one click.</sub></td>
   </tr>
   <tr>
@@ -49,10 +49,11 @@
 </table>
 
 <p align="center">
-  <a href="docs/shot-settings.png"><img src="docs/shot-settings.png" width="49%" alt="Settings, Treemap tab"></a>
-  <a href="docs/shot-update.png"><img src="docs/shot-update.png" width="49%" alt="The update dialog with What's new"></a>
+  <a href="docs/shot-settings.png"><img src="docs/shot-settings.png" width="32%" alt="Settings, Treemap tab"></a>
+  <a href="docs/shot-update.png"><img src="docs/shot-update.png" width="32%" alt="The update notice: install and restart, What's new, or later"></a>
+  <a href="docs/shot-about.png"><img src="docs/shot-about.png" width="32%" alt="The About window"></a>
   <br>
-  <sub>Treemap options · Update with release notes</sub>
+  <sub>Treemap options · Update notice · About</sub>
 </p>
 
 ---
@@ -159,7 +160,7 @@ The first launch is a little slower than the ones after it, because the portable
 2. When the scan finishes, the whole drive or folder fills the window. The biggest boxes are the biggest space users.
 3. Hover over a box to see its full path and size in the status bar.
 4. Double-click a folder to zoom into it. Use Backspace, the mouse back button, the breadcrumb or the mouse wheel to zoom back out.
-5. Right-click a file or folder for the full menu: Inspect (sizes, shares, dates, largest items inside, space by file type), Open, Show in Explorer, Properties, copy, filter to its type, select its folder, or move it to the Recycle Bin.
+5. Right-click a file or folder for the full menu: Inspect (size and shares, where the space is, by type and by age, change since the last scan), Open, Show in Explorer, Properties, copy, filter to its type, select its folder, or move it to the Recycle Bin.
 
 To see protected system folders, run SpaceSharp as administrator. Otherwise those folders are skipped and marked as unreadable.
 
@@ -283,7 +284,7 @@ Settings › Windows › **"Scan with SpaceSharp" in Explorer** adds an entry to
 | Home, Ctrl+0 | Show the whole map |
 | F5 | Rescan |
 | Ctrl+C | Copy the selected paths |
-| Ctrl+I | Inspect the selection: sizes, shares, dates, what is inside, which file types take the space |
+| Ctrl+I | Inspect the selection: size and shares, where the space is inside, by type and by age |
 | Ctrl+S | Save the scan to a file |
 | Ctrl+O | Open a saved scan |
 | Alt+Enter | Windows Properties for the selected item |
@@ -359,7 +360,7 @@ The same steps by hand, if you prefer:
 ```powershell
 dotnet publish .\SpaceSharp\SpaceSharp.csproj -p:PublishProfile=Velopack
 vpk download github --repoUrl https://github.com/ClearanceClarence/SpaceSharp
-vpk pack --packId SpaceSharp --packVersion 1.5.1 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png --msi --instLocation Either --instWelcome .\installer\welcome.md --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.md
+vpk pack --packId SpaceSharp --packVersion 1.6.0 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png --msi --instLocation Either --instWelcome .\installer\welcome.md --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.md
 .\installer\brand-msi.ps1
 ```
 

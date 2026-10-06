@@ -206,14 +206,15 @@
         </Border>
 
         <!-- ============================================================ side panel: top lists -->
-        <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="340"
+        <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="340" MinWidth="240"
                 Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,1,0">
+          <Grid>
             <DockPanel>
                 <!-- drives -->
                 <TextBlock DockPanel.Dock="Top" Text="{u:T Main_Drives}" FontSize="15" FontWeight="SemiBold" Margin="14,12,14,4" />
                 <TextBlock DockPanel.Dock="Top" Text="{u:T Main_ClickADriveTo}" Foreground="{DynamicResource TextDim}"
                            FontSize="12" Margin="14,0,14,4" />
-                <ListBox x:Name="DriveList" DockPanel.Dock="Top" MaxHeight="320" SelectionChanged="DriveList_SelectionChanged">
+                <ListBox x:Name="DriveList" DockPanel.Dock="Top" MaxHeight="320" MinHeight="72" SelectionChanged="DriveList_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="2,3">
@@ -244,7 +245,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource Stroke}" Margin="14,8,14,6" />
+                <!-- drag to give the drives or the list more room -->
+                <Thumb x:Name="SectionSplitter" DockPanel.Dock="Top" Style="{StaticResource SplitterThumb}" Height="9" Margin="0,4,0,2" Cursor="SizeNS"
+                       DragDelta="SectionSplitter_DragDelta" DragCompleted="Splitter_DragCompleted" />
 
                 <!-- largest items -->
                 <TextBlock DockPanel.Dock="Top" Text="{u:T Main_LargestItems}" FontSize="15" FontWeight="SemiBold" Margin="14,4,14,2" />
@@ -282,6 +285,10 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </DockPanel>
+            <!-- drag to resize the whole panel -->
+            <Thumb x:Name="PanelSplitter" Style="{StaticResource SplitterThumb}" HorizontalAlignment="Right" Width="6" Cursor="SizeWE"
+                   DragDelta="PanelSplitter_DragDelta" DragCompleted="Splitter_DragCompleted" />
+          </Grid>
         </Border>
 
         <!-- ============================================================ map -->
@@ -398,22 +405,18 @@
             <Popup x:Name="HoverTip" Placement="Relative" PlacementTarget="{Binding ElementName=Treemap}"
                    AllowsTransparency="True" IsHitTestVisible="False" StaysOpen="True" Focusable="False">
                 <Border Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                        CornerRadius="8" Padding="12,9" Margin="0,0,10,10" MaxWidth="420">
+                        CornerRadius="8" Padding="12,8" Margin="0,0,10,10" MinWidth="200" MaxWidth="360">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="14" ShadowDepth="3" Opacity="0.45" Color="Black" />
                     </Border.Effect>
                     <StackPanel>
-                        <TextBlock x:Name="TipName" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource Text}" />
-                        <TextBlock x:Name="TipPath" FontSize="11" TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource TextDim}" Margin="0,1,0,6" />
-                        <Grid x:Name="TipRows">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                        <TextBlock x:Name="TipHint" FontSize="11" Foreground="{DynamicResource TextDim}" Margin="0,6,0,0" />
+                        <DockPanel>
+                            <TextBlock x:Name="TipSize" DockPanel.Dock="Right" FontSize="14" FontWeight="SemiBold" Margin="12,0,0,0"
+                                       VerticalAlignment="Center" Foreground="{DynamicResource Text}" />
+                            <TextBlock x:Name="TipName" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource Text}" />
+                        </DockPanel>
+                        <StackPanel x:Name="TipLines" Margin="0,2,0,0" />
                     </StackPanel>
                 </Border>
             </Popup>

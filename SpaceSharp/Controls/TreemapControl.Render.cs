@@ -50,6 +50,13 @@ public sealed partial class TreemapControl
             new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.6),
             new(Color.FromArgb(0x22, 0x00, 0x00, 0x00), 1.0)
         }, new Point(0, 0), new Point(0.7, 1)));
+    private static readonly Brush CushionBrushLight = Frozen(new LinearGradientBrush(
+        new GradientStopCollection
+        {
+            new(Color.FromArgb(0x16, 0xFF, 0xFF, 0xFF), 0.0),
+            new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.55),
+            new(Color.FromArgb(0x10, 0x00, 0x00, 0x00), 1.0)
+        }, new Point(0, 0), new Point(0.7, 1)));
     private static readonly Pen SelectionPen = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0xF5, 0xB8, 0x2E)), 3));
 
     private readonly Dictionary<Brush, Brush> _dimmed = new();
@@ -75,7 +82,7 @@ public sealed partial class TreemapControl
     private void DrawItem(DrawingContext dc, TreemapItem item, double pixelsPerDip)
     {
         var node = item.Node;
-        double gap = Gap;
+        var (gap, radius) = GapAndRadiusFor(item);
         var full = item.Bounds;
         if (gap > 0)
         {
@@ -95,7 +102,7 @@ public sealed partial class TreemapControl
         {
             fill = _mapStyle switch
             {
-                MapStyle.Cards => Tint(fill, MapBackground is SolidColorBrush bg ? bg.Color : Color.FromRgb(0x0D, 0x11, 0x17), 0.15, 1),
+                MapStyle.Cards => Tint(fill, MapBackground is SolidColorBrush bg ? bg.Color : Color.FromRgb(0x0D, 0x11, 0x17), 0.22, 1),
                 MapStyle.Bands => Tint(fill, Colors.White, 0.22, 2),
                 MapStyle.Soft => Tint(fill, Colors.White, 0.15, 3),
                 _ => fill
@@ -105,15 +112,20 @@ public sealed partial class TreemapControl
         {
             fill = Tint(fill, Colors.White, 0.10, 4);
         }
+        else if (_mapStyle == MapStyle.Cards && !node.IsFreeSpace)
+        {
+            // Files are chips on a darker card: lighter than the card so the two read as different layers.
+            fill = Tint(fill, Colors.White, 0.16, 6);
+        }
 
         bool dimmed = _filterMatches is not null && !_filterMatches.Contains(node) && !_matchedGroups.Contains(node);
         if (dimmed) fill = Dim(fill);
         var textBrush = dimmed ? DimText : _scheme.LabelFor(fill);
-        double radius = Radius;
 
         // ---- body
-        if (_mapStyle == MapStyle.Cards && node.IsDirectory && !dimmed)
+        if (_mapStyle == MapStyle.Cards && node.IsDirectory && !dimmed && Math.Min(box.Width, box.Height) >= 24)
         {
+            // Small cards skip the shadow: at that size it only adds a dark halo around every box.
             // Two soft layers read as a blur without the cost of a real one.
             dc.DrawRoundedRectangle(CardShadowFar, null, new Rect(box.X - 2, box.Y + 1, box.Width + 4, box.Height + 4), radius + 2, radius + 2);
             dc.DrawRoundedRectangle(CardShadowNear, null, new Rect(box.X - 1, box.Y + 1, box.Width + 2, box.Height + 2), radius + 1, radius + 1);
@@ -124,7 +136,11 @@ public sealed partial class TreemapControl
 
         if (!dimmed)
         {
-            if (_mapStyle == MapStyle.Classic) dc.DrawRectangle(CushionBrush, null, box); // Classic is the shaded style
+            // Classic is the shaded style, but only files and groups get the cushion. A folder shows as a frame
+            // around its children, and shading every frame stacked darkness at each level of nesting; small
+            // boxes get a lighter cushion so the dark corner does not swallow them.
+            if (_mapStyle == MapStyle.Classic && !node.IsDirectory)
+                dc.DrawRectangle(Math.Min(box.Width, box.Height) < 28 ? CushionBrushLight : CushionBrush, null, box);
             if (_mapStyle == MapStyle.Soft) dc.DrawRoundedRectangle(SoftSheen, null, box, radius, radius);
         }
         if (node.IsGroup)
@@ -149,13 +165,13 @@ public sealed partial class TreemapControl
             {
                 case MapStyle.Classic:
                     dc.DrawRectangle(HeaderShade, null, header);
-                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  —  "), HeaderFace, textBrush, x + 4, full.Y + 1, header.Width - 8, HeaderAlign, pixelsPerDip);
+                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  ·  "), HeaderFace, textBrush, x + 4, full.Y + 1, header.Width - 8, HeaderAlign, pixelsPerDip);
                     break;
                 case MapStyle.Bands:
                 {
                     var band = dimmed ? fill : Tint(fill, Colors.Black, 0.35, 5);
                     dc.DrawRectangle(band, null, header);
-                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  —  "), BoldFace, dimmed ? DimText : _scheme.LabelFor(band), x + 5, full.Y + 2, header.Width - 8, HeaderAlign, pixelsPerDip);
+                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  ·  "), BoldFace, dimmed ? DimText : _scheme.LabelFor(band), x + 5, full.Y + 2, header.Width - 8, HeaderAlign, pixelsPerDip);
                     break;
                 }
                 case MapStyle.Cards:
@@ -317,7 +333,7 @@ public sealed partial class TreemapControl
     private Rect FrameRect(Rect bounds, double inset)
     {
         var r = bounds;
-        double gap = Gap;
+        double gap = GapAndRadiusFor(bounds, Math.Min(bounds.Width, bounds.Height)).Gap;
         if (gap > 0)
         {
             if (r.Width <= gap || r.Height <= gap) return Rect.Empty;
@@ -328,10 +344,64 @@ public sealed partial class TreemapControl
         return Rect.Intersect(r, _drawClip);
     }
 
+    /// <summary>
+    /// The style's gap and corner radius, scaled down for small boxes. A full 3 px gap and 4 px radius on a
+    /// 10 px box turns it into a dot, and a folder of a thousand equal files into a polka-dot texture; so
+    /// below about 40 px the gap shrinks toward a hairline, then to nothing, and the radius stays under a
+    /// sixth of the box's shorter side.
+    /// </summary>
+    private readonly Dictionary<FsNode, double> _siblingSide = new();
+
+    /// <summary>
+    /// Geometry for one item. The gap is decided per folder from the typical size of its children, so
+    /// neighbors never get different gaps and the seams between them stay straight; the radius follows
+    /// the box itself.
+    /// </summary>
+    private (double Gap, double Radius) GapAndRadiusFor(TreemapItem item)
+    {
+        double own = Math.Min(item.Bounds.Width, item.Bounds.Height);
+        var parent = item.Node.Parent;
+        if (parent is null) return GapAndRadiusFor(item.Bounds, own);
+
+        if (!_siblingSide.TryGetValue(parent, out double typical))
+        {
+            // Median of the shorter sides of the laid-out siblings, from a sample so huge folders stay cheap.
+            var sides = new List<double>();
+            foreach (var c in parent.Children)
+            {
+                if (_index.TryGetValue(c, out var sib)) sides.Add(Math.Min(sib.Bounds.Width, sib.Bounds.Height));
+                if (sides.Count == 64) break;
+            }
+            sides.Sort();
+            typical = sides.Count == 0 ? own : sides[sides.Count / 2];
+            _siblingSide[parent] = typical;
+        }
+        var (gap, _) = GapAndRadiusFor(item.Bounds, typical);
+        return (gap, GapAndRadiusFor(item.Bounds, own).Radius);
+    }
+
+    private (double Gap, double Radius) GapAndRadiusFor(Rect bounds, double side)
+    {
+        double gap = Gap, radius = Radius;
+        if (gap > 0)
+        {
+            if (side < 6) gap = 0;
+            else if (side < 12) gap = Math.Min(gap, 1);
+            else if (side < 40) gap = Math.Min(gap, 1 + (side - 12) / 28 * (gap - 1));
+        }
+        if (radius > 0)
+        {
+            // A sixth of the side keeps a 16 px box square-ish (under 3 px); the full radius returns at 24 px and up.
+            double inner = side - gap;
+            radius = inner < 10 ? 0 : Math.Min(radius, inner / 6);
+        }
+        return (gap, radius);
+    }
+
     /// <summary>Draws a frame with the current style's corner radius, so rounded styles get rounded frames.</summary>
     private void Frame(DrawingContext dc, Brush? fill, Pen pen, Rect r)
     {
-        double radius = Math.Max(0, Radius - pen.Thickness / 2);
+        double radius = Math.Max(0, Math.Min(Radius, Math.Min(r.Width, r.Height) / 6) - pen.Thickness / 2);
         if (radius > 0) dc.DrawRoundedRectangle(fill, pen, r, radius, radius);
         else dc.DrawRectangle(fill, pen, r);
     }

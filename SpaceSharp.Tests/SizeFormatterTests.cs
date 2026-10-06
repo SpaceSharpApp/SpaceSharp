@@ -31,4 +31,11 @@ public class SizeFormatterTests
         long exabyte = 1024L * 1024 * 1024 * 1024 * 1024 * 1024;
         Assert.Equal("1024 PB", SizeFormatter.Format(exabyte));
     }
+
+    [Theory]
+    [InlineData(444L * 1024 * 1024 + 450_000, "444 MB")]
+    [InlineData(22_060L * 1024 * 1024, "21.5 GB")]
+    [InlineData(1100, "1.07 KB")]
+    [InlineData(512, "512 B")]
+    public void CompactKeepsOnlyTheDigitsThatFit(long bytes, string expected) => Assert.Equal(expected, SizeFormatter.Compact(bytes));
 }

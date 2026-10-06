@@ -270,18 +270,6 @@
   .about-row { display:flex; align-items:center; gap:14px; padding:9px 14px; border-top:1px solid var(--stroke); font-size:13.5px; } .about-row:first-child { border-top:0; } .about-row svg { width:16px; height:16px; color:var(--dim); } .about-row .sub { font-size:12px; color:var(--dim); margin-top:2px; } .about-row .c { margin-left:auto; color:var(--dim); }
   .dialog.about { width:520px; display:flex; flex-direction:column; max-height:calc(100% - 24px); } .dialog.about .about-list { flex:0 1 auto; overflow:hidden; } .about-head { display:flex; align-items:center; gap:16px; padding:20px 24px 14px; } .about-head svg { width:56px; height:56px; } .about-head .t { font-size:22px; font-weight:600; line-height:1.1; } .about-head .s { color:var(--dim); font-size:13px; margin-top:4px; }
   .about-copy { padding:10px 24px 12px; font-size:11.5px; color:var(--dim); }
-  .dialog.settings { width:640px; display:flex; flex-direction:column; max-height:calc(100% - 24px); }
-  .st-tabs { display:flex; gap:4px; padding:14px 22px 12px; border-bottom:1px solid var(--stroke); } .st-tabs span { padding:6px 12px; border-radius:6px; color:var(--dim); font-size:13px; } .st-tabs span.on { background:var(--control); color:var(--text); }
-  .st-body { padding:22px 22px 10px 28px; overflow:hidden; }
-  .st-section { font-size:15px; font-weight:600; margin:0 0 4px; } .st-note { color:var(--dim); font-size:12px; margin-bottom:10px; }
-  .st-card { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; }
-  .st-row { display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center; padding:12px 16px; border-top:1px solid var(--stroke); } .st-row:first-child { border-top:0; }
-  .st-row .t { font-size:13.5px; font-weight:600; } .st-row .d { color:var(--dim); font-size:12px; margin-top:2px; line-height:1.45; max-width:330px; }
-  .st-combo { width:220px; height:30px; border-radius:6px; background:var(--control); border:1px solid var(--stroke); display:flex; align-items:center; padding:0 10px; font-size:13px; justify-content:space-between; } .st-combo i { width:8px; height:8px; border-right:1.4px solid var(--dim); border-bottom:1.4px solid var(--dim); transform:rotate(45deg) translateY(-3px); }
-  .st-slider { width:220px; } .st-slider .lbl { font-size:12.5px; margin-bottom:2px; } .st-slider .tr { height:4px; border-radius:2px; background:var(--hover); position:relative; margin:10px 0; } .st-slider .tr i { position:absolute; left:0; top:0; bottom:0; width:50%; background:var(--accent); border-radius:2px; } .st-slider .tr b { position:absolute; left:50%; top:50%; width:18px; height:18px; border-radius:50%; background:var(--accent); border:3px solid var(--bg); transform:translate(-50%,-50%); box-sizing:border-box; }
-  .st-slider .ends { display:flex; justify-content:space-between; font-size:11px; color:var(--dim); }
-  .st-switches { width:220px; display:grid; grid-template-columns:1fr auto; row-gap:8px; align-items:center; font-size:13px; }
-  .sw { width:40px; height:22px; border-radius:11px; background:var(--accent); position:relative; } .sw::after { content:""; position:absolute; top:3px; right:3px; width:16px; height:16px; border-radius:50%; background:#1C1500; } .sw.off { background:var(--hover); } .sw.off::after { right:auto; left:3px; background:var(--dim); }
   .dialog.update { width:480px; } .dialog.notes { width:560px; }
   .dialog .ub { display:flex; gap:16px; padding:22px 24px 18px; } .dialog .ub .g { width:26px; height:26px; color:var(--accent); flex:none; margin-top:2px; }
   .dialog .ub .t { font-size:15px; font-weight:600; } .dialog .ub .h { color:var(--dim); margin-top:6px; line-height:1.45; }
@@ -334,7 +322,7 @@
 <div class="fit"><div class="fit-inner" id="fitInner"><div class="stage" id="stage">
   <div class="win" id="win">
     <div class="titlebar">
-      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.5.1</div>
+      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.6.0</div>
       <div class="caption"><span><svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg></span><span><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></span><span><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10"/></svg></span></div>
     </div>
     <div class="toolbar">
@@ -431,7 +419,7 @@
     <div class="item"><h3>Scans a whole drive in seconds</h3><p>Run as administrator and SpaceSharp reads the NTFS file table directly instead of walking every folder, so a drive with a million files is mapped in a few seconds. Folders, other file systems and normal runs use a parallel folder walk.</p></div>
     <div class="item"><h3>A map you can fly into</h3><p>Double-click a folder and the map zooms until it fills the window. Wheel to zoom around the cursor, drag to pan, Backspace to go up. Small files gather into one box until you zoom in close enough to see them.</p></div>
     <div class="item"><h3>Filters in plain words</h3><p>Type <code>videos over 500MB older than 1 year</code> or <code>*.iso</code> and everything else dims. Six quick filters cover the usual cleanups. Select every match with one click, then delete them together.</p></div>
-    <div class="item"><h3>Inspect anything</h3><p>Ctrl+I on a file, folder or selection: exact size and size on disk, share of its folder and of the drive, counts, dates, the largest items inside and the space each file type takes, all with bars. Copy it as text.</p></div>
+    <div class="item"><h3>Inspect anything</h3><p>Ctrl+I on a file, folder or selection: the size with its share of the folder and of the drive, the five largest things anywhere inside, donuts by file type and by age, and a plain-language callout when one thing holds most of the space or nothing has changed in years. Breadcrumbs and rows zoom the map. Copy it as text.</p></div>
     <div class="item"><h3>Colors that show the hierarchy</h3><p>Each top-level folder gets one hue, and everything inside keeps that hue, a step lighter per level. Or color by depth, or by file type with a legend. Six map styles and eight palettes, including a color-blind safe one.</p></div>
     <div class="item"><h3>Clean up in place</h3><p>Right-click for Open, Show in Explorer, Properties, copy, filter to this file type, select the whole folder, or move to the Recycle Bin. The map updates and the freed space shows immediately.</p></div>
     <div class="item"><h3>Drives at a glance</h3><p>A side panel lists every drive with usage bars, and the largest files, folders and file types of the current scan. Click a drive to scan it.</p></div>
@@ -455,7 +443,7 @@
       <tr><th>Zoomable map you fly into</th><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
       <tr><th>Filter in plain words</th><td class="yes">Yes</td><td class="no">Name search</td><td class="no">No</td><td class="no">No</td></tr>
       <tr><th>Hierarchy shown by color</th><td class="yes">Yes</td><td class="no">By type</td><td class="no">By type</td><td class="no">By depth</td></tr>
-      <tr><th>Inspect with shares, dates and type breakdown</th><td class="yes">Yes</td><td class="no">Basic</td><td class="no">Basic</td><td class="no">No</td></tr>
+      <tr><th>Inspect with shares, type and age breakdown</th><td class="yes">Yes</td><td class="no">Basic</td><td class="no">Basic</td><td class="no">No</td></tr>
       <tr><th>Delete from the map</th><td class="yes">Recycle Bin</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><th>Dark mode</th><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
       <tr><th>Saves scans and shows what changed</th><td class="yes">Yes</td><td class="no">Export only</td><td class="no">No</td><td class="no">No</td></tr>
@@ -1044,30 +1032,6 @@
     document.getElementById("startScreen").hidden = state.scene !== "start";
     document.getElementById("statusScan").style.visibility = state.scene === "start" ? "hidden" : "";
     if (state.scene === "start") { document.getElementById("startMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="44" height="44"'); }
-    if (state.scene === "settings") {
-      const combo = (v) => `<div class="st-combo">${v}<i></i></div>`;
-      const row = (t, d, c) => `<div class="st-row"><div><div class="t">${t}</div><div class="d">${d}</div></div>${c}</div>`;
-      document.getElementById("dialog").className = "dialog settings";
-      document.getElementById("dialog").innerHTML = `
-        <div class="dt"><span id="dlgIcon"></span>Settings<span class="x">✕</span></div>
-        <div class="st-tabs"><span>General</span><span>Appearance</span><span class="on">Treemap</span><span>Map</span><span>Scanning</span></div>
-        <div class="st-body">
-          <div class="st-section">Treemap</div><div class="st-note">None of these are essential, but they change how the map reads.</div>
-          <div class="st-card">
-            ${row("Density", "How many small items the map draws before they are grouped into one \"312 files\" box or left out.", combo("Normal"))}
-            ${row("Bias", "Whether the layout favors wide boxes or tall ones. Equal is the plain squarified layout.", `<div class="st-slider"><div class="tr"><i></i><b></b></div><div class="ends"><span>Horizontal</span><span>Equal</span><span>Vertical</span></div></div>`)}
-            ${row("Padding", "Extra space around every box, on top of what the style uses.", combo("0 px"))}
-            ${row("Border", "Line width around boxes in the Classic, Flat and Bands styles.", combo("1 px"))}
-            ${row("Font", "The typeface for every label on the map.", combo("Segoe UI"))}
-            ${row("Files", "What a file box shows.", `<div class="st-switches"><span>Center names</span><span class="sw"></span><span>Show sizes</span><span class="sw"></span></div>`)}
-            ${row("Folders", "What a folder title shows.", `<div class="st-switches"><span>Center names</span><span class="sw off"></span><span>Show sizes</span><span class="sw"></span><span>Show file counts</span><span class="sw off"></span></div>`)}
-          </div>
-        </div>
-        <div class="df"><div class="btn"><svg data-i="refresh"></svg>Reset to defaults</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
-      document.getElementById("dialog").querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      scrim.hidden = false;
-    }
     if (state.scene === "about") {
       const rows = [["info","Version " + APP_VERSION,"Portable. Updates are not automatic; the newest version is on GitHub.",false],["file","What's new","Changes in this version",true],["keyboard","Shortcuts","Every key and mouse action",true],["bug","Report a bug","Opens GitHub with your version and system filled in",true],["idea","Suggest a feature","",true],["globe","Source on GitHub","MIT license",true],["book","Credits","Treemap algorithm, SpaceMonger, icons",true]];
       document.getElementById("dialog").className = "dialog about";
@@ -1084,14 +1048,13 @@
     }
     if (state.scene === "update" || state.scene === "whatsnew") {
       const next = APP_VERSION, cur = APP_VERSION.replace(/\.(\d+)\.(\d+)$/, (m, a, b) => `.${Math.max(0, +a - 1)}.0`);
-      const notes = `TREEMAP OPTIONS
-•  Density, Bias, Padding, Border, Font, and what file boxes and folder titles show, on a Treemap page in Settings.
+      const notes = `INSPECT, REDRAWN
+•  The Inspect window is built around the question you opened it for: size, share and rank, what the folder is made of, how old it is, where the space is, and donuts by type and by age.
+•  The hover tooltip is three lines: name and size, what it is and its share, what it mostly holds and when it changed.
 
 CHANGES
-•  Settings is split into tabs. About is a short list with the shortcuts in their own window.
-•  The start screen lists your recent saved scans; one click reopens yesterday's map.
-•  Saved scans are kept for a period you choose, 3 months by default.
-•  The update notice is a dialog with What's new and the release notes inside.
+•  The fast NTFS scan no longer needs a restart as administrator; a small elevated helper reads the file table and hands the map back.
+•  The side panel and the Drives list can be resized by dragging. Title bars take the theme colors on Windows 11.
 …`;
       document.getElementById("dialog").className = "dialog " + (state.scene === "update" ? "update" : "notes");
       document.getElementById("dialog").innerHTML = state.scene === "update" ? `
@@ -1191,7 +1154,7 @@ CHANGES
   // ---- previewer controls, driven by the embedded engine's API
   const P = window.SpaceSharpPreview;
   const groups = {
-    scene: [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["filter", "Filter"], ["fpanel", "Filter panel"], ["inspect", "Inspect"], ["multi", "Selection"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["update", "Update notice"], ["whatsnew", "What's new"], ["start", "Start screen"], ["about", "About"], ["settings", "Settings"]],
+    scene: [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["filter", "Filter"], ["fpanel", "Filter panel"], ["inspect", "Inspect"], ["multi", "Selection"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["update", "Update notice"], ["whatsnew", "What's new"], ["start", "Start screen"], ["about", "About"]],
     style: P.styles.map((n, i) => [i, n]),
     mode: [["branch", "Top folder"], ["depth", "Depth"], ["type", "File type"], ["change", "Change"]],
     palette: P.palettes.map(n => [n, n]),

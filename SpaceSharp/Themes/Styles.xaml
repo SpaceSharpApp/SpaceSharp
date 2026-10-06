@@ -626,4 +626,34 @@
         <Setter Property="Background" Value="{DynamicResource Control}" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
+    <!-- A drag handle drawn as a hairline that turns amber under the mouse; the hit area is the whole thumb. -->
+    <Style x:Key="SplitterThumb" TargetType="Thumb">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid Background="Transparent">
+                        <Rectangle x:Name="Line" Fill="{DynamicResource Stroke}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Cursor" Value="SizeNS">
+                            <Setter TargetName="Line" Property="Height" Value="1" />
+                            <Setter TargetName="Line" Property="Margin" Value="14,0" />
+                        </Trigger>
+                        <Trigger Property="Cursor" Value="SizeWE">
+                            <Setter TargetName="Line" Property="Width" Value="1" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Line" Property="Fill" Value="{DynamicResource Accent}" />
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="Line" Property="Fill" Value="{DynamicResource Accent}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -48,6 +48,10 @@ internal sealed class AppSettings
     public bool CheckForUpdates { get; set; } = true;
     public bool ShowSidePanel { get; set; } = true;
     public bool ShowTooltips { get; set; } = true;
+    public double InspectWidth { get; set; }                        // last size of the Inspect window; 0 means the default
+    public double InspectHeight { get; set; }
+    public double SidePanelWidth { get; set; } = 340;                // the Drives / Largest items panel
+    public double DriveListHeight { get; set; } = 320;               // the Drives list inside it; the splitter below it sets this
 
     public void ResetToDefaults()
     {

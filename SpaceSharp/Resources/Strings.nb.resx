@@ -169,37 +169,18 @@
   <data name="InspectWin_Properties" xml:space="preserve"><value>Egenskaper</value></data>
   <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>Vis i Utforsker</value></data>
   <data name="Inspect_AccessDenied" xml:space="preserve"><value>Noe av innholdet kunne ikke leses (ingen tilgang)</value></data>
-  <data name="Inspect_AverageFile" xml:space="preserve"><value>Gjennomsnittlig fil</value></data>
-  <data name="Inspect_ByFileType" xml:space="preserve"><value>Etter filtype</value></data>
-  <data name="Inspect_Contains" xml:space="preserve"><value>Inneholder</value></data>
-  <data name="Inspect_Depth" xml:space="preserve"><value>Dybde</value></data>
-  <data name="Inspect_DepthValue" xml:space="preserve"><value>{0} nivåer under skanneroten</value></data>
-  <data name="Inspect_DirectlyInside" xml:space="preserve"><value>Direkte i mappen</value></data>
   <data name="Inspect_ExactBytes" xml:space="preserve"><value>  ({0:N0} byte)</value></data>
   <data name="Inspect_FileNoExtension" xml:space="preserve"><value>Fil uten filendelse ({0})</value></data>
   <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0}-fil ({1})</value></data>
-  <data name="Inspect_Files" xml:space="preserve"><value>Filer</value></data>
   <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} filer, {1:N0} mapper</value></data>
   <data name="Inspect_Folder" xml:space="preserve"><value>Mappe</value></data>
-  <data name="Inspect_GrewBy" xml:space="preserve"><value>Vokste med {0} (var {1})</value></data>
-  <data name="Inspect_HardLink" xml:space="preserve"><value>Hard lenke</value></data>
   <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}, allerede talt et annet sted</value></data>
   <data name="Inspect_InFolders" xml:space="preserve"><value>I {0:N0} mapper</value></data>
   <data name="Inspect_Items" xml:space="preserve"><value>Elementer</value></data>
   <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} elementer valgt</value></data>
-  <data name="Inspect_LargestInside" xml:space="preserve"><value>Størst i mappen</value></data>
-  <data name="Inspect_Modified" xml:space="preserve"><value>Endret</value></data>
-  <data name="Inspect_New" xml:space="preserve"><value>Ny</value></data>
-  <data name="Inspect_NewestChange" xml:space="preserve"><value>Nyeste endring</value></data>
-  <data name="Inspect_Note" xml:space="preserve"><value>Merk</value></data>
-  <data name="Inspect_ShareOf" xml:space="preserve"><value>Andel av {0}</value></data>
-  <data name="Inspect_ShrankBy" xml:space="preserve"><value>Krympet med {0} (var {1})</value></data>
-  <data name="Inspect_SinceLastScan" xml:space="preserve"><value>Siden forrige skanning</value></data>
   <data name="Inspect_Size" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Undersøk: {0:N0} elementer</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Undersøk: {0}</value></data>
-  <data name="Inspect_TotalSize" xml:space="preserve"><value>Total størrelse</value></data>
-  <data name="Inspect_Unchanged" xml:space="preserve"><value>Uendret</value></data>
   <data name="Key_About" xml:space="preserve"><value>Åpne dette vinduet</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Legg til i utvalget</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Avbryt en skanning</value></data>
@@ -465,22 +446,8 @@
   <data name="Theme_WordLight" xml:space="preserve"><value>lyst</value></data>
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Noe av innholdet kunne ikke leses</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Skann samme stasjon eller mappe to ganger, eller åpne en lagret skanning å sammenligne med.</value></data>
-  <data name="Tip_Files" xml:space="preserve"><value>Filer</value></data>
-  <data name="Tip_Folders" xml:space="preserve"><value>Mapper</value></data>
-  <data name="Tip_FoldersInside" xml:space="preserve"><value>{0:N0} direkte i mappen</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Ledig plass</value></data>
-  <data name="Tip_Hint" xml:space="preserve"><value>Høyreklikk for handlinger · Ctrl+I for å undersøke</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Zoom inn for å se disse elementene</value></data>
-  <data name="Tip_In" xml:space="preserve"><value>i {0}</value></data>
-  <data name="Tip_Largest" xml:space="preserve"><value>Størst</value></data>
-  <data name="Tip_NoExtension" xml:space="preserve"><value>ingen filendelse · {0}</value></data>
-  <data name="Tip_Note" xml:space="preserve"><value>Merk</value></data>
-  <data name="Tip_OfDrive" xml:space="preserve"><value>Av stasjonen</value></data>
-  <data name="Tip_OnDisk" xml:space="preserve"><value>På disk</value></data>
-  <data name="Tip_PercentOf" xml:space="preserve"><value>{0:0.#} % av {1}</value></data>
-  <data name="Tip_PercentOf2" xml:space="preserve"><value>{0:0.##} % av {1}</value></data>
-  <data name="Tip_Share" xml:space="preserve"><value>Andel</value></data>
-  <data name="Tip_Size" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (hard lenke, talt et annet sted)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
   <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} filer · {1}</value></data>
@@ -516,7 +483,6 @@
   <data name="Explorer_ScanWith" xml:space="preserve"><value>Skann med SpaceSharp</value></data>
   <data name="Settings_CommandLine" xml:space="preserve"><value>Kommandolinje</value></data>
   <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>Start SpaceSharp fra en snarvei, et skript eller Kjør-boksen med en stasjon, en mappe eller en lagret skanning.</value></data>
-  <data name="Inspect_OnDisk" xml:space="preserve"><value>På disk</value></data>
   <data name="Update_Title" xml:space="preserve"><value>Oppdatering tilgjengelig</value></data>
   <data name="Update_Hint" xml:space="preserve"><value>Installasjonen tar omtrent et minutt og starter SpaceSharp på nytt. Innstillingene og de lagrede skanningene beholdes.</value></data>
   <data name="Update_WhatsNew" xml:space="preserve"><value>Hva er nytt</value></data>
@@ -595,4 +561,41 @@
   <data name="Exclude_Add" xml:space="preserve"><value>Legg til</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Fjern</value></data>
   <data name="Exclude_Suggestions" xml:space="preserve"><value>Vanlige:</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{0} av {1}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>Etter type</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>Etter alder</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Hvor plassen er</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Zoom kartet hit</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>Zoom kartet til denne mappen</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Denne måneden</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>I år</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 til 3 år</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>Eldre</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>over ett år gammelt</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Eldste endring: {0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>Disse {0} utgjør {1} av mappen. De øvrige {2:N0} filene deler {3}.</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} av denne mappen er én ting: {1} på {2}.</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} på disk</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} av {1}, den eneste mappen der</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} av {1}, den eneste filen der</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} av {1}, den største av de {2} mappene</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} av {1}, den største av de {2} filene</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} av {1}, nummer {3} av {2} mapper etter størrelse</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} av {1}, nummer {3} av {2} filer etter størrelse</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Mest {0} ({1})</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Mest {0} ({1}) og {2} ({3})</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>En blanding av {0} ({1}), {2} ({3}) og {4} ({5})</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>medianfil {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Sist endret {0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Endret {0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} urørt i over ett år</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>uendret siden forrige skanning</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>vokste {0} siden forrige skanning</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>krympet {0} siden forrige skanning</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>ny siden forrige skanning</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>Mest {0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} filer</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>ny siden forrige skanning</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>endret {0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>endret {0}</value></data>
 </root>

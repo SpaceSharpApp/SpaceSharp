@@ -2,10 +2,26 @@
 
 All notable changes to SpaceSharp. The newest release is at the top.
 
-## Unreleased
+## 1.6.0
+
+### Inspect, redrawn
+- The Inspect window (Ctrl+I) is laid out around the question you opened it for. The size is the one big number; the path is a row of breadcrumbs, and clicking one zooms the map there. Under the name, three lines say something about the item instead of restating the map: its share of the parent and where it ranks among its siblings ("48% of Nexus Stuff, the largest of its 6 folders"), what it is made of ("Mostly images (61.2 GB) and archives (6.8 GB), median file 2.3 MB"), and its age and change ("Last changed 3 months ago, 78% untouched for over a year, unchanged since the last scan"). Depth, average file size, "directly inside" and the fact grid are gone.
+- **Where the space is** lists the five largest things anywhere inside, not only direct children, each on one line with a bar scaled to the folder: a folder that is almost entirely one child is skipped in favor of that child, so you see `Google\Chrome\User Data` rather than `Google`. Clicking a folder row zooms the map to it. A closing line says how much the rest of the files share.
+- **By type** and **By age** are donuts with the legend beside them; hovering a slice or a legend row shows it in the center. Type colors follow the active palette, the age bands (this month, this year, 1 to 3 years, older) run from bright to dim amber. Age is new: it tells you how much of a folder has not been touched in over a year.
+- A callout appears when one thing holds most of a folder: "65% of this folder is one thing: AppData at 93.15 GB."
+- The hover tooltip on the map is three lines: name and size, then "Folder · 583 files · 25% of Images", then "Mostly images · changed 27 Apr 2026" with the change since the last scan in the Change colors when a comparison is loaded. Folder count, size on disk, share of the drive, the largest child and the right-click hint are gone from the tooltip; Inspect has them. Three of its labels were hardcoded English and are now translated.
+- On Windows 11 every window's title bar is painted in the theme's background color with the theme's text, so the caption and the toolbar read as one surface (Graphite #0D1117 in dark, the light grey in light). Windows 10 keeps the dark or light system caption as before.
+- The side panel can be resized: drag its right edge to make it wider or narrower, and drag the line between Drives and Largest items to give either list more room. Both sizes are remembered.
+- The window is resizable and remembers its size; the header stays while the rest scrolls. Copy details copies the same content as before, in the new order.
 
 ### Fast scan without the restart
 - The fast NTFS scan no longer needs SpaceSharp itself to run as administrator. When you scan a drive, Windows asks for permission (the UAC prompt), a small elevated helper reads the file table and hands the finished map back to the window you already have, and the helper exits. The window never closes and keeps your zoom, filters and settings. Say no and the normal scan runs; you are not asked again until the next start. The start screen's "Restart as administrator" line is gone.
+
+### Fixes
+- Tiles, Cards and Soft no longer turn a folder of many small files into a field of dots. The gap between boxes and the corner radius now shrink with the box: under about 40 px the gap narrows to a hairline and then disappears, and corners are never rounder than a sixth of the box's shorter side. Cards under 24 px also drop their shadow, which at that size was only a dark halo. The gap is decided per folder from the typical size of its children, so neighbors never get different gaps and the seams stay straight. Large boxes look exactly as before.
+- Classic no longer shades folders, only files and groups. A folder is a frame around its children, and shading every frame stacked darkness with each level of nesting, so deep parts of the tree went muddy; the frames are now flat and the files inside keep their cushion. Boxes under 28 px get a lighter cushion.
+- Cards and Tiles had drifted into the same look. Cards now sets its folders a step darker and its files a step lighter, so files read as chips lying on a card; Tiles stays flat.
+- Classic and Bands title bars separate name, size and count with a dot instead of a dash.
 
 ## 1.5.1
 

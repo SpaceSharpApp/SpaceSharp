@@ -170,37 +170,18 @@
   <data name="InspectWin_Properties" xml:space="preserve"><value>Properties</value></data>
   <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>Show in Explorer</value></data>
   <data name="Inspect_AccessDenied" xml:space="preserve"><value>Some content could not be read (access denied)</value></data>
-  <data name="Inspect_AverageFile" xml:space="preserve"><value>Average file</value></data>
-  <data name="Inspect_ByFileType" xml:space="preserve"><value>By file type</value></data>
-  <data name="Inspect_Contains" xml:space="preserve"><value>Contains</value></data>
-  <data name="Inspect_Depth" xml:space="preserve"><value>Depth</value></data>
-  <data name="Inspect_DepthValue" xml:space="preserve"><value>{0} levels below the scan root</value></data>
-  <data name="Inspect_DirectlyInside" xml:space="preserve"><value>Directly inside</value></data>
   <data name="Inspect_ExactBytes" xml:space="preserve"><value>  ({0:N0} bytes)</value></data>
   <data name="Inspect_FileNoExtension" xml:space="preserve"><value>File, no extension ({0})</value></data>
   <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0} file ({1})</value></data>
-  <data name="Inspect_Files" xml:space="preserve"><value>Files</value></data>
   <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} files, {1:N0} folders</value></data>
   <data name="Inspect_Folder" xml:space="preserve"><value>Folder</value></data>
-  <data name="Inspect_GrewBy" xml:space="preserve"><value>Grew by {0} (was {1})</value></data>
-  <data name="Inspect_HardLink" xml:space="preserve"><value>Hard link</value></data>
   <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}, already counted elsewhere</value></data>
   <data name="Inspect_InFolders" xml:space="preserve"><value>In {0:N0} folders</value></data>
   <data name="Inspect_Items" xml:space="preserve"><value>Items</value></data>
   <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} items selected</value></data>
-  <data name="Inspect_LargestInside" xml:space="preserve"><value>Largest inside</value></data>
-  <data name="Inspect_Modified" xml:space="preserve"><value>Modified</value></data>
-  <data name="Inspect_New" xml:space="preserve"><value>New</value></data>
-  <data name="Inspect_NewestChange" xml:space="preserve"><value>Newest change</value></data>
-  <data name="Inspect_Note" xml:space="preserve"><value>Note</value></data>
-  <data name="Inspect_ShareOf" xml:space="preserve"><value>Share of {0}</value></data>
-  <data name="Inspect_ShrankBy" xml:space="preserve"><value>Shrank by {0} (was {1})</value></data>
-  <data name="Inspect_SinceLastScan" xml:space="preserve"><value>Since last scan</value></data>
   <data name="Inspect_Size" xml:space="preserve"><value>Size</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspect: {0:N0} items</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspect: {0}</value></data>
-  <data name="Inspect_TotalSize" xml:space="preserve"><value>Total size</value></data>
-  <data name="Inspect_Unchanged" xml:space="preserve"><value>Unchanged</value></data>
   <data name="Key_About" xml:space="preserve"><value>Open this window</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Add to selection</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Cancel a scan</value></data>
@@ -466,22 +447,8 @@
   <data name="Theme_WordLight" xml:space="preserve"><value>light</value></data>
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Some content could not be read</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Scan the same drive or folder twice, or open a saved scan to compare with.</value></data>
-  <data name="Tip_Files" xml:space="preserve"><value>Files</value></data>
-  <data name="Tip_Folders" xml:space="preserve"><value>Folders</value></data>
-  <data name="Tip_FoldersInside" xml:space="preserve"><value>{0:N0} directly inside</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Free space</value></data>
-  <data name="Tip_Hint" xml:space="preserve"><value>Right-click for actions · Ctrl+I to inspect</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Zoom in to see these items</value></data>
-  <data name="Tip_In" xml:space="preserve"><value>in {0}</value></data>
-  <data name="Tip_Largest" xml:space="preserve"><value>Largest</value></data>
-  <data name="Tip_NoExtension" xml:space="preserve"><value>no extension · {0}</value></data>
-  <data name="Tip_Note" xml:space="preserve"><value>Note</value></data>
-  <data name="Tip_OfDrive" xml:space="preserve"><value>Of drive</value></data>
-  <data name="Tip_OnDisk" xml:space="preserve"><value>On disk</value></data>
-  <data name="Tip_PercentOf" xml:space="preserve"><value>{0:0.#}% of {1}</value></data>
-  <data name="Tip_PercentOf2" xml:space="preserve"><value>{0:0.##}% of {1}</value></data>
-  <data name="Tip_Share" xml:space="preserve"><value>Share</value></data>
-  <data name="Tip_Size" xml:space="preserve"><value>Size</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (hard link, counted elsewhere)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
   <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} files · {1}</value></data>
@@ -517,7 +484,6 @@
   <data name="Explorer_ScanWith" xml:space="preserve"><value>Scan with SpaceSharp</value></data>
   <data name="Settings_CommandLine" xml:space="preserve"><value>Command line</value></data>
   <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>Start SpaceSharp from a shortcut, a script or the Run box with a drive, a folder or a saved scan.</value></data>
-  <data name="Inspect_OnDisk" xml:space="preserve"><value>On disk</value></data>
   <data name="Update_Title" xml:space="preserve"><value>Update available</value></data>
   <data name="Update_Hint" xml:space="preserve"><value>Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</value></data>
   <data name="Update_WhatsNew" xml:space="preserve"><value>What's new</value></data>
@@ -596,4 +562,41 @@
   <data name="Exclude_Add" xml:space="preserve"><value>Add</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Remove</value></data>
   <data name="Exclude_Suggestions" xml:space="preserve"><value>Common:</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{0} of {1}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>By type</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>By age</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Where the space is</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Zoom the map here</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>Zoom the map to this folder</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>This month</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>This year</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 to 3 years</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>Older</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>over a year old</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Oldest change: {0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>These {0} are {1} of the folder. The other {2:N0} files share {3}.</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} of this folder is one thing: {1} at {2}.</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} on disk</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} of {1}, its only folder</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} of {1}, its only file</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} of {1}, the largest of its {2} folders</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} of {1}, the largest of its {2} files</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} of {1}, number {3} of {2} folders by size</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} of {1}, number {3} of {2} files by size</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Mostly {0} ({1})</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Mostly {0} ({1}) and {2} ({3})</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>A mix of {0} ({1}), {2} ({3}) and {4} ({5})</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>median file {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Last changed {0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Modified {0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} untouched for over a year</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>unchanged since the last scan</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>grew {0} since the last scan</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>shrank {0} since the last scan</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>new since the last scan</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>Mostly {0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} files</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>new since last scan</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>changed {0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>modified {0}</value></data>
 </root>

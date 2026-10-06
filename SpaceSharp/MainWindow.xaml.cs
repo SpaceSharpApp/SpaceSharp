@@ -621,6 +621,8 @@ public partial class MainWindow : Window
 
         SidePanel.Visibility = _settings.ShowSidePanel ? Visibility.Visible : Visibility.Collapsed;
         ListsButton.Style = (Style)FindResource(_settings.ShowSidePanel ? "AccentButton" : "ToolButton");
+        SidePanel.Width = Math.Max(SidePanel.MinWidth, _settings.SidePanelWidth);
+        DriveList.MaxHeight = Math.Max(DriveList.MinHeight, _settings.DriveListHeight);
         ListsButton.Padding = new Thickness(8, 0, 8, 0); // icon only: AccentButton's text padding would make it wide
         RefreshTopList();
         if (_filter is not null && !_filter.IsEmpty) ApplyFilter(); // size measure may have changed
@@ -1384,6 +1386,28 @@ public partial class MainWindow : Window
         }
     }
 
+    // =============================================================== side panel splitters
+
+    private void PanelSplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        double max = Math.Max(SidePanel.MinWidth, ActualWidth * 0.6);
+        SidePanel.Width = Math.Clamp(SidePanel.Width + e.HorizontalChange, SidePanel.MinWidth, max);
+    }
+
+    private void SectionSplitter_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+    {
+        double max = Math.Max(DriveList.MinHeight, SidePanel.ActualHeight - 220); // leave the list below a usable height
+        // The list shrinks to its content below this cap, so a one-drive machine does not get an empty box.
+        DriveList.MaxHeight = Math.Clamp(DriveList.ActualHeight + e.VerticalChange, DriveList.MinHeight, max);
+    }
+
+    private void Splitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+    {
+        _settings.SidePanelWidth = SidePanel.Width;
+        _settings.DriveListHeight = DriveList.MaxHeight;
+        _settings.Save();
+    }
+
     // =============================================================== tooltip
 
     private void ArmTooltip(FsNode? node)
@@ -1408,66 +1432,95 @@ public partial class MainWindow : Window
         if (node is null || !Treemap.IsMouseOver) return;
 
         var measure = Treemap.SizeMode;
+        long size = node.IsHardLinkDuplicate ? node.LinkedSize : node.SizeFor(measure);
         TipName.Text = node.IsFreeSpace ? Strings.Get("Tip_FreeSpace") : node.Name;
-        TipPath.Text = node.IsGroup ? Strings.Format("Tip_In", node.FullPath) : node.IsFreeSpace ? node.Parent?.FullPath ?? "" : node.Parent?.FullPath ?? node.FullPath;
+        TipSize.Text = SizeFormatter.Format(size);
+        TipLines.Children.Clear();
 
-        TipRows.Children.Clear();
-        TipRows.RowDefinitions.Clear();
-        void Row(string label, string value)
+        if (node.IsGroup)
         {
-            int r = TipRows.RowDefinitions.Count;
-            TipRows.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            var l = Themed(new TextBlock { Text = label, FontSize = 12, Margin = new Thickness(0, 1, 14, 1) }, TextBlock.ForegroundProperty, "TextDim");
-            var v = Themed(new TextBlock { Text = value, FontSize = 12, Margin = new Thickness(0, 1, 0, 1) }, TextBlock.ForegroundProperty, "Text");
-            Grid.SetRow(l, r); Grid.SetRow(v, r); Grid.SetColumn(v, 1);
-            TipRows.Children.Add(l); TipRows.Children.Add(v);
+            TipLine(RichText.Dim(Strings.Format("Tip_FilesInGroup", node.FileCount) + RichText.Separator + Strings.Get("Tip_HintGroup")));
+            Open();
+            return;
+        }
+        if (node.IsFreeSpace)
+        {
+            TipLine(RichText.Dim(node.Parent?.FullPath ?? string.Empty));
+            Open();
+            return;
         }
 
-        if (node.IsHardLinkDuplicate)
+        // Line 1: what it is, and its share of the folder being looked at. "Folder · 583 files · 25% of Images"
+        var first = new List<RichText.Part> { RichText.Dim(node.IsDirectory ? Strings.Get("Inspect_Folder") : DescribeType(node)) };
+        if (node.IsDirectory) first.Add(RichText.Dim(RichText.Separator + Strings.Format("Tip_FilesInGroup", node.FileCount)));
+        if (node.IsHardLinkDuplicate) first.Add(RichText.Dim(RichText.Separator + Strings.Format("Tip_SizeHardLink", SizeFormatter.Format(node.LinkedSize))));
+        var whole = Treemap.FocusedFolder is { } focus && !ReferenceEquals(focus, node) && focus.IsAncestorOf(node) ? focus : _root;
+        if (whole is not null && !ReferenceEquals(whole, node) && whole.SizeFor(measure) > 0 && !node.IsHardLinkDuplicate)
         {
-            Row(Strings.Get("Tip_Size"), Strings.Format("Tip_SizeHardLink", SizeFormatter.Format(node.LinkedSize)));
+            first.Add(RichText.Dim(RichText.Separator));
+            var share = RichText.Format("Inspect_Of", RichText.Accent(InspectSummary.Percent(InspectSummary.Fraction(node.SizeFor(measure), whole.SizeFor(measure)))), RichText.Plain(whole.Name));
+            first.AddRange(share.Select(part => part.Bold ? part : part with { BrushKey = "TextDim" })); // the percentage stays amber, the words go dim
         }
-        else
-        {
-            Row("Size", SizeFormatter.Format(node.Size));
-            if (node.Allocated != node.Size) Row(Strings.Get("Tip_OnDisk"), SizeFormatter.Format(node.Allocated));
-        }
-        if (node.IsDirectory || node.IsGroup) Row(Strings.Get("Tip_Files"), $"{node.FileCount:N0}");
-        if (node.IsDirectory) Row(Strings.Get("Tip_Folders"), Strings.Format("Tip_FoldersInside", node.Children.Count(c => c.IsDirectory)));
-        if (!node.IsDirectory && !node.IsFreeSpace && !node.IsGroup) Row("Type", DescribeType(node));
-        if (node.LastWriteUtc > DateTime.MinValue) Row("Modified", DescribeDate(node.LastWriteUtc));
-        if (Treemap.FocusedFolder is { } focus && focus.SizeFor(measure) > 0 && !ReferenceEquals(focus, node))
-            Row(Strings.Get("Tip_Share"), Strings.Format("Tip_PercentOf", 100.0 * node.SizeFor(measure) / focus.SizeFor(measure), focus.Name));
-        if (_root is not null && !ReferenceEquals(_root, node) && !ReferenceEquals(_root, Treemap.FocusedFolder) && _root.SizeFor(measure) > 0)
-            Row(Strings.Get("Tip_OfDrive"), Strings.Format("Tip_PercentOf2", 100.0 * node.SizeFor(measure) / _root.SizeFor(measure), _root.Name));
-        if (node.IsDirectory && node.Children.FirstOrDefault(c => c.IsReal && c.SizeFor(measure) > 0) is { } biggest)
-            Row(Strings.Get("Tip_Largest"), $"{biggest.Name}  ({SizeFormatter.Format(biggest.SizeFor(measure))})");
-        if (node.AccessDenied) Row(Strings.Get("Tip_Note"), Strings.Get("Tip_AccessDenied"));
-        TipHint.Text = node.IsReal ? Strings.Get("Tip_Hint") : node.IsGroup ? Strings.Get("Tip_HintGroup") : string.Empty;
-        TipHint.Visibility = TipHint.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        TipLine(first);
 
-        HoverTip.HorizontalOffset = _mousePosition.X + 16;
-        HoverTip.VerticalOffset = _mousePosition.Y + 20;
-        HoverTip.IsOpen = true;
+        // Line 2: what it mostly is, when it changed, and the change since the last scan. "Mostly images · changed 27 Apr 2026 · +3.1 GB"
+        var second = new List<RichText.Part>();
+        if (node.IsDirectory && node.FileCount > 0 && node.FileCount <= 250_000 && TopCategory(node, measure) is { } top)
+            second.Add(RichText.Dim(Strings.Format("Tip_Mostly", Strings.Category(top).ToLowerInvariant())));
+        if (node.LastWriteUtc > DateTime.MinValue)
+        {
+            string when = Strings.Format(node.IsDirectory ? "Tip_Changed" : "Tip_Modified", Ago(node.LastWriteUtc));
+            second.Add(RichText.Dim((second.Count == 0 ? Capitalize(when) : RichText.Separator + when)));
+        }
+        if (node.HasBaseline)
+        {
+            RichText.Part? change = node.BaselineSize is null ? RichText.Colored(Strings.Get("Tip_NewSinceLastScan"), Palette.NewBrush)
+                : node.ChangeFor(measure) is var c && c != 0 ? RichText.Colored((c > 0 ? "+" : "\u2212") + SizeFormatter.Format(Math.Abs(c)), c > 0 ? Palette.GrewBrush : Palette.ShrankBrush)
+                : null;
+            if (change is not null)
+            {
+                if (second.Count > 0) second.Add(RichText.Dim(RichText.Separator));
+                second.Add(change);
+            }
+        }
+        if (second.Count > 0) TipLine(second);
+        if (node.AccessDenied) TipLine(RichText.Dim(Strings.Get("Tip_AccessDenied")));
+        Open();
+
+        void Open()
+        {
+            HoverTip.HorizontalOffset = _mousePosition.X + 16;
+            HoverTip.VerticalOffset = _mousePosition.Y + 20;
+            HoverTip.IsOpen = true;
+        }
+    }
+
+    private static string Capitalize(string text) => text.Length > 0 ? char.ToUpper(text[0]) + text[1..] : text;
+
+    private void TipLine(RichText.Part part) => TipLine(new[] { part });
+
+    private void TipLine(IEnumerable<RichText.Part> parts)
+    {
+        var block = new TextBlock { FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 1, 0, 1) };
+        RichText.Fill(block, parts);
+        TipLines.Children.Add(block);
+    }
+
+    /// <summary>The file category holding the most bytes under a folder, or null when nothing has a size.</summary>
+    private static FileCategory? TopCategory(FsNode folder, SizeMeasure measure)
+    {
+        var sums = new long[Enum.GetValues<FileCategory>().Length];
+        foreach (var f in folder.DescendantFiles())
+            if (!f.IsHardLinkDuplicate) sums[(int)Palette.Categorize(f.Extension)] += f.SizeFor(measure);
+        int best = Array.IndexOf(sums, sums.Max());
+        return sums[best] > 0 ? (FileCategory)best : null;
     }
 
     private static string DescribeType(FsNode node)
     {
         string ext = node.Extension;
-        string category = Palette.Categorize(ext).ToString().ToLowerInvariant();
-        return ext.Length == 0 ? Strings.Format("Tip_NoExtension", category) : $"{ext} · {category}";
-    }
-
-    private static string DescribeDate(DateTime utc)
-    {
-        var local = utc.ToLocalTime();
-        var age = DateTime.UtcNow - utc;
-        string ago = age.TotalDays < 1 ? "today"
-                   : age.TotalDays < 2 ? Strings.Get("Ago_Yesterday")
-                   : age.TotalDays < 30 ? Strings.Format("Ago_Days", (int)age.TotalDays)
-                   : age.TotalDays < 365 ? Strings.Format("Ago_Months", (int)(age.TotalDays / 30))
-                   : Strings.Format("Ago_Years", age.TotalDays / 365);
-        return $"{local:d}  ({ago})";
+        string category = Strings.Category(Palette.Categorize(ext)).ToLowerInvariant();
+        return ext.Length == 0 ? Strings.Format("Inspect_FileNoExtension", category) : Strings.Format("Inspect_FileWithExtension", ext.TrimStart('.').ToUpperInvariant(), category);
     }
 
     private void CopyPath(FsNode node) => RunSafely(() => Clipboard.SetText(node.FullPath));
@@ -1585,7 +1638,7 @@ public partial class MainWindow : Window
         var nodes = Treemap.SelectedNodes.Where(n => n.IsReal).ToList();
         if (nodes.Count == 0 && Treemap.HoveredNode is { IsReal: true } hovered) nodes.Add(hovered);
         if (nodes.Count == 0) return;
-        new InspectWindow(nodes, _root, Treemap.SizeMode) { Owner = this }.ShowDialog();
+        new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, folder => Treemap.FocusOn(folder)) { Owner = this }.ShowDialog();
     }
 
     private void MenuProperties_Click(object sender, RoutedEventArgs e)

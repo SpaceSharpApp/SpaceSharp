@@ -54,6 +54,7 @@ public sealed partial class TreemapControl
         _items.Clear();
         _index.Clear();
         _matchedGroups.Clear();
+        _siblingSide.Clear();
 
         double width = ActualWidth;
         double height = ActualHeight;
