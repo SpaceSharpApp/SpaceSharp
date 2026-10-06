@@ -25,6 +25,12 @@ public sealed class ScanOptions
 
     /// <summary>Names to leave out entirely, with their contents (node_modules, *.tmp). Matched against the name, not the path.</summary>
     public Util.NamePatterns Exclude { get; init; } = Util.NamePatterns.Empty;
+
+    /// <summary>
+    /// When the fast scan needs administrator rights this process lacks: ask for them through a helper process
+    /// (a UAC prompt) rather than skipping to the folder walk. Off after the person declines once in a session.
+    /// </summary>
+    public bool AskForElevation { get; init; }
 }
 
 /// <summary>
@@ -63,6 +69,9 @@ public sealed class DiskScanner
     /// <summary>How the current or last scan is done: "MFT" or "folder walk". Set as soon as the scan decides, so the UI can say so.</summary>
     public string LastMethod { get; private set; } = "folder walk";
 
+    /// <summary>True when the last scan asked for administrator rights and the person said no.</summary>
+    public bool ElevationDeclined { get; private set; }
+
     /// <summary>Why the MFT wasn't used on the last drive scan, if it wasn't (for the status line).</summary>
     public string? MftSkippedReason { get; private set; }
 
@@ -93,9 +102,43 @@ public sealed class DiskScanner
 
             LastMethod = "folder walk";
             MftSkippedReason = null;
+            ElevationDeclined = false;
             if (options.UseMft && IsDriveRoot(rootPath))
             {
-                if (MftScanner.IsSupported(rootPath, out string reason))
+                bool supported = MftScanner.IsSupported(rootPath, out string reason);
+                if (!supported && options.AskForElevation && MftScanner.IsNtfsDrive(rootPath))
+                {
+                    // Not allowed to open the volume ourselves: let an elevated helper do it and hand the tree back.
+                    LastMethod = "MFT";
+                    try
+                    {
+                        var fast = ElevatedScan.Run(rootPath, options, (files, dirs, bytes, path) =>
+                        {
+                            Interlocked.Exchange(ref _files, files);
+                            Interlocked.Exchange(ref _directories, dirs);
+                            Interlocked.Exchange(ref _bytes, bytes);
+                            Volatile.Write(ref _currentPath, path);
+                        }, ct);
+                        fast.AddFreeSpace(new DriveInfo(rootPath).AvailableFreeSpace);
+                        return fast;
+                    }
+                    catch (ElevatedScan.DeclinedException)
+                    {
+                        ElevationDeclined = true;
+                        LastMethod = "folder walk";
+                        MftSkippedReason = reason;
+                    }
+                    catch (OperationCanceledException) { throw; }
+                    catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or InvalidOperationException)
+                    {
+                        LastMethod = "folder walk";
+                        MftSkippedReason = ex.Message;
+                        Interlocked.Exchange(ref _files, 0);
+                        Interlocked.Exchange(ref _directories, 0);
+                        Interlocked.Exchange(ref _bytes, 0);
+                    }
+                }
+                else if (supported)
                 {
                     LastMethod = "MFT";
                     try

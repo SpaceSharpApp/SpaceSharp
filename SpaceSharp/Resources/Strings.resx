@@ -393,7 +393,7 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Ask before deleting. Deleted items can always be restored from the Recycle Bin.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Custom palettes</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Fast NTFS scan</value></data>
-  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Reads the drive's file table directly, so a whole drive is mapped in seconds instead of minutes. Needs administrator rights; without them, or on other file systems and single folders, the normal scan is used. Hard links are always counted once.</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Reads the drive's file table directly, so a whole drive is mapped in seconds instead of minutes. Windows asks for administrator permission once per scan; the app itself stays as it is. Say no and the normal scan runs, and you are not asked again until SpaceSharp restarts. Other file systems and single folders always use the normal scan.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Count hard links once</value></data>
   <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>Reads every file's link count so data with several names, such as Windows' WinSxS folder, is counted once. Slower on large drives.</value></data>
   <data name="Settings_HoverDetails" xml:space="preserve"><value>Hover details</value></data>

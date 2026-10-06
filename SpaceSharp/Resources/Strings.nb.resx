@@ -392,7 +392,7 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Spør før sletting. Slettede elementer kan alltid gjenopprettes fra papirkurven.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Egne paletter</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Rask NTFS-skanning</value></data>
-  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Leser stasjonens filtabell direkte, så en hel stasjon kartlegges på sekunder i stedet for minutter. Krever administratorrettigheter; uten dem, eller på andre filsystemer og enkeltmapper, brukes den vanlige skanningen. Harde lenker telles alltid én gang.</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Leser stasjonens filtabell direkte, så en hel stasjon kartlegges på sekunder i stedet for minutter. Windows ber om administratortillatelse én gang per skanning; selve appen fortsetter som før. Sier du nei, kjøres den vanlige skanningen, og du blir ikke spurt igjen før SpaceSharp starter på nytt. Andre filsystemer og enkeltmapper bruker alltid den vanlige skanningen.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Tell harde lenker én gang</value></data>
   <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>Leser lenketallet for hver fil, slik at data med flere navn, som Windows-mappen WinSxS, telles én gang. Tregere på store stasjoner.</value></data>
   <data name="Settings_HoverDetails" xml:space="preserve"><value>Detaljer ved peking</value></data>

@@ -30,15 +30,29 @@
 <p align="center">
   <img src="docs/screenshot.png" alt="SpaceSharp showing a drive as a treemap, with sample data">
   <br>
-  <sub>Illustration with sample data</sub>
+  <sub>The map. Every file and folder is a box sized by the space it uses; folders carry a title bar and their contents inside. Sample data.</sub>
 </p>
 
+<table align="center">
+  <tr>
+    <td align="center" width="50%"><a href="docs/shot-filter.png"><img src="docs/shot-filter.png" alt="Filter panel with matches lit and everything else dimmed"></a><br><sub><b>Filter in plain words.</b> "videos over 500MB older than 1 year" lights the matches and dims the rest.</sub></td>
+    <td align="center" width="50%"><a href="docs/shot-change.png"><img src="docs/shot-change.png" alt="Color by change: what grew, shrank or appeared since the last scan"></a><br><sub><b>What changed.</b> Every scan is saved; the Change mode shows what grew, shrank or appeared since last time.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window for a folder"></a><br><sub><b>Inspect.</b> Exact sizes, shares, dates, the largest items inside and a breakdown by file type.</sub></td>
+    <td align="center"><a href="docs/shot-start.png"><img src="docs/shot-start.png" alt="The start screen with recent saved scans"></a><br><sub><b>Pick up where you left off.</b> Recent scans reopen in one click.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/shot-menu.png"><img src="docs/shot-menu.png" alt="The right-click menu on a file"></a><br><sub><b>Clean up from the map.</b> Open, Inspect, filter by type, Recycle Bin, right from the box.</sub></td>
+    <td align="center"><a href="docs/shot-flat.png"><img src="docs/shot-flat.png" alt="The Flat map style in the Ocean palette"></a><br><sub><b>Six styles, eight palettes.</b> Flat in Ocean here; Classic, Tiles, Cards, Bands and Soft too, light or dark.</sub></td>
+  </tr>
+</table>
+
 <p align="center">
-  <a href="docs/shot-filter.png"><img src="docs/shot-filter.png" width="32%" alt="The filter panel, with matches highlighted on the map"></a>
-  <a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" width="32%" alt="The Inspect window for a folder"></a>
-  <a href="docs/shot-flat.png"><img src="docs/shot-flat.png" width="32%" alt="The Flat map style"></a>
+  <a href="docs/shot-settings.png"><img src="docs/shot-settings.png" width="49%" alt="Settings, Treemap tab"></a>
+  <a href="docs/shot-update.png"><img src="docs/shot-update.png" width="49%" alt="The update dialog with What's new"></a>
   <br>
-  <sub>Filter panel · Inspect · Flat style</sub>
+  <sub>Treemap options · Update with release notes</sub>
 </p>
 
 ---
@@ -69,7 +83,7 @@ It's a single, portable `.exe` with no installer and no dependencies.
 
 **Scanning**
 - Scan a whole drive or any folder, with live counts of files, folders and bytes while it runs
-- Fast NTFS scan: reads the drive's file table directly, mapping a whole drive in seconds (needs administrator; the start screen offers to restart elevated on every run without it)
+- Fast NTFS scan: reads the drive's file table directly, mapping a whole drive in seconds. Windows asks for administrator permission when you scan a drive; an elevated helper does the reading and hands the map back, so the app itself never restarts
 - Every drive scan is saved, so the app opens with yesterday's map already on screen and F5 rescans; save and open scans as files to compare machines
 - Compare with the previous scan: color by change (grew warm, shrank cool, new in amber), a Changes tab listing what grew most, and "since last scan" in Inspect
 - Rescan a single folder from the right-click menu; the rest of the map stays put

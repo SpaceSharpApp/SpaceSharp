@@ -107,8 +107,15 @@ public static class ScanFile
     {
         string temp = path + ".tmp";
         using (var file = File.Create(temp))
-        using (var gzip = new GZipStream(file, CompressionLevel.Fastest))
-        using (var w = new BinaryWriter(gzip, Encoding.UTF8))
+            Write(root, file, scannedUtc, method);
+        File.Move(temp, path, overwrite: true);
+    }
+
+    /// <summary>Writes the tree to any stream in the scan-file format (gzip inside). Used for files and for the elevated helper's pipe.</summary>
+    public static void Write(FsNode root, Stream stream, DateTime scannedUtc, string method)
+    {
+        using (var gzip = new GZipStream(stream, CompressionLevel.Fastest, leaveOpen: true))
+        using (var w = new BinaryWriter(gzip, Encoding.UTF8, leaveOpen: true))
         {
             w.Write(Magic);
             w.Write(Version);
@@ -121,7 +128,6 @@ public static class ScanFile
             foreach (var child in root.Children) WriteNode(w, child);
             w.Write(byte.MaxValue); // end of root's children
         }
-        File.Move(temp, path, overwrite: true);
     }
 
     private static void WriteNode(BinaryWriter w, FsNode node)
@@ -173,8 +179,14 @@ public static class ScanFile
     public static (FsNode Root, ScanFileInfo Info) Load(string path, bool addFreeSpace = true)
     {
         using var file = File.OpenRead(path);
-        using var gzip = new GZipStream(file, CompressionMode.Decompress);
-        using var r = new BinaryReader(gzip, Encoding.UTF8);
+        return Read(file, path, addFreeSpace);
+    }
+
+    /// <summary>Reads a tree in the scan-file format from any stream.</summary>
+    public static (FsNode Root, ScanFileInfo Info) Read(Stream stream, string path, bool addFreeSpace = true)
+    {
+        using var gzip = new GZipStream(stream, CompressionMode.Decompress, leaveOpen: true);
+        using var r = new BinaryReader(gzip, Encoding.UTF8, leaveOpen: true);
         if (r.ReadUInt32() != Magic) throw new InvalidDataException(Strings.Get("ScanFile_NotAScan"));
         if (r.ReadByte() != Version) throw new InvalidDataException(Strings.Get("ScanFile_Newer"));
         string rootPath = r.ReadString();

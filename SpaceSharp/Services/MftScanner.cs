@@ -83,6 +83,14 @@ internal sealed class MftScanner
     }
 
     /// <summary>True when the path is the root of an NTFS drive and the volume can be opened (administrator).</summary>
+    /// <summary>True for a drive root formatted NTFS, whether or not this process may open it.</summary>
+    public static bool IsNtfsDrive(string rootPath)
+    {
+        if (!DiskScanner.IsDriveRoot(rootPath)) return false;
+        try { return string.Equals(new DriveInfo(rootPath).DriveFormat, "NTFS", StringComparison.OrdinalIgnoreCase); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return false; }
+    }
+
     public static bool IsSupported(string rootPath, out string reason)
     {
         reason = string.Empty;

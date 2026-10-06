@@ -20,6 +20,15 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+        // Elevated helper for the fast NTFS scan: no window, no single-instance handshake, just do the job and leave.
+        if (Array.IndexOf(e.Args, ElevatedScan.HelperFlag) >= 0)
+        {
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            Environment.ExitCode = ElevatedScan.RunHelper(e.Args);
+            Shutdown();
+            return;
+        }
+
         Args = CommandLine.Parse(e.Args);
 
         // Second instance: hand the arguments to the one already running and leave. If it cannot be reached

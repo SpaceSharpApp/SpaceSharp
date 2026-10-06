@@ -393,15 +393,6 @@
                     </StackPanel>
                 </StackPanel>
 
-                <Border x:Name="FastScanLine" VerticalAlignment="Bottom" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="16,10">
-                    <DockPanel>
-                        <TextBlock DockPanel.Dock="Left" Text="&#xE945;" FontFamily="{StaticResource IconFont}" FontSize="14" Foreground="{DynamicResource Accent}"
-                                   VerticalAlignment="Center" Margin="0,0,10,0" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource LinkButton}" Content="{u:T Main_NotNow}" Click="FastScanLater_Click" Foreground="{DynamicResource TextDim}" />
-                        <Button DockPanel.Dock="Right" Style="{StaticResource LinkButton}" Content="{u:T Main_RestartAsAdministrator}" Click="FastScanRestart_Click" Margin="0,0,16,0" />
-                        <TextBlock Text="{u:T Start_FastScanLine}" Foreground="{DynamicResource TextDim}" FontSize="12.5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
-                    </DockPanel>
-                </Border>
             </Grid>
 
             <Popup x:Name="HoverTip" Placement="Relative" PlacementTarget="{Binding ElementName=Treemap}"

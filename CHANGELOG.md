@@ -2,6 +2,11 @@
 
 All notable changes to SpaceSharp. The newest release is at the top.
 
+## Unreleased
+
+### Fast scan without the restart
+- The fast NTFS scan no longer needs SpaceSharp itself to run as administrator. When you scan a drive, Windows asks for permission (the UAC prompt), a small elevated helper reads the file table and hands the finished map back to the window you already have, and the helper exits. The window never closes and keeps your zoom, filters and settings. Say no and the normal scan runs; you are not asked again until the next start. The start screen's "Restart as administrator" line is gone.
+
 ## 1.5.1
 
 ### Fixes

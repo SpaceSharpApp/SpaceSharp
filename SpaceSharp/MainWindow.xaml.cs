@@ -98,7 +98,6 @@ public partial class MainWindow : Window
         UpdateNavigation();
 
         if (IsElevated) Title += "  (Administrator)";
-        FastScanLine.Visibility = _settings.FastNtfsScan && !IsElevated ? Visibility.Visible : Visibility.Collapsed;
 
         // Command line: a folder or drive scans right away (also how "Restart as administrator" comes back),
         // a .sscan file opens, and --compare sets the baseline for the scan that follows.
@@ -185,6 +184,7 @@ public partial class MainWindow : Window
     }
 
     private DateTime _scanTimeUtc = DateTime.MinValue;
+    private bool _declinedElevation; // the person cancelled the UAC prompt this session; don't ask again until restart
     private ScanFileInfo? _baselineInfo;
 
     /// <summary>On startup: show the last map straight away, compared with the one before it.</summary>
@@ -716,9 +716,11 @@ public partial class MainWindow : Window
                 DetectHardLinks = _settings.DetectHardLinks,
                 IncludeHidden = _settings.IncludeHidden,
                 UseMft = _settings.FastNtfsScan,
+                AskForElevation = _settings.FastNtfsScan && !IsElevated && !_declinedElevation,
                 Exclude = NamePatterns.Parse(_settings.ExcludePatterns)
             };
             FsNode root = await _scanner.ScanAsync(path, options, cts.Token);
+            if (_scanner.ElevationDeclined) _declinedElevation = true; // one "no" per session is enough
             _baselineInfo = null;
             root.SetFreeSpaceVisible(_settings.ShowFreeSpace, Treemap.SizeMode);
             _root = root;
@@ -767,10 +769,27 @@ public partial class MainWindow : Window
             AccessText.Text = deniedFolders == 1 ? Strings.Get("Access_DeniedOne") : Strings.Format("Access_DeniedMany", deniedFolders);
     }
 
-    private void FastScanRestart_Click(object sender, RoutedEventArgs e) => RestartElevated();
 
-    /// <summary>"Not now": hides the card until the next start. The card comes back every start without administrator rights; turning off Fast NTFS scan in Settings is the way to stop it.</summary>
-    private void FastScanLater_Click(object sender, RoutedEventArgs e) => FastScanLine.Visibility = Visibility.Collapsed;
+    /// <summary>
+    /// For the access-denied notice: protected folders the normal scan could not enter need the whole app
+    /// elevated, so this relaunches as administrator with the same drive and hands the instance over.
+    /// (The fast NTFS scan no longer needs this; it uses an elevated helper.)
+    /// </summary>
+    private void RestartElevated()
+    {
+        if (Environment.ProcessPath is not { } exe) return;
+        try
+        {
+            string args = _lastScanPath is null ? string.Empty : $"\"{_lastScanPath}\"";
+            App.Instance.Release();
+            Process.Start(new ProcessStartInfo(exe, args) { UseShellExecute = true, Verb = "runas" });
+            Application.Current.Shutdown();
+        }
+        catch (System.ComponentModel.Win32Exception)
+        {
+            if (App.Instance.TryClaim()) App.Instance.Listen(); // UAC cancelled: keep running and take the instance back
+        }
+    }
 
     /// <summary>Starts a fresh copy and closes this one, for a language switch.</summary>
     public void RestartApp()
@@ -786,24 +805,6 @@ public partial class MainWindow : Window
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
         {
             Dialog.Error(this, Strings.Get("Dialog_CouldNotRestart"), ex.Message);
-        }
-    }
-
-    private void RestartElevated()
-    {
-        if (Environment.ProcessPath is not { } exe) return;
-        try
-        {
-            string args = _lastScanPath is null ? string.Empty : $"\"{_lastScanPath}\"";
-            App.Instance.Release(); // so the elevated copy can become the instance
-            Process.Start(new ProcessStartInfo(exe, args) { UseShellExecute = true, Verb = "runas" });
-            Application.Current.Shutdown();
-        }
-        catch (System.ComponentModel.Win32Exception)
-        {
-            // The UAC prompt was cancelled; keep running as we are, and take the instance back.
-            if (!App.Instance.TryClaim()) { /* something else grabbed it meanwhile; nothing to do */ }
-            else App.Instance.Listen();
         }
     }
 
