@@ -19,7 +19,7 @@
 
     <!-- Shown in the About window and in the .exe's file properties. -->
     <Product>SpaceSharp</Product>
-    <Version>1.6.0</Version>
+    <Version>1.6.1</Version>
     <Authors>ClearanceClarence</Authors>
     <Copyright>© 2026 ClearanceClarence</Copyright>
     <Description>See where your disk space went. SpaceSharp maps every file and folder as a box sized by the space it uses, so the biggest ones stand out.</Description>

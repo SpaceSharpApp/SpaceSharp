@@ -360,7 +360,7 @@ The same steps by hand, if you prefer:
 ```powershell
 dotnet publish .\SpaceSharp\SpaceSharp.csproj -p:PublishProfile=Velopack
 vpk download github --repoUrl https://github.com/ClearanceClarence/SpaceSharp
-vpk pack --packId SpaceSharp --packVersion 1.6.0 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png --msi --instLocation Either --instWelcome .\installer\welcome.md --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.md
+vpk pack --packId SpaceSharp --packVersion 1.6.1 --packDir .\publish\velopack --mainExe SpaceSharp.exe --packTitle SpaceSharp --packAuthors ClearanceClarence --icon .\SpaceSharp\Assets\SpaceSharp.ico --splashImage .\installer\splash.gif --msi --instLocation Either --instWelcome .\installer\welcome.rtf --instLicense .\installer\license.txt --instConclusion .\installer\conclusion.rtf
 .\installer\brand-msi.ps1
 ```
 
@@ -441,8 +441,8 @@ SpaceSharp/
 │   ├── Dark.xaml                 dark theme colors
 │   └── Light.xaml                light theme colors
 ├── Assets/
-│   ├── SpaceSharp.svg            icon source
-│   ├── SpaceSharp-small.svg      simplified icon for 16–24 px
+│   ├── SpaceSharp.svg            the mark (deep carve), source for everything below
+│   ├── SpaceSharp-small.svg      shallow-carve version used for 16–24 px
 │   ├── SpaceSharp.ico            icon with all Windows sizes (16–256 px)
 │   └── SpaceSharp-256.png        icon used in the app UI
 ├── Properties/PublishProfiles/   Portable, Small and Velopack publish profiles
@@ -479,7 +479,7 @@ Extensions and their categories are listed in `BuildExtensionMap()` in `Util/Pal
 These come from `SpaceSharp.csproj` (`Version`, `Authors`, `Copyright`, `Description`) and appear in the About window and in the exe's file properties.
 
 **Icon**
-The mark is nine cells on a graphite tile (`#161B22`, the same grey as the app window); the gutters form the `#` in Sharp and brightness follows size. Every brand asset is generated from one definition in `tools/make-assets.py` (Python 3 with Pillow; it downloads Bricolage Grotesque from its GitHub repository for the wordmark). Running it rewrites `Assets/SpaceSharp.svg`, `SpaceSharp-small.svg` (the four-cell version used at 16 to 24 px), `SpaceSharp.ico`, `SpaceSharp-256.png`, the icons and previews in `docs/`, and the two installer bitmaps, so change the cells or colors there rather than editing the files by hand.
+The mark is an isometric amber block with a cube carved out of its front corner: three lit faces (pale `#FFD166`, amber `#F5B82E`, deep `#C98E22`) and a graphite void. It has no background tile; the silhouette is the icon, and the carve gets shallower at 16 to 48 px so the hole stays a hole. Every brand asset is generated from one definition in `tools/make-assets.py` (Python 3 with Pillow and cairosvg; it downloads Bricolage Grotesque from its GitHub repository for the wordmark). Running it rewrites `Assets/SpaceSharp.svg`, `SpaceSharp-small.svg`, `SpaceSharp.ico`, `SpaceSharp-256.png`, the icon, header and wordmark in `docs/`, and the two installer bitmaps; `tools/make-social.py` then rebuilds `docs/social-preview.png`. Change the geometry or colors there rather than editing the files by hand.
 
 ## Where things are stored
 
@@ -490,7 +490,7 @@ The mark is nine cells on a graphite tile (`#161B22`, the same grey as the app w
 | Custom palettes | `%LocalAppData%\SpaceSharp\palettes\*.json` |
 | The installed app (Setup.exe and Portable.zip) | `%LocalAppData%\SpaceSharp\` |
 
-Nothing is written anywhere else, and nothing leaves the machine except the update check against GitHub Releases, which only installed copies make.
+Nothing is written anywhere else, and nothing leaves the machine except the update check against GitHub Releases, which only installed copies make, and, when you open What's new from the update prompt, a read of CHANGELOG.md from the GitHub repository so releases you skipped are listed too.
 
 ## Known limitations
 

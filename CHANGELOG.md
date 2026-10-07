@@ -2,6 +2,17 @@
 
 All notable changes to SpaceSharp. The newest release is at the top.
 
+## 1.6.1
+
+### New icon
+- SpaceSharp has a new mark: an amber block with a cube carved out of its front corner, drawn in isometric with no background tile. It replaces the nine-cell tile everywhere: the window and taskbar icon, the start screen and About window, the installer pages, the README header, the landing page and the social preview. The carve is shallower at small sizes so the icon stays legible at 16 px.
+- Setup.exe and Update.exe show a proper splash while they work: a Graphite card with the mark, the wordmark and a moving amber sweep (`installer/splash.gif`, drawn by tools/make-assets.py), instead of the bare icon on white.
+
+### Fixes
+- The update prompt's What's new now covers every release you skipped. Someone updating from 1.4.0 to 1.6.0 used to see only the 1.6.0 notes; the window is now titled "What's new since 1.4.0" and lists each release in between, read from the changelog at the new release's tag, with "See all changes" opening the full changelog. The notes packed into the update are still used when the changelog cannot be fetched.
+- Installing an update no longer pops up a stock Windows "Installing Update" box with a blue i. The update applies silently: the app closes, the files are swapped, and the new version opens a few seconds later. The update dialog says "Restarting into 1.6.0" once the download is done.
+- The installer's welcome and finish pages have their paragraphs back (they are RTF now; the markdown-to-RTF step flattened them), and the finish page says what F1 does correctly: it opens About, where the keyboard shortcuts are; the gear or Ctrl+, opens the settings.
+
 ## 1.6.0
 
 ### Inspect, redrawn

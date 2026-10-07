@@ -1,321 +1,247 @@
-"""Generates every SpaceSharp brand asset from one definition of the mark.
-
-Outputs (relative to the repo root):
-  SpaceSharp/Assets/SpaceSharp.svg, SpaceSharp-small.svg, SpaceSharp.ico, SpaceSharp-256.png
-  docs/icon.png, docs/social-preview.png, docs/wordmark.svg, docs/header.png
-  installer/banner.bmp, installer/logo.bmp
+#!/usr/bin/env python3
 """
-import io
-import struct
+SpaceSharp brand assets: the "Core" mark.
+
+An isometric amber block with a cube carved out of its front corner. Three lit
+faces (pale top, brand amber left, deep amber right), three graphite faces
+inside the void. No background tile: the silhouette is the icon.
+
+One definition here produces every brand file in the repository:
+
+  SpaceSharp/Assets/SpaceSharp.svg        master mark (deep carve)
+  SpaceSharp/Assets/SpaceSharp-small.svg  shallow carve, used for 16 to 24 px
+  SpaceSharp/Assets/SpaceSharp.ico        Windows icon: 16, 20, 24, 32, 48, 64, 128, 256
+  SpaceSharp/Assets/SpaceSharp-256.png    the mark the app shows in its own UI
+  docs/icon.png, docs/icon-512.png        landing page favicon and store icon
+  docs/header.png                         README header, 1280x360 on GitHub's #0D1117
+  docs/wordmark.svg                       horizontal lockup, mark + wordmark
+  installer/banner.bmp                    WiX WixUIBannerBmp, 493x58 (branding at the right edge)
+  installer/logo.bmp                      WiX WixUIDialogBmp, 493x312 (branding in the left column)
+
+tools/make-social.py imports this file for the palette, fonts and mark.
+
+Requires: pip install cairosvg pillow
+The wordmark is Bricolage Grotesque; the TTF is downloaded from google/fonts on
+first run and cached in tools/.fonts/ (ignored by git).
+"""
+from __future__ import annotations
+import io, math, urllib.request
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+import cairosvg
+from PIL import Image, ImageDraw, ImageFont
 
-ROOT = Path(__file__).resolve().parent.parent
-FONTS = Path(__file__).resolve().parent / "fonts"
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
 
+# ---------------------------------------------------------------- palette
+AMBER       = (0xF5, 0xB8, 0x2E)   # brand amber: left face, accents
+AMBER_LIGHT = "#FFD166"            # top face
+AMBER_DEEP  = "#C98E22"            # right face
+GRAPHITE    = (0x0D, 0x11, 0x17)   # GitHub dark page color, app window
+PANEL       = (0x16, 0x1B, 0x22)
+OFFWHITE    = (0xE6, 0xED, 0xF3)
+MUTED       = (0x8B, 0x94, 0x9E)
+HINT        = (0x6E, 0x76, 0x81)
+
+INTERIOR_DARK  = ("#30363D", "#161B22", "#21262D")   # inner left wall, inner right wall, floor
+INTERIOR_LIGHT = ("#484F58", "#21262D", "#30363D")   # one step lighter, for white grounds
+
+def hexs(rgb) -> str:
+    return "#%02X%02X%02X" % rgb[:3]
+
+def blend(a, b, t: float):
+    """t of color a over color b (both RGB tuples)."""
+    return tuple(round(a[i] * t + b[i] * (1 - t)) for i in range(3))
+
+# ---------------------------------------------------------------- geometry
+# Isometric cube with edge L and its front vertex at (CX, CY); a cube of edge l
+# is carved out of that corner. The mark is the deep carve, l = 2/3 L.
+CX, CY, L = 50.0, 52.0, 42.0
+CARVE_DEEP = 28.0
+CARVE_MID = 22.0
+CARVE_SMALL = 16.0
+
+def carve_for(px: int) -> float:
+    """Shallower carve at small sizes so the hole stays a hole, not a dot."""
+    if px <= 24:
+        return CARVE_SMALL
+    if px <= 48:
+        return CARVE_MID
+    return CARVE_DEEP
+
+def _pt(x, y):
+    return f"{x:.2f},{y:.2f}"
+
+def mark_paths(l: float, top: str, left: str, right: str,
+               in_l: str, in_r: str, floor: str) -> str:
+    h = math.sqrt(3) / 2 * L
+    T, TL, TR = _pt(CX, CY - L), _pt(CX - h, CY - L / 2), _pt(CX + h, CY - L / 2)
+    C, BL, BR, B = _pt(CX, CY), _pt(CX - h, CY + L / 2), _pt(CX + h, CY + L / 2), _pt(CX, CY + L)
+    hl = math.sqrt(3) / 2 * l
+    nU, nUR, nLR = _pt(CX, CY - l), _pt(CX + hl, CY - l / 2), _pt(CX + hl, CY + l / 2)
+    nD, nLL, nUL = _pt(CX, CY + l), _pt(CX - hl, CY + l / 2), _pt(CX - hl, CY - l / 2)
+    P = lambda pts, fill: f'<polygon points="{pts}" fill="{fill}"/>'
+    return "".join([
+        P(f"{T} {TR} {nUR} {nU} {nUL} {TL}", top),
+        P(f"{TL} {nUL} {nLL} {nD} {B} {BL}", left),
+        P(f"{TR} {BR} {B} {nD} {nLR} {nUR}", right),
+        P(f"{nU} {C} {nLL} {nUL}", in_l),
+        P(f"{nU} {nUR} {nLR} {C}", in_r),
+        P(f"{C} {nLR} {nD} {nLL}", floor),
+    ])
+
+def mark_body(l: float = CARVE_DEEP, interior=INTERIOR_DARK, mono: str | None = None) -> str:
+    """The polygons only, for inlining into another SVG."""
+    if mono:
+        return mark_paths(l, mono, mono, mono, "none", "none", "none")
+    return mark_paths(l, AMBER_LIGHT, hexs(AMBER), AMBER_DEEP, *interior)
+
+def mark_svg(l: float = CARVE_DEEP, interior=INTERIOR_DARK, mono: str | None = None,
+             size: int | None = None) -> str:
+    dim = f' width="{size}" height="{size}"' if size else ""
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"{dim} '
+            f'role="img" aria-label="SpaceSharp">{mark_body(l, interior, mono)}</svg>')
+
+# ---------------------------------------------------------------- raster helpers
+def raster(svg: str, px: int) -> Image.Image:
+    png = cairosvg.svg2png(bytestring=svg.encode(), output_width=px, output_height=px)
+    return Image.open(io.BytesIO(png)).convert("RGBA")
+
+def mark_image(px: int, interior=INTERIOR_DARK) -> Image.Image:
+    return raster(mark_svg(carve_for(px), interior), px)
+
+def paste_mark(im: Image.Image, px: int, xy, tile=None, interior=INTERIOR_DARK):
+    """Draw the mark at px on im at xy. `tile` is accepted for compatibility and ignored: the mark has no tile."""
+    im.alpha_composite(mark_image(px, interior), (int(xy[0]), int(xy[1])))
+
+# ---------------------------------------------------------------- fonts
+FONT_URL = ("https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/"
+            "BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf")
+FONT_PATH = HERE / ".fonts" / "BricolageGrotesque.ttf"
 
 def ensure_fonts():
-    """Downloads Bricolage Grotesque (OFL) from GitHub on first run."""
-    if (FONTS / "BricolageGrotesque96pt-ExtraBold.ttf").exists():
-        return
-    import urllib.request
-    import zipfile
-    url = "https://github.com/ateliertriay/bricolage/archive/refs/heads/main.zip"
-    buf = io.BytesIO(urllib.request.urlopen(url).read())
-    FONTS.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(buf) as z:
-        for name in z.namelist():
-            if name.endswith(".ttf") and "/fonts/ttf/BricolageGrotesque" in name:
-                (FONTS / Path(name).name).write_bytes(z.read(name))
+    if not FONT_PATH.exists():
+        FONT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        print("  downloading Bricolage Grotesque")
+        urllib.request.urlretrieve(FONT_URL, FONT_PATH)
 
-AMBER = (0xF5, 0xB8, 0x2E)
-AMBER_DEEP = (0xD9, 0x9A, 0x12)
-CHARCOAL = (0x16, 0x1B, 0x22)   # Graphite window; also the icon tile
-BASE = (0x0D, 0x11, 0x17)       # Graphite base, the same as GitHub's dark page
-PANEL = (0x21, 0x26, 0x2D)
-LINE = (0x30, 0x36, 0x3D)
-OFFWHITE = (0xF4, 0xF4, 0xF7)
-MUTED = (0xB1, 0xBA, 0xC4)
-HINT = (0x8B, 0x94, 0x9E)
-
-# The nine cells of the mark, in a 100 x 100 box: (x, y, w, h, alpha). Largest first from the top left.
-CELLS = [
-    (16, 16, 28, 28, 1.00), (48, 16, 18, 28, 0.55), (70, 16, 14, 28, 0.30),
-    (16, 48, 28, 18, 0.55), (48, 48, 18, 18, 0.30), (70, 48, 14, 18, 0.18),
-    (16, 70, 28, 14, 0.30), (48, 70, 18, 14, 0.18), (70, 70, 14, 14, 0.12),
-]
-# Four-cell version for 16 and 24 px, where nine cells would blur.
-CELLS_SMALL = [
-    (14, 14, 40, 40, 1.00), (60, 14, 26, 40, 0.55),
-    (14, 60, 40, 26, 0.55), (60, 60, 26, 26, 0.30),
-]
-
-
-def blend(fg, bg, a):
-    return tuple(round(f * a + b * (1 - a)) for f, b in zip(fg, bg))
-
-
-def hexc(rgb):
-    return "#%02X%02X%02X" % rgb
-
-
-# ------------------------------------------------------------------ SVG
-
-def mark_svg(cells, tile, radius, cell_radius, size=None):
-    attrs = f' width="{size}" height="{size}"' if size else ""
-    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"{attrs}>',
-           f'  <rect width="100" height="100" rx="{radius}" fill="{hexc(tile)}"/>']
-    for x, y, w, h, a in cells:
-        op = "" if a == 1 else f' opacity="{a:g}"'
-        out.append(f'  <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{cell_radius}" fill="{hexc(AMBER)}"{op}/>')
-    out.append("</svg>\n")
-    return "\n".join(out)
-
-
-def wordmark_svg():
-    # Text as outlines would need a font engine; ship it as text with the font stack so it renders where the font exists.
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120">
-  <style>text{{font-family:"Bricolage Grotesque","Segoe UI",sans-serif;letter-spacing:-0.035em}}</style>
-  <rect width="100" height="100" x="10" y="10" rx="22" fill="{hexc(CHARCOAL)}"/>
-''' + "".join(
-        f'  <rect x="{10 + x}" y="{10 + y}" width="{w}" height="{h}" rx="3" fill="{hexc(AMBER)}"{"" if a == 1 else f" opacity={chr(34)}{a:g}{chr(34)}"}/>\n'
-        for x, y, w, h, a in CELLS
-    ) + f'''  <text x="136" y="92" font-size="84" font-weight="500" fill="{hexc(OFFWHITE)}">Space<tspan font-weight="800" fill="{hexc(AMBER)}">Sharp</tspan></text>
-</svg>
-'''
-
-
-# ------------------------------------------------------------------ raster
-
-SS = 4  # supersampling factor
-
-
-def draw_mark(size, cells, tile, radius, cell_radius, tile_alpha=True):
-    """Returns an RGBA image of the mark at `size` px."""
-    big = size * SS
-    im = Image.new("RGBA", (big, big), (0, 0, 0, 0))
-    d = ImageDraw.Draw(im)
-    s = big / 100
-    d.rounded_rectangle([0, 0, big - 1, big - 1], radius=radius * s, fill=tile + (255,))
-    for x, y, w, h, a in cells:
-        col = blend(AMBER, tile, a)
-        d.rounded_rectangle([x * s, y * s, (x + w) * s - 1, (y + h) * s - 1], radius=cell_radius * s, fill=col + (255,))
-    return im.resize((size, size), Image.LANCZOS)
-
-
-def icon(size):
-    if size <= 24:
-        return draw_mark(size, CELLS_SMALL, CHARCOAL, 24, 5)
-    return draw_mark(size, CELLS, CHARCOAL, 22, 3)
-
-
-def write_ico(path, sizes):
-    """ICO with PNG-compressed entries (supported since Vista)."""
-    entries = []
-    for s in sizes:
-        buf = io.BytesIO()
-        icon(s).save(buf, "PNG")
-        entries.append((s, buf.getvalue()))
-    header = struct.pack("<HHH", 0, 1, len(entries))
-    offset = 6 + 16 * len(entries)
-    dir_entries, data = [], b""
-    for s, png in entries:
-        dim = 0 if s >= 256 else s
-        dir_entries.append(struct.pack("<BBBBHHII", dim, dim, 0, 0, 1, 32, len(png), offset + len(data)))
-        data += png
-    path.write_bytes(header + b"".join(dir_entries) + data)
-
-
-def font(weight, px, opsz96=True):
-    name = {500: "Medium", 600: "SemiBold", 700: "Bold", 800: "ExtraBold"}[weight]
-    prefix = "BricolageGrotesque96pt-" if opsz96 else "BricolageGrotesque-"
-    return ImageFont.truetype(str(FONTS / f"{prefix}{name}.ttf"), px)
-
-
-def text(d, xy, s, fnt, fill, tracking=0.0):
-    """Draws text with letter-spacing (tracking in em)."""
-    x, y = xy
-    if not tracking:
-        d.text((x, y), s, font=fnt, fill=fill)
-        return x + d.textlength(s, font=fnt)
-    step = fnt.size * tracking
-    for ch in s:
-        d.text((x, y), ch, font=fnt, fill=fill)
-        x += d.textlength(ch, font=fnt) + step
-    return x
-
-
-def wordmark(d, x, y, px, light_color=OFFWHITE):
-    """'Space' medium + 'Sharp' extrabold amber. Returns the end x."""
-    f1, f2 = font(500, px), font(800, px)
-    x = text(d, (x, y), "Space", f1, light_color, -0.035)
-    return text(d, (x, y), "Sharp", f2, AMBER, -0.035)
-
-
-def paste_mark(im, size, xy, cells=CELLS, tile=CHARCOAL, radius=22, cell_radius=3):
-    im.alpha_composite(draw_mark(size, cells, tile, radius, cell_radius), xy)
-
-
-def treemap(d, x0, y0, w, h, boxes, label_font=None):
-    """boxes: (x, y, w, h, alpha or None for free space, label)."""
-    for bx, by, bw, bh, a, label in boxes:
-        col = PANEL if a is None else blend(AMBER, CHARCOAL, a)
-        d.rounded_rectangle([x0 + bx, y0 + by, x0 + bx + bw - 1, y0 + by + bh - 1], radius=6, fill=col)
-        if label and label_font:
-            tc = CHARCOAL if a and a >= 0.9 else (HINT if a is None else OFFWHITE)
-            d.text((x0 + bx + 14, y0 + by + 12), label, font=label_font, fill=tc)
-
-
-def social_preview(w=1280, h=640, scale=1):
-    W, H = w * scale, h * scale
-    im = Image.new("RGBA", (W, H), BASE + (255,))
-    d = ImageDraw.Draw(im)
-    S = scale
-    # header: mark + wordmark
-    paste_mark(im, 56 * S, (64 * S, 72 * S))
-    wordmark(d, 138 * S, 76 * S, 34 * S)
-    # headline
-    fh = font(800, 62 * S)
-    d.text((64 * S, 214 * S), "See where your", font=fh, fill=OFFWHITE)
-    d.text((64 * S, 282 * S), "disk space went.", font=fh, fill=OFFWHITE)
-    fb = font(500, 22 * S)
-    for i, line in enumerate(["A zoomable map of your drives for Windows.",
-                              "Filter in plain words, fly into folders,",
-                              "clean up from the map."]):
-        d.text((64 * S, (372 + i * 32) * S), line, font=fb, fill=MUTED)
-    # chips
-    fc = font(500, 15 * S)
-    x = 64 * S
-    for chip in ["Free", "Open source", "Portable exe"]:
-        tw = d.textlength(chip, font=fc)
-        d.rounded_rectangle([x, 536 * S, x + tw + 24 * S, 566 * S], radius=6 * S, fill=CHARCOAL, outline=PANEL, width=S)
-        d.text((x + 12 * S, 542 * S), chip, font=fc, fill=MUTED)
-        x += tw + 34 * S
-    d.text((64 * S, 588 * S), "github.com/ClearanceClarence/SpaceSharp", font=fc, fill=HINT)
-    # map
-    mx, my, mw, mh = 660 * S, 40 * S, 580 * S, 560 * S
-    d.rounded_rectangle([mx, my, mx + mw - 1, my + mh - 1], radius=16 * S, fill=CHARCOAL)
-    fl = font(600, 17 * S, opsz96=False)
-    boxes = [
-        (12, 12, 322, 322, 1.0, "Videos"), (342, 12, 226, 196, 0.55, "Games"),
-        (342, 216, 142, 118, 0.38, "Photos"), (492, 216, 76, 118, 0.26, ""),
-        (12, 342, 202, 206, 0.30, "Users"), (222, 342, 146, 116, 0.22, ""),
-        (222, 466, 146, 82, 0.16, ""), (376, 342, 116, 206, 0.20, ""),
-        (500, 342, 68, 90, 0.14, ""), (500, 440, 68, 108, None, "Free"),
-    ]
-    treemap(d, mx, my, mw, mh, [(bx * S, by * S, bw * S, bh * S, a, l) for bx, by, bw, bh, a, l in boxes], fl)
-    return im
-
-
-def header(w=1280, h=360):
-    """README header: mark, wordmark and tagline, with a quiet abstract treemap on the right. No screenshot,
-    no labels, only the shape the app is about, in the brand's amber steps."""
-    S = 2
-    GITHUB = (0x0D, 0x11, 0x17)   # GitHub's dark page background, so the image has no visible edge on the README
-    im = Image.new('RGBA', (w * S, h * S), GITHUB + (255,))
-    d = ImageDraw.Draw(im)
-    # abstract map: a handful of boxes, largest first from the top left, brightness following size
-    x0, y0, mw, mh = 720 * S, 0, 560 * S, h * S
-    boxes = [
-        (0, 0, 300, 220, 0.55), (306, 0, 254, 140, 0.34), (306, 146, 150, 74, 0.24), (462, 146, 98, 74, 0.17),
-        (0, 226, 190, 134, 0.26), (196, 226, 140, 80, 0.18), (196, 312, 140, 48, 0.12), (342, 226, 120, 134, 0.14),
-        (468, 226, 92, 64, 0.10), (468, 296, 92, 64, 0.07),
-    ]
-    for bx, by, bw, bh, a in boxes:
-        d.rounded_rectangle([x0 + bx * S, y0 + by * S, x0 + (bx + bw) * S - 1, y0 + (by + bh) * S - 1], radius=6 * S,
-                            fill=blend(AMBER, GITHUB, a * 0.34))
-    # fade the map's left edge so the words sit on a clean surface
-    fade = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
-    fd = ImageDraw.Draw(fade)
-    span = 300 * S
-    for i in range(span):
-        fd.line([(x0 + i, 0), (x0 + i, h * S)], fill=GITHUB + (int(255 * (1 - i / span) ** 1.4),))
-    im.alpha_composite(fade)
-    d = ImageDraw.Draw(im)
-    paste_mark(im, 112 * S, (72 * S, (h // 2 - 56) * S), tile=PANEL)
-    wordmark(d, 210 * S, (h // 2 - 62) * S, 84 * S)
-    d.text((214 * S, (h // 2 + 40) * S), "See where your disk space went.", font=font(500, 27 * S), fill=MUTED)
-    return im.resize((w, h), Image.LANCZOS)
-
-
-def banner():
-    """WixUIBannerBmp: the installer draws the page title in black on the left, so keep that side light
-    and put the mark at the right edge."""
-    S = 2
-    im = Image.new("RGBA", (493 * S, 58 * S), OFFWHITE + (255,))
-    d = ImageDraw.Draw(im)
-    d.rectangle([0, 58 * S - 2 * S, 493 * S, 58 * S], fill=AMBER)
-    paste_mark(im, 40 * S, (493 * S - 52 * S, 8 * S))
-    f = font(800, 17 * S)
-    w = d.textlength("SpaceSharp", font=f)
-    x = 493 * S - 62 * S - w
-    x = text(d, (x, 17 * S), "Space", font(500, 17 * S), CHARCOAL, -0.03)
-    text(d, (x, 17 * S), "Sharp", f, AMBER_DEEP, -0.03)
-    return im.resize((493, 58), Image.LANCZOS)
-
-
-def logo():
-    """WixUIDialogBmp: the welcome and finish pages draw their text in black over the right part,
-    so only the left 164 px column is branded and the rest stays light."""
-    S = 2
-    col = 164
-    im = Image.new("RGBA", (493 * S, 312 * S), OFFWHITE + (255,))
-    d = ImageDraw.Draw(im)
-    d.rectangle([0, 0, col * S, 312 * S], fill=CHARCOAL)
-    d.rectangle([col * S - 2 * S, 0, col * S, 312 * S], fill=AMBER)
-    paste_mark(im, 88 * S, ((col - 88) // 2 * S, 40 * S), tile=PANEL)
-    f1, f2 = font(500, 24 * S), font(800, 24 * S)
-    w = d.textlength("Space", font=f1) + d.textlength("Sharp", font=f2) - 0.03 * 24 * S * 10
-    x = (col * S - w) / 2
-    x = text(d, (x, 150 * S), "Space", f1, OFFWHITE, -0.03)
-    text(d, (x, 150 * S), "Sharp", f2, AMBER, -0.03)
-    ft = font(500, 11 * S)
-    for i, line in enumerate(["See where your", "disk space went."]):
-        tw = d.textlength(line, font=ft)
-        d.text(((col * S - tw) / 2, (186 + i * 16) * S), line, font=ft, fill=MUTED)
-    # small map at the bottom of the column
-    boxes = [
-        (0, 0, 78, 64, 1.0, ""), (84, 0, 52, 36, 0.55, ""), (84, 42, 26, 22, 0.35, ""), (116, 42, 20, 22, 0.22, ""),
-    ]
-    treemap(d, 14 * S, 234 * S, 136 * S, 64 * S, [(bx * S, by * S, bw * S, bh * S, a, l) for bx, by, bw, bh, a, l in boxes])
-    return im.resize((493, 312), Image.LANCZOS)
-
-
-def stamp_version():
-    """Writes the project version into the title bars of the screenshot mockup and the website's previewer."""
-    import re
-    version = re.search(r'<Version>([^<]+)</Version>', (ROOT / 'SpaceSharp' / 'SpaceSharp.csproj').read_text(encoding='utf-8')).group(1)
-    for rel in ('tools/screenshot-mockup.html', 'docs/index.html'):
-        p = ROOT / rel
-        text = p.read_bytes().decode('utf-8')
-        new = re.sub(r'SpaceSharp \d+\.\d+\.\d+', f'SpaceSharp {version}', text)
-        if new != text: p.write_bytes(new.encode('utf-8'))
-
-
-def main():
+def font(weight: int, px: int) -> ImageFont.FreeTypeFont:
     ensure_fonts()
-    stamp_version()
-    assets = ROOT / "SpaceSharp" / "Assets"
-    docs = ROOT / "docs"
-    inst = ROOT / "installer"
+    f = ImageFont.truetype(str(FONT_PATH), px)
+    f.set_variation_by_axes([96, weight, 100])  # opsz, wght, wdth
+    return f
 
-    (assets / "SpaceSharp.svg").write_text(mark_svg(CELLS, CHARCOAL, 22, 3), encoding="utf-8")
-    (assets / "SpaceSharp-small.svg").write_text(mark_svg(CELLS_SMALL, CHARCOAL, 24, 5), encoding="utf-8")
-    (docs / "wordmark.svg").write_text(wordmark_svg(), encoding="utf-8")
+def wordmark(d: ImageDraw.ImageDraw, x: int, y: int, px: int,
+             color=OFFWHITE, accent=AMBER, tracking=-0.03) -> int:
+    """Draws Space|Sharp with 'Sharp' in amber. Returns the end x."""
+    f = font(800, px)
+    cur = x
+    for word, col in (("Space", color), ("Sharp", accent)):
+        for ch in word:
+            d.text((cur, y), ch, font=f, fill=col)
+            cur += d.textlength(ch, font=f) + tracking * px
+    return int(cur)
 
-    write_ico(assets / "SpaceSharp.ico", [16, 20, 24, 32, 40, 48, 64, 128, 256])
-    icon(256).save(assets / "SpaceSharp-256.png")
-    icon(256).save(docs / "icon.png")
-    icon(512).save(docs / "icon-512.png")
+def wordmark_width(px: int) -> int:
+    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    return wordmark(probe, 0, 0, px)
 
-    social_preview(scale=1).convert("RGB").save(docs / "social-preview.png", optimize=True)
-    header().convert("RGB").save(docs / "header.png", optimize=True)
+# ---------------------------------------------------------------- outputs
+def write(rel: str, data: bytes | str):
+    path = ROOT / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if isinstance(data, bytes):
+        path.write_bytes(data)
+    else:
+        path.write_text(data, encoding="utf-8", newline="\n")
+    print(f"  {rel}")
 
-    banner().convert("RGB").save(inst / "banner.bmp")
-    logo().convert("RGB").save(inst / "logo.bmp")
-    print("done")
+def png_bytes(im: Image.Image) -> bytes:
+    buf = io.BytesIO(); im.save(buf, "PNG", optimize=True); return buf.getvalue()
 
+def make_svgs():
+    write("SpaceSharp/Assets/SpaceSharp.svg", mark_svg())
+    write("SpaceSharp/Assets/SpaceSharp-small.svg", mark_svg(CARVE_SMALL))
+    lock = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120" role="img" aria-label="SpaceSharp">'
+            f'<style>text{{font-family:"Bricolage Grotesque","Segoe UI",sans-serif;letter-spacing:-0.035em}}</style>'
+            f'<g transform="translate(10,10)">{mark_body()}</g>'
+            f'<text x="128" y="88" font-weight="800" font-size="76" fill="{hexs(OFFWHITE)}">Space<tspan fill="{hexs(AMBER)}">Sharp</tspan></text></svg>')
+    write("docs/wordmark.svg", lock)
+
+def make_pngs():
+    write("SpaceSharp/Assets/SpaceSharp-256.png", png_bytes(mark_image(256)))
+    write("docs/icon.png", png_bytes(mark_image(256)))
+    write("docs/icon-512.png", png_bytes(mark_image(512)))
+
+def make_ico(rel: str, sizes=(16, 20, 24, 32, 48, 64, 128, 256)):
+    frames = [mark_image(px) for px in sizes]
+    buf = io.BytesIO()
+    frames[-1].save(buf, "ICO", sizes=[(s, s) for s in sizes], append_images=frames[:-1])
+    write(rel, buf.getvalue())
+
+def make_header(w=1280, h=360):
+    im = Image.new("RGBA", (w, h), GRAPHITE + (255,))
+    paste_mark(im, 150, ((w - 150) // 2, 44))
+    d = ImageDraw.Draw(im)
+    wordmark(d, (w - wordmark_width(68)) // 2, 212, 68)
+    tag = font(500, 24)
+    t = "See where your disk space went."
+    d.text(((w - d.textlength(t, font=tag)) // 2, 302), t, font=tag, fill=MUTED)
+    write("docs/header.png", png_bytes(im))
+
+def make_installer_bitmaps():
+    # WiX banner, 493x58: the text area stays light, branding only in a block at the right edge.
+    ban = Image.new("RGB", (493, 58), "#FFFFFF")
+    blk = Image.new("RGBA", (84, 58), GRAPHITE + (255,))
+    paste_mark(blk, 40, (22, 9))
+    ban.paste(blk, (493 - 84, 0), blk)
+    buf = io.BytesIO(); ban.save(buf, "BMP"); write("installer/banner.bmp", buf.getvalue())
+    # WiX dialog, 493x312: branding in the left column (164 px), the text area to the right stays light.
+    dlg = Image.new("RGB", (493, 312), "#FFFFFF")
+    col = Image.new("RGBA", (164, 312), GRAPHITE + (255,))
+    paste_mark(col, 88, (38, 92))
+    d = ImageDraw.Draw(col)
+    wordmark(d, (164 - wordmark_width(24)) // 2, 196, 24)
+    dlg.paste(col, (0, 0), col)
+    buf = io.BytesIO(); dlg.save(buf, "BMP"); write("installer/logo.bmp", buf.getvalue())
+
+def make_splash(w=460, h=250, frames=36):
+    """The window Setup.exe and Update.exe show while they work (Velopack's --splashImage). A Graphite card with
+    the mark, the wordmark and an amber sweep that keeps moving, so an install that takes a few seconds does not
+    look stuck. An animated GIF, which Velopack plays; the first frame also works as a still."""
+    def frame(t: float) -> Image.Image:
+        im = Image.new("RGBA", (w, h), GRAPHITE + (255,))
+        d = ImageDraw.Draw(im)
+        d.rectangle([0, 0, w - 1, h - 1], outline=(0x30, 0x36, 0x3D), width=1)
+        paste_mark(im, 72, (40, 48))
+        wordmark(d, 132, 56, 34)
+        tag = font(500, 15)
+        d.text((134, 100), "See where your disk space went.", font=tag, fill=MUTED)
+        d.text((40, 170), "Setting up", font=font(600, 14), fill=OFFWHITE)   # one splash serves both Setup.exe and Update.exe
+        # the track, and a sweep that runs along it and fades at both ends
+        x0, x1, y, th = 40, w - 40, 198, 4
+        d.rounded_rectangle([x0, y, x1, y + th], radius=th // 2, fill=(0x21, 0x26, 0x2D))
+        span = x1 - x0; sw = int(span * 0.28)
+        head = int(x0 - sw + (span + sw) * t)
+        for i in range(sw):
+            k = i / sw
+            a = (1 - abs(k * 2 - 1)) ** 1.5           # bright in the middle, fading to both ends
+            xx = head + i
+            if x0 <= xx <= x1:
+                d.line([(xx, y), (xx, y + th)], fill=blend(AMBER, (0x21, 0x26, 0x2D), a))
+        return im.convert("P", palette=Image.ADAPTIVE, colors=128)
+    seq = [frame(i / frames) for i in range(frames)]
+    buf = io.BytesIO()
+    seq[0].save(buf, "GIF", save_all=True, append_images=seq[1:], duration=40, loop=0, optimize=False)
+    write("installer/splash.gif", buf.getvalue())
 
 if __name__ == "__main__":
-    main()
+    print(f"writing into {ROOT}")
+    make_svgs()
+    make_pngs()
+    make_ico("SpaceSharp/Assets/SpaceSharp.ico")
+    make_header()
+    make_installer_bitmaps()
+    make_splash()
+    print("done; run tools/make-social.py for docs/social-preview.png")

@@ -290,7 +290,7 @@
 
 <nav><div class="wrap">
   <a class="brand" href="#top" aria-label="SpaceSharp">
-    <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#1E1E24"/><rect x="16" y="16" width="28" height="28" rx="3" fill="#F5B82E"/><rect x="48" y="16" width="18" height="28" rx="3" fill="#F5B82E" opacity=".55"/><rect x="70" y="16" width="14" height="28" rx="3" fill="#F5B82E" opacity=".3"/><rect x="16" y="48" width="28" height="18" rx="3" fill="#F5B82E" opacity=".55"/><rect x="48" y="48" width="18" height="18" rx="3" fill="#F5B82E" opacity=".3"/><rect x="70" y="48" width="14" height="18" rx="3" fill="#F5B82E" opacity=".18"/><rect x="16" y="70" width="28" height="14" rx="3" fill="#F5B82E" opacity=".3"/><rect x="48" y="70" width="18" height="14" rx="3" fill="#F5B82E" opacity=".18"/><rect x="70" y="70" width="14" height="14" rx="3" fill="#F5B82E" opacity=".12"/></svg>
+    <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.00,10.00 86.37,31.00 74.25,38.00 50.00,24.00 25.75,38.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 25.75,38.00 25.75,66.00 50.00,80.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,80.00 74.25,66.00 74.25,38.00" fill="#C98E22"/><polygon points="50.00,24.00 50.00,52.00 25.75,66.00 25.75,38.00" fill="#30363D"/><polygon points="50.00,24.00 74.25,38.00 74.25,66.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 74.25,66.00 50.00,80.00 25.75,66.00" fill="#21262D"/></svg>
     <span>Space<b>Sharp</b></span>
   </a>
   <div class="links">
@@ -322,7 +322,7 @@
 <div class="fit"><div class="fit-inner" id="fitInner"><div class="stage" id="stage">
   <div class="win" id="win">
     <div class="titlebar">
-      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.6.0</div>
+      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.6.1</div>
       <div class="caption"><span><svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg></span><span><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></span><span><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10"/></svg></span></div>
     </div>
     <div class="toolbar">
@@ -546,7 +546,7 @@
   const APP_VERSION = (document.querySelector(".app").textContent.match(/\d+\.\d+\.\d+/) || ["0.0.0"])[0];
   const setIcon = (el, name) => { el.setAttribute("viewBox", "0 0 16 16"); el.innerHTML = ICONS[name]; };
   document.querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
-  document.getElementById("titleIcon").innerHTML = `<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#161B22"/><rect x="16" y="16" width="28" height="28" rx="3" fill="#F5B82E"/><rect x="48" y="16" width="18" height="28" rx="3" fill="#F5B82E" opacity=".55"/><rect x="70" y="16" width="14" height="28" rx="3" fill="#F5B82E" opacity=".3"/><rect x="16" y="48" width="28" height="18" rx="3" fill="#F5B82E" opacity=".55"/><rect x="48" y="48" width="18" height="18" rx="3" fill="#F5B82E" opacity=".3"/><rect x="70" y="48" width="14" height="18" rx="3" fill="#F5B82E" opacity=".18"/><rect x="16" y="70" width="28" height="14" rx="3" fill="#F5B82E" opacity=".3"/><rect x="48" y="70" width="18" height="14" rx="3" fill="#F5B82E" opacity=".18"/><rect x="70" y="70" width="14" height="14" rx="3" fill="#F5B82E" opacity=".12"/></svg>`;
+  document.getElementById("titleIcon").innerHTML = `<svg viewBox="0 0 100 100"><polygon points="50.00,10.00 86.37,31.00 69.05,41.00 50.00,30.00 30.95,41.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 30.95,41.00 30.95,63.00 50.00,74.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,74.00 69.05,63.00 69.05,41.00" fill="#C98E22"/><polygon points="50.00,30.00 50.00,52.00 30.95,63.00 30.95,41.00" fill="#30363D"/><polygon points="50.00,30.00 69.05,41.00 69.05,63.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 69.05,63.00 50.00,74.00 30.95,63.00" fill="#21262D"/></svg>`;
 
   // ============================================================ sample data
   const KB = 1024, MB = KB * 1024, GB = MB * 1024;
@@ -1048,13 +1048,13 @@
     }
     if (state.scene === "update" || state.scene === "whatsnew") {
       const next = APP_VERSION, cur = APP_VERSION.replace(/\.(\d+)\.(\d+)$/, (m, a, b) => `.${Math.max(0, +a - 1)}.0`);
-      const notes = `INSPECT, REDRAWN
-•  The Inspect window is built around the question you opened it for: size, share and rank, what the folder is made of, how old it is, where the space is, and donuts by type and by age.
-•  The hover tooltip is three lines: name and size, what it is and its share, what it mostly holds and when it changed.
+      const notes = `NEW ICON
+•  An amber block with a cube carved out of its front corner, everywhere: window, taskbar, installer, website.
+•  Setup.exe and Update.exe show a proper splash while they work.
 
-CHANGES
-•  The fast NTFS scan no longer needs a restart as administrator; a small elevated helper reads the file table and hands the map back.
-•  The side panel and the Drives list can be resized by dragging. Title bars take the theme colors on Windows 11.
+FIXES
+•  What's new covers every release you skipped, not only the newest.
+•  Updates apply silently; no stock Windows progress box.
 …`;
       document.getElementById("dialog").className = "dialog " + (state.scene === "update" ? "update" : "notes");
       document.getElementById("dialog").innerHTML = state.scene === "update" ? `

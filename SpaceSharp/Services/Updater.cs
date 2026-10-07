@@ -39,11 +39,16 @@ internal sealed class Updater
         return Available;
     }
 
-    /// <summary>Downloads the update, then exits and restarts into the new version.</summary>
+    /// <summary>
+    /// Downloads the update, then exits and restarts into the new version. The apply step runs silently:
+    /// Velopack's own progress window is a stock Windows task dialog that cannot be themed, so the app
+    /// closes, the files are swapped with nothing on screen, and the new version opens a few seconds later.
+    /// </summary>
     public async Task InstallAndRestartAsync(Action<int>? progress = null)
     {
         if (Available is null) return;
         await _manager.DownloadUpdatesAsync(Available, progress);
-        _manager.ApplyUpdatesAndRestart(Available);
+        _manager.WaitExitThenApplyUpdates(Available, silent: true, restart: true);
+        Environment.Exit(0);
     }
 }

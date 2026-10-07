@@ -1,12 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="22" fill="#161B22"/>
-  <rect x="16" y="16" width="28" height="28" rx="3" fill="#F5B82E"/>
-  <rect x="48" y="16" width="18" height="28" rx="3" fill="#F5B82E" opacity="0.55"/>
-  <rect x="70" y="16" width="14" height="28" rx="3" fill="#F5B82E" opacity="0.3"/>
-  <rect x="16" y="48" width="28" height="18" rx="3" fill="#F5B82E" opacity="0.55"/>
-  <rect x="48" y="48" width="18" height="18" rx="3" fill="#F5B82E" opacity="0.3"/>
-  <rect x="70" y="48" width="14" height="18" rx="3" fill="#F5B82E" opacity="0.18"/>
-  <rect x="16" y="70" width="28" height="14" rx="3" fill="#F5B82E" opacity="0.3"/>
-  <rect x="48" y="70" width="18" height="14" rx="3" fill="#F5B82E" opacity="0.18"/>
-  <rect x="70" y="70" width="14" height="14" rx="3" fill="#F5B82E" opacity="0.12"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="SpaceSharp"><polygon points="50.00,10.00 86.37,31.00 74.25,38.00 50.00,24.00 25.75,38.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 25.75,38.00 25.75,66.00 50.00,80.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,80.00 74.25,66.00 74.25,38.00" fill="#C98E22"/><polygon points="50.00,24.00 50.00,52.00 25.75,66.00 25.75,38.00" fill="#30363D"/><polygon points="50.00,24.00 74.25,38.00 74.25,66.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 74.25,66.00 50.00,80.00 25.75,66.00" fill="#21262D"/></svg>

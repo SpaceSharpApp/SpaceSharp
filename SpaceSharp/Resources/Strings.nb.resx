@@ -455,6 +455,7 @@
   <data name="TopList_NoExtension" xml:space="preserve"><value>(ingen filendelse)</value></data>
   <data name="Update_Available" xml:space="preserve"><value>SpaceSharp {0} er tilgjengelig. Du har {1}.</value></data>
   <data name="Update_Downloading" xml:space="preserve"><value>Laster ned oppdatering… {0} %</value></data>
+  <data name="Update_Restarting" xml:space="preserve"><value>Starter {0} på nytt…</value></data>
   <data name="Update_Failed" xml:space="preserve"><value>Oppdateringen kunne ikke installeres: {0}</value></data>
   <data name="Word_Off" xml:space="preserve"><value>av</value></data>
   <data name="Word_On" xml:space="preserve"><value>på</value></data>
@@ -488,6 +489,7 @@
   <data name="Update_WhatsNew" xml:space="preserve"><value>Hva er nytt</value></data>
   <data name="Update_Later" xml:space="preserve"><value>Senere</value></data>
   <data name="WhatsNew_Title" xml:space="preserve"><value>Nytt i {0}</value></data>
+  <data name="WhatsNew_TitleSince" xml:space="preserve"><value>Nytt siden {1}</value></data>
   <data name="WhatsNew_Loading" xml:space="preserve"><value>Henter utgivelsesnotatene…</value></data>
   <data name="WhatsNew_Unavailable" xml:space="preserve"><value>Utgivelsesnotatene kunne ikke hentes. Hele listen finnes på GitHub.</value></data>
   <data name="WhatsNew_SeeAll" xml:space="preserve"><value>Se alle endringer på GitHub</value></data>

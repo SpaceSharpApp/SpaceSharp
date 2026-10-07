@@ -49,4 +49,55 @@ public class WhatsNewTests
         Assert.Null(UpdateWindow.Abridge(null));
         Assert.Null(UpdateWindow.Abridge("   "));
     }
+
+    private const string Changelog = """
+        # Changelog
+
+        ## Unreleased
+        - not shipped
+
+        ## 1.6.0
+        - new icon
+
+        ## 1.5.1
+        - grouping fix
+
+        ## 1.5.0
+        - tabbed settings
+
+        ## 1.4.0
+        - translations
+        """;
+
+    [Fact]
+    public void SectionsBetweenKeepsEveryReleaseAfterTheInstalledOne()
+    {
+        string text = UpdateWindow.SectionsBetween(Changelog, "1.4.0", "1.6.0")!;
+        Assert.Contains("## 1.6.0", text);
+        Assert.Contains("## 1.5.1", text);
+        Assert.Contains("## 1.5.0", text);
+        Assert.DoesNotContain("1.4.0", text);
+        Assert.DoesNotContain("Unreleased", text);
+        Assert.DoesNotContain("not shipped", text);
+        Assert.True(text.IndexOf("1.6.0", StringComparison.Ordinal) < text.IndexOf("1.5.0", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void SectionsBetweenGivesNullWhenNothingIsInRange()
+    {
+        Assert.Null(UpdateWindow.SectionsBetween(Changelog, "1.6.0", "1.6.0"));
+        Assert.Null(UpdateWindow.SectionsBetween(Changelog, "1.6.0", "1.4.0"));
+    }
+
+    [Fact]
+    public void SpansReleasesOnlyWhenMoreThanOneStepBehind()
+    {
+        Assert.False(UpdateWindow.SpansReleases("1.5.0", "1.5.1"));
+        Assert.True(UpdateWindow.SpansReleases("1.5.0", "1.5.2"));
+        Assert.True(UpdateWindow.SpansReleases("1.4.0", "1.6.0"));
+        Assert.True(UpdateWindow.SpansReleases("1.5.1", "1.6.0"));
+        Assert.False(UpdateWindow.SpansReleases(null, "1.6.0"));
+        Assert.False(UpdateWindow.SpansReleases("unknown", "1.6.0"));
+        Assert.False(UpdateWindow.SpansReleases("1.6.0", "1.6.0"));
+    }
 }

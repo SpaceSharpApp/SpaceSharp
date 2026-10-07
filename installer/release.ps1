@@ -69,12 +69,12 @@ vpk pack `
     --packTitle SpaceSharp `
     --packAuthors ClearanceClarence `
     --icon .\SpaceSharp\Assets\SpaceSharp.ico `
-    --splashImage .\SpaceSharp\Assets\SpaceSharp-256.png `
+    --splashImage .\installer\splash.gif `
     --msi `
     --instLocation Either `
-    --instWelcome .\installer\welcome.md `
+    --instWelcome .\installer\welcome.rtf `
     --instLicense .\installer\license.txt `
-    --instConclusion .\installer\conclusion.md `
+    --instConclusion .\installer\conclusion.rtf `
     --releaseNotes .\Releases\notes.md
 if ($LASTEXITCODE) { throw "vpk pack failed" }
 Remove-Item .\Releases\notes.md -ErrorAction SilentlyContinue

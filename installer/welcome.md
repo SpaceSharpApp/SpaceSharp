@@ -1,7 +1,0 @@
-# Welcome to SpaceSharp
-
-SpaceSharp shows a drive or folder as a map where every file and folder is a box sized by the space it uses, so the biggest ones stand out at once. Double-click to zoom into a folder, scroll to zoom back out, and tidy up straight from the map.
-
-This wizard installs SpaceSharp on your computer. You can choose the folder and whether to install it for yourself or for everyone who uses this PC.
-
-SpaceSharp keeps itself up to date: when a new version is released it offers to install it, and the update takes a few seconds.

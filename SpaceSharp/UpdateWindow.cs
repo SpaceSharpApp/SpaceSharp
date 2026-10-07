@@ -47,7 +47,7 @@ public static class UpdateWindow
         var whatsNew = new Button { Content = Strings.Get("Update_WhatsNew"), Style = (Style)Application.Current.FindResource("ToolButton"), Tag = "\uE7C3", Height = 32 };
         var later = new Button { Content = Strings.Get("Update_Later"), Style = (Style)Application.Current.FindResource("ToolButton"), Height = 32, MinWidth = 84, Margin = new Thickness(8, 0, 0, 0), IsCancel = true };
         var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Style = (Style)Application.Current.FindResource("AccentButton"), Height = 32, Margin = new Thickness(8, 0, 0, 0), IsDefault = true };
-        whatsNew.Click += (_, _) => ShowWhatsNew(window, version);
+        whatsNew.Click += (_, _) => ShowWhatsNew(window, version, updater.CurrentVersion);
         later.Click += (_, _) => window.Close();
         install.Click += async (_, _) =>
         {
@@ -59,7 +59,7 @@ public static class UpdateWindow
                 await updater.InstallAndRestartAsync(percent => window.Dispatcher.BeginInvoke(() =>
                 {
                     progress.Value = percent;
-                    status.Text = Strings.Format("Update_Downloading", percent);
+                    status.Text = percent >= 100 ? Strings.Format("Update_Restarting", version) : Strings.Format("Update_Downloading", percent);
                 }));
             }
             catch (Exception ex)
@@ -81,9 +81,13 @@ public static class UpdateWindow
 
     // ------------------------------------------------------------------ what's new
 
-    public static void ShowWhatsNew(Window owner, string version)
+    /// <param name="version">The version whose notes to show.</param>
+    /// <param name="sinceVersion">The installed version, when this is an update prompt: every release after it up to
+    /// <paramref name="version"/> is shown, so someone two releases behind sees what the release in between did.</param>
+    public static void ShowWhatsNew(Window owner, string version, string? sinceVersion = null)
     {
-        var window = Dialog.CreateWindow(owner, Strings.Format("WhatsNew_Title", version), 560);
+        bool span = SpansReleases(sinceVersion, version);
+        var window = Dialog.CreateWindow(owner, Strings.Format(span ? "WhatsNew_TitleSince" : "WhatsNew_Title", version, sinceVersion ?? string.Empty), 560);
         var body = new StackPanel { Margin = new Thickness(24, 20, 24, 16) };
         var notes = new TextBlock { Text = Strings.Get("WhatsNew_Loading"), TextWrapping = TextWrapping.Wrap, LineHeight = 21 };
         notes.SetResourceReference(TextBlock.ForegroundProperty, "Text");
@@ -91,7 +95,7 @@ public static class UpdateWindow
         body.Children.Add(scroll);
 
         var all = new Button { Content = Strings.Get("WhatsNew_SeeAll"), Style = (Style)Application.Current.FindResource("ToolButton"), Tag = "\uE8A7", Height = 32 };
-        all.Click += (_, _) => { try { Process.Start(new ProcessStartInfo($"{Repository}/releases/tag/{version}") { UseShellExecute = true }); } catch { } };
+        all.Click += (_, _) => { try { Process.Start(new ProcessStartInfo(span ? $"{Repository}/blob/{version}/CHANGELOG.md" : $"{Repository}/releases/tag/{version}") { UseShellExecute = true }); } catch { } };
         var close = new Button { Content = Strings.Get("Dialog_Ok"), Style = (Style)Application.Current.FindResource("AccentButton"), Height = 32, MinWidth = 84, IsDefault = true, IsCancel = true };
         close.Click += (_, _) => window.Close();
         var footer = new DockPanel();
@@ -100,9 +104,83 @@ public static class UpdateWindow
         footer.Children.Add(all); footer.Children.Add(right);
         Dialog.Finish(window, body, footer);
 
-        var load = LoadNotesAsync(version);
-        window.Loaded += async (_, _) => notes.Text = Abridge(await load) ?? Strings.Get("WhatsNew_Unavailable");
+        var load = span ? LoadNotesSinceAsync(sinceVersion!, version) : LoadNotesAsync(version);
+        window.Loaded += async (_, _) => notes.Text = Abridge(await load, span ? 40 : 14) ?? Strings.Get("WhatsNew_Unavailable");
         window.ShowDialog();
+    }
+
+    /// <summary>True when an update prompt should show more than one release: the installed version is known and at
+    /// least two releases behind, judged by whether the changelog would hold a section between them.</summary>
+    internal static bool SpansReleases(string? since, string target)
+    {
+        if (!TryVersion(since, out var a) || !TryVersion(target, out var b)) return false;
+        if (a >= b) return false;
+        // One patch step (1.5.0 -> 1.5.1) or one minor step with no patches (1.5.x -> 1.6.0) is a single release; the
+        // changelog decides the rest. We cannot know without it, so assume a gap unless the versions are adjacent.
+        return !(a.Major == b.Major && a.Minor == b.Minor && b.Build == a.Build + 1);
+    }
+
+    private static bool TryVersion(string? text, out Version version)
+    {
+        version = new Version(0, 0);
+        if (string.IsNullOrWhiteSpace(text)) return false;
+        string core = text.Trim().TrimStart('v', 'V');
+        int cut = core.IndexOfAny(new[] { '-', '+' });
+        if (cut >= 0) core = core[..cut];
+        if (core.Count(c => c == '.') == 1) core += ".0";
+        return Version.TryParse(core, out version!);
+    }
+
+    /// <summary>
+    /// Release notes for every version after <paramref name="since"/> up to and including <paramref name="through"/>,
+    /// read from CHANGELOG.md at the target release's tag so the text matches what shipped. Falls back to the
+    /// single-version notes when the changelog cannot be fetched.
+    /// </summary>
+    private static async Task<string?> LoadNotesSinceAsync(string since, string through)
+    {
+        try
+        {
+            using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("SpaceSharp");
+            string changelog = await http.GetStringAsync($"https://raw.githubusercontent.com/ClearanceClarence/SpaceSharp/{through}/CHANGELOG.md");
+            string? sections = SectionsBetween(changelog, since, through);
+            if (!string.IsNullOrWhiteSpace(sections)) return sections;
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+        {
+        }
+        return await LoadNotesAsync(through);
+    }
+
+    /// <summary>
+    /// The "## x.y.z" sections of a changelog with since &lt; x.y.z &lt;= through, newest first, each kept under its
+    /// version heading. Sections whose heading is not a version (Unreleased, notes) are skipped.
+    /// </summary>
+    internal static string? SectionsBetween(string changelog, string since, string through)
+    {
+        if (!TryVersion(since, out var lo) || !TryVersion(through, out var hi)) return null;
+        var keep = new List<string>();
+        Version? current = null;
+        var section = new List<string>();
+        void Flush()
+        {
+            if (current is not null && current > lo && current <= hi && section.Count > 0) keep.Add(string.Join("\n", section).Trim());
+            section.Clear();
+        }
+        foreach (var raw in changelog.Replace("\r\n", "\n").Split('\n'))
+        {
+            var m = Regex.Match(raw, @"^##\s+(.+?)\s*$");
+            if (m.Success)
+            {
+                Flush();
+                current = TryVersion(m.Groups[1].Value, out var v) ? v : null;
+                if (current is not null) section.Add("## " + m.Groups[1].Value.Trim());
+                continue;
+            }
+            if (current is not null) section.Add(raw);
+        }
+        Flush();
+        return keep.Count == 0 ? null : string.Join("\n\n", keep);
     }
 
     /// <summary>Release notes for the version: from the Velopack package first (vpk --releaseNotes), then the GitHub release.</summary>
