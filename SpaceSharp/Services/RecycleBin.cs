@@ -26,6 +26,19 @@ internal static class RecycleBin
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
 
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern int SHEmptyRecycleBin(IntPtr hwnd, string? pszRootPath, uint dwFlags);
+
+
+    /// <summary>Empties the Recycle Bin of one drive ("C:\") or of all drives (null). The shell asks for confirmation.</summary>
+    public static bool TryEmpty(string? driveRoot, IntPtr owner, out string? error)
+    {
+        int result = SHEmptyRecycleBin(owner, driveRoot, 0);
+        if (result == 0 || result == unchecked((int)0x8000FFFF)) { error = null; return true; } // E_UNEXPECTED: already empty
+        error = $"Windows reported error code 0x{result:X}.";
+        return false;
+    }
+
     public static bool TrySend(string path, IntPtr owner, out string? error) => TrySend(new[] { path }, owner, out error);
 
     /// <summary>Sends several items in one shell operation (one progress dialog, one undo).</summary>

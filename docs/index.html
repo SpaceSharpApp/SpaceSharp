@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SpaceSharp: see where your disk space went</title>
-<meta name="description" content="SpaceSharp is a free, open-source disk space analyzer for Windows. A zoomable map of your drives, filters in plain words, and cleanup right from the map. Reads the NTFS file table for whole-drive scans in seconds.">
+<meta name="description" content="A free, zoomable map of your drives for Windows. One look you shade yourself, a filter in plain words, and a panel that says what is safe to clear.">
 <meta property="og:title" content="SpaceSharp: see where your disk space went">
 <meta property="og:description" content="A free, zoomable map of your drives for Windows. Filter in plain words, fly into folders, clean up from the map.">
 <meta property="og:image" content="https://clearanceclarence.github.io/SpaceSharp/social-preview.png">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="icon.png">
+<meta name="theme-color" content="#16161B">
+<link rel="icon" type="image/png" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,800&display=swap" rel="stylesheet">
@@ -26,10 +26,10 @@
 <style>
   :root {
     box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
-    --bg: #16161B; --bg-2: #1E1E24; --panel: #22222A; --line: #2E2E38; --line-strong: #44444F;
-    --ink: #F4F4F7; --muted: #A2A2B0; --hint: #6E6E7C;
+    --bg: #0D1117; --bg-2: #161B22; --panel: #1C2128; --line: #30363D; --line-strong: #444C56;
+    --ink: #F0F3F6; --muted: #9AA4AF; --hint: #6E7681;
     --amber: #F5B82E; --amber-ink: #1C1500; --amber-deep: #D99A12;
-    --radius: 10px;
+    --radius: 12px;
   }
   @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
     --bg: #F4F4F7; --bg-2: #FFFFFF; --panel: #FFFFFF; --line: #DCDCE4; --line-strong: #C4C4CE;
@@ -46,254 +46,128 @@
   a { color: inherit; text-decoration: none; }
   a:focus-visible, button:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; border-radius: 4px; }
   img { max-width: 100%; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
   h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -0.03em; line-height: 1.02; font-variation-settings: "opsz" 96; }
   h2 { font-size: clamp(30px, 4vw, 44px); }
   h3 { font-size: 19px; letter-spacing: -0.01em; font-variation-settings: "opsz" 24; }
   p { margin: 0; }
   .lede { color: var(--muted); font-size: 18px; max-width: 58ch; }
+  code { font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 0.92em; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+  kbd { font-family: inherit; font-size: 0.85em; font-weight: 600; color: var(--ink); background: var(--panel); border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 5px; padding: 0 6px; }
 
-  /* ---------- buttons */
   .btn { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 20px; border-radius: 8px; font-weight: 600; font-size: 15px; border: 1px solid var(--line-strong); color: var(--ink); background: var(--bg-2); white-space: nowrap; cursor: pointer; }
   .btn:hover { border-color: var(--amber); }
   .btn.primary { background: var(--amber); border-color: var(--amber); color: var(--amber-ink); }
   .btn.primary:hover { background: #F7C24A; }
   .btn.small { height: 36px; padding: 0 14px; font-size: 14px; }
-  .btn svg { width: 16px; height: 16px; flex: none; }
 
-  /* ---------- nav */
-  nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  nav .wrap { height: 68px; display: flex; align-items: center; gap: 28px; }
+  nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  nav .wrap { height: 64px; display: flex; align-items: center; gap: 28px; }
   .brand { display: flex; align-items: center; gap: 11px; font-size: 20px; letter-spacing: -0.03em; font-variation-settings: "opsz" 96; }
-  .brand svg { width: 30px; height: 30px; }
+  .brand svg { width: 28px; height: 28px; }
   .brand span { font-weight: 500; } .brand b { font-weight: 800; color: var(--amber); }
-  nav .links { margin-left: auto; display: flex; gap: 26px; font-size: 15px; color: var(--muted); }
+  .brand .v { font-size: 12px; font-weight: 600; color: var(--amber-ink); background: var(--amber); border-radius: 999px; padding: 1px 8px; margin-left: 4px; letter-spacing: 0; }
+  nav .links { margin-left: auto; display: flex; gap: 24px; font-size: 15px; color: var(--muted); }
   nav .links a:hover { color: var(--ink); }
-  @media (max-width: 720px) { nav .links { display: none; } }
+  @media (max-width: 760px) { nav .links { display: none; } }
 
-  /* ---------- hero */
-  .hero { padding: 84px 0 0; }
-  .hero h1 { font-size: clamp(46px, 7.6vw, 104px); max-width: 12ch; }
-  .hero .hero-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 40px; align-items: end; margin-top: 30px; }
+  .hero { padding: 72px 0 0; }
+  .hero h1 { font-size: clamp(44px, 7.2vw, 96px); max-width: 12ch; }
+  .hero .hero-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr); gap: 40px; align-items: end; margin-top: 28px; }
   .hero .hero-row .lede { font-size: 20px; }
   .hero .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
   .hero .facts { color: var(--hint); font-size: 14.5px; line-height: 1.6; }
   .hero .facts b { color: var(--muted); font-weight: 600; }
   @media (max-width: 860px) { .hero .hero-row { grid-template-columns: 1fr; gap: 24px; align-items: start; } }
 
-  /* ---------- previewer */
-  .preview { margin-top: 56px; }
-  .preview .frame { position: relative; border-radius: 14px; padding: 12px; background: var(--bg-2); border: 1px solid var(--line); }
-  .preview .fit { padding: 0; display: block; }
+  .preview { margin-top: 48px; }
+  .preview .frame { position: relative; border-radius: 16px; padding: 10px; background: var(--bg-2); border: 1px solid var(--line); }
   .preview .fit-inner { position: relative; overflow: hidden; border-radius: 8px; }
   .preview .stage { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
-  .preview .caption { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; padding: 14px 6px 0; color: var(--hint); font-size: 13.5px; }
-  .preview .caption b { color: var(--muted); font-weight: 600; }
-  .console { display: grid; grid-template-columns: repeat(5, minmax(0, auto)); gap: 18px 28px; margin-top: 26px; padding: 22px 26px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); }
-  .console .group { min-width: 0; }
-  .console .group > span { display: block; font-size: 13px; color: var(--hint); margin-bottom: 8px; }
-  .console .opts { display: flex; flex-wrap: wrap; gap: 6px; }
-  .console button { font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 7px; padding: 6px 11px; cursor: pointer; line-height: 1.2; }
+  .console { display: flex; flex-wrap: wrap; gap: 10px 26px; align-items: center; margin-top: 16px; padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); }
+  .console .group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .console .group > span { font-size: 13px; color: var(--hint); margin-right: 2px; }
+  .console button { font: inherit; font-size: 14px; font-weight: 500; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 7px; padding: 5px 10px; cursor: pointer; line-height: 1.2; }
   .console button:hover { color: var(--ink); border-color: var(--line-strong); }
   .console button[aria-pressed="true"] { color: var(--ink); background: var(--panel); border-color: var(--line-strong); box-shadow: inset 0 -2px 0 var(--amber); }
-  .console .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 7px; vertical-align: -1px; }
-  @media (max-width: 1000px) { .console { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 560px) { .console { grid-template-columns: 1fr; padding: 18px; } .preview .frame { padding: 6px; border-radius: 10px; } }
+  .console select { font: inherit; font-size: 14px; color: var(--ink); background: var(--panel); border: 1px solid var(--line-strong); border-radius: 7px; padding: 5px 8px; }
+  .preview .caption { padding: 12px 6px 0; color: var(--hint); font-size: 13.5px; }
+  .preview .caption b { color: var(--muted); font-weight: 600; }
+  @media (max-width: 560px) { .preview .frame { padding: 5px; border-radius: 10px; } .console { padding: 12px; } }
 
-  /* ---------- sections */
-  section { padding: 108px 0 0; }
-  section .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: end; margin-bottom: 44px; }
+  section { padding: 104px 0 0; }
+  section .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: end; margin-bottom: 40px; }
   @media (max-width: 860px) { section .head { grid-template-columns: 1fr; gap: 16px; } }
 
-  /* features as a spec list: term on the left, explanation right, rule between */
-  .spec { border-top: 1px solid var(--line); }
-  .spec .item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px 40px; padding: 26px 0; border-bottom: 1px solid var(--line); }
-  .spec .item p { color: var(--muted); max-width: 62ch; }
-  .spec .item code { font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 0.92em; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
-  @media (max-width: 720px) { .spec .item { grid-template-columns: 1fr; gap: 8px; } }
+  /* what's new: three big cards */
+  .new { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .new .card { padding: 26px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); display: flex; flex-direction: column; gap: 10px; }
+  .new .card .k { font-size: 12.5px; font-weight: 600; color: var(--amber-deep); letter-spacing: 0.06em; text-transform: uppercase; }
+  :root:not([data-theme="light"]) .new .card .k { color: var(--amber); }
+  .new .card h3 { font-size: 22px; }
+  .new .card p { color: var(--muted); }
+  .new .card a { margin-top: auto; padding-top: 6px; color: var(--muted); font-size: 14px; font-weight: 600; }
+  .new .card a:hover { color: var(--ink); }
+  @media (max-width: 860px) { .new { grid-template-columns: 1fr; } }
 
-  /* comparison */
+  /* features: a compact grid */
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 40px; border-top: 1px solid var(--line); }
+  .grid .item { padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .grid .item h3 { margin-bottom: 8px; }
+  .grid .item p { color: var(--muted); font-size: 15.5px; }
+  @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
   .compare { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .compare th, .compare td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .compare th, .compare td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
   .compare th { font-weight: 600; color: var(--muted); font-size: 14px; }
   .compare thead th { color: var(--ink); font-size: 16px; }
   .compare thead th:first-child { font-weight: 500; color: var(--hint); }
   .compare td.yes { color: var(--ink); } .compare td.no { color: var(--hint); }
   .compare td:nth-child(2) { color: var(--ink); font-weight: 600; }
   .compare-wrap { overflow-x: auto; }
-  .compare-note { color: var(--hint); font-size: 13.5px; margin-top: 14px; }
+  .note { color: var(--hint); font-size: 13.5px; margin-top: 14px; }
+  .note a { color: var(--muted); text-decoration: underline; }
 
-  /* downloads */
-  .dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
   .dl a { display: flex; flex-direction: column; gap: 10px; padding: 26px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); }
   .dl a:hover { border-color: var(--amber); }
-  .dl a.main { grid-column: span 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); grid-template-rows: auto auto; gap: 6px 40px; align-items: start; background: var(--panel); border-color: var(--line-strong); padding: 30px; }
-  .dl a.main h3 { font-size: 26px; grid-row: 1; }
-  .dl a.main .file { grid-row: 2; }
-  .dl a.main p { grid-column: 2; grid-row: 1 / span 2; font-size: 17px; }
-  .dl a.main .go { grid-column: 1 / span 2; margin-top: 14px; }
-  .dl a .go { margin-top: auto; }
+  .dl a.main { background: var(--panel); border-color: var(--line-strong); }
   .dl a .file { font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 13px; color: var(--hint); }
   .dl a p { color: var(--muted); }
-  .dl a.main p { font-size: 17px; }
-  .dl a .go { font-weight: 600; color: var(--amber-deep); }
+  .dl a .go { margin-top: auto; padding-top: 10px; font-weight: 600; color: var(--amber-deep); }
   :root:not([data-theme="light"]) .dl a .go { color: var(--amber); }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dl a .go { color: var(--amber); } }
-  .winget { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 24px; padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 14px; color: var(--muted); }
+  .winget { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 18px; padding: 14px 18px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); font-family: Consolas, "Cascadia Mono", ui-monospace, monospace; font-size: 14px; color: var(--muted); cursor: pointer; }
   .winget b { color: var(--ink); font-weight: 500; }
   .winget .soon { margin-left: auto; font-family: "Bricolage Grotesque", sans-serif; font-size: 13px; color: var(--amber-deep); }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .winget .soon { color: var(--amber); } }
-  @media (max-width: 720px) { .dl { grid-template-columns: 1fr; } .dl a.main { grid-column: auto; display: flex; } .dl a.main .go { margin-top: auto; } }
+  :root:not([data-theme="light"]) .winget .soon { color: var(--amber); }
+  @media (max-width: 860px) { .dl { grid-template-columns: 1fr; } }
 
-  /* faq */
   .faq details { border-bottom: 1px solid var(--line); }
-  .faq details:first-child { border-top: 1px solid var(--line); }
-  .faq summary { cursor: pointer; padding: 20px 0; font-size: 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+  .faq details:first-of-type { border-top: 1px solid var(--line); }
+  .faq summary { cursor: pointer; padding: 18px 0; font-size: 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
   .faq summary::-webkit-details-marker { display: none; }
   .faq summary::after { content: "+"; color: var(--hint); font-weight: 400; font-size: 22px; line-height: 1; }
   .faq details[open] summary::after { content: "\2212"; }
-  .faq details p { color: var(--muted); padding: 0 0 22px; max-width: 70ch; }
+  .faq details p { color: var(--muted); padding: 0 0 20px; max-width: 70ch; }
 
-  footer { margin-top: 108px; padding: 36px 0 44px; border-top: 1px solid var(--line); color: var(--hint); font-size: 14px; }
+  footer { margin-top: 104px; padding: 36px 0 44px; border-top: 1px solid var(--line); color: var(--hint); font-size: 14px; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; }
   footer .links { margin-left: auto; display: flex; gap: 22px; }
   footer a:hover { color: var(--ink); }
-
   .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 8px; font-size: 14px; pointer-events: none; transition: .25s; z-index: 30; }
   .toast.show { opacity: 1; transform: translateX(-50%); }
-
-  /* ---------- the embedded app window (from tools/screenshot-mockup.html) */
-  .win { --bg:#0D1117; --panel:#161B22; --control:#21262D; --hover:#2B3139; --stroke:#30363D; --text:#E6EDF3; --dim:#8B949E; --accent:#F5B82E; --accent-text:#1C1500; --mapbg:#0D1117; --titlebar:#161B22; --titletext:#fff;
-    display:flex; flex-direction:column; overflow:hidden; background:var(--bg); color:var(--text); font:13px/1.3 "Segoe UI", system-ui, sans-serif; border-radius:8px; border:1px solid rgba(0,0,0,.35); box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.2); }
-  .win.light { --bg:#F3F3F6; --panel:#fff; --control:#ECECF1; --hover:#E2E2E9; --stroke:#D6D6DE; --text:#1C1C22; --dim:#61616F; --mapbg:#D9D9E1; --titlebar:#F3F3F3; --titletext:#1C1C22; border-color:rgba(0,0,0,.18); }
-
-  .titlebar { height:32px; flex:none; display:flex; align-items:center; background:var(--titlebar); color:var(--titletext); font-size:12px; }
-  .titlebar .app { display:flex; align-items:center; gap:9px; padding-left:10px; flex:1; }
-  .titlebar .app svg { width:16px; height:16px; }
-  .caption { display:flex; height:100%; } .caption span { width:46px; display:grid; place-items:center; } .caption svg { width:10px; height:10px; stroke:currentColor; fill:none; stroke-width:1; }
-
-  .toolbar { height:49px; flex:none; display:flex; align-items:center; gap:4px; padding:0 10px; background:var(--panel); border-bottom:1px solid var(--stroke); }
-  .combo { height:32px; display:flex; align-items:center; gap:9px; padding:0 10px 0 12px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); white-space:nowrap; overflow:hidden; }
-  .combo .chev { margin-left:auto; width:10px; height:10px; color:var(--dim); flex:none; }
-  .btn { height:32px; min-width:32px; display:flex; align-items:center; justify-content:center; gap:8px; padding:0 10px; border-radius:6px; white-space:nowrap; }
-  .btn svg, .icon { width:16px; height:16px; flex:none; }
-  .btn.accent { background:var(--accent); color:var(--accent-text); font-weight:600; padding:0 14px; }
-  .btn.accent.only { padding:0 8px; }
-  .btn.off { opacity:.35; }
-  .divider { width:1px; height:20px; background:var(--stroke); margin:0 8px; flex:none; }
-  .label { color:var(--dim); margin:0 8px 0 6px; white-space:nowrap; }
-  .zoomlabel { width:64px; text-align:center; color:var(--dim); }
-  .spacer { flex:1; }
-  .swatches { display:flex; gap:1px; } .swatches i { width:9px; height:14px; border-radius:2px; display:block; }
-
-  .crumbs { height:37px; flex:none; display:flex; align-items:center; padding:0 6px; background:var(--bg); border-bottom:1px solid var(--stroke); gap:2px; }
-  .crumb { height:26px; display:flex; align-items:center; gap:6px; padding:0 6px; border-radius:6px; color:var(--dim); white-space:nowrap; }
-  .crumb.current { color:var(--text); font-weight:600; } .crumb svg { width:15px; height:15px; }
-  .crumbs .info { margin-left:auto; color:var(--dim); padding:0 4px 0 12px; white-space:nowrap; }
-  .filter { width:360px; height:28px; margin:0 4px 0 12px; display:flex; align-items:center; gap:9px; padding:0 8px 0 10px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); color:var(--dim); white-space:nowrap; overflow:hidden; }
-  .filter svg { width:14px; height:14px; flex:none; } .filter .funnel { margin-left:auto; }
-  .legend { display:none; gap:12px; margin-left:8px; padding-right:4px; } .legend.show { display:flex; }
-  .legend span { display:flex; align-items:center; gap:5px; color:var(--dim); font-size:12px; white-space:nowrap; } .legend i { width:11px; height:11px; border-radius:3px; display:block; }
-
-  .body { flex:1; display:flex; min-height:0; }
-  .side { width:340px; flex:none; background:var(--panel); border-right:1px solid var(--stroke); display:flex; flex-direction:column; min-height:0; }
-  .side.hidden { display:none; }
-  .side h2 { font-size:15px; font-weight:600; margin:12px 14px 4px; } .side .sub { color:var(--dim); font-size:12px; margin:0 14px 6px; }
-  .drives { padding:0 4px; }
-  .drive { display:grid; grid-template-columns:auto 1fr auto; gap:0 10px; padding:9px 10px; border-radius:5px; margin:1px 0; }
-  .drive:hover { background:var(--hover); }
-  .drive svg { width:16px; height:16px; color:var(--dim); margin-top:1px; }
-  .drive .name { font-weight:600; } .drive .free { color:var(--dim); }
-  .drive .bar { grid-column:2 / span 2; height:6px; margin:7px 0 5px; border-radius:3px; background:var(--control); position:relative; }
-  .drive .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:3px; background:var(--accent); opacity:.9; }
-  .drive .detail { grid-column:2 / span 2; color:var(--dim); font-size:11px; }
-  .rule { height:1px; background:var(--stroke); margin:8px 14px 6px; }
-  .tabs { display:flex; gap:2px; margin:4px 10px; } .tab { height:28px; padding:0 12px; display:flex; align-items:center; border-radius:6px; color:var(--dim); } .tab.on { background:var(--control); color:var(--text); font-weight:600; }
-  .rows { padding:0 4px; overflow:hidden; }
-  .row { display:grid; grid-template-columns:1fr auto; gap:0 10px; padding:6px 8px; border-radius:5px; margin:1px 0; position:relative; }
-  .row .s { white-space:nowrap; }
-  .tab[hidden] { display:none; }
-  .row .sw { position:absolute; left:8px; top:11px; width:9px; height:9px; border-radius:2px; } .row.chg { padding-left:24px; }
-  .row .n { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .row .d { color:var(--dim); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .row .s { font-weight:600; align-self:center; } .row .bar { position:absolute; left:8px; bottom:2px; height:3px; border-radius:2px; background:var(--accent); opacity:.55; }
-
-  .map { flex:1; position:relative; background:var(--mapbg); cursor:default; min-width:0; }
-  .map canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
-  .sample-tag { position:absolute; right:12px; bottom:12px; pointer-events:none; padding:5px 11px; border-radius:999px; font-size:12px; font-weight:600; background:rgba(20,20,24,.78); color:#F2F2F6; border:1px solid rgba(255,255,255,.14); }
-  .sample-tag[hidden] { display:none; }
-
-  .win { position:relative; }
-  .ov { position:absolute; z-index:5; font-size:13px; color:var(--text); }
-  .ov[hidden] { display:none; }
-  .tip { background:var(--menubg, #1C2128); border:1px solid var(--stroke); border-radius:8px; padding:9px 12px; max-width:420px; box-shadow:0 6px 18px rgba(0,0,0,.45); }
-  .win.light .tip, .win.light .cmenu, .win.light .fpanel, .win.light .dialog { --menubg:#fff; }
-  .tip .n { font-weight:600; } .tip .p { color:var(--dim); font-size:11px; margin:1px 0 6px; }
-  .tip table { border-collapse:collapse; font-size:12px; } .tip td { padding:1px 14px 1px 0; } .tip td:first-child { color:var(--dim); }
-  .tip .hint { color:var(--dim); font-size:11px; margin-top:6px; }
-  .cmenu { background:var(--menubg, #1C2128); border:1px solid var(--stroke); border-radius:8px; padding:6px; width:290px; box-shadow:0 8px 22px rgba(0,0,0,.5); }
-  .cmenu .mi { display:flex; align-items:center; gap:10px; height:30px; padding:0 10px 0 8px; border-radius:5px; white-space:nowrap; }
-  .cmenu .mi.on { background:var(--hover); } .cmenu .mi.off { opacity:.4; } .cmenu .mi b { font-weight:600; }
-  .cmenu .mi .k { margin-left:auto; color:var(--dim); font-size:12px; } .cmenu .mi .danger { color:#FF7070; }
-  .cmenu .mi svg { width:15px; height:15px; color:var(--dim); flex:none; } .cmenu .mi .blank { width:15px; flex:none; }
-  .cmenu .sep { height:1px; background:var(--stroke); margin:5px 4px; }
-  .fpanel { width:440px; background:var(--menubg, #1C2128); border:1px solid var(--stroke); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.5); overflow:hidden; }
-  .fpanel .fh { display:flex; align-items:center; gap:10px; padding:12px 10px 10px 16px; border-bottom:1px solid var(--stroke); } .fpanel .fh b { font-size:14px; } .fpanel .fh span { color:var(--dim); font-size:11.5px; flex:1; } .fpanel .fh i { width:26px; height:26px; display:grid; place-items:center; color:var(--dim); font-style:normal; }
-  .fpanel .fb { padding:12px 16px 4px; } .fpanel h4 { margin:0; font-size:12px; font-weight:600; color:var(--dim); }
-  .fpanel .chips { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 2px; } .fpanel .chip { padding:5px 10px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); } .fpanel .chip.on { background:var(--accent); border-color:var(--accent); color:var(--accent-text); }
-  .fpanel .fdiv { height:1px; background:var(--stroke); margin:8px 0 10px; }
-  .fpanel .box svg { width:14px; height:14px; flex:none; }
-  .fpanel .box { height:32px; margin:6px 0 10px; display:flex; align-items:center; padding:0 10px; gap:8px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); color:var(--dim); }
-  .fpanel .two { display:grid; grid-template-columns:1fr 12px 1fr; margin-bottom:10px; } .fpanel .two .combo { margin-top:6px; }
-  .fpanel .ff { display:flex; align-items:center; gap:8px; padding:10px 16px; background:var(--control); border-top:1px solid var(--stroke); } .fpanel .ff span { flex:1; color:var(--dim); font-size:12px; }
-  .fpanel .ff .btn { border:1px solid var(--stroke); min-width:84px; } .fpanel .ff .btn.accent { border-color:var(--accent); }
-  .scrim { position:absolute; inset:0; z-index:6; background:rgba(0,0,0,.45); display:grid; place-items:center; } .scrim[hidden] { display:none; }
-  .dialog { width:640px; background:var(--bg); border:1px solid var(--stroke); border-radius:8px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; color:var(--text); }
-  .dialog .dt { height:32px; display:flex; align-items:center; padding:0 12px; gap:8px; background:var(--titlebar); color:var(--titletext); font-size:12px; } .dialog .dt svg { width:14px; height:14px; } .dialog .dt .x { margin-left:auto; }
-  .dialog .db { padding:20px 24px; } .dialog .head { display:flex; gap:16px; margin-bottom:12px; } .dialog .head .g { width:32px; height:32px; color:var(--accent); flex:none; margin-top:4px; }
-  .dialog .head .nm { font-size:20px; font-weight:600; } .dialog .head .pt { color:var(--dim); font-size:12px; margin-top:2px; } .dialog .head .kd { color:var(--dim); margin-top:4px; }
-  .dialog table { border-collapse:collapse; margin-bottom:6px; } .dialog td { padding:3px 18px 3px 0; vertical-align:top; } .dialog td:first-child { color:var(--dim); white-space:nowrap; }
-  .dialog h5 { font-size:14px; font-weight:600; margin:14px 0 6px; }
-  .dialog .br { display:grid; grid-template-columns:1fr 80px 56px; margin:2px 0 6px; } .dialog .br .s { text-align:right; } .dialog .br .p { text-align:right; color:var(--dim); }
-  .dialog .br .bar { grid-column:1 / span 3; height:4px; border-radius:2px; background:var(--control); margin-top:3px; position:relative; } .dialog .br .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:2px; background:var(--accent); }
-  .start { position:absolute; inset:0; background:var(--mapbg); display:flex; flex-direction:column; }
-  .start[hidden] { display:none; }
-  .start-center { flex:1; display:flex; align-items:center; justify-content:center; }
-  .start-center > div { width:520px; }
-  .start-head { display:flex; align-items:center; gap:14px; } .start-mark svg { width:44px; height:44px; display:block; }
-  .start-title { font-size:18px; font-weight:600; } .start-sub { color:var(--dim); font-size:12.5px; margin-top:3px; }
-  .start-card { margin-top:18px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
-  .start-row { display:flex; align-items:center; gap:14px; height:42px; padding:0 12px 0 14px; font-size:13px; border-top:1px solid var(--stroke); } .start-row:first-child { border-top:0; }
-  .start-row svg { width:14px; height:14px; color:var(--dim); } .start-row .n { flex:1; } .start-row .w, .start-row .s, .start-row .c { color:var(--dim); font-size:12.5px; white-space:nowrap; } .start-row .s { width:90px; text-align:right; }
-  .start-actions { display:flex; gap:8px; margin-top:14px; } .start-actions .btn { border:1px solid var(--stroke); }
-  .start-foot { display:flex; align-items:center; gap:10px; padding:10px 16px; border-top:1px solid var(--stroke); font-size:12.5px; color:var(--dim); } .start-foot svg { width:14px; height:14px; color:var(--accent); } .start-foot a { color:var(--accent); } .start-foot a.dim { color:var(--dim); margin-left:16px; }
-  .about-list { margin:0 24px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
-  .about-row { display:flex; align-items:center; gap:14px; padding:9px 14px; border-top:1px solid var(--stroke); font-size:13.5px; } .about-row:first-child { border-top:0; } .about-row svg { width:16px; height:16px; color:var(--dim); } .about-row .sub { font-size:12px; color:var(--dim); margin-top:2px; } .about-row .c { margin-left:auto; color:var(--dim); }
-  .dialog.about { width:520px; display:flex; flex-direction:column; max-height:calc(100% - 24px); } .dialog.about .about-list { flex:0 1 auto; overflow:hidden; } .about-head { display:flex; align-items:center; gap:16px; padding:20px 24px 14px; } .about-head svg { width:56px; height:56px; } .about-head .t { font-size:22px; font-weight:600; line-height:1.1; } .about-head .s { color:var(--dim); font-size:13px; margin-top:4px; }
-  .about-copy { padding:10px 24px 12px; font-size:11.5px; color:var(--dim); }
-  .dialog.update { width:480px; } .dialog.notes { width:560px; }
-  .dialog .ub { display:flex; gap:16px; padding:22px 24px 18px; } .dialog .ub .g { width:26px; height:26px; color:var(--accent); flex:none; margin-top:2px; }
-  .dialog .ub .t { font-size:15px; font-weight:600; } .dialog .ub .h { color:var(--dim); margin-top:6px; line-height:1.45; }
-  .dialog .ub .bar { height:4px; border-radius:2px; background:var(--control); margin-top:14px; position:relative; } .dialog .ub .bar i { position:absolute; left:0; top:0; bottom:0; width:38%; border-radius:2px; background:var(--accent); }
-  .dialog .nb { padding:20px 24px 16px; line-height:1.6; white-space:pre-wrap; max-height:380px; overflow:hidden; } .dialog .nb b { font-weight:600; }
-  .dialog .df { display:flex; align-items:center; gap:6px; padding:12px 16px; background:var(--panel); border-top:1px solid var(--stroke); } .dialog .df .btn { border:1px solid var(--stroke); } .dialog .df .spacer { flex:1; } .dialog .df .btn.accent { min-width:84px; border-color:var(--accent); }
-  .finfo { display:none; color:var(--accent); margin-left:12px; white-space:nowrap; } .finfo.show { display:block; }
-  .filter .fx { display:none; margin-left:auto; color:var(--dim); } .filter .fx.show { display:block; } .filter .fx.show + .funnel { margin-left:0; }
-  .filter.active { color:var(--text); }
-  .sel-btn svg { width:15px; height:15px; flex:none; }
-  .sel-btn { display:none; align-items:center; gap:8px; height:28px; padding:0 10px; border-radius:6px; border:1px solid var(--stroke); margin-left:8px; white-space:nowrap; } .sel-btn.show { display:flex; }
-  .status { height:30px; flex:none; display:flex; align-items:center; gap:16px; padding:0 12px; background:var(--panel); border-top:1px solid var(--stroke); }
-  .status .hover { flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .status .scan { color:var(--dim); white-space:nowrap; }
-
 </style>
 </head>
 <body>
 
 <nav><div class="wrap">
   <a class="brand" href="#top" aria-label="SpaceSharp">
-    <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50.00,10.00 86.37,31.00 74.25,38.00 50.00,24.00 25.75,38.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 25.75,38.00 25.75,66.00 50.00,80.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,80.00 74.25,66.00 74.25,38.00" fill="#C98E22"/><polygon points="50.00,24.00 50.00,52.00 25.75,66.00 25.75,38.00" fill="#30363D"/><polygon points="50.00,24.00 74.25,38.00 74.25,66.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 74.25,66.00 50.00,80.00 25.75,66.00" fill="#21262D"/></svg>
-    <span>Space<b>Sharp</b></span>
+    <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,10 86.37,31 74.25,38 50,24 25.75,38 13.63,31" fill="#FFD166"/><polygon points="13.63,31 25.75,38 25.75,66 50,80 50,94 13.63,73" fill="#F5B82E"/><polygon points="86.37,31 86.37,73 50,94 50,80 74.25,66 74.25,38" fill="#C98E22"/><polygon points="50,24 50,52 25.75,66 25.75,38" fill="#30363D"/><polygon points="50,24 74.25,38 74.25,66 50,52" fill="#161B22"/><polygon points="50,52 74.25,66 50,80 25.75,66" fill="#21262D"/></svg>
+    <span>Space<b>Sharp</b></span><span class="v">2.0</span>
   </a>
   <div class="links">
+    <a href="#new">What's new</a>
     <a href="#features">What it does</a>
     <a href="#compare">Compared</a>
     <a href="#download">Download</a>
@@ -307,126 +181,55 @@
   <h1>See where your disk space went.</h1>
   <div class="hero-row">
     <div>
-      <p class="lede">A zoomable map of your drives for Windows. Every file and folder is a box sized by the space it uses. Filter in plain words, fly into folders, and clean up right from the map.</p>
+      <p class="lede">A zoomable map of your drives for Windows. Every file and folder is a box sized by the space it uses. Fly into folders, filter in plain words, and clean up right from the map.</p>
       <div class="cta">
         <a class="btn primary" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi" data-track="download" data-file="msi">Download for Windows</a>
-        <a class="btn" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-Portable.zip" data-track="download" data-file="portable">Portable version</a>
+        <a class="btn" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.exe" data-track="download" data-file="exe">Portable exe</a>
       </div>
     </div>
-    <p class="facts"><b>Free and open source</b> under the MIT license. Windows 10 and 11, 64-bit. No account, no telemetry, nothing installed unless you choose the installer. The map below is the real interface drawn in your browser with sample data.</p>
+    <p class="facts"><b>Free and open source</b>, MIT license. Windows 10 and 11, 64-bit. No account, no telemetry, nothing installed unless you pick the installer. The window below is the real interface drawn in your browser with sample data: hover it, click it, switch scenes.</p>
   </div>
 
   <div class="preview" id="preview">
-    <div class="frame">
-      <div id="previewHost">
-<div class="fit"><div class="fit-inner" id="fitInner"><div class="stage" id="stage">
-  <div class="win" id="win">
-    <div class="titlebar">
-      <div class="app"><span id="titleIcon"></span>SpaceSharp 1.6.1</div>
-      <div class="caption"><span><svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg></span><span><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></span><span><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10"/></svg></span></div>
-    </div>
-    <div class="toolbar">
-      <div class="btn accent"><svg data-i="folder"></svg>Scan folder</div>
-      <div class="btn"><svg data-i="refresh"></svg></div>
-      <div class="divider"></div>
-      <div class="btn off"><svg data-i="up"></svg></div>
-      <div class="btn off"><svg data-i="home"></svg></div>
-      <div class="btn" id="panelBtn"><svg data-i="panel"></svg></div>
-      <div class="divider"></div>
-      <div class="btn off"><svg data-i="zoomout"></svg></div><div class="zoomlabel">100%</div><div class="btn"><svg data-i="zoomin"></svg></div>
-      <div class="spacer"></div>
-      <span class="label">Style</span><div class="combo" style="width:118px"><span id="styleText">Classic</span><svg class="chev" data-i="chev"></svg></div>
-      <span class="label" style="margin-left:14px">Color by</span><div class="combo" style="width:120px"><span id="modeText">Depth</span><svg class="chev" data-i="chev"></svg></div>
-      <span class="label" style="margin-left:14px">Palette</span><div class="combo" style="width:180px"><span class="swatches" id="swatches"></span><span id="paletteText">Pastel</span><svg class="chev" data-i="chev"></svg></div>
-      <div class="divider"></div>
-      <div class="btn"><svg data-i="gear"></svg></div><div class="btn"><svg data-i="moon" id="themeIcon"></svg></div><div class="btn"><svg data-i="info"></svg></div>
-    </div>
-    <div class="crumbs">
-      <div id="crumbBar" style="display:flex;align-items:center;gap:2px"><div class="crumb current"><svg data-i="drive"></svg>C:\</div></div>
-      <div class="legend" id="legend"></div>
-      <div class="info" id="crumbInfo"></div>
-      <div class="finfo" id="filterInfo"></div>
-      <div class="sel-btn" id="selBtn"><svg data-i="select"></svg>Select matches</div>
-      <div class="filter" id="filterBox"><svg data-i="search"></svg><span id="filterText">Filter, e.g. videos over 500MB older than 1 year</span><svg class="fx" id="filterX" data-i="x"></svg><svg class="funnel" data-i="funnel"></svg></div>
-    </div>
-    <div class="body">
-      <aside class="side" id="side">
-        <h2>Drives</h2><div class="sub">Click a drive to scan it.</div>
-        <div class="drives" id="drives"></div>
-        <div class="rule"></div>
-        <h2 style="margin-top:4px">Largest items</h2>
-        <div class="tabs" id="tabs"><span class="tab on">Files</span><span class="tab">Folders</span><span class="tab">Types</span><span class="tab" id="tabChanges" hidden>Changes</span></div>
-        <div class="sub" id="listSub">Largest files in C:\</div>
-        <div class="rows" id="rows"></div>
-      </aside>
-      <div class="map" id="map"><canvas id="canvas"></canvas>
-        <div class="start" id="startScreen" hidden>
-          <div class="start-center"><div>
-            <div class="start-head"><span class="start-mark" id="startMark"></span><div><div class="start-title">Pick a drive on the left, or pick up where you left off</div><div class="start-sub">Saved scans open instantly and are compared with the new one.</div></div></div>
-            <div class="start-card">
-              <div class="start-row"><svg data-i="drive"></svg><span class="n">C:</span><span class="w">yesterday</span><span class="s">271.37 GB</span><span class="c">›</span></div>
-              <div class="start-row"><svg data-i="drive"></svg><span class="n">E:</span><span class="w">4 days ago</span><span class="s">3.05 TB</span><span class="c">›</span></div>
-              <div class="start-row"><svg data-i="folder"></svg><span class="n">C:\Users\User\Downloads</span><span class="w">2 weeks ago</span><span class="s">14.44 GB</span><span class="c">›</span></div>
-            </div>
-            <div class="start-actions"><div class="btn"><svg data-i="folder"></svg>Scan a folder</div><div class="btn"><svg data-i="file"></svg>Open a saved scan…</div></div>
-          </div></div>
-                  </div>
-        <div class="sample-tag" id="sampleTag" hidden>Illustration with sample data</div></div>
-    </div>
-    <div class="status"><div class="hover" id="statusHover"></div><div class="scan" id="statusScan"></div></div>
-
-    <div class="ov tip" id="tip" hidden></div>
-    <div class="ov cmenu" id="cmenu" hidden></div>
-    <div class="ov fpanel" id="fpanel" hidden>
-      <div class="fh"><b>Filter</b><span>Everything that doesn't match is dimmed on the map.</span><i>✕</i></div>
-      <div class="fb">
-        <h4>Quick filters</h4>
-        <div class="chips"><span class="chip">Large files</span><span class="chip on">Big videos</span><span class="chip">Installers &amp; archives</span><span class="chip">Untouched for 2 years</span><span class="chip">Big and old</span><span class="chip">Recently changed</span></div>
-        <div class="fdiv"></div>
-        <h4>Name</h4>
-        <div class="box"><svg data-i="search"></svg>Part of the name, or a pattern like *.iso</div>
-        <h4>Type</h4>
-        <div class="chips"><span class="chip">Images</span><span class="chip on">✓ Video</span><span class="chip">Audio</span><span class="chip">Archives</span><span class="chip">Programs</span><span class="chip">Documents</span><span class="chip">Code</span><span class="chip">Other</span></div>
-        <div class="fdiv"></div>
-        <div class="two"><div><h4>Larger than</h4><div class="combo"><span>500 MB</span><svg class="chev" data-i="chev"></svg></div></div><div></div><div><h4>Smaller than</h4><div class="combo"><span>Any size</span><svg class="chev" data-i="chev"></svg></div></div></div>
-        <div class="two"><div><h4>Not modified for</h4><div class="combo"><span>Any time</span><svg class="chev" data-i="chev"></svg></div></div><div></div><div><h4>Show</h4><div class="combo"><span>Files and folders</span><svg class="chev" data-i="chev"></svg></div></div></div>
-      </div>
-      <div class="ff"><span id="fpanelInfo"></span><div class="btn">Clear</div><div class="btn accent">Done</div></div>
-    </div>
-    <div class="scrim" id="scrim" hidden><div class="dialog" id="dialog"></div></div>
-  </div>
-</div></div></div>
-
-      </div>
-    </div>
+    <div class="frame"><div class="fit-inner" id="fitInner"><div class="stage" id="stage"><div id="host"></div></div></div></div>
     <div class="console" aria-label="Preview controls">
       <div class="group"><span>Show</span><div class="opts" data-key="scene"></div></div>
-      <div class="group"><span>Map style</span><div class="opts" data-key="style"></div></div>
       <div class="group"><span>Color by</span><div class="opts" data-key="mode"></div></div>
-      <div class="group"><span>Palette</span><div class="opts" data-key="palette"></div></div>
+      <div class="group"><span>Shading</span><div class="opts" data-key="shading"></div></div>
       <div class="group"><span>Theme</span><div class="opts" data-key="theme"></div></div>
+      <div class="group"><span>Palette</span><select id="paletteSel" aria-label="Palette"></select></div>
     </div>
-    <p class="caption"><b>Try it:</b> hover the map for the status line, click a box to select it, and use the controls to switch scene, style and colors. Names are sample data.</p>
+    <p class="caption"><b>Try it:</b> hover the map for the status line, click a box to select it. Names are sample data.</p>
   </div>
 </div></header>
+
+<section id="new"><div class="wrap">
+  <div class="head">
+    <h2>New in 2.0</h2>
+    <p class="lede">One map instead of six styles, a filter you can see, and a panel that says what is safe to clear. <a href="https://github.com/ClearanceClarence/SpaceSharp/blob/main/CHANGELOG.md" target="_blank" rel="noopener" style="text-decoration:underline">The full changelog</a> has the rest.</p>
+  </div>
+  <div class="new">
+    <div class="card"><span class="k">The map</span><h3>One look, shaded your way</h3><p>Folders are frames with a title bar, files are cushioned boxes, a one-pixel grid between them. Shading depth, where the light comes from, title bar tint and padding, and the text colors are sliders in Settings with a live preview. Fifteen palettes, split by theme.</p><a href="#" data-scene="settings">See the shading settings →</a></div>
+    <div class="card"><span class="k">The filter</span><h3>A drawer over the map</h3><p>File types as rows with a share bar, size and age controls, Files or Folders, and presets like Large files and Untouched for 2 years. The map dims to the matches as you change it. Prefer one row of pills under the path? That is a setting.</p><a href="#" data-scene="drawer">Open the drawer →</a></div>
+    <div class="card"><span class="k">Under the map</span><h3>By type, safe to clear, when changed</h3><p>Space by file type as one bar. Places that are usually safe to empty, each with Show and a one-click action. A histogram of when files were last changed, with the old stuff a click away. Hover any of it to see it on the map.</p><a href="#" data-scene="cleanup">Show the panel →</a></div>
+  </div>
+</div></section>
 
 <section id="features"><div class="wrap">
   <div class="head">
     <h2>What it does</h2>
     <p class="lede">The whole drive is one map. The biggest things are the biggest boxes, and you fly into them.</p>
   </div>
-  <div class="spec">
-    <div class="item"><h3>Scans a whole drive in seconds</h3><p>Run as administrator and SpaceSharp reads the NTFS file table directly instead of walking every folder, so a drive with a million files is mapped in a few seconds. Folders, other file systems and normal runs use a parallel folder walk.</p></div>
-    <div class="item"><h3>A map you can fly into</h3><p>Double-click a folder and the map zooms until it fills the window. Wheel to zoom around the cursor, drag to pan, Backspace to go up. Small files gather into one box until you zoom in close enough to see them.</p></div>
-    <div class="item"><h3>Filters in plain words</h3><p>Type <code>videos over 500MB older than 1 year</code> or <code>*.iso</code> and everything else dims. Six quick filters cover the usual cleanups. Select every match with one click, then delete them together.</p></div>
-    <div class="item"><h3>Inspect anything</h3><p>Ctrl+I on a file, folder or selection: the size with its share of the folder and of the drive, the five largest things anywhere inside, donuts by file type and by age, and a plain-language callout when one thing holds most of the space or nothing has changed in years. Breadcrumbs and rows zoom the map. Copy it as text.</p></div>
-    <div class="item"><h3>Colors that show the hierarchy</h3><p>Each top-level folder gets one hue, and everything inside keeps that hue, a step lighter per level. Or color by depth, or by file type with a legend. Six map styles and eight palettes, including a color-blind safe one.</p></div>
-    <div class="item"><h3>Clean up in place</h3><p>Right-click for Open, Show in Explorer, Properties, copy, filter to this file type, select the whole folder, or move to the Recycle Bin. The map updates and the freed space shows immediately.</p></div>
-    <div class="item"><h3>Drives at a glance</h3><p>A side panel lists every drive with usage bars, and the largest files, folders and file types of the current scan. Click a drive to scan it.</p></div>
-    <div class="item"><h3>Light, dark, and yours</h3><p>Follows Windows or picks a side. A Treemap page in Settings tunes density, layout bias, padding, borders and the label font; five label sizes, outlined labels for busy palettes, and your own palettes as JSON files. S cycles styles, K cycles colors.</p></div>
-    <div class="item"><h3>Remembers where you left off</h3><p>Every scan is saved. The start screen lists your recent ones, one click reopens yesterday's map, and a Change color mode shows what grew, shrank or appeared since. Old saves clean themselves up after a period you choose.</p></div>
-    <div class="item"><h3>In English and Norwegian</h3><p>Every word in the app can be translated; Norwegian bokmål ships alongside English and follows Windows by default. Adding a language is one file, and the test suite checks nothing is missing.</p></div>
-    <div class="item"><h3>Fits into Windows</h3><p><code>SpaceSharp.exe D:\</code> scans straight away, a saved scan opens from the command line, and an optional "Scan with SpaceSharp" entry goes into Explorer's right-click menu for folders and drives, for your user only.</p></div>
+  <div class="grid">
+    <div class="item"><h3>Scans a whole drive in seconds</h3><p>As administrator, SpaceSharp reads the NTFS file table instead of walking every folder, so a million files are mapped in a few seconds. Folders and other file systems use a parallel walk.</p></div>
+    <div class="item"><h3>A map you fly into</h3><p>Double-click a folder and the map zooms until it fills the window. Wheel to zoom around the cursor, drag to pan, Backspace to go up. Small files gather into one box until you are close enough to see them.</p></div>
+    <div class="item"><h3>Filters in plain words</h3><p>Type <code>videos over 500MB older than 1 year</code> or <code>*.iso</code>, or set it in the drawer. Everything else dims and the layout stays put. Select every match, then delete them together.</p></div>
+    <div class="item"><h3>Inspect anything</h3><p><kbd>Ctrl</kbd>+<kbd>I</kbd> on a file, folder or selection: size and share, the five largest things anywhere inside, donuts by type and by age, and a callout when one thing holds most of the space.</p></div>
+    <div class="item"><h3>Remembers where you left off</h3><p>Every scan is saved. The app opens with yesterday's map, and a Change color mode shows what grew, shrank or appeared since. Old saves clean themselves up.</p></div>
+    <div class="item"><h3>Cleans up in place</h3><p>Right-click for Open, Show in Explorer, Properties, copy, filter to this type, select the whole folder, or move to the Recycle Bin. The map updates without a rescan.</p></div>
+    <div class="item"><h3>Colors that show the hierarchy</h3><p>Each top-level folder gets a hue and everything inside keeps it, a step lighter per level. Or color by depth, by file type with a legend, or by change.</p></div>
+    <div class="item"><h3>Drives at a glance</h3><p>A side panel lists every drive with usage bars, and the largest files, folders and types of the current scan. Click a drive to scan it.</p></div>
+    <div class="item"><h3>Fits into Windows</h3><p><code>SpaceSharp.exe D:\</code> scans straight away, a saved scan opens from the command line, and "Scan with SpaceSharp" can sit in Explorer's right-click menu. English and Norwegian.</p></div>
   </div>
 </div></section>
 
@@ -442,18 +245,18 @@
       <tr><th>Reads the NTFS file table for fast scans</th><td class="yes">Yes, as administrator</td><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td></tr>
       <tr><th>Zoomable map you fly into</th><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
       <tr><th>Filter in plain words</th><td class="yes">Yes</td><td class="no">Name search</td><td class="no">No</td><td class="no">No</td></tr>
+      <tr><th>Says what is safe to clear</th><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
       <tr><th>Hierarchy shown by color</th><td class="yes">Yes</td><td class="no">By type</td><td class="no">By type</td><td class="no">By depth</td></tr>
       <tr><th>Inspect with shares, type and age breakdown</th><td class="yes">Yes</td><td class="no">Basic</td><td class="no">Basic</td><td class="no">No</td></tr>
       <tr><th>Delete from the map</th><td class="yes">Recycle Bin</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
       <tr><th>Dark mode</th><td class="yes">Yes</td><td class="no">No</td><td class="no">No</td><td class="no">No</td></tr>
       <tr><th>Saves scans and shows what changed</th><td class="yes">Yes</td><td class="no">Export only</td><td class="no">No</td><td class="no">No</td></tr>
-      <tr><th>Languages</th><td class="yes">English, Norwegian</td><td class="yes">Many</td><td class="yes">Many</td><td class="no">English</td></tr>
       <tr><th>Open source</th><td class="yes">MIT</td><td class="no">No</td><td class="yes">GPL</td><td class="no">Abandoned</td></tr>
       <tr><th>Price</th><td class="yes">Free</td><td class="no">Free for home use</td><td class="yes">Free</td><td class="no">Was paid</td></tr>
     </tbody>
   </table>
   </div>
-  <p class="compare-note">As of October 2026, from each product's own documentation. Corrections welcome on GitHub.</p>
+  <p class="note">As of October 2026, from each product's own documentation. Corrections welcome on GitHub.</p>
 </div></section>
 
 <section id="download"><div class="wrap">
@@ -464,22 +267,22 @@
   <div class="dl">
     <a class="main" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi" data-track="download" data-file="msi">
       <h3>Installer</h3><span class="file">SpaceSharp-win-x64.msi</span>
-      <p>Choose the folder, install for you or for everyone, and get updates automatically. This is the one most people want.</p>
+      <p>Choose the folder, install for you or for everyone, and get updates automatically. The one most people want.</p>
       <span class="go">Download the installer</span>
     </a>
-    <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-Portable.zip" data-track="download" data-file="portable">
-      <h3>Portable</h3><span class="file">SpaceSharp-win-Portable.zip</span>
-      <p>Unzip anywhere and run. Still updates itself. Good for USB sticks and other people's PCs.</p>
-      <span class="go">Download the ZIP</span>
+    <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64-Setup.exe" data-track="download" data-file="setup">
+      <h3>One-click setup</h3><span class="file">SpaceSharp-win-x64-Setup.exe</span>
+      <p>Installs to your profile without asking anything and without admin rights. Updates itself.</p>
+      <span class="go">Download Setup.exe</span>
     </a>
-    <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp.exe" data-track="download" data-file="exe">
-      <h3>Single exe</h3><span class="file">SpaceSharp.exe</span>
+    <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.exe" data-track="download" data-file="exe">
+      <h3>Single exe</h3><span class="file">SpaceSharp-win-x64.exe</span>
       <p>One file, no install, no admin, no updates. The simplest thing that works.</p>
       <span class="go">Download the exe</span>
     </a>
   </div>
   <div class="winget" id="winget" role="button" tabindex="0" title="Copies the command; the package is not published yet" data-track="winget_copy"><span>&gt;</span><b>winget install ClearanceClarence.SpaceSharp</b><span class="soon">winget package pending review</span></div>
-  <p class="compare-note">Every release with notes and checksums is on <a href="https://github.com/ClearanceClarence/SpaceSharp/releases" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline">GitHub Releases</a>.</p>
+  <p class="note">32-bit Windows: <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86-Setup.exe" data-track="download" data-file="setup-x86">SpaceSharp-win-x86-Setup.exe</a>, <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.msi" data-track="download" data-file="msi-x86">SpaceSharp-win-x86.msi</a> or <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.exe" data-track="download" data-file="exe-x86">SpaceSharp-win-x86.exe</a>. The exe is not code-signed, so SmartScreen may ask once; choose More info, then Run anyway. Every release with notes is on <a href="https://github.com/ClearanceClarence/SpaceSharp/releases" target="_blank" rel="noopener">GitHub Releases</a>.</p>
 </div></section>
 
 <section class="faq" id="faq"><div class="wrap">
@@ -488,13 +291,13 @@
     <p class="lede">The short answers. The README on GitHub has the long ones.</p>
   </div>
   <details><summary>Is it safe? Does it send anything anywhere?</summary><p>No telemetry, no accounts, no network use except the update check, which only asks GitHub for the latest release and only when you installed with the installer. The source is public and the release assets are built from it.</p></details>
-  <details><summary>Why does the fast scan ask for administrator permission?</summary><p>Reading the NTFS file table means opening the drive itself rather than its folders, and Windows only allows that for administrators. When you scan a drive, SpaceSharp asks once through the normal Windows prompt, a small elevated helper reads the table and hands the map back to the window you already have, and the helper exits. Say no and the normal scan runs instead; everything else works the same.</p></details>
+  <details><summary>Why does the fast scan ask for administrator permission?</summary><p>Reading the NTFS file table means opening the drive itself rather than its folders, and Windows only allows that for administrators. SpaceSharp asks once through the normal Windows prompt, a small elevated helper reads the table and hands the map back, and the helper exits. Say no and the normal scan runs instead.</p></details>
+  <details><summary>What does "Safe to clear" actually do?</summary><p>It looks at names only: Windows.old, the Recycle Bin, Temp folders, package caches, browser and shader caches, Windows Update downloads, and Downloads not touched in a year. Show selects them on the map; Recycle sends them to the Recycle Bin after the usual confirmation; Empty empties the bin through Windows; Review selects old downloads so you decide. Hibernation and paging files get a How to, never a button.</p></details>
   <details><summary>Deleting from the map, what exactly happens?</summary><p>Files go to the Recycle Bin, never straight to deletion, and the map updates to show the space as free. Protected system folders are read-only unless you run as administrator, and even then the app never touches files by itself.</p></details>
-  <details><summary>Why is the total different from Explorer or from the drive's properties?</summary><p>The map counts file contents. Explorer's used space also includes the file system's own structures, shadow copies and space reserved by Windows. Hard-linked data such as WinSxS is counted once here, which Explorer's folder sizes do not do.</p></details>
-  <details><summary>How is this different from WizTree or WinDirStat?</summary><p>SpaceSharp is about the map: zooming, styles, filtering and cleaning up in place. Like WizTree it reads the NTFS file table when run as administrator. WinDirStat is the classic and has not changed much. Use whichever fits; the table above lists the differences.</p></details>
-  <details><summary>Where do the saved scans go, and can I turn that off?</summary><p>In your profile's local app data, one file per drive plus the previous one for comparison. Settings › Scanning sets how long they are kept (a week to forever, 3 months by default), deletes them all in one click, and can stop the last scan from reopening at startup.</p></details>
-  <details><summary>Can I use it in Norwegian?</summary><p>Yes. Settings › Språk lists every language that has a translation; it follows Windows unless you choose one. Translations are plain resource files in the repository, so adding another language takes an afternoon, not a release.</p></details>
-  <details><summary>What does it need to run?</summary><p>Windows 10 or 11, 64-bit. The portable exe and the installer both carry their own .NET runtime, so nothing else needs installing. Around 60 MB on disk.</p></details>
+  <details><summary>Why is the total different from Explorer or from the drive's properties?</summary><p>The map counts file contents. Explorer's used space also includes the file system's own structures, shadow copies and space reserved by Windows. Hard-linked data such as WinSxS can be counted once here, which Explorer's folder sizes do not do.</p></details>
+  <details><summary>I had a map style I liked in 1.x. Where did it go?</summary><p>The six styles were replaced by one look with sliders: cushion shading on or off, Depth, Spread, Tone, Fade inside folders, the light direction, title bar tint and padding, the grid, and the text colors. Cushion shading off with the grid on is close to the old Flat; the Classic preset is the old Classic look.</p></details>
+  <details><summary>Where do the saved scans go, and can I turn that off?</summary><p>In your profile's local app data, one file per drive plus the previous one for comparison. Settings › Scanning sets how long they are kept, deletes them all in one click, and can stop the last scan from reopening at startup.</p></details>
+  <details><summary>What does it need to run?</summary><p>Windows 10 or 11. The downloads above are 64-bit; 32-bit Windows has its own three files on the release page. The portable exe and the installer both carry their own .NET runtime, so nothing else needs installing.</p></details>
 </div></section>
 
 <footer><div class="wrap">
@@ -508,637 +311,7 @@
 </div></footer>
 <div class="toast" id="toast"></div>
 
-<script>
-
-(() => {
-  const ICONS = {
-    chev:'<path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
-    drive:'<rect x="1.5" y="5" width="13" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="11.5" cy="8" r=".9" fill="currentColor"/>',
-    folder:'<path d="M1.5 4.2c0-.7.5-1.2 1.2-1.2h3.2l1.5 1.6h5.9c.7 0 1.2.5 1.2 1.2v6.5c0 .7-.5 1.2-1.2 1.2H2.7c-.7 0-1.2-.5-1.2-1.2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    file:'<path d="M4 2h5l3 3v9H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9 2v3h3" fill="none" stroke="currentColor" stroke-width="1.3"/>',
-    bolt:'<path d="M9 1.5 3.5 9H8l-1 5.5L12.5 7H8z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    refresh:'<path d="M13.2 8A5.2 5.2 0 1 1 11.6 4.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11.8 1.6v2.9H8.9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    up:'<path d="M8 14V2.5M3.5 7L8 2.5 12.5 7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    home:'<path d="M2.5 7.2L8 2.5l5.5 4.7V13a.8.8 0 0 1-.8.8H10V9.8H6v4H3.3a.8.8 0 0 1-.8-.8z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    panel:'<rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.8 3v10" stroke="currentColor" stroke-width="1.4"/>',
-    zoomout:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14M4.6 6.8h4.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    zoomin:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14M4.6 6.8h4.4M6.8 4.6v4.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    search:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    funnel:'<path d="M2 3h12l-4.6 5.4V13l-2.8-1.4V8.4z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    moon:'<path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    sun:'<circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9L13 13M13 3l-1.1 1.1M4.1 11.9L3 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    gear:'<g transform="scale(.6667)" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></g>',
-    info:'<circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="4.9" r=".9" fill="currentColor"/>'
-  };
-  ICONS.x = '<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>';
-  ICONS.select = '<rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 8.2l2 2 4-4.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>';
-  ICONS.inspect = '<circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="4.9" r=".9" fill="currentColor"/>';
-  ICONS.props = '<rect x="2.5" y="2" width="11" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 8.5h6M5 11h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>';
-  ICONS.copy = '<rect x="5.5" y="5.5" width="8" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 5.5V3.7a1.2 1.2 0 0 0-1.2-1.2H3.7a1.2 1.2 0 0 0-1.2 1.2v5.6a1.2 1.2 0 0 0 1.2 1.2h1.8" fill="none" stroke="currentColor" stroke-width="1.3"/>';
-  ICONS.trash = '<path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.2 4.5l.6 8.3a1 1 0 0 0 1 .9h4.4a1 1 0 0 0 1-.9l.6-8.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>';
-  ICONS.open = '<path d="M9.5 2.5h4v4M13.5 2.5L7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>';
-  ICONS.folderOpen = '<path d="M1.5 4.2c0-.7.5-1.2 1.2-1.2h3.2l1.5 1.6h5.9c.7 0 1.2.5 1.2 1.2v1.2H4.1L2 12.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M2 12.5l2.1-5.5h10.4l-2 5.5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>';
-  ICONS.keyboard = '<rect x="1.5" y="4" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M5 9.5h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';
-  ICONS.bug = '<rect x="5" y="4" width="6" height="9" rx="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4V2M2 8h3M11 8h3M3 12l2-1.5M13 12l-2-1.5M3 4l2 1.5M13 4l-2 1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';
-  ICONS.idea = '<path d="M6 13h4M6.5 11h3a4.5 4.5 0 1 0-3 0z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>';
-  ICONS.globe = '<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12" fill="none" stroke="currentColor" stroke-width="1.3"/>';
-  ICONS.book = '<path d="M3 2.5h6l3 3v8H3z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9 2.5v3h3M5.5 8.5h5M5.5 11h5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>';
-  const APP_VERSION = (document.querySelector(".app").textContent.match(/\d+\.\d+\.\d+/) || ["0.0.0"])[0];
-  const setIcon = (el, name) => { el.setAttribute("viewBox", "0 0 16 16"); el.innerHTML = ICONS[name]; };
-  document.querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
-  document.getElementById("titleIcon").innerHTML = `<svg viewBox="0 0 100 100"><polygon points="50.00,10.00 86.37,31.00 69.05,41.00 50.00,30.00 30.95,41.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 30.95,41.00 30.95,63.00 50.00,74.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,74.00 69.05,63.00 69.05,41.00" fill="#C98E22"/><polygon points="50.00,30.00 50.00,52.00 30.95,63.00 30.95,41.00" fill="#30363D"/><polygon points="50.00,30.00 69.05,41.00 69.05,63.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 69.05,63.00 50.00,74.00 30.95,63.00" fill="#21262D"/></svg>`;
-
-  // ============================================================ sample data
-  const KB = 1024, MB = KB * 1024, GB = MB * 1024;
-  let seed = 20260924;
-  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const F = (name, bytes) => ({ name, size: Math.round(bytes), dir: false });
-  const D = (name, children) => ({ name, dir: true, children });
-  const many = (pattern, count, minMb, maxMb) =>
-    Array.from({ length: count }, (_, i) => F(pattern.replace("#", i + 1), (minMb + (maxMb - minMb) * Math.pow(rnd(), 2.4)) * MB));
-  const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
-
-  // Generic sample data, so the image reads as an illustration rather than someone's real drive.
-  const pad = (n) => String(n).padStart(2, "0");
-  const root = D("C:\\", [
-    D("Users", [D("User", [
-      D("Games", [
-        D("Example Game", [
-          D("data", [
-            ...range(1, 12).map(i => F(`level_${pad(i)}.pak`, (1.3 + rnd() * 1.9) * GB)),
-            ...range(1, 6).map(i => F(`cinematics_${pad(i)}.pak`, (1.1 + rnd() * 0.9) * GB)),
-            F("intro.pak", 0.62 * GB), F("ui.pak", 0.54 * GB), F("scripts.pak", 0.21 * GB),
-            D("saves", many("save_#.sav", 30, 0.4, 3))
-          ]),
-          D("bin", many("module_#.dll", 40, 0.1, 8)),
-          F("ExampleGame.exe", 0.2 * MB)
-        ]),
-        D("Sample Game", [D("Build", [
-          F("game_data.pak", 3.4 * GB), F("engine.dll", 31 * MB),
-          D("assets", many("asset_#.bundle", 28, 20, 180))
-        ])])
-      ]),
-      D("Videos", [D("Recordings", [
-        F("recording_01.mp4", 4.3 * GB), F("recording_02.mp4", 3.2 * GB), F("recording_03.mp4", 2.6 * GB),
-        ...many("clip_#.mp4", 14, 60, 900)
-      ])]),
-      D("Downloads", [
-        F("os_installer.iso", 5.4 * GB), F("linux_image.iso", 5.7 * GB), F("setup.exe", 1.3 * GB),
-        F("tools.zip", 0.18 * GB), ...many("archive_#.zip", 22, 2, 260), ...many("photo_#.jpg", 30, 1, 6)
-      ]),
-      D("Pictures", [
-        D("Screenshots", many("screenshot_#.png", 120, 0.4, 5)),
-        D("Camera", many("photo_#.jpg", 160, 2, 9))
-      ]),
-      D("Documents", [
-        D("Saved Games", [
-          D("Game One", many("save_#.dat", 40, 2, 9)),
-          D("Game Two", many("save_#.dat", 30, 8, 24))
-        ]),
-        ...many("document_#.docx", 18, 0.05, 2), ...many("report_#.pdf", 12, 0.2, 6)
-      ]),
-      D("Projects", [
-        D("Project A", many("source_#.cs", 16, 0.01, 0.06)),
-        D("Project B", many("source_#.js", 60, 0.01, 0.2)),
-        D("Project C", many("source_#.py", 30, 0.02, 0.5))
-      ]),
-      D("AppData", [D("Local", [
-        D("Shader Cache", many("cache_#.bin", 40, 8, 90)),
-        D("Temp", many("temp_#.tmp", 80, 0.1, 40)),
-        D("Web Browser", [D("User Data", [D("Default", many("cache_#", 60, 2, 40))])]),
-        D("Code Editor", many("index_#.dat", 40, 5, 60))
-      ])])
-    ])]),
-    D("Games Library", [D("common", [
-      D("Game One", [D("content", [
-        ...range(1, 14).map(i => F(`content_${pad(i)}.pak`, (1.2 + rnd() * 4.2) * GB)),
-        ...many("expansion_#.pak", 8, 800, 3600)
-      ])]),
-      D("Game Two", [D("Data", [
-        ...range(1, 12).map(i => F(`textures_${pad(i)}.pak`, (1.4 + rnd() * 2.6) * GB)),
-        F("meshes.pak", 3.8 * GB), F("audio.pak", 4.9 * GB), F("world.dat", 0.46 * GB)
-      ])]),
-      D("Game Three", [D("Data", [
-        F("world.pak", 7.9 * GB), F("shared.pak", 3.1 * GB), F("textures.pak", 4.4 * GB),
-        F("streaming.pak", 9.8 * GB), F("models.pak", 2.7 * GB), ...many("language_#.pak", 8, 100, 900)
-      ])])
-    ])]),
-    D("Program Files", [
-      D("Code Editor", [D("lib", many("library_#.jar", 70, 2, 60)), D("plugins", many("plugin_#.jar", 90, 0.5, 30))]),
-      D("Graphics Driver", many("driver_#.dll", 40, 5, 120)),
-      D("Office Suite", [D("root", many("component_#.dll", 70, 1, 60))]),
-      D("Runtime", [D("shared", many("library_#.dll", 90, 0.1, 12))])
-    ]),
-    D("Windows", [
-      D("WinSxS", many("component_#", 260, 1, 80)),
-      D("System32", many("driver_#.sys", 160, 0.1, 40)),
-      D("Installer", many("package_#.msi", 30, 20, 400)),
-      D("SoftwareDistribution", [D("Download", many("update_#.cab", 24, 30, 700))])
-    ]),
-    D("ProgramData", [
-      D("Package Cache", many("package_#.msi", 40, 5, 150)),
-      D("Shared Data", many("data_#.bin", 40, 1, 80))
-    ]),
-    F("pagefile.sys", 16 * GB), F("hiberfil.sys", 12.7 * GB), F("swapfile.sys", 256 * MB)
-  ]);
-
-  let totalFiles = 0, totalDirs = 0;
-  (function finish(node, parent) {
-    node.parent = parent;
-    node.path = !parent ? node.name : parent.parent ? `${parent.path}\\${node.name}` : parent.path + node.name;
-    if (!node.dir) { node.files = 1; totalFiles++; return; }
-    totalDirs++;
-    node.children.forEach(c => finish(c, node));
-    node.children.sort((a, b) => b.size - a.size);
-    node.size = node.children.reduce((s, c) => s + c.size, 0);
-    node.files = node.children.reduce((s, c) => s + c.files, 0);
-  })(root, null);
-
-  const fmt = (bytes) => {
-    const units = ["B", "KB", "MB", "GB", "TB"];
-    let v = bytes, u = 0;
-    while (v >= 1024 && u < units.length - 1) { v /= 1024; u++; }
-    return u === 0 ? `${bytes} B` : `${+v.toFixed(2)} ${units[u]}`;
-  };
-
-  // ============================================================ colors
-  const hex = (s) => [parseInt(s.slice(1,3),16), parseInt(s.slice(3,5),16), parseInt(s.slice(5,7),16)];
-  const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
-  const rgb = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
-  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
-  const lum = (c) => c.map(v => { v /= 255; return v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
-  function hsl(h, s, l) {
-    h = (((h % 360) + 360) % 360) / 360; l = Math.min(1, Math.max(0, l));
-    const f = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1/6) return p + (q - p) * 6 * t; if (t < .5) return q; if (t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; };
-    if (s <= 0) return [l, l, l].map(v => Math.round(v * 255));
-    const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
-    return [f(p, q, h + 1/3), f(p, q, h), f(p, q, h - 1/3)].map(v => Math.round(v * 255));
-  }
-  const fromList = (list, tint) => { const c = list.map(hex); return { folder: d => c[d % c.length], file: d => mix(c[d % c.length], [255,255,255], tint) }; };
-  const PALETTES = {
-    "Pastel": { folder: d => hsl(205 + d * 37, .42, .60), file: d => hsl(205 + d * 37, .50, .80) },
-    "Retro": fromList(["#5B8DEF","#49B86B","#E8C547","#E8864A","#B565D9","#4CC3C9","#E86A8A"], .45),
-    "Ocean": fromList(["#2E6F95","#3C8DAD","#48A9A6","#5FB49C","#7FC8A9","#4A7FB0","#6C9BD2"], .5),
-    "Sunset": fromList(["#C8553D","#E07A5F","#F2A65A","#F6C85F","#D9738A","#B0588E","#8E5A9E"], .5),
-    "Forest": fromList(["#4F772D","#6A994E","#90A955","#A7C957","#7A9E7E","#5C8D89","#8C7A4F"], .5),
-    "Neon": { folder: d => hex(["#1B2450","#2E1B50","#12403F","#461B3C","#3F3A12","#1B3550"][d % 6]), file: d => hex(["#5CE1E6","#B388FF","#69F0AE","#FF80AB","#FFD740","#82B1FF"][d % 6]) },
-    "Monochrome": { folder: d => hsl(230, .06, .36 + (d % 6) * .06), file: d => hsl(230, .05, .72 + (d % 4) * .05) },
-    "Color-blind safe": fromList(["#0072B2","#E69F00","#009E73","#CC79A7","#56B4E9","#D55E00","#F0E442"], .45)
-  };
-
-  const CATS = ["Images","Video","Audio","Archives","Programs","Documents","Code","Other"];
-  const CATCOL = { "Pastel": ["#78C890","#E0806A","#B795D6","#EDC44D","#6FA6DE","#BAC4E2","#6FC7B5","#C8C0B4"] };
-  const EXT = {}; [[0,"jpg png gif bmp webp psd dds tga"],[1,"mp4 mkv avi mov webm"],[2,"mp3 wav flac ogg wem bnk"],[3,"zip rar 7z iso cab pak archive ba2 bsa rpa bundle"],[4,"exe dll sys msi so pyd jar"],[5,"pdf doc docx txt md csv"],[6,"cs js ts php py json xml html css"]].forEach(([c,l]) => l.split(" ").forEach(e => EXT[e] = c));
-  const category = (name) => { const m = /\.([^.]+)$/.exec(name); return m && EXT[m[1].toLowerCase()] !== undefined ? EXT[m[1].toLowerCase()] : 7; };
-  const catColors = () => { const p = PALETTES[state.palette]; return CATCOL[state.palette] ? CATCOL[state.palette].map(hex) : [...Array(7)].map((_, i) => mix(p.folder(i), [255,255,255], .2)).concat([hex("#B8B4AC")]); };
-
-  const state = { theme: "dark", palette: "Pastel", mode: "branch", style: 0, w: 1400, h: 860, hovered: null, selected: null, panel: true, cushion: true, group: true, scene: "none", filter: null, multi: [], zoomNode: null, tag: false };
-  const themeBg = () => state.theme === "dark" ? [13,17,23] : [217,217,225];
-
-  // Top-level branch index, for styles that color by branch.
-  const branchOf = new Map();
-  root.children.forEach((c, i) => { (function mark(n) { branchOf.set(n, i); (n.children || []).forEach(mark); })(c); });
-
-  // ============================================================ layout (same as the app)
-  function squarify(nodes, x, y, w, h, emit) {
-    const list = nodes.filter(n => n.size > 0), total = list.reduce((s, n) => s + n.size, 0);
-    if (!list.length || w <= 0 || h <= 0) return;
-    const scale = w * h / total; let i = 0;
-    while (i < list.length) {
-      const side = Math.min(w, h); if (side <= .0001) break;
-      let rowSum = 0, worst = Infinity, j = i; const largest = list[i].size * scale;
-      while (j < list.length) { const a = list[j].size * scale, s = rowSum + a; const nw = Math.max(side*side*largest/(s*s), (s*s)/(side*side*a)); if (j > i && nw > worst) break; rowSum = s; worst = nw; j++; }
-      if (w >= h) { const t = rowSum / h; let cy = y; for (let k = i; k < j; k++) { const ih = list[k].size*scale/t; emit(list[k], x, cy, t, ih); cy += ih; } x += t; w = Math.max(0, w - t); }
-      else { const t = rowSum / w; let cx = x; for (let k = i; k < j; k++) { const iw = list[k].size*scale/t; emit(list[k], cx, y, iw, t); cx += iw; } y += t; h = Math.max(0, h - t); }
-      i = j;
-    }
-  }
-  const singleSub = (n) => n.dir && n.children.length && n.children[0].dir && n.children[0].size > 0 && (n.children.length === 1 || n.children[1].size === 0) ? n.children[0] : null;
-  function groupSmall(folder, area) {
-    const kids = folder.children, total = kids.reduce((s, c) => s + c.size, 0); if (total <= 0) return kids;
-    const per = area / total; let cutoff = kids.findIndex(c => c.size * per < 30 * 22); if (cutoff < 0) return kids;
-    const rest = kids.slice(cutoff).filter(c => c.size > 0); if (rest.length < 2) return kids;
-    const group = { name: `${rest.length} files`, dir: false, group: true, parent: folder, size: rest.reduce((s, c) => s + c.size, 0), files: rest.reduce((s, c) => s + c.files, 0) };
-    return [...kids.slice(0, cutoff), group].sort((a, b) => b.size - a.size);
-  }
-  function layout(st, node, x, y, w, h, depth, items) {
-    let shown = node, chainTop = null, next;
-    while ((next = singleSub(shown))) { chainTop = chainTop || node; shown = next; }
-    const header = st.header !== "none" && shown.dir && w >= 60 && h >= st.headerH + 26;
-    items.push({ node: shown, chainTop, x, y, w, h, depth, header });
-    if (!shown.dir || !shown.children.length) return;
-    const inset = st.inset(w, h);
-    const top = header ? st.headerH : inset;
-    const cw = w - 2 * inset, ch = h - top - inset;
-    if (cw < 12 || ch < 12) return;
-    squarify(state.group ? groupSmall(shown, cw * ch) : shown.children, x + inset, y + top, cw, ch, (c, cx, cy, iw, ih) => { if (iw >= 4 && ih >= 4) layout(st, c, cx, cy, iw, ih, depth + 1, items); });
-  }
-
-  // ============================================================ drawing helpers
-  function rr(ctx, x, y, w, h, r) {
-    r = Math.min(r, w / 2, h / 2);
-    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
-  }
-  function fit(ctx, text, maxW) {
-    if (maxW < 8) return ""; if (ctx.measureText(text).width <= maxW) return text;
-    let lo = 0, hi = text.length; while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (ctx.measureText(text.slice(0, mid) + "…").width <= maxW) lo = mid; else hi = mid - 1; }
-    return lo ? text.slice(0, lo) + "…" : "";
-  }
-  function chainName(it) {
-    if (!it.chainTop) return it.node.name;
-    const names = []; for (let n = it.node; n; n = n.parent) { names.unshift(n.name); if (n === it.chainTop) break; }
-    return names.join(" › ");
-  }
-  const textFor = (c) => lum(c) > .2 ? "#141418" : "#F2F2F6";
-  // "Change" mode: a deterministic pretend baseline per node (some grew, some shrank, a few are new).
-  const changeOf = (n) => { let h = 0; for (const ch of n.name) h = (h * 31 + ch.charCodeAt(0)) | 0; const r = ((h >>> 0) % 100) / 100; return r < .12 ? null : r < .40 ? +Math.round(n.size * (r - .1)) : r < .62 ? -Math.round(n.size * (r - .4) * .6) : 0; };
-  const changeFill = (it) => {
-    const n = it.node; if (n.group) return [106, 106, 116];
-    const d = n.dir ? n.children.reduce((s, c) => s + (changeOf(c) ?? c.size), 0) : changeOf(n);
-    if (d === null) return [245, 184, 46];
-    if (d === 0) return n.dir ? [85, 85, 96] : [106, 106, 116];
-    const share = Math.min(1, Math.abs(d) / Math.max(n.size, 1)), t = Math.min(1, share * 1.4);
-    return d > 0 ? mix([140, 122, 110], [232, 122, 79], t) : mix([110, 128, 140], [93, 169, 201], t);
-  };
-  const baseFill = (it) => {
-    if (state.mode === "change") return changeFill(it);
-    const p = PALETTES[state.palette];
-    if (state.mode === "type") return it.node.dir ? hsl(225, .10, .50 + (it.depth % 6) * .05) : catColors()[category(it.node.name)];
-    if (state.mode === "branch" && it.depth > 0) {
-      const hue = p.folder((branchOf.get(it.node.group ? it.node.parent : it.node) ?? 0) % 12), level = Math.min(it.depth - 1, 6);
-      return mix(hue, [255, 255, 255], it.node.dir ? level * .09 : .30 + level * .07);
-    }
-    return it.node.dir ? p.folder(it.depth % 12) : p.file(it.depth % 12);
-  };
-  const gap = (it, g) => ({ x: it.x + g / 2, y: it.y + g / 2, w: Math.max(0, it.w - g), h: Math.max(0, it.h - g) });
-
-  // ============================================================ the six styles
-  const STYLES = [
-    { name: "Classic", desc: "Title bars, 1 px borders, soft shading.",
-      header: "bar", headerH: 17, inset: (w, h) => Math.min(w, h) >= 40 ? 2 : 1,
-      draw(ctx, it) {
-        const c = baseFill(it); ctx.fillStyle = rgb(c); ctx.fillRect(it.x, it.y, it.w, it.h);
-        if (state.cushion) { const g = ctx.createLinearGradient(it.x, it.y, it.x + it.w, it.y + it.h); g.addColorStop(0, "rgba(255,255,255,.28)"); g.addColorStop(.55, "rgba(128,128,128,0)"); g.addColorStop(1, "rgba(0,0,0,.31)"); ctx.fillStyle = g; ctx.fillRect(it.x, it.y, it.w, it.h); }
-        if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.19)"; ctx.fillRect(it.x, it.y, it.w, it.h); }
-        ctx.strokeStyle = "rgba(16,16,20,.69)"; ctx.lineWidth = 1; ctx.strokeRect(it.x + .5, it.y + .5, it.w - 1, it.h - 1);
-        if (it.header) { ctx.fillStyle = "rgba(0,0,0,.19)"; ctx.fillRect(it.x, it.y, it.w, 17); label(ctx, it, textFor(c), "600 11px", 4, 2, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`); }
-        else fileLabel(ctx, it, textFor(c), it);
-      } },
-
-    { name: "Flat", desc: "Plain fills, thin lines, no gaps, no shading.",
-      header: "text", headerH: 16, inset: () => 1,
-      draw(ctx, it) {
-        const c = baseFill(it); ctx.fillStyle = rgb(c); ctx.fillRect(it.x, it.y, it.w, it.h);
-        if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.15)"; ctx.fillRect(it.x, it.y, it.w, it.h); }
-        ctx.strokeStyle = "rgba(0,0,0,.22)"; ctx.lineWidth = 1; ctx.strokeRect(it.x + .5, it.y + .5, it.w - 1, it.h - 1);
-        if (it.header) label(ctx, it, textFor(c), "600 10.5px", 6, 2, "left", `${chainName(it)}   ${fmt(it.node.size)}`);
-        else fileLabel(ctx, it, textFor(c), it);
-      } },
-
-    { name: "Tiles", desc: "Flat colors, 3 px gaps, softly rounded. Folder names as small captions.",
-      header: "text", headerH: 16, inset: () => 2,
-      draw(ctx, it) {
-        const c = baseFill(it), b = gap(it, 3); ctx.fillStyle = rgb(c); rr(ctx, b.x, b.y, b.w, b.h, 4); ctx.fill();
-        if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.15)"; rr(ctx, b.x, b.y, b.w, b.h, 4); ctx.fill(); }
-        if (it.header) label(ctx, { x: b.x, y: b.y, w: b.w, h: b.h }, rgba(hex(textFor(c)), .8), "600 10.5px", 6, 2, "left", chainName(it).toUpperCase() + "   " + fmt(it.node.size));
-        else fileLabel(ctx, b, textFor(c), it);
-      } },
-
-    { name: "Cards", desc: "Folders as raised cards with a bold title; files as flat chips.",
-      header: "bar", headerH: 19, inset: () => 3,
-      draw(ctx, it) {
-        const c = baseFill(it), b = gap(it, 2);
-        if (it.node.dir) {
-          const body = mix(c, themeBg(), .15);
-          ctx.save(); ctx.shadowColor = "rgba(0,0,0,.28)"; ctx.shadowBlur = 6; ctx.shadowOffsetY = 1;
-          ctx.fillStyle = rgb(body); rr(ctx, b.x, b.y, b.w, b.h, 5); ctx.fill(); ctx.restore();
-          if (it.header) label(ctx, b, textFor(body), "700 11.5px", 8, 3, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`);
-        } else {
-          ctx.fillStyle = rgb(c); rr(ctx, b.x, b.y, b.w, b.h, 4); ctx.fill();
-          if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.15)"; rr(ctx, b.x, b.y, b.w, b.h, 4); ctx.fill(); }
-          fileLabel(ctx, b, textFor(c), it);
-        }
-      } },
-
-    { name: "Bands", desc: "A dark title band, lighter body, thin lines, no shading.",
-      header: "bar", headerH: 18, inset: () => 2,
-      draw(ctx, it) {
-        const c = baseFill(it);
-        const body = it.node.dir ? mix(c, [255, 255, 255], .22) : c;
-        ctx.fillStyle = rgb(body); ctx.fillRect(it.x, it.y, it.w, it.h);
-        if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(it.x, it.y, it.w, it.h); }
-        ctx.strokeStyle = "rgba(0,0,0,.22)"; ctx.lineWidth = 1; ctx.strokeRect(it.x + .5, it.y + .5, it.w - 1, it.h - 1);
-        if (it.header) { const band = mix(c, [0, 0, 0], .35); ctx.fillStyle = rgb(band); ctx.fillRect(it.x, it.y, it.w, 18); label(ctx, it, "#F5F5F8", "700 11px", 5, 3, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`); }
-        else fileLabel(ctx, it, textFor(body), it);
-      } },
-
-    { name: "Soft", desc: "Rounded pastel blocks with small gaps.",
-      header: "bar", headerH: 18, inset: () => 2,
-      draw(ctx, it) {
-        const c = baseFill(it), b = gap(it, 3);
-        const light = mix(c, [255, 255, 255], it.node.dir ? .15 : .1);
-        ctx.fillStyle = rgb(light); rr(ctx, b.x, b.y, b.w, b.h, 6); ctx.fill();
-        ctx.save(); rr(ctx, b.x, b.y, b.w, b.h, 6); ctx.clip();
-        const g = ctx.createLinearGradient(b.x, b.y, b.x, b.y + b.h); g.addColorStop(0, "rgba(255,255,255,.18)"); g.addColorStop(1, "rgba(0,0,0,.10)");
-        ctx.fillStyle = g; ctx.fillRect(b.x, b.y, b.w, b.h); ctx.restore();
-        if (it.node.group) { ctx.fillStyle = "rgba(0,0,0,.12)"; rr(ctx, b.x, b.y, b.w, b.h, 6); ctx.fill(); }
-        if (it.header) label(ctx, b, textFor(light), "600 11px", 8, 3, "left", `${chainName(it)}  ·  ${fmt(it.node.size)}`);
-        else fileLabel(ctx, b, textFor(light), it);
-      } }
-  ];
-
-  function label(ctx, box, color, font, px, py, align, text) {
-    ctx.fillStyle = color; ctx.font = `${font} 'Segoe UI', system-ui, sans-serif`; ctx.textBaseline = "top"; ctx.textAlign = align;
-    ctx.fillText(fit(ctx, text, box.w - px * 2), align === "left" ? box.x + px : box.x + box.w / 2, box.y + py);
-  }
-  function fileLabel(ctx, box, color, it, quiet) {
-    if (box.w < 44 || box.h < 16) return;
-    ctx.fillStyle = color; ctx.font = `${quiet ? "500 " : ""}11px 'Segoe UI', system-ui, sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "top";
-    const cx = box.x + box.w / 2, tw = box.w - 6;
-    if (box.h >= 34) { const ty = box.y + (box.h - 30) / 2; ctx.fillText(fit(ctx, it.node.name, tw), cx, ty + 1); ctx.fillText(fit(ctx, fmt(it.node.size), tw), cx, ty + 16); }
-    else ctx.fillText(fit(ctx, it.node.name, tw), cx, box.y + (box.h - 15) / 2 + 1);
-  }
-
-  // Thumbnails show one branch so the styling is visible at card size; the large preview shows the whole drive.
-    function render(canvas, st, cssW, cssH, node = root) {
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr); canvas.style.height = cssH + "px";
-    const ctx = canvas.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = rgb(themeBg()); ctx.fillRect(0, 0, cssW, cssH);
-    const items = []; layout(st, node, 0, 0, Math.floor(cssW) - 1, Math.floor(cssH) - 1, 0, items);
-    for (const it of items) st.draw(ctx, it);
-  }
-
-
-
-  // ============================================================ map with hover/selection
-  const canvas = document.getElementById("canvas"), ctx = canvas.getContext("2d");
-  let items = [], base = null;
-  function draw() {
-    const map = document.getElementById("map"); const w = map.clientWidth, h = map.clientHeight, dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = rgb(themeBg()); ctx.fillRect(0, 0, w, h);
-    const st = STYLES[state.style]; items = []; layout(st, state.zoomNode || root, 0, 0, Math.floor(w) - 1, Math.floor(h) - 1, 0, items);
-    const bg = themeBg();
-    for (const it of items) {
-      st.draw(ctx, it);
-      if (state.filter && !state.filter.matches(it.node)) { ctx.fillStyle = rgba(bg, .62); ctx.fillRect(it.x, it.y, it.w, it.h); }
-    }
-    base = document.createElement("canvas"); base.width = canvas.width; base.height = canvas.height; base.getContext("2d").drawImage(canvas, 0, 0);
-    paintOverlay();
-  }
-  function paintOverlay() {
-    if (!base) return;
-    ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(base, 0, 0); ctx.restore();
-    const find = n => items.find(i => i.node === n);
-    const hov = state.hovered && state.hovered !== state.selected ? find(state.hovered) : null;
-    if (hov) { ctx.fillStyle = "rgba(255,255,255,.25)"; ctx.fillRect(hov.x, hov.y, hov.w, hov.h); ctx.strokeStyle = "rgba(0,0,0,.6)"; ctx.lineWidth = 4; ctx.strokeRect(hov.x+1, hov.y+1, hov.w-2, hov.h-2); ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.strokeRect(hov.x+1, hov.y+1, hov.w-2, hov.h-2); }
-    const sel = state.selected ? find(state.selected) : null;
-    if (sel) { ctx.strokeStyle = "#F5B82E"; ctx.lineWidth = 3; ctx.strokeRect(sel.x+1.5, sel.y+1.5, sel.w-3, sel.h-3); }
-    for (const n of state.multi) { const it = find(n); if (it) { ctx.strokeStyle = "#F5B82E"; ctx.lineWidth = 3; ctx.strokeRect(it.x+1.5, it.y+1.5, it.w-3, it.h-3); } }
-  }
-  const nodeAt = (x, y) => { for (let i = items.length - 1; i >= 0; i--) { const it = items[i]; if (x >= it.x && y >= it.y && x < it.x + it.w && y < it.y + it.h) return it.node; } return null; };
-  function showInfo(node) {
-    const el = document.getElementById("statusHover"); if (!node) { el.textContent = ""; return; }
-    let t = node.group ? `${node.name} too small to show in ${node.path}    ${fmt(node.size)}    zoom in to see them` : `${node.path}    ${fmt(node.size)}`;
-    if (node !== root) t += `  (${(100 * node.size / root.size).toFixed(1).replace(/\.0$/, "")}% of C:\\)`;
-    if (node.dir) t += `    ${node.files.toLocaleString("en-US")} files`;
-    el.textContent = t;
-  }
-  const map = document.getElementById("map");
-  const localPoint = (e) => { const r = canvas.getBoundingClientRect(); return [(e.clientX - r.left) * map.clientWidth / r.width, (e.clientY - r.top) * map.clientHeight / r.height]; };
-  map.addEventListener("mousemove", e => { if (state.scene !== "none") return; const n = nodeAt(...localPoint(e)); if (n === state.hovered) return; state.hovered = n; paintOverlay(); showInfo(n || state.selected); });
-  map.addEventListener("mouseleave", () => { if (state.scene !== "none") return; state.hovered = null; paintOverlay(); showInfo(state.selected); });
-  map.addEventListener("click", e => { if (state.scene !== "none") return; state.selected = nodeAt(...localPoint(e)); paintOverlay(); showInfo(state.selected); });
-
-  // ============================================================ side panel
-  const GBs = 1024 ** 3;
-  const DRIVES = [
-    { name: "C:  Local Disk", used: 271.37, total: 1024, fs: "NTFS", current: true },
-    { name: "D:  Data", used: 1560, total: 1863, fs: "NTFS" },
-    { name: "E:  Games", used: 3120, total: 3726, fs: "NTFS" },
-    { name: "F:  Backup", used: 2210, total: 3726, fs: "exFAT" },
-    { name: "G:  USB Drive", used: 12.4, total: 57.6, fs: "Removable" }
-  ];
-  document.getElementById("drives").innerHTML = DRIVES.map(d => `
-    <div class="drive"><svg viewBox="0 0 16 16">${ICONS.drive}</svg><span class="name">${d.name}</span><span class="free">${fmt((d.total - d.used) * GBs)} free</span>
-    <div class="bar"><i style="width:${(100 * d.used / d.total).toFixed(1)}%"></i></div>
-    <div class="detail">${fmt(d.used * GBs)} used of ${fmt(d.total * GBs)} · ${d.fs}</div></div>`).join("");
-  const files = []; (function walk(n) { for (const c of n.children) c.dir ? walk(c) : files.push(c); })(root);
-  files.sort((a, b) => b.size - a.size);
-  function fillSideList(changes) {
-    const tabs = [...document.querySelectorAll("#tabs .tab")];
-    tabs.forEach(t => t.classList.toggle("on", changes ? t.id === "tabChanges" : t.textContent === "Files"));
-    if (!changes) {
-      const top = files.slice(0, 7), largest = top[0].size;
-      document.getElementById("listSub").textContent = "Largest files in C:\\";
-      document.getElementById("rows").innerHTML = top.map(f => `
-        <div class="row"><div><div class="n">${f.name}</div><div class="d">${f.parent.path}</div></div><div class="s">${fmt(f.size)}</div>
-        <div class="bar" style="width:${Math.round(292 * f.size / largest)}px"></div></div>`).join("");
-      return;
-    }
-    const rows = files.map(f => ({ f, d: changeOf(f) })).filter(x => x.d !== 0).map(x => ({ ...x, abs: Math.abs(x.d ?? x.f.size) }))
-      .sort((a, b) => b.abs - a.abs).slice(0, 7);
-    const largest = rows[0].abs;
-    document.getElementById("listSub").textContent = "Biggest changes since yesterday";
-    document.getElementById("rows").innerHTML = rows.map(({ f, d, abs }) => {
-      const what = d === null ? "new" : d > 0 ? "grew" : "shrank", color = d === null ? "#F5B82E" : d > 0 ? "#E87A4F" : "#5DA9C9";
-      return `<div class="row chg"><span class="sw" style="background:${color}"></span><div><div class="n">${f.name}</div><div class="d">${what} · ${f.parent.path}</div></div>
-        <div class="s">${d === null || d > 0 ? "+" : "−"}${fmt(abs)}</div><div class="bar" style="width:${Math.round(292 * abs / largest)}px;left:24px"></div></div>`;
-    }).join("");
-  }
-  fillSideList(false);
-
-  // ============================================================ scenes
-  const isVideo = n => !n.dir && !n.group && category(n.name) === 1;
-  const containsMatch = (n, pred) => n.dir ? n.children.some(c => containsMatch(c, pred)) : pred(n);
-  const bigVideo = { text: "videos over 500MB", desc: "video, over 500 MB", matches(n) { const pred = f => isVideo(f) && f.size > 500 * 1024 ** 2; return n.group ? n.parent.children.some(pred) : containsMatch(n, pred); } };
-  // The busiest top-level folder (most direct children) makes the richest Inspect and zoom scenes.
-  const largestFolder = [...root.children].filter(c => c.dir).sort((a, b) => b.children.length - a.children.length || b.size - a.size)[0];
-  const focusFile = files.find(f => isVideo(f) && f.size > 500 * 1024 ** 2) || files[0];
-  const sameFolder = files.filter(f => f.parent === focusFile.parent).slice(0, 3);
-  const dateOf = n => { const d = new Date(2026, 8, 27 - Math.round(3 + (n.size % 900))); const days = Math.round((Date.UTC(2026, 8, 27) - d) / 864e5); return `${d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}  (${days < 30 ? days + " days ago" : days < 365 ? Math.round(days / 30) + " months ago" : (days / 365).toFixed(1) + " years ago"})`; };
-  const typeOf = n => { const m = /\.([^.]+)$/.exec(n.name); return m ? `${m[1].toUpperCase()} file (${CATS[category(n.name)].toLowerCase()})` : "File"; };
-  const pct = (a, b) => (100 * a / b).toFixed(1).replace(/\.0$/, "") + "%";
-  const mapOrigin = () => { const map = document.getElementById("map"), body = map.parentElement; return [map.offsetLeft + body.offsetLeft, map.offsetTop + body.offsetTop]; };
-  const place = (el, x, y) => { const [ox, oy] = mapOrigin(); el.style.left = Math.max(8, Math.min(state.w - el.offsetWidth - 8, ox + x)) + "px"; el.style.top = Math.max(8, Math.min(state.h - el.offsetHeight - 8, oy + y)) + "px"; };
-  const menuRow = (icon, text, key, cls = "") => `<div class="mi ${cls}">${icon ? `<svg viewBox="0 0 16 16">${ICONS[icon]}</svg>` : '<span class="blank"></span>'}<span>${text}</span>${key ? `<span class="k">${key}</span>` : ""}</div>`;
-
-  function applyScene() {
-    const tip = document.getElementById("tip"), menu = document.getElementById("cmenu"), fpanel = document.getElementById("fpanel"), scrim = document.getElementById("scrim");
-    tip.hidden = menu.hidden = fpanel.hidden = scrim.hidden = true;
-    state.hovered = null; state.selected = null; state.multi = []; state.filter = null; state.zoomNode = null;
-    if (state.scene !== "compare" && state.mode === "change" && state.sceneWasCompare) { state.mode = "branch";  }
-    state.sceneWasCompare = state.scene === "compare";
-    const ft = document.getElementById("filterText"), fb = document.getElementById("filterBox"), selBtn = document.getElementById("selBtn");
-    ft.textContent = "Filter, e.g. videos over 500MB older than 1 year"; fb.classList.remove("active"); selBtn.classList.remove("show");
-    document.getElementById("filterX").classList.remove("show"); document.getElementById("filterInfo").classList.remove("show");
-    const infoEl = document.getElementById("crumbInfo"); infoEl.textContent = `${fmt(root.size)} · ${root.files.toLocaleString("en-US")} files`;
-    document.getElementById("crumbBar").innerHTML = `<div class="crumb current"><svg viewBox="0 0 16 16">${ICONS.drive}</svg>C:\\</div>`;
-    document.querySelector(".zoomlabel").textContent = "100%";
-    document.querySelectorAll(".toolbar .btn.off").forEach(b => b.style.opacity = "");
-    document.getElementById("statusHover").textContent = "";
-    if (state.scene === "compare") document.getElementById("statusScan").textContent = `${root.files.toLocaleString("en-US")} files · ${totalDirs.toLocaleString("en-US")} folders · ${fmt(root.size)} · 2.1 s · file table  ·  compared with the scan from yesterday`;
-
-    switch (state.scene) {
-      case "zoomed": {
-        state.zoomNode = largestFolder;
-        document.getElementById("crumbBar").innerHTML = `<div class="crumb"><svg viewBox="0 0 16 16">${ICONS.drive}</svg>C:\\</div><span style="color:var(--dim)">›</span><div class="crumb current">${largestFolder.name}</div>`;
-        infoEl.textContent = `${fmt(largestFolder.size)} · ${largestFolder.files.toLocaleString("en-US")} files · ${pct(largestFolder.size, root.size)} of C:\\`;
-        document.querySelector(".zoomlabel").textContent = Math.round(100 * root.size / largestFolder.size) + "%";
-        document.querySelectorAll(".toolbar .btn.off").forEach(b => b.style.opacity = "1");
-        break;
-      }
-      case "filter":
-      case "fpanel": {
-        state.filter = bigVideo; ft.textContent = bigVideo.text; fb.classList.add("active"); document.getElementById("filterX").classList.add("show");
-        const m = files.filter(f => bigVideo.matches(f)); const bytes = m.reduce((s, f) => s + f.size, 0);
-        const fi = document.getElementById("filterInfo"); fi.textContent = `${m.length.toLocaleString("en-US")} files · ${fmt(bytes)}: ${bigVideo.desc}`; fi.classList.add("show"); selBtn.classList.add("show");
-        if (state.scene === "fpanel") { fpanel.hidden = false; document.getElementById("fpanelInfo").textContent = `${m.length.toLocaleString("en-US")} files · ${fmt(bytes)} match`; fpanel.style.left = (fb.offsetLeft + fb.offsetParent.offsetLeft + fb.offsetWidth - 440) + "px"; fpanel.style.top = (fb.offsetParent.offsetTop + fb.offsetTop + fb.offsetHeight + 6) + "px"; }
-        break;
-      }
-      case "multi": state.multi = sameFolder; break;
-      case "compare":  break;
-      case "hover": state.hovered = focusFile; break;
-      case "menu": state.selected = focusFile; break;
-      case "inspect": state.selected = largestFolder; break;
-    }
-    draw();
-    const find = n => items.find(i => i.node === n);
-    if (state.scene === "hover") {
-      const it = find(focusFile); if (!it) return;
-      tip.innerHTML = `<div class="n">${focusFile.name}</div><div class="p">${focusFile.parent.path}</div><table>
-        <tr><td>Size</td><td>${fmt(focusFile.size)}</td></tr><tr><td>Type</td><td>${typeOf(focusFile)}</td></tr><tr><td>Modified</td><td>${dateOf(focusFile)}</td></tr>
-        <tr><td>Share</td><td>${pct(focusFile.size, focusFile.parent.size)} of ${focusFile.parent.name}</td></tr><tr><td>Of drive</td><td>${pct(focusFile.size, root.size)} of C:\\</td></tr></table>
-        <div class="hint">Right-click for actions · Ctrl+I to inspect</div>`;
-      tip.hidden = false; place(tip, it.x + it.w * .55 + 16, it.y + it.h * .5 + 20);
-      showInfo(focusFile);
-    }
-    if (state.scene === "menu") {
-      const it = find(focusFile); if (!it) return;
-      const ext = /\.[^.]+$/.exec(focusFile.name)?.[0] || ".mp4";
-      menu.innerHTML = menuRow("inspect", "<b>Inspect</b>", "Ctrl+I") + '<div class="sep"></div>' + menuRow("zoomin", "Zoom to folder", "Double-click") + menuRow("up", "Up one folder", "Backspace", "off") + menuRow("home", "Show whole map", "Home", "off")
-        + '<div class="sep"></div>' + menuRow("open", "Open", "Enter", "on") + menuRow("folderOpen", "Show in Explorer") + menuRow("props", "Properties", "Alt+Enter")
-        + '<div class="sep"></div>' + menuRow("copy", "Copy path", "Ctrl+C") + menuRow("", "Copy name") + menuRow("funnel", `Show only *${ext} files`) + menuRow("select", `Select everything in ${focusFile.parent.name}`)
-        + '<div class="sep"></div>' + menuRow("refresh", `Rescan ${focusFile.parent.name}`) + menuRow("", "Scan file", "›") + menuRow("", "Export to CSV", "›")
-        + '<div class="sep"></div>' + menuRow("trash", '<span class="danger">Move to Recycle Bin</span>', "Del");
-      menu.hidden = false; place(menu, it.x + it.w * .5, it.y + it.h * .45);
-      showInfo(focusFile);
-    }
-    if (state.scene === "multi") {
-      const total = sameFolder.reduce((s, f) => s + f.size, 0);
-      document.getElementById("statusHover").textContent = `${sameFolder.length} items selected · ${fmt(total)} · ${sameFolder.length} files    Del moves them to the Recycle Bin`;
-    }
-    document.getElementById("startScreen").hidden = state.scene !== "start";
-    document.getElementById("statusScan").style.visibility = state.scene === "start" ? "hidden" : "";
-    if (state.scene === "start") { document.getElementById("startMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="44" height="44"'); }
-    if (state.scene === "about") {
-      const rows = [["info","Version " + APP_VERSION,"Portable. Updates are not automatic; the newest version is on GitHub.",false],["file","What's new","Changes in this version",true],["keyboard","Shortcuts","Every key and mouse action",true],["bug","Report a bug","Opens GitHub with your version and system filled in",true],["idea","Suggest a feature","",true],["globe","Source on GitHub","MIT license",true],["book","Credits","Treemap algorithm, SpaceMonger, icons",true]];
-      document.getElementById("dialog").className = "dialog about";
-      document.getElementById("dialog").innerHTML = `
-        <div class="dt"><span id="dlgIcon"></span>About SpaceSharp<span class="x">✕</span></div>
-        <div class="about-head"><span id="aboutMark"></span><div><div class="t">SpaceSharp</div><div class="s">See where your disk space went.</div></div></div>
-        <div class="about-list">${rows.map(([ic,t,sub,chev]) => `<div class="about-row"><svg data-i="${ic}"></svg><div><div>${t}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>${chev ? '<span class="c">›</span>' : ""}</div>`).join("")}</div>
-        <div class="about-copy">© 2026 ClearanceClarence  ·  .NET 10 on Windows 11 (x64)</div>
-        <div class="df"><div class="btn"><svg data-i="copy"></svg>Copy version info</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
-      document.getElementById("dialog").querySelectorAll("svg[data-i]").forEach(el => setIcon(el, el.dataset.i));
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      document.getElementById("aboutMark").innerHTML = document.getElementById("titleIcon").innerHTML.replace('width="16" height="16"', 'width="64" height="64"');
-      scrim.hidden = false;
-    }
-    if (state.scene === "update" || state.scene === "whatsnew") {
-      const next = APP_VERSION, cur = APP_VERSION.replace(/\.(\d+)\.(\d+)$/, (m, a, b) => `.${Math.max(0, +a - 1)}.0`);
-      const notes = `NEW ICON
-•  An amber block with a cube carved out of its front corner, everywhere: window, taskbar, installer, website.
-•  Setup.exe and Update.exe show a proper splash while they work.
-
-FIXES
-•  What's new covers every release you skipped, not only the newest.
-•  Updates apply silently; no stock Windows progress box.
-…`;
-      document.getElementById("dialog").className = "dialog " + (state.scene === "update" ? "update" : "notes");
-      document.getElementById("dialog").innerHTML = state.scene === "update" ? `
-        <div class="dt"><span id="dlgIcon"></span>Update available<span class="x">✕</span></div>
-        <div class="ub"><svg class="g" viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div><div class="t">SpaceSharp ${next} is available. You have ${cur}.</div><div class="h">Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</div></div></div>
-        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M3 3h10v10H3zM5.5 6h5M5.5 8.5h5M5.5 11h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>What's new</div><span class="spacer"></span><div class="btn">Later</div><div class="btn accent">Install and restart</div></div>`
-      : `
-        <div class="dt"><span id="dlgIcon"></span>What's new in ${next}<span class="x">✕</span></div>
-        <div class="nb">${notes}</div>
-        <div class="df"><div class="btn"><svg viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>See all changes on GitHub</div><span class="spacer"></span><div class="btn accent">OK</div></div>`;
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      scrim.hidden = false;
-    }
-    if (state.scene === "inspect") {
-      const f = largestFolder, kids = [...f.children].sort((a, b) => b.size - a.size).slice(0, 6);
-      const types = {}; (function walk(n) { for (const c of n.children) c.dir ? walk(c) : (types[CATS[category(c.name)]] = (types[CATS[category(c.name)]] || 0) + c.size); })(f);
-      const typeRows = Object.entries(types).sort((a, b) => b[1] - a[1]).slice(0, 5);
-      const bars = (rows, total) => { const max = rows[0][1]; return rows.map(([n, b]) => `<div class="br"><span>${n}</span><span class="s">${fmt(b)}</span><span class="p">${pct(b, total)}</span><div class="bar"><i style="width:${(100 * b / max).toFixed(1)}%"></i></div></div>`).join(""); };
-      let dirs = 0; (function count(n) { for (const c of n.children) if (c.dir) { dirs++; count(c); } })(f);
-      document.getElementById("dialog").className = "dialog";
-      document.getElementById("dialog").innerHTML = `
-        <div class="dt"><span id="dlgIcon"></span>Inspect: ${f.name}<span class="x">✕</span></div>
-        <div class="db">
-          <div class="head"><svg class="g" viewBox="0 0 16 16">${ICONS.folder}</svg><div><div class="nm">${f.name}</div><div class="pt">${f.path}</div><div class="kd">Folder</div></div></div>
-          <table><tr><td>Size</td><td>${fmt(f.size)}  (${f.size.toLocaleString("en-US")} bytes)</td></tr>
-          <tr><td>Share of C:\\</td><td>${pct(f.size, root.size)}</td></tr>
-          <tr><td>Contains</td><td>${f.files.toLocaleString("en-US")} files, ${dirs.toLocaleString("en-US")} folders</td></tr>
-          <tr><td>Directly inside</td><td>${f.children.filter(c => !c.dir).length} files, ${f.children.filter(c => c.dir).length} folders</td></tr>
-          <tr><td>Average file</td><td>${fmt(f.size / Math.max(1, f.files))}</td></tr>
-          <tr><td>Newest change</td><td>${dateOf(kids[0])}</td></tr>
-          <tr><td>Since last scan</td><td>Grew by ${fmt(Math.round(f.size * .06))} (was ${fmt(Math.round(f.size * .94))})</td></tr>
-          <tr><td>Depth</td><td>1 level below the scan root</td></tr></table>
-          <h5>Largest inside</h5>${bars(kids.map(k => [k.name + (k.dir ? "\\" : ""), k.size]), f.size)}
-          <h5>By file type</h5>${bars(typeRows, f.size)}
-        </div>
-        <div class="df"><div class="btn"><svg viewBox="0 0 16 16">${ICONS.copy}</svg>Copy details</div><div class="btn"><svg viewBox="0 0 16 16">${ICONS.folderOpen}</svg>Show in Explorer</div><div class="btn"><svg viewBox="0 0 16 16">${ICONS.props}</svg>Properties</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
-      document.getElementById("dlgIcon").innerHTML = document.getElementById("titleIcon").innerHTML;
-      scrim.hidden = false;
-    }
-  }
-
-
-  // ============================================================ chrome sync
-  function applyChrome() {
-    const win = document.getElementById("win");
-    win.classList.toggle("light", state.theme === "light"); win.style.width = state.w + "px"; win.style.height = state.h + "px";
-    setIcon(document.getElementById("themeIcon"), state.theme === "light" ? "sun" : "moon");
-    const p = PALETTES[state.palette];
-    document.getElementById("swatches").innerHTML = [0,1,2,3,4,5].map(d => `<i style="background:${rgb(p.folder(d))}"></i>`).join("");
-    document.getElementById("paletteText").textContent = state.palette;
-    document.getElementById("styleText").textContent = STYLES[state.style].name;
-    if (state.scene === "compare") state.mode = "change";
-    document.getElementById("modeText").textContent = { branch: "Top folder", depth: "Depth", type: "File type", change: "Change" }[state.mode];
-    const legend = document.getElementById("legend"); legend.classList.toggle("show", state.mode === "type" || state.mode === "change");
-    legend.innerHTML = state.mode === "change"
-      ? [["Grew", "#E87A4F"], ["Shrank", "#5DA9C9"], ["Same", "#6A6A74"], ["New", "#F5B82E"]].map(([n, c]) => `<span><i style="background:${c}"></i>${n}</span>`).join("")
-      : CATS.map((n, i) => `<span><i style="background:${rgb(catColors()[i])}"></i>${n}</span>`).join("");
-    document.getElementById("tabChanges").hidden = state.scene !== "compare" && state.mode !== "change";
-    fillSideList(state.scene === "compare" || state.mode === "change");
-    document.getElementById("side").classList.toggle("hidden", !state.panel);
-    document.getElementById("panelBtn").classList.toggle("accent", state.panel); document.getElementById("panelBtn").classList.toggle("only", state.panel);
-    document.getElementById("crumbInfo").textContent = `${fmt(root.size)} · ${root.files.toLocaleString("en-US")} files`;
-    document.getElementById("statusScan").textContent = `${root.files.toLocaleString("en-US")} files · ${totalDirs.toLocaleString("en-US")} folders · ${fmt(root.size)} · 3.8 s`;
-    rescale(); applyScene();
-  }
-  function rescale() {
-    const host = document.getElementById("previewHost");
-    const avail = Math.max(300, host.clientWidth), s = Math.min(1, avail / state.w);
-    document.getElementById("stage").style.transform = `scale(${s})`;
-    const inner = document.getElementById("fitInner"); inner.style.width = state.w * s + "px"; inner.style.height = state.h * s + "px";
-  }
-  // Public API for the page's own controls.
-  window.SpaceSharpPreview = {
-    state, styles: STYLES.map(s => s.name), palettes: Object.keys(PALETTES),
-    set(key, value) { state[key] = value; applyChrome(); },
-    redraw: applyChrome
-  };
-  let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(rescale, 60); });
-  applyChrome();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(applyScene);
-})();
-
-</script>
+<script src="spacesharp-mock.js"></script>
 <script>
 (() => {
   const track = (name, params) => { try { if (typeof gtag === "function") gtag("event", name, params || {}); } catch (e) {} };
@@ -1151,35 +324,40 @@ FIXES
   winget.addEventListener("click", copyWinget);
   winget.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); copyWinget(); } });
 
-  // ---- previewer controls, driven by the embedded engine's API
-  const P = window.SpaceSharpPreview;
+  // ---- the live window
+  const pageDark = !matchMedia("(prefers-color-scheme: light)").matches;
+  const api = SpaceSharpMock.mount(document.getElementById("host"), { theme: pageDark ? "dark" : "light", scene: "none", w: 1600, h: 900 });
   const groups = {
-    scene: [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["filter", "Filter"], ["fpanel", "Filter panel"], ["inspect", "Inspect"], ["multi", "Selection"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["update", "Update notice"], ["whatsnew", "What's new"], ["start", "Start screen"], ["about", "About"]],
-    style: P.styles.map((n, i) => [i, n]),
-    mode: [["branch", "Top folder"], ["depth", "Depth"], ["type", "File type"], ["change", "Change"]],
-    palette: P.palettes.map(n => [n, n]),
+    scene: [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["drawer", "Filter drawer"], ["rail", "Filter rail"], ["panel", "By type"], ["cleanup", "Safe to clear"], ["timeline", "When changed"], ["inspect", "Inspect"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["settings", "Settings"], ["start", "Start screen"]],
+    mode: api.modes,
+    shading: api.shadings.map(n => [n, n]),
     theme: [["dark", "Dark"], ["light", "Light"]]
   };
-  const swatchOf = {};
   for (const [key, options] of Object.entries(groups)) {
     const host = document.querySelector(`.console .opts[data-key="${key}"]`);
     for (const [value, label] of options) {
       const b = document.createElement("button"); b.type = "button"; b.dataset.value = String(value); b.textContent = label;
-      b.addEventListener("click", () => { P.set(key, key === "style" ? +value : value); sync(); track("preview_" + key, { value: String(label) }); });
+      b.addEventListener("click", () => { api.set(key, value); sync(); track("preview_" + key, { value: String(label) }); });
       host.appendChild(b);
     }
   }
+  const paletteSel = document.getElementById("paletteSel");
+  paletteSel.addEventListener("change", () => { api.set("palette", paletteSel.value); track("preview_palette", { value: paletteSel.value }); });
   function sync() {
-    for (const key of Object.keys(groups)) document.querySelectorAll(`.console .opts[data-key="${key}"] button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.value === String(P.state[key]))));
+    for (const key of Object.keys(groups)) document.querySelectorAll(`.console .opts[data-key="${key}"] button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.value === String(api.state[key]))));
+    paletteSel.innerHTML = ""; for (const n of api.palettes(api.state.theme)) paletteSel.add(new Option(n, n)); paletteSel.value = api.state.palette;
   }
   sync();
+  document.querySelectorAll("[data-scene]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); api.set("scene", a.dataset.scene); sync(); document.getElementById("preview").scrollIntoView({ behavior: "smooth", block: "start" }); track("preview_scene", { value: a.dataset.scene }); }));
 
-  // The previewer's own theme follows the page's, until the visitor picks one.
-  const pageDark = !matchMedia("(prefers-color-scheme: light)").matches;
-  P.set("theme", pageDark ? "dark" : "light"); sync();
-  // On narrow screens the side panel would shrink the map to nothing; show the map alone.
-  const fitPanel = () => { const narrow = document.getElementById("previewHost").clientWidth < 760; if (P.state.panel === narrow) P.set("panel", !narrow); };
-  fitPanel(); let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(fitPanel, 120); });
+  function rescale() {
+    const inner = document.getElementById("fitInner"), avail = inner.parentElement.clientWidth, s = Math.min(1, avail / api.state.w);
+    document.getElementById("stage").style.transform = `scale(${s})`;
+    inner.style.width = api.state.w * s + "px"; inner.style.height = api.state.h * s + "px";
+    // On a narrow screen the side panel would shrink the map to nothing; show the map alone.
+    const narrow = avail < 760; if (api.state.side === narrow) api.set("side", !narrow);
+  }
+  rescale(); let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(rescale, 100); });
 })();
 </script>
 </body>

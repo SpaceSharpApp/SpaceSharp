@@ -100,4 +100,21 @@ public class WhatsNewTests
         Assert.False(UpdateWindow.SpansReleases("unknown", "1.6.0"));
         Assert.False(UpdateWindow.SpansReleases("1.6.0", "1.6.0"));
     }
+
+    [Fact]
+    public void ShortVersionDropsAZeroPatch()
+    {
+        Assert.Equal("2.0", UpdateWindow.ShortVersion("2.0.0"));
+        Assert.Equal("2.0.1", UpdateWindow.ShortVersion("2.0.1"));
+        Assert.Equal("2.1", UpdateWindow.ShortVersion("v2.1"));
+    }
+
+    [Fact]
+    public void HighlightsAreTheSectionHeadingsWithoutTheHousekeeping()
+    {
+        const string notes = "## 2.0.0\n\nIntro.\n\n### One look, shaded your way\n- a\n### The filter, redone\n- b\n### Fixes\n- c\n### A panel under the map\n- d\n### Under the hood\n- e\n### Palettes\n- f\n### Icon\n- g\n";
+        Assert.Equal(new[] { "One look, shaded your way", "The filter, redone", "A panel under the map", "Palettes" }, UpdateWindow.Highlights(notes));
+        Assert.Empty(UpdateWindow.Highlights(null));
+        Assert.Empty(UpdateWindow.Highlights("## 1.6.1\n- only bullets\n"));
+    }
 }

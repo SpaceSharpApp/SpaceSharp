@@ -54,6 +54,7 @@ public sealed partial class TreemapControl
         _items.Clear();
         _index.Clear();
         _matchedGroups.Clear();
+        _subdivided.Clear();
         _siblingSide.Clear();
 
         double width = ActualWidth;
@@ -83,7 +84,13 @@ public sealed partial class TreemapControl
         UpdateFocus();
     }
 
-    private void LayoutNode(FsNode node, Rect bounds, int depth, int branch)
+    /// <summary>Containers whose children were laid out this pass (so a group's own label is not drawn under its members).</summary>
+    private readonly HashSet<FsNode> _subdivided = new();
+
+    /// <param name="sole">True when the node is its container's only laid-out child: a group standing for the whole content.</param>
+    /// <param name="flushRight">The box ends at its container's right content edge (no grid line of its own there).</param>
+    /// <param name="flushBottom">The same for the bottom edge.</param>
+    private void LayoutNode(FsNode node, Rect bounds, int depth, int branch, bool sole = false, bool flushRight = true, bool flushBottom = true)
     {
         if (!bounds.IntersectsWith(_viewport)) return;
 
@@ -98,8 +105,13 @@ public sealed partial class TreemapControl
         }
 
         bool container = shown.IsDirectory || shown.GroupMembers is not null;
-        bool hasHeader = container && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= MinHeaderHeight * _labelScale;
-        var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch);
+        // A title bar needs room for itself and a strip of content under it. It stays on narrow folders too,
+        // with the name cut short or left out: the bar is what makes a folder read as a frame.
+        // A group that is the whole content of its folder gets no bar of its own: the folder's bar already
+        // names the place, and "312 files" sits in the body instead until the members have room.
+        bool hasHeader = container && !(shown.IsGroup && sole)
+            && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= HeaderHeight + MinHeaderBody;
+        var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom);
         _items.Add(item);
 
         // Every folder of the chain maps to the same box, so focus/selection/zoom still work for each.
@@ -121,8 +133,11 @@ public sealed partial class TreemapControl
 
         var content = new Rect(bounds.X + inset, bounds.Y + top, contentWidth, contentHeight);
         var layout = ChildLayout(shown, content);
+        if (layout.Children.Count == 0) return;
         if (layout.Group is not null && layout.GroupMatched) _matchedGroups.Add(layout.Group);
+        _subdivided.Add(shown);
 
+        bool soleChild = layout.Children.Count == 1;
         for (int i = 0; i < layout.Children.Count; i++)
         {
             var n = layout.Normalized[i];
@@ -135,7 +150,7 @@ public sealed partial class TreemapControl
             // Children of the root define the branches; everything below inherits its branch.
             int childBranch = depth == 0 ? i : branch;
             if (rect.Width >= MinChildSize && rect.Height >= MinChildSize)
-                LayoutNode(layout.Children[i], rect, depth + 1, childBranch);
+                LayoutNode(layout.Children[i], rect, depth + 1, childBranch, soleChild, n.X + n.Width >= 0.999, n.Y + n.Height >= 0.999);
         }
     }
 
@@ -147,17 +162,43 @@ public sealed partial class TreemapControl
     /// decided from the data alone (their share of the whole scan), never from the current zoom, so a box
     /// keeps its place however far you zoom: a "312 files" group that gets room lays its members out inside
     /// its own rectangle instead of the parent being laid out again.
+    ///
+    /// That rule has nothing to say about a folder whose every child is small by the scan's standard: a
+    /// 40 × 40 px folder on a 1 TB map. Laying all of its children out flat turned every such folder into a
+    /// pile of slivers, which is where the map used to fall apart. Those folders (and groups, whose members
+    /// are small by definition) are cut by the pixels they actually have: the children big enough to see
+    /// get a box, the rest merge into one block; when none is big enough the whole content is one block.
+    /// Only these small containers re-layout as you zoom; the large structure of the map stays put.
     /// </summary>
     private CachedChildLayout ChildLayout(FsNode folder, Rect content)
     {
         var all = ChildrenOf(folder);
-        // Groups are laid out flat: their members are the small items by definition, and grouping them again
-        // would only wrap the same box in another header. A cutoff of 0 would group every child, which is the
-        // folder itself; leave those flat too.
-        int cutoff = _groupSmall && !folder.IsGroup ? GroupCutoff(all) : all.Count;
-        if (cutoff == 0) cutoff = all.Count;
-        if (_layoutCache.TryGetValue(folder, out var cached) && cached.Cutoff == cutoff)
+        int cutoff;
+        if (!_groupSmall) cutoff = all.Count;
+        else
+        {
+            cutoff = folder.IsGroup ? 0 : GroupCutoff(all);
+            if (cutoff == 0)
+                cutoff = Grouping.CutoffOnScreen(all, _measure, folder.SizeFor(_measure), content.Width, content.Height, VisibleArea);
+            // A group that is still too small for any member to show stays one solid block; it is already the
+            // merged box, and a group inside it would only wrap the same pixels again.
+            if (cutoff == 0 && folder.IsGroup) cutoff = -1;
+        }
+        if (_layoutCache.TryGetValue(folder, out var cached))
+        {
+            if (cached.Cutoff == cutoff) return cached;
+            // The cut moved (a small container got more or fewer pixels): the group it had is gone for good,
+            // so its own cached layout, and any nested group's, would only sit in the cache until the next scan.
+            var stale = cached.Group;
+            while (stale is not null && _layoutCache.Remove(stale, out var inner)) stale = inner.Group;
+        }
+
+        if (cutoff < 0)
+        {
+            cached = new CachedChildLayout(cutoff, Array.Empty<FsNode>(), Array.Empty<Rect>(), null, false);
+            _layoutCache[folder] = cached;
             return cached;
+        }
 
         IReadOnlyList<FsNode> children = all;
         FsNode? group = null;
@@ -196,11 +237,7 @@ public sealed partial class TreemapControl
     {
         double whole = _root?.SizeFor(_measure) ?? 0;
         if (whole <= 0) return children.Count;
-        double pixelsPerByte = ReferenceArea / whole;
-        for (int i = 0; i < children.Count; i++)
-            if (children[i].SizeFor(_measure) * pixelsPerByte < GroupBelowArea)
-                return i;
-        return children.Count;
+        return Grouping.Cutoff(children, _measure, ReferenceArea / whole, GroupBelowArea);
     }
 
     /// <summary>
@@ -230,7 +267,7 @@ public sealed partial class TreemapControl
         string kind = folders == 0 ? Strings.Get("Group_Files") : folders == count ? Strings.Get("Group_Folders") : Strings.Get("Group_Items");
         var members = new List<FsNode>(children.Count - cutoff);
         for (int i = cutoff; i < children.Count; i++) if (children[i].SizeFor(_measure) > 0) members.Add(children[i]);
-        group = new FsNode($"{count:N0} {kind}", folder.FullPath, NodeKind.Group, folder.IsGroup ? folder.Parent : folder)
+        group = new FsNode($"{count:N0} {kind}", NodeKind.Group, folder.IsGroup ? folder.Parent : folder)
         {
             Size = size,
             Allocated = allocated,

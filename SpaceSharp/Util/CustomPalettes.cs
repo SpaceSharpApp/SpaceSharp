@@ -34,6 +34,7 @@ public static class CustomPalettes
         [JsonPropertyName("fileTint")] public double? FileTint { get; set; }
         [JsonPropertyName("categories")] public Dictionary<string, string>? Categories { get; set; }
         [JsonPropertyName("neutral")] public string[]? Neutral { get; set; }
+        [JsonPropertyName("theme")] public string? Theme { get; set; }
     }
 
     private static readonly JsonSerializerOptions Options = new()
@@ -79,7 +80,17 @@ public static class CustomPalettes
                     d => folders[d % folders.Length],
                     d => files[d % files.Length],
                     categories,
-                    neutral is null ? Palette.NeutralFolder : d => neutral[d % neutral.Length]) { IsCustom = true });
+                    neutral is null ? Palette.NeutralFolder : d => neutral[d % neutral.Length])
+                {
+                    IsCustom = true,
+                    Theme = p.Theme?.Trim().ToLowerInvariant() switch
+                    {
+                        null or "" or "any" or "both" => PaletteTheme.Any,
+                        "dark" => PaletteTheme.Dark,
+                        "light" => PaletteTheme.Light,
+                        _ => throw new InvalidDataException($"unknown theme \"{p.Theme}\" (use dark, light or any)")
+                    }
+                });
             }
             catch (Exception ex) when (ex is JsonException or InvalidDataException or FormatException or IOException)
             {
@@ -112,6 +123,10 @@ public static class CustomPalettes
               // or when you press "Reload" in Settings. Comments and trailing commas are allowed.
 
               "name": "Example",
+
+              // Which window theme the palette is made for: "dark", "light" or "any". Decides which group
+              // it is listed under; "any" (the default) lists it under both.
+              "theme": "dark",
 
               // Folder colors, cycled by nesting depth in "Depth" mode and by top-level folder in
               // "Top folder" mode. One to twelve colors, #RRGGBB.

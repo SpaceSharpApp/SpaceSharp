@@ -202,7 +202,7 @@ public sealed class DiskScanner
     {
         ct.ThrowIfCancellationRequested();
 
-        var node = new FsNode(parent is null ? dir.FullName : dir.Name, dir.FullName, NodeKind.Directory, parent);
+        var node = new FsNode(parent is null ? dir.FullName : dir.Name, NodeKind.Directory, parent);
         Volatile.Write(ref _currentPath, dir.FullName);
         Interlocked.Increment(ref _directories);
 
@@ -259,7 +259,7 @@ public sealed class DiskScanner
         long size = duplicate ? 0 : length;
         Interlocked.Add(ref _bytes, size);
 
-        return new FsNode(file.Name, file.FullName, NodeKind.File, parent)
+        return new FsNode(file.Name, NodeKind.File, parent)
         {
             Size = size,
             Allocated = allocated,

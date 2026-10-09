@@ -196,7 +196,7 @@ public static class ScanFile
         int files = r.ReadInt32();
         long bytes = r.ReadInt64();
 
-        var root = new FsNode(rootPath, rootPath, NodeKind.Directory, null);
+        var root = new FsNode(rootPath, NodeKind.Directory, null);
         ReadChildren(r, root);
         root.FinishDirectory();
         if (addFreeSpace && free > 0) root.AddFreeSpace(free);
@@ -210,10 +210,9 @@ public static class ScanFile
             byte kind = r.ReadByte();
             if (kind == byte.MaxValue) return;
             string name = r.ReadString();
-            string path = folder.FullPath.EndsWith('\\') ? folder.FullPath + name : folder.FullPath + "\\" + name;
             if (kind == KindDirectory)
             {
-                var dir = new FsNode(name, path, NodeKind.Directory, folder)
+                var dir = new FsNode(name, NodeKind.Directory, folder)
                 {
                     LastWriteUtc = new DateTime(r.ReadInt64(), DateTimeKind.Utc),
                     AccessDenied = r.ReadBoolean()
@@ -227,7 +226,7 @@ public static class ScanFile
                 long size = r.ReadInt64(), allocated = r.ReadInt64();
                 var ticks = r.ReadInt64();
                 bool link = kind == KindHardLink;
-                folder.Children.Add(new FsNode(name, path, NodeKind.File, folder)
+                folder.Children.Add(new FsNode(name, NodeKind.File, folder)
                 {
                     Size = link ? 0 : size,
                     Allocated = link ? 0 : allocated,

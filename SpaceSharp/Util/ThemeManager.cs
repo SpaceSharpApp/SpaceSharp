@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Media;
 using Microsoft.Win32;
 
 namespace SpaceSharp.Util;
@@ -11,8 +12,8 @@ public enum AppTheme
 }
 
 /// <summary>
-/// Swaps the color dictionary (Themes/Dark.xaml or Themes/Light.xaml). All UI colors are
-/// DynamicResource references, so open windows recolor immediately.
+/// Swaps the color dictionary (Themes/Dark.xaml or Themes/Light.xaml) and lays the chosen look (<see cref="UiLooks"/>)
+/// over it. All UI colors are DynamicResource references, so open windows recolor immediately.
 /// "System" follows the Windows setting for apps and updates when it changes.
 /// </summary>
 internal static class ThemeManager
@@ -23,6 +24,9 @@ internal static class ThemeManager
     public static AppTheme Choice { get; private set; } = AppTheme.System;
 
     public static bool IsDark { get; private set; } = true;
+
+    /// <summary>The look in use for the current theme.</summary>
+    public static UiLook Look { get; private set; } = UiLooks.For(true)[0];
 
     public static event EventHandler? Changed;
 
@@ -45,6 +49,14 @@ internal static class ThemeManager
         Apply();
     }
 
+    /// <summary>Picks a look for the dark or the light theme, saves it, and recolors if that theme is showing.</summary>
+    public static void SetLook(bool dark, string name)
+    {
+        if (dark) AppSettings.Current.LookDark = name; else AppSettings.Current.LookLight = name;
+        AppSettings.Current.Save();
+        if (dark == IsDark) Apply(force: true);
+    }
+
     public static void Shutdown()
     {
         if (!_listening) return;
@@ -56,10 +68,10 @@ internal static class ThemeManager
     {
         // Fires on a background thread when e.g. the Windows light/dark setting changes.
         if (Choice != AppTheme.System || e.Category != UserPreferenceCategory.General) return;
-        Application.Current?.Dispatcher.BeginInvoke(new Action(Apply));
+        Application.Current?.Dispatcher.BeginInvoke(new Action(() => Apply()));
     }
 
-    private static void Apply()
+    private static void Apply(bool force = false)
     {
         bool dark = Choice switch
         {
@@ -68,13 +80,22 @@ internal static class ThemeManager
             _ => !WindowsUsesLightTheme()
         };
 
-        if (_colors is not null && dark == IsDark) return;
+        if (!force && _colors is not null && dark == IsDark) return;
 
         var resources = Application.Current.Resources;
         var colors = new ResourceDictionary
         {
             Source = new Uri($"pack://application:,,,/SpaceSharp;component/Themes/{(dark ? "Dark" : "Light")}.xaml", UriKind.Absolute)
         };
+        // The look overrides the file's surfaces and text; the accent and Danger stay the file's.
+        var look = UiLooks.Find(dark ? AppSettings.Current.LookDark : AppSettings.Current.LookLight, dark);
+        foreach (var (key, color) in look.Colors())
+        {
+            var brush = new SolidColorBrush(color);
+            brush.Freeze();
+            colors[key] = brush;
+        }
+        Look = look;
 
         // Remove every other color dictionary, including one left in an out-of-date App.xaml,
         // so nothing can override the theme's colors.

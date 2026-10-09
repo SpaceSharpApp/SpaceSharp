@@ -144,6 +144,9 @@ public sealed class DonutChart : FrameworkElement
 
     private static Geometry Ring(Point c, double outer, double inner, double startDeg, double sweepDeg)
     {
+        // A full turn has the same start and end point, and an arc between them is nothing; a hair short of
+        // a turn is a complete ring. Happens whenever one slice is the whole donut (a folder of one file type).
+        sweepDeg = Math.Min(sweepDeg, 359.999);
         bool large = sweepDeg > 180;
         double a0 = startDeg * Math.PI / 180, a1 = (startDeg + sweepDeg) * Math.PI / 180;
         Point P(double r, double a) => new(c.X + r * Math.Cos(a), c.Y + r * Math.Sin(a));

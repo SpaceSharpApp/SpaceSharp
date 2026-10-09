@@ -1,0 +1,5 @@
+You'll find SpaceSharp in the Start menu.
+
+Pick a drive and click Scan drive. The biggest boxes are the biggest space users: hover for details, double-click to zoom in, right-click to open, show in Explorer or move to the Recycle Bin.
+
+The gear button (or Ctrl+,) opens the settings. F1 opens About, with the full list of keyboard shortcuts.

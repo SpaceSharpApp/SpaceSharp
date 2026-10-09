@@ -24,23 +24,6 @@ public enum ColorMode
 
 /// <param name="Node">The node drawn in this box (the deepest folder of a collapsed chain).</param>
 /// <param name="ChainTop">First folder of a collapsed single-child chain, or null.</param>
-/// <summary>How boxes are drawn. Same layout, different visual treatment.</summary>
-public enum MapStyle
-{
-    /// <summary>Title bars, 1 px borders, cushion shading.</summary>
-    Classic,
-    /// <summary>Plain fills, thin borders, no gaps, no shading. The simplest look.</summary>
-    Flat,
-    /// <summary>Flat colors, small gaps, softly rounded, folder names as captions.</summary>
-    Tiles,
-    /// <summary>Folders as raised cards with a shadow and bold title; files as flat chips.</summary>
-    Cards,
-    /// <summary>Deep title band, lighter body, light borders, no shading.</summary>
-    Bands,
-    /// <summary>Rounded pastel blocks with gaps.</summary>
-    Soft
-}
-
 /// <param name="Branch">Index of the top-level folder this item belongs to (0 for the root itself).</param>
 /// <summary>How many small items the map draws before grouping or hiding them.</summary>
 public enum MapDensity
@@ -56,4 +39,6 @@ public enum MapDensity
     Everything
 }
 
-public readonly record struct TreemapItem(FsNode Node, Rect Bounds, int Depth, bool HasHeader, FsNode? ChainTop, int Branch);
+/// <param name="FlushRight">The box ends exactly at its container's right content edge: the container's own grid line serves, the box draws none.</param>
+/// <param name="FlushBottom">The same for the bottom edge.</param>
+public readonly record struct TreemapItem(FsNode Node, Rect Bounds, int Depth, bool HasHeader, FsNode? ChainTop, int Branch, bool FlushRight = true, bool FlushBottom = true);

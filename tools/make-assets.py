@@ -4,13 +4,16 @@ SpaceSharp brand assets: the "Core" mark.
 
 An isometric amber block with a cube carved out of its front corner. Three lit
 faces (pale top, brand amber left, deep amber right), three graphite faces
-inside the void. No background tile: the silhouette is the icon.
+inside the void. The mark itself has no background tile: the silhouette is the
+icon on the README, the landing page and inside the app. The Windows icon
+(taskbar, Explorer, the title bar) sits on the rounded Graphite tile the old
+nine-cell icon used, so it reads as an app icon next to other apps' tiles.
 
 One definition here produces every brand file in the repository:
 
   SpaceSharp/Assets/SpaceSharp.svg        master mark (deep carve)
   SpaceSharp/Assets/SpaceSharp-small.svg  shallow carve, used for 16 to 24 px
-  SpaceSharp/Assets/SpaceSharp.ico        Windows icon: 16, 20, 24, 32, 48, 64, 128, 256
+  SpaceSharp/Assets/SpaceSharp.ico        Windows icon on the tile: 16, 20, 24, 32, 48, 64, 128, 256
   SpaceSharp/Assets/SpaceSharp-256.png    the mark the app shows in its own UI
   docs/icon.png, docs/icon-512.png        landing page favicon and store icon
   docs/header.png                         README header, 1280x360 on GitHub's #0D1117
@@ -115,6 +118,24 @@ def paste_mark(im: Image.Image, px: int, xy, tile=None, interior=INTERIOR_DARK):
     """Draw the mark at px on im at xy. `tile` is accepted for compatibility and ignored: the mark has no tile."""
     im.alpha_composite(mark_image(px, interior), (int(xy[0]), int(xy[1])))
 
+# The tile behind the Windows icon: the Panel tone on rounded corners (about a fifth of the side), the same
+# tile the nine-cell icon had. The mark fills three quarters of it so the amber stays bold at 16 px.
+TILE_COLOR = PANEL
+TILE_RADIUS = 0.22
+TILE_MARK = 0.78
+
+def tile_image(px: int, interior=INTERIOR_DARK) -> Image.Image:
+    S = 4 if px < 128 else 2                      # draw the corners oversampled, then shrink
+    big = px * S
+    tile = Image.new("RGBA", (big, big), (0, 0, 0, 0))
+    ImageDraw.Draw(tile).rounded_rectangle([0, 0, big - 1, big - 1], radius=round(big * TILE_RADIUS), fill=TILE_COLOR + (255,))
+    tile = tile.resize((px, px), Image.LANCZOS)
+    m = max(8, round(px * TILE_MARK))
+    if m % 2 != px % 2:
+        m += 1                                    # keep the mark centered on whole pixels
+    tile.alpha_composite(mark_image(m, interior), ((px - m) // 2, (px - m) // 2))
+    return tile
+
 # ---------------------------------------------------------------- fonts
 FONT_URL = ("https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/"
             "BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf")
@@ -175,7 +196,7 @@ def make_pngs():
     write("docs/icon-512.png", png_bytes(mark_image(512)))
 
 def make_ico(rel: str, sizes=(16, 20, 24, 32, 48, 64, 128, 256)):
-    frames = [mark_image(px) for px in sizes]
+    frames = [tile_image(px) for px in sizes]
     buf = io.BytesIO()
     frames[-1].save(buf, "ICO", sizes=[(s, s) for s in sizes], append_images=frames[:-1])
     write(rel, buf.getvalue())

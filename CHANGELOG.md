@@ -1,239 +1,72 @@
 # Changelog
 
-All notable changes to SpaceSharp. The newest release is at the top.
+What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md).
 
-## 1.6.1
+## 2.0.0
 
-### New icon
-- SpaceSharp has a new mark: an amber block with a cube carved out of its front corner, drawn in isometric with no background tile. It replaces the nine-cell tile everywhere: the window and taskbar icon, the start screen and About window, the installer pages, the README header, the landing page and the social preview. The carve is shallower at small sizes so the icon stays legible at 16 px.
-- Setup.exe and Update.exe show a proper splash while they work: a Graphite card with the mark, the wordmark and a moving amber sweep (`installer/splash.gif`, drawn by tools/make-assets.py), instead of the bare icon on white.
+SpaceSharp 2.0 is a new map, a new filter and a new panel under the map. It is a major version because it takes things away: the six map styles are gone in favor of one look you shade yourself, the Neon palette is gone, and every palette was redrawn, so a saved style or palette choice from 1.x does not carry over (a saved Neon falls back to Graphite; the old `MapStyle` setting is ignored). Everything else, your saved scans, custom palettes and settings, is read as before.
 
-### Fixes
-- The update prompt's What's new now covers every release you skipped. Someone updating from 1.4.0 to 1.6.0 used to see only the 1.6.0 notes; the window is now titled "What's new since 1.4.0" and lists each release in between, read from the changelog at the new release's tag, with "See all changes" opening the full changelog. The notes packed into the update are still used when the changelog cannot be fetched.
-- Installing an update no longer pops up a stock Windows "Installing Update" box with a blue i. The update applies silently: the app closes, the files are swapped, and the new version opens a few seconds later. The update dialog says "Restarting into 1.6.0" once the download is done.
-- The installer's welcome and finish pages have their paragraphs back (they are RTF now; the markdown-to-RTF step flattened them), and the finish page says what F1 does correctly: it opens About, where the keyboard shortcuts are; the gear or Ctrl+, opens the settings.
+### One look, shaded your way
+- The map draws one way, the way SpaceMonger drew it: folders are frames with a title bar, files are boxes inside them, and a one-pixel line or a small gap separates every box. The Style box has left the toolbar, and S no longer cycles anything. What used to be a choice between Classic, Flat, Tiles, Cards, Bands and Soft is now a set of sliders, so the look is yours rather than one of six.
+- Settings › Treemap has a **Shading** card in its place. **Cushion shading** switches the light-to-dark shading on files on or off; off is flat color and grays out the rest of the card. **Presets** Soft, Classic and Deep are starting points for four sliders: **Depth** (how pronounced the shading is), **Spread** (how far the light reaches before the shadow), **Tone** (lighter or darker files overall; folders keep their color) and **Fade inside folders** (how much shading nested files keep). **Light from** is a square of nine buttons: pick a side or corner, or the middle for light from straight ahead. Reset to defaults puts all of it back.
+- A preview map of sample data is pinned above the Treemap page and follows every change, so you see the shading, the title bars, the grid and the text colors as you drag.
+- Folder title bars are a shade of the folder's own color rather than a black overlay. On a pastel palette the overlay turned every nested bar into the same muddy strip and Users › AppData › Local stacked into one dark block; now each bar keeps its palette and its level. **Title bar tint** (0 to 40 %) sets how far the bar is shaded from the folder's color, **Title bar padding** (0 to 8 px) the space above and below the name; the bar grows with it.
+- **Text and title bars**: the color of folder names and of file names and sizes is Auto (dark or light per box, as before) or a fixed color from swatches or any #RRGGBB. Label size, font, outlined labels, and what file and folder labels show (names, sizes, counts, centered or not) moved here from Appearance and Layout.
+- **Grid and highlight**: grid lines on or off, their width (1 to 3 px, the old Border setting) and color from swatches or any #RRGGBB, and the color of the frame around selected boxes, amber by default.
+- The grid is one line wide everywhere. Each box used to stroke its own outline on fractional coordinates, so two neighbors drew two lines on different pixels and a child flush against its folder's edge added a third; seams came out two or three pixels dark. Boxes now snap to whole pixels and each leaves exactly one grid strip on its right and bottom, none where the folder's own line already is.
+- **Padding** still puts a gap around every box; the gap shows the map background at the top level and the folder's color inside it, scaled down on small boxes so a field of tiny files does not turn into dots.
+- Small folders no longer dissolve into slivers. Grouping used to be judged against the whole scan only, so inside any folder smaller than about 70 × 70 px every child counted as "too small" and the map drew all of them a few pixels wide. A folder is now also cut by the pixels it actually has on screen: children big enough to see (about 10 × 10 px) get their own box, the rest merge into one "312 files" block, and when none is big enough the whole folder body is one block. The cut only moves when the folder's area doubles, so a smooth zoom does not shuffle boxes. A merged block that fills its folder has no title bar of its own; the folder's bar names the place.
+- Title bars stay down to 30 px wide. The bar is what makes a folder read as a frame; the name is cut short, and left out below about 18 px of room, so a narrow frame shows a plain bar rather than a lone "…". Bars also appear a little earlier in height (24 px of content under the bar, down from a fixed 44 px box).
+- Density, bias and padding sit under **Layout** on the same page; Palette and Color by moved from Appearance to a **Colors** card there, next to the custom palettes folder. Appearance keeps the theme.
 
-## 1.6.0
+### The filter, redone
+- The filter box and its popup are gone. In their place, by default, a **filter drawer**: a sheet over the right of the map with the file types as rows (checkbox, color, name, a share-of-scan bar and the size), a size range, **Not modified for** as a row of buttons, Show (files and folders, files only, folders only), a name box, the presets (Large files, Big videos, Installers & archives, Untouched for 2 years, Big and old, Recently changed), and a footer with the live match count and size and Select matches. The Filter button in the path row and Ctrl+F open and close it; Esc closes it; Clear all empties it. The button reads "Filter · 3" while three conditions are set.
+- The name box still takes the full syntax ("type:video >500MB older than 1 year"), and anything typed there turns into checked rows and set controls, so the drawer teaches the syntax as well.
+- Settings › Map › **Filter layout** switches to a **filter rail** under the path instead: one pill per condition (Type, Size, Age, Show), each a small dropdown that shows its value when set and takes an amber edge, a name box, a Try pill with the presets, and the live count with Select matches and Clear on the right. The same Filter button shows and hides it.
+- Underneath, nothing changed: both faces read and write the same filter text, so anything that sets a filter (the panel under the map, the right-click menu's "Show only *.mp4 files", the presets, a typed filter) works with either, and Ctrl+A still selects every match.
 
-### Inspect, redrawn
-- The Inspect window (Ctrl+I) is laid out around the question you opened it for. The size is the one big number; the path is a row of breadcrumbs, and clicking one zooms the map there. Under the name, three lines say something about the item instead of restating the map: its share of the parent and where it ranks among its siblings ("48% of Nexus Stuff, the largest of its 6 folders"), what it is made of ("Mostly images (61.2 GB) and archives (6.8 GB), median file 2.3 MB"), and its age and change ("Last changed 3 months ago, 78% untouched for over a year, unchanged since the last scan"). Depth, average file size, "directly inside" and the fact grid are gone.
-- **Where the space is** lists the five largest things anywhere inside, not only direct children, each on one line with a bar scaled to the folder: a folder that is almost entirely one child is skipped in favor of that child, so you see `Google\Chrome\User Data` rather than `Google`. Clicking a folder row zooms the map to it. A closing line says how much the rest of the files share.
-- **By type** and **By age** are donuts with the legend beside them; hovering a slice or a legend row shows it in the center. Type colors follow the active palette, the age bands (this month, this year, 1 to 3 years, older) run from bright to dim amber. Age is new: it tells you how much of a folder has not been touched in over a year.
-- A callout appears when one thing holds most of a folder: "65% of this folder is one thing: AppData at 93.15 GB."
-- The hover tooltip on the map is three lines: name and size, then "Folder · 583 files · 25% of Images", then "Mostly images · changed 27 Apr 2026" with the change since the last scan in the Change colors when a comparison is loaded. Folder count, size on disk, share of the drive, the largest child and the right-click hint are gone from the tooltip; Inspect has them. Three of its labels were hardcoded English and are now translated.
-- On Windows 11 every window's title bar is painted in the theme's background color with the theme's text, so the caption and the toolbar read as one surface (Graphite #0D1117 in dark, the light grey in light). Windows 10 keeps the dark or light system caption as before.
-- The side panel can be resized: drag its right edge to make it wider or narrower, and drag the line between Drives and Largest items to give either list more room. Both sizes are remembered.
-- The window is resizable and remembers its size; the header stays while the rest scrolls. Copy details copies the same content as before, in the new order.
+### A panel under the map
+- A new strip under the map with three views of the whole scan side by side. The toolbar button next to the side panel's, or B, shows and hides it; the chevron on its right folds it down to its titles and back; Settings › Map › Show bottom panel sets whether it is there at all. It fills in when a scan finishes or a saved scan opens, and updates after a delete.
+- **By type** is one stacked bar of the drive by file type in the palette's colors, with a legend of name, size and share. Hover a type and the map dims to its files; click and it becomes a filter, click again to clear it.
+- **Safe to clear** lists places that are usually safe to empty, decided from names alone: Windows.old, the Recycle Bin, Temp folders, package caches (npm, pnpm, NuGet, pip, Cargo, Gradle, Composer, Go, Maven), browser caches, shader caches, Windows Update downloads, and Downloads not touched in a year. Each row has Show, which selects the items on the map and zooms there, and an action: **Recycle** sends them to the Recycle Bin after the usual confirmation, **Empty** empties the Recycle Bin through Windows (which asks first) and takes the freed space off the map, **Review** selects old downloads and sets the filter so you decide, and **How to** explains the hibernation and paging files SpaceSharp will not touch. Anything that does not fit in five rows is summed up on an "Also:" line.
+- **When changed** is a histogram of bytes by the month they were last written, 36 months, colored in the four age bands Inspect uses (this month, this year, 1 to 3 years, older), with the band totals as filter buttons under it; click one to filter the map to that band, click again to clear. Hover a month to see it on the map, click to filter to it.
 
-### Fast scan without the restart
-- The fast NTFS scan no longer needs SpaceSharp itself to run as administrator. When you scan a drive, Windows asks for permission (the UAC prompt), a small elevated helper reads the file table and hands the finished map back to the window you already have, and the helper exits. The window never closes and keeps your zoom, filters and settings. Say no and the normal scan runs; you are not asked again until the next start. The start screen's "Restart as administrator" line is gone.
+### Palettes
+- Every palette now has twelve hues, one per top-level folder before any repeats (they had seven, so the eighth folder on a drive wore the first one's color). The toolbar swatches show eight colors instead of six, and the palette list is wide enough for the longest name.
+- Palettes are split by theme. The dark theme has Graphite (new, the default), Ocean, Sunset, Forest, Vivid (new), Aurora (new, in place of Neon), Monochrome and Color-blind safe; the light theme has Pastel (the default), Paper (new), Candy (new), Nordic (new), Earth (new), Retro and Color-blind safe (light). The pickers list the current theme's palettes first and the others under their own heading; each theme remembers its own choice, so switching the theme switches the palette too.
+- A custom palette's JSON can say `"theme": "dark"` or `"light"`; without it the palette is listed under both. Example.json and the README in the palettes folder show the field.
+- Neon is gone. Its dark frames never worked with the single look and its files were either glare or mud; Aurora, a saturated mid-tone palette for the dark theme, takes its slot.
 
-### Fixes
-- Tiles, Cards and Soft no longer turn a folder of many small files into a field of dots. The gap between boxes and the corner radius now shrink with the box: under about 40 px the gap narrows to a hairline and then disappears, and corners are never rounder than a sixth of the box's shorter side. Cards under 24 px also drop their shadow, which at that size was only a dark halo. The gap is decided per folder from the typical size of its children, so neighbors never get different gaps and the seams stay straight. Large boxes look exactly as before.
-- Classic no longer shades folders, only files and groups. A folder is a frame around its children, and shading every frame stacked darkness with each level of nesting, so deep parts of the tree went muddy; the frames are now flat and the files inside keep their cushion. Boxes under 28 px get a lighter cushion.
-- Cards and Tiles had drifted into the same look. Cards now sets its folders a step darker and its files a step lighter, so files read as chips lying on a card; Tiles stays flat.
-- Classic and Bands title bars separate name, size and count with a dot instead of a dash.
+### The right-click menu
+- The map's menu is the same list, drawn better. Inspect is a taller first row on the control tone with the clicked item's name, size and kind as its sub-line (or the count and total size of a selection), so the menu says what it is about. Every row has an icon in a fixed column, the shortcuts are smaller and quieter, the rows are 32 px with a rounded hover, the menu has a 10 px radius and a softer shadow, and Move to Recycle Bin sits apart in a footer on the panel tone with a red-tinted hover.
 
-## 1.5.1
+### The app's own colors
+- Settings › Appearance has a **Dark look** and a **Light look**: the colors of the window, panels, controls, menus and the map background, five for each theme. Dark: Graphite (the one the app has had), Slate (cooler), Mocha (warmer), Midnight (deeper blue), Carbon (neutral black). Light: Paper (as before), Linen (warm), Mist (cool), Sand (beige), Snow (white). The amber accent stays the same in every look, so the app stays recognizable; each theme remembers its own look and the map's palette is separate from it.
 
-### Fixes
-- Boxes never move when you zoom. Which small items are grouped into a "312 files" box is now decided from the data alone, not from how many pixels the folder has on screen, so zooming in no longer lays a folder out again. A group that gets room shows its members inside its own box, laid out flat under one title.
-- Classic's shading is softer: a light top-left and a slightly darker bottom-right instead of a white-to-black sweep, which read as stripes when many boxes sat together.
+### The update prompt
+- The update notice is one narrow column: the mark on its tile, "SpaceSharp 2.0.0 is ready" with your version under it, the jump as two pills (1.6.1 → 2.0.0), a short paragraph led by the release's section headings, then Install and restart, Remind me later, and a "What's new in 2.0" link that opens the full notes. The download progress shows under the pills. Someone two releases behind still gets every release in between in the notes.
 
-### Changes
-- Only one SpaceSharp runs per session. Starting it again, from Explorer, a shortcut or the command line, brings the open window forward and hands it the request (a drive to scan, a saved scan to open), so a second window never appears. Restarting as administrator or for a language switch hands the instance to the new copy.
-
-## 1.5.0
-
-### Treemap options
-- A new Treemap section in Settings: **Density** (Sparse to Maximum, how many small items are drawn before grouping), **Bias** (a slider from Horizontal through Equal to Vertical, steering the squarified layout toward wide or tall boxes), **Padding**, **Border** width, label **Font**, and what file boxes and folder titles show (center names, sizes, file counts). All take effect immediately. The separate "Group small items" setting is gone: Density › Everything is the no-grouping choice, and G now switches between your density and Everything.
-
-### Changes
-- Sliders are drawn in the app's style: a thin track, amber up to the thumb, a round amber thumb. Destructive buttons that are not the main action (Delete all saved scans) are outlined in red text.
-- Settings › Scanning › Keep saved scans for: a slider from a week to forever (default 90 days); older automatic saves are deleted at startup, and a button deletes them all now. Files you saved yourself are never touched.
-- The start screen shows your recent saved scans: one click reopens yesterday's map, compared with the scan before it. Scan a folder and Open a saved scan sit under the list, and the administrator offer for the fast scan is one line at the bottom of the map area instead of a card.
-- About is a short list instead of a page: version with a Check button, What's new, Keyboard shortcuts, Report a bug, Suggest a feature, Source on GitHub, Credits, each one row. The shortcut reference moved to its own window, grouped into Navigate, Select and act, View and files.
-- Leave out is a list of chips instead of a text box: add a name or pattern with Enter, remove one with its ×, and the common ones (node_modules, $Recycle.Bin, *.tmp, .git, System Volume Information) are one click away.
-- Settings is split into tabs: General (language, updates, safety, Windows), Appearance, Treemap, Map and Scanning. Same options, one page at a time.
-- The update notice is a dialog instead of a bar across the window: install and restart, **What's new**, or later. What's new shows a short version of the release notes (carried inside the update package, with the GitHub release as fallback) and links to the full changelog on GitHub. The About window's Check for updates opens the same dialog.
-
-## 1.4.0
-
-### Translations
-- Ready for translation: every piece of user-visible text (about 450 strings across the map, menus, settings, filter panel, Inspect, About, dialogs and status line) now comes from `Resources/Strings.resx`. Settings › Language lists every language that has a `Strings.<culture>.resx` in the build, with "Same as Windows" as the default, and switching restarts the app. Ships in English and Norwegian bokmål; see CONTRIBUTING to add a language. The filter grammar stays English on purpose.
-- Norwegian bokmål is the first translation (`Resources/Strings.nb.resx`); Settings › Språk lists it next to "Same as Windows" and English.
-
-### Command line and Explorer
-- `SpaceSharp.exe D:\` scans right away, `SpaceSharp.exe scan.sscan` opens a saved scan, `--compare old.sscan D:\` scans and compares, `--help` lists the options.
-- Settings › Windows › "Scan with SpaceSharp" in Explorer adds a right-click entry for folders, drives and the folder background (current user only, no administrator rights). The entry is refreshed to point at the running exe on every start while the setting is on.
-
-### Changes
-- Every prompt and error (delete confirmation, language switch, reset, failures) uses the app's own dialog in the app's colors and type instead of the Windows message box.
-- Tests cover the scan file, comparison, folder splicing, exclusion patterns and the translations: every key used in code or XAML must exist, every translation must match the English keys and placeholders, and Norwegian must load. The GitHub workflow only runs the tests; it never builds, packs or uploads release assets.
-- The dark theme moves to Graphite: GitHub's dark greys (#0D1117 base, #161B22 panels, #21262D controls) replace the warmer charcoal, so the app, the README and the repository page share one set of tones and the amber reads richer. The icon tile, installer images, website, screenshot tool and social images follow.
-- The README header is redrawn as a quiet abstract treemap on GitHub's page color, with no screenshot.
-- The start-screen offer to restart as administrator appears on every run without administrator rights; "Not now" hides it for the run.
-
-## 1.3.0
-
-### Fast NTFS scan
-- Whole drives are scanned by reading the NTFS Master File Table directly, the way WizTree does, so a drive with a million files is mapped in a few seconds. Needs administrator rights; on the start screen the app offers to restart elevated every time it runs without administrator rights ("Not now" hides it for this run; the Fast NTFS scan setting turns it off). Single folders, non-NTFS volumes and non-elevated runs use the folder walk as before. Hard links are always counted once on the fast path. Settings › Scanning › Fast NTFS scan turns it off. The status line says "file table" when it was used.
-
-### Saved scans and comparison
-- Every drive or folder scan is saved automatically (`%LocalAppData%\SpaceSharp\scans`). The app opens with the last map already on screen; F5 rescans. Ctrl+S saves a scan as a file, Ctrl+O opens one, so a scan of another machine can be looked at anywhere.
-- Each new scan is compared with the previous one of the same place, provided both were made the same way (file table or folder walk, administrator or not, hard-link and hidden-file settings); otherwise the status line says why they are not compared, since a folder walk without administrator rights cannot see System Volume Information and counts hard-linked names separately, which would show up as false growth and shrinkage. A new color mode, **Change**, colors what grew in warm shades, what shrank in cool ones, unchanged grey and new items amber, with a legend. The side panel gets a **Changes** tab listing what grew or appeared most, Inspect shows "Since last scan", and the right-click menu can compare with any saved scan or stop comparing.
-- **Rescan this folder** in the right-click menu re-walks one folder and splices it into the map; zoom and the rest of the tree stay as they were.
-- **Export to CSV** from the right-click menu: largest files, a folder's contents, the filter matches, or the changes since the last scan. A first, plain version: fixed columns (path, name, type, sizes, modified, change), UTF-8, no options yet.
-- **Leave out** in Settings › Scanning: names to skip entirely, one wildcard per line (`node_modules`, `$Recycle.Bin`, `*.tmp`), for both the file-table scan and the folder walk.
-
-### Fixes
-- The hover and selection frames follow the map style: rounded corners on Tiles, Cards and Soft, drawn inside the box so they no longer cover the neighbors' labels.
-
-### Changes
-- `TreemapControl` is split into partial files by concern (fields, camera, layout, rendering, input) with the enums in `MapEnums.cs`; no behavior change.
-- Classic always has its soft shading; the Cushion setting and the C shortcut are gone.
-- Custom palettes: drop JSON files into %LocalAppData%\SpaceSharp\palettes (Settings › Appearance › Custom palettes › Open folder writes an Example.json and a README). Reload from Settings or restart; files that can't be read are listed with the reason.
-- New website: the hero is the app itself, drawn live in the browser with sample data, with controls for scene, style, color mode, palette and theme. Spec-style feature list, a comparison with WizTree, WinDirStat and SpaceMonger, and a cleaner download section.
-- The window title shows the version: "SpaceSharp 1.2.3" (with "(Administrator)" after it when elevated).
-
-## 1.2.2
-
-### Fixes
-- Zooming no longer rearranges the map. Title bars and borders keep a fixed pixel size, so a folder's content area changes shape slightly as you zoom, and the layout could flip a row from horizontal to vertical along the way; the box you were zooming into then jumped somewhere else. Each folder's layout is now computed once and only stretched with the zoom. Small items still ungroup as they get room, but that only affects the folder they are in.
-
-### Changes
-- Two more label sizes, Smaller and Smallest, in Settings › Appearance › Label size.
-- New color mode, **Top folder**, and it is the default: each top-level folder gets one hue, and everything inside it is that hue, a step lighter at each level, so the hierarchy reads at a glance. "Depth" (a color per level, the SpaceMonger way) and "File type" are still there.
-- New **Flat** map style: plain fills, thin lines, no gaps, no shading. It replaces Terraces, whose one-hue-per-branch idea is now the Top folder color mode and works with every style.
-- Map styles reworked. Cards: tighter spacing, folders keep their palette color instead of going muddy, lighter shadow. Bands: the bright borders are gone, replaced by a faint dark line, and folder bodies are less washed out. Soft: smaller gaps, corners and title bars, so less space goes to nothing.
-- Cushion shading is off by default (C turns it on).
-- **Inspect** (Ctrl+I, or from the right-click menu): a window with everything about an item or a selection. Size and size on disk with exact bytes, share of the parent folder and of the drive, file and folder counts, average file size, newest change, and for folders the largest items inside and the space taken by each file type, all with bars. Copy details puts it on the clipboard as text.
-- The right-click menu is reorganized and gains Inspect, Properties (the Windows dialog, also Alt+Enter), Copy name, "Show only *.ext files", and "Select everything in this folder".
-- The hover card shows the item's share of the whole drive, the largest item inside a folder, and a hint for the menu and Inspect.
-- K cycles the color mode, next to S for map style.
-- The scanning card is calmer: no logo, the percentage sits on the right of the title, and the current folder is a single quiet line under the progress bar next to the speed and elapsed time.
-- The filter panel is tidier: a title bar with a close button, sections separated by lines instead of stacked headings, and a footer that shows the live match count next to proper Clear and Done buttons. Clear is disabled when there is nothing to clear.
-
-## 1.2.1
-
-### Fixes
-- Age filters without a number now work as documented: `modified in the last week`, `older than a year` and `not opened in one month` mean one week, one year and one month. Before, the words fell through to the name search.
-
-### Appearance
-- New mark: nine cells on a charcoal tile whose gutters form the `#` in Sharp, with brightness following size. One brand color (amber) instead of four. New app icon at every size, README header, social preview, landing-page logo and installer images, all generated from `tools/make-assets.py`.
-
-### Project
-- Unit tests (`SpaceSharp.Tests`, xUnit) for the treemap layout, the filter parser and matcher, size formatting and the tree operations behind delete and free space.
-- GitHub Actions builds and runs the tests on every push and pull request.
-- Dependabot keeps NuGet packages and workflow actions up to date.
-- `installer/release.ps1` builds every release asset locally; `installer/brand-msi.ps1` (now in the repository) brands the MSI and fixes the desktop shortcut description.
-
-## 1.2.0
-
-The theme of 1.2.0 is finding things. Earlier versions showed you the map; this one lets you ask it questions, pick out what you want to remove, and clear it in one go. It also brings six map styles, a redesigned side panel with your drives, and a set of readability options.
-
-### Filter and highlight
-- A filter box sits above the map. Everything that doesn't match is blended toward the background; the layout stays put, so you can see *where* the matches are. Folders that contain a match stay lit, so the path to every hit remains visible.
-- The status line explains what was understood in plain words, for example "1,204 files · 48 GB: video, over 500 MB, untouched for 2 years", so a misread query is obvious right away.
-- **Plain-language terms.** Type it the way you'd say it: `videos over 500MB not touched in 2 years`, `photos larger than 10 MB`, `.iso`, `installer`. Everything you type must match.
-  - Name: any text (`report`), a pattern (`*.mp4 *.mkv`, patterns are OR-ed), or an extension (`.iso`).
-  - File type: `videos`, `photos`, `music`, `archives`, `programs`, `documents`, `code`, or `type:video,audio`.
-  - Minimum size: `>1GB`, `over 500 MB`, `larger than 2 GB`, `at least 100MB`. A bare number means megabytes.
-  - Maximum size: `<10MB`, `under 1 GB`, `smaller than 500MB`.
-  - Age: `older than 2 years`, `not modified in 6 months`, `unused for 1 year`, `over 3 years old`, `newer than 30 days`, `modified in the last week`, `last 2 months`.
-  - Kind: `files`, `folders`, `is:file`, `is:folder`.
-  - Filler words such as "and", "with", "that" and "show" are ignored.
-- **Filter panel.** The funnel button in the box opens a panel for people who'd rather click: quick filters (Large files, Big videos, Installers & archives, Untouched for 2 years, Big and old, Recently changed), a name field, file type chips, Larger than / Smaller than drop-downs from 1 MB to 50 GB, a Not modified for drop-down from 1 month to 5 years, and a files/folders switch. Every control writes the filter text into the box, and opening the panel reads the current text back, so the two never disagree.
-- **Select matches** (Ctrl+A) selects every matching file; Del then sends them all to the Recycle Bin.
-- Ctrl+F focuses the box, Esc clears it, Enter applies immediately. Typing is debounced so the map doesn't redraw on every keystroke.
-- Files now record their last modified date during the scan (folders take the newest date inside), which the age terms rely on.
-
-### Side panel with drives and largest items
-- A panel on the left of the map, open by default, toggled with the panel button in the toolbar or **L**.
-- **Drives** replaces the drive drop-down. Every ready drive is listed with its letter and label, free space, a usage bar, "used of total" and the file system (or Removable, Network, Optical). Click a drive to scan it. The list refreshes after scans and deletes so free space stays current.
-- **Largest items** has three tabs. Files and Folders show the 200 largest with a size bar under each row; clicking a row selects it and zooms the map to it. Types shows space per file extension with the file-type color; clicking a type puts `*.ext` into the filter box.
-- The lists are built with a priority queue in one pass over the tree, so they appear instantly even on drives with millions of files, and they follow the current size measure.
-- The "Scan drive" toolbar button is gone; "Scan folder" is now the highlighted button.
-
-### Multi-select and batch delete
-- Ctrl+click adds or removes items; Shift+click selects a range of siblings.
-- The status bar shows "12 items selected · 4.2 GB · 318 files".
-- Del, or the right-click menu, moves everything selected in a single Recycle Bin operation with one confirmation that lists the first eight paths. If a folder and something inside it are both selected, only the folder is sent. Items that fail to delete (for example, a file in use) are reported, and everything that did go is removed from the map.
-- Ctrl+C copies all selected paths, one per line.
-- Right-clicking an item outside the selection selects just that item; inside the selection keeps it.
-
-### Hover details
-- After the mouse rests on a box for about half a second, a card appears beside it with the name, folder, size, size on disk when it differs, file and folder counts, type, last modified date with a relative age such as "3 years ago", share of the current folder, and a note when content couldn't be read.
-- Can be turned off in Settings → Map → Hover details.
-
-### Map styles
-- Six styles, chosen from the new **Style** drop-down in the toolbar, in Settings, or by pressing **S** to cycle:
-  - **Classic**: title bars, 1 px borders, cushion shading (the previous look).
-  - **Tiles**: flat colors, 3 px gaps, softly rounded, folder names as small uppercase captions.
-  - **Cards**: folders as raised cards with a soft shadow and bold title, files as flat rounded chips.
-  - **Bands**: a deep title band with bold light text, lighter folder body, thin light borders, no shading.
-  - **Terraces**: each top-level folder takes one palette color and everything inside gets darker with depth. Works with every palette.
-  - **Soft**: rounded pastel blocks with gaps and a gentle top-to-bottom sheen.
-- Spacing is tuned so the gap between siblings matches the space between a folder's edge and its children.
-- Cushion shading and its C shortcut now apply to the Classic style only.
-
-### Readability
-- **Label size**: Normal, Large or Larger. Title bars, file labels and the room a folder needs before it gets a title all scale with it.
-- **Outlined labels**: a thin outline in the opposite tone around every label, so text stays readable on any color in any style.
-- Label text picks dark or light automatically per box; this now covers the darker fills of Terraces and Bands.
-
-### Layout
-- **Folder chains merge more often.** A chain like `Steam › steamapps › common` used to merge only when each folder had exactly one child. Now the child needs to hold at least 97% of the folder, so a few stray files no longer break the merge into stacked title bars.
-- **Small items are grouped.** Children that would get less than about 30 × 22 pixels are replaced by a single darker box labeled "812 files" with their combined size. Zooming in gives them more room and they appear individually again. Hovering the group explains what it is; double-clicking zooms into its folder. Toggle with **G** or in Settings.
-
-### Scanning dialog
-- Redesigned: the app icon and a title such as "Scanning C: Windows · 63%", three large counters (size found, files, folders), a rate line ("12.4k files per second") and elapsed time.
-- For whole-drive scans the progress bar is real, based on the drive's used space; for folder scans it sweeps.
-- Long paths are shortened in the middle so the drive and the last folders stay visible.
-
-### About window and feedback
-- Shortcuts are listed in two columns, and the window is wider.
-- New Feedback section: **Report a bug** opens the GitHub bug form with the version, Windows details and install type already filled in; **Suggest a feature** opens the feature form; **GitHub** opens the repository.
-- Issue forms for bugs and feature requests live in the repository, so new issues start with the right questions.
-
-### Settings
-- New rows: Map style, Label size, Outlined labels, Hover details, Show side panel, Group small items.
-- The side panel setting replaces the earlier "Show largest items panel".
-
-### Shortcuts added
-| Key | Action |
-|---|---|
-| Ctrl+F | Filter the map |
-| Ctrl+A | Select every file matching the filter |
-| Ctrl+click | Add to selection |
-| Shift+click | Select a range |
-| L | Side panel |
-| S | Next map style |
-| Ctrl+C | Copy the selected paths (now several) |
-| Del | Move the selected items to the Recycle Bin (now several) |
+### New defaults
+- A fresh install now opens with Color by Depth, Dense grouping, a 2 px gap between boxes with the grid off, no cushion shading (the Soft preset is set, ready to switch on), flat title bars (tint 0), black labels in Segoe UI Variable Text, and file counts in folder titles. Settings you have already saved are kept; Reset to defaults lands on this look.
 
 ### Icon
-- New app icon: a square drive unit with the map as its label and an activity light. A simplified variant is used at 16 to 24 px. The installer images use it too.
+- The Windows icon (taskbar, Explorer, title bars) sits on the rounded Graphite tile the 1.x icon had, so it reads as an app icon next to other apps' tiles. The mark itself is unchanged and stands on its own in the README, on the landing page and inside the app. `tools/make-assets.py` draws both.
+
+### 32-bit Windows
+- Every release now also ships for 32-bit Windows: SpaceSharp-win-x86.exe, SpaceSharp-win-x86-Setup.exe and SpaceSharp-win-x86.msi, built from the Portable-x86 and Velopack-x86 publish profiles. The x64 files follow the same scheme (SpaceSharp-win-x64.exe, SpaceSharp-win-x64-Setup.exe, SpaceSharp-win-x64.msi); SpaceSharp.exe and SpaceSharp-win-Setup.exe are the old names. Each build is its own update channel, `win-x64` and `win-x86`, so an x86 install never pulls an x64 package, and every release file carries the channel name. 1.x installs were on a channel called `win`; the release also carries a `releases.win.json` that points them at the 2.0 x64 package, after which they are on `win-x64` like everyone else. `installer\release.ps1` builds both channels; `-NoX86` skips the second.
+- The tree takes about a third of the memory it did. A node no longer stores its full path (it is rebuilt from the names up the tree when asked for), files share one empty child list instead of each carrying their own, and the comparison baseline is stored without boxing. The 32-bit build needs this most: a 32-bit process can address a few gigabytes at most, and a system drive with a couple of million files used to run it out of memory. When that still happens, the error says so and points to the 64-bit build.
+
+### Keyboard
+- B shows and hides the panel under the map. S is gone with the styles. Ctrl+F opens the filter drawer or rail; Esc closes the drawer. The About window's shortcut list follows.
 
 ### Fixes
-- The drive list turned white while a scan was running. The list is no longer disabled during scans and has its own template, so the system's white disabled look can't appear.
-- The filter box placed the caret about 30 px too far right because the padding was applied twice.
-- Filter panel chips were pill-shaped; they now use the same 6 px corners as everything else.
+- Inspect's By type and By age donuts were blank when one slice was the whole ring (a folder with one kind of file, or everything changed this year): a full-circle arc starts and ends on the same point and draws nothing.
+- The palette list no longer jumps when the mouse crosses the group headers.
+- The panel under the map used to keep the previous scan's numbers until you switched tabs; it now refreshes when a scan ends, a saved scan opens, or a delete finishes.
+- Brightness used to darken every folder as well as the files; it now only tilts the cushion shading, and the shading can be switched off altogether.
 
-## 1.1.1
-- Installers: a Windows Installer (`.msi`) with a choice between per-user and per-machine, and a one-click `Setup.exe`, both with automatic updates via Velopack
-- Update notice in the app, **Check for updates** in the About window, and a setting for the startup check
-- Branded installer pages and images
-
-## 1.1.0
-- Size on disk as an alternative measure
-- Optional hard-link detection so files with several names are counted once
-- Free-space block for whole-drive scans, growing when you delete files
-- Notice for protected folders with one-click restart as administrator
-- Cushion shading
-- Small items grouped into one "N files" box
-- Settings window (Ctrl+,) with all options
-- Shortcuts: C toggles cushion shading, G toggles grouping
-
-## 1.0.0
-- First release
+### Under the hood
+- Grouping moved into `Layout/Grouping.cs` with tests of its own (the data cutoff at a reference window, the on-screen cutoff quantized to powers of two). The panel's numbers come from `Services/DriveInsights.cs`, pure and tested: bytes by type, bytes by month, the cleanup suggestions and their filters. Color parsing for the new settings is in `Util/ColorText.cs`, tested. The update prompt's version shortening and highlight headings are tested too.
+- The changelog is split: this file holds 2.0 onward, `CHANGELOG-1.x.md` every 1.x release. The release script and the in-app What's new read the `## version` sections as before.
+- The README was rewritten to be short; the long material (how the scanner, layout, renderer, filter and updater work, the project structure, where to add a palette, file type, setting, shortcut or translation) is in `DEVELOPING.md`.
+- The landing page was rebuilt around a live drawing of the 2.0 window. `docs/spacesharp-mock.js` is one engine shared by the page and `tools/screenshot-mockup.html`; it is a mockup of the app with sample data, not a build of it, and says so in the image. `node tools/screenshots.js` renders every README screenshot from it with headless Chromium; `tools/make-social.py` draws the social preview.

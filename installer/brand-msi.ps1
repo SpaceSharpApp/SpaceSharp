@@ -3,21 +3,24 @@
 #   1. writes the branded dialog images (installer\banner.bmp, installer\logo.bmp)
 #   2. fixes the desktop shortcut description, which vpk 1.2.158 leaves as a placeholder
 #   3. registers the app icon so Apps & features and the installer show the mark instead of the generic MSI icon
-# Works from any folder; the release workflow runs it too:  .\installer\brand-msi.ps1
+# Works from any folder; the release script runs it once per MSI:  .\installer\brand-msi.ps1 -Msi .\Releases\SpaceSharp-win-x64.msi
+# Without -Msi it brands every .msi in Releases (x64 and x86). Running it twice on the same file is harmless.
+
+param([string]$Msi)
 
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path $PSScriptRoot -Parent
-$msi = Get-Item (Join-Path $root "Releases\*.msi") -ErrorAction SilentlyContinue | Select-Object -First 1
-if (-not $msi) { throw "No .msi found in $root\Releases. Run vpk pack first." }
-$msi = $msi.FullName
+if ($Msi) { $targets = @((Resolve-Path $Msi).Path) }
+else {
+    $targets = @(Get-Item (Join-Path $root "Releases\*.msi") -ErrorAction SilentlyContinue | ForEach-Object FullName)
+    if ($targets.Count -eq 0) { throw "No .msi found in $root\Releases. Run vpk pack first." }
+}
 
 $banner      = (Resolve-Path (Join-Path $PSScriptRoot "banner.bmp")).Path
 $logo        = (Resolve-Path (Join-Path $PSScriptRoot "logo.bmp")).Path
 $icon        = (Resolve-Path (Join-Path $root "SpaceSharp\Assets\SpaceSharp.ico")).Path
 $description = "See where your disk space went"
-
-$installer = New-Object -ComObject WindowsInstaller.Installer
 
 # Windows Installer's COM object has no type info in PowerShell 7, so call it through reflection.
 function Call($obj, $method, $params) {
@@ -40,54 +43,60 @@ function Query-Column($db, $sql) {
     return $values
 }
 
-$db = Call $installer "OpenDatabase" @($msi, 1)   # 1 = transact
+$installer = New-Object -ComObject WindowsInstaller.Installer
 
-# ---- 1. dialog images -------------------------------------------------------
-$images = @{
-    "WixUI_Bmp_Banner" = $banner; "WixUI_Bmp_Dialog" = $logo   # WiX 4/5 names
-    "WixUIBannerBmp"   = $banner; "WixUIDialogBmp"   = $logo   # WiX 3 names
-}
-$binaries = Query-Column $db "SELECT Name FROM Binary"
-$replaced = 0
-foreach ($name in $binaries) {
-    if (-not $images.ContainsKey($name)) { continue }
+foreach ($msi in $targets) {
+    "== $([IO.Path]::GetFileName($msi))"
+    $db = Call $installer "OpenDatabase" @($msi, 1)   # 1 = transact
+
+    # ---- 1. dialog images -------------------------------------------------------
+    $images = @{
+        "WixUI_Bmp_Banner" = $banner; "WixUI_Bmp_Dialog" = $logo   # WiX 4/5 names
+        "WixUIBannerBmp"   = $banner; "WixUIDialogBmp"   = $logo   # WiX 3 names
+    }
+    $binaries = Query-Column $db "SELECT Name FROM Binary"
+    $replaced = 0
+    foreach ($name in $binaries) {
+        if (-not $images.ContainsKey($name)) { continue }
+        $record = Call $installer "CreateRecord" @(1)
+        Call $record "SetStream" @(1, $images[$name]) | Out-Null
+        Run-Sql $db "UPDATE Binary SET Data = ? WHERE Name = '$name'" $record
+        "Replaced image $name"
+        $replaced++
+    }
+    if ($replaced -eq 0) {
+        "No dialog images found. Binary table contains: $($binaries -join ', ')"
+    }
+
+    # ---- 2. desktop shortcut description -----------------------------------------
+    $hasProperty = (Query-Column $db "SELECT Property FROM Property WHERE Property = 'MsiDesktopShortcutDescription'").Count -gt 0
+    if ($hasProperty) {
+        Run-Sql $db "UPDATE Property SET Value = '$description' WHERE Property = 'MsiDesktopShortcutDescription'"
+    } else {
+        Run-Sql $db "INSERT INTO Property (Property, Value) VALUES ('MsiDesktopShortcutDescription', '$description')"
+    }
+    # In case the placeholder text is stored directly in the shortcut instead of through the property.
+    Run-Sql $db "UPDATE Shortcut SET Description = '$description' WHERE Description = '[MsiDesktopShortcutDescription]'"
+    "Set desktop shortcut description"
+
+    # ---- 3. product icon --------------------------------------------------------
+    $iconName = "SpaceSharp.ico"
+    $hasIcon = (Query-Column $db "SELECT Name FROM Icon WHERE Name = '$iconName'").Count -gt 0
     $record = Call $installer "CreateRecord" @(1)
-    Call $record "SetStream" @(1, $images[$name]) | Out-Null
-    Run-Sql $db "UPDATE Binary SET Data = ? WHERE Name = '$name'" $record
-    "Replaced image $name"
-    $replaced++
+    Call $record "SetStream" @(1, $icon) | Out-Null
+    if ($hasIcon) { Run-Sql $db "UPDATE Icon SET Data = ? WHERE Name = '$iconName'" $record }
+    else          { Run-Sql $db "INSERT INTO Icon (Name, Data) VALUES ('$iconName', ?)" $record }
+    $hasArp = (Query-Column $db "SELECT Property FROM Property WHERE Property = 'ARPPRODUCTICON'").Count -gt 0
+    if ($hasArp) { Run-Sql $db "UPDATE Property SET Value = '$iconName' WHERE Property = 'ARPPRODUCTICON'" }
+    else         { Run-Sql $db "INSERT INTO Property (Property, Value) VALUES ('ARPPRODUCTICON', '$iconName')" }
+    "Set product icon"
+
+    Call $db "Commit" @() | Out-Null
+
+    $record = $null; $view = $null; $db = $null
+    "Done: $msi"
 }
-if ($replaced -eq 0) {
-    "No dialog images found. Binary table contains: $($binaries -join ', ')"
-}
 
-# ---- 2. desktop shortcut description -----------------------------------------
-$hasProperty = (Query-Column $db "SELECT Property FROM Property WHERE Property = 'MsiDesktopShortcutDescription'").Count -gt 0
-if ($hasProperty) {
-    Run-Sql $db "UPDATE Property SET Value = '$description' WHERE Property = 'MsiDesktopShortcutDescription'"
-} else {
-    Run-Sql $db "INSERT INTO Property (Property, Value) VALUES ('MsiDesktopShortcutDescription', '$description')"
-}
-# In case the placeholder text is stored directly in the shortcut instead of through the property.
-Run-Sql $db "UPDATE Shortcut SET Description = '$description' WHERE Description = '[MsiDesktopShortcutDescription]'"
-"Set desktop shortcut description"
-
-# ---- 3. product icon --------------------------------------------------------
-$iconName = "SpaceSharp.ico"
-$hasIcon = (Query-Column $db "SELECT Name FROM Icon WHERE Name = '$iconName'").Count -gt 0
-$record = Call $installer "CreateRecord" @(1)
-Call $record "SetStream" @(1, $icon) | Out-Null
-if ($hasIcon) { Run-Sql $db "UPDATE Icon SET Data = ? WHERE Name = '$iconName'" $record }
-else          { Run-Sql $db "INSERT INTO Icon (Name, Data) VALUES ('$iconName', ?)" $record }
-$hasArp = (Query-Column $db "SELECT Property FROM Property WHERE Property = 'ARPPRODUCTICON'").Count -gt 0
-if ($hasArp) { Run-Sql $db "UPDATE Property SET Value = '$iconName' WHERE Property = 'ARPPRODUCTICON'" }
-else         { Run-Sql $db "INSERT INTO Property (Property, Value) VALUES ('ARPPRODUCTICON', '$iconName')" }
-"Set product icon"
-
-Call $db "Commit" @() | Out-Null
-
-# Release the file so Windows Installer can open it afterwards.
-$record = $null; $view = $null; $db = $null; $installer = $null
+# Release the files so Windows Installer can open them afterwards.
+$installer = $null
 [GC]::Collect(); [GC]::WaitForPendingFinalizers()
-
-"Done: $msi"

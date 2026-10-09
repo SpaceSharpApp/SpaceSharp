@@ -102,7 +102,7 @@ public class FileFilterTests
         root.AddFreeSpace(1000);
 
         Assert.False(Filter("").Matches(root.FreeSpaceNode!));
-        Assert.False(Filter(">0").Matches(new FsNode("12 files", @"C:\", NodeKind.Group, root)));
+        Assert.False(Filter(">0").Matches(new FsNode("12 files", NodeKind.Group, root)));
     }
 
     [Fact]

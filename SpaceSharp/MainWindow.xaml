@@ -18,18 +18,8 @@
                 BorderThickness="0,0,0,1" Padding="10,8">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                    <TextBlock Text="{u:T Main_Style}" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center"
-                               Margin="0,0,8,0" />
-                    <ComboBox x:Name="StyleCombo" Width="118" SelectionChanged="ColorSettings_Changed">
-                        <ComboBoxItem Content="{u:T Main_Classic}" />
-                        <ComboBoxItem Content="{u:T Main_Flat}" />
-                        <ComboBoxItem Content="{u:T Main_Tiles}" />
-                        <ComboBoxItem Content="{u:T Main_Cards}" />
-                        <ComboBoxItem Content="{u:T Main_Bands}" />
-                        <ComboBoxItem Content="{u:T Main_Soft}" />
-                    </ComboBox>
                     <TextBlock Text="{u:T Main_ColorBy}" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center"
-                               Margin="14,0,8,0" />
+                               Margin="0,0,8,0" />
                     <ComboBox x:Name="ColorCombo" Width="120" SelectionChanged="ColorSettings_Changed">
                         <ComboBoxItem Content="{u:T Main_TopFolder}" />
                         <ComboBoxItem Content="{u:T Main_Depth}" />
@@ -38,7 +28,10 @@
                     </ComboBox>
                     <TextBlock Text="{u:T Main_Palette}" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center"
                                Margin="14,0,8,0" />
-                    <ComboBox x:Name="PaletteCombo" Width="180" MaxDropDownHeight="480"
+                    <!-- Pixel scrolling: with groups, the default item-wise scrolling snaps the list by a whole
+                         item or group whenever the mouse enters a partly visible row. -->
+                    <ComboBox x:Name="PaletteCombo" Width="250" MaxDropDownHeight="640"
+                              ScrollViewer.CanContentScroll="False"
                               SelectionChanged="ColorSettings_Changed">
                         <ComboBox.GroupStyle>
                             <GroupStyle>
@@ -72,9 +65,9 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Border Style="{StaticResource ToolDivider}" />
-                    <Button Style="{StaticResource ToolButton}" Tag="&#xE713;"
+                    <Button Style="{StaticResource ToolButton}" Tag="&#xE713;" Margin="0,0,6,0"
                             ToolTip="{u:T Main_SettingsCtrl}" Click="SettingsButton_Click" />
-                    <Button x:Name="ThemeButton" Style="{StaticResource ToolButton}" Tag="&#xE708;"
+                    <Button x:Name="ThemeButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0" Tag="&#xE708;"
                             ToolTip="{u:T Main_Theme}" Click="ThemeButton_Click" />
                     <Button Style="{StaticResource ToolButton}" Tag="&#xE946;" ToolTip="{u:T Main_AboutSpaceSharpF1}"
                             Click="About_Click" />
@@ -83,25 +76,27 @@
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="ScanFolderButton" Style="{StaticResource AccentButton}"
                             Tag="&#xE838;" Content="{u:T Main_ScanFolder}" Click="ScanFolder_Click" />
-                    <Button x:Name="RescanButton" Style="{StaticResource ToolButton}"
+                    <Button x:Name="RescanButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE72C;" ToolTip="{u:T Main_RescanF5}" Click="Rescan_Click" />
 
                     <Border Style="{StaticResource ToolDivider}" />
 
-                    <Button x:Name="UpButton" Style="{StaticResource ToolButton}"
+                    <Button x:Name="UpButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE74A;" ToolTip="{u:T Main_UpOneFolderBackspace}" Click="Up_Click" />
-                    <Button x:Name="FitButton" Style="{StaticResource ToolButton}"
+                    <Button x:Name="FitButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE80F;" ToolTip="{u:T Main_ShowWholeMapHome}" Click="Fit_Click" />
-                    <Button x:Name="ListsButton" Style="{StaticResource ToolButton}"
+                    <Button x:Name="ListsButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE90C;" ToolTip="{u:T Main_DrivesAndLargestItems}" Click="Lists_Click" />
+                    <Button x:Name="PanelButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
+                            Tag="&#xE90E;" ToolTip="{u:T Main_BottomPanel}" Click="Panel_Click" />
 
                     <Border Style="{StaticResource ToolDivider}" />
 
-                    <Button x:Name="ZoomOutButton" Style="{StaticResource ToolButton}"
+                    <Button x:Name="ZoomOutButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE71F;" ToolTip="{u:T Main_ZoomOutMouseWheel}" Click="ZoomOut_Click" />
                     <TextBlock x:Name="ZoomLabel" Width="64" TextAlignment="Center" VerticalAlignment="Center"
-                               Foreground="{DynamicResource TextDim}" Text="—" />
-                    <Button x:Name="ZoomInButton" Style="{StaticResource ToolButton}"
+                               Foreground="{DynamicResource TextDim}" Text="—" Margin="0,0,6,0" />
+                    <Button x:Name="ZoomInButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
                             Tag="&#xE8A3;" ToolTip="{u:T Main_ZoomInMouseWheel}" Click="ZoomIn_Click" />
                 </StackPanel>
             </DockPanel>
@@ -124,68 +119,10 @@
         <Border DockPanel.Dock="Top" Background="{DynamicResource Bg}" BorderBrush="{DynamicResource Stroke}"
                 BorderThickness="0,0,0,1" Padding="6,4" MinHeight="36">
             <DockPanel>
-                <Grid DockPanel.Dock="Right" Width="360" Margin="12,0,4,0" VerticalAlignment="Center">
-                    <TextBox x:Name="FilterBox" Style="{StaticResource FilterBox}" Height="28" Padding="30,0,56,0"
-                             Tag="{u:T Main_FilterPlaceholder}"
-                             TextChanged="FilterBox_TextChanged" PreviewKeyDown="FilterBox_PreviewKeyDown" />
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,3,0">
-                        <Button x:Name="ClearFilterButton" Style="{StaticResource ToolButton}" Tag="&#xE711;" Height="22"
-                                MinWidth="22" Padding="4,0" Visibility="Collapsed" ToolTip="{u:T Main_ClearFilterEsc}"
-                                Click="ClearFilter_Click" />
-                        <Button x:Name="FilterPanelButton" Style="{StaticResource ToolButton}" Tag="&#xE71C;" Height="22"
-                                MinWidth="22" Padding="4,0" ToolTip="{u:T Main_FilterOptions}" Click="FilterPanel_Click" />
-                    </StackPanel>
-                    <Popup x:Name="FilterPopup" PlacementTarget="{Binding ElementName=FilterBox}" Placement="Bottom"
-                           StaysOpen="False" AllowsTransparency="True" PopupAnimation="Fade" VerticalOffset="6">
-                        <Border Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                                CornerRadius="10" Margin="0,0,12,12" Width="440" ClipToBounds="True">
-                            <Border.Effect>
-                                <DropShadowEffect BlurRadius="18" ShadowDepth="4" Opacity="0.5" Color="Black" />
-                            </Border.Effect>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-
-                                <!-- header -->
-                                <DockPanel Grid.Row="0" Margin="16,12,10,10">
-                                    <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="&#xE711;" Height="26" MinWidth="26"
-                                            Padding="4,0" ToolTip="{u:T Main_Close}" Click="FilterPanel_Click" />
-                                    <TextBlock Text="{u:T Main_Filter}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"
-                                               Foreground="{DynamicResource Text}" />
-                                    <TextBlock Text="{u:T Main_EverythingThatDoesnT}" FontSize="11.5" Margin="10,0,0,0"
-                                               VerticalAlignment="Center" Foreground="{DynamicResource TextDim}" TextTrimming="CharacterEllipsis" />
-                                </DockPanel>
-                                <Border Grid.Row="0" Height="1" VerticalAlignment="Bottom" Background="{DynamicResource Stroke}" />
-
-                                <!-- body, built in MainWindow.FilterPanel.cs -->
-                                <StackPanel x:Name="FilterPanelBody" Grid.Row="1" Margin="16,12,16,4" />
-
-                                <!-- footer -->
-                                <Border Grid.Row="2" Background="{DynamicResource Control}" BorderBrush="{DynamicResource Stroke}"
-                                        BorderThickness="0,1,0,0" Padding="16,10">
-                                    <DockPanel>
-                                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                            <Button x:Name="FilterClearButton" Style="{StaticResource ToolButton}" Content="{u:T Main_Clear}" Height="32"
-                                                    MinWidth="84" Margin="0,0,8,0" IsEnabled="False" Click="ClearFilter_Click" />
-                                            <Button x:Name="FilterDoneButton" Style="{StaticResource AccentButton}" Content="{u:T Main_Done}" Height="32"
-                                                    MinWidth="84" Click="FilterPanel_Click" />
-                                        </StackPanel>
-                                        <TextBlock x:Name="FilterFooterInfo" Text="{u:T Main_NoFilter}" FontSize="12" VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource TextDim}" TextTrimming="CharacterEllipsis" Margin="0,0,12,0" />
-                                    </DockPanel>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </Popup>
-                </Grid>
-                <Button x:Name="SelectMatchesButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Height="28"
-                        Tag="&#xE8B3;" Content="{u:T Main_SelectMatches}" Visibility="Collapsed" Margin="8,0,0,0"
-                        ToolTip="{u:T Main_SelectEveryMatchingFile}" Click="SelectMatches_Click" />
-                <TextBlock x:Name="FilterInfo" DockPanel.Dock="Right" Foreground="{DynamicResource Accent}"
-                           VerticalAlignment="Center" Margin="12,0,0,0" Visibility="Collapsed" />
+                <!-- The filter text lives here, hidden: shortcuts, presets and the panels all write to it. -->
+                <TextBox x:Name="FilterBox" Visibility="Collapsed" Width="0" TextChanged="FilterBox_TextChanged" />
+                <Button x:Name="FilterToggleButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Height="28"
+                        Tag="&#xE71C;" Content="{u:T Main_Filter}" Margin="12,0,4,0" ToolTip="{u:T Filter_ToggleTip}" Click="FilterToggle_Click" />
                 <WrapPanel x:Name="LegendPanel" DockPanel.Dock="Right" Visibility="Collapsed"
                            VerticalAlignment="Center" Margin="12,0,4,0" />
                 <TextBlock x:Name="BreadcrumbInfo" DockPanel.Dock="Right" Foreground="{DynamicResource TextDim}"
@@ -193,6 +130,50 @@
                 <StackPanel x:Name="BreadcrumbPanel" Orientation="Horizontal" ClipToBounds="True"
                             VerticalAlignment="Center" />
             </DockPanel>
+        </Border>
+
+        <!-- ============================================================ filter rail (the default filter face) -->
+        <Border x:Name="FilterRail" DockPanel.Dock="Top" Visibility="Collapsed" Background="{DynamicResource Panel}"
+                BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="12,7">
+            <DockPanel x:Name="RailContent" LastChildFill="False" />
+        </Border>
+
+        <!-- ============================================================ bottom panel: by type, safe to clear, when changed -->
+        <Border x:Name="BottomPanel" DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}"
+                BorderThickness="0,1,0,0" Padding="16,8,10,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <DockPanel Grid.Column="0" Margin="0,0,16,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabType}" FontWeight="SemiBold" />
+                    <TextBlock x:Name="TypeSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
+                    <StackPanel x:Name="TypeBody" />
+                </DockPanel>
+                <Border Grid.Column="1" Width="1" Background="{DynamicResource Stroke}" Margin="0,2,16,0" />
+
+                <DockPanel Grid.Column="2" Margin="0,0,16,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabCleanup}" FontWeight="SemiBold" />
+                    <TextBlock x:Name="CleanupSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,6" TextTrimming="CharacterEllipsis" />
+                    <StackPanel x:Name="CleanupBody" />
+                </DockPanel>
+                <Border Grid.Column="3" Width="1" Background="{DynamicResource Stroke}" Margin="0,2,16,0" />
+
+                <DockPanel Grid.Column="4" Margin="0,0,8,0">
+                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabTimeline}" FontWeight="SemiBold" />
+                    <TextBlock x:Name="TimelineSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
+                    <StackPanel x:Name="TimelineBody" />
+                </DockPanel>
+
+                <Button x:Name="BottomCollapse" Grid.Column="5" Style="{StaticResource ToolButton}" Tag="&#xE70D;" ToolTip="{u:T Panel_Collapse}"
+                        Click="BottomCollapse_Click" Padding="8,0" VerticalAlignment="Top" />
+            </Grid>
         </Border>
 
         <!-- ============================================================ status bar -->
@@ -296,9 +277,15 @@
             <controls:TreemapControl x:Name="Treemap" MapBackground="{DynamicResource MapBg}">
                 <controls:TreemapControl.ContextMenu>
                     <ContextMenu Opened="TreemapMenu_Opened">
-                        <MenuItem x:Name="MenuInspect" Header="{u:T Main_Inspect}" InputGestureText="{u:T Main_CtrlI}" FontWeight="SemiBold" Click="MenuInspect_Click">
+                        <MenuItem x:Name="MenuInspect" Style="{StaticResource PrimaryMenuItem}" InputGestureText="{u:T Main_CtrlI}" Click="MenuInspect_Click">
+                            <MenuItem.Header>
+                                <StackPanel>
+                                    <TextBlock x:Name="MenuInspectTitle" Text="{u:T Main_Inspect}" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="MenuInspectSub" FontSize="11.5" Foreground="{DynamicResource TextDim}" TextTrimming="CharacterEllipsis" MaxWidth="260" />
+                                </StackPanel>
+                            </MenuItem.Header>
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE946;" />
+                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE946;" FontSize="16" Foreground="{DynamicResource Accent}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
@@ -339,7 +326,11 @@
                                 <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8C8;" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem x:Name="MenuCopyName" Header="{u:T Main_CopyName}" Click="MenuCopyName_Click" />
+                        <MenuItem x:Name="MenuCopyName" Header="{u:T Main_CopyName}" Click="MenuCopyName_Click">
+                            <MenuItem.Icon>
+                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8C8;" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem x:Name="MenuFilterType" Header="{u:T Main_ShowOnlyThisFile}" Click="MenuFilterType_Click">
                             <MenuItem.Icon>
                                 <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE71C;" />
@@ -357,22 +348,27 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="{u:T Main_ScanFile}">
+                            <MenuItem.Icon>
+                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8E5;" />
+                            </MenuItem.Icon>
                             <MenuItem x:Name="MenuSaveScan" Header="{u:T Main_SaveScanAs}" InputGestureText="{u:T Main_CtrlS}" Click="MenuSaveScan_Click" />
                             <MenuItem Header="{u:T Main_OpenSavedScan}" InputGestureText="{u:T Main_CtrlO}" Click="MenuOpenScan_Click" />
                             <MenuItem x:Name="MenuCompareScan" Header="{u:T Main_CompareWithASaved}" Click="MenuCompareScan_Click" />
                             <MenuItem x:Name="MenuClearCompare" Header="{u:T Main_StopComparing}" Click="MenuClearCompare_Click" />
                         </MenuItem>
                         <MenuItem x:Name="MenuExport" Header="{u:T Main_ExportToCSV}">
+                            <MenuItem.Icon>
+                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xEDE1;" />
+                            </MenuItem.Icon>
                             <MenuItem Header="{u:T Main_LargestFiles}" Click="MenuExportFiles_Click" />
                             <MenuItem x:Name="MenuExportFolder" Header="{u:T Main_ThisFolder}" Click="MenuExportFolder_Click" />
                             <MenuItem x:Name="MenuExportMatches" Header="{u:T Main_FilterMatches}" Click="MenuExportMatches_Click" />
                             <MenuItem x:Name="MenuExportChanges" Header="{u:T Main_ChangesSinceLastScan}" Click="MenuExportChanges_Click" />
                         </MenuItem>
-                        <Separator />
                         <MenuItem x:Name="MenuDelete" Header="{u:T Main_MoveToRecycleBin}" InputGestureText="{u:T Main_Del}"
-                                  Foreground="{DynamicResource Danger}" Click="MenuDelete_Click">
+                                  Style="{StaticResource DangerMenuItem}" Click="MenuDelete_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE74D;" />
+                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE74D;" Foreground="{DynamicResource Danger}" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
@@ -401,6 +397,31 @@
                 </StackPanel>
 
             </Grid>
+
+            <!-- the filter drawer (Settings › Map › Filter layout): a sheet over the right of the map -->
+            <Border x:Name="FilterDrawer" HorizontalAlignment="Right" Width="380" Visibility="Collapsed"
+                    Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="24" ShadowDepth="0" Opacity="0.5" Color="Black" />
+                </Border.Effect>
+                <DockPanel>
+                    <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="16,0" Height="44">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="&#xE711;" Height="28" MinWidth="28" Padding="4,0"
+                                    ToolTip="{u:T Main_Close}" Click="CloseDrawer_Click" />
+                            <Button x:Name="DrawerClearButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Content="{u:T Drawer_ClearAll}" Height="28"
+                                    IsEnabled="False" Click="ClearFilter_Click" />
+                            <TextBlock Text="{u:T Main_Filter}" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </Border>
+                    <Border DockPanel.Dock="Bottom" Background="{DynamicResource Bg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="16,10">
+                        <DockPanel x:Name="DrawerFooter" />
+                    </Border>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="DrawerContent" Margin="16,12,16,8" />
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
 
             <Popup x:Name="HoverTip" Placement="Relative" PlacementTarget="{Binding ElementName=Treemap}"
                    AllowsTransparency="True" IsHitTestVisible="False" StaysOpen="True" Focusable="False">

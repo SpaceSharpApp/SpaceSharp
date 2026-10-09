@@ -19,21 +19,64 @@ public enum SizeMeasure
     SizeOnDisk
 }
 
-/// <summary>A file or folder in the scanned tree.</summary>
+/// <summary>
+/// A file or folder in the scanned tree. A drive holds millions of these, and the 32-bit build has to fit them
+/// all in a 2 to 4 GB address space, so the node keeps as little as it can: the full path is not stored but
+/// rebuilt from the parent chain, files share one empty child list, and the baseline sizes are plain longs.
+/// </summary>
 public sealed class FsNode
 {
-    public FsNode(string name, string fullPath, NodeKind kind, FsNode? parent)
+    private static readonly List<FsNode> NoChildren = new(0);
+    private const long NoBaseline = -1;
+
+    private List<FsNode>? _children;
+    private long _baselineSize = NoBaseline, _baselineAllocated = NoBaseline;
+
+    public FsNode(string name, NodeKind kind, FsNode? parent)
     {
         Name = name;
-        FullPath = fullPath;
         Kind = kind;
         Parent = parent;
     }
 
+    /// <summary>The file or folder name. A scan root carries its full path as its name.</summary>
     public string Name { get; internal set; }
-    public string FullPath { get; }
     public NodeKind Kind { get; }
     public FsNode? Parent { get; private set; }
+
+    /// <summary>
+    /// The full path, built from the names up the tree. A group or the free-space block answers with its folder's
+    /// path. Costs an allocation per call, so hold on to it inside a loop rather than asking again.
+    /// </summary>
+    public string FullPath
+    {
+        get
+        {
+            if (Parent is null) return Name;
+            if (!IsReal) return Parent.FullPath;
+
+            // Measure first, then write the names into one string from the end backwards.
+            var root = this;
+            int length = 0;
+            while (root.Parent is not null) { length += root.Name.Length + 1; root = root.Parent!; }
+            var rootName = root.Name.AsSpan();
+            if (rootName.Length > 0 && rootName[^1] is '\\' or '/') rootName = rootName[..^1]; // "C:\" + "\Windows"
+            length += rootName.Length;
+
+            return string.Create(length, this, static (span, node) =>
+            {
+                int end = span.Length;
+                var n = node;
+                for (; n.Parent is not null; n = n.Parent!)
+                {
+                    end -= n.Name.Length;
+                    n.Name.AsSpan().CopyTo(span[end..]);
+                    span[--end] = '\\';
+                }
+                n.Name.AsSpan(0, end).CopyTo(span);
+            });
+        }
+    }
 
     /// <summary>Logical size in bytes (recursive for folders).</summary>
     public long Size { get; internal set; }
@@ -62,8 +105,8 @@ public sealed class FsNode
     /// Size of this item in the scan it is being compared with, or null when it did not exist then.
     /// Set by <see cref="Services.ScanCompare"/>; <see cref="HasBaseline"/> says whether a comparison is loaded at all.
     /// </summary>
-    public long? BaselineSize { get; internal set; }
-    public long? BaselineAllocated { get; internal set; }
+    public long? BaselineSize { get => _baselineSize < 0 ? null : _baselineSize; internal set => _baselineSize = value ?? NoBaseline; }
+    public long? BaselineAllocated { get => _baselineAllocated < 0 ? null : _baselineAllocated; internal set => _baselineAllocated = value ?? NoBaseline; }
     public bool HasBaseline { get; internal set; }
 
     /// <summary>Bytes grown since the baseline (negative when shrunk). A new item counts fully as growth.</summary>
@@ -74,8 +117,11 @@ public sealed class FsNode
         return now - (then ?? 0);
     }
 
-    /// <summary>Children sorted by the current measure, largest first.</summary>
-    public List<FsNode> Children { get; } = new();
+    /// <summary>
+    /// Children sorted by the current measure, largest first. A file answers with a shared empty list that must
+    /// not be added to; only folders (and the pseudo nodes) get a list of their own.
+    /// </summary>
+    public List<FsNode> Children => Kind == NodeKind.File ? NoChildren : (_children ??= new());
 
     /// <summary>The "Free space" pseudo node, only on the root of a whole-drive scan.</summary>
     public FsNode? FreeSpaceNode { get; private set; }
@@ -130,7 +176,7 @@ public sealed class FsNode
     internal void AddFreeSpace(long freeBytes)
     {
         FreeBytes = Math.Max(0, freeBytes);
-        FreeSpaceNode = new FsNode(Util.Strings.Get("Tip_FreeSpace"), FullPath, NodeKind.FreeSpace, this)
+        FreeSpaceNode = new FsNode(Util.Strings.Get("Tip_FreeSpace"), NodeKind.FreeSpace, this)
         {
             Size = FreeBytes,
             Allocated = FreeBytes

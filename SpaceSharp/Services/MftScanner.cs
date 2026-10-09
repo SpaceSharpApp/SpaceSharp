@@ -374,7 +374,7 @@ internal sealed class MftScanner
 
         _files = 0; _directories = 0; _bytes = 0;
         _folderNodes.Clear();
-        var root = new FsNode(_rootPath, _rootPath, NodeKind.Directory, null);
+        var root = new FsNode(_rootPath, NodeKind.Directory, null);
         AddChildren(root, RootRecord, firstChild, nextSibling, 0, ct);
         AddExtraLinks(ct);
         _folderNodes.Clear();
@@ -391,17 +391,16 @@ internal sealed class MftScanner
         for (int i = firstChild[record]; i >= 0; i = nextSibling[i])
         {
             ref var e = ref _entries[i];
-            string path = folder.FullPath.EndsWith('\\') ? folder.FullPath + e.Name : folder.FullPath + "\\" + e.Name;
             if (e.IsDirectory)
             {
                 if ((e.Attributes & FileAttributeReparsePoint) != 0) continue; // junctions and symlinks, like the folder walk
-                var sub = new FsNode(e.Name!, path, NodeKind.Directory, folder) { LastWriteUtc = ToUtc(e.ModifiedFileTime) };
+                var sub = new FsNode(e.Name!, NodeKind.Directory, folder) { LastWriteUtc = ToUtc(e.ModifiedFileTime) };
                 folder.Children.Add(sub);
                 if (depth < 4000) AddChildren(sub, i, firstChild, nextSibling, depth + 1, ct);
             }
             else
             {
-                folder.Children.Add(new FsNode(e.Name!, path, NodeKind.File, folder)
+                folder.Children.Add(new FsNode(e.Name!, NodeKind.File, folder)
                 {
                     Size = e.Size,
                     Allocated = e.Allocated,
@@ -426,7 +425,7 @@ internal sealed class MftScanner
             foreach (var (parent, parentSeq, name) in e.ExtraLinks)
             {
                 if (!_folderNodes.TryGetValue(parent, out var folder) || _entries[parent].Sequence != parentSeq) continue;
-                folder.Children.Add(new FsNode(name, Path.Combine(folder.FullPath, name), NodeKind.File, folder)
+                folder.Children.Add(new FsNode(name, NodeKind.File, folder)
                 {
                     FileCount = 1,
                     LastWriteUtc = ToUtc(e.ModifiedFileTime),

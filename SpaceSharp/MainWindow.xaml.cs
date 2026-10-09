@@ -228,6 +228,7 @@ public partial class MainWindow : Window
         ApplyFilter();
         UpdateCompareUi();
         RefreshTopList();
+        RefreshBottomPanel();
         LoadDrives();
         StatusScan.Text = Strings.Format("Status_OpenedScan", verb, Ago(info.ScannedUtc), root.FileCount, SizeFormatter.Format(info.Bytes)) +
                           (baseline is not null ? Strings.Format("Status_ComparedWith", Ago(baseline.ScannedUtc)) : string.Empty);
@@ -578,7 +579,8 @@ public partial class MainWindow : Window
     /// <summary>Pushes every saved setting into the UI and the map. Called at startup and by the Settings window.</summary>
     public void ApplySettings()
     {
-        var scheme = Palette.Find(_settings.Palette);
+        bool dark = ThemeManager.IsDark;
+        var scheme = Palette.Find(_settings.PaletteFor(dark), dark);
         var mode = Enum.TryParse<ColorMode>(_settings.ColorMode, out var parsedMode) ? parsedMode : ColorMode.ByBranch;
         if (mode == ColorMode.ByChange && !HasBaseline) mode = ColorMode.ByBranch; // nothing to compare with yet
 
@@ -590,12 +592,10 @@ public partial class MainWindow : Window
         Treemap.Scheme = scheme;
         Treemap.ColorMode = mode;
         Treemap.SizeMode = _settings.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize;
-        var mapStyle = Enum.TryParse<MapStyle>(_settings.MapStyle, out var style) ? style : MapStyle.Classic;
-        Treemap.MapStyle = mapStyle;
         Treemap.Density = Enum.TryParse<MapDensity>(_settings.Density, out var density) ? density : MapDensity.Normal;
         Treemap.Bias = _settings.Bias;
         Treemap.Padding = _settings.Padding;
-        Treemap.BorderThickness = _settings.BorderThickness;
+        ApplyLook(Treemap, _settings);
         Treemap.FontFamilyName = _settings.MapFont;
         Treemap.FileCenterNames = _settings.FileCenterNames;
         Treemap.FileShowSizes = _settings.FileShowSizes;
@@ -605,9 +605,6 @@ public partial class MainWindow : Window
         Treemap.LabelScale = _settings.LabelSize switch { "Smallest" => 0.7, "Smaller" => 0.85, "Large" => 1.2, "Larger" => 1.4, _ => 1.0 };
         Treemap.LabelHalo = _settings.LabelHalo;
 
-        _applyingSettings = true;
-        StyleCombo.SelectedIndex = (int)mapStyle;
-        _applyingSettings = false;
         Treemap.AnimateZoom = _settings.AnimateZoom;
         Treemap.MergeSingleFolderChains = _settings.MergeChains;
         if (mode == ColorMode.ByChange) BuildChangeLegend(); else BuildLegend(scheme);
@@ -619,6 +616,9 @@ public partial class MainWindow : Window
             Treemap.Refresh();
         }
 
+        ApplyBottomPanelVisibility();
+        RefreshBottomPanel();
+        ApplyFilterLayout();
         SidePanel.Visibility = _settings.ShowSidePanel ? Visibility.Visible : Visibility.Collapsed;
         ListsButton.Style = (Style)FindResource(_settings.ShowSidePanel ? "AccentButton" : "ToolButton");
         SidePanel.Width = Math.Max(SidePanel.MinWidth, _settings.SidePanelWidth);
@@ -636,6 +636,25 @@ public partial class MainWindow : Window
         _settings.Save();
     }
 
+    /// <summary>Pushes the look settings (shading, grid, text, title bars) into a map. Shared with the preview map in Settings so both draw alike.</summary>
+    internal static void ApplyLook(TreemapControl map, AppSettings settings)
+    {
+        map.TitlePadding = settings.TitlePadding;
+        map.TitleBarTint = settings.TitleBarTint;
+        map.FolderTextColor = ColorText.IsHex(settings.FolderTextColor) ? ColorText.Parse(settings.FolderTextColor, Colors.Black) : null;
+        map.FileTextColor = ColorText.IsHex(settings.FileTextColor) ? ColorText.Parse(settings.FileTextColor, Colors.Black) : null;
+        map.CushionEnabled = settings.CushionEnabled;
+        map.Brightness = settings.Brightness;
+        map.CushionShading = settings.CushionShading;
+        map.CushionHeight = settings.CushionHeight;
+        map.ShadingScale = settings.ShadingScale;
+        map.SetLight(settings.LightX, settings.LightY);
+        map.ShowGrid = settings.ShowGrid;
+        map.GridThickness = Math.Max(1, settings.BorderThickness);
+        map.GridColor = ColorText.Parse(settings.GridColor, TreemapControl.DefaultGridColor);
+        map.HighlightColor = ColorText.Parse(settings.HighlightColor, TreemapControl.DefaultHighlightColor);
+    }
+
     /// <summary>After custom palettes were reloaded: refresh the toolbar list and keep the chosen one if it still exists.</summary>
     public void RefreshPalettes()
     {
@@ -644,12 +663,11 @@ public partial class MainWindow : Window
         ApplySettings();
     }
 
-    /// <summary>The palettes grouped as "Built in" and "Custom"; the header only appears when there are custom ones.</summary>
+    /// <summary>The palettes grouped by theme, the current theme's first, custom ones last.</summary>
     private static System.Windows.Data.ListCollectionView PaletteView()
     {
-        var view = new System.Windows.Data.ListCollectionView(Palette.Schemes.ToList());
-        if (Palette.Schemes.Any(s => s.IsCustom))
-            view.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(nameof(ColorScheme.Group)));
+        var view = new System.Windows.Data.ListCollectionView(Palette.OrderedFor(ThemeManager.IsDark).ToList());
+        view.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(nameof(ColorScheme.Group)));
         return view;
     }
 
@@ -708,6 +726,9 @@ public partial class MainWindow : Window
         _scanCts = cts;
         PrepareScanOverlay(path);
         SetScanning(true);
+        EndPeek();
+        InvalidateInsights();
+        RefreshBottomPanel();
         _scanClock.Restart();
         _progressTimer.Start();
 
@@ -731,6 +752,7 @@ public partial class MainWindow : Window
             Treemap.Root = root;
             ApplyFilter();
             RefreshTopList();
+            RefreshBottomPanel();
             LoadDrives();
 
             var progress = _scanner.GetProgress();
@@ -748,6 +770,11 @@ public partial class MainWindow : Window
         catch (OperationCanceledException)
         {
             StatusScan.Text = Strings.Get("Status_ScanCancelled");
+        }
+        catch (OutOfMemoryException ex)
+        {
+            // The tree is as small as it can be; on a 32-bit process the address space is the limit, not the PC's RAM.
+            Dialog.Error(this, Strings.Get("Dialog_ScanFailed"), Environment.Is64BitProcess ? ex.Message : Strings.Get("Dialog_OutOfMemory32"));
         }
         catch (Exception ex)
         {
@@ -818,6 +845,8 @@ public partial class MainWindow : Window
         CancelButton.IsEnabled = scanning;
         if (!scanning) ScanBarSweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, null);
         UpdateNavigation();
+        // The panel under the map is blank while scanning; once the scan is in (or cancelled), it sums up whatever is loaded.
+        RefreshBottomPanel();
     }
 
     private void PrepareScanOverlay(string path)
@@ -1068,7 +1097,12 @@ public partial class MainWindow : Window
 
     // ================================================================= theme
 
-    private void OnThemeChanged(object? sender, EventArgs e) => UpdateThemeButton();
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        UpdateThemeButton();
+        // Each theme has its own palette; the list is reordered and the map recolored once the theme has settled.
+        Dispatcher.BeginInvoke(RefreshPalettes);
+    }
 
     private void UpdateThemeButton()
     {
@@ -1236,6 +1270,8 @@ public partial class MainWindow : Window
         UpdateNavigation();
         if (_filter is not null && !_filter.IsEmpty) ApplyFilter();
         RefreshTopList();
+        InvalidateInsights();
+        RefreshBottomPanel();
         LoadDrives();
 
         if (!ok)
@@ -1249,34 +1285,14 @@ public partial class MainWindow : Window
 
     private void FilterBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        ClearFilterButton.Visibility = FilterBox.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         _filterTimer.Stop();
         _filterTimer.Start();
-    }
-
-    private void FilterBox_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case Key.Escape:
-                if (FilterBox.Text.Length > 0) FilterBox.Clear();
-                else Treemap.Focus();
-                e.Handled = true;
-                break;
-            case Key.Enter:
-                _filterTimer.Stop();
-                ApplyFilter();
-                Treemap.Focus();
-                e.Handled = true;
-                break;
-        }
     }
 
     private void ClearFilter_Click(object sender, RoutedEventArgs e)
     {
         FilterBox.Clear();
-        if (FilterPopup.IsOpen) LoadPanelFromText();
-        else Treemap.Focus();
+        Treemap.Focus();
     }
 
     /// <summary>Evaluates the filter text over the whole tree and dims everything that doesn't match.</summary>
@@ -1289,20 +1305,15 @@ public partial class MainWindow : Window
         {
             _filterResult = null;
             Treemap.SetFilterMatches(null);
-            FilterInfo.Visibility = Visibility.Collapsed;
-            SelectMatchesButton.Visibility = Visibility.Collapsed;
-            UpdateFilterFooter();
+            SyncFilterUi();
+            UpdatePanelActiveStates();
             return;
         }
 
         _filterResult = _filter.Evaluate(_root);
         Treemap.SetFilterMatches(_filterResult.Matches);
-        FilterInfo.Text = _filterResult.FileCount == 0
-            ? Strings.Format("Filter_NothingMatches", _filter.Description)
-            : Strings.Format("Filter_Matches", _filterResult.FileCount, SizeFormatter.Format(_filterResult.Bytes), _filter.Description);
-        FilterInfo.Visibility = Visibility.Visible;
-        SelectMatchesButton.Visibility = _filterResult.FileCount > 0 ? Visibility.Visible : Visibility.Collapsed;
-        UpdateFilterFooter();
+        SyncFilterUi();
+        UpdatePanelActiveStates();
     }
 
     private void SelectMatches_Click(object sender, RoutedEventArgs e) => SelectMatches();
@@ -1569,11 +1580,10 @@ public partial class MainWindow : Window
     private void ColorSettings_Changed(object sender, SelectionChangedEventArgs e)
     {
         // Also fires during InitializeComponent, before everything exists.
-        if (_applyingSettings || Treemap is null || LegendPanel is null || PaletteCombo is null || StyleCombo is null) return;
+        if (_applyingSettings || Treemap is null || LegendPanel is null || PaletteCombo is null) return;
 
-        _settings.Palette = (PaletteCombo.SelectedItem as ColorScheme ?? Palette.Default).Name;
+        _settings.SetPalette(ThemeManager.IsDark, (PaletteCombo.SelectedItem as ColorScheme ?? Palette.DefaultFor(ThemeManager.IsDark)).Name);
         if (ColorCombo.SelectedIndex >= 0) _settings.ColorMode = ((ColorMode)ColorCombo.SelectedIndex).ToString();
-        if (StyleCombo.SelectedIndex >= 0) _settings.MapStyle = Enum.GetNames<MapStyle>()[StyleCombo.SelectedIndex];
         ApplySettings();
     }
 
@@ -1591,7 +1601,17 @@ public partial class MainWindow : Window
         MenuExplorer.IsEnabled = hasNode && count <= 1;
         MenuCopy.IsEnabled = hasNode;
         MenuInspect.IsEnabled = Treemap.SelectedNodes.Any(n => n.IsReal) && !IsScanning;
-        MenuInspect.Header = count > 1 ? Strings.Format("Menu_InspectMany", count) : Strings.Get("Menu_Inspect");;
+        MenuInspectTitle.Text = count > 1 ? Strings.Format("Menu_InspectMany", count) : Strings.Get("Menu_Inspect");
+        // The sub-line under Inspect says what the menu is about: the item, its size and what it is.
+        if (count > 1)
+            MenuInspectSub.Text = SizeFormatter.Format(Treemap.SelectedNodes.Sum(n => n.SizeFor(Treemap.SizeMode)));
+        else if (node is not null)
+        {
+            string kind = node.IsGroup ? Strings.Get("Menu_KindGroup") : node.IsDirectory ? Strings.Format("Menu_KindFolder", node.FileCount) : node.Extension.Length > 0 ? Strings.Format("Menu_KindFile", node.Extension.TrimStart('.').ToUpperInvariant()) : Strings.Get("Menu_KindFileNoExt");
+            MenuInspectSub.Text = $"{node.Name}  ·  {SizeFormatter.Format(node.SizeFor(Treemap.SizeMode))}  ·  {kind}";
+        }
+        else MenuInspectSub.Text = string.Empty;
+        MenuInspectSub.Visibility = MenuInspectSub.Text.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         MenuProperties.IsEnabled = hasNode && count <= 1;
         MenuCopyName.IsEnabled = hasNode;
         MenuFilterType.IsEnabled = hasNode && count <= 1 && !node!.IsDirectory && node.Extension.Length > 0;
@@ -1608,7 +1628,8 @@ public partial class MainWindow : Window
         MenuExportChanges.IsEnabled = HasBaseline;
         MenuExportFolder.Header = folder is not null ? Strings.Format("Menu_ContentsOf", folder.Name) : Strings.Get("Menu_ThisFolder");
         MenuDelete.IsEnabled = !IsScanning && Treemap.SelectedNodes.Any(n => n.IsReal && n.Parent is not null && !ReferenceEquals(n, Treemap.Root));
-        MenuDelete.Header = count > 1 ? Strings.Format("Menu_DeleteMany", count) : Strings.Get("Menu_Delete");;
+        MenuDelete.Header = count > 1 ? Strings.Format("Menu_DeleteMany", count) : Strings.Get("Menu_Delete");
+
     }
 
     private void MenuFocus_Click(object sender, RoutedEventArgs e)
@@ -1677,7 +1698,7 @@ public partial class MainWindow : Window
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (FilterBox.IsKeyboardFocusWithin) return; // the box handles its own keys
+        if (FilterRail.IsKeyboardFocusWithin || FilterDrawer.IsKeyboardFocusWithin) return; // the filter boxes handle their own keys
         bool ctrl = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
         bool alt = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt);
 
@@ -1741,8 +1762,7 @@ public partial class MainWindow : Window
                 CopySelectedPaths();
                 break;
             case Key.F when ctrl:
-                FilterBox.Focus();
-                FilterBox.SelectAll();
+                FocusFilter();
                 break;
             case Key.A when ctrl && _filterResult is not null:
                 SelectMatches();
@@ -1750,15 +1770,9 @@ public partial class MainWindow : Window
             case Key.L when !ctrl:
                 ToggleLists();
                 break;
-            case Key.S when !ctrl:
-            {
-                var names = Enum.GetNames<MapStyle>();
-                int index = Math.Max(0, Array.IndexOf(names, _settings.MapStyle ?? "Classic"));
-                _settings.MapStyle = names[(index + 1) % names.Length];
-                ApplySettings();
-                StatusScan.Text = Strings.Format("Status_MapStyle", _settings.MapStyle);
+            case Key.B when !ctrl:
+                ToggleBottomPanel();
                 break;
-            }
             case Key.G when !ctrl:
             {
                 // G flips between the chosen density and no grouping at all, and back.

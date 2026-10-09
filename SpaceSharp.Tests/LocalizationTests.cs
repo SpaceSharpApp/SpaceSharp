@@ -43,7 +43,7 @@ public class LocalizationTests
                 foreach (Match m in p.Matches(text))
                 {
                     string key = m.Groups[1].Value;
-                    if (key.EndsWith('_')) continue; // a prefix completed at runtime ("MapStyle_" + name); covered by DynamicKeysExistForEveryEnumValue
+                    if (key.EndsWith('_')) continue; // a prefix completed at runtime ("Density_" + name); covered by DynamicKeysExistForEveryEnumValue
                     used.TryAdd(key, Path.GetFileName(file));
                 }
         }
@@ -57,7 +57,9 @@ public class LocalizationTests
     {
         var keys = NeutralKeys();
         foreach (var c in Enum.GetNames<FileCategory>()) Assert.Contains("Category_" + c, keys);
-        foreach (var s in Enum.GetNames<SpaceSharp.Controls.MapStyle>()) Assert.Contains("MapStyle_" + s, keys);
+        foreach (var p in new[] { "Soft", "Classic", "Deep" }) Assert.Contains("Preset_" + p, keys);
+        foreach (var k in SpaceSharp.Services.DriveInsights.SuggestionKeys) { Assert.Contains("Cleanup_" + k, keys); Assert.Contains("Cleanup_" + k + "_Note", keys); }
+        foreach (var a in new[] { "ThisMonth", "ThisYear", "OneToThree", "Older" }) Assert.Contains("Age_" + a, keys);
         foreach (var d in Enum.GetNames<SpaceSharp.Controls.MapDensity>()) Assert.Contains("Density_" + d, keys);
         foreach (var t in new[] { "General", "Appearance", "Treemap", "Map", "Scanning" }) Assert.Contains("SettingsTab_" + t, keys);
         foreach (var l in new[] { "Smallest", "Smaller", "Normal", "Large", "Larger" }) Assert.Contains("LabelSize_" + l, keys);

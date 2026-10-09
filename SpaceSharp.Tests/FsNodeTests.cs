@@ -24,6 +24,36 @@ public class FsNodeTests
     }
 
     [Fact]
+    public void FullPathIsBuiltFromTheNamesUpTheTree()
+    {
+        var root = SampleTree();
+        var videos = root.Children.Single(c => c.Name == "Videos");
+        Assert.Equal(@"C:\", root.FullPath);
+        Assert.Equal(@"C:\Videos", videos.FullPath);
+        Assert.Equal(@"C:\Videos\a.mp4", videos.Children[0].FullPath);
+        Assert.Equal(@"C:\readme.md", root.Children.Single(c => c.Name == "readme.md").FullPath);
+
+        // A root without a trailing separator, and a group that answers with its folder's path.
+        var sub = TestTree.Dir(@"D:\Work\Project");
+        var deep = TestTree.Dir("src", sub);
+        Assert.Equal(@"D:\Work\Project\src", deep.FullPath);
+        Assert.Equal(@"D:\Work\Project\src", new FsNode("3 files", NodeKind.Group, deep).FullPath);
+    }
+
+    [Fact]
+    public void RescannedFolderTakesItsPlaceInThePath()
+    {
+        var root = SampleTree();
+        var old = root.Children.Single(c => c.Name == "Videos");
+        var fresh = TestTree.Dir(@"C:\Videos");
+        TestTree.File(fresh, "c.avi", 700);
+        TestTree.Finish(fresh);
+        root.ReplaceChild(old, fresh, SizeMeasure.FileSize);
+        Assert.Equal("Videos", fresh.Name);
+        Assert.Equal(@"C:\Videos\c.avi", fresh.Children[0].FullPath);
+    }
+
+    [Fact]
     public void FinishDirectorySumsSizesCountsAndNewestDate()
     {
         var root = TestTree.Dir(@"C:\");

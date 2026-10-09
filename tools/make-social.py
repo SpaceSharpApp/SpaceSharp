@@ -1,8 +1,9 @@
-"""Builds docs/social-preview.png (1280x640): the message itself laid out as a treemap. The biggest boxes carry the
-tagline, the smaller ones the facts, in amber steps on GitHub's dark page color. No screenshot needed."""
+"""Builds docs/social-preview.png (1280x640): the mark, large, on the left; the wordmark, the version, the tagline
+and one line of what it is on the right. Graphite ground, amber accent, no screenshot. Run after make-assets.py
+(it imports the palette, the mark and the fonts from there)."""
 from pathlib import Path
 import importlib.util
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location('ma', HERE / 'make-assets.py'); ma = importlib.util.module_from_spec(spec); spec.loader.exec_module(ma)
@@ -11,53 +12,41 @@ ma.ensure_fonts()
 S = 2; W, H = 1280 * S, 640 * S
 GITHUB = (0x0D, 0x11, 0x17)
 im = Image.new('RGBA', (W, H), GITHUB + (255,))
+
+# ---- the mark, 400 px, with a soft shadow under it
+MARK, MX, MY = 400, 96, 120
+mark = ma.mark_image(MARK * S)
+shadow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+sil = Image.new('RGBA', mark.size, (0, 0, 0, 0)); sil.paste((0, 0, 0, 140), (0, 0), mark.split()[3])
+shadow.paste(sil, (MX * S, (MY + 30) * S), sil)
+shadow = shadow.filter(ImageFilter.GaussianBlur(26 * S))
+im.alpha_composite(shadow)
+im.alpha_composite(mark, (MX * S, MY * S))
+
+# ---- the words
 d = ImageDraw.Draw(im)
+x = (MX + MARK + 72) * S
+y = 172 * S
+# the wordmark and the version pill
+end = ma.wordmark(d, x, y, 30 * S)
+pill = ma.font(800, 15 * S); label = "2.0"
+pw = int(d.textlength(label, font=pill)) + 24 * S
+px, py = end + 14 * S, y + 6 * S
+d.rounded_rectangle([px, py, px + pw, py + 26 * S], radius=13 * S, fill=ma.AMBER)
+d.text((px + 12 * S, py + 4 * S), label, font=pill, fill=(0x1C, 0x15, 0x00))
 
-def tone(a):  # amber over the page color, a = strength 0..1
-    return ma.blend(ma.AMBER, GITHUB, a)
+# the tagline, two lines
+y += 56 * S
+head = ma.font(800, 76 * S)
+for line in ("See where your", "disk space went."):
+    d.text((x - 3 * S, y), line, font=head, fill=ma.OFFWHITE); y += 74 * S
 
-# the layout: (x, y, w, h, strength, text, size, weight, color, sub)
-# coordinates in the 1280x640 frame, gutters of 10 px like the mark's cells
-G = 10; M = 40
-boxes = [
-    (M, M, 586, 320, 1.00, "Your drive,", 92, 800, (0x1C, 0x15, 0x00), None),
-    (M + 596, M, 604, 190, 0.78, "as a map.", 92, 800, (0x1C, 0x15, 0x00), None),
-    (M + 596, M + 200, 298, 120, 0.46, "Scan C: in 2 s", 30, 800, ma.OFFWHITE, "reads the NTFS file table"),
-    (M + 904, M + 200, 296, 120, 0.34, "See what grew", 30, 800, ma.OFFWHITE, "compared with last time"),
-    (M, M + 330, 290, 230, 0.30, "Filter in words", 30, 800, ma.OFFWHITE, '"videos over 500MB older\nthan 1 year"'),
-    (M + 300, M + 330, 286, 230, 0.22, "Clean up from\nthe map", 30, 800, ma.OFFWHITE, "straight to the Recycle Bin"),
-    (M + 596, M + 330, 298, 108, 0.17, "English and Norwegian", 22, 800, ma.OFFWHITE, None),
-    (M + 904, M + 330, 296, 108, 0.14, "Windows 10 and 11", 22, 800, ma.OFFWHITE, None),
-    (M + 596, M + 448, 298, 112, 0.11, "Free and open source", 22, 800, ma.OFFWHITE, "MIT license"),
-    (M + 904, M + 448, 296, 112, 0.08, None, 0, 0, None, None),  # the brand cell
-]
-for x, y, w, h, a, text, size, weight, color, sub in boxes:
-    d.rounded_rectangle([x * S, y * S, (x + w) * S - 1, (y + h) * S - 1], radius=8 * S, fill=tone(a))
-    if text is None: continue
-    f = ma.font(weight, size * S)
-    lines = text.split("\n")
-    ty = (y + 18) * S
-    for line in lines:
-        d.text(((x + 20) * S, ty), line, font=f, fill=color)
-        ty += int(size * 1.08 * S)
-    if sub:
-        fs = ma.font(500, 15 * S)
-        subcol = (0x3A, 0x2E, 0x08) if a > 0.6 else ma.MUTED
-        sy = ty + 6 * S
-        for line in sub.split("\n"):
-            d.text(((x + 20) * S, sy), line, font=fs, fill=subcol); sy += 20 * S
-
-# the brand cell: mark + wordmark, bottom right
-bx, by = M + 904, M + 448
-ma.paste_mark(im, 44 * S, ((bx + 20) * S, (by + 34) * S), tile=ma.PANEL)
-ma.wordmark(d, (bx + 76) * S, (by + 38) * S, 30 * S)
-d.text(((bx + 78) * S, (by + 76) * S), "clearanceclarence.github.io/SpaceSharp", font=ma.font(500, 12 * S), fill=ma.HINT)
-
-# size labels in the corner of the two tagline boxes, the way the app writes them
-fl = ma.font(600, 14 * S)
-d.text(((M + 586 - 20) * S - d.textlength("271.37 GB", font=fl), (M + 320 - 36) * S), "271.37 GB", font=fl, fill=(0x5A, 0x45, 0x0A))
-d.text(((M + 596 + 604 - 20) * S - d.textlength("137.9 GB", font=fl), (M + 190 - 36) * S), "137.9 GB", font=fl, fill=(0x5A, 0x45, 0x0A))
+# one line of what it is, and the address
+y += 18 * S
+d.text((x, y), "Your drive as a map. Free and open source, for Windows 10 and 11.", font=ma.font(500, 20 * S), fill=ma.MUTED)
+y += 50 * S
+d.text((x, y), "clearanceclarence.github.io/SpaceSharp", font=ma.font(500, 15 * S), fill=ma.HINT)
 
 out = im.resize((1280, 640), Image.LANCZOS).convert('RGB')
 out.save(HERE.parent / 'docs' / 'social-preview.png', optimize=True)
-print('ok')
+print("  docs/social-preview.png")

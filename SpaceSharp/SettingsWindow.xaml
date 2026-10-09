@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:u="clr-namespace:SpaceSharp.Util"
         Title="{u:T SettingsWin_Settings}"
-        Width="640" Height="640" MinWidth="520" MinHeight="400"
+        Width="660" Height="760" MinWidth="520" MinHeight="400"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Icon="/Assets/SpaceSharp.ico"
         Background="{DynamicResource Bg}" Foreground="{DynamicResource Text}"
@@ -22,6 +22,11 @@
 
         <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="22,14,22,12">
             <StackPanel x:Name="TabBar" Orientation="Horizontal" />
+        </Border>
+
+        <Border x:Name="PreviewDock" DockPanel.Dock="Top" Visibility="Collapsed" BorderBrush="{DynamicResource Stroke}"
+                BorderThickness="0,0,0,1" Padding="28,14,28,8" Background="{DynamicResource Panel}">
+            <ContentControl x:Name="PreviewHost" Focusable="False" />
         </Border>
 
         <ScrollViewer x:Name="Scroller" VerticalScrollBarVisibility="Auto" Padding="0,0,6,0">

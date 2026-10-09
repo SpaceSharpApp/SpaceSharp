@@ -14,9 +14,9 @@ namespace SpaceSharp.Controls;
 //   TreemapControl.cs         constants, fields, constructor, public properties and events
 //   TreemapControl.Camera.cs  zoom, pan, focus animation, viewport math
 //   TreemapControl.Layout.cs  rebuild, squarified layout cache, grouping, folder-chain merging
-//   TreemapControl.Render.cs  drawing of boxes, headers, labels, hover and selection
+//   TreemapControl.Render.cs  drawing of boxes, title bars, cushions, labels, hover and selection
 //   TreemapControl.Input.cs   mouse and keyboard handling
-//   MapEnums.cs               ColorMode, MapStyle and TreemapItem
+//   MapEnums.cs               ColorMode, MapDensity and TreemapItem
 
 /// <summary>
 /// SpaceMonger-style nested treemap with a zoomable camera.
@@ -28,14 +28,17 @@ namespace SpaceSharp.Controls;
 /// "Focusing" a folder animates the camera so that folder fills the window. The focused
 /// folder is the one shown in the breadcrumb; wheel/pan changes it to whatever folder
 /// covers most of the window.
+///
+/// There is one look: folders are frames with a title bar, files are cushioned boxes, and a
+/// grid line separates every box. How strong the cushion is, where the light comes from and
+/// how the grid is drawn are the shading settings (Settings › Treemap).
 /// </summary>
 public sealed partial class TreemapControl : FrameworkElement
 {
     public const double MaxZoom = 1_000_000;
 
-    private const double ClassicHeaderHeight = 17;
-    private const double MinHeaderWidth = 60;   // folders smaller than this get no title bar
-    private const double MinHeaderHeight = 44;
+    private const double MinHeaderWidth = 30;        // the title bar stays down to this width (the name goes first)
+    private const double MinHeaderBody = 24;         // a title bar needs at least this much content under it
     private const double BaseMinChildSize = 4;       // smaller children are not drawn (the parent's color shows)
     private const double MinFolderContent = 12;      // don't subdivide folders with less room than this
     private const double BaseGroupBelowArea = 30 * 22;  // children smaller than this many pixels are grouped
@@ -43,6 +46,12 @@ public sealed partial class TreemapControl : FrameworkElement
     // Density scales the two thresholds above.
     private double MinChildSize => _density switch { MapDensity.Sparse => BaseMinChildSize * 2, MapDensity.Dense => 2, MapDensity.Maximum or MapDensity.Everything => 1, _ => BaseMinChildSize };
     private double GroupBelowArea => _density switch { MapDensity.Sparse => BaseGroupBelowArea * 2.5, MapDensity.Dense => BaseGroupBelowArea * 0.4, MapDensity.Maximum => BaseGroupBelowArea * 0.12, _ => BaseGroupBelowArea };
+
+    // A folder whose children are all small by the scan-wide rule is cut by the pixels it has on screen, and
+    // there the question is only whether a box can be seen: about 10 × 10 px is enough, so a folder of two
+    // thousand equal photos opens into its grid as soon as each photo gets that much, not at 30 × 22.
+    private const double BaseVisibleArea = 10 * 10;
+    private double VisibleArea => _density switch { MapDensity.Sparse => BaseVisibleArea * 2.5, MapDensity.Dense => BaseVisibleArea * 0.6, MapDensity.Maximum => BaseVisibleArea * 0.36, _ => BaseVisibleArea };
     private const double TextSize = 11;
     private const double WheelStep = 1.25;
     private const double DragThreshold = 4;
@@ -62,7 +71,6 @@ public sealed partial class TreemapControl : FrameworkElement
     private readonly HashSet<FsNode> _selection = new();
     private HashSet<FsNode>? _filterMatches;             // null = no filter active
     private readonly HashSet<FsNode> _matchedGroups = new(); // transient group boxes that contain a match (rebuilt each layout)
-    private MapStyle _mapStyle = MapStyle.Classic;
     private double _labelScale = 1.0;
     private bool _labelHalo;
     private ColorMode _colorMode = ColorMode.ByBranch;
@@ -79,6 +87,8 @@ public sealed partial class TreemapControl : FrameworkElement
         RenderOptions.SetEdgeMode(_overlayVisual, EdgeMode.Aliased);
         ClipToBounds = true;
         Focusable = true;
+        RebuildPens();
+        RebuildCushions();
     }
 
     /// <summary>Color shown behind and between the boxes (follows the light/dark theme).</summary>
@@ -88,7 +98,7 @@ public sealed partial class TreemapControl : FrameworkElement
         {
             var map = (TreemapControl)d;
             map._dimmed.Clear();
-            map._tints.Clear();
+            map._headerFills.Clear();
             map.Invalidate();
         }));
 
@@ -210,7 +220,7 @@ public sealed partial class TreemapControl : FrameworkElement
         {
             if (ReferenceEquals(_scheme, value)) return;
             _scheme = value;
-            _tints.Clear();
+            _headerFills.Clear();
             Invalidate();
         }
     }
@@ -253,38 +263,20 @@ public sealed partial class TreemapControl : FrameworkElement
         }
     }
 
-    /// <summary>The visual treatment of the boxes.</summary>
-    public MapStyle MapStyle
-    {
-        get => _mapStyle;
-        set
-        {
-            if (_mapStyle == value) return;
-            _mapStyle = value;
-            InvalidateLayout();
-        }
-    }
+    // Geometry. The gap is taken off each box before drawing; the inset is the space folders keep around
+    // their children; the header height is the room reserved for the folder title.
+    // The title bar is one line of text plus the title padding above and below it.
+    private double HeaderHeight => Math.Round(TitleLineHeight * _labelScale + 2 * _titlePadding);
+    private const double TitleLineHeight = 15;
 
-    // Per-style geometry. Gap is taken off each box before drawing; inset is the space folders keep
-    // around their children; the header height is the room reserved for the folder title.
-    private double HeaderHeight => Math.Round((_mapStyle switch
-    {
-        MapStyle.Tiles => 16, MapStyle.Flat => 16, MapStyle.Cards => 19, MapStyle.Bands => 18, MapStyle.Soft => 18, _ => ClassicHeaderHeight
-    }) * _labelScale);
+    private static double InsetFor(Rect bounds) => Math.Min(bounds.Width, bounds.Height) >= 40 ? 2 : 1;
 
-    private double InsetFor(Rect bounds) => _mapStyle switch
-    {
-        MapStyle.Tiles => 2, MapStyle.Cards => 3, MapStyle.Soft => 2, MapStyle.Bands => 2, MapStyle.Flat => 1,
-        _ => Math.Min(bounds.Width, bounds.Height) >= 40 ? 2 : 1
-    };
+    private double Gap => _padding;
 
-    private double Gap => _mapStyle switch { MapStyle.Tiles => 3, MapStyle.Cards => 2, MapStyle.Soft => 3, _ => 0 } + _padding;
-
-    // ---- treemap options (Settings › Treemap)
+    // ---- treemap options (Settings › Treemap › Layout)
     private MapDensity _density = MapDensity.Normal;
     private double _bias;            // -1 horizontal … 0 equal … +1 vertical
     private double _padding;         // extra pixels around every box
-    private double _borderThickness = 1;
     private string _fontFamily = "Segoe UI";
     private bool _fileCenterNames = true, _fileShowSizes = true, _folderCenterNames, _folderShowSizes = true, _folderShowCounts;
 
@@ -298,9 +290,6 @@ public sealed partial class TreemapControl : FrameworkElement
     /// <summary>Extra space around every box, 0 to 6 px.</summary>
     public double Padding { get => _padding; set { value = Math.Clamp(value, 0, 6); if (_padding == value) return; _padding = value; InvalidateLayout(); } }
 
-    /// <summary>Border line width for the styles that draw one (Classic, Flat, Bands), 0 to 3 px.</summary>
-    public double BorderThickness { get => _borderThickness; set { value = Math.Clamp(value, 0, 3); if (_borderThickness == value) return; _borderThickness = value; RebuildPens(); Invalidate(); } }
-
     /// <summary>Font family for every label on the map.</summary>
     public string FontFamilyName { get => _fontFamily; set { if (string.IsNullOrWhiteSpace(value) || _fontFamily == value) return; _fontFamily = value; RebuildTypefaces(); InvalidateLayout(); } }
 
@@ -311,7 +300,82 @@ public sealed partial class TreemapControl : FrameworkElement
     public bool FolderShowCounts { get => _folderShowCounts; set { if (_folderShowCounts == value) return; _folderShowCounts = value; Invalidate(); } }
 
     private double OrientationBias => Math.Pow(3, _bias);
-    private double Radius => _mapStyle switch { MapStyle.Tiles => 4, MapStyle.Cards => 5, MapStyle.Soft => 6, _ => 0 };
+
+    // ---- shading (Settings › Treemap › Shading). All 0 to 100 except the light, which is -1 to 1 on each axis.
+    private bool _cushionEnabled = true;
+    private int _brightness = DefaultBrightness;
+    private int _cushion = DefaultCushion;
+    private int _cushionHeight = DefaultCushionHeight;
+    private int _shadingScale = DefaultShadingScale;
+    private double _lightX = DefaultLightX, _lightY = DefaultLightY;
+    private bool _showGrid = true;
+    private double _gridThickness = 1;
+    private Color _gridColor = DefaultGridColor;
+    private Color _highlightColor = DefaultHighlightColor;
+
+    public const int DefaultBrightness = 50, DefaultCushion = 55, DefaultCushionHeight = 45, DefaultShadingScale = 70;
+    public const double DefaultLightX = -0.5, DefaultLightY = -0.5;
+    public static readonly Color DefaultGridColor = Color.FromRgb(0x10, 0x10, 0x14);
+    public static readonly Color DefaultHighlightColor = Color.FromRgb(0xF5, 0xB8, 0x2E);
+
+    /// <summary>Light-to-dark shading on every file. Off draws files as flat color; the other shading settings then do nothing.</summary>
+    public bool CushionEnabled { get => _cushionEnabled; set { if (_cushionEnabled == value) return; _cushionEnabled = value; Invalidate(); } }
+
+    /// <summary>How light the files are. 50 balances the lit and shadow sides of the cushion; lower dims files, higher lifts them. Folders are not affected.</summary>
+    public int Brightness { get => _brightness; set { value = Math.Clamp(value, 0, 100); if (_brightness == value) return; _brightness = value; RebuildCushions(); Invalidate(); } }
+
+    /// <summary>Strength of the light-to-dark sweep across each box. 0 is flat.</summary>
+    public int CushionShading { get => _cushion; set { value = Math.Clamp(value, 0, 100); if (_cushion == value) return; _cushion = value; RebuildCushions(); Invalidate(); } }
+
+    /// <summary>How far the lit side reaches before the box falls into shadow. Low is a thin rim, high a rounded pillow.</summary>
+    public int CushionHeight { get => _cushionHeight; set { value = Math.Clamp(value, 0, 100); if (_cushionHeight == value) return; _cushionHeight = value; RebuildCushions(); Invalidate(); } }
+
+    /// <summary>How much shading nested levels keep: the cushion strength is multiplied by (scale/100) per level of depth.</summary>
+    public int ShadingScale { get => _shadingScale; set { value = Math.Clamp(value, 0, 100); if (_shadingScale == value) return; _shadingScale = value; RebuildCushions(); Invalidate(); } }
+
+    /// <summary>Where the light comes from, as a point in the unit square: (-1, -1) is top-left, (0, 0) straight ahead.</summary>
+    public void SetLight(double x, double y)
+    {
+        x = Math.Clamp(x, -1, 1); y = Math.Clamp(y, -1, 1);
+        if (_lightX == x && _lightY == y) return;
+        _lightX = x; _lightY = y;
+        RebuildCushions();
+        Invalidate();
+    }
+
+    public double LightX => _lightX;
+    public double LightY => _lightY;
+
+    /// <summary>Draw a line between every box.</summary>
+    public bool ShowGrid { get => _showGrid; set { if (_showGrid == value) return; _showGrid = value; Invalidate(); } }
+
+    /// <summary>Grid line width, 1 to 3 px.</summary>
+    public double GridThickness { get => _gridThickness; set { value = Math.Clamp(value, 1, 3); if (_gridThickness == value) return; _gridThickness = value; RebuildPens(); Invalidate(); } }
+
+    public Color GridColor { get => _gridColor; set { if (_gridColor == value) return; _gridColor = value; RebuildPens(); Invalidate(); } }
+
+    // ---- text and title bars
+    private double _titlePadding = DefaultTitlePadding;
+    private int _titleBarTint = DefaultTitleBarTint;
+    private Brush? _folderText, _fileText;
+
+    public const double DefaultTitlePadding = 1;
+    public const int DefaultTitleBarTint = 16;
+
+    /// <summary>Space above and below a folder's name in its title bar, 0 to 8 px. Changes the bar's height.</summary>
+    public double TitlePadding { get => _titlePadding; set { value = Math.Clamp(value, 0, 8); if (_titlePadding == value) return; _titlePadding = value; InvalidateLayout(); } }
+
+    /// <summary>How far the title bar is shaded from the folder's color, 0 (same color) to 40 (%).</summary>
+    public int TitleBarTint { get => _titleBarTint; set { value = Math.Clamp(value, 0, 40); if (_titleBarTint == value) return; _titleBarTint = value; _headerFills.Clear(); Invalidate(); } }
+
+    /// <summary>Color of folder names, or null to pick dark or light per bar.</summary>
+    public Color? FolderTextColor { set { _folderText = value is null ? null : Frozen(new SolidColorBrush(value.Value)); Invalidate(); } }
+
+    /// <summary>Color of file names and sizes, or null to pick dark or light per box.</summary>
+    public Color? FileTextColor { set { _fileText = value is null ? null : Frozen(new SolidColorBrush(value.Value)); Invalidate(); } }
+
+    /// <summary>Color of the frame around selected boxes.</summary>
+    public Color HighlightColor { get => _highlightColor; set { if (_highlightColor == value) return; _highlightColor = value; RebuildPens(); DrawOverlay(); } }
 
     /// <summary>Fly to folders instead of jumping (FocusOn with animate: true).</summary>
     public bool AnimateZoom { get; set; } = true;

@@ -128,6 +128,7 @@
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>Rescan failed</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>Save scan</value></data>
   <data name="Dialog_ScanFailed" xml:space="preserve"><value>Scan failed</value></data>
+  <data name="Dialog_OutOfMemory32" xml:space="preserve"><value>The 32-bit build ran out of memory before the scan finished. A 32-bit process can only address a few gigabytes, however much RAM the PC has, so a drive with this many files needs the 64-bit build (SpaceSharp-win-x64).</value></data>
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp scan (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} free</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} used of {1} · {2}</value></data>
@@ -191,7 +192,6 @@
   <data name="Key_Grouping" xml:space="preserve"><value>Switch density to Everything (no grouping) and back</value></data>
   <data name="Key_Inspect" xml:space="preserve"><value>Inspect the selection</value></data>
   <data name="Key_NextColor" xml:space="preserve"><value>Next color mode</value></data>
-  <data name="Key_NextStyle" xml:space="preserve"><value>Next map style</value></data>
   <data name="Key_OpenScan" xml:space="preserve"><value>Open a saved scan</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Pan while zoomed in</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Largest files, folders and types panel</value></data>
@@ -220,13 +220,10 @@
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Ask again next time</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
-  <data name="Main_Bands" xml:space="preserve"><value>Bands</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="Main_Cards" xml:space="preserve"><value>Cards</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Change</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Changes</value></data>
   <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Changes since last scan</value></data>
-  <data name="Main_Classic" xml:space="preserve"><value>Classic</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Clear</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Clear filter (Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>Click a drive on the left, or choose a folder to scan.</value></data>
@@ -257,7 +254,6 @@
   <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Filter matches</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Filter options</value></data>
-  <data name="Main_Flat" xml:space="preserve"><value>Flat</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Folders</value></data>
   <data name="Main_Folders2" xml:space="preserve"><value>folders</value></data>
   <data name="Main_FoundSoFar" xml:space="preserve"><value>found so far</value></data>
@@ -290,13 +286,10 @@
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Show only this file type</value></data>
   <data name="Main_ShowWholeMap" xml:space="preserve"><value>Show whole map</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Show whole map (Home / Ctrl+0)</value></data>
-  <data name="Main_Soft" xml:space="preserve"><value>Soft</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp can read the drive's file table directly instead of walking every folder. That needs administrator rights, so the app has to restart once. Folders and other file systems scan the normal way either way.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>Stop comparing</value></data>
-  <data name="Main_Style" xml:space="preserve"><value>Style</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>Theme</value></data>
   <data name="Main_ThisFolder" xml:space="preserve"><value>This folder</value></data>
-  <data name="Main_Tiles" xml:space="preserve"><value>Tiles</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>Top folder</value></data>
   <data name="Main_Types" xml:space="preserve"><value>Types</value></data>
   <data name="Main_UpOneFolder" xml:space="preserve"><value>Up one folder</value></data>
@@ -304,15 +297,13 @@
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Zoom in (mouse wheel / +)</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Zoom out (mouse wheel / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Zoom to folder</value></data>
-  <data name="MapStyle_Bands" xml:space="preserve"><value>Bands</value></data>
-  <data name="MapStyle_Cards" xml:space="preserve"><value>Cards</value></data>
-  <data name="MapStyle_Classic" xml:space="preserve"><value>Classic</value></data>
-  <data name="MapStyle_Flat" xml:space="preserve"><value>Flat</value></data>
-  <data name="MapStyle_Soft" xml:space="preserve"><value>Soft</value></data>
-  <data name="MapStyle_Tiles" xml:space="preserve"><value>Tiles</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Contents of {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>Move to Recycle Bin</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Move {0:N0} items to Recycle Bin</value></data>
+  <data name="Menu_KindGroup" xml:space="preserve"><value>files too small to show</value></data>
+  <data name="Menu_KindFolder" xml:space="preserve"><value>folder, {0:N0} files</value></data>
+  <data name="Menu_KindFile" xml:space="preserve"><value>{0} file</value></data>
+  <data name="Menu_KindFileNoExt" xml:space="preserve"><value>file</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>Inspect</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>Inspect {0:N0} items</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>Rescan {0}</value></data>
@@ -325,7 +316,6 @@
   <data name="Mft_Building" xml:space="preserve"><value>Building the map</value></data>
   <data name="Mft_CannotOpen" xml:space="preserve"><value>Cannot open volume {0}. Administrator rights are needed to read the file table.</value></data>
   <data name="Mft_Reading" xml:space="preserve"><value>Reading the file table: {0:N0} of {1:N0} records</value></data>
-  <data name="Palette_GroupBuiltIn" xml:space="preserve"><value>Built in</value></data>
   <data name="Palette_GroupCustom" xml:space="preserve"><value>Custom</value></data>
   <data name="Palettes_CouldNotOpen" xml:space="preserve"><value>Couldn't open the palettes folder</value></data>
   <data name="Palettes_LoadedMany" xml:space="preserve"><value> {0} custom palettes loaded.</value></data>
@@ -386,8 +376,6 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Leave out</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Names to skip, with everything inside them. Matched against file and folder names, not paths; * and ? are wildcards.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Map</value></data>
-  <data name="Settings_MapStyle" xml:space="preserve"><value>Map style</value></data>
-  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>How boxes are drawn. Classic: title bars, borders and soft shading. Flat: plain fills and thin lines. Tiles: flat, gapped, rounded. Cards: raised folders. Bands: dark title band. Soft: rounded pastel blocks.</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Merge single-folder chains</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Draw folders that only contain one folder (Users › you › AppData › Local) as one box with a combined title.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Outlined labels</value></data>
@@ -422,7 +410,6 @@
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>Comparison cleared.</value></data>
   <data name="Status_Exported" xml:space="preserve"><value>Exported {0:N0} rows to {1} (a basic CSV: fixed columns, more options later)</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · file table</value></data>
-  <data name="Status_MapStyle" xml:space="preserve"><value>Map style: {0}</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>Moved {0:N0} items, {1}, to the Recycle Bin</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>Moved {0} to the Recycle Bin</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} files · {3}. F5 rescans.</value></data>
@@ -488,6 +475,10 @@
   <data name="Update_Title" xml:space="preserve"><value>Update available</value></data>
   <data name="Update_Hint" xml:space="preserve"><value>Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</value></data>
   <data name="Update_WhatsNew" xml:space="preserve"><value>What's new</value></data>
+  <data name="Update_YouHave" xml:space="preserve"><value>You have {0}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>SpaceSharp {0} is ready</value></data>
+  <data name="Update_RemindLater" xml:space="preserve"><value>Remind me later</value></data>
+  <data name="Update_WhatsNewIn" xml:space="preserve"><value>What's new in {0}</value></data>
   <data name="Update_Later" xml:space="preserve"><value>Later</value></data>
   <data name="WhatsNew_Title" xml:space="preserve"><value>What's new in {0}</value></data>
   <data name="WhatsNew_TitleSince" xml:space="preserve"><value>What's new since {1}</value></data>
@@ -509,9 +500,8 @@
   <data name="Treemap_Vertical" xml:space="preserve"><value>Vertical</value></data>
   <data name="Treemap_Padding" xml:space="preserve"><value>Padding</value></data>
   <data name="Treemap_Padding_Desc" xml:space="preserve"><value>Extra space around every box, on top of what the style uses.</value></data>
-  <data name="Treemap_Border" xml:space="preserve"><value>Border</value></data>
-  <data name="Treemap_Border_Desc" xml:space="preserve"><value>Line width around boxes in the Classic, Flat and Bands styles.</value></data>
-  <data name="Treemap_NoBorder" xml:space="preserve"><value>None</value></data>
+  <data name="Treemap_Border" xml:space="preserve"><value>Grid line width</value></data>
+  <data name="Treemap_Border_Desc" xml:space="preserve"><value>How thick the grid lines are.</value></data>
   <data name="Unit_Pixels" xml:space="preserve"><value>{0} px</value></data>
   <data name="Treemap_Font" xml:space="preserve"><value>Font</value></data>
   <data name="Treemap_Font_Desc" xml:space="preserve"><value>The typeface for every label on the map. Label size is set under Appearance.</value></data>
@@ -601,4 +591,136 @@
   <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>new since last scan</value></data>
   <data name="Tip_Changed" xml:space="preserve"><value>changed {0}</value></data>
   <data name="Tip_Modified" xml:space="preserve"><value>modified {0}</value></data>
+  <data name="Settings_Shading" xml:space="preserve"><value>Shading</value></data>
+  <data name="Settings_Shading_Desc" xml:space="preserve"><value>How files are lit. The map at the top is sample data and follows every change.</value></data>
+  <data name="Settings_PreviewSample" xml:space="preserve"><value>Sample data</value></data>
+  <data name="Settings_PreviewDrive" xml:space="preserve"><value>Sample drive</value></data>
+  <data name="Shading_Light" xml:space="preserve"><value>Light from</value></data>
+  <data name="Shading_Light_Desc" xml:space="preserve"><value>Which side the light comes from. The middle is straight ahead.</value></data>
+  <data name="Shading_Reset" xml:space="preserve"><value>Reset shading</value></data>
+  <data name="Shading_Reset_Desc" xml:space="preserve"><value>Puts the shading, grid and highlight settings back the way they ship.</value></data>
+  <data name="Shading_ResetButton" xml:space="preserve"><value>Reset to defaults</value></data>
+  <data name="Settings_Grid" xml:space="preserve"><value>Grid and highlight</value></data>
+  <data name="Grid_Show" xml:space="preserve"><value>Grid lines</value></data>
+  <data name="Grid_Show_Desc" xml:space="preserve"><value>A line between every box, around files and folder frames alike.</value></data>
+  <data name="Grid_Color" xml:space="preserve"><value>Grid color</value></data>
+  <data name="Grid_Color_Desc" xml:space="preserve"><value>Dark lines suit most palettes; light ones work on the darkest.</value></data>
+  <data name="Highlight_Color" xml:space="preserve"><value>Highlight frame</value></data>
+  <data name="Highlight_Color_Desc" xml:space="preserve"><value>The frame around selected boxes. Hovered boxes keep a white frame.</value></data>
+  <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
+  <data name="Shading_Enable" xml:space="preserve"><value>Cushion shading</value></data>
+  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Light-to-dark shading on every file, the way SpaceMonger drew them. Off gives flat colors, and the settings below do nothing.</value></data>
+  <data name="Shading_Presets" xml:space="preserve"><value>Presets</value></data>
+  <data name="Shading_Presets_Desc" xml:space="preserve"><value>A starting point. The sliders below fine-tune it.</value></data>
+  <data name="Preset_Soft" xml:space="preserve"><value>Soft</value></data>
+  <data name="Preset_Classic" xml:space="preserve"><value>Classic</value></data>
+  <data name="Preset_Deep" xml:space="preserve"><value>Deep</value></data>
+  <data name="Shading_Depth" xml:space="preserve"><value>Depth</value></data>
+  <data name="Shading_Depth_Desc" xml:space="preserve"><value>How pronounced the shading is, from a faint sheen to a deep pillow.</value></data>
+  <data name="Shading_Spread" xml:space="preserve"><value>Spread</value></data>
+  <data name="Shading_Spread_Desc" xml:space="preserve"><value>How far the light reaches across a file before the shadow takes over.</value></data>
+  <data name="Shading_Tone" xml:space="preserve"><value>Tone</value></data>
+  <data name="Shading_Tone_Desc" xml:space="preserve"><value>Lighter or darker files overall. Folders keep their color.</value></data>
+  <data name="Shading_Fade" xml:space="preserve"><value>Fade inside folders</value></data>
+  <data name="Shading_Fade_Desc" xml:space="preserve"><value>How much shading nested files keep. Low calms deep levels so the top folders stand out.</value></data>
+  <data name="Shading_LightSide" xml:space="preserve"><value>Light from this side</value></data>
+  <data name="Shading_LightAhead" xml:space="preserve"><value>Light from straight ahead</value></data>
+  <data name="Settings_LookDark" xml:space="preserve"><value>Dark look</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>The colors of the window, panels and menus when the dark theme is showing: Graphite, Slate, Mocha, Midnight or Carbon.</value></data>
+  <data name="Settings_LookLight" xml:space="preserve"><value>Light look</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>The same for the light theme: Paper, Linen, Mist, Sand or Snow.</value></data>
+  <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, shading and text</value></data>
+  <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Everything about how the map looks is on the Treemap page, next to a preview.</value></data>
+  <data name="Settings_Colors" xml:space="preserve"><value>Colors</value></data>
+  <data name="Settings_Colors_Desc" xml:space="preserve"><value>The preview above follows every change on this page.</value></data>
+  <data name="Settings_Text" xml:space="preserve"><value>Text and title bars</value></data>
+  <data name="Settings_Text_Desc" xml:space="preserve"><value>How names are drawn on files and in the folder title bars.</value></data>
+  <data name="Text_FolderColor" xml:space="preserve"><value>Folder names</value></data>
+  <data name="Text_FolderColor_Desc" xml:space="preserve"><value>The color of the text in title bars. Auto picks dark or light for each bar.</value></data>
+  <data name="Text_FileColor" xml:space="preserve"><value>File names and sizes</value></data>
+  <data name="Text_FileColor_Desc" xml:space="preserve"><value>The color of the text on files. Auto picks dark or light for each box.</value></data>
+  <data name="Text_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Text_TitlePadding" xml:space="preserve"><value>Title bar padding</value></data>
+  <data name="Text_TitlePadding_Desc" xml:space="preserve"><value>Space above and below a folder name. The bar grows with it.</value></data>
+  <data name="Text_TitleTint" xml:space="preserve"><value>Title bar tint</value></data>
+  <data name="Text_TitleTint_Desc" xml:space="preserve"><value>How far the bar is shaded from the folder's own color. 0 is the same color; the grid line still marks it.</value></data>
+  <data name="Palette_GroupDark" xml:space="preserve"><value>For the dark theme</value></data>
+  <data name="Palette_GroupLight" xml:space="preserve"><value>For the light theme</value></data>
+  <data name="Palette_GroupAny" xml:space="preserve"><value>Any theme</value></data>
+  <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>The palette for the {0} theme. Each theme remembers its own; the map switches with the theme.</value></data>
+  <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · made for the {1} theme</value></data>
+  <data name="Main_BottomPanel" xml:space="preserve"><value>By type, safe to clear and when changed (B)</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Show or hide the panel under the map</value></data>
+  <data name="Panel_TabType" xml:space="preserve"><value>By type</value></data>
+  <data name="Panel_TabCleanup" xml:space="preserve"><value>Safe to clear</value></data>
+  <data name="Panel_TabTimeline" xml:space="preserve"><value>When changed</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>Scan a drive or folder and this panel sums it up.</value></data>
+  <data name="Panel_TypeSummary" xml:space="preserve"><value>{0} are {1} of the scan. Hover a type to see it on the map, click to filter.</value></data>
+  <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}: {1} in {2:N0} files</value></data>
+  <data name="Panel_TypeLargest" xml:space="preserve"><value> · largest: {0} ({1})</value></data>
+  <data name="Panel_CleanupSummary" xml:space="preserve"><value>{0} in places that are usually safe to empty. Nothing is deleted until you say so.</value></data>
+  <data name="Panel_CleanupNone" xml:space="preserve"><value>Nothing obvious to clear.</value></data>
+  <data name="Panel_CleanupNoneHint" xml:space="preserve"><value>No Windows.old, no sizeable caches, no Recycle Bin or Downloads with a year of dust on them. Largest items on the left is the next place to look.</value></data>
+  <data name="Panel_CleanupMore" xml:space="preserve"><value>Also: {0}</value></data>
+  <data name="Panel_TimelineSummary" xml:space="preserve"><value>{0} has not been touched in over a year. Hover a month to see it on the map, click to filter.</value></data>
+  <data name="Panel_TimelineMonth" xml:space="preserve"><value>{0}: {1} in {2:N0} files</value></data>
+  <data name="Panel_TimelineFirst" xml:space="preserve"><value> (and everything older)</value></data>
+  <data name="Panel_TimelineOldest" xml:space="preserve"><value>{0} and older</value></data>
+  <data name="Age_ThisMonth" xml:space="preserve"><value>This month</value></data>
+  <data name="Age_ThisYear" xml:space="preserve"><value>This year</value></data>
+  <data name="Age_OneToThree" xml:space="preserve"><value>1 to 3 years</value></data>
+  <data name="Age_Older" xml:space="preserve"><value>Older</value></data>
+  <data name="Cleanup_Show" xml:space="preserve"><value>Show</value></data>
+  <data name="Cleanup_Empty" xml:space="preserve"><value>Empty</value></data>
+  <data name="Cleanup_Review" xml:space="preserve"><value>Review</value></data>
+  <data name="Cleanup_HowTo" xml:space="preserve"><value>How to</value></data>
+  <data name="Cleanup_WindowsOld" xml:space="preserve"><value>Windows.old</value></data>
+  <data name="Cleanup_WindowsOld_Note" xml:space="preserve"><value>Left by a Windows feature update. Windows removes it itself after 10 days; this one is still here.</value></data>
+  <data name="Cleanup_RecycleBin" xml:space="preserve"><value>Recycle Bin</value></data>
+  <data name="Cleanup_RecycleBin_Note" xml:space="preserve"><value>What you have already deleted. Emptying it is final; Windows asks first.</value></data>
+  <data name="Cleanup_SystemFiles" xml:space="preserve"><value>Hibernation and paging files</value></data>
+  <data name="Cleanup_SystemFiles_Note" xml:space="preserve"><value>hiberfil.sys, pagefile.sys and swapfile.sys. Windows manages them; SpaceSharp will not touch them.</value></data>
+  <data name="Cleanup_SystemFiles_HowTo" xml:space="preserve"><value>hiberfil.sys holds memory for hibernation and fast startup. To free it, open an administrator command prompt and run: powercfg /hibernate off
+
+pagefile.sys and swapfile.sys are virtual memory. Their size is set under System › Advanced system settings › Performance › Virtual memory. Leaving them to Windows is the safe choice.</value></data>
+  <data name="Cleanup_Temp" xml:space="preserve"><value>Temporary files</value></data>
+  <data name="Cleanup_Temp_Note" xml:space="preserve"><value>{0:N0} Temp folders, {1:N0} files. Programs are supposed to clean up after themselves; many do not.</value></data>
+  <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Package caches</value></data>
+  <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} caches (npm, pnpm, NuGet, pip, Cargo, Gradle and the like), {1:N0} files. They are re-downloaded when needed.</value></data>
+  <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Browser caches</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cache folders, {1:N0} files. Pages load a little slower the first time after.</value></data>
+  <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shader caches</value></data>
+  <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} folders, {1:N0} files. Games and drivers rebuild them on the next launch.</value></data>
+  <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update downloads</value></data>
+  <data name="Cleanup_WindowsUpdate_Note" xml:space="preserve"><value>Installers Windows Update has already applied. Windows fetches them again if it ever needs them.</value></data>
+  <data name="Cleanup_OldDownloads" xml:space="preserve"><value>Downloads, untouched for a year</value></data>
+  <data name="Cleanup_OldDownloads_Note" xml:space="preserve"><value>{0:N0} items in Downloads not changed in a year, mostly installers and archives. Review selects them on the map.</value></data>
+  <data name="Panel_Collapse" xml:space="preserve"><value>Collapse the panel to its tabs</value></data>
+  <data name="Panel_Expand" xml:space="preserve"><value>Expand the panel</value></data>
+  <data name="Cleanup_Emptied" xml:space="preserve"><value>Recycle Bin emptied, {0} freed.</value></data>
+  <data name="Cleanup_Recycle" xml:space="preserve"><value>Recycle</value></data>
+  <data name="Settings_BottomPanel" xml:space="preserve"><value>Show bottom panel</value></data>
+  <data name="Settings_BottomPanel_Desc" xml:space="preserve"><value>The panel under the map with space by type, what is safe to clear, and when files were last changed. Shortcut: B.</value></data>
+  <data name="Panel_BandTip" xml:space="preserve"><value>Filter the map to files last changed {0}</value></data>
+  <data name="Filter_ToggleTip" xml:space="preserve"><value>Show or hide the filter (Ctrl+F)</value></data>
+  <data name="Filter_ToggleCount" xml:space="preserve"><value>Filter · {0}</value></data>
+  <data name="Rail_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Rail_Size" xml:space="preserve"><value>Size</value></data>
+  <data name="Rail_Age" xml:space="preserve"><value>Age</value></data>
+  <data name="Rail_Show" xml:space="preserve"><value>Show</value></data>
+  <data name="Rail_Try" xml:space="preserve"><value>Try</value></data>
+  <data name="Rail_Any" xml:space="preserve"><value>any</value></data>
+  <data name="Rail_Over" xml:space="preserve"><value>over {0}</value></data>
+  <data name="Rail_Under" xml:space="preserve"><value>under {0}</value></data>
+  <data name="Rail_Untouched" xml:space="preserve"><value>untouched {0}</value></data>
+  <data name="Rail_Within" xml:space="preserve"><value>within {0}</value></data>
+  <data name="Rail_Files" xml:space="preserve"><value>files</value></data>
+  <data name="Rail_Folders" xml:space="preserve"><value>folders</value></data>
+  <data name="Drawer_ShareOfScan" xml:space="preserve"><value>share of scan</value></data>
+  <data name="Drawer_ClearAll" xml:space="preserve"><value>Clear all</value></data>
+  <data name="Settings_FilterLayout" xml:space="preserve"><value>Filter layout</value></data>
+  <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>A drawer over the right of the map with full controls (the default), or a rail under the path with one pill per condition. Ctrl+F opens either.</value></data>
+  <data name="FilterLayout_Rail" xml:space="preserve"><value>Rail under the path</value></data>
+  <data name="FilterLayout_Drawer" xml:space="preserve"><value>Drawer over the map</value></data>
+  <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Name or pattern, e.g. *.iso</value></data>
 </root>

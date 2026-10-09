@@ -7,15 +7,14 @@ internal static class TestTree
 {
     public static FsNode Dir(string name, FsNode? parent = null)
     {
-        string path = parent is null ? name : Path.Combine(parent.FullPath, name);
-        var dir = new FsNode(name, path, NodeKind.Directory, parent);
+        var dir = new FsNode(name, NodeKind.Directory, parent);
         parent?.Children.Add(dir);
         return dir;
     }
 
     public static FsNode File(FsNode parent, string name, long size, long? allocated = null, DateTime? modified = null)
     {
-        var file = new FsNode(name, Path.Combine(parent.FullPath, name), NodeKind.File, parent)
+        var file = new FsNode(name, NodeKind.File, parent)
         {
             Size = size,
             Allocated = allocated ?? size,

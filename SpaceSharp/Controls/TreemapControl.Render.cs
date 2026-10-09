@@ -21,75 +21,143 @@ public sealed partial class TreemapControl
         var family = new FontFamily(_fontFamily);
         NormalFace = new Typeface(family, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
         HeaderFace = new Typeface(family, FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
-        CaptionFace = new Typeface(family, FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
-        BoldFace = new Typeface(family, FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
     }
+
+    // ---- the grid color and the selection frame follow the shading settings
+    private Brush GridBrush = Frozen(new SolidColorBrush(DefaultGridColor));
+    private Pen SelectionPen = Frozen(new Pen(new SolidColorBrush(DefaultHighlightColor), 3));
 
     private void RebuildPens()
     {
-        BorderPen = _borderThickness <= 0 ? null : Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0xB0, 0x10, 0x10, 0x14)), _borderThickness));
-        FaintPen = _borderThickness <= 0 ? null : Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0x38, 0x00, 0x00, 0x00)), _borderThickness));
+        GridBrush = Frozen(new SolidColorBrush(_gridColor));
+        SelectionPen = Frozen(new Pen(Frozen(new SolidColorBrush(_highlightColor)), 3));
     }
 
     private static readonly Brush BackgroundBrush = Frozen(new SolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17)));
-    private static readonly Brush HeaderShade = Frozen(new SolidColorBrush(Color.FromArgb(0x30, 0x00, 0x00, 0x00)));
+    private static readonly Brush GroupShade = Frozen(new SolidColorBrush(Color.FromArgb(0x24, 0x00, 0x00, 0x00)));
+
+    // The title bar is a shade of the folder's own color, not a black overlay: a flat 27% black turned every
+    // nested bar on a pastel palette into the same muddy strip, and four stacked bars read as one dark block.
+    // Light fills get a bar 16% toward black, dark fills 16% toward white, so the bar belongs to its palette and
+    // each level of nesting keeps its own tint. A grid line under the bar does the separating.
+    private readonly Dictionary<Brush, Brush> _headerFills = new();
+
+    private Brush HeaderFill(Brush fill)
+    {
+        if (_headerFills.TryGetValue(fill, out var bar)) return bar;
+        var c = fill is SolidColorBrush s ? s.Color : Colors.Gray;
+        double luminance = 0.299 * c.R + 0.587 * c.G + 0.114 * c.B;
+        byte to = luminance > 96 ? (byte)0 : (byte)255;
+        double t = _titleBarTint / 100.0;
+        bar = Frozen(new SolidColorBrush(Color.FromRgb(
+            (byte)Math.Round(c.R + (to - c.R) * t),
+            (byte)Math.Round(c.G + (to - c.G) * t),
+            (byte)Math.Round(c.B + (to - c.B) * t))));
+        _headerFills[fill] = bar;
+        return bar;
+    }
+    private const double MinHeaderTextWidth = 18;   // below this the title bar stays blank
     private static readonly Brush TextBrush = Frozen(new SolidColorBrush(Color.FromRgb(0x14, 0x14, 0x18)));
     private static readonly Brush HoverFill = Frozen(new SolidColorBrush(Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF)));
-    private Pen? BorderPen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0xB0, 0x10, 0x10, 0x14)), 1));
     private static readonly Pen HoverPen = Frozen(new Pen(Brushes.White, 2));
     private static readonly Pen HoverOutlinePen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)), 4)); // keeps the hover frame visible on light fills
     private static readonly Brush FreeSpaceBrush = Frozen(new SolidColorBrush(Color.FromRgb(0x4E, 0x4E, 0x5A)));
-    // One relative-coordinate gradient works for every box: WPF stretches it to each rectangle's bounds.
-    // Classic's shading: a light top-left, a quiet middle, a slightly darker bottom-right. Kept gentle on purpose;
-    // the old version ran from white to near-black across the box and read as stripes when many boxes sat together.
-    private static readonly Brush CushionBrush = Frozen(new LinearGradientBrush(
-        new GradientStopCollection
-        {
-            new(Color.FromArgb(0x26, 0xFF, 0xFF, 0xFF), 0.0),
-            new(Color.FromArgb(0x08, 0xFF, 0xFF, 0xFF), 0.35),
-            new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.6),
-            new(Color.FromArgb(0x22, 0x00, 0x00, 0x00), 1.0)
-        }, new Point(0, 0), new Point(0.7, 1)));
-    private static readonly Brush CushionBrushLight = Frozen(new LinearGradientBrush(
-        new GradientStopCollection
-        {
-            new(Color.FromArgb(0x16, 0xFF, 0xFF, 0xFF), 0.0),
-            new(Color.FromArgb(0x00, 0x80, 0x80, 0x80), 0.55),
-            new(Color.FromArgb(0x10, 0x00, 0x00, 0x00), 1.0)
-        }, new Point(0, 0), new Point(0.7, 1)));
-    private static readonly Pen SelectionPen = Frozen(new Pen(new SolidColorBrush(Color.FromRgb(0xF5, 0xB8, 0x2E)), 3));
 
     private readonly Dictionary<Brush, Brush> _dimmed = new();
-    private readonly Dictionary<(Brush, int), Brush> _tints = new();   // style-specific shades of palette brushes
 
     private static readonly Pen LightHaloPen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0xB8, 0xFF, 0xFF, 0xFF)), 3) { LineJoin = PenLineJoin.Round });
     private static readonly Pen DarkHaloPen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0xB8, 0x00, 0x00, 0x00)), 3) { LineJoin = PenLineJoin.Round });
 
-    // =============================================================== drawing
+    // ---- cushions
+    //
+    // One relative-coordinate gradient per depth level: WPF stretches it to each box, so every file at the same
+    // depth shares a brush. The gradient runs from the lit side to the shadow side along the light direction; a
+    // light stop fades out at the "height" and a dark stop grows toward the far edge. The strength is the
+    // cushion setting scaled down by (scale/100) for every level of nesting, so deep levels can be kept calm.
+    // Small boxes get the same gradient at reduced strength: a strong dark corner swallows a 12 px box.
+    private const int CushionLevels = 16;
+    private readonly Brush?[] _cushions = new Brush?[CushionLevels];
+    private readonly Brush?[] _cushionsSmall = new Brush?[CushionLevels];
 
-    private Pen? FaintPen = Frozen(new Pen(new SolidColorBrush(Color.FromArgb(0x38, 0x00, 0x00, 0x00)), 1));
-    private static readonly Brush CardShadowNear = Frozen(new SolidColorBrush(Color.FromArgb(0x22, 0x00, 0x00, 0x00)));
-    private static readonly Brush CardShadowFar = Frozen(new SolidColorBrush(Color.FromArgb(0x16, 0x00, 0x00, 0x00)));
-    private static readonly Brush SoftSheen = Frozen(new LinearGradientBrush(
-        new GradientStopCollection
+    private void RebuildCushions()
+    {
+        for (int depth = 0; depth < CushionLevels; depth++)
         {
-            new(Color.FromArgb(0x2E, 0xFF, 0xFF, 0xFF), 0.0),
-            new(Color.FromArgb(0x1A, 0x00, 0x00, 0x00), 1.0)
-        }, new Point(0, 0), new Point(0, 1)));
-    private Typeface CaptionFace = new(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
-    private Typeface BoldFace = new(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
+            double keep = Math.Pow(_shadingScale / 100.0, depth);
+            double strength = _cushion / 100.0 * keep;
+            _cushions[depth] = MakeCushion(strength);
+            _cushionsSmall[depth] = MakeCushion(strength * 0.55);
+        }
+    }
+
+    /// <summary>
+    /// The cushion gradient for one strength (0 = none), lit from the current light direction. Brightness tilts
+    /// it: at 50 the lit and shadow sides are balanced; lower grows the shadow and dims the whole box, higher
+    /// grows the highlight and lifts it. Only files carry a cushion, so folders keep their palette color.
+    /// </summary>
+    private Brush? MakeCushion(double strength)
+    {
+        double b = (_brightness - 50) / 50.0;                       // -1 … 1
+        if (strength <= 0.002 && Math.Abs(b) < 0.005) return null;
+        double hiA = Math.Clamp(0.55 * strength * (1 + 0.8 * b), 0, 1);
+        double loA = Math.Clamp(0.60 * strength * (1 - 0.8 * b), 0, 1);
+        // A flat wash through the middle of the box carries the brightness even where the cushion is weak.
+        double washA = Math.Abs(b) * 0.35;
+        Color wash = b >= 0 ? Color.FromArgb(A(washA), 0xFF, 0xFF, 0xFF) : Color.FromArgb(A(washA), 0x00, 0x00, 0x00);
+        double mid = 0.25 + _cushionHeight / 100.0 * 0.55;
+        var stops = new GradientStopCollection
+        {
+            new(Blend(Color.FromArgb(A(hiA), 0xFF, 0xFF, 0xFF), wash), 0.0),
+            new(wash, mid),
+            new(Blend(Color.FromArgb(A(loA), 0x00, 0x00, 0x00), wash), 1.0)
+        };
+
+        double len = Math.Sqrt(_lightX * _lightX + _lightY * _lightY);
+        if (len < 0.12)
+        {
+            // Light from straight ahead: an even cushion, bright in the middle, dark all around.
+            return Frozen(new RadialGradientBrush(stops) { Center = new Point(0.5, 0.5), GradientOrigin = new Point(0.5, 0.5), RadiusX = 0.75, RadiusY = 0.75 });
+        }
+        // Start on the lit side, end on the shadow side, through the center of the box.
+        double dx = _lightX / len, dy = _lightY / len;
+        return Frozen(new LinearGradientBrush(stops, new Point(0.5 + 0.5 * dx, 0.5 + 0.5 * dy), new Point(0.5 - 0.5 * dx, 0.5 - 0.5 * dy)));
+    }
+
+    private static byte A(double alpha) => (byte)Math.Round(255 * Math.Clamp(alpha, 0, 1));
+
+    /// <summary>The flat wash laid under a gradient stop: the stop's color over the wash, as one color.</summary>
+    private static Color Blend(Color over, Color under)
+    {
+        double ao = over.A / 255.0, au = under.A / 255.0;
+        double a = ao + au * (1 - ao);
+        if (a <= 0) return Colors.Transparent;
+        byte Ch(byte o, byte u) => (byte)Math.Round((o * ao + u * au * (1 - ao)) / a);
+        return Color.FromArgb(A(a), Ch(over.R, under.R), Ch(over.G, under.G), Ch(over.B, under.B));
+    }
+
+    // =============================================================== drawing
 
     private void DrawItem(DrawingContext dc, TreemapItem item, double pixelsPerDip)
     {
         var node = item.Node;
-        var (gap, radius) = GapAndRadiusFor(item);
+        double gap = GapFor(item);
         var full = item.Bounds;
         if (gap > 0)
         {
             if (full.Width <= gap || full.Height <= gap) return;
             full = new Rect(full.X + gap / 2, full.Y + gap / 2, full.Width - gap, full.Height - gap);
         }
-        var box = Rect.Intersect(full, _drawClip);
+        // Whole pixels. Squarify hands out fractional edges, and a stroke centered on one lands on a different
+        // pixel for each of the two boxes that share it; snapping first makes neighbors agree on where the seam is.
+        full = Snap(full);
+        if (full.IsEmpty) return;
+
+        // The grid is not a stroke around each box but a strip the box leaves on its right and bottom, so two
+        // neighbors share exactly one line and a box flush with its folder's edge leaves the folder's line alone.
+        double t = _showGrid ? Math.Min(_gridThickness, Math.Floor(Math.Min(full.Width, full.Height) / 2)) : 0;
+        double stripRight = item.FlushRight ? 0 : t, stripBottom = item.FlushBottom ? 0 : t;
+        var inner = new Rect(full.X, full.Y, full.Width - stripRight, full.Height - stripBottom);
+        var box = Rect.Intersect(inner, _drawClip);
         if (box.IsEmpty) return;
 
         // ---- fill
@@ -98,96 +166,60 @@ public sealed partial class TreemapControl
         else if (_colorMode == ColorMode.ByChange) fill = Palette.ChangeFill(node, _measure);
         else fill = _scheme.Fill(node, item.Depth, item.Branch, _colorMode);
 
-        if (node.IsDirectory && !node.IsFreeSpace)
-        {
-            fill = _mapStyle switch
-            {
-                MapStyle.Cards => Tint(fill, MapBackground is SolidColorBrush bg ? bg.Color : Color.FromRgb(0x0D, 0x11, 0x17), 0.22, 1),
-                MapStyle.Bands => Tint(fill, Colors.White, 0.22, 2),
-                MapStyle.Soft => Tint(fill, Colors.White, 0.15, 3),
-                _ => fill
-            };
-        }
-        else if (_mapStyle == MapStyle.Soft && !node.IsFreeSpace)
-        {
-            fill = Tint(fill, Colors.White, 0.10, 4);
-        }
-        else if (_mapStyle == MapStyle.Cards && !node.IsFreeSpace)
-        {
-            // Files are chips on a darker card: lighter than the card so the two read as different layers.
-            fill = Tint(fill, Colors.White, 0.16, 6);
-        }
-
         bool dimmed = _filterMatches is not null && !_filterMatches.Contains(node) && !_matchedGroups.Contains(node);
         if (dimmed) fill = Dim(fill);
-        var textBrush = dimmed ? DimText : _scheme.LabelFor(fill);
+        var textBrush = dimmed ? DimText : _fileText ?? _scheme.LabelFor(fill);
 
         // ---- body
-        if (_mapStyle == MapStyle.Cards && node.IsDirectory && !dimmed && Math.Min(box.Width, box.Height) >= 24)
-        {
-            // Small cards skip the shadow: at that size it only adds a dark halo around every box.
-            // Two soft layers read as a blur without the cost of a real one.
-            dc.DrawRoundedRectangle(CardShadowFar, null, new Rect(box.X - 2, box.Y + 1, box.Width + 4, box.Height + 4), radius + 2, radius + 2);
-            dc.DrawRoundedRectangle(CardShadowNear, null, new Rect(box.X - 1, box.Y + 1, box.Width + 2, box.Height + 2), radius + 1, radius + 1);
-        }
+        dc.DrawRectangle(fill, null, box);
 
-        if (radius > 0) dc.DrawRoundedRectangle(fill, null, box, radius, radius);
-        else dc.DrawRectangle(fill, null, box);
-
-        if (!dimmed)
+        // Only files and groups get the cushion. A folder is a frame around its children, and shading every
+        // frame stacked darkness at each level of nesting.
+        if (_cushionEnabled && !dimmed && !node.IsDirectory && !node.IsFreeSpace)
         {
-            // Classic is the shaded style, but only files and groups get the cushion. A folder shows as a frame
-            // around its children, and shading every frame stacked darkness at each level of nesting; small
-            // boxes get a lighter cushion so the dark corner does not swallow them.
-            if (_mapStyle == MapStyle.Classic && !node.IsDirectory)
-                dc.DrawRectangle(Math.Min(box.Width, box.Height) < 28 ? CushionBrushLight : CushionBrush, null, box);
-            if (_mapStyle == MapStyle.Soft) dc.DrawRoundedRectangle(SoftSheen, null, box, radius, radius);
+            var set = Math.Min(box.Width, box.Height) < 28 ? _cushionsSmall : _cushions;
+            var cushion = set[Math.Min(item.Depth, CushionLevels - 1)];
+            if (cushion is not null) dc.DrawRectangle(cushion, null, box);
         }
-        if (node.IsGroup)
-        {
-            if (radius > 0) dc.DrawRoundedRectangle(HeaderShade, null, box, radius, radius);
-            else dc.DrawRectangle(HeaderShade, null, box);
-        }
+        if (node.IsGroup) dc.DrawRectangle(GroupShade, null, box);
 
-        var pen = _mapStyle switch { MapStyle.Classic => BorderPen, MapStyle.Flat => FaintPen, MapStyle.Bands => FaintPen, _ => null };
-        if (pen is not null) dc.DrawRectangle(null, pen, box);
+        // ---- grid strips
+        if (stripRight > 0)
+        {
+            var strip = Rect.Intersect(new Rect(full.Right - stripRight, full.Y, stripRight, full.Height), _drawClip);
+            if (!strip.IsEmpty) dc.DrawRectangle(GridBrush, null, strip);
+        }
+        if (stripBottom > 0)
+        {
+            var strip = Rect.Intersect(new Rect(full.X, full.Bottom - stripBottom, full.Width - stripRight, stripBottom), _drawClip);
+            if (!strip.IsEmpty) dc.DrawRectangle(GridBrush, null, strip);
+        }
 
         // ---- folder title (a group that has room for its members gets one too)
         if (node.IsDirectory || (node.IsGroup && item.HasHeader))
         {
             if (!item.HasHeader) return;
-            double headerHeight = HeaderHeight;
-            var header = Rect.Intersect(new Rect(full.X, full.Y, full.Width, headerHeight), _drawClip);
+            var header = Rect.Intersect(new Rect(inner.X, inner.Y, inner.Width, HeaderHeight), _drawClip);
             if (header.IsEmpty) return;
             double x = Math.Max(header.X, 0);
 
-            switch (_mapStyle)
+            // The bar is drawn whenever the folder has room for one; the name only when it has room for a few
+            // letters, so a narrow frame shows a plain dark bar rather than a lone "…".
+            var barFill = dimmed ? fill : HeaderFill(fill);
+            dc.DrawRectangle(barFill, null, header);
+            if (_showGrid)
             {
-                case MapStyle.Classic:
-                    dc.DrawRectangle(HeaderShade, null, header);
-                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  ·  "), HeaderFace, textBrush, x + 4, full.Y + 1, header.Width - 8, HeaderAlign, pixelsPerDip);
-                    break;
-                case MapStyle.Bands:
-                {
-                    var band = dimmed ? fill : Tint(fill, Colors.Black, 0.35, 5);
-                    dc.DrawRectangle(band, null, header);
-                    DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  ·  "), BoldFace, dimmed ? DimText : _scheme.LabelFor(band), x + 5, full.Y + 2, header.Width - 8, HeaderAlign, pixelsPerDip);
-                    break;
-                }
-                case MapStyle.Cards:
-                    DrawLabel(dc, HeaderText(item, header.Width - 18, pixelsPerDip, "  ·  "), BoldFace, textBrush, x + 9, full.Y + 4, header.Width - 18, HeaderAlign, pixelsPerDip);
-                    break;
-                case MapStyle.Soft:
-                    DrawLabel(dc, HeaderText(item, header.Width - 18, pixelsPerDip, "  ·  "), HeaderFace, textBrush, x + 9, full.Y + 4, header.Width - 18, HeaderAlign, pixelsPerDip);
-                    break;
-                default: // Tiles, Flat: a small caption, no strip
-                    DrawLabel(dc, HeaderText(item, header.Width - 10, pixelsPerDip, "   ", upper: _mapStyle == MapStyle.Tiles), CaptionFace, textBrush, x + 6, full.Y + 2, header.Width - 10, HeaderAlign, pixelsPerDip, 10.5);
-                    break;
+                var rule = Rect.Intersect(new Rect(inner.X, inner.Y + HeaderHeight - 1, inner.Width, 1), _drawClip);
+                if (!rule.IsEmpty) dc.DrawRectangle(GridBrush, null, rule);
             }
+            var barText = dimmed ? DimText : _folderText ?? _scheme.LabelFor(barFill);
+            if (header.Width - 8 >= MinHeaderTextWidth)
+                DrawLabel(dc, HeaderText(item, header.Width - 8, pixelsPerDip, "  ·  "), HeaderFace, barText, x + 4, inner.Y + _titlePadding, header.Width - 8, HeaderAlign, pixelsPerDip);
             return;
         }
 
-        // ---- file label
+        // ---- file label (a group without a bar is labeled like a file, until its members are drawn on top of it)
+        if (node.IsGroup && _subdivided.Contains(node)) return;
         double line = 15 * _labelScale;
         if (box.Width < 44 * _labelScale || box.Height < line + 1) return;
         double textWidth = box.Width - 6;
@@ -204,36 +236,28 @@ public sealed partial class TreemapControl
         }
     }
 
-    /// <summary>A cached blend of a palette brush toward a color; the key separates different blends of the same brush.</summary>
-    private Brush Tint(Brush fill, Color toward, double t, int key)
+    /// <summary>The rectangle on whole device pixels; empty when rounding closes it.</summary>
+    private static Rect Snap(Rect r)
     {
-        if (t <= 0) return fill;
-        if (_tints.TryGetValue((fill, key), out var tinted)) return tinted;
-        var c = fill is SolidColorBrush s ? s.Color : Colors.Gray;
-        tinted = Frozen(new SolidColorBrush(Color.FromRgb(
-            (byte)Math.Round(c.R + (toward.R - c.R) * t),
-            (byte)Math.Round(c.G + (toward.G - c.G) * t),
-            (byte)Math.Round(c.B + (toward.B - c.B) * t))));
-        _tints[(fill, key)] = tinted;
-        return tinted;
+        double left = Math.Round(r.X), top = Math.Round(r.Y), right = Math.Round(r.Right), bottom = Math.Round(r.Bottom);
+        return right <= left || bottom <= top ? Rect.Empty : new Rect(left, top, right - left, bottom - top);
     }
 
     /// <summary>
     /// "Users › Alex › AppData  12 GB" for a collapsed chain. When that doesn't fit, leading folders
     /// are dropped ("… › AppData — 12 GB") so the deepest name, the one that matters, stays readable.
     /// </summary>
-    private string HeaderText(TreemapItem item, double maxWidth, double pixelsPerDip, string separator = "  —  ", bool upper = false)
+    private string HeaderText(TreemapItem item, double maxWidth, double pixelsPerDip, string separator = "  —  ")
     {
         var node = item.Node;
         string size = SizeFormatter.Format(node.SizeFor(_measure));
-        string Case(string text) => upper ? text.ToUpperInvariant() : text;
         string Tail()
         {
             string t = _folderShowSizes ? separator + size : string.Empty;
             if (_folderShowCounts && node.FileCount > 0) t += separator + Strings.Format("Group_FilesCount", node.FileCount);
             return t;
         }
-        if (item.ChainTop is null) return $"{Case(node.Name)}{Tail()}";
+        if (item.ChainTop is null) return $"{node.Name}{Tail()}";
 
         var names = new List<string>();
         for (var n = node; n is not null; n = n.Parent)
@@ -245,12 +269,12 @@ public sealed partial class TreemapControl
 
         for (int skip = 0; skip < names.Count; skip++)
         {
-            string path = Case(string.Join("  ›  ", names.Skip(skip)));
+            string path = string.Join("  ›  ", names.Skip(skip));
             string text = (skip > 0 ? "…  ›  " : "") + $"{path}{Tail()}";
             if (skip == names.Count - 1 || MeasureWidth(text, pixelsPerDip) <= maxWidth) return text;
         }
 
-        return $"{Case(node.Name)}{Tail()}";
+        return $"{node.Name}{Tail()}";
     }
 
     private TextAlignment HeaderAlign => _folderCenterNames ? TextAlignment.Center : TextAlignment.Left;
@@ -313,8 +337,8 @@ public sealed partial class TreemapControl
             var r = FrameRect(hovered.Bounds, HoverOutlinePen.Thickness / 2);
             if (!r.IsEmpty)
             {
-                Frame(dc, HoverFill, HoverOutlinePen, r);
-                Frame(dc, null, HoverPen, r);
+                dc.DrawRectangle(HoverFill, HoverOutlinePen, r);
+                dc.DrawRectangle(null, HoverPen, r);
             }
         }
 
@@ -322,18 +346,18 @@ public sealed partial class TreemapControl
         {
             if (!_index.TryGetValue(node, out var selected)) continue;
             var r = FrameRect(selected.Bounds, SelectionPen.Thickness / 2);
-            if (!r.IsEmpty) Frame(dc, null, SelectionPen, r);
+            if (!r.IsEmpty) dc.DrawRectangle(null, SelectionPen, r);
         }
     }
 
     /// <summary>
-    /// Where a hover or selection frame goes: the box as the style draws it (minus the style's gap), pulled
-    /// in by half the pen so the stroke stays inside the box instead of covering the neighbors' labels.
+    /// Where a hover or selection frame goes: the box as drawn (minus the padding gap), pulled in by half the
+    /// pen so the stroke stays inside the box instead of covering the neighbors' labels.
     /// </summary>
     private Rect FrameRect(Rect bounds, double inset)
     {
         var r = bounds;
-        double gap = GapAndRadiusFor(bounds, Math.Min(bounds.Width, bounds.Height)).Gap;
+        double gap = GapFor(Math.Min(bounds.Width, bounds.Height));
         if (gap > 0)
         {
             if (r.Width <= gap || r.Height <= gap) return Rect.Empty;
@@ -344,24 +368,19 @@ public sealed partial class TreemapControl
         return Rect.Intersect(r, _drawClip);
     }
 
-    /// <summary>
-    /// The style's gap and corner radius, scaled down for small boxes. A full 3 px gap and 4 px radius on a
-    /// 10 px box turns it into a dot, and a folder of a thousand equal files into a polka-dot texture; so
-    /// below about 40 px the gap shrinks toward a hairline, then to nothing, and the radius stays under a
-    /// sixth of the box's shorter side.
-    /// </summary>
+    /// <summary>Median shorter side of each folder's laid-out children, so neighbors get the same gap.</summary>
     private readonly Dictionary<FsNode, double> _siblingSide = new();
 
     /// <summary>
-    /// Geometry for one item. The gap is decided per folder from the typical size of its children, so
-    /// neighbors never get different gaps and the seams between them stay straight; the radius follows
-    /// the box itself.
+    /// The padding gap for one item, decided per folder from the typical size of its children so neighbors
+    /// never get different gaps and the seams between them stay straight.
     /// </summary>
-    private (double Gap, double Radius) GapAndRadiusFor(TreemapItem item)
+    private double GapFor(TreemapItem item)
     {
+        if (_padding <= 0) return 0;
         double own = Math.Min(item.Bounds.Width, item.Bounds.Height);
         var parent = item.Node.Parent;
-        if (parent is null) return GapAndRadiusFor(item.Bounds, own);
+        if (parent is null) return GapFor(own);
 
         if (!_siblingSide.TryGetValue(parent, out double typical))
         {
@@ -376,36 +395,23 @@ public sealed partial class TreemapControl
             typical = sides.Count == 0 ? own : sides[sides.Count / 2];
             _siblingSide[parent] = typical;
         }
-        var (gap, _) = GapAndRadiusFor(item.Bounds, typical);
-        return (gap, GapAndRadiusFor(item.Bounds, own).Radius);
+        return GapFor(typical);
     }
 
-    private (double Gap, double Radius) GapAndRadiusFor(Rect bounds, double side)
+    /// <summary>
+    /// The padding gap scaled down for small boxes: a full 6 px gap on a 10 px box turns it into a dot, and a
+    /// folder of a thousand equal files into a polka-dot texture, so below about 40 px the gap shrinks toward a
+    /// hairline, then to nothing.
+    /// </summary>
+    private double GapFor(double side)
     {
-        double gap = Gap, radius = Radius;
-        if (gap > 0)
-        {
-            if (side < 6) gap = 0;
-            else if (side < 12) gap = Math.Min(gap, 1);
-            else if (side < 40) gap = Math.Min(gap, 1 + (side - 12) / 28 * (gap - 1));
-        }
-        if (radius > 0)
-        {
-            // A sixth of the side keeps a 16 px box square-ish (under 3 px); the full radius returns at 24 px and up.
-            double inner = side - gap;
-            radius = inner < 10 ? 0 : Math.Min(radius, inner / 6);
-        }
-        return (gap, radius);
+        double gap = Gap;
+        if (gap <= 0) return 0;
+        if (side < 6) return 0;
+        if (side < 12) return Math.Min(gap, 1);
+        if (side < 40) return Math.Min(gap, 1 + (side - 12) / 28 * (gap - 1));
+        return gap;
     }
-
-    /// <summary>Draws a frame with the current style's corner radius, so rounded styles get rounded frames.</summary>
-    private void Frame(DrawingContext dc, Brush? fill, Pen pen, Rect r)
-    {
-        double radius = Math.Max(0, Math.Min(Radius, Math.Min(r.Width, r.Height) / 6) - pen.Thickness / 2);
-        if (radius > 0) dc.DrawRoundedRectangle(fill, pen, r, radius, radius);
-        else dc.DrawRectangle(fill, pen, r);
-    }
-
 
     private static T Frozen<T>(T freezable) where T : Freezable
     {

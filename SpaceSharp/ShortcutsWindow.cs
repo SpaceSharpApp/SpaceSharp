@@ -22,7 +22,7 @@ public sealed class ShortcutsWindow : Window
         }),
         (Strings.Get("Keys_View"), new[]
         {
-            ("Ctrl+F", Strings.Get("Key_Filter")), ("S", Strings.Get("Key_NextStyle")), ("K", Strings.Get("Key_NextColor")), ("G", Strings.Get("Key_Grouping")),
+            ("Ctrl+F", Strings.Get("Key_Filter")), ("K", Strings.Get("Key_NextColor")), ("B", Strings.Get("Key_BottomPanel")), ("G", Strings.Get("Key_Grouping")),
             ("L", Strings.Get("Key_Panel")), ("Ctrl+S", Strings.Get("Key_SaveScan")), ("Ctrl+O", Strings.Get("Key_OpenScan")), ("Esc", Strings.Get("Key_CancelScan")), ("Ctrl+,", Strings.Get("Key_Settings"))
         })
     };

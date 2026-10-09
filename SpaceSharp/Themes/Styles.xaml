@@ -177,8 +177,10 @@
     <!-- ============================================================ menus -->
     <Style x:Key="MenuIcon" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
     </Style>
 
     <Style TargetType="ContextMenu">
@@ -191,9 +193,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ContextMenu">
                     <Border Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}"
-                            BorderThickness="1" CornerRadius="8" Padding="4" Margin="0,0,12,12">
+                            BorderThickness="1" CornerRadius="10" Padding="6" Margin="0,0,14,14">
                         <Border.Effect>
-                            <DropShadowEffect BlurRadius="16" ShadowDepth="4" Opacity="0.5" Color="Black" />
+                            <DropShadowEffect BlurRadius="22" ShadowDepth="6" Opacity="0.45" Color="Black" />
                         </Border.Effect>
                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                     </Border>
@@ -209,29 +211,29 @@
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
                     <Grid>
-                        <Border x:Name="Bd" Background="Transparent" CornerRadius="5" Padding="8,7" MinWidth="230">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="6" Padding="10,0" MinWidth="250" Height="32">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="32" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter ContentSource="Icon" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <ContentPresenter ContentSource="Icon" Width="22" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                 <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True"
                                                   VerticalAlignment="Center" />
-                                <TextBlock x:Name="Gesture" Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="24,0,2,0"
-                                           Foreground="{DynamicResource TextDim}" FontSize="12" VerticalAlignment="Center" />
+                                <TextBlock x:Name="Gesture" Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="20,0,0,0"
+                                           Foreground="{DynamicResource TextDim}" Opacity="0.8" FontSize="11.5" VerticalAlignment="Center" />
                                 <TextBlock x:Name="Chevron" Grid.Column="2" Text="&#xE76C;" FontFamily="{StaticResource IconFont}" FontSize="10"
-                                           Margin="24,0,2,0" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Visibility="Collapsed" />
+                                           Margin="20,0,0,0" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Visibility="Collapsed" />
                             </Grid>
                         </Border>
                         <!-- submenu: opens to the right, same look as the menu itself -->
                         <Popup x:Name="PART_Popup" Placement="Right" HorizontalOffset="-4" VerticalOffset="-5" AllowsTransparency="True"
                                IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Focusable="False" PopupAnimation="Fade">
                             <Border Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                                    CornerRadius="8" Padding="4" Margin="0,0,12,12">
+                                    CornerRadius="10" Padding="6" Margin="0,0,14,14">
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="16" ShadowDepth="4" Opacity="0.5" Color="Black" />
+                                    <DropShadowEffect BlurRadius="22" ShadowDepth="6" Opacity="0.45" Color="Black" />
                                 </Border.Effect>
                                 <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                             </Border>
@@ -254,11 +256,77 @@
         </Setter>
     </Style>
 
+    <!-- The map menu's first row: Inspect, taller and on the control tone, with the clicked item's name and size as a sub-line. -->
+    <Style x:Key="PrimaryMenuItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border x:Name="Bd" Background="{DynamicResource Control}" CornerRadius="6" Padding="10,0" MinWidth="250" Height="44">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter ContentSource="Icon" Width="22" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center" />
+                            <TextBlock Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="20,0,0,0"
+                                       Foreground="{DynamicResource TextDim}" Opacity="0.8" FontSize="11.5" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ControlHover}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.35" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- The map menu's last row: Move to Recycle Bin, set apart in a footer on the panel tone with a red-tinted hover. -->
+    <Style x:Key="DangerMenuItem" TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+        <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0"
+                            CornerRadius="0,0,9,9" Padding="6" Margin="-6,4,-6,-6">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="6" Padding="10,0" MinWidth="250" Height="32">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="32" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter ContentSource="Icon" Width="22" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <ContentPresenter Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="20,0,0,0"
+                                           Foreground="{DynamicResource TextDim}" Opacity="0.8" FontSize="11.5" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#24FF7070" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.35" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Separator">
-                    <Border Height="1" Margin="8,4" Background="{DynamicResource Stroke}" />
+                    <Border Height="1" Margin="10,5" Background="{DynamicResource Stroke}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -460,6 +528,20 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- filter rail pills and the path row's Filter button -->
+    <Style x:Key="PillButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="Background" Value="{DynamicResource Control}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style x:Key="AccentOutlineButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
+        <Setter Property="Background" Value="{DynamicResource Control}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+        <Setter Property="BorderThickness" Value="1" />
     </Style>
 
     <Style x:Key="TabButton" TargetType="Button" BasedOn="{StaticResource ToolButton}">
