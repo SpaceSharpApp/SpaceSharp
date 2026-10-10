@@ -79,6 +79,15 @@
   .hero .facts { color: var(--hint); font-size: 14.5px; line-height: 1.6; }
   .hero .facts b { color: var(--muted); font-weight: 600; }
   @media (max-width: 860px) { .hero .hero-row { grid-template-columns: 1fr; gap: 24px; align-items: start; } }
+  @media (max-width: 560px) {
+    .hero { padding-top: 48px; }
+    .hero .cta .btn { flex: 1 1 auto; justify-content: center; }
+    section { padding-top: 72px; }
+    footer { margin-top: 72px; }
+    .new .card, .dl a { padding: 20px; }
+    .faq summary { font-size: 17px; padding: 16px 0; }
+  }
+  a, button { -webkit-tap-highlight-color: transparent; }
 
   .preview { margin-top: 48px; }
   .preview .frame { position: relative; border-radius: 16px; padding: 10px; background: var(--bg-2); border: 1px solid var(--line); }
@@ -97,6 +106,32 @@
   .preview .caption { padding: 12px 6px 0; color: var(--hint); font-size: 13.5px; }
   .preview .caption b { color: var(--muted); font-weight: 600; }
   @media (max-width: 560px) { .preview .frame { padding: 5px; border-radius: 10px; } .console { padding: 12px; } }
+
+  /* phones and small tablets: a gallery of pictures instead of the live window (nothing to hover, no room for it) */
+  .gallery { display: none; margin-top: 36px; }
+  .gallery .strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 24px; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin: 0 -24px; padding: 0 24px 4px; }
+  .gallery .strip::-webkit-scrollbar { display: none; }
+  .gallery .strip::after { content: ""; flex: 0 0 12px; }
+  .gallery .slide { flex: 0 0 calc(100% - 28px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 10px; }
+  .gallery .slide a { display: block; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); -webkit-tap-highlight-color: transparent; }
+  .gallery .slide img { display: block; width: 100%; height: auto; aspect-ratio: 2400 / 1352; }
+  .gallery .slide figcaption { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .gallery .slide figcaption b { color: var(--ink); font-weight: 600; }
+  .gallery .dots { display: flex; justify-content: center; gap: 7px; margin-top: 12px; }
+  .gallery .dots button { width: 8px; height: 8px; padding: 0; border-radius: 50%; border: 0; background: var(--line-strong); cursor: pointer; }
+  .gallery .dots button[aria-current="true"] { background: var(--amber); width: 20px; border-radius: 4px; }
+  .gallery .caption { padding: 10px 0 0; color: var(--hint); font-size: 13.5px; text-align: center; }
+  body.touch .preview { display: none; }
+  body.touch .gallery { display: block; }
+  .only-touch { display: none; } body.touch .only-touch { display: initial; } body.touch .only-wide { display: none; }
+
+  /* "you are on a phone" card above the downloads */
+  .phone-note { display: none; margin-bottom: 18px; padding: 18px 20px; border-radius: var(--radius); border: 1px solid var(--line-strong); background: var(--panel); }
+  .phone-note p { color: var(--muted); font-size: 15px; }
+  .phone-note p b { color: var(--ink); font-weight: 600; }
+  .phone-note .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .phone-note .btn { height: 40px; padding: 0 16px; font-size: 14px; }
+  body.touch .phone-note { display: block; }
 
   section { padding: 104px 0 0; }
   section .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: end; margin-bottom: 40px; }
@@ -129,6 +164,15 @@
   .compare td.yes { color: var(--ink); } .compare td.no { color: var(--hint); }
   .compare td:nth-child(2) { color: var(--ink); font-weight: 600; }
   .compare-wrap { overflow-x: auto; }
+  @media (max-width: 640px) {
+    /* one card per feature: the name on top, the four products as a two-by-two grid */
+    .compare, .compare tbody, .compare tr, .compare th, .compare td { display: block; }
+    .compare thead { display: none; }
+    .compare tr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .compare tbody th { grid-column: 1 / -1; padding: 0; border: 0; color: var(--ink); font-size: 16px; }
+    .compare td { padding: 0; border: 0; font-size: 14.5px; }
+    .compare td::before { content: attr(data-p); display: block; font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--hint); margin-bottom: 1px; }
+  }
   .note { color: var(--hint); font-size: 13.5px; margin-top: 14px; }
   .note a { color: var(--muted); text-decoration: underline; }
 
@@ -190,7 +234,7 @@
         <a class="btn" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.exe" data-track="download" data-file="exe">Portable exe</a>
       </div>
     </div>
-    <p class="facts"><b>Free and open source</b>, MIT license. Windows 10 and 11, 64-bit. No account, no telemetry, nothing installed unless you pick the installer. The window below is the real interface drawn in your browser with sample data: hover it, click it, switch scenes.</p>
+    <p class="facts"><b>Free and open source</b>, MIT license. Windows 10 and 11, 64-bit. No account, no telemetry, nothing installed unless you pick the installer. <span class="only-wide">The window below is the real interface drawn in your browser with sample data: hover it, click it, switch scenes.</span><span class="only-touch">The pictures below are the real interface with sample data; swipe through them.</span></p>
   </div>
 
   <div class="preview" id="preview">
@@ -205,6 +249,21 @@
       </div>
     </div>
     <p class="caption"><b>Try it:</b> hover the map for the status line, click a box to select it. Names are sample data.</p>
+  </div>
+
+  <div class="gallery" id="gallery" aria-label="Screenshots">
+    <div class="strip" id="strip">
+      <figure class="slide" data-scene="none"><a href="screenshot.png" target="_blank" rel="noopener"><img src="m/screenshot.webp" alt="SpaceSharp showing a drive as a treemap, with the panel under the map open" width="1200" height="676" fetchpriority="high"></a><figcaption><b>The map.</b> Every folder a frame, every file a box sized by its space. Under it, the drive by type and what is safe to clear.</figcaption></figure>
+      <figure class="slide" data-scene="drawer"><a href="shot-filter.png" target="_blank" rel="noopener"><img src="m/shot-filter.webp" alt="The filter drawer with the matches lit and everything else dimmed" width="1200" height="676" loading="lazy"></a><figcaption><b>The filter.</b> Check types, set size and age, and the map dims to what matches.</figcaption></figure>
+      <figure class="slide" data-scene="menu"><a href="shot-menu.png" target="_blank" rel="noopener"><img src="m/shot-menu.webp" alt="The right-click menu on a file" width="1200" height="676" loading="lazy"></a><figcaption><b>Right-click.</b> Inspect, open, filter to this type, or send it to the Recycle Bin.</figcaption></figure>
+      <figure class="slide" data-scene="compare"><a href="shot-change.png" target="_blank" rel="noopener"><img src="m/shot-change.webp" alt="Color by change: what grew, shrank or appeared since the last scan" width="1200" height="676" loading="lazy"></a><figcaption><b>Since last scan.</b> Grew warm, shrank cool, new in amber.</figcaption></figure>
+      <figure class="slide" data-scene="inspect"><a href="shot-inspect.png" target="_blank" rel="noopener"><img src="m/shot-inspect.webp" alt="The Inspect window for a folder" width="1200" height="676" loading="lazy"></a><figcaption><b>Inspect.</b> Where the space is, by type and by age.</figcaption></figure>
+      <figure class="slide" data-scene="settings"><a href="shot-settings.png" target="_blank" rel="noopener"><img src="m/shot-settings.webp" alt="Settings, Treemap page, with the preview map following the sliders" width="1200" height="676" loading="lazy"></a><figcaption><b>Shading.</b> Every slider shows in the preview as you drag it.</figcaption></figure>
+      <figure class="slide" data-scene="light"><a href="shot-light.png" target="_blank" rel="noopener"><img src="m/shot-light.webp" alt="SpaceSharp in the light theme" width="1200" height="676" loading="lazy"></a><figcaption><b>Light theme.</b> Five looks for each theme; the palette is separate.</figcaption></figure>
+      <figure class="slide" data-scene="start"><a href="shot-start.png" target="_blank" rel="noopener"><img src="m/shot-start.webp" alt="The start screen with drives and recent scans" width="1200" height="676" loading="lazy"></a><figcaption><b>Start.</b> Pick a drive, or reopen yesterday's map.</figcaption></figure>
+    </div>
+    <div class="dots" id="dots" role="tablist" aria-label="Pick a screenshot"></div>
+    <p class="caption">Tap a picture to see it full size. Names are sample data.</p>
   </div>
 </div></header>
 
@@ -269,6 +328,14 @@
     <h2>Download</h2>
     <p class="lede">One file if you want nothing installed. An installer if you want updates to arrive on their own.</p>
   </div>
+  <div class="phone-note" id="phoneNote">
+    <p><b>On a phone?</b> SpaceSharp is a Windows app. Send yourself the link and open it on the PC.</p>
+    <div class="row">
+      <button class="btn" type="button" id="shareLink">Share the link</button>
+      <button class="btn" type="button" id="copyLink">Copy the link</button>
+      <a class="btn" href="mailto:?subject=SpaceSharp&body=See%20where%20your%20disk%20space%20went%3A%20https%3A%2F%2Fclearanceclarence.github.io%2FSpaceSharp" data-track="phone_email">Email it to me</a>
+    </div>
+  </div>
   <div class="dl">
     <a class="main" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi" data-track="download" data-file="msi">
       <h3>Installer</h3><span class="file">SpaceSharp-win-x64.msi</span>
@@ -329,42 +396,76 @@
   winget.addEventListener("click", copyWinget);
   winget.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); copyWinget(); } });
 
-  // ---- the live window
+  // ---- on a phone: the gallery; otherwise the live window
+  const touchOnly = matchMedia("(max-width: 760px)").matches || (matchMedia("(hover: none)").matches && innerWidth < 1024);
   const pageDark = !matchMedia("(prefers-color-scheme: light)").matches;
-  const api = SpaceSharpMock.mount(document.getElementById("host"), { theme: pageDark ? "dark" : "light", scene: "none", w: 1600, h: 900 });
-  const groups = {
-    scene: [["none", "Map"], ["hover", "Hover"], ["menu", "Right-click"], ["drawer", "Filter drawer"], ["rail", "Filter rail"], ["panel", "By type"], ["cleanup", "Safe to clear"], ["timeline", "When changed"], ["inspect", "Inspect"], ["zoomed", "Zoomed in"], ["compare", "Compare"], ["settings", "Settings"], ["start", "Start"]],
-    mode: api.modes,
-    shading: api.shadings.map(n => [n, n]),
-    theme: [["dark", "Dark"], ["light", "Light"]]
-  };
-  for (const [key, options] of Object.entries(groups)) {
-    const host = document.querySelector(`.console .opts[data-key="${key}"]`);
-    for (const [value, label] of options) {
-      const b = document.createElement("button"); b.type = "button"; b.dataset.value = String(value); b.textContent = label;
-      b.addEventListener("click", () => { api.set(key, value); sync(); track("preview_" + key, { value: String(label) }); });
-      host.appendChild(b);
+  const sceneLinks = document.querySelectorAll(".new [data-scene]");
+  if (touchOnly) {
+    document.body.classList.add("touch");
+    const strip = document.getElementById("strip"), slides = [...strip.children], dots = document.getElementById("dots");
+    const left = sl => sl.offsetLeft - strip.offsetLeft - 24; // the strip's own padding
+    slides.forEach((sl, i) => {
+      const b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-label", `Screenshot ${i + 1}`);
+      b.addEventListener("click", () => strip.scrollTo({ left: left(sl), behavior: "smooth" }));
+      dots.appendChild(b);
+    });
+    const current = () => { const x = strip.scrollLeft + strip.clientWidth / 2; let best = 0; slides.forEach((sl, i) => { if (left(sl) < x) best = i; }); return best; };
+    const mark = () => { const c = current(); [...dots.children].forEach((d, i) => d.setAttribute("aria-current", String(i === c))); };
+    let st; strip.addEventListener("scroll", () => { clearTimeout(st); st = setTimeout(mark, 60); }, { passive: true }); mark();
+    // the "see it" links in the cards jump to the matching picture; the panel lives on the first one
+    const slideFor = { settings: "settings", drawer: "drawer", cleanup: "none" };
+    sceneLinks.forEach(a => a.addEventListener("click", e => {
+      e.preventDefault(); const target = slides.find(sl => sl.dataset.scene === (slideFor[a.dataset.scene] || a.dataset.scene)) || slides[0];
+      document.getElementById("gallery").scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => strip.scrollTo({ left: left(target), behavior: "smooth" }), 350);
+      track("gallery_scene", { value: a.dataset.scene });
+    }));
+    // send the link to the PC
+    const url = "https://clearanceclarence.github.io/SpaceSharp";
+    const share = document.getElementById("shareLink"), copy = document.getElementById("copyLink");
+    if (navigator.share) share.addEventListener("click", () => { navigator.share({ title: "SpaceSharp", text: "See where your disk space went.", url }).catch(() => {}); track("phone_share"); });
+    else share.hidden = true;
+    copy.addEventListener("click", async () => { try { await navigator.clipboard.writeText(url); toast("Link copied"); } catch { toast(url); } track("phone_copy"); });
+  } else {
+    const api = SpaceSharpMock.mount(document.getElementById("host"), { theme: pageDark ? "dark" : "light", scene: "none", w: 1600, h: 900 });
+    const groups = {
+      scene: [["none", "Map"], ["hover", "Hover"], ["menu", "Right-click"], ["drawer", "Filter drawer"], ["rail", "Filter rail"], ["panel", "By type"], ["cleanup", "Safe to clear"], ["timeline", "When changed"], ["inspect", "Inspect"], ["zoomed", "Zoomed in"], ["compare", "Compare"], ["settings", "Settings"], ["start", "Start"]],
+      mode: api.modes,
+      shading: api.shadings.map(n => [n, n]),
+      theme: [["dark", "Dark"], ["light", "Light"]]
+    };
+    for (const [key, options] of Object.entries(groups)) {
+      const host = document.querySelector(`.console .opts[data-key="${key}"]`);
+      for (const [value, label] of options) {
+        const b = document.createElement("button"); b.type = "button"; b.dataset.value = String(value); b.textContent = label;
+        b.addEventListener("click", () => { api.set(key, value); sync(); track("preview_" + key, { value: String(label) }); });
+        host.appendChild(b);
+      }
     }
-  }
-  const paletteSel = document.getElementById("paletteSel");
-  paletteSel.addEventListener("change", () => { api.set("palette", paletteSel.value); track("preview_palette", { value: paletteSel.value }); });
-  function sync() {
-    for (const key of Object.keys(groups)) document.querySelectorAll(`.console .opts[data-key="${key}"] button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.value === String(api.state[key]))));
-    paletteSel.innerHTML = ""; for (const n of api.palettes(api.state.theme)) paletteSel.add(new Option(n, n)); paletteSel.value = api.state.palette;
-  }
-  sync();
-  document.querySelectorAll("[data-scene]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); api.set("scene", a.dataset.scene); sync(); document.getElementById("preview").scrollIntoView({ behavior: "smooth", block: "start" }); track("preview_scene", { value: a.dataset.scene }); }));
+    const paletteSel = document.getElementById("paletteSel");
+    paletteSel.addEventListener("change", () => { api.set("palette", paletteSel.value); track("preview_palette", { value: paletteSel.value }); });
+    function sync() {
+      for (const key of Object.keys(groups)) document.querySelectorAll(`.console .opts[data-key="${key}"] button`).forEach(b => b.setAttribute("aria-pressed", String(b.dataset.value === String(api.state[key]))));
+      paletteSel.innerHTML = ""; for (const n of api.palettes(api.state.theme)) paletteSel.add(new Option(n, n)); paletteSel.value = api.state.palette;
+    }
+    sync();
+    sceneLinks.forEach(a => a.addEventListener("click", e => { e.preventDefault(); api.set("scene", a.dataset.scene); sync(); document.getElementById("preview").scrollIntoView({ behavior: "smooth", block: "start" }); track("preview_scene", { value: a.dataset.scene }); }));
 
-  function rescale() {
-    // The frame's clientWidth includes its padding; the window has to fit inside the padding.
-    const inner = document.getElementById("fitInner"), frame = inner.parentElement, cs = getComputedStyle(frame);
-    const avail = frame.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), s = Math.min(1, avail / api.state.w);
-    document.getElementById("stage").style.transform = `scale(${s})`;
-    inner.style.width = api.state.w * s + "px"; inner.style.height = api.state.h * s + "px";
-    // On a narrow screen the side panel would shrink the map to nothing; show the map alone.
-    const narrow = avail < 760; if (api.state.side === narrow) api.set("side", !narrow);
+    function rescale() {
+      // The frame's clientWidth includes its padding; the window has to fit inside the padding.
+      const inner = document.getElementById("fitInner"), frame = inner.parentElement, cs = getComputedStyle(frame);
+      const avail = frame.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), s = Math.min(1, avail / api.state.w);
+      document.getElementById("stage").style.transform = `scale(${s})`;
+      inner.style.width = api.state.w * s + "px"; inner.style.height = api.state.h * s + "px";
+      // On a narrow screen the side panel would shrink the map to nothing; show the map alone.
+      const narrow = avail < 760; if (api.state.side === narrow) api.set("side", !narrow);
+    }
+    rescale(); let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(rescale, 100); });
   }
-  rescale(); let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(rescale, 100); });
+
+  // the comparison table: each cell learns its column's name, for the stacked layout on narrow screens
+  const heads = [...document.querySelectorAll(".compare thead th")].map(th => th.textContent);
+  document.querySelectorAll(".compare tbody tr").forEach(tr => [...tr.children].forEach((c, i) => { if (c.tagName === "TD") c.dataset.p = heads[i]; }));
 })();
 </script>
 </body>
