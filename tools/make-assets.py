@@ -201,14 +201,39 @@ def make_ico(rel: str, sizes=(16, 20, 24, 32, 48, 64, 128, 256)):
     frames[-1].save(buf, "ICO", sizes=[(s, s) for s in sizes], append_images=frames[:-1])
     write(rel, buf.getvalue())
 
-def make_header(w=1280, h=360):
-    im = Image.new("RGBA", (w, h), GRAPHITE + (255,))
-    paste_mark(im, 150, ((w - 150) // 2, 44))
+def version_pill(d: ImageDraw.ImageDraw, x: int, y: int, px: int, label: str, ring: int = 0) -> int:
+    """An amber pill with the version, sized to go next to a wordmark of px. A ring in the ground color
+    separates it from whatever it sits on. Returns the end x."""
+    fpx = int(px * 0.46)
+    f = font(800, fpx)
+    pad = int(px * 0.32)
+    h = int(px * 0.72)
+    wdt = int(d.textlength(label, font=f)) + 2 * pad
+    if ring:
+        d.rounded_rectangle([x - ring, y - ring, x + wdt + ring, y + h + ring], radius=h // 2 + ring, fill=GRAPHITE)
+    d.rounded_rectangle([x, y, x + wdt, y + h], radius=h // 2, fill=AMBER)
+    bbox = f.getbbox(label)
+    d.text((x + pad, y + (h - (bbox[3] - bbox[1])) // 2 - bbox[1]), label, font=f, fill=(0x1C, 0x15, 0x00))
+    return x + wdt
+
+VERSION_LABEL = "2.0"
+
+def make_header(w=1280, h=360, scale=2):
+    """README header, drawn at 2x so it stays sharp on high-DPI screens (the README shows it at 800 wide)."""
+    S = scale
+    im = Image.new("RGBA", (w * S, h * S), GRAPHITE + (255,))
+    paste_mark(im, 150 * S, ((w - 150) // 2 * S, 44 * S))
     d = ImageDraw.Draw(im)
-    wordmark(d, (w - wordmark_width(68)) // 2, 212, 68)
-    tag = font(500, 24)
+    # the version pill sits on the mark's upper right corner; the wordmark is centered on its own
+    px = 68 * S
+    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    pill_w = version_pill(probe, 0, 0, px, VERSION_LABEL)
+    mark_x, mark_y, mark_px = (w - 150) // 2 * S, 44 * S, 150 * S
+    version_pill(d, mark_x + mark_px - pill_w + 10 * S, mark_y + 2 * S, px, VERSION_LABEL, ring=5 * S)
+    wordmark(d, (w * S - wordmark_width(px)) // 2, 212 * S, px)
+    tag = font(500, 24 * S)
     t = "See where your disk space went."
-    d.text(((w - d.textlength(t, font=tag)) // 2, 302), t, font=tag, fill=MUTED)
+    d.text(((w * S - d.textlength(t, font=tag)) // 2, 302 * S), t, font=tag, fill=MUTED)
     write("docs/header.png", png_bytes(im))
 
 def make_installer_bitmaps():

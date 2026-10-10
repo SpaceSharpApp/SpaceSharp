@@ -61,6 +61,7 @@ tools/make-assets.py              every icon, header and installer image from on
 tools/make-social.py              docs/social-preview.png, the message laid out as a treemap in amber
 tools/screenshot-mockup.html      controls around docs/spacesharp-mock.js, for screenshots
 tools/screenshots.js              renders the README screenshots from it with headless Chromium
+tools/make-mobile-shots.py        docs/m/*.webp, the screenshots at 1200 px for the phone-sized landing page
 installer/                        wizard pages, dialog images, release.ps1, brand-msi.ps1
 ```
 
@@ -80,6 +81,6 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 
 **The icon.** The mark is an isometric amber block with a cube carved out of its front corner. Everything is generated from `tools/make-assets.py` (Python 3 with Pillow and cairosvg): the SVGs, the Windows icon on its rounded Graphite tile, the 256 px PNG the app shows, the header, the wordmark and the installer images. Change the geometry or colors there, not in the files.
 
-**Screenshots.** `docs/spacesharp-mock.js` draws the window with sample data so no real file names end up online; the landing page embeds it as the live preview and `tools/screenshot-mockup.html` wraps it in controls. Open the tool in a browser, pick a theme, palette and scene, and capture the window, or run `node tools/screenshots.js` (needs Playwright) to regenerate every PNG the README uses. When the app's UI changes, the engine has to follow: it is a drawing, not a build of the app.
+**Screenshots.** `docs/spacesharp-mock.js` draws the window with sample data so no real file names end up online; the landing page embeds it as the live preview and `tools/screenshot-mockup.html` wraps it in controls. Open the tool in a browser, pick a theme, palette and scene, and capture the window, or run `node tools/screenshots.js` (needs Playwright) to regenerate every PNG the README uses, then `python tools/make-mobile-shots.py` for the small WebP copies the landing page shows on phones, where a swipeable gallery of pictures stands in for the live preview. When the app's UI changes, the engine has to follow: it is a drawing, not a build of the app.
 
 **Name, version and author** come from `SpaceSharp.csproj` and appear in About and in the exe's properties. Tag releases with the bare version number; the update window reads the changelog at that tag.

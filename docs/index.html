@@ -69,7 +69,7 @@
   .brand .v { font-size: 12px; font-weight: 600; color: var(--amber-ink); background: var(--amber); border-radius: 999px; padding: 1px 8px; margin-left: 4px; letter-spacing: 0; }
   nav .links { margin-left: auto; display: flex; gap: 24px; font-size: 15px; color: var(--muted); }
   nav .links a:hover { color: var(--ink); }
-  @media (max-width: 760px) { nav .links { display: none; } }
+  @media (max-width: 760px) { nav .links { display: none; } nav .wrap { gap: 16px; } nav .brand { margin-right: auto; } }
 
   .hero { padding: 72px 0 0; }
   .hero h1 { font-size: clamp(44px, 7.2vw, 96px); max-width: 12ch; }
@@ -132,6 +132,9 @@
   .phone-note .row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
   .phone-note .btn { height: 40px; padding: 0 16px; font-size: 14px; }
   body.touch .phone-note { display: block; }
+  body.touch .dl, body.touch .winget, body.touch .dl-note, body.touch .hero .cta { display: none; }
+  .cta-touch { display: none; margin-top: 24px; } .cta-touch .btn { width: 100%; justify-content: center; }
+  body.touch .cta-touch { display: flex; }
 
   section { padding: 104px 0 0; }
   section .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: end; margin-bottom: 40px; }
@@ -165,13 +168,17 @@
   .compare td:nth-child(2) { color: var(--ink); font-weight: 600; }
   .compare-wrap { overflow-x: auto; }
   @media (max-width: 640px) {
-    /* one card per feature: the name on top, the four products as a two-by-two grid */
+    /* one card per feature: the name on top, then one row per product, SpaceSharp's first and emphasized */
     .compare, .compare tbody, .compare tr, .compare th, .compare td { display: block; }
     .compare thead { display: none; }
-    .compare tr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-    .compare tbody th { grid-column: 1 / -1; padding: 0; border: 0; color: var(--ink); font-size: 16px; }
-    .compare td { padding: 0; border: 0; font-size: 14.5px; }
-    .compare td::before { content: attr(data-p); display: block; font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--hint); margin-bottom: 1px; }
+    .compare tr { padding: 14px 0 6px; border-bottom: 1px solid var(--line); }
+    .compare tbody th { padding: 0 0 8px; border: 0; color: var(--ink); font-size: 16.5px; }
+    .compare td { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 7px 0; border: 0; border-top: 1px solid color-mix(in srgb, var(--line) 55%, transparent); font-size: 15px; text-align: right; }
+    .compare td::before { content: attr(data-p); flex: none; text-align: left; font-size: 14.5px; font-weight: 500; color: var(--hint); }
+    .compare td:nth-child(2) { border-top: 0; }
+    .compare td:nth-child(2)::before { color: var(--ink); font-weight: 600; }
+    .compare td.yes { color: var(--ink); font-weight: 600; }
+    .compare td.no { color: var(--muted); font-weight: 400; }
   }
   .note { color: var(--hint); font-size: 13.5px; margin-top: 14px; }
   .note a { color: var(--muted); text-decoration: underline; }
@@ -221,7 +228,7 @@
     <a href="#faq">Questions</a>
     <a href="https://github.com/ClearanceClarence/SpaceSharp" target="_blank" rel="noopener" data-track="github">GitHub</a>
   </div>
-  <a class="btn primary small" href="#download" data-track="nav_download">Download</a>
+  <a class="btn primary small" href="#download" data-track="nav_download"><span class="only-wide">Download</span><span class="only-touch">Send to PC</span></a>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
@@ -233,6 +240,7 @@
         <a class="btn primary" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi" data-track="download" data-file="msi">Download for Windows</a>
         <a class="btn" href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.exe" data-track="download" data-file="exe">Portable exe</a>
       </div>
+      <div class="cta-touch"><a class="btn primary" href="#download" data-track="hero_send">Send the link to your PC</a></div>
     </div>
     <p class="facts"><b>Free and open source</b>, MIT license. Windows 10 and 11, 64-bit. No account, no telemetry, nothing installed unless you pick the installer. <span class="only-wide">The window below is the real interface drawn in your browser with sample data: hover it, click it, switch scenes.</span><span class="only-touch">The pictures below are the real interface with sample data; swipe through them.</span></p>
   </div>
@@ -326,10 +334,10 @@
 <section id="download"><div class="wrap">
   <div class="head">
     <h2>Download</h2>
-    <p class="lede">One file if you want nothing installed. An installer if you want updates to arrive on their own.</p>
+    <p class="lede"><span class="only-wide">One file if you want nothing installed. An installer if you want updates to arrive on their own.</span><span class="only-touch">SpaceSharp runs on Windows 10 and 11. Pick the file on the PC: an installer, a one-click setup, or a single portable exe.</span></p>
   </div>
   <div class="phone-note" id="phoneNote">
-    <p><b>On a phone?</b> SpaceSharp is a Windows app. Send yourself the link and open it on the PC.</p>
+    <p><b>You are on a phone.</b> SpaceSharp is a Windows app, so the downloads are on the PC. Send yourself the link and open it there.</p>
     <div class="row">
       <button class="btn" type="button" id="shareLink">Share the link</button>
       <button class="btn" type="button" id="copyLink">Copy the link</button>
@@ -354,7 +362,7 @@
     </a>
   </div>
   <div class="winget" id="winget" role="button" tabindex="0" title="Copies the command; the package is not published yet" data-track="winget_copy"><span>&gt;</span><b>winget install ClearanceClarence.SpaceSharp</b><span class="soon">winget package pending review</span></div>
-  <p class="note">32-bit Windows: <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86-Setup.exe" data-track="download" data-file="setup-x86">SpaceSharp-win-x86-Setup.exe</a>, <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.msi" data-track="download" data-file="msi-x86">SpaceSharp-win-x86.msi</a> or <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.exe" data-track="download" data-file="exe-x86">SpaceSharp-win-x86.exe</a>. The exe is not code-signed, so SmartScreen may ask once; choose More info, then Run anyway. Every release with notes is on <a href="https://github.com/ClearanceClarence/SpaceSharp/releases" target="_blank" rel="noopener">GitHub Releases</a>.</p>
+  <p class="note dl-note">32-bit Windows: <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86-Setup.exe" data-track="download" data-file="setup-x86">SpaceSharp-win-x86-Setup.exe</a>, <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.msi" data-track="download" data-file="msi-x86">SpaceSharp-win-x86.msi</a> or <a href="https://github.com/ClearanceClarence/SpaceSharp/releases/latest/download/SpaceSharp-win-x86.exe" data-track="download" data-file="exe-x86">SpaceSharp-win-x86.exe</a>. The exe is not code-signed, so SmartScreen may ask once; choose More info, then Run anyway. Every release with notes is on <a href="https://github.com/ClearanceClarence/SpaceSharp/releases" target="_blank" rel="noopener">GitHub Releases</a>.</p>
 </div></section>
 
 <section class="faq" id="faq"><div class="wrap">
