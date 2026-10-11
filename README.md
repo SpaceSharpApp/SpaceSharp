@@ -8,8 +8,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/github/v/release/SpaceSharpApp/SpaceSharp?label=version&color=F5B82E" alt="Latest version"></a>
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/SpaceSharpApp/SpaceSharp/tests.yml?branch=main&label=tests&color=6FC2B0" alt="Test status"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.1.0-F5B82E" alt="Version 2.1.0"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
   <img src="https://img.shields.io/badge/.NET-10-8C84D6" alt=".NET 10">
@@ -185,7 +185,7 @@ How the scanner, layout, renderer, filter and updater work, and where to add a p
 
 ## Feedback
 
-[Report a bug](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=bug_report.yml) (About › Report a bug fills in your version and Windows details), [suggest a feature](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=feature_request.yml), or open a [blank issue](https://github.com/SpaceSharpApp/SpaceSharp/issues/new). Code, palettes and translations: [CONTRIBUTING.md](CONTRIBUTING.md). Screen readers, keyboard and low vision: [ACCESSIBILITY.md](ACCESSIBILITY.md). Releases: [CHANGELOG.md](CHANGELOG.md).
+[Report a bug](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=bug_report.yml) (About › Report a bug fills in your version and Windows details; after an unexpected error, the dialog's Report on GitHub does the same with the error, and the log it points to is in `%LocalAppData%\SpaceSharp\logs`), [suggest a feature](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=feature_request.yml), or open a [blank issue](https://github.com/SpaceSharpApp/SpaceSharp/issues/new). Code, palettes and translations: [CONTRIBUTING.md](CONTRIBUTING.md). Screen readers, keyboard and low vision: [ACCESSIBILITY.md](ACCESSIBILITY.md). Releases: [CHANGELOG.md](CHANGELOG.md).
 
 ## Credits and license
 

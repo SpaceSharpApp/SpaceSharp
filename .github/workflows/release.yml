@@ -61,6 +61,9 @@ jobs:
           if (-not (Select-String -Path .\CHANGELOG.md -Pattern "^## $([regex]::Escape($version))\s*$" -Quiet)) {
             throw "CHANGELOG.md has no '## $version' heading. Take '(unreleased)' off it before tagging."
           }
+          if (-not (Select-String -Path .\README.md -Pattern "badge/version-$([regex]::Escape($version))-" -Quiet)) {
+            throw "The version badge in README.md does not say $version. Update it (img.shields.io/badge/version-$version-F5B82E) before tagging."
+          }
           "Releasing SpaceSharp $version"
 
       - name: Choose the signing policy
