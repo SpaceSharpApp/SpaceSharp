@@ -17,10 +17,10 @@ Boxes are placed with the squarified treemap algorithm (Bruls, Huizing and van W
 The map is a custom WPF element that draws into `DrawingVisual`s instead of creating a control per box, so tens of thousands of boxes stay fast. Zooming does not scale a picture: the map is laid out again on a virtual canvas that is the window size times the zoom level, and only boxes that intersect the window are laid out and drawn. Boxes snap to whole pixels and each leaves one grid-colored strip on its right and bottom, none where the folder's own line already is. Files get a cushion gradient per depth from the shading settings (`MakeCushion`); folder title bars are a tint of the folder's color. Zooming to a folder is an animated camera move that interpolates the zoom level logarithmically and refines the target every frame, since title bars have a fixed pixel height. Hover and selection outlines live on a separate overlay.
 
 **Filtering** (`Services/FileFilter.cs`, `MainWindow.FilterPanel.cs`)
-The filter text is parsed into conditions (`FilterSpec`). The whole tree is evaluated once per change; files match on their own and a folder stays lit when anything inside it matches, so the path to every hit stays visible. Non-matching boxes are blended toward the background without changing the layout. The hidden filter box is the single source of truth: the drawer and the rail both read and write its text, so anything that sets a filter works with either face. "Peek" (hovering a type or a month in the panel) dims the map through `SetFilterMatches` without touching the real filter.
+The filter text is parsed into conditions (`FilterSpec`). The whole tree is evaluated once per change; files match on their own and a folder stays lit when anything inside it matches, so the path to every hit stays visible. Non-matching boxes are blended toward the background without changing the layout. The hidden filter box is the single source of truth: the drawer and the rail both read and write its text, so anything that sets a filter works with either face. `SetFilterMatches` can dim the map to any set of nodes without touching the real filter (used by Show in Insights).
 
-**The panel under the map** (`Services/DriveInsights.cs`, `MainWindow.BottomPanel.cs`)
-`DriveInsights` is pure and tested: bytes by file type, bytes by month last written, and the cleanup suggestions, which are decided from names alone (`CachePatterns`). The window builds the three sections from those results and refreshes them after a scan, a delete or a load.
+**The Insights view** (`Services/DriveInsights.cs`, `MainWindow.Insights.cs`)
+`DriveInsights` is pure and tested: bytes by file type with the top extensions, bytes by month last written, the oldest large files, where each extension mostly lives, what changed against the baseline, and the cleanup suggestions, which are decided from names alone (`CachePatterns`). `MainWindow.Insights.cs` builds the tiles and cards from those results in the map's place (`InsightsView` over the `Treemap`, toggled by `ApplyView`) and refreshes them after a scan, a delete or a load. Every row calls back into the map: `ShowOnMap` selects and zooms, `FilterAndShowMap` sets the filter text and switches the view.
 
 **Themes** (`Util/ThemeManager.cs`, `Themes/`)
 All control styles are in `Styles.xaml` and reference colors through `DynamicResource`. Switching themes swaps `Dark.xaml` for `Light.xaml` and every open window recolors. In "Match Windows" mode the Windows app theme is read from the registry and watched for changes. Palettes are per theme (`PaletteTheme`); `AppSettings` keeps one choice for dark and one for light.
@@ -41,7 +41,7 @@ SpaceSharp/
 ├── App.xaml(.cs)                 startup, theme setup, error dialog
 ├── MainWindow.xaml(.cs)          toolbar, path row, map, status bar, settings application
 ├── MainWindow.FilterPanel.cs     the filter drawer and rail
-├── MainWindow.BottomPanel.cs     By type, Safe to clear, When changed
+├── MainWindow.Insights.cs        The Insights view in the map's place
 ├── AboutWindow, InspectWindow, SettingsWindow, UpdateWindow, ShortcutsWindow
 ├── Controls/
 │   ├── TreemapControl*.cs        fields, camera, layout, render, input
@@ -59,6 +59,7 @@ SpaceSharp.Tests/                 xUnit: layout, grouping, filter, insights, col
 docs/                             landing page (GitHub Pages), spacesharp-mock.js (the app drawn in a browser), screenshots, icon, header, social preview
 tools/make-assets.py              every icon, header and installer image from one definition of the mark
 tools/make-social.py              docs/social-preview.png, the message laid out as a treemap in amber
+tools/make-icons.py               SpaceSharp/Themes/Icons.xaml, the Lucide icons as path geometry
 tools/screenshot-mockup.html      controls around docs/spacesharp-mock.js, for screenshots
 tools/screenshots.js              renders the README screenshots from it with headless Chromium
 tools/make-mobile-shots.py        docs/m/*.webp, the screenshots at 1200 px for the phone-sized landing page
@@ -67,13 +68,15 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 
 ## Where to change things
 
-**Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users add their own as JSON instead (see the README).
+**Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.
 
 **Add a file type.** Extensions and their categories are in `BuildExtensionMap()` in `Util/Palette.cs`. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
 
 **Change theme colors.** Edit `Themes/Dark.xaml` or `Themes/Light.xaml`. Both must define the same keys.
 
 **Add a setting.** A property with a default in `Util/AppSettings.cs` (and in `ResetToDefaults`), a row in `SettingsWindow.Build()`, and its effect in `MainWindow.ApplySettings()` or `ApplyLook()` if it changes the map. Map settings also show in the Settings preview, which runs through the same `ApplyLook`.
+
+**Add or change an icon.** The icons are Lucide, as path geometry in `SpaceSharp/Themes/Icons.xaml`, which `tools/make-icons.py` generates: add a line to its `ICONS` table (app name, Lucide name) or a path to `CUSTOM`, run it, then use `{StaticResource Icon.Name}` on a `ToolButton`'s `Tag` or a `controls:Icon`'s `Glyph` in XAML, or `Icons.Get("Name")` / `Icons.Make("Name", size, "TextDim")` in code. `Controls/Icon.cs` draws any of them at any size with the stroke scaled along. The mockup's copies live in `docs/spacesharp-mock.js`; the drive pictures are picked by `Services/DriveKinds.cs`.
 
 **Add a shortcut.** `MainWindow.Window_PreviewKeyDown`, the list in `ShortcutsWindow.cs`, and the README's table.
 
@@ -84,3 +87,5 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 **Screenshots.** `docs/spacesharp-mock.js` draws the window with sample data so no real file names end up online; the landing page embeds it as the live preview and `tools/screenshot-mockup.html` wraps it in controls. Open the tool in a browser, pick a theme, palette and scene, and capture the window, or run `node tools/screenshots.js` (needs Playwright) to regenerate every PNG the README uses, then `python tools/make-mobile-shots.py` for the small WebP copies the landing page shows on phones, where a swipeable gallery of pictures stands in for the live preview. When the app's UI changes, the engine has to follow: it is a drawing, not a build of the app.
 
 **Name, version and author** come from `SpaceSharp.csproj` and appear in About and in the exe's properties. Tag releases with the bare version number; the update window reads the changelog at that tag.
+
+**Releasing.** Finish the changelog section (take "(unreleased)" off its heading), make sure `<Version>` matches, commit, then `git tag 2.1.0 && git push origin main --tags`. The tag starts `.github/workflows/release.yml`, which checks that the tag, the version and the changelog heading agree, then runs `installer/release.ps1` in three stages: Build (tests, the four publishes), Pack (vpk, the MSIs, the 1.x bridge files) and Upload (a draft release). Between the stages the app exes, then the installers and MSIs, go to SignPath for code signing, so the installers contain a signed app and are signed themselves. The signing steps are skipped when the SignPath secrets are missing, so the workflow runs unsigned until the project is approved. From the Actions tab the workflow can be run by hand as a dry run: it builds and test-signs but creates no release. A broken run reaches nobody: installed copies only see published releases, and the draft is yours to delete; fix, delete the tag, tag again.

@@ -15,7 +15,7 @@
             <DockPanel>
                 <Button DockPanel.Dock="Right" Style="{StaticResource AccentButton}" Content="{u:T About_Close}"
                         IsDefault="True" IsCancel="True" Click="Close_Click" />
-                <Button Style="{StaticResource ToolButton}" Tag="&#xE8C8;" Content="{u:T About_CopyVersionInfo}"
+                <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Copy}" Content="{u:T About_CopyVersionInfo}"
                         HorizontalAlignment="Left" Click="CopyInfo_Click" />
             </DockPanel>
         </Border>

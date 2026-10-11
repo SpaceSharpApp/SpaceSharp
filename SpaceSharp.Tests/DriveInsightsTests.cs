@@ -37,11 +37,15 @@ public class DriveInsightsTests
     public void ByTypeSumsEachCategoryLargestFirst()
     {
         var shares = DriveInsights.ByType(Drive(), SizeMeasure.FileSize);
-        var programs = shares[0];
-        Assert.Equal(FileCategory.Programs, programs.Category);   // hiberfil.sys (.sys counts as a program) + ntoskrnl + old-setup
-        Assert.Equal(15 * GB, programs.Bytes);
-        Assert.Equal(3, programs.Files);
-        Assert.Equal("hiberfil.sys", programs.Largest!.Name);
+        var system = shares[0];
+        Assert.Equal(FileCategory.System, system.Category);       // hiberfil.sys
+        Assert.Equal(12 * GB, system.Bytes);
+        Assert.Equal("hiberfil.sys", system.Largest!.Name);
+        var programs = shares.Single(s => s.Category == FileCategory.Programs); // ntoskrnl.exe + old-setup.exe
+        Assert.Equal(3 * GB, programs.Bytes);
+        Assert.Equal(2, programs.Files);
+        Assert.Equal("ntoskrnl.exe", programs.Largest!.Name);
+        Assert.Equal(new[] { ".exe" }, programs.Extensions.Select(e => e.Extension));
         var video = shares.Single(s => s.Category == FileCategory.Video);
         Assert.Equal(5 * GB, video.Bytes);
         Assert.Equal("b.mp4", video.Largest!.Name);

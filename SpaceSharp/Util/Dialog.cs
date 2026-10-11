@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using SpaceSharp.Controls;
 
 namespace SpaceSharp.Util;
 
@@ -13,13 +14,13 @@ namespace SpaceSharp.Util;
 public static class Dialog
 {
     public static bool Confirm(Window? owner, string title, string message, string yes, string? no = null, bool danger = false) =>
-        Show(owner, title, message, yes, no ?? Strings.Get("Dialog_Cancel"), danger, "\uE9CE") == true;
+        Show(owner, title, message, yes, no ?? Strings.Get("Dialog_Cancel"), danger, "Question") == true;
 
     public static void Error(Window? owner, string title, string message) =>
-        Show(owner, title, message, Strings.Get("Dialog_Ok"), null, false, "\uEA39");
+        Show(owner, title, message, Strings.Get("Dialog_Ok"), null, false, "Error");
 
     public static void Info(Window? owner, string title, string message) =>
-        Show(owner, title, message, Strings.Get("Dialog_Ok"), null, false, "\uE946");
+        Show(owner, title, message, Strings.Get("Dialog_Ok"), null, false, "Info");
 
     /// <summary>A bare themed dialog window; add content with <see cref="Finish"/>.</summary>
     public static Window CreateWindow(Window? owner, string title, double width)
@@ -31,8 +32,8 @@ public static class Dialog
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             ShowInTaskbar = false,
-            WindowStartupLocation = owner is null ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
-            Owner = owner,
+            WindowStartupLocation = owner is { IsVisible: true } ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen,
+            Owner = owner is { IsVisible: true } ? owner : null,   // a window that has not been shown yet cannot own anything (a crash during startup)
             FontFamily = new FontFamily("Segoe UI"),
             FontSize = 13,
             UseLayoutRounding = true,
@@ -66,8 +67,8 @@ public static class Dialog
             SizeToContent = SizeToContent.Height,
             ResizeMode = ResizeMode.NoResize,
             ShowInTaskbar = false,
-            WindowStartupLocation = owner is null ? WindowStartupLocation.CenterScreen : WindowStartupLocation.CenterOwner,
-            Owner = owner,
+            WindowStartupLocation = owner is { IsVisible: true } ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen,
+            Owner = owner is { IsVisible: true } ? owner : null,   // a window that has not been shown yet cannot own anything (a crash during startup)
             FontFamily = new FontFamily("Segoe UI"),
             FontSize = 13,
             UseLayoutRounding = true,
@@ -78,12 +79,8 @@ public static class Dialog
         TitleBarTheme.Attach(window);
 
         var app = Application.Current!;
-        var icon = new TextBlock
-        {
-            Text = glyph, FontSize = 26, Margin = new Thickness(0, 2, 16, 0), VerticalAlignment = VerticalAlignment.Top,
-            FontFamily = (FontFamily)app.FindResource("IconFont")
-        };
-        icon.SetResourceReference(TextBlock.ForegroundProperty, danger ? "Danger" : "Accent");
+        var icon = Icons.Make(glyph, 28, danger ? "Danger" : "Accent");
+        icon.Margin = new Thickness(0, 2, 16, 0); icon.VerticalAlignment = VerticalAlignment.Top; icon.StrokeWidth = 1.75;
 
         var text = new TextBlock { Text = message, TextWrapping = TextWrapping.Wrap, LineHeight = 20, VerticalAlignment = VerticalAlignment.Center };
         text.SetResourceReference(TextBlock.ForegroundProperty, "Text");

@@ -1,6 +1,43 @@
 # Changelog
 
-What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md).
+What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
+
+## 2.1.0 (unreleased)
+
+The panel under the map became a view of its own. Insights takes the map's whole area when you want the numbers, the icons are a consistent set, drives show what kind of disk they are, and there are fourteen file types instead of eight.
+
+### The Insights view
+- The panel under the map is gone; its three views moved into a view of their own and grew.
+- Two buttons in the toolbar, Map and Insights, and one keeps the other's place: Insights takes the whole area the map had, so the scan can be read in full instead of in a strip. B switches between them, and the choice is remembered. It fills in when a scan finishes or a saved scan opens, and updates after a delete or a cleanup.
+- A row of tiles across the top: what was scanned (files, folders, how it was read), free space on the drive with its kind (HDD, SSD, NVMe, USB), how much is safe to clear, how much has been untouched for a year, the biggest folder, and what changed since the last scan.
+- **By type** is a donut with the whole scan in the middle and all fourteen types as rows: swatch, name, the three biggest extensions in grey, a share bar, size, files and share, with a sentence above saying where the biggest type mostly lives. Click a row and the map comes back filtered to that type.
+- **Largest folders**, **Largest files**, **Since last scan** (what grew, shrank and appeared, with the biggest movers) and **Extensions** (the biggest extensions and the folder that holds most of each) fill the second row. Every row is a click back to the map, zoomed or filtered to it.
+- **Safe to clear** lists places that are usually safe to empty, decided from names alone: Windows.old, the Recycle Bin, Temp folders, package caches (npm, pnpm, NuGet, pip, Cargo, Gradle, Composer, Go, Maven), browser caches, shader caches, Windows Update downloads, and Downloads not touched in a year. Each row has Show, which selects the items on the map and zooms there, and an action: **Recycle** sends them to the Recycle Bin after the usual confirmation, **Empty** empties the Recycle Bin through Windows (which asks first) and takes the freed space off the map, **Review** selects old downloads and sets the filter so you decide, and **How to** explains the hibernation and paging files SpaceSharp will not touch. Rows that can be recycled have a checkbox; the footer sums what is checked, says how much would be free afterwards, and one button recycles them all.
+- **When changed** is a histogram of bytes by the month they were last written, 36 months, colored in the four age bands Inspect uses (this month, this year, 1 to 3 years, older), with the band totals and file counts as filter buttons under it, and a list of the oldest large files, each a click away on the map.
+
+### File types
+- Fourteen file types instead of eight. Game data (.pak, .ba2, .uasset and the like), Installers (.msi, .msix, .appx), Disk images (.iso, .vhdx, .wim), Databases (.db, .sqlite, .mdf), Fonts and System (.sys, .mui, .etl, .dmp) come out of Other, which on a gaming PC used to be half the drive. Color by type, the filter drawer and the filter's type words ("game data", "installers", "iso", "fonts", "system") know the new ones; custom palettes can name a color for each, and a custom palette that names only the old eight keeps working, with the new types taking the file tints.
+
+### Palette creator
+- Settings › Treemap › Custom palettes has New palette, and Edit or Start from the current one. The editor shows the twelve folder colors, the file tint (or twelve file colors of your own) and the fourteen file type colors as swatches; click one and set it by hex (any of #RRGGBB, RRGGBB, #RGB) or hue, saturation and lightness sliders. Generate fills the twelve from a base color in four spreads (Rainbow, Neighbors, Two-tone, One hue), and Random rolls a base and a spread for you. The sample drive is drawn beside it in Depth, Top folder or File type mode as you work, and the footer warns about folder colors whose labels would be hard to read and pairs too alike to tell apart. Save writes the JSON file to the palettes folder and switches the map to it; Copy JSON puts the file on the clipboard to share.
+
+### The scan card
+- The card shown while a drive is read now shows the scan as three stages, each with its own bar: find the files (or read the file table), build the tree, draw the map. The first fills against the drive's used space, the second sweeps while a file table scan links its records, the third lights while the map is laid out. Under them the three numbers are big and in a row: found so far (of how much), files per second, and elapsed time with an estimate of what is left. The title line says what is being read: used space, the kind of drive, file table or folder walk.
+
+### Icons
+- The interface icons are Lucide (https://lucide.dev, ISC license) instead of Windows' Segoe glyph font: one consistent set of 2-pixel round strokes, drawn as path geometry through a small `Icon` control, so they look the same on Windows 10 and 11, scale cleanly at any DPI, and take the color of whatever they sit in. `tools/make-icons.py` writes `Themes/Icons.xaml` from the Lucide release it pins; the landing-page mockup uses the same set.
+- Drives show what they are. A fixed disk is asked, without elevation, whether it spins and which bus it is on, so the side panel and the start screen show a hard disk, a solid-state drive, a USB drive, a network share or an optical disc, each with its own picture and the kind named before the file system ("NVMe SSD · NTFS"). The first breadcrumb and the saved-scan list use the same picture.
+
+### Side panel
+- The cards reflow with the window: four across on a wide window, three, two or one as it narrows, with the By type card keeping its width where there is room, and the tiles going from six to three to two across. The view scrolls when the cards no longer fit the height.
+- The side panel is narrower (300 px instead of 360) now that Insights carries the long lists, and while Insights shows, its Largest items section is hidden and the drives get the whole height.
+
+### Releasing
+- Releases are built by GitHub Actions when a version tag is pushed, code-signed through SignPath, and created as drafts. `installer\release.ps1` runs in stages so the signing fits between them, and refuses to upload an unsigned build from a PC unless told to.
+
+### Website
+- The project moved to github.com/SpaceSharpApp/SpaceSharp and the site to spacesharpapp.github.io/SpaceSharp; every link in the app, the README and the page follows, and the update check and What's new read from the new address.
+- The landing page works on a phone: the live preview gives way to a gallery of screenshots, the download links step aside (the installers are for a PC), and the comparison table reads as stacked cards.
 
 ## 2.0.0
 
@@ -27,7 +64,7 @@ SpaceSharp 2.0 is a new map, a new filter and a new panel under the map. It is a
 
 ### A panel under the map
 - A new strip under the map with three views of the whole scan side by side. The toolbar button next to the side panel's, or B, shows and hides it; the chevron on its right folds it down to its titles and back; Settings › Map › Show bottom panel sets whether it is there at all. It fills in when a scan finishes or a saved scan opens, and updates after a delete.
-- **By type** is one stacked bar of the drive by file type in the palette's colors, with a legend of name, size and share. Hover a type and the map dims to its files; click and it becomes a filter, click again to clear it.
+- **By type** sums the scan by file type, eight of them, each with its biggest extensions. Hover a type to see those files on the map; click and it becomes a filter, click again to clear it.
 - **Safe to clear** lists places that are usually safe to empty, decided from names alone: Windows.old, the Recycle Bin, Temp folders, package caches (npm, pnpm, NuGet, pip, Cargo, Gradle, Composer, Go, Maven), browser caches, shader caches, Windows Update downloads, and Downloads not touched in a year. Each row has Show, which selects the items on the map and zooms there, and an action: **Recycle** sends them to the Recycle Bin after the usual confirmation, **Empty** empties the Recycle Bin through Windows (which asks first) and takes the freed space off the map, **Review** selects old downloads and sets the filter so you decide, and **How to** explains the hibernation and paging files SpaceSharp will not touch. Anything that does not fit in five rows is summed up on an "Also:" line.
 - **When changed** is a histogram of bytes by the month they were last written, 36 months, colored in the four age bands Inspect uses (this month, this year, 1 to 3 years, older), with the band totals as filter buttons under it; click one to filter the map to that band, click again to clear. Hover a month to see it on the map, click to filter to it.
 
@@ -49,7 +86,7 @@ SpaceSharp 2.0 is a new map, a new filter and a new panel under the map. It is a
 ### New defaults
 - A fresh install now opens with Color by Depth, Dense grouping, a 2 px gap between boxes with the grid off, no cushion shading (the Soft preset is set, ready to switch on), flat title bars (tint 0), black labels in Segoe UI Variable Text, and file counts in folder titles. Settings you have already saved are kept; Reset to defaults lands on this look.
 
-### Icon
+### App icon
 - The Windows icon (taskbar, Explorer, title bars) sits on the rounded Graphite tile the 1.x icon had, so it reads as an app icon next to other apps' tiles. The mark itself is unchanged and stands on its own in the README, on the landing page and inside the app. `tools/make-assets.py` draws both.
 
 ### 32-bit Windows

@@ -70,11 +70,12 @@ public static class CustomPalettes
 
                 var categories = new Color[Enum.GetValues<FileCategory>().Length];
                 for (int i = 0; i < categories.Length; i++) categories[i] = Palette.Mix(folders[i % folders.Length], Colors.White, 0.2);
+                categories[(int)FileCategory.System] = Color.FromRgb(0x8F, 0xA3, 0xB8);
                 categories[(int)FileCategory.Other] = Color.FromRgb(0xB8, 0xB4, 0xAC);
                 if (p.Categories is not null)
                     foreach (var (key, value) in p.Categories)
                         if (Enum.TryParse<FileCategory>(key, ignoreCase: true, out var cat)) categories[(int)cat] = ParseColor(value);
-                        else throw new InvalidDataException($"unknown category \"{key}\" (use images, video, audio, archives, programs, documents, code, other)");
+                        else throw new InvalidDataException($"unknown category \"{key}\" (use images, video, audio, archives, programs, documents, code, gamedata, installers, diskimages, databases, fonts, system, other)");
 
                 schemes.Add(new ColorScheme(name,
                     d => folders[d % folders.Length],
@@ -83,6 +84,7 @@ public static class CustomPalettes
                     neutral is null ? Palette.NeutralFolder : d => neutral[d % neutral.Length])
                 {
                     IsCustom = true,
+                    SourceFile = file,
                     Theme = p.Theme?.Trim().ToLowerInvariant() switch
                     {
                         null or "" or "any" or "both" => PaletteTheme.Any,
@@ -99,6 +101,35 @@ public static class CustomPalettes
         }
         LastErrors = errors;
         return schemes;
+    }
+
+    /// <summary>Reads one palette file into a draft the editor can change. Throws the same errors <see cref="Load"/> lists.</summary>
+    public static PaletteDraft Read(string file)
+    {
+        var p = JsonSerializer.Deserialize<PaletteFile>(File.ReadAllText(file), Options) ?? throw new InvalidDataException("empty file");
+        if (p.Folders is null || p.Folders.Length == 0) throw new InvalidDataException("\"folders\" needs at least one color");
+        var draft = new PaletteDraft
+        {
+            Name = string.IsNullOrWhiteSpace(p.Name) ? Path.GetFileNameWithoutExtension(file) : p.Name.Trim(),
+            Folders = p.Folders.Select(ParseColor).ToList(),
+            FileTint = Math.Clamp(p.FileTint ?? 0.45, 0, 0.9),
+            Files = p.Files is { Length: > 0 } ? p.Files.Select(ParseColor).ToList() : null,
+            Theme = p.Theme?.Trim().ToLowerInvariant() switch { "light" => PaletteTheme.Light, "dark" => PaletteTheme.Dark, _ => PaletteTheme.Any },
+            SourceFile = file
+        };
+        if (p.Categories is not null)
+            foreach (var (key, value) in p.Categories)
+                if (Enum.TryParse<FileCategory>(key, ignoreCase: true, out var cat)) draft.Categories[(int)cat] = ParseColor(value);
+        return draft;
+    }
+
+    /// <summary>Writes the draft to the palettes folder (over the file it came from, or a new one named after it) and returns the path.</summary>
+    public static string Save(PaletteDraft draft)
+    {
+        string path = draft.SourceFile ?? Path.Combine(Folder, draft.FileName());
+        File.WriteAllText(path, draft.ToJson());
+        draft.SourceFile = path;
+        return path;
     }
 
     private static Color ParseColor(string text)
@@ -139,7 +170,9 @@ public static class CustomPalettes
               // Colors for "File type" mode. Any you leave out are taken from the folder colors.
               "categories": {
                 "video": "#E8864A", "images": "#49B86B", "audio": "#B565D9", "archives": "#E8C547",
-                "programs": "#5B8DEF", "documents": "#BAC4E2", "code": "#4CC3C9", "other": "#B8B4AC"
+                "programs": "#5B8DEF", "documents": "#BAC4E2", "code": "#4CC3C9", "gamedata": "#C9A66B",
+                "installers": "#D9A066", "diskimages": "#C7C09A", "databases": "#5FA8D3", "fonts": "#B9A0E0",
+                "system": "#8FA3B8", "other": "#B8B4AC"
               }
             }
             """);
@@ -151,7 +184,8 @@ public static class CustomPalettes
             Custom palettes for SpaceSharp
             ==============================
 
-            Copy Example.json, give the copy a new name, change the colors, save.
+            The easy way: Settings > Treemap > Custom palettes > New palette, which writes a file here.
+            By hand: copy Example.json, give the copy a new name, change the colors, save.
             Then open Settings in SpaceSharp and press "Reload palettes", or restart the app.
             The palette appears in the Palette list next to the built-in ones.
 
@@ -163,7 +197,8 @@ public static class CustomPalettes
                           colors are lightened by fileTint.
               fileTint    Optional, 0 to 0.9, default 0.45. How much lighter files are than folders.
               categories  Optional. Colors for File type mode: images, video, audio, archives,
-                          programs, documents, code, other. Missing ones are derived from folders.
+                          programs, documents, code, gamedata, installers, diskimages, databases,
+                          fonts, system, other. Missing ones are derived from folders.
               neutral     Optional. 1 to 6 greys used for folders in File type mode.
 
             A file that cannot be read is listed with the reason on the Settings page.

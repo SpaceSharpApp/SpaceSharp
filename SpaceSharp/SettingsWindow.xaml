@@ -15,7 +15,7 @@
             <DockPanel>
                 <Button DockPanel.Dock="Right" Style="{StaticResource AccentButton}" Content="{u:T SettingsWin_Close}"
                         IsDefault="True" IsCancel="True" Click="Close_Click" />
-                <Button Style="{StaticResource ToolButton}" Tag="&#xE777;" Content="{u:T SettingsWin_ResetToDefaults}"
+                <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Reset}" Content="{u:T SettingsWin_ResetToDefaults}"
                         HorizontalAlignment="Left" Click="Reset_Click" />
             </DockPanel>
         </Border>

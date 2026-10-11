@@ -65,39 +65,45 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <Border Style="{StaticResource ToolDivider}" />
-                    <Button Style="{StaticResource ToolButton}" Tag="&#xE713;" Margin="0,0,6,0"
+                    <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Settings}" Margin="0,0,6,0"
                             ToolTip="{u:T Main_SettingsCtrl}" Click="SettingsButton_Click" />
-                    <Button x:Name="ThemeButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0" Tag="&#xE708;"
+                    <Button x:Name="ThemeButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0" Tag="{StaticResource Icon.Moon}"
                             ToolTip="{u:T Main_Theme}" Click="ThemeButton_Click" />
-                    <Button Style="{StaticResource ToolButton}" Tag="&#xE946;" ToolTip="{u:T Main_AboutSpaceSharpF1}"
+                    <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Info}" ToolTip="{u:T Main_AboutSpaceSharpF1}"
                             Click="About_Click" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="ScanFolderButton" Style="{StaticResource AccentButton}"
-                            Tag="&#xE838;" Content="{u:T Main_ScanFolder}" Click="ScanFolder_Click" />
+                            Tag="{StaticResource Icon.ScanFolder}" Content="{u:T Main_ScanFolder}" Click="ScanFolder_Click" />
                     <Button x:Name="RescanButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE72C;" ToolTip="{u:T Main_RescanF5}" Click="Rescan_Click" />
+                            Tag="{StaticResource Icon.Refresh}" ToolTip="{u:T Main_RescanF5}" Click="Rescan_Click" />
 
                     <Border Style="{StaticResource ToolDivider}" />
 
                     <Button x:Name="UpButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE74A;" ToolTip="{u:T Main_UpOneFolderBackspace}" Click="Up_Click" />
+                            Tag="{StaticResource Icon.Up}" ToolTip="{u:T Main_UpOneFolderBackspace}" Click="Up_Click" />
                     <Button x:Name="FitButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE80F;" ToolTip="{u:T Main_ShowWholeMapHome}" Click="Fit_Click" />
+                            Tag="{StaticResource Icon.Home}" ToolTip="{u:T Main_ShowWholeMapHome}" Click="Fit_Click" />
                     <Button x:Name="ListsButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE90C;" ToolTip="{u:T Main_DrivesAndLargestItems}" Click="Lists_Click" />
-                    <Button x:Name="PanelButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE90E;" ToolTip="{u:T Main_BottomPanel}" Click="Panel_Click" />
+                            Tag="{StaticResource Icon.SidePanel}" ToolTip="{u:T Main_DrivesAndLargestItems}" Click="Lists_Click" />
+
+                    <Border Style="{StaticResource ToolDivider}" />
+
+                    <!-- the two views of the scan: the map, or the insights that replace it -->
+                    <Button x:Name="MapViewButton" Style="{StaticResource AccentButton}" Margin="0,0,2,0" Padding="10,0"
+                            Tag="{StaticResource Icon.Treemap}" Content="{u:T Main_ViewMap}" ToolTip="{u:T Main_ViewMapTip}" Click="MapView_Click" />
+                    <Button x:Name="InsightsButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0" Padding="10,0"
+                            Tag="{StaticResource Icon.Info}" Content="{u:T Main_ViewInsights}" ToolTip="{u:T Main_ViewInsightsTip}" Click="InsightsView_Click" />
 
                     <Border Style="{StaticResource ToolDivider}" />
 
                     <Button x:Name="ZoomOutButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE71F;" ToolTip="{u:T Main_ZoomOutMouseWheel}" Click="ZoomOut_Click" />
+                            Tag="{StaticResource Icon.ZoomOut}" ToolTip="{u:T Main_ZoomOutMouseWheel}" Click="ZoomOut_Click" />
                     <TextBlock x:Name="ZoomLabel" Width="64" TextAlignment="Center" VerticalAlignment="Center"
                                Foreground="{DynamicResource TextDim}" Text="—" Margin="0,0,6,0" />
                     <Button x:Name="ZoomInButton" Style="{StaticResource ToolButton}" Margin="0,0,6,0"
-                            Tag="&#xE8A3;" ToolTip="{u:T Main_ZoomInMouseWheel}" Click="ZoomIn_Click" />
+                            Tag="{StaticResource Icon.ZoomIn}" ToolTip="{u:T Main_ZoomInMouseWheel}" Click="ZoomIn_Click" />
                 </StackPanel>
             </DockPanel>
         </Border>
@@ -106,10 +112,10 @@
         <Border x:Name="AccessBar" DockPanel.Dock="Top" Visibility="Collapsed" Background="{DynamicResource Panel}"
                 BorderBrush="{DynamicResource Accent}" BorderThickness="4,0,0,1" Padding="12,6">
             <DockPanel>
-                <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="&#xE711;" Height="28"
+                <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Close}" Height="28"
                         ToolTip="{u:T Main_Dismiss}" Click="CloseAccessBar_Click" />
                 <Button DockPanel.Dock="Right" Style="{StaticResource AccentButton}" Height="28" Margin="12,0,6,0"
-                        Tag="&#xE7EF;" Content="{u:T Main_RestartAsAdministrator}" Click="RestartElevated_Click" />
+                        Tag="{StaticResource Icon.Shield}" Content="{u:T Main_RestartAsAdministrator}" Click="RestartElevated_Click" />
                 <TextBlock x:Name="AccessText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
             </DockPanel>
         </Border>
@@ -122,7 +128,7 @@
                 <!-- The filter text lives here, hidden: shortcuts, presets and the panels all write to it. -->
                 <TextBox x:Name="FilterBox" Visibility="Collapsed" Width="0" TextChanged="FilterBox_TextChanged" />
                 <Button x:Name="FilterToggleButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Height="28"
-                        Tag="&#xE71C;" Content="{u:T Main_Filter}" Margin="12,0,4,0" ToolTip="{u:T Filter_ToggleTip}" Click="FilterToggle_Click" />
+                        Tag="{StaticResource Icon.Filter}" Content="{u:T Main_Filter}" Margin="12,0,4,0" ToolTip="{u:T Filter_ToggleTip}" Click="FilterToggle_Click" />
                 <WrapPanel x:Name="LegendPanel" DockPanel.Dock="Right" Visibility="Collapsed"
                            VerticalAlignment="Center" Margin="12,0,4,0" />
                 <TextBlock x:Name="BreadcrumbInfo" DockPanel.Dock="Right" Foreground="{DynamicResource TextDim}"
@@ -138,44 +144,6 @@
             <DockPanel x:Name="RailContent" LastChildFill="False" />
         </Border>
 
-        <!-- ============================================================ bottom panel: by type, safe to clear, when changed -->
-        <Border x:Name="BottomPanel" DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}"
-                BorderThickness="0,1,0,0" Padding="16,8,10,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="4*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <DockPanel Grid.Column="0" Margin="0,0,16,0">
-                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabType}" FontWeight="SemiBold" />
-                    <TextBlock x:Name="TypeSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
-                    <StackPanel x:Name="TypeBody" />
-                </DockPanel>
-                <Border Grid.Column="1" Width="1" Background="{DynamicResource Stroke}" Margin="0,2,16,0" />
-
-                <DockPanel Grid.Column="2" Margin="0,0,16,0">
-                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabCleanup}" FontWeight="SemiBold" />
-                    <TextBlock x:Name="CleanupSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,6" TextTrimming="CharacterEllipsis" />
-                    <StackPanel x:Name="CleanupBody" />
-                </DockPanel>
-                <Border Grid.Column="3" Width="1" Background="{DynamicResource Stroke}" Margin="0,2,16,0" />
-
-                <DockPanel Grid.Column="4" Margin="0,0,8,0">
-                    <TextBlock DockPanel.Dock="Top" Text="{u:T Panel_TabTimeline}" FontWeight="SemiBold" />
-                    <TextBlock x:Name="TimelineSummary" DockPanel.Dock="Top" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
-                    <StackPanel x:Name="TimelineBody" />
-                </DockPanel>
-
-                <Button x:Name="BottomCollapse" Grid.Column="5" Style="{StaticResource ToolButton}" Tag="&#xE70D;" ToolTip="{u:T Panel_Collapse}"
-                        Click="BottomCollapse_Click" Padding="8,0" VerticalAlignment="Top" />
-            </Grid>
-        </Border>
-
         <!-- ============================================================ status bar -->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}"
                 BorderThickness="0,1,0,0" Padding="12,6">
@@ -187,7 +155,7 @@
         </Border>
 
         <!-- ============================================================ side panel: top lists -->
-        <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="340" MinWidth="240"
+        <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="300" MinWidth="220"
                 Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,1,0">
           <Grid>
             <DockPanel>
@@ -209,8 +177,8 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="&#xEDA2;" FontFamily="{StaticResource IconFont}" FontSize="16"
-                                           Foreground="{DynamicResource TextDim}" Margin="0,1,10,0" VerticalAlignment="Center" />
+                                <controls:Icon Glyph="{Binding Icon}" Width="16" Height="16"
+                                        Foreground="{DynamicResource TextDim}" Margin="0,1,10,0" VerticalAlignment="Center" />
                                 <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"
                                            VerticalAlignment="Center" />
                                 <TextBlock Grid.Column="2" Text="{Binding FreeText}" Foreground="{DynamicResource TextDim}"
@@ -230,7 +198,8 @@
                 <Thumb x:Name="SectionSplitter" DockPanel.Dock="Top" Style="{StaticResource SplitterThumb}" Height="9" Margin="0,4,0,2" Cursor="SizeNS"
                        DragDelta="SectionSplitter_DragDelta" DragCompleted="Splitter_DragCompleted" />
 
-                <!-- largest items -->
+                <!-- largest items (hidden while the Insights view shows them in full) -->
+                <DockPanel x:Name="LargestSection">
                 <TextBlock DockPanel.Dock="Top" Text="{u:T Main_LargestItems}" FontSize="15" FontWeight="SemiBold" Margin="14,4,14,2" />
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,4,10,4">
                     <Button x:Name="TabFiles" Style="{StaticResource TabButton}" Content="{u:T Main_Files}" Click="Tab_Click" />
@@ -265,6 +234,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                </DockPanel>
             </DockPanel>
             <!-- drag to resize the whole panel -->
             <Thumb x:Name="PanelSplitter" Style="{StaticResource SplitterThumb}" HorizontalAlignment="Right" Width="6" Cursor="SizeWE"
@@ -285,71 +255,71 @@
                                 </StackPanel>
                             </MenuItem.Header>
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE946;" FontSize="16" Foreground="{DynamicResource Accent}" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Info}" Width="16" Height="16" Foreground="{DynamicResource Accent}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
                         <MenuItem x:Name="MenuFocus" Header="{u:T Main_ZoomToFolder}" InputGestureText="{u:T Main_DoubleClick}" Click="MenuFocus_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8A3;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.ZoomIn}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuUp" Header="{u:T Main_UpOneFolder}" InputGestureText="{u:T Main_Backspace}" Click="Up_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE74A;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Up}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuFit" Header="{u:T Main_ShowWholeMap}" InputGestureText="{u:T Main_Home}" Click="Fit_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE80F;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Home}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
                         <MenuItem x:Name="MenuOpen" Header="{u:T Main_Open}" InputGestureText="{u:T Main_Enter}" Click="MenuOpen_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8E5;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Open}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuExplorer" Header="{u:T Main_ShowInExplorer}" Click="MenuExplorer_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE838;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.ScanFolder}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuProperties" Header="{u:T Main_Properties}" InputGestureText="{u:T Main_AltEnter}" Click="MenuProperties_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE90F;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Properties}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
                         <MenuItem x:Name="MenuCopy" Header="{u:T Main_CopyPath}" InputGestureText="{u:T Main_CtrlC}" Click="MenuCopy_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8C8;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Copy}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuCopyName" Header="{u:T Main_CopyName}" Click="MenuCopyName_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8C8;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Copy}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuFilterType" Header="{u:T Main_ShowOnlyThisFile}" Click="MenuFilterType_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE71C;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Filter}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem x:Name="MenuSelectFolder" Header="{u:T Main_SelectEverythingInThis}" Click="MenuSelectFolder_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8B3;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Selection}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
                         <MenuItem x:Name="MenuRescan" Header="{u:T Main_RescanThisFolder}" Click="MenuRescan_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE72C;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Refresh}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="{u:T Main_ScanFile}">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE8E5;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Open}" />
                             </MenuItem.Icon>
                             <MenuItem x:Name="MenuSaveScan" Header="{u:T Main_SaveScanAs}" InputGestureText="{u:T Main_CtrlS}" Click="MenuSaveScan_Click" />
                             <MenuItem Header="{u:T Main_OpenSavedScan}" InputGestureText="{u:T Main_CtrlO}" Click="MenuOpenScan_Click" />
@@ -358,7 +328,7 @@
                         </MenuItem>
                         <MenuItem x:Name="MenuExport" Header="{u:T Main_ExportToCSV}">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xEDE1;" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Export}" />
                             </MenuItem.Icon>
                             <MenuItem Header="{u:T Main_LargestFiles}" Click="MenuExportFiles_Click" />
                             <MenuItem x:Name="MenuExportFolder" Header="{u:T Main_ThisFolder}" Click="MenuExportFolder_Click" />
@@ -368,12 +338,18 @@
                         <MenuItem x:Name="MenuDelete" Header="{u:T Main_MoveToRecycleBin}" InputGestureText="{u:T Main_Del}"
                                   Style="{StaticResource DangerMenuItem}" Click="MenuDelete_Click">
                             <MenuItem.Icon>
-                                <TextBlock Style="{StaticResource MenuIcon}" Text="&#xE74D;" Foreground="{DynamicResource Danger}" />
+                                <controls:Icon Style="{StaticResource MenuIcon}" Glyph="{StaticResource Icon.Delete}" Foreground="{DynamicResource Danger}" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </controls:TreemapControl.ContextMenu>
             </controls:TreemapControl>
+
+            <!-- insights: the scan summed up, in the map's place while the Insights view is on -->
+            <ScrollViewer x:Name="InsightsView" Visibility="Collapsed" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" SizeChanged="InsightsView_SizeChanged"
+                          Background="{DynamicResource Bg}" Focusable="False">
+                <StackPanel x:Name="InsightsHost" Margin="18,16,22,18" />
+            </ScrollViewer>
 
             <!-- start screen: pick a drive, or pick up where you left off (recent saved scans); the administrator offer is one footer line -->
             <Grid x:Name="EmptyHint">
@@ -391,8 +367,8 @@
                         <StackPanel x:Name="RecentRows" />
                     </Border>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                        <Button Style="{StaticResource ToolButton}" Tag="&#xE838;" Content="{u:T Start_ScanAFolder}" Click="ScanFolder_Click" />
-                        <Button Style="{StaticResource ToolButton}" Tag="&#xE8E5;" Content="{u:T Start_OpenASavedScan}" Margin="8,0,0,0" Click="MenuOpenScan_Click" />
+                        <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.ScanFolder}" Content="{u:T Start_ScanAFolder}" Click="ScanFolder_Click" />
+                        <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Open}" Content="{u:T Start_OpenASavedScan}" Margin="8,0,0,0" Click="MenuOpenScan_Click" />
                     </StackPanel>
                 </StackPanel>
 
@@ -407,7 +383,7 @@
                 <DockPanel>
                     <Border DockPanel.Dock="Top" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="16,0" Height="44">
                         <DockPanel>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="&#xE711;" Height="28" MinWidth="28" Padding="4,0"
+                            <Button DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Close}" Height="28" MinWidth="28" Padding="4,0"
                                     ToolTip="{u:T Main_Close}" Click="CloseDrawer_Click" />
                             <Button x:Name="DrawerClearButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Content="{u:T Drawer_ClearAll}" Height="28"
                                     IsEnabled="False" Click="ClearFilter_Click" />
@@ -443,79 +419,105 @@
             </Popup>
 
             <Grid x:Name="ScanOverlay" Background="{DynamicResource Scrim}" Visibility="Collapsed">
-                <Border Width="620" Padding="28,24,28,22" CornerRadius="12" Background="{DynamicResource Panel}"
+                <Border Width="800" Padding="30,24,30,22" CornerRadius="14" Background="{DynamicResource Panel}"
                         BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
                         HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="28" ShadowDepth="8" Opacity="0.5" Color="Black" />
                     </Border.Effect>
                     <StackPanel>
-                        <!-- title: name on the left, percentage on the right -->
+                        <!-- title: what is scanned, the facts about it in dim beside, the percentage on the right -->
                         <DockPanel>
-                            <TextBlock x:Name="ScanPercentText" DockPanel.Dock="Right" FontSize="26" FontWeight="SemiBold"
+                            <TextBlock x:Name="ScanPercentText" DockPanel.Dock="Right" FontSize="24" FontWeight="Bold"
                                        Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="16,0,0,0" />
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock x:Name="ScanTitle" Text="{u:T Main_Scanning}" FontSize="20" FontWeight="SemiBold" />
-                                <TextBlock x:Name="ScanSubtitle" Foreground="{DynamicResource TextDim}" Margin="0,2,0,0"
-                                           Text="{u:T Main_ReadingTheFolderTree}" />
-                            </StackPanel>
+                            <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                                <Run x:Name="ScanTitle" FontSize="24" FontWeight="Bold" />
+                                <Run Text="   " />
+                                <Run x:Name="ScanSubtitle" FontSize="13" Foreground="{DynamicResource TextDim}" />
+                            </TextBlock>
                         </DockPanel>
 
-                        <!-- counters -->
+                        <!-- the three stages: each a bar with its name under it; done, running, waiting -->
                         <Grid Margin="0,20,0,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="1.2*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="2.4*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Background="{DynamicResource Control}" CornerRadius="8" Padding="14,10">
-                                <StackPanel>
-                                    <TextBlock x:Name="ScanSizeText" Text="0 B" FontSize="24" FontWeight="SemiBold" />
-                                    <TextBlock Text="{u:T Main_FoundSoFar}" Foreground="{DynamicResource TextDim}" FontSize="12" />
-                                </StackPanel>
-                            </Border>
-                            <Border Grid.Column="2" Background="{DynamicResource Control}" CornerRadius="8" Padding="14,10">
-                                <StackPanel>
-                                    <TextBlock x:Name="ScanFilesText" Text="0" FontSize="24" FontWeight="SemiBold" />
-                                    <TextBlock Text="{u:T Main_Files2}" Foreground="{DynamicResource TextDim}" FontSize="12" />
-                                </StackPanel>
-                            </Border>
-                            <Border Grid.Column="4" Background="{DynamicResource Control}" CornerRadius="8" Padding="14,10">
-                                <StackPanel>
-                                    <TextBlock x:Name="ScanFoldersText" Text="0" FontSize="24" FontWeight="SemiBold" />
-                                    <TextBlock Text="{u:T Main_Folders2}" Foreground="{DynamicResource TextDim}" FontSize="12" />
-                                </StackPanel>
-                            </Border>
-                        </Grid>
-
-                        <!-- progress bar: determinate for whole drives, sweeping for folders -->
-                        <Grid x:Name="ScanBar" Height="6" Margin="0,18,0,8" ClipToBounds="True">
-                            <Border Background="{DynamicResource Control}" CornerRadius="3" />
-                            <Border x:Name="ScanBarFill" Background="{DynamicResource Accent}" CornerRadius="3"
-                                    HorizontalAlignment="Left" Width="160">
-                                <Border.RenderTransform>
-                                    <TranslateTransform x:Name="ScanBarSweep" />
-                                </Border.RenderTransform>
-                            </Border>
-                        </Grid>
-
-                        <!-- one quiet line: where the scan is, and how fast -->
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="16,0,0,0">
-                                <TextBlock x:Name="ScanRateText" Foreground="{DynamicResource TextDim}" FontSize="12" />
-                                <TextBlock x:Name="ScanElapsedText" Foreground="{DynamicResource TextDim}" FontSize="12" Margin="10,0,0,0" />
+                            <StackPanel Grid.Column="0">
+                                <Grid x:Name="StageFindBar" Height="6" ClipToBounds="True">
+                                    <Border Background="{DynamicResource Control}" CornerRadius="3" />
+                                    <Border x:Name="StageFindFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="6">
+                                        <Border.RenderTransform><TranslateTransform x:Name="StageFindSweep" /></Border.RenderTransform>
+                                    </Border>
+                                </Grid>
+                                <DockPanel Margin="0,8,0,0">
+                                    <controls:Icon x:Name="StageFindIcon" Glyph="{StaticResource Icon.Loader}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                                        <Run x:Name="StageFindText" FontWeight="SemiBold" Text="{u:T Scan_StageFind}" />
+                                        <Run x:Name="StageFindDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" />
+                                    </TextBlock>
+                                </DockPanel>
                             </StackPanel>
-                            <TextBlock x:Name="ScanPathText" Foreground="{DynamicResource TextDim}" FontSize="12"
-                                       TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="2">
+                                <Grid x:Name="StageBuildBar" Height="6" ClipToBounds="True">
+                                    <Border Background="{DynamicResource Control}" CornerRadius="3" />
+                                    <Border x:Name="StageBuildFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0">
+                                        <Border.RenderTransform><TranslateTransform x:Name="StageBuildSweep" /></Border.RenderTransform>
+                                    </Border>
+                                </Grid>
+                                <DockPanel Margin="0,8,0,0">
+                                    <controls:Icon x:Name="StageBuildIcon" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+                                        <Run x:Name="StageBuildText" FontWeight="SemiBold" Text="{u:T Scan_StageBuild}" />
+                                        <Run x:Name="StageBuildDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" />
+                                    </TextBlock>
+                                </DockPanel>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <Grid x:Name="StageDrawBar" Height="6" ClipToBounds="True">
+                                    <Border Background="{DynamicResource Control}" CornerRadius="3" />
+                                    <Border x:Name="StageDrawFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0">
+                                        <Border.RenderTransform><TranslateTransform x:Name="StageDrawSweep" /></Border.RenderTransform>
+                                    </Border>
+                                </Grid>
+                                <DockPanel Margin="0,8,0,0">
+                                    <controls:Icon x:Name="StageDrawIcon" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock x:Name="StageDrawText" FontWeight="SemiBold" Text="{u:T Scan_StageDraw}" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                </DockPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- the numbers, big, in one row; Cancel on the right -->
+                        <DockPanel Margin="0,22,0,0">
+                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                                <TextBlock Text="{u:T Main_EscAlsoCancels}" Foreground="{DynamicResource TextDim}" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                <Button x:Name="CancelButton" Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Close}"
+                                        Content="{u:T Main_Cancel}" Click="Cancel_Click" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Margin="0,0,36,0">
+                                    <TextBlock x:Name="ScanSizeText" Text="0 B" FontSize="30" FontWeight="Bold" />
+                                    <TextBlock x:Name="ScanSizeLabel" Text="{u:T Scan_FoundSoFar}" Foreground="{DynamicResource TextDim}" FontSize="11.5" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,36,0">
+                                    <TextBlock x:Name="ScanRateText" Text="0" FontSize="30" FontWeight="Bold" />
+                                    <TextBlock Text="{u:T Scan_FilesPerSecond}" Foreground="{DynamicResource TextDim}" FontSize="11.5" />
+                                </StackPanel>
+                                <StackPanel>
+                                    <TextBlock x:Name="ScanElapsedText" Text="0:00" FontSize="30" FontWeight="Bold" />
+                                    <TextBlock x:Name="ScanElapsedLabel" Text="{u:T Scan_Elapsed}" Foreground="{DynamicResource TextDim}" FontSize="11.5" />
+                                </StackPanel>
+                            </StackPanel>
                         </DockPanel>
 
-                        <DockPanel Margin="0,18,0,0">
-                            <Button x:Name="CancelButton" DockPanel.Dock="Right" Style="{StaticResource ToolButton}" Tag="&#xE711;"
-                                    Content="{u:T Main_Cancel}" Click="Cancel_Click" />
-                            <TextBlock Text="{u:T Main_EscAlsoCancels}" Foreground="{DynamicResource TextDim}" FontSize="12" VerticalAlignment="Center" />
-                        </DockPanel>
+                        <!-- the path the scan is at, on a hairline -->
+                        <Border BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Margin="0,16,0,0" Padding="0,10,0,0">
+                            <TextBlock x:Name="ScanPathText" Foreground="{DynamicResource TextDim}" FontSize="12" FontFamily="Consolas, Cascadia Mono, Segoe UI"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Border>
                     </StackPanel>
                 </Border>
             </Grid>

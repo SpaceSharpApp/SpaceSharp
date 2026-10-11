@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
+using SpaceSharp.Controls;
 
 namespace SpaceSharp;
 
@@ -165,7 +166,7 @@ public partial class MainWindow
         var text = new StackPanel { Orientation = Orientation.Horizontal };
         var name = Themed(new TextBlock { Text = label, Margin = new Thickness(0, 0, showValue ? 6 : 0, 0), VerticalAlignment = VerticalAlignment.Center }, TextBlock.ForegroundProperty, showValue ? "TextDim" : "Text");
         var value = new TextBlock { Text = Strings.Get("Rail_Any"), VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 220, Visibility = showValue ? Visibility.Visible : Visibility.Collapsed };
-        var chevron = Themed(new TextBlock { Text = "", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 9, Margin = new Thickness(7, 1, 0, 0), VerticalAlignment = VerticalAlignment.Center }, TextBlock.ForegroundProperty, "TextDim");
+        var chevron = Icons.Make("ChevronDown", 11, "TextDim"); chevron.Margin = new Thickness(7, 1, 0, 0);
         text.Children.Add(name); text.Children.Add(value); text.Children.Add(chevron);
         var pill = new Button { Style = (Style)FindResource("PillButton"), Content = text, Margin = new Thickness(0, 0, 6, 0) };
         _pillValues[pill] = value;

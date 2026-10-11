@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
+using SpaceSharp.Controls;
 
 namespace SpaceSharp;
 
@@ -36,13 +37,13 @@ public partial class AboutWindow : Window
 
         _checkButton = installed ? new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("About_Check"), Height = 30 } : null;
         if (_checkButton is not null) _checkButton.Click += CheckUpdates_Click;
-        Row("\uE895", Strings.Format("About_Version", _version), installed ? Strings.Get("About_InstalledCheck") : Strings.Get("About_PortableNoUpdates"), _checkButton, null);
-        Row("\uE7C3", Strings.Get("Update_WhatsNew"), Strings.Get("About_WhatsNewSub"), null, () => UpdateWindow.ShowWhatsNew(this, _version));
-        Row("\uE765", Strings.Get("About_Shortcuts"), Strings.Get("About_ShortcutsSub"), null, () => new ShortcutsWindow { Owner = this }.ShowDialog());
-        Row("\uEBE8", Strings.Get("About_ReportABug"), Strings.Get("About_ReportSub"), null, () => ReportBug_Click(this, new RoutedEventArgs()));
-        Row("\uEA80", Strings.Get("About_SuggestAFeature"), null, null, () => SuggestFeature_Click(this, new RoutedEventArgs()));
-        Row("\uE774", Strings.Get("About_Source"), Strings.Get("About_SourceSub"), null, () => OpenUrl(Repository));
-        Row("\uE8F1", Strings.Get("About_Credits"), Strings.Get("About_CreditsSub"), null, () => Dialog.Info(this, Strings.Get("About_Credits"), Strings.Get("About_CreditsText")));
+        Row("Sync", Strings.Format("About_Version", _version), installed ? Strings.Get("About_InstalledCheck") : Strings.Get("About_PortableNoUpdates"), _checkButton, null);
+        Row("Notes", Strings.Get("Update_WhatsNew"), Strings.Get("About_WhatsNewSub"), null, () => UpdateWindow.ShowWhatsNew(this, _version));
+        Row("Keyboard", Strings.Get("About_Shortcuts"), Strings.Get("About_ShortcutsSub"), null, () => new ShortcutsWindow { Owner = this }.ShowDialog());
+        Row("Bug", Strings.Get("About_ReportABug"), Strings.Get("About_ReportSub"), null, () => ReportBug_Click(this, new RoutedEventArgs()));
+        Row("Idea", Strings.Get("About_SuggestAFeature"), null, null, () => SuggestFeature_Click(this, new RoutedEventArgs()));
+        Row("Globe", Strings.Get("About_Source"), Strings.Get("About_SourceSub"), null, () => OpenUrl(Repository));
+        Row("Book", Strings.Get("About_Credits"), Strings.Get("About_CreditsSub"), null, () => Dialog.Info(this, Strings.Get("About_Credits"), Strings.Get("About_CreditsText")));
     }
 
     /// <summary>One list row: glyph, title, optional sub-line; either a button at the right or the whole row is a button with a chevron.</summary>
@@ -53,8 +54,8 @@ public partial class AboutWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-        var icon = new TextBlock { Text = glyph, FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 16, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 14, 0) };
-        icon.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+        var icon = Icons.Make(glyph, 16, "TextDim");
+        icon.Margin = new Thickness(0, 0, 14, 0);
         var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 9, 0, 9) };
         text.Children.Add(new TextBlock { Text = title, FontSize = 13.5 });
         if (!string.IsNullOrEmpty(sub))
@@ -74,8 +75,8 @@ public partial class AboutWindow : Window
         }
         else if (onClick is not null)
         {
-            var chevron = new TextBlock { Text = "\uE76C", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 2, 0) };
-            chevron.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+            var chevron = Icons.Make("ChevronRight", 12, "TextDim");
+            chevron.Margin = new Thickness(10, 0, 2, 0);
             Grid.SetColumn(chevron, 2);
             grid.Children.Add(chevron);
         }
@@ -133,7 +134,7 @@ public partial class AboutWindow : Window
         UpdateWindow.Show(this);
     }
 
-    private const string Repository = "https://github.com/ClearanceClarence/SpaceSharp";
+    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
 
     private void OpenGitHub_Click(object sender, RoutedEventArgs e) => OpenUrl(Repository);
 

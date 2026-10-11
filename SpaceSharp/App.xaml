@@ -6,6 +6,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- The color dictionary (Themes/Dark.xaml or Themes/Light.xaml) is added by ThemeManager at startup. -->
+                <ResourceDictionary Source="Themes/Icons.xaml" />
                 <ResourceDictionary Source="Themes/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

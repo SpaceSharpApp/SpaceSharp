@@ -12,6 +12,7 @@ const { chromium } = require("playwright");
 const SHOTS = [
   ["screenshot.png", "scene=none&theme=dark&palette=Graphite"],
   ["shot-filter.png", "scene=drawer&theme=dark&palette=Graphite"],
+  ["shot-insights.png", "scene=insights&theme=dark&palette=Graphite"],
   ["shot-change.png", "scene=compare&theme=dark&palette=Graphite"],
   ["shot-inspect.png", "scene=inspect&theme=dark&palette=Graphite"],
   ["shot-settings.png", "scene=settings&theme=dark&palette=Graphite"],
@@ -23,7 +24,8 @@ const SHOTS = [
 ];
 
 (async () => {
-  const browser = await chromium.launch();
+  // CHROME_PATH points at a Chromium of your own (the CI container has one); otherwise Playwright uses its download.
+  const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
   const page = await browser.newPage({ viewport: { width: 1680, height: 1040 }, deviceScaleFactor: 1.5 });
   const tool = "file://" + path.resolve(__dirname, "screenshot-mockup.html");
   for (const [file, query] of SHOTS) {

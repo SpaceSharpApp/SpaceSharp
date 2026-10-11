@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
+using SpaceSharp.Controls;
 
 namespace SpaceSharp;
 
@@ -17,7 +18,7 @@ namespace SpaceSharp;
 /// </summary>
 public static class UpdateWindow
 {
-    private const string Repository = "https://github.com/ClearanceClarence/SpaceSharp";
+    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
 
     public static void Show(Window owner)
     {
@@ -48,8 +49,8 @@ public static class UpdateWindow
         var fromText = new TextBlock { Text = current, FontSize = 12.5 };
         fromText.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
         from.Child = fromText;
-        var arrow = new TextBlock { Text = "\uE72A", FontSize = 12, Margin = new Thickness(10, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center, FontFamily = (FontFamily)Application.Current.FindResource("IconFont") };
-        arrow.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+        var arrow = Icons.Make("ArrowRight", 13, "TextDim");
+        arrow.Margin = new Thickness(10, 0, 10, 0);
         var to = new Border { CornerRadius = new CornerRadius(999), Padding = new Thickness(12, 4, 12, 4) };
         to.SetResourceReference(Border.BackgroundProperty, "Accent");
         to.Child = new TextBlock { Text = version, FontSize = 12.5, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush(Color.FromRgb(0x1C, 0x15, 0x00)) };
@@ -149,7 +150,7 @@ public static class UpdateWindow
         var scroll = new ScrollViewer { Content = notes, MaxHeight = 380, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
         body.Children.Add(scroll);
 
-        var all = new Button { Content = Strings.Get("WhatsNew_SeeAll"), Style = (Style)Application.Current.FindResource("ToolButton"), Tag = "\uE8A7", Height = 32 };
+        var all = new Button { Content = Strings.Get("WhatsNew_SeeAll"), Style = (Style)Application.Current.FindResource("ToolButton"), Tag = Icons.Get("External"), Height = 32 };
         all.Click += (_, _) => { try { Process.Start(new ProcessStartInfo(span ? $"{Repository}/blob/{version}/CHANGELOG.md" : $"{Repository}/releases/tag/{version}") { UseShellExecute = true }); } catch { } };
         var close = new Button { Content = Strings.Get("Dialog_Ok"), Style = (Style)Application.Current.FindResource("AccentButton"), Height = 32, MinWidth = 84, IsDefault = true, IsCancel = true };
         close.Click += (_, _) => window.Close();
@@ -197,7 +198,7 @@ public static class UpdateWindow
         {
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
             http.DefaultRequestHeaders.UserAgent.ParseAdd("SpaceSharp");
-            string changelog = await http.GetStringAsync($"https://raw.githubusercontent.com/ClearanceClarence/SpaceSharp/{through}/CHANGELOG.md");
+            string changelog = await http.GetStringAsync($"https://raw.githubusercontent.com/SpaceSharpApp/SpaceSharp/{through}/CHANGELOG.md");
             string? sections = SectionsBetween(changelog, since, through);
             if (!string.IsNullOrWhiteSpace(sections)) return sections;
         }
@@ -248,7 +249,7 @@ public static class UpdateWindow
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
             http.DefaultRequestHeaders.UserAgent.ParseAdd("SpaceSharp");
             http.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
-            string json = await http.GetStringAsync($"https://api.github.com/repos/ClearanceClarence/SpaceSharp/releases/tags/{version}");
+            string json = await http.GetStringAsync($"https://api.github.com/repos/SpaceSharpApp/SpaceSharp/releases/tags/{version}");
             using var doc = JsonDocument.Parse(json);
             return doc.RootElement.TryGetProperty("body", out var body) ? body.GetString() : null;
         }

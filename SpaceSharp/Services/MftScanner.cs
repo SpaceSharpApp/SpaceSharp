@@ -19,6 +19,9 @@ internal sealed class MftScanner
     /// <summary>Counters the scanner reports into while it works; the same ones the folder walk uses.</summary>
     public delegate void Progress(long files, long directories, long bytes, string currentPath);
 
+    /// <summary>The "current path" reported once the records are read and the tree is being linked together.</summary>
+    public static readonly string BuildingMarker = Strings.Get("Mft_Building");
+
     private const uint GenericRead = 0x80000000;
     private const uint FileShareReadWrite = 0x1 | 0x2;
     private const uint OpenExisting = 3;
@@ -216,7 +219,7 @@ internal sealed class MftScanner
                     _progress(_files, _directories, _bytes, Strings.Format("Mft_Reading", recordIndex, recordCount));
             }
         }
-        _progress(_files, _directories, _bytes, Strings.Get("Mft_Building"));
+        _progress(_files, _directories, _bytes, BuildingMarker);
     }
 
     // ------------------------------------------------------------------ parsing

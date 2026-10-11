@@ -1,0 +1,171 @@
+name: Release
+
+# Builds, signs and drafts a release. Runs when a version tag is pushed (the tag is the bare version, "2.1.0",
+# matching <Version> in SpaceSharp.csproj), or by hand from the Actions tab as a dry run that builds and signs with
+# the test policy but creates no release.
+#
+# The build is installer/release.ps1 in three stages, with SignPath signing in between: the app exes after Build
+# (so the installers contain a signed app), the installers and MSIs after Pack. Signing is skipped when the
+# SignPath secrets are not set, so the workflow can be exercised before the project is approved; the files are
+# then unsigned, exactly as a local build is.
+#
+# Secrets: SIGNPATH_API_TOKEN (a CI user's API token). Variables: SIGNPATH_ORGANIZATION_ID, SIGNPATH_PROJECT_SLUG,
+# and optionally SIGNPATH_POLICY_RELEASE / SIGNPATH_POLICY_TEST (default "release-signing" / "test-signing").
+
+on:
+  push:
+    tags: ['[0-9]+.[0-9]+.[0-9]+']
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and test-sign only; create no release
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, sign and draft
+    runs-on: windows-latest
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+      SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+      SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      SIGNPATH_PROJECT_SLUG: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install vpk
+        run: dotnet tool install -g vpk
+
+      - name: Check that the tag matches the project version
+        if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          $csproj = Get-Content .\SpaceSharp\SpaceSharp.csproj -Raw
+          if ($csproj -notmatch '<Version>([^<]+)</Version>') { throw "No <Version> in SpaceSharp.csproj" }
+          $version = $Matches[1]
+          $tag = "${{ github.ref_name }}"
+          if ($version -ne $tag) { throw "Tag $tag does not match <Version>$version</Version>. Bump the version, commit, and tag that commit." }
+          if (-not (Select-String -Path .\CHANGELOG.md -Pattern "^## $([regex]::Escape($version))\s*$" -Quiet)) {
+            throw "CHANGELOG.md has no '## $version' heading. Take '(unreleased)' off it before tagging."
+          }
+          "Releasing SpaceSharp $version"
+
+      - name: Choose the signing policy
+        shell: pwsh
+        run: |
+          $policy = if ($env:DRY_RUN -eq 'true') { "${{ vars.SIGNPATH_POLICY_TEST || 'test-signing' }}" } else { "${{ vars.SIGNPATH_POLICY_RELEASE || 'release-signing' }}" }
+          "SIGNPATH_POLICY=$policy" >> $env:GITHUB_ENV
+          if ($env:SIGNPATH_API_TOKEN) { "Signing with policy $policy" } else { "SignPath secrets not set: this build will not be signed" }
+
+      # ---------------------------------------------------------------- stage 1: the app
+      - name: Build
+        shell: pwsh
+        run: .\installer\release.ps1 -Stage Build
+
+      - name: Collect the app binaries for signing
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .\signing\app\portable-x64, .\signing\app\portable-x86, .\signing\app\velopack-x64, .\signing\app\velopack-x86 | Out-Null
+          Copy-Item .\publish\portable\SpaceSharp.exe     .\signing\app\portable-x64\
+          Copy-Item .\publish\portable-x86\SpaceSharp.exe .\signing\app\portable-x86\
+          Copy-Item .\publish\velopack\SpaceSharp.exe     .\signing\app\velopack-x64\
+          Copy-Item .\publish\velopack-x86\SpaceSharp.exe .\signing\app\velopack-x86\
+
+      - name: Upload the app binaries (unsigned)
+        id: app-unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-unsigned
+          path: signing/app
+          if-no-files-found: error
+
+      - name: Sign the app binaries
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ env.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
+          artifact-configuration-slug: app
+          github-artifact-id: ${{ steps.app-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signing/app-signed
+
+      - name: Put the signed app binaries back
+        if: env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          Copy-Item .\signing\app-signed\portable-x64\SpaceSharp.exe .\publish\portable\SpaceSharp.exe     -Force
+          Copy-Item .\signing\app-signed\portable-x86\SpaceSharp.exe .\publish\portable-x86\SpaceSharp.exe -Force
+          Copy-Item .\signing\app-signed\velopack-x64\SpaceSharp.exe .\publish\velopack\SpaceSharp.exe     -Force
+          Copy-Item .\signing\app-signed\velopack-x86\SpaceSharp.exe .\publish\velopack-x86\SpaceSharp.exe -Force
+          Get-AuthenticodeSignature .\publish\portable\SpaceSharp.exe | Format-List Status, SignerCertificate
+
+      # ---------------------------------------------------------------- stage 2: the installers
+      - name: Pack
+        shell: pwsh
+        run: .\installer\release.ps1 -Stage Pack
+
+      - name: Collect the installers for signing
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force .\signing\installers | Out-Null
+          Copy-Item .\Releases\SpaceSharp-win-x64-Setup.exe, .\Releases\SpaceSharp-win-x86-Setup.exe, .\Releases\SpaceSharp-win-x64.msi, .\Releases\SpaceSharp-win-x86.msi .\signing\installers\
+
+      - name: Upload the installers (unsigned)
+        id: installers-unsigned
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-unsigned
+          path: signing/installers
+          if-no-files-found: error
+
+      - name: Sign the installers
+        if: env.SIGNPATH_API_TOKEN != ''
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ env.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ env.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
+          artifact-configuration-slug: installers
+          github-artifact-id: ${{ steps.installers-unsigned.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signing/installers-signed
+
+      - name: Put the signed installers back
+        if: env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          Copy-Item .\signing\installers-signed\* .\Releases\ -Force
+          Get-ChildItem .\Releases\*-Setup.exe, .\Releases\*.msi | Get-AuthenticodeSignature | Format-Table Status, Path
+
+      - name: Keep the release assets with the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: Releases
+          if-no-files-found: error
+
+      # ---------------------------------------------------------------- stage 3: the draft release
+      - name: Draft the GitHub release
+        if: env.DRY_RUN != 'true'
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: .\installer\release.ps1 -Stage Upload

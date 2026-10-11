@@ -37,6 +37,9 @@ public sealed class ScanOptions
 /// Walks a folder tree on background threads. The top few levels are scanned
 /// in parallel, which helps a lot on SSDs.
 /// </summary>
+/// <summary>The stages of a scan as the card shows them.</summary>
+public enum ScanPhase { Finding, Building }
+
 public sealed class DiskScanner
 {
     private const int ParallelDepth = 3;
@@ -69,6 +72,24 @@ public sealed class DiskScanner
     /// <summary>How the current or last scan is done: "MFT" or "folder walk". Set as soon as the scan decides, so the UI can say so.</summary>
     public string LastMethod { get; private set; } = "folder walk";
 
+    private int _phase;
+
+    /// <summary>
+    /// Where the scan is: finding the files (walking folders or reading the file table), or, for a file table scan,
+    /// linking the records into a tree afterwards. The window shows the stages on the scan card.
+    /// </summary>
+    public ScanPhase Phase => (ScanPhase)Volatile.Read(ref _phase);
+
+    private void Report(long files, long dirs, long bytes, string path)
+    {
+        Interlocked.Exchange(ref _files, files);
+        Interlocked.Exchange(ref _directories, dirs);
+        Interlocked.Exchange(ref _bytes, bytes);
+        Volatile.Write(ref _currentPath, path);
+        if (path == MftScanner.BuildingMarker)   // also what the elevated helper sends, being the same program
+            Volatile.Write(ref _phase, (int)ScanPhase.Building);
+    }
+
     /// <summary>True when the last scan asked for administrator rights and the person said no.</summary>
     public bool ElevationDeclined { get; private set; }
 
@@ -89,6 +110,7 @@ public sealed class DiskScanner
         Interlocked.Exchange(ref _bytes, 0);
         Interlocked.Exchange(ref _denied, 0);
         Volatile.Write(ref _currentPath, rootPath);
+        Volatile.Write(ref _phase, (int)ScanPhase.Finding);
         _clusterSize = NativeFileInfo.GetClusterSize(rootPath);
         _seenLinks = options.DetectHardLinks ? new ConcurrentDictionary<(uint, uint, uint), byte>() : null;
         _enumeration = MakeEnumerationOptions(options.IncludeHidden);
@@ -112,13 +134,7 @@ public sealed class DiskScanner
                     LastMethod = "MFT";
                     try
                     {
-                        var fast = ElevatedScan.Run(rootPath, options, (files, dirs, bytes, path) =>
-                        {
-                            Interlocked.Exchange(ref _files, files);
-                            Interlocked.Exchange(ref _directories, dirs);
-                            Interlocked.Exchange(ref _bytes, bytes);
-                            Volatile.Write(ref _currentPath, path);
-                        }, ct);
+                        var fast = ElevatedScan.Run(rootPath, options, Report, ct);
                         fast.AddFreeSpace(new DriveInfo(rootPath).AvailableFreeSpace);
                         return fast;
                     }
@@ -143,13 +159,7 @@ public sealed class DiskScanner
                     LastMethod = "MFT";
                     try
                     {
-                        var mft = new MftScanner(rootPath, options.IncludeHidden, options.Exclude, (files, dirs, bytes, path) =>
-                        {
-                            Interlocked.Exchange(ref _files, files);
-                            Interlocked.Exchange(ref _directories, dirs);
-                            Interlocked.Exchange(ref _bytes, bytes);
-                            Volatile.Write(ref _currentPath, path);
-                        });
+                        var mft = new MftScanner(rootPath, options.IncludeHidden, options.Exclude, Report);
                         var fast = mft.Scan(ct);
                         fast.AddFreeSpace(new DriveInfo(rootPath).AvailableFreeSpace);
                         return fast;
@@ -159,6 +169,7 @@ public sealed class DiskScanner
                     {
                         LastMethod = "folder walk";
                         MftSkippedReason = ex.Message; // fall through to the folder walk
+                        Volatile.Write(ref _phase, (int)ScanPhase.Finding);
                         Interlocked.Exchange(ref _files, 0);
                         Interlocked.Exchange(ref _directories, 0);
                         Interlocked.Exchange(ref _bytes, 0);

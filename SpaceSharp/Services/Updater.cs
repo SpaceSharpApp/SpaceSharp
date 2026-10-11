@@ -9,7 +9,7 @@ namespace SpaceSharp.Services;
 /// </summary>
 internal sealed class Updater
 {
-    private const string Repository = "https://github.com/ClearanceClarence/SpaceSharp";
+    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
 
     private readonly UpdateManager _manager = new(new GithubSource(Repository, null, prerelease: false));
 

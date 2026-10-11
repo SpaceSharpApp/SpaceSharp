@@ -80,6 +80,12 @@
   <data name="Category_Other" xml:space="preserve"><value>Annet</value></data>
   <data name="Category_Programs" xml:space="preserve"><value>Programmer</value></data>
   <data name="Category_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="Category_GameData" xml:space="preserve"><value>Spilldata</value></data>
+  <data name="Category_Installers" xml:space="preserve"><value>Installasjonsfiler</value></data>
+  <data name="Category_DiskImages" xml:space="preserve"><value>Diskbilder</value></data>
+  <data name="Category_Databases" xml:space="preserve"><value>Databaser</value></data>
+  <data name="Category_Fonts" xml:space="preserve"><value>Skrifter</value></data>
+  <data name="Category_System" xml:space="preserve"><value>System</value></data>
   <data name="Changes_Grew" xml:space="preserve"><value>vokste</value></data>
   <data name="Changes_GrewFolder" xml:space="preserve"><value>mappe som vokste</value></data>
   <data name="Changes_New" xml:space="preserve"><value>ny</value></data>
@@ -249,13 +255,10 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>Eksporter til CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Filtype</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Filer</value></data>
-  <data name="Main_Files2" xml:space="preserve"><value>filer</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Filtertreff</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Filtervalg</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Mapper</value></data>
-  <data name="Main_Folders2" xml:space="preserve"><value>mapper</value></data>
-  <data name="Main_FoundSoFar" xml:space="preserve"><value>funnet så langt</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>Undersøk</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>Installer og start på nytt</value></data>
@@ -269,14 +272,12 @@
   <data name="Main_OpenSavedScan" xml:space="preserve"><value>Åpne lagret skanning…</value></data>
   <data name="Main_Palette" xml:space="preserve"><value>Palett</value></data>
   <data name="Main_Properties" xml:space="preserve"><value>Egenskaper</value></data>
-  <data name="Main_ReadingTheFolderTree" xml:space="preserve"><value>Leser mappetreet. Kartet vises når det er ferdig.</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>Skann på nytt (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>Skann denne mappen på nytt</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Start på nytt som administrator</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Lagre skanning som…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>Skanningsfil</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>Skann mappe</value></data>
-  <data name="Main_Scanning" xml:space="preserve"><value>Skanner…</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Velg alle filer som passer (Ctrl+A), så Del for å legge dem i papirkurven</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Velg alt i denne mappen</value></data>
   <data name="Main_SelectMatches" xml:space="preserve"><value>Velg treff</value></data>
@@ -323,6 +324,65 @@
   <data name="Palettes_Note" xml:space="preserve"><value>Legg til dine egne: én JSON-fil per palett i palettmappen. Mappen kommer med et eksempel og en README.</value></data>
   <data name="Palettes_OpenFolder" xml:space="preserve"><value>Åpne mappe</value></data>
   <data name="Palettes_Reload" xml:space="preserve"><value>Last inn igjen</value></data>
+  <data name="Palettes_New" xml:space="preserve"><value>Ny palett</value></data>
+  <data name="Palettes_Edit" xml:space="preserve"><value>Rediger {0}</value></data>
+  <data name="Palettes_Copy" xml:space="preserve"><value>Start fra {0}</value></data>
+  <data name="Palettes_CopyName" xml:space="preserve"><value>{0} kopi</value></data>
+  <data name="PaletteEd_Title" xml:space="preserve"><value>Palett</value></data>
+  <data name="PaletteEd_Name" xml:space="preserve"><value>Navn</value></data>
+  <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Det Palett-listen skal kalle den</value></data>
+  <data name="PaletteEd_For" xml:space="preserve"><value>For</value></data>
+  <data name="PaletteEd_Dark" xml:space="preserve"><value>Mørk</value></data>
+  <data name="PaletteEd_Light" xml:space="preserve"><value>Lys</value></data>
+  <data name="PaletteEd_Both" xml:space="preserve"><value>Begge</value></data>
+  <data name="PaletteEd_Folders" xml:space="preserve"><value>Mapper</value></data>
+  <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>tolv farger, én per toppmappe, gjentatt nedover</value></data>
+  <data name="PaletteEd_FolderN" xml:space="preserve"><value>Mappe {0}</value></data>
+  <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>toppmappe nummer {0}, og hvert tolvte nivå nedover</value></data>
+  <data name="PaletteEd_Generate" xml:space="preserve"><value>Lag:</value></data>
+  <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regnbue</value></data>
+  <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Naboer</value></data>
+  <data name="PaletteEd_TwoTone" xml:space="preserve"><value>To toner</value></data>
+  <data name="PaletteEd_OneHue" xml:space="preserve"><value>Én farge</value></data>
+  <data name="PaletteEd_Random" xml:space="preserve"><value>Tilfeldig</value></data>
+  <data name="PaletteEd_RandomTip" xml:space="preserve"><value>En tilfeldig grunnfarge og spredning. Trykk til noe ser riktig ut, og juster.</value></data>
+  <data name="PaletteEd_FromBase" xml:space="preserve"><value>fra</value></data>
+  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Grunnfargen generatoren starter fra. Klikk for å endre den.</value></data>
+  <data name="PaletteEd_Base" xml:space="preserve"><value>Grunnfarge</value></data>
+  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>det Lag starter fra; den første mappefargen som standard</value></data>
+  <data name="PaletteEd_Files" xml:space="preserve"><value>Filer</value></data>
+  <data name="PaletteEd_FilesSub" xml:space="preserve"><value>mappefargen, løftet mot hvitt</value></data>
+  <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Velg hver filfarge selv</value></data>
+  <data name="PaletteEd_FilesTint" xml:space="preserve"><value>Bruk én tone i stedet</value></data>
+  <data name="PaletteEd_FileN" xml:space="preserve"><value>Filfarge {0}</value></data>
+  <data name="PaletteEd_FileDetail" xml:space="preserve"><value>filer under mappefarge {0} av tolv</value></data>
+  <data name="PaletteEd_Types" xml:space="preserve"><value>Filtyper</value></data>
+  <data name="PaletteEd_TypesSub" xml:space="preserve"><value>fylt ut fra mappene; klikk en for å sette den</value></data>
+  <data name="PaletteEd_TypeDerived" xml:space="preserve"><value>utledet fra mappefargene; sett den, så blir den</value></data>
+  <data name="PaletteEd_TypeOwn" xml:space="preserve"><value>satt av deg</value></data>
+  <data name="PaletteEd_ResetDerived" xml:space="preserve"><value>Tilbake til utledet</value></data>
+  <data name="PaletteEd_Hue" xml:space="preserve"><value>Kulør</value></data>
+  <data name="PaletteEd_Saturation" xml:space="preserve"><value>Metning</value></data>
+  <data name="PaletteEd_Lightness" xml:space="preserve"><value>Lyshet</value></data>
+  <data name="PaletteEd_LabelOk" xml:space="preserve"><value>Etiketter på den: {0}, kontrast {1:0.0}:1</value></data>
+  <data name="PaletteEd_LabelLow" xml:space="preserve"><value>Etiketter på den: {0}, kontrast {1:0.0}:1, vanskelig å lese</value></data>
+  <data name="PaletteEd_DarkText" xml:space="preserve"><value>mørk tekst</value></data>
+  <data name="PaletteEd_LightText" xml:space="preserve"><value>lys tekst</value></data>
+  <data name="PaletteEd_ClosePairs" xml:space="preserve"><value>Mapper som er for like: {0}</value></data>
+  <data name="PaletteEd_LowLabels" xml:space="preserve"><value>{0} mappefarger der etikettene er vanskelige å lese</value></data>
+  <data name="PaletteEd_AllGood" xml:space="preserve"><value>Etikettene kan leses på alle mappefargene, og ingen to er for like.</value></data>
+  <data name="PaletteEd_Preview" xml:space="preserve"><value>Forhåndsvisning</value></data>
+  <data name="PaletteEd_PreviewNote" xml:space="preserve"><value>eksempeldata, din skyggelegging</value></data>
+  <data name="PaletteEd_Export" xml:space="preserve"><value>Kopier JSON</value></data>
+  <data name="PaletteEd_Exported" xml:space="preserve"><value>Palettfilen ligger på utklippstavlen.</value></data>
+  <data name="PaletteEd_Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="PaletteEd_Save" xml:space="preserve"><value>Lagre og bruk</value></data>
+  <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Navnet er opptatt</value></data>
+  <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} er en innebygd palett. Gi din et annet navn.</value></data>
+  <data name="PaletteEd_Replace" xml:space="preserve"><value>Erstatte paletten?</value></data>
+  <data name="PaletteEd_ReplaceDetail" xml:space="preserve"><value>En egen palett som heter {0} finnes allerede. Lagring erstatter den.</value></data>
+  <data name="PaletteEd_ReplaceYes" xml:space="preserve"><value>Erstatt</value></data>
+  <data name="PaletteEd_CouldNotSave" xml:space="preserve"><value>Kunne ikke lagre paletten</value></data>
   <data name="Period_Day" xml:space="preserve"><value>1 dag</value></data>
   <data name="Period_Days" xml:space="preserve"><value>{0} dager</value></data>
   <data name="Period_Month" xml:space="preserve"><value>1 måned</value></data>
@@ -340,14 +400,26 @@
   <data name="ScanFile_Newer" xml:space="preserve"><value>Denne skanningsfilen ble laget av en nyere SpaceSharp.</value></data>
   <data name="ScanFile_NotAScan" xml:space="preserve"><value>Ikke en SpaceSharp-skanningsfil.</value></data>
   <data name="Scan_FolderMissing" xml:space="preserve"><value>Mappen «{0}» finnes ikke.</value></data>
-  <data name="Scan_Rate" xml:space="preserve"><value>{0:0} filer/s</value></data>
-  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k filer/s</value></data>
-  <data name="Scan_ReadingMft" xml:space="preserve"><value>Leser NTFS-filtabellen direkte. Hver fil på stasjonen i én omgang.</value></data>
-  <data name="Scan_ReadingMftSized" xml:space="preserve"><value>Leser NTFS-filtabellen direkte, {0} brukt plass. Hver fil på stasjonen i én omgang.</value></data>
-  <data name="Scan_ReadingTree" xml:space="preserve"><value>Leser mappetreet. Kartet vises når det er ferdig.</value></data>
-  <data name="Scan_ReadingUsed" xml:space="preserve"><value>Leser {0} brukt plass. Kartet vises når det er ferdig.</value></data>
+  <data name="Scan_Rate" xml:space="preserve"><value>{0:0}</value></data>
+  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k</value></data>
   <data name="Scan_Title" xml:space="preserve"><value>Skanner {0}</value></data>
-  <data name="Scan_TitleMft" xml:space="preserve"><value>Skanner {0} fra filtabellen</value></data>
+  <data name="Scan_Used" xml:space="preserve"><value>{0} brukt</value></data>
+  <data name="Scan_FolderFacts" xml:space="preserve"><value>mappe</value></data>
+  <data name="Scan_MethodMft" xml:space="preserve"><value>filtabell</value></data>
+  <data name="Scan_MethodWalk" xml:space="preserve"><value>mappegjennomgang</value></data>
+  <data name="Scan_StageFind" xml:space="preserve"><value>Finn filene</value></data>
+  <data name="Scan_StageRead" xml:space="preserve"><value>Les filtabellen</value></data>
+  <data name="Scan_StageBuild" xml:space="preserve"><value>Bygg treet</value></data>
+  <data name="Scan_StageDraw" xml:space="preserve"><value>Tegn kartet</value></data>
+  <data name="Scan_SoFar" xml:space="preserve"><value>{0:N0} filer i {1:N0} mapper så langt</value></data>
+  <data name="Scan_FoundSoFar" xml:space="preserve"><value>funnet så langt</value></data>
+  <data name="Scan_FoundOf" xml:space="preserve"><value>funnet av {0}</value></data>
+  <data name="Scan_FilesPerSecond" xml:space="preserve"><value>filer per sekund</value></data>
+  <data name="Scan_Elapsed" xml:space="preserve"><value>gått</value></data>
+  <data name="Scan_ElapsedLeft" xml:space="preserve"><value>gått · omtrent {0} igjen</value></data>
+  <data name="Scan_ASecond" xml:space="preserve"><value>ett sekund</value></data>
+  <data name="Scan_Seconds" xml:space="preserve"><value>{0:0} s</value></data>
+  <data name="Scan_Minutes" xml:space="preserve"><value>{0:0} min</value></data>
   <data name="SettingsWin_Close" xml:space="preserve"><value>Lukk</value></data>
   <data name="SettingsWin_ResetToDefaults" xml:space="preserve"><value>Tilbakestill til standard</value></data>
   <data name="SettingsWin_Settings" xml:space="preserve"><value>Innstillinger</value></data>
@@ -456,7 +528,7 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Se hvor diskplassen ble av. SpaceSharp tegner hver fil og mappe som en boks like stor som plassen den bruker, så de største skiller seg ut.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} på {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap-layout av Bruls, Huizing og van Wijk (2000). Inspirert av SpaceMonger. Grensesnittikoner fra Segoe Fluent Icons.</value></data>
+  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap-layout av Bruls, Huizing og van Wijk (2000). Inspirert av SpaceMonger. Grensesnittikoner fra Lucide (ISC-lisens).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Innstillingene lagres i %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, f.eks. videos over 500MB older than 1 year</value></data>
   <data name="Group_Files" xml:space="preserve"><value>filer</value></data>
@@ -465,6 +537,10 @@
   <data name="Drive_Removable" xml:space="preserve"><value>Flyttbar</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>Nettverk</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>Optisk</value></data>
+  <data name="Drive_Hdd" xml:space="preserve"><value>Harddisk</value></data>
+  <data name="Drive_Ssd" xml:space="preserve"><value>SSD</value></data>
+  <data name="Drive_Nvme" xml:space="preserve"><value>NVMe-SSD</value></data>
+  <data name="Drive_Usb" xml:space="preserve"><value>USB</value></data>
   <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
   <data name="Settings_ExplorerMenu" xml:space="preserve"><value>«Skann med SpaceSharp» i Utforsker</value></data>
   <data name="Settings_ExplorerMenu_Desc" xml:space="preserve"><value>Legger til et valg i høyreklikkmenyen for mapper, stasjoner og mappebakgrunnen i Filutforsker. Bare for denne Windows-brukeren; krever ikke administratorrettigheter. Peker på denne kopien av SpaceSharp, så slå det av før du flytter den portable exe-filen.</value></data>
@@ -648,14 +724,14 @@
   <data name="Palette_GroupAny" xml:space="preserve"><value>Alle temaer</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Paletten for {0} tema. Hvert tema husker sin egen; kartet bytter sammen med temaet.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · laget for {1} tema</value></data>
-  <data name="Main_BottomPanel" xml:space="preserve"><value>Etter type, trygt å tømme og sist endret (B)</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Vis eller skjul panelet under kartet</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Bytt mellom kartet og Innsikt-visningen</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Etter type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Trygt å tømme</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Sist endret</value></data>
-  <data name="Panel_NoScan" xml:space="preserve"><value>Skann en stasjon eller mappe, så oppsummerer dette panelet den.</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>Skann en stasjon eller mappe, så oppsummerer denne visningen den.</value></data>
   <data name="Panel_TypeSummary" xml:space="preserve"><value>{0} utgjør {1} av skanningen. Hold musen over en type for å se den på kartet, klikk for å filtrere.</value></data>
   <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}: {1} i {2:N0} filer</value></data>
+  <data name="Panel_TypeFiles" xml:space="preserve"><value>{0:N0} filer</value></data>
   <data name="Panel_TypeLargest" xml:space="preserve"><value> · største: {0} ({1})</value></data>
   <data name="Panel_CleanupSummary" xml:space="preserve"><value>{0} på steder som vanligvis er trygge å tømme. Ingenting slettes før du sier fra.</value></data>
   <data name="Panel_CleanupNone" xml:space="preserve"><value>Ingenting opplagt å tømme.</value></data>
@@ -698,8 +774,6 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Panel_Expand" xml:space="preserve"><value>Fold panelet ut</value></data>
   <data name="Cleanup_Emptied" xml:space="preserve"><value>Papirkurven er tømt, {0} frigjort.</value></data>
   <data name="Cleanup_Recycle" xml:space="preserve"><value>Papirkurv</value></data>
-  <data name="Settings_BottomPanel" xml:space="preserve"><value>Vis bunnpanel</value></data>
-  <data name="Settings_BottomPanel_Desc" xml:space="preserve"><value>Panelet under kartet med plass etter type, hva som er trygt å tømme, og når filene sist ble endret. Snarvei: B.</value></data>
   <data name="Panel_BandTip" xml:space="preserve"><value>Filtrer kartet til filer sist endret {0}</value></data>
   <data name="Filter_ToggleTip" xml:space="preserve"><value>Vis eller skjul filteret (Ctrl+F)</value></data>
   <data name="Filter_ToggleCount" xml:space="preserve"><value>Filter · {0}</value></data>
@@ -722,4 +796,45 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="FilterLayout_Rail" xml:space="preserve"><value>Rad under stien</value></data>
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>Skuff over kartet</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Navn eller mønster, f.eks. *.iso</value></data>
+  <data name="Main_ViewMap" xml:space="preserve"><value>Kart</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>Kartet over skanningen (B bytter mellom de to visningene)</value></data>
+  <data name="Main_ViewInsights" xml:space="preserve"><value>Innsikt</value></data>
+  <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Skanningen oppsummert: etter type, trygt å tømme, sist endret, største elementer (B)</value></data>
+  <data name="Insights_Title" xml:space="preserve"><value>Innsikt</value></data>
+  <data name="Insights_Scanning" xml:space="preserve"><value>Skanner … oppsummeringen kommer når den er ferdig.</value></data>
+  <data name="Insights_Scanned" xml:space="preserve"><value>Skannet</value></data>
+  <data name="Insights_ScannedDetail" xml:space="preserve"><value>{0:N0} filer · {1:N0} mapper · {2}</value></data>
+  <data name="Insights_FromFileTable" xml:space="preserve"><value>fra filtabellen</value></data>
+  <data name="Insights_FromWalk" xml:space="preserve"><value>mappegjennomgang</value></data>
+  <data name="Insights_FreeOn" xml:space="preserve"><value>Ledig på {0}</value></data>
+  <data name="Insights_FreeOf" xml:space="preserve"><value>{0} av {1}</value></data>
+  <data name="Insights_FreeDetail" xml:space="preserve"><value>{0} brukt · {1}</value></data>
+  <data name="Insights_Free" xml:space="preserve"><value>Ledig plass</value></data>
+  <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} steder · {1} avkrysset</value></data>
+  <data name="Insights_Untouched" xml:space="preserve"><value>Urørt i et år</value></data>
+  <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} av skanningen · {1:N0} filer</value></data>
+  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Største mappe</value></data>
+  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} filer</value></data>
+  <data name="Insights_SinceLast" xml:space="preserve"><value>Siden forrige skanning</value></data>
+  <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nye filer</value></data>
+  <data name="Insights_NoBaseline" xml:space="preserve"><value>Ingen tidligere skanning</value></data>
+  <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Skann igjen en annen dag for å se hva som endret seg</value></data>
+  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} typer · klikk en rad for å filtrere kartet</value></data>
+  <data name="Insights_TypesReading" xml:space="preserve"><value>{0} er {1} av skanningen, mest under {2}. Deretter {3} med {4}.</value></data>
+  <data name="Insights_ClearSub" xml:space="preserve"><value>{0} på steder som vanligvis er trygge å tømme · ingenting slettes før du sier fra</value></data>
+  <data name="Insights_NoneChecked" xml:space="preserve"><value>Kryss av stedene du vil sende til papirkurven samlet</value></data>
+  <data name="Insights_Checked" xml:space="preserve"><value>{0} avkrysset · {1} · gir {2} ledig</value></data>
+  <data name="Insights_CheckTip" xml:space="preserve"><value>Ta med i Papirkurv for avkryssede</value></data>
+  <data name="Insights_RecycleChecked" xml:space="preserve"><value>Papirkurv for avkryssede</value></data>
+  <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} urørt i over et år · klikk en måned eller en gruppe for å filtrere</value></data>
+  <data name="Insights_OldestLargest" xml:space="preserve"><value>Største, urørt i et år eller mer</value></data>
+  <data name="Insights_LargestFolders" xml:space="preserve"><value>Største mapper</value></data>
+  <data name="Insights_AnywhereInScan" xml:space="preserve"><value>hvor som helst i skanningen</value></data>
+  <data name="Insights_LargestFiles" xml:space="preserve"><value>Største filer</value></data>
+  <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Skann denne disken igjen en annen dag, så viser dette kortet hva som vokste, krympet og kom til i mellomtiden. En lagret skanning kan også sammenlignes fra Skannefil › Sammenlign med en lagret skanning.</value></data>
+  <data name="Insights_Grew" xml:space="preserve"><value>Vokste</value></data>
+  <data name="Insights_Shrank" xml:space="preserve"><value>Krympet</value></data>
+  <data name="Insights_New" xml:space="preserve"><value>Nye</value></data>
+  <data name="Insights_Extensions" xml:space="preserve"><value>Største filendelser</value></data>
+  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>og hvor det meste av hver ligger</value></data>
 </root>

@@ -5,6 +5,10 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Util;
 
+/// <summary>
+/// What a file is, by extension. The order is the order of colors in a palette; Other stays last. The six after
+/// Code came out of Other in 2.0 so that a gaming PC does not read as "58% other".
+/// </summary>
 public enum FileCategory
 {
     Images,
@@ -14,6 +18,12 @@ public enum FileCategory
     Programs,
     Documents,
     Code,
+    GameData,
+    Installers,
+    DiskImages,
+    Databases,
+    Fonts,
+    System,
     Other
 }
 
@@ -43,7 +53,9 @@ public sealed class ColorScheme
     private readonly Dictionary<FileCategory, Brush> _categories;
     private readonly Dictionary<Brush, Brush> _labels = new();
 
-    /// <param name="categories">One color per <see cref="FileCategory"/>, in enum order.</param>
+    /// <param name="categories">One color per <see cref="FileCategory"/>, in enum order. A shorter list names the
+    /// first categories and Other (its last entry); the categories in between take the file tints in turn, except
+    /// System, which is a neutral steel.</param>
     internal ColorScheme(string name, Func<int, Color> folder, Func<int, Color> file,
         IReadOnlyList<Color> categories, Func<int, Color> neutral)
     {
@@ -51,6 +63,18 @@ public sealed class ColorScheme
         _folders = Enumerable.Range(0, DepthCycle).Select(d => Palette.Freeze(folder(d))).ToArray();
         _files = Enumerable.Range(0, DepthCycle).Select(d => Palette.Freeze(file(d))).ToArray();
         _neutral = Enumerable.Range(0, 6).Select(d => Palette.Freeze(neutral(d))).ToArray();
+        int count = Enum.GetValues<FileCategory>().Length;
+        if (categories.Count < count)
+        {
+            int given = Math.Max(0, categories.Count - 1);
+            var full = new Color[count];
+            for (int i = 0; i < count - 1; i++)
+                full[i] = i < given ? categories[i]
+                    : i == (int)FileCategory.System ? Color.FromRgb(0x8F, 0xA3, 0xB8)
+                    : file(i);
+            full[count - 1] = categories.Count > 0 ? categories[^1] : Color.FromRgb(0xB8, 0xB4, 0xAC);
+            categories = full;
+        }
         _categories = Enum.GetValues<FileCategory>().ToDictionary(c => c, c => Palette.Freeze(categories[(int)c]));
         Swatches = _folders.Take(8).ToArray();
     }
@@ -62,6 +86,18 @@ public sealed class ColorScheme
 
     /// <summary>The theme the palette is made for.</summary>
     public PaletteTheme Theme { get; internal set; } = PaletteTheme.Any;
+
+    /// <summary>The file this palette was read from, for custom ones, so the editor can open it.</summary>
+    public string? SourceFile { get; internal set; }
+
+    /// <summary>The folder hues in depth order (twelve), for the palette editor.</summary>
+    public IReadOnlyList<Color> FolderColors => _folders.Select(b => ((SolidColorBrush)b).Color).ToList();
+
+    /// <summary>The file colors in depth order (twelve).</summary>
+    public IReadOnlyList<Color> FileColors => _files.Select(b => ((SolidColorBrush)b).Color).ToList();
+
+    /// <summary>One color per <see cref="FileCategory"/>, in enum order.</summary>
+    public IReadOnlyList<Color> CategoryColors => Enum.GetValues<FileCategory>().Select(c => ((SolidColorBrush)_categories[c]).Color).ToList();
 
     /// <summary>True when the palette fits the given theme (an untagged one fits both).</summary>
     public bool Suits(bool dark) => Theme == PaletteTheme.Any || (Theme == PaletteTheme.Dark) == dark;
@@ -256,10 +292,18 @@ public static class Palette
         ColorScheme FromList(string name, string[] folderHex, double fileTint, Color[]? categories = null)
         {
             var folders = Hex(folderHex);
-            categories ??= Enumerable.Range(0, 7)
-                .Select(i => Mix(folders[i % folders.Length], Colors.White, 0.2))
-                .Append(Hex("#B8B4AC")[0])
-                .ToArray();
+            // A palette may name colors for the first categories and Other (the last entry); the rest take the
+            // folder hues in turn, except System, which is a neutral steel so it reads as "Windows' own", and Other,
+            // a warm grey when the palette does not say.
+            int count = Enum.GetValues<FileCategory>().Length;
+            int given = categories is null ? 0 : categories.Length - 1;
+            var full = new Color[count];
+            for (int i = 0; i < count - 1; i++)
+                full[i] = i < given ? categories![i]
+                    : i == (int)FileCategory.System ? Hex("#8FA3B8")[0]
+                    : Mix(folders[i % folders.Length], Colors.White, 0.2);
+            full[count - 1] = categories?[^1] ?? Hex("#B8B4AC")[0];
+            categories = full;
 
             return new ColorScheme(name,
                 d => folders[d % folders.Length],
@@ -320,7 +364,40 @@ public static class Palette
         (byte)Math.Round(a.G + (b.G - a.G) * t),
         (byte)Math.Round(a.B + (b.B - a.B) * t));
 
-    private static Color FromHsl(double h, double s, double l)
+    /// <summary>Hue 0 to 360, saturation and lightness 0 to 1, the inverse of <see cref="FromHsl"/>.</summary>
+    internal static (double H, double S, double L) ToHsl(Color c)
+    {
+        double r = c.R / 255.0, g = c.G / 255.0, b = c.B / 255.0;
+        double max = Math.Max(r, Math.Max(g, b)), min = Math.Min(r, Math.Min(g, b));
+        double l = (max + min) / 2, h = 0, sat = 0;
+        if (max > min)
+        {
+            double d = max - min;
+            sat = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if (max == r) h = (g - b) / d + (g < b ? 6 : 0);
+            else if (max == g) h = (b - r) / d + 2;
+            else h = (r - g) / d + 4;
+            h *= 60;
+        }
+        return (h, sat, l);
+    }
+
+    /// <summary>Relative luminance, 0 (black) to 1 (white), as WCAG defines it.</summary>
+    internal static double Luminance(Color c) => 0.2126 * LinearChannel(c.R) + 0.7152 * LinearChannel(c.G) + 0.0722 * LinearChannel(c.B);
+
+    private static double LinearChannel(byte channel) { double v = channel / 255.0; return v <= 0.04045 ? v / 12.92 : Math.Pow((v + 0.055) / 1.055, 2.4); }
+
+    /// <summary>The label color the map puts on a fill: near-black on light fills, near-white on dark ones (the rule <see cref="ColorScheme.LabelFor"/> uses).</summary>
+    internal static Color LabelColorFor(Color fill) => Luminance(fill) > 0.2 ? Color.FromRgb(0x14, 0x14, 0x18) : Color.FromRgb(0xF2, 0xF2, 0xF6);
+
+    /// <summary>The WCAG contrast ratio between two colors, 1 to 21.</summary>
+    internal static double Contrast(Color a, Color b)
+    {
+        double la = Luminance(a), lb = Luminance(b);
+        return (Math.Max(la, lb) + 0.05) / (Math.Min(la, lb) + 0.05);
+    }
+
+    internal static Color FromHsl(double h, double s, double l)
     {
         h = ((h % 360) + 360) % 360 / 360.0;
         l = Math.Clamp(l, 0, 1);
@@ -365,9 +442,15 @@ public static class Palette
             ".raw", ".cr2", ".nef", ".heic", ".svg", ".ico", ".dds", ".tga", ".exr", ".hdr");
         Add(FileCategory.Video, ".mp4", ".mkv", ".avi", ".mov", ".wmv", ".webm", ".m4v", ".mpg", ".mpeg", ".flv", ".ts", ".bk2", ".bik");
         Add(FileCategory.Audio, ".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma", ".opus", ".wem", ".bnk");
-        Add(FileCategory.Archives, ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".iso", ".cab", ".pak",
-            ".archive", ".ba2", ".bsa", ".vpk", ".img", ".vhd", ".vhdx", ".rpa");
-        Add(FileCategory.Programs, ".exe", ".dll", ".sys", ".msi", ".msp", ".so", ".bin", ".pdb", ".lib", ".ocx", ".drv", ".appx", ".msix");
+        Add(FileCategory.Archives, ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".tgz", ".zst", ".lz4", ".cab");
+        Add(FileCategory.Programs, ".exe", ".dll", ".so", ".bin", ".pdb", ".lib", ".ocx", ".jar", ".pyd", ".node");
+        Add(FileCategory.GameData, ".pak", ".archive", ".ba2", ".bsa", ".vpk", ".rpa", ".uasset", ".ubulk", ".umap", ".upk",
+            ".forge", ".bundle", ".pck", ".wad", ".gcf", ".nif", ".esp", ".esm", ".esl", ".sav");
+        Add(FileCategory.Installers, ".msi", ".msp", ".msix", ".msixbundle", ".appx", ".appxbundle", ".nupkg", ".apk", ".deb", ".rpm");
+        Add(FileCategory.DiskImages, ".iso", ".img", ".vhd", ".vhdx", ".vmdk", ".vdi", ".qcow2", ".wim", ".esd", ".dmg");
+        Add(FileCategory.Databases, ".db", ".sqlite", ".sqlite3", ".mdf", ".ldf", ".ndf", ".accdb", ".mdb", ".edb", ".realm", ".db-wal");
+        Add(FileCategory.Fonts, ".ttf", ".otf", ".ttc", ".woff", ".woff2", ".fon", ".pfb");
+        Add(FileCategory.System, ".sys", ".drv", ".mui", ".etl", ".evtx", ".dmp", ".pf", ".manifest", ".cat", ".inf", ".winmd");
         Add(FileCategory.Documents, ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".md",
             ".rtf", ".odt", ".ods", ".odp", ".epub", ".csv", ".log");
         Add(FileCategory.Code, ".cs", ".js", ".ts", ".tsx", ".jsx", ".php", ".py", ".cpp", ".c", ".h", ".hpp",

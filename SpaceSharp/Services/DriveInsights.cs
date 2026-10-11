@@ -4,7 +4,10 @@ using SpaceSharp.Util;
 namespace SpaceSharp.Services;
 
 /// <summary>Bytes and files of one file type across the scan, with the biggest single file of that type.</summary>
-public sealed record TypeShare(FileCategory Category, long Bytes, int Files, FsNode? Largest);
+/// <summary>One file type's share of a scan, with its biggest extensions (largest first, at most three).</summary>
+public sealed record TypeShare(FileCategory Category, long Bytes, int Files, FsNode? Largest, IReadOnlyList<ExtensionShare> Extensions);
+
+public sealed record ExtensionShare(string Extension, long Bytes);
 
 /// <summary>Bytes changed in one calendar month: the bar of the age timeline.</summary>
 public sealed record MonthBucket(int Year, int Month, long Bytes, int Files);
@@ -25,8 +28,14 @@ public enum CleanupAction
 /// <summary>One card on the "Safe to clear" panel.</summary>
 public sealed record CleanupSuggestion(string Key, long Bytes, IReadOnlyList<FsNode> Items, CleanupAction Action);
 
+/// <summary>An extension's total and the folder most of it lives in: the deepest folder holding at least half of it.</summary>
+public sealed record ExtensionHome(string Extension, long Bytes, int Files, FsNode? Folder, double Share);
+
+/// <summary>What changed since the compared scan, in totals.</summary>
+public sealed record ChangeTotals(long Grew, long Shrank, int NewFiles);
+
 /// <summary>
-/// The whole-scan summaries the bottom panel draws: space by file type, bytes changed per month, and places
+/// The whole-scan summaries the Insights view draws: space by file type, bytes changed per month, and places
 /// that are usually safe to empty. Pure functions of the tree, so each is computed once per scan and tested
 /// without a window.
 /// </summary>
@@ -40,18 +49,23 @@ public static class DriveInsights
         var bytes = new long[Enum.GetValues<FileCategory>().Length];
         var files = new int[bytes.Length];
         var largest = new FsNode?[bytes.Length];
+        var byExtension = new Dictionary<string, long>[bytes.Length];
         foreach (var f in root.DescendantFiles())
         {
             long size = f.SizeFor(measure);
             if (size <= 0) continue;
-            int c = (int)Palette.Categorize(f.Extension);
+            string ext = f.Extension;
+            int c = (int)Palette.Categorize(ext);
             bytes[c] += size;
             files[c]++;
             if (largest[c] is null || largest[c]!.SizeFor(measure) < size) largest[c] = f;
+            var exts = byExtension[c] ??= new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+            exts[ext.Length == 0 ? "(none)" : ext] = exts.GetValueOrDefault(ext.Length == 0 ? "(none)" : ext) + size;
         }
         return Enumerable.Range(0, bytes.Length)
             .Where(i => bytes[i] > 0)
-            .Select(i => new TypeShare((FileCategory)i, bytes[i], files[i], largest[i]))
+            .Select(i => new TypeShare((FileCategory)i, bytes[i], files[i], largest[i],
+                byExtension[i]!.OrderByDescending(kv => kv.Value).Take(3).Select(kv => new ExtensionShare(kv.Key, kv.Value)).ToList()))
             .OrderByDescending(t => t.Bytes)
             .ToList();
     }
@@ -210,5 +224,73 @@ public static class DriveInsights
     private static void AddWithAncestors(HashSet<FsNode> set, FsNode node)
     {
         for (var n = node; n is not null && set.Add(n); n = n.Parent) { }
+    }
+
+    // ---------------------------------------------------------------- the Insights view's extra cards
+
+    /// <summary>The biggest extensions and where each mostly lives. One pass over the files, then one up each tree for the winners.</summary>
+    public static List<ExtensionHome> ExtensionHomes(FsNode root, SizeMeasure measure, int count)
+    {
+        var totals = new Dictionary<string, (long Bytes, int Files)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var f in root.DescendantFiles())
+        {
+            string ext = f.Extension.Length == 0 ? "(none)" : f.Extension;
+            totals.TryGetValue(ext, out var t);
+            totals[ext] = (t.Bytes + f.SizeFor(measure), t.Files + 1);
+        }
+        var top = totals.OrderByDescending(kv => kv.Value.Bytes).Take(count).Select(kv => kv.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // bytes of each winning extension under every folder on the way up
+        var under = new Dictionary<string, Dictionary<FsNode, long>>(StringComparer.OrdinalIgnoreCase);
+        foreach (var f in root.DescendantFiles())
+        {
+            string ext = f.Extension.Length == 0 ? "(none)" : f.Extension;
+            if (!top.Contains(ext)) continue;
+            long size = f.SizeFor(measure);
+            if (!under.TryGetValue(ext, out var tally)) under[ext] = tally = new Dictionary<FsNode, long>();
+            for (var p = f.Parent; p is not null; p = p.Parent) tally[p] = tally.GetValueOrDefault(p) + size;
+        }
+        var result = new List<ExtensionHome>();
+        foreach (var ext in top.OrderByDescending(e => totals[e].Bytes))
+        {
+            var (bytes, files) = totals[ext];
+            FsNode? home = null; double share = 0;
+            if (bytes > 0 && under.TryGetValue(ext, out var tally))
+            {
+                // the deepest folder that still holds at least half of the extension
+                foreach (var (folder, b) in tally)
+                {
+                    if (b * 2 < bytes) continue;
+                    int depth = Depth(folder);
+                    if (home is null || depth > Depth(home) || (depth == Depth(home) && b > tally[home])) home = folder;
+                }
+                if (home is not null) share = (double)tally[home] / bytes;
+            }
+            result.Add(new ExtensionHome(ext, bytes, files, home, share));
+        }
+        return result;
+    }
+
+    private static int Depth(FsNode n) { int d = 0; for (var p = n.Parent; p is not null; p = p.Parent) d++; return d; }
+
+    /// <summary>The largest files not written to for at least a year, largest first.</summary>
+    public static List<FsNode> OldestLargest(FsNode root, SizeMeasure measure, DateTime nowUtc, int count)
+    {
+        var cutoff = nowUtc.AddYears(-1);
+        return root.DescendantFiles().Where(f => f.LastWriteUtc > DateTime.MinValue && f.LastWriteUtc < cutoff)
+            .OrderByDescending(f => f.SizeFor(measure)).Take(count).ToList();
+    }
+
+    /// <summary>Totals of the change since the compared scan: bytes grown, bytes shrunk, files that are new.</summary>
+    public static ChangeTotals Changes(FsNode root, SizeMeasure measure)
+    {
+        long grew = 0, shrank = 0; int fresh = 0;
+        if (!root.HasBaseline) return new ChangeTotals(0, 0, 0);
+        foreach (var f in root.DescendantFiles())
+        {
+            long c = f.ChangeFor(measure);
+            if (f.BaselineSize is null) fresh++;
+            if (c > 0) grew += c; else shrank -= c;
+        }
+        return new ChangeTotals(grew, shrank, fresh);
     }
 }

@@ -174,8 +174,6 @@ public partial class SettingsWindow : Window
                         i => { _settings.FilterLayout = i == 1 ? "Rail" : "Drawer"; _settings.ShowFilterRail = true; }));
                 Row(Strings.Get("Settings_SidePanel"), Strings.Get("Settings_SidePanel_Desc"),
                     Switch(_settings.ShowSidePanel, v => _settings.ShowSidePanel = v));
-                Row(Strings.Get("Settings_BottomPanel"), Strings.Get("Settings_BottomPanel_Desc"),
-                    Switch(_settings.ShowBottomPanel, v => { _settings.ShowBottomPanel = v; _settings.BottomPanelCollapsed = false; }));
                 Row(Strings.Get("Settings_AnimateZoom"), Strings.Get("Settings_AnimateZoom_Desc"),
                     Switch(_settings.AnimateZoom, v => _settings.AnimateZoom = v));
                 break;
@@ -355,10 +353,10 @@ public partial class SettingsWindow : Window
 
     private static bool IsBuiltIn(ColorScheme s) => !s.IsCustom;
 
-    private StackPanel PaletteButtons()
+    private Panel PaletteButtons()
     {
-        var panel = new StackPanel { Orientation = Orientation.Horizontal };
-        var open = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Palettes_OpenFolder"), Tag = "\uE838", Height = 30 };
+        var panel = new WrapPanel { Width = 320, Margin = new Thickness(0, 0, -6, -6) };
+        var open = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Palettes_OpenFolder"), Tag = Icons.Get("ScanFolder"), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
         open.Click += (_, _) =>
         {
             try
@@ -371,16 +369,41 @@ public partial class SettingsWindow : Window
                 Dialog.Error(this, Strings.Get("Palettes_CouldNotOpen"), ex.Message);
             }
         };
-        var reload = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Palettes_Reload"), Tag = "\uE72C", Height = 30, Margin = new Thickness(6, 0, 0, 0) };
+        var reload = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Palettes_Reload"), Tag = Icons.Get("Refresh"), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
         reload.Click += (_, _) =>
         {
             Palette.Reload();
             _main.RefreshPalettes();
             Build(); // redraw the page so the palette list and the note update
         };
+        bool dark = ThemeManager.IsDark;
+        var current = Palette.Find(_settings.PaletteFor(dark), dark);
+        var create = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Palettes_New"), Tag = Icons.Get("Add"), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
+        create.Click += (_, _) => OpenEditor(new PaletteDraft { Theme = dark ? PaletteTheme.Dark : PaletteTheme.Light, Folders = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), PaletteSpread.Rainbow) });
+        var edit = new Button
+        {
+            Style = (Style)FindResource("ToolButton"), Tag = Icons.Get("Palette"), Height = 30, Margin = new Thickness(0, 0, 6, 6),
+            Content = current.IsCustom ? Strings.Format("Palettes_Edit", current.Name) : Strings.Format("Palettes_Copy", current.Name)
+        };
+        edit.Click += (_, _) =>
+        {
+            PaletteDraft draft;
+            try { draft = current.IsCustom && current.SourceFile is { } file ? CustomPalettes.Read(file) : PaletteDraft.FromScheme(current, Strings.Format("Palettes_CopyName", current.Name)); }
+            catch (Exception ex) when (ex is IOException or InvalidDataException or FormatException or System.Text.Json.JsonException) { Dialog.Error(this, Strings.Get("Palettes_CouldNotOpen"), ex.Message); return; }
+            OpenEditor(draft);
+        };
+        panel.Children.Add(create);
+        panel.Children.Add(edit);
         panel.Children.Add(open);
         panel.Children.Add(reload);
         return panel;
+    }
+
+    private void OpenEditor(PaletteDraft draft)
+    {
+        var editor = new PaletteEditorWindow(_main, draft) { Owner = this };
+        editor.ShowDialog();
+        if (editor.Saved) Build();   // the palette list and the Edit button follow the new palette
     }
 
     private static readonly string[] MapFonts = { "Segoe UI", "Segoe UI Variable Text", "Calibri", "Arial", "Verdana", "Tahoma", "Consolas", "Cascadia Mono" };
@@ -393,10 +416,10 @@ public partial class SettingsWindow : Window
     /// </summary>
     private FrameworkElement ExclusionsEditor()
     {
-        var panel = new StackPanel { Width = 260 };
+        var panel = new StackPanel { Width = 320 };
         var chips = new WrapPanel();
-        var input = new TextBox { Style = (Style)FindResource("InputBox"), Tag = Strings.Get("Exclude_Placeholder"), Width = 196 };
-        var add = new Button { Style = (Style)FindResource("ToolButton"), Tag = "\uE710", Content = Strings.Get("Exclude_Add"), Height = 30, Margin = new Thickness(6, 0, 0, 0) };
+        var input = new TextBox { Style = (Style)FindResource("InputBox"), Tag = Strings.Get("Exclude_Placeholder") };
+        var add = new Button { Style = (Style)FindResource("ToolButton"), Tag = Icons.Get("Add"), Content = Strings.Get("Exclude_Add"), Height = 30, Margin = new Thickness(6, 0, 0, 0) };
         var suggestions = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
 
         List<string> Current() => NamePatterns.Parse(_settings.ExcludePatterns).Patterns.ToList();
@@ -421,7 +444,7 @@ public partial class SettingsWindow : Window
                 chip.SetResourceReference(Border.BorderBrushProperty, "Stroke");
                 var row = new StackPanel { Orientation = Orientation.Horizontal };
                 row.Children.Add(new TextBlock { Text = pattern, FontFamily = new FontFamily("Consolas"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center });
-                var remove = new Button { Style = (Style)FindResource("LinkButton"), Content = "\uE711", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 10, Margin = new Thickness(8, 0, 0, 0), ToolTip = Strings.Get("Exclude_Remove") };
+                var remove = new Button { Style = (Style)FindResource("ToolButton"), Tag = Icons.Get("Close"), Height = 22, MinWidth = 22, Padding = new Thickness(3, 0, 3, 0), Margin = new Thickness(6, 0, 0, 0), ToolTip = Strings.Get("Exclude_Remove") };
                 remove.SetResourceReference(ForegroundProperty, "TextDim");
                 string captured = pattern;
                 remove.Click += (_, _) => Save(Current().Where(p => !string.Equals(p, captured, StringComparison.OrdinalIgnoreCase)));
@@ -446,8 +469,10 @@ public partial class SettingsWindow : Window
         input.KeyDown += (_, e) => { if (e.Key == System.Windows.Input.Key.Enter) { Add(input.Text); e.Handled = true; } };
         Render();
 
-        var inputRow = new StackPanel { Orientation = Orientation.Horizontal };
-        inputRow.Children.Add(input); inputRow.Children.Add(add);
+        // the button takes what it needs on the right, the box the rest, so neither can run past the column
+        var inputRow = new DockPanel { LastChildFill = true };
+        DockPanel.SetDock(add, Dock.Right);
+        inputRow.Children.Add(add); inputRow.Children.Add(input);
         panel.Children.Add(chips); panel.Children.Add(inputRow); panel.Children.Add(suggestions);
         return panel;
     }
@@ -464,7 +489,7 @@ public partial class SettingsWindow : Window
         void Show(int i) => label.Text = KeepSteps[i] == 0 ? Strings.Get("KeepScans_Forever") : KeepSteps[i] % 365 == 0 ? Strings.Get("KeepScans_OneYear") : KeepSteps[i] >= 30 ? Strings.Format("KeepScans_Months", KeepSteps[i] / 30) : Strings.Format("KeepScans_Days", KeepSteps[i]);
         Show(index);
         slider.ValueChanged += (_, e) => { int i = (int)Math.Round(e.NewValue); _settings.KeepScansDays = KeepSteps[i]; Show(i); _settings.Save(); };
-        var clear = new Button { Style = (Style)FindResource("DangerOutlineButton"), Content = Strings.Get("KeepScans_DeleteAll"), Tag = "\uE74D", Height = 30, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 0) };
+        var clear = new Button { Style = (Style)FindResource("DangerOutlineButton"), Content = Strings.Get("KeepScans_DeleteAll"), Tag = Icons.Get("Delete"), Height = 30, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 0) };
         clear.Click += (_, _) =>
         {
             int count = ScanFile.RecentAutoSaves(int.MaxValue).Count;
@@ -544,7 +569,7 @@ public partial class SettingsWindow : Window
     /// </summary>
     private FrameworkElement PreviewMap()
     {
-        _preview = new TreemapControl { Height = 168, IsHitTestVisible = false, Focusable = false, Root = SampleTree() };
+        _preview = new TreemapControl { Height = 168, IsHitTestVisible = false, Focusable = false, Root = SampleTree(out _previewSelected) };
         _preview.SetResourceReference(TreemapControl.MapBackgroundProperty, "MapBg");
         RefreshPreview();
         var frame = new Border { CornerRadius = new CornerRadius(6), BorderThickness = new Thickness(1), ClipToBounds = true, Child = _preview };
@@ -582,7 +607,7 @@ public partial class SettingsWindow : Window
     private FsNode? _previewSelected;
 
     /// <summary>A pretend drive: five folders, one nested, with the kind of files the real map shows. Sizes in GB.</summary>
-    private FsNode SampleTree()
+    internal static FsNode SampleTree(out FsNode selected)
     {
         var root = new FsNode(Strings.Get("Settings_PreviewDrive"), NodeKind.Directory, null);
         FsNode Dir(FsNode parent, string name) { var d = new FsNode(name, NodeKind.Directory, parent); parent.Children.Add(d); return d; }
@@ -605,7 +630,7 @@ public partial class SettingsWindow : Window
         foreach (var (n, g) in new[] { ("Album.flac", 3.0), ("Live.flac", 2.0), ("Mix.mp3", 2.0), ("Demo.wav", 2.0), ("Intro.mp3", 1.0) }) File(music, n, g);
         foreach (var d in new[] { steam, photos, videos, programs, docs, music }) d.FinishDirectory();
         root.FinishDirectory();
-        _previewSelected = photos.Children[0]; // a selected box, so the highlight color has something to show on
+        selected = photos.Children[0]; // a selected box, so the highlight color has something to show on
         return root;
     }
 
@@ -715,7 +740,7 @@ public partial class SettingsWindow : Window
 
     private Button ResetShadingButton()
     {
-        var button = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Shading_ResetButton"), Tag = "\uE72C", Height = 30 };
+        var button = new Button { Style = (Style)FindResource("ToolButton"), Content = Strings.Get("Shading_ResetButton"), Tag = Icons.Get("Reset"), Height = 30 };
         button.Click += (_, _) => { _settings.ResetShading(); _main.ApplySettings(); Build(); };
         return button;
     }

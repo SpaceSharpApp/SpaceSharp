@@ -41,7 +41,13 @@ public sealed class FilterSpec
         ["program"] = FileCategory.Programs, ["programs"] = FileCategory.Programs, ["app"] = FileCategory.Programs,
         ["apps"] = FileCategory.Programs, ["executable"] = FileCategory.Programs, ["executables"] = FileCategory.Programs,
         ["document"] = FileCategory.Documents, ["documents"] = FileCategory.Documents, ["doc"] = FileCategory.Documents, ["docs"] = FileCategory.Documents,
-        ["code"] = FileCategory.Code, ["source"] = FileCategory.Code, ["other"] = FileCategory.Other
+        ["code"] = FileCategory.Code, ["source"] = FileCategory.Code, ["other"] = FileCategory.Other,
+        ["gamedata"] = FileCategory.GameData, ["game"] = FileCategory.GameData, ["games"] = FileCategory.GameData,
+        ["installers"] = FileCategory.Installers, ["installer"] = FileCategory.Installers, ["setup"] = FileCategory.Installers,
+        ["diskimages"] = FileCategory.DiskImages, ["diskimage"] = FileCategory.DiskImages, ["iso"] = FileCategory.DiskImages, ["images-disk"] = FileCategory.DiskImages,
+        ["databases"] = FileCategory.Databases, ["database"] = FileCategory.Databases, ["db"] = FileCategory.Databases,
+        ["fonts"] = FileCategory.Fonts, ["font"] = FileCategory.Fonts,
+        ["system"] = FileCategory.System, ["windows"] = FileCategory.System
     };
 
     private static readonly HashSet<string> Fillers = new(StringComparer.OrdinalIgnoreCase)

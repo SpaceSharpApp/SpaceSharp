@@ -48,6 +48,7 @@ public partial class MainWindow : Window
         public double Fraction { get; init; }                  // used share, 0..1
         public double BarWidth => Math.Round(Fraction * 300);
         public bool IsCurrent { get; init; }
+        public Geometry? Icon { get; init; }                   // hard disk, SSD, USB stick, network, optical
     }
 
     public MainWindow()
@@ -158,15 +159,15 @@ public partial class MainWindow : Window
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(90) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             bool drive = DiskScanner.IsDriveRoot(info.RootPath);
-            var icon = new TextBlock { Text = drive ? "\uEDA2" : "\uE8B7", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 14, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 14, 0) };
-            icon.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+            var icon = Icons.Make(drive ? DriveKinds.IconName(DriveKinds.Detect(info.RootPath)) : "Folder", 14, "TextDim");
+            icon.Margin = new Thickness(0, 0, 14, 0);
             var name = new TextBlock { Text = info.RootPath.TrimEnd('\\'), VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
             var when = new TextBlock { Text = Ago(info.ScannedUtc), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
             when.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
             var size = new TextBlock { Text = SizeFormatter.Format(info.Bytes), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
             size.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
-            var chevron = new TextBlock { Text = "\uE76C", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0) };
-            chevron.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+            var chevron = Icons.Make("ChevronRight", 12, "TextDim");
+            chevron.Margin = new Thickness(10, 0, 0, 0);
             Grid.SetColumn(name, 1); Grid.SetColumn(when, 2); Grid.SetColumn(size, 3); Grid.SetColumn(chevron, 4);
             grid.Children.Add(icon); grid.Children.Add(name); grid.Children.Add(when); grid.Children.Add(size); grid.Children.Add(chevron);
 
@@ -228,7 +229,7 @@ public partial class MainWindow : Window
         ApplyFilter();
         UpdateCompareUi();
         RefreshTopList();
-        RefreshBottomPanel();
+        RefreshInsights();
         LoadDrives();
         StatusScan.Text = Strings.Format("Status_OpenedScan", verb, Ago(info.ScannedUtc), root.FileCount, SizeFormatter.Format(info.Bytes)) +
                           (baseline is not null ? Strings.Format("Status_ComparedWith", Ago(baseline.ScannedUtc)) : string.Empty);
@@ -544,19 +545,15 @@ public partial class MainWindow : Window
                 if (!drive.IsReady) continue;
                 long used = drive.TotalSize - drive.AvailableFreeSpace;
                 string letter = drive.Name.TrimEnd('\\');
-                string kind = drive.DriveType switch
-                {
-                    DriveType.Removable => Strings.Get("Drive_Removable"),
-                    DriveType.Network => Strings.Get("Drive_Network"),
-                    DriveType.CDRom => Strings.Get("Drive_Optical"),
-                    _ => drive.DriveFormat
-                };
+                var kind = DriveKinds.Detect(drive);
+                string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {drive.DriveFormat}" : drive.DriveFormat;
                 rows.Add(new DriveRow
                 {
                     Path = drive.RootDirectory.FullName,
                     Name = string.IsNullOrWhiteSpace(drive.VolumeLabel) ? letter : $"{letter}  {drive.VolumeLabel}",
                     FreeText = Strings.Format("Drive_Free", SizeFormatter.Format(drive.AvailableFreeSpace)),
-                    Detail = Strings.Format("Drive_UsedOf", SizeFormatter.Format(used), SizeFormatter.Format(drive.TotalSize), kind),
+                    Detail = Strings.Format("Drive_UsedOf", SizeFormatter.Format(used), SizeFormatter.Format(drive.TotalSize), kindText),
+                    Icon = Icons.Get(DriveKinds.IconName(kind)),
                     Fraction = drive.TotalSize > 0 ? (double)used / drive.TotalSize : 0,
                     IsCurrent = _lastScanPath is not null && string.Equals(_lastScanPath, drive.RootDirectory.FullName, StringComparison.OrdinalIgnoreCase)
                 });
@@ -616,8 +613,8 @@ public partial class MainWindow : Window
             Treemap.Refresh();
         }
 
-        ApplyBottomPanelVisibility();
-        RefreshBottomPanel();
+        ApplyView();
+        RefreshInsights();
         ApplyFilterLayout();
         SidePanel.Visibility = _settings.ShowSidePanel ? Visibility.Visible : Visibility.Collapsed;
         ListsButton.Style = (Style)FindResource(_settings.ShowSidePanel ? "AccentButton" : "ToolButton");
@@ -726,9 +723,8 @@ public partial class MainWindow : Window
         _scanCts = cts;
         PrepareScanOverlay(path);
         SetScanning(true);
-        EndPeek();
         InvalidateInsights();
-        RefreshBottomPanel();
+        RefreshInsights();
         _scanClock.Restart();
         _progressTimer.Start();
 
@@ -744,6 +740,7 @@ public partial class MainWindow : Window
             };
             FsNode root = await _scanner.ScanAsync(path, options, cts.Token);
             if (_scanner.ElevationDeclined) _declinedElevation = true; // one "no" per session is enough
+            await ShowDrawingStageAsync();
             _baselineInfo = null;
             root.SetFreeSpaceVisible(_settings.ShowFreeSpace, Treemap.SizeMode);
             _root = root;
@@ -752,7 +749,7 @@ public partial class MainWindow : Window
             Treemap.Root = root;
             ApplyFilter();
             RefreshTopList();
-            RefreshBottomPanel();
+            RefreshInsights();
             LoadDrives();
 
             var progress = _scanner.GetProgress();
@@ -843,16 +840,19 @@ public partial class MainWindow : Window
         if (scanning) AccessBar.Visibility = Visibility.Collapsed;
         ScanFolderButton.IsEnabled = !scanning;
         CancelButton.IsEnabled = scanning;
-        if (!scanning) ScanBarSweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, null);
+        if (!scanning)
+            foreach (var sweep in new[] { StageFindSweep, StageBuildSweep, StageDrawSweep })
+                sweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, null);
         UpdateNavigation();
-        // The panel under the map is blank while scanning; once the scan is in (or cancelled), it sums up whatever is loaded.
-        RefreshBottomPanel();
+        // The Insights view is blank while scanning; once the scan is in (or cancelled), it sums up whatever is loaded.
+        RefreshInsights();
     }
 
     private void PrepareScanOverlay(string path)
     {
         _scanExpectedBytes = null;
         string target = path;
+        string? facts = null;
         try
         {
             if (DiskScanner.IsDriveRoot(path))
@@ -860,6 +860,8 @@ public partial class MainWindow : Window
                 var drive = new DriveInfo(path);
                 _scanExpectedBytes = Math.Max(1, drive.TotalSize - drive.AvailableFreeSpace);
                 target = string.IsNullOrWhiteSpace(drive.VolumeLabel) ? drive.Name.TrimEnd('\\') : $"{drive.Name.TrimEnd('\\')}  {drive.VolumeLabel}";
+                facts = Strings.Format("Scan_Used", SizeFormatter.Format(_scanExpectedBytes.Value));
+                if (DriveKinds.Label(DriveKinds.Detect(drive)) is { } kind) facts += " · " + kind;
             }
             else
             {
@@ -871,23 +873,28 @@ public partial class MainWindow : Window
         }
 
         _scanTarget = target;
+        _scanFacts = facts;
         ScanTitle.Text = Strings.Format("Scan_Title", target);
-        ScanSubtitle.Text = _scanExpectedBytes is null
-            ? Strings.Get("Scan_ReadingTree")
-            : Strings.Format("Scan_ReadingUsed", SizeFormatter.Format(_scanExpectedBytes.Value));
+        ScanSubtitle.Text = facts ?? Strings.Get("Scan_FolderFacts");
         ScanSizeText.Text = "0 B";
-        ScanFilesText.Text = "0";
-        ScanFoldersText.Text = "0";
-        ScanRateText.Text = string.Empty;
-        ScanElapsedText.Text = string.Empty;
+        ScanSizeLabel.Text = _scanExpectedBytes is { } expected ? Strings.Format("Scan_FoundOf", SizeFormatter.Format(expected)) : Strings.Get("Scan_FoundSoFar");
+        ScanRateText.Text = "0";
+        ScanElapsedText.Text = "0:00";
+        ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
         ScanPercentText.Text = string.Empty;
         _scanMethodShown = null;
         ScanPathText.Text = path;
-        SetScanBar(_scanExpectedBytes is null ? null : 0);
+        StageFindDetail.Text = string.Empty;
+        StageBuildDetail.Text = string.Empty;
+        _findSweepSized = false;
+        SetStage(ScanStage.Find, StageState.Running, _scanExpectedBytes is null ? null : 0);
+        SetStage(ScanStage.Build, StageState.Waiting);
+        SetStage(ScanStage.Draw, StageState.Waiting);
     }
 
     private string? _scanMethodShown;
     private string _scanTarget = string.Empty;
+    private string? _scanFacts;
     private string ScanTarget() => _scanTarget;
 
     /// <summary>Once the scanner has decided how it reads the drive, say so on the card.</summary>
@@ -897,12 +904,9 @@ public partial class MainWindow : Window
         if (method == _scanMethodShown) return;
         _scanMethodShown = method;
         bool mft = method == "MFT";
-        ScanTitle.Text = mft ? Strings.Format("Scan_TitleMft", ScanTarget()) : Strings.Format("Scan_Title", ScanTarget());
-        ScanSubtitle.Text = mft
-            ? _scanExpectedBytes is { } b ? Strings.Format("Scan_ReadingMftSized", SizeFormatter.Format(b)) : Strings.Get("Scan_ReadingMft")
-            : _scanExpectedBytes is null
-                ? Strings.Get("Scan_ReadingTree")
-                : Strings.Format("Scan_ReadingUsed", SizeFormatter.Format(_scanExpectedBytes.Value));
+        string how = Strings.Get(mft ? "Scan_MethodMft" : "Scan_MethodWalk");
+        ScanSubtitle.Text = _scanFacts is null ? Strings.Get("Scan_FolderFacts") + " · " + how : _scanFacts + " · " + how;
+        StageFindText.Text = Strings.Get(mft ? "Scan_StageRead" : "Scan_StageFind");
     }
 
     private void UpdateProgress()
@@ -912,41 +916,117 @@ public partial class MainWindow : Window
         double seconds = Math.Max(0.001, _scanClock.Elapsed.TotalSeconds);
 
         ScanSizeText.Text = SizeFormatter.Format(p.Bytes);
-        ScanFilesText.Text = p.Files.ToString("N0");
-        ScanFoldersText.Text = p.Directories.ToString("N0");
         ScanElapsedText.Text = _scanClock.Elapsed.ToString(@"m\:ss");
-        ScanRateText.Text = p.Files / seconds >= 1000
-            ? Strings.Format("Scan_RateK", p.Files / seconds / 1000)
-            : Strings.Format("Scan_Rate", p.Files / seconds);
-        ScanPathText.Text = ShortenPath(p.CurrentPath, 70);
+        double rate = p.Files / seconds;
+        ScanRateText.Text = rate >= 1000 ? Strings.Format("Scan_RateK", rate / 1000) : Strings.Format("Scan_Rate", rate);
+        ScanPathText.Text = ShortenPath(p.CurrentPath, 90);
+        string soFar = Strings.Format("Scan_SoFar", p.Files, p.Directories);
 
-        if (_scanExpectedBytes is { } expected)
+        if (_scanner.Phase == ScanPhase.Building)
         {
-            double fraction = Math.Clamp((double)p.Bytes / expected, 0, 0.99);
-            SetScanBar(fraction);
-            ScanPercentText.Text = $"{fraction * 100:0}%";
-        }
-    }
-
-    /// <summary>Sets the bar to a fraction (0..1), or starts the sweeping animation when null.</summary>
-    private void SetScanBar(double? fraction)
-    {
-        const double trackWidth = 564; // card width minus padding
-        if (fraction is { } f)
-        {
-            ScanBarSweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, null);
-            ScanBarSweep.X = 0;
-            ScanBarFill.Width = Math.Max(6, trackWidth * f);
+            // The file table is read; the records are being linked into a tree. The first bar fills, the second sweeps.
+            if (_stageStates[(int)ScanStage.Find] != StageState.Done)
+            {
+                SetStage(ScanStage.Find, StageState.Done);
+                StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss");
+                SetStage(ScanStage.Build, StageState.Running, null);
+            }
+            StageBuildDetail.Text = soFar;
+            ScanPercentText.Text = string.Empty;
+            ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
             return;
         }
 
-        ScanBarFill.Width = 160;
-        var sweep = new System.Windows.Media.Animation.DoubleAnimation(-160, trackWidth, TimeSpan.FromSeconds(1.4))
+        StageFindDetail.Text = soFar;
+        if (_scanExpectedBytes is null)
+        {
+            // A folder scan has no total to fill against: the bar sweeps, sized once the card has been laid out.
+            if (!_findSweepSized && StageFindBar.ActualWidth > 0) { _findSweepSized = true; SetStage(ScanStage.Find, StageState.Running, null); }
+        }
+        else if (_scanExpectedBytes is { } expected)
+        {
+            double fraction = Math.Clamp((double)p.Bytes / expected, 0, 0.99);
+            SetStage(ScanStage.Find, StageState.Running, fraction);
+            ScanPercentText.Text = $"{fraction * 100:0}%";
+            ScanElapsedLabel.Text = fraction > 0.05 && seconds > 1
+                ? Strings.Format("Scan_ElapsedLeft", TimeLeft(seconds * (1 - fraction) / fraction))
+                : Strings.Get("Scan_Elapsed");
+        }
+    }
+
+    /// <summary>"a second", "12 s", "3 min": the time left, rounded the way a person would say it.</summary>
+    private static string TimeLeft(double seconds) =>
+        seconds < 1.5 ? Strings.Get("Scan_ASecond")
+        : seconds < 90 ? Strings.Format("Scan_Seconds", Math.Ceiling(seconds))
+        : Strings.Format("Scan_Minutes", Math.Ceiling(seconds / 60));
+
+    private enum ScanStage { Find, Build, Draw }
+    private enum StageState { Waiting, Running, Done }
+    private readonly StageState[] _stageStates = new StageState[3];
+    private bool _findSweepSized;
+
+    /// <summary>
+    /// One stage of the card: waiting is an empty bar and a hollow circle, running a filling or sweeping bar with
+    /// the spinner glyph, done a full bar with a check. A fraction fills the bar; null sweeps it.
+    /// </summary>
+    private void SetStage(ScanStage stage, StageState state, double? fraction = null)
+    {
+        _stageStates[(int)stage] = state;
+        var (bar, fill, sweep, icon, text) = stage switch
+        {
+            ScanStage.Find => (StageFindBar, StageFindFill, StageFindSweep, StageFindIcon, (FrameworkContentElement)StageFindText),
+            ScanStage.Build => (StageBuildBar, StageBuildFill, StageBuildSweep, StageBuildIcon, StageBuildText),
+            _ => (StageDrawBar, StageDrawFill, StageDrawSweep, StageDrawIcon, null)
+        };
+        sweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, null);
+        sweep.X = 0;
+        icon.Glyph = Icons.Get(state switch { StageState.Done => "Check", StageState.Running => "Loader", _ => "Circle" });
+        icon.SetResourceReference(Controls.Icon.ForegroundProperty, state == StageState.Waiting ? "TextDim" : "Accent");
+        string labelKey = state == StageState.Waiting ? "TextDim" : "Text";
+        if (text is not null) text.SetResourceReference(System.Windows.Documents.TextElement.ForegroundProperty, labelKey);
+        else StageDrawText.SetResourceReference(TextBlock.ForegroundProperty, labelKey);
+
+        switch (state)
+        {
+            case StageState.Waiting:
+                fill.Width = 0;
+                return;
+            case StageState.Done:
+                fill.Width = Math.Max(6, bar.ActualWidth);
+                return;
+        }
+        double track = Math.Max(60, bar.ActualWidth);
+        if (fraction is { } f)
+        {
+            fill.Width = Math.Max(6, track * f);
+            return;
+        }
+        double w = Math.Min(120, track * 0.4);
+        fill.Width = w;
+        var animation = new System.Windows.Media.Animation.DoubleAnimation(-w, track, TimeSpan.FromSeconds(1.4))
         {
             RepeatBehavior = System.Windows.Media.Animation.RepeatBehavior.Forever,
             EasingFunction = new System.Windows.Media.Animation.SineEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseInOut }
         };
-        ScanBarSweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, sweep);
+        sweep.BeginAnimation(System.Windows.Media.TranslateTransform.XProperty, animation);
+    }
+
+    /// <summary>The scan is in; the tree is done and the map is about to be laid out. Lets the card paint that before the layout blocks the thread.</summary>
+    private async Task ShowDrawingStageAsync()
+    {
+        _progressTimer.Stop();
+        if (_stageStates[(int)ScanStage.Find] != StageState.Done)
+        {
+            SetStage(ScanStage.Find, StageState.Done);
+            StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss");
+        }
+        SetStage(ScanStage.Build, StageState.Done);
+        var p = _scanner.GetProgress();
+        StageBuildDetail.Text = Strings.Format("Scan_SoFar", p.Files, p.Directories);
+        SetStage(ScanStage.Draw, StageState.Running, null);
+        ScanPercentText.Text = "100%";
+        ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
+        await Dispatcher.Yield(DispatcherPriority.Render);
     }
 
     /// <summary>Keeps the start and the end of a long path: "C:\Windows\…\amd64_microsoft-windows-…".</summary>
@@ -1066,7 +1146,7 @@ public partial class MainWindow : Window
                 Content = crumb.Name,
                 ToolTip = crumb.FullPath
             };
-            if (i == 0) button.Tag = "\uEDA2";
+            if (i == 0) button.Tag = Icons.Get(DriveKinds.IconName(DriveKinds.Detect(crumb.FullPath)));
             if (isLast)
             {
                 button.SetResourceReference(ForegroundProperty, "Text");
@@ -1079,14 +1159,12 @@ public partial class MainWindow : Window
         BreadcrumbInfo.Text = Strings.Format("Crumb_Info", SizeFormatter.Format(focus.SizeFor(Treemap.SizeMode)), focus.FileCount);
     }
 
-    private TextBlock CrumbSeparator() => Themed(new TextBlock
+    private static Controls.Icon CrumbSeparator()
     {
-        Text = "\uE76C",
-        FontFamily = (FontFamily)FindResource("IconFont"),
-        FontSize = 10,
-        VerticalAlignment = VerticalAlignment.Center,
-        Margin = new Thickness(2, 1, 2, 0)
-    }, TextBlock.ForegroundProperty, "TextDim");
+        var icon = Icons.Make("ChevronRight", 11, "TextDim");
+        icon.Margin = new Thickness(2, 1, 2, 0);
+        return icon;
+    }
 
     /// <summary>Binds a property to a theme color so it follows light/dark switches.</summary>
     private static T Themed<T>(T element, DependencyProperty property, string resourceKey) where T : FrameworkElement
@@ -1106,7 +1184,7 @@ public partial class MainWindow : Window
 
     private void UpdateThemeButton()
     {
-        ThemeButton.Tag = ThemeManager.IsDark ? "\uE708" : "\uE706"; // moon / sun
+        ThemeButton.Tag = Icons.Get(ThemeManager.IsDark ? "Moon" : "Sun");
         ThemeButton.ToolTip = ThemeManager.Choice switch
         {
             AppTheme.Light => Strings.Get("Theme_Light"),
@@ -1141,9 +1219,9 @@ public partial class MainWindow : Window
 
         var options = new (AppTheme Theme, string Label, string Glyph)[]
         {
-            (AppTheme.System, "Match Windows", "\uE7F4"),
-            (AppTheme.Light, "Light", "\uE706"),
-            (AppTheme.Dark, "Dark", "\uE708")
+            (AppTheme.System, "Match Windows", "Monitor"),
+            (AppTheme.Light, "Light", "Sun"),
+            (AppTheme.Dark, "Dark", "Moon")
         };
 
         foreach (var (theme, label, glyph) in options)
@@ -1152,7 +1230,7 @@ public partial class MainWindow : Window
             var item = new MenuItem
             {
                 Header = label,
-                Icon = new TextBlock { Text = glyph, Style = (Style)FindResource("MenuIcon") },
+                Icon = new Controls.Icon { Glyph = Icons.Get(glyph), Style = (Style)FindResource("MenuIcon") },
                 InputGestureText = current ? "\u2713" : string.Empty,
                 FontWeight = current ? FontWeights.SemiBold : FontWeights.Normal
             };
@@ -1271,7 +1349,7 @@ public partial class MainWindow : Window
         if (_filter is not null && !_filter.IsEmpty) ApplyFilter();
         RefreshTopList();
         InvalidateInsights();
-        RefreshBottomPanel();
+        RefreshInsights();
         LoadDrives();
 
         if (!ok)
@@ -1415,7 +1493,7 @@ public partial class MainWindow : Window
     private void Splitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
     {
         _settings.SidePanelWidth = SidePanel.Width;
-        _settings.DriveListHeight = DriveList.MaxHeight;
+        if (!double.IsInfinity(DriveList.MaxHeight)) _settings.DriveListHeight = DriveList.MaxHeight;   // unbounded while Insights shows
         _settings.Save();
     }
 
@@ -1771,7 +1849,7 @@ public partial class MainWindow : Window
                 ToggleLists();
                 break;
             case Key.B when !ctrl:
-                ToggleBottomPanel();
+                ToggleInsights();
                 break;
             case Key.G when !ctrl:
             {

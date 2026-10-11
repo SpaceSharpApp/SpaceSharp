@@ -1,7 +1,7 @@
 name: Tests
 
 # Test only. This workflow never publishes, packs or uploads anything built from SpaceSharp;
-# releases are built locally with installer/release.ps1 and uploaded by hand.
+# releases come from release.yml when a version tag is pushed.
 
 on:
   push:

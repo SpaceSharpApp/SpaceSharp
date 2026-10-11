@@ -78,12 +78,11 @@ internal sealed class AppSettings
     public bool ShowSidePanel { get; set; } = true;
     public string FilterLayout { get; set; } = "Drawer";            // Drawer (a sheet over the map, the default) or Rail (under the path)
     public bool ShowFilterRail { get; set; } = true;
-    public bool ShowBottomPanel { get; set; } = true;                 // by type / safe to clear / when changed, under the map
-    public bool BottomPanelCollapsed { get; set; }                   // folded down to its tab row
+    public bool InsightsView { get; set; }                           // the Insights view in the map's place (false: the map)
     public bool ShowTooltips { get; set; } = true;
     public double InspectWidth { get; set; }                        // last size of the Inspect window; 0 means the default
     public double InspectHeight { get; set; }
-    public double SidePanelWidth { get; set; } = 340;                // the Drives / Largest items panel
+    public double SidePanelWidth { get; set; } = 300;                // the Drives / Largest items panel
     public double DriveListHeight { get; set; } = 320;               // the Drives list inside it; the splitter below it sets this
 
     public void ResetToDefaults()
@@ -112,7 +111,7 @@ internal sealed class AppSettings
         DetectHardLinks = d.DetectHardLinks;
         ConfirmDelete = d.ConfirmDelete;
         CheckForUpdates = d.CheckForUpdates;
-        ShowSidePanel = d.ShowSidePanel; ShowBottomPanel = d.ShowBottomPanel; FilterLayout = d.FilterLayout; ShowFilterRail = d.ShowFilterRail; BottomPanelCollapsed = d.BottomPanelCollapsed;
+        ShowSidePanel = d.ShowSidePanel; InsightsView = d.InsightsView; FilterLayout = d.FilterLayout; ShowFilterRail = d.ShowFilterRail;
         ShowTooltips = d.ShowTooltips;
     }
 

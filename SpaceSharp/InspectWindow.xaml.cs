@@ -68,7 +68,7 @@ public partial class InspectWindow : Window
         if (s.Single is { } one)
         {
             Title = Strings.Format("Inspect_TitleOne", one.FullPath);
-            Glyph.Text = one.IsDirectory ? "\uE8B7" : "\uE8A5";
+            Glyph.Glyph = Icons.Get(one.IsDirectory ? "Folder" : "File");
             NameText.Text = one.Name;
             KindText.Text = Join(one.IsDirectory ? Strings.Get("Inspect_Folder") : DescribeType(one),
                 one.IsDirectory ? Strings.Format("Inspect_FilesFolders", s.Files, s.Folders) : null,
@@ -80,7 +80,7 @@ public partial class InspectWindow : Window
         else
         {
             Title = Strings.Format("Inspect_TitleMany", s.Nodes.Count);
-            Glyph.Text = "\uE8B3";
+            Glyph.Glyph = Icons.Get("Selection");
             NameText.Text = Strings.Format("Inspect_ItemsSelected", s.Nodes.Count);
             var parents = s.Nodes.Select(n => n.Parent?.FullPath).Where(p => p is not null).Distinct().ToList();
             KindText.Text = Join(Strings.Format("Inspect_FilesFolders", s.Nodes.Count(n => !n.IsDirectory), s.Nodes.Count(n => n.IsDirectory)),
@@ -99,7 +99,7 @@ public partial class InspectWindow : Window
 
         BuildContext();
         if (s.Single is { AccessDenied: true })
-            ContextLine("\uE7BA", Plain(Strings.Get("Inspect_AccessDenied")));
+            ContextLine("Warning", Plain(Strings.Get("Inspect_AccessDenied")));
         if (Context.RowDefinitions.Count == 0) Context.Visibility = Visibility.Collapsed;
     }
 
@@ -131,7 +131,7 @@ public partial class InspectWindow : Window
             var ofRoot = Rich("Inspect_Of", one is null ? A(InspectSummary.Percent(root.Share)) : P(InspectSummary.Percent(root.Share)), P(root.Name));
             if (share.Count == 0) share.AddRange(ofRoot); else share.AddRange(Dim(ofRoot));
         }
-        if (share.Count > 0) ContextLine("\uE9D9", share.ToArray());
+        if (share.Count > 0) ContextLine("Share", share.ToArray());
 
         // 2. What it is made of (folders and selections only).
         if ((one is null || one.IsDirectory) && s.ByType.Count > 0 && s.Files > 0)
@@ -144,7 +144,7 @@ public partial class InspectWindow : Window
                       : Rich("Inspect_Ctx_Mix", A(L(0)), P(B(0)), P(L(1)), P(B(1)), P(L(2)), P(B(2)));
             var line = new List<Part>(types);
             if (s.Files > 1) line.AddRange(Dim(Rich("Inspect_Ctx_Median", P(SizeFormatter.Compact(s.MedianFileBytes)))));
-            ContextLine("\uE8B9", line.ToArray());
+            ContextLine("Composition", line.ToArray());
         }
 
         // 3. Age and change.
@@ -163,7 +163,7 @@ public partial class InspectWindow : Window
             if (age.Count > 0) age.AddRange(Dim(change));
             else age.AddRange(RichText.Capitalized(change)); // standing alone, it starts the line
         }
-        if (age.Count > 0) ContextLine("\uE823", age.ToArray());
+        if (age.Count > 0) ContextLine("Age", age.ToArray());
     }
 
     private void BuildCrumbs(FsNode node)
@@ -206,7 +206,8 @@ public partial class InspectWindow : Window
     {
         int r = Context.RowDefinitions.Count;
         Context.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        var icon = Themed(new TextBlock { Text = glyph, FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 14, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 5, 0, 4) }, TextBlock.ForegroundProperty, "TextDim");
+        var icon = Icons.Make(glyph, 14, "TextDim");
+        icon.VerticalAlignment = VerticalAlignment.Top; icon.Margin = new Thickness(0, 5, 0, 4);
         var text = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = 12.5, Margin = new Thickness(0, 3, 0, 4), LineHeight = 18 };
         RichText.Fill(text, parts);
         Grid.SetRow(icon, r); Grid.SetRow(text, r); Grid.SetColumn(text, 1);
@@ -313,7 +314,8 @@ public partial class InspectWindow : Window
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(44) });
 
             var label = new DockPanel { VerticalAlignment = VerticalAlignment.Center };
-            label.Children.Add(Themed(new TextBlock { Text = row.Node.IsDirectory ? "\uE8B7" : "\uE8A5", FontFamily = (FontFamily)FindResource("IconFont"), FontSize = 13, Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center }, TextBlock.ForegroundProperty, "TextDim"));
+            var rowIcon = Icons.Make(row.Node.IsDirectory ? "Folder" : "File", 13, "TextDim"); rowIcon.Margin = new Thickness(0, 0, 8, 0);
+            label.Children.Add(rowIcon);
             label.Children.Add(Themed(new TextBlock { Text = row.Name, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center, ToolTip = row.Node.FullPath }, TextBlock.ForegroundProperty, "Text"));
 
             var bar = Bar(row.Share, "Accent", 6);

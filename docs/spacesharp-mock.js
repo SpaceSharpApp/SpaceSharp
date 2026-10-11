@@ -29,7 +29,7 @@
   .ssm .titlebar { height:32px; flex:none; display:flex; align-items:center; background:var(--titlebar); color:var(--titletext); font-size:12px; }
   .ssm .titlebar .app { display:flex; align-items:center; gap:9px; padding-left:10px; flex:1; }
   .ssm .titlebar .app svg { width:16px; height:16px; }
-  .ssm .caption { display:flex; height:100%; } .ssm .caption span { width:46px; display:grid; place-items:center; } .ssm .caption svg { width:10px; height:10px; stroke:currentColor; fill:none; stroke-width:1; }
+  .ssm .caption { display:flex; height:100%; } .ssm .caption span { width:46px; display:grid; place-items:center; } .ssm .caption svg { width:11px; height:11px; }
   .ssm .toolbar { height:49px; flex:none; display:flex; align-items:center; gap:6px; padding:0 10px; background:var(--panel); border-bottom:1px solid var(--stroke); }
   .ssm .combo { height:32px; display:flex; align-items:center; gap:9px; padding:0 10px 0 12px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); white-space:nowrap; overflow:hidden; }
   .ssm .combo .chev { margin-left:auto; width:10px; height:10px; color:var(--dim); flex:none; }
@@ -61,7 +61,7 @@
   .ssm .railname { height:28px; width:200px; display:flex; align-items:center; padding:0 10px; border-radius:14px; border:1px solid var(--stroke); color:var(--dim); font-size:12.5px; }
   .ssm .rail .count { margin-left:auto; color:var(--accent); font-weight:600; font-size:12.5px; white-space:nowrap; }
   .ssm .body { flex:1; display:flex; min-height:0; }
-  .ssm .side { width:340px; flex:none; background:var(--panel); border-right:1px solid var(--stroke); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+  .ssm .side { width:300px; flex:none; background:var(--panel); border-right:1px solid var(--stroke); display:flex; flex-direction:column; min-height:0; overflow:hidden; }
   .ssm .side.hidden { display:none; }
   .ssm .side h2 { font-size:15px; font-weight:600; margin:12px 14px 4px; } .ssm .side .sub { color:var(--dim); font-size:12px; margin:0 14px 6px; }
   .ssm .drives { padding:0 4px; }
@@ -83,16 +83,35 @@
   .ssm .map canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
   .ssm .sample-tag { position:absolute; right:12px; bottom:12px; pointer-events:none; padding:5px 11px; border-radius:999px; font-size:12px; font-weight:600; background:rgba(20,20,24,.78); color:#F2F2F6; border:1px solid rgba(255,255,255,.14); z-index:4; }
   .ssm .sample-tag[hidden] { display:none; }
-  .ssm .bottom { flex:none; height:232px; background:var(--bg); border-top:1px solid var(--stroke); display:grid; grid-template-columns:5fr auto 4fr auto 4fr auto; }
-  .ssm .bottom[hidden] { display:none; } .ssm .bottom.collapsed { height:36px; } .ssm .bottom.empty { height:58px; } .ssm .bottom.empty .sum { margin-bottom:0; }
-  .ssm .bottom .vsep { width:1px; background:var(--stroke); margin:14px 0; }
-  .ssm .bsec { padding:12px 18px 10px 18px; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
-  .ssm .bsec h3 { margin:0 0 2px; font-size:14px; font-weight:600; } .ssm .bsec .sum { color:var(--dim); font-size:12px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:10px; }
-  .ssm .bottom.collapsed .bsec .sum, .ssm .bottom.collapsed .bsec .bbody { display:none; }
-  .ssm .bbody { flex:1; min-height:0; }
-  .ssm .stack { display:flex; height:26px; border-radius:4px; overflow:hidden; background:var(--control); } .ssm .stack i { display:flex; align-items:center; height:100%; padding:0 6px; font-size:12px; color:#14141A; white-space:nowrap; overflow:hidden; }
-  .ssm .tlegend { display:grid; grid-template-columns:1fr 1fr; gap:6px 16px; margin-top:12px; font-size:13px; } .ssm .tlegend span { display:flex; align-items:center; gap:7px; white-space:nowrap; overflow:hidden; } .ssm .tlegend i { width:10px; height:10px; border-radius:2px; flex:none; } .ssm .tlegend .z { color:var(--dim); font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .ssm .tlegend span.on { color:var(--accent); }
+  .ssm .viewbtn { padding:0 10px; gap:7px; font-weight:600; }
+  .ssm .insights { position:absolute; inset:0; overflow:hidden; background:var(--bg); padding:16px 22px 18px 18px; display:flex; flex-direction:column; gap:12px; }
+  .ssm .insights[hidden] { display:none; }
+  .ssm .tiles { display:grid; grid-template-columns:repeat(6, minmax(0, 1fr)); gap:10px; }
+  .ssm .tile { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; padding:11px 14px; display:flex; flex-direction:column; gap:2px; min-width:0; }
+  .ssm .tile .l { font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--dim); } .ssm .tile .v { font-size:21px; font-weight:700; line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ssm .tile .bar { height:4px; border-radius:2px; background:var(--control); margin:6px 0 4px; overflow:hidden; } .ssm .tile .bar i { display:block; height:100%; border-radius:2px; }
+  .ssm .tile .d { font-size:11px; color:var(--dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ssm .irow { display:grid; gap:12px; min-height:0; } .ssm .irow.one { flex:none; } .ssm .irow.two { flex:1 1 auto; overflow:hidden; } .ssm .irow.two .card { overflow:hidden; } .ssm .irow.one { grid-template-columns:400px minmax(0,1fr) minmax(0,1fr); } .ssm .irow.two { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .ssm .card { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; padding:13px 16px 14px; display:flex; flex-direction:column; min-width:0; }
+  .ssm .card h3 { flex:none; margin:0 0 8px; font-size:15px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .card h3 small { font-weight:400; font-size:12px; color:var(--dim); margin-left:10px; }
+  .ssm .card .lrow { flex:none; display:grid; align-items:center; border-bottom:1px solid var(--stroke); font-size:12.5px; } .ssm .card .lrow .z { text-align:right; font-variant-numeric:tabular-nums; } .ssm .card .lrow .p { text-align:right; color:var(--dim); font-variant-numeric:tabular-nums; }
+  .ssm .card .lrow .nm { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; } .ssm .card .lrow .nm small { display:block; color:var(--dim); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ssm .card .lrow i.sw { width:10px; height:10px; border-radius:2px; } .ssm .card .lrow .hb { height:7px; border-radius:4px; margin-right:10px; }
+  .ssm .card .typerow { grid-template-columns:16px 112px minmax(0,1fr) 76px 44px; height:24px; }
+  .ssm .card .cleanrow { grid-template-columns:24px minmax(0,1fr) auto auto auto; height:38px; column-gap:0; } .ssm .card .cleanrow .cb { width:14px; height:14px; border-radius:3px; border:1px solid var(--dim); box-sizing:border-box; } .ssm .card .cleanrow .cb.on { background:var(--accent); border-color:var(--accent); }
+  .ssm .card .cleanrow .sz { color:var(--accent); font-weight:600; min-width:64px; text-align:right; margin-right:10px; } .ssm .card .cleanrow .mini { height:24px; padding:0 8px; border-radius:6px; font-size:12px; display:flex; align-items:center; margin-left:4px; } .ssm .card .cleanrow .mini.o { border:1px solid var(--stroke); min-width:54px; justify-content:center; }
+  .ssm .card .foot { display:flex; align-items:center; margin-top:10px; font-size:12px; color:var(--dim); } .ssm .card .foot .btn { margin-left:auto; height:30px; }
+  .ssm .card .hist { display:flex; align-items:flex-end; gap:3px; height:92px; margin-top:4px; border-bottom:1px solid var(--stroke); } .ssm .card .hist i { flex:1 1 0; border-radius:2px 2px 0 0; }
+  .ssm .card .axis { display:grid; grid-template-columns:repeat(4, 1fr); color:var(--dim); font-size:11px; margin:3px 0 8px; } .ssm .card .axis span:nth-child(2), .ssm .card .axis span:nth-child(3) { text-align:center; } .ssm .card .axis span:last-child { text-align:right; }
+  .ssm .card .bands { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; } .ssm .card .band { border:1px solid var(--stroke); background:var(--control); border-radius:8px; padding:7px 10px; display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .ssm .card .band .n { display:flex; align-items:center; gap:6px; color:var(--dim); font-size:11px; white-space:nowrap; } .ssm .card .band .n i { width:8px; height:8px; border-radius:2px; } .ssm .card .band b { font-size:14px; } .ssm .card .band small { color:var(--dim); font-size:11px; }
+  .ssm .card .sect { font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--dim); margin:12px 0 4px; }
+  .ssm .card .oldrow { grid-template-columns:minmax(0,1fr) 70px 84px; height:25px; font-size:12px; }
+  .ssm .card .frow { grid-template-columns:minmax(0,1fr) 70px; height:37px; } .ssm .card .frow .fb { display:flex; align-items:center; gap:8px; margin-top:3px; } .ssm .card .frow .fb i { height:5px; border-radius:3px; background:#4F7CAC; } .ssm .card .frow .fb small { color:var(--dim); font-size:11px; }
+  .ssm .card .filerow { grid-template-columns:18px minmax(0,1fr) 78px; height:46px; } .ssm .card .filerow .sw { width:10px; height:10px; border-radius:2px; position:static; align-self:start; margin-top:5px; background:none; } .ssm .card .filerow .sw::after { content:none; } .ssm .card .filerow .fb { display:block; height:3px; border-radius:2px; margin-top:4px; } .ssm .card .filerow .z { display:flex; flex-direction:column; align-items:flex-end; font-weight:600; } .ssm .card .filerow .z small { font-weight:400; color:var(--dim); font-size:11px; }
+  .ssm .card .stats { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; margin-bottom:6px; } .ssm .card .stat { border:1px solid var(--stroke); border-radius:8px; padding:7px 10px; } .ssm .card .stat small { color:var(--dim); font-size:11px; display:block; } .ssm .card .stat b { font-size:14px; }
+  .ssm .card .extrow { grid-template-columns:58px minmax(0,1fr) 70px; height:33px; } .ssm .card .extrow .wh { color:var(--dim); font-size:11.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; }
+  .ssm .card .nob { color:var(--dim); font-size:12px; line-height:1.5; }
   .ssm .clean { display:grid; grid-template-columns:1fr auto auto auto; gap:4px 16px; align-items:center; font-size:13px; }
   .ssm .clean .nm { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .clean .z { color:var(--accent); font-weight:600; font-variant-numeric:tabular-nums; white-space:nowrap; text-align:right; }
   .ssm .clean .lk, .ssm .clean .act { font-size:12px; height:24px; padding:0 8px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--text); }
@@ -171,44 +190,53 @@
   `;
 
   // ============================================================ icons
+  // Lucide icons (ISC, https://lucide.dev, release 0.468.0) on their 24-unit grid, plus the app's own SSD and USB
+  // stick drawn the same way. The same set the app draws through Themes/Icons.xaml; keep the two in step.
   const ICONS = {
-    chev:'<path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
-    chevUp:'<path d="M2 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
-    drive:'<rect x="1.5" y="5" width="13" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="11.5" cy="8" r=".9" fill="currentColor"/>',
-    folder:'<path d="M1.5 4.2c0-.7.5-1.2 1.2-1.2h3.2l1.5 1.6h5.9c.7 0 1.2.5 1.2 1.2v6.5c0 .7-.5 1.2-1.2 1.2H2.7c-.7 0-1.2-.5-1.2-1.2z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    file:'<path d="M4 2h5l3 3v9H4z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9 2v3h3" fill="none" stroke="currentColor" stroke-width="1.3"/>',
-    refresh:'<path d="M13.2 8A5.2 5.2 0 1 1 11.6 4.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M11.8 1.6v2.9H8.9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    up:'<path d="M8 14V2.5M3.5 7L8 2.5 12.5 7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    home:'<path d="M2.5 7.2L8 2.5l5.5 4.7V13a.8.8 0 0 1-.8.8H10V9.8H6v4H3.3a.8.8 0 0 1-.8-.8z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    panel:'<rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.8 3v10" stroke="currentColor" stroke-width="1.4"/>',
-    bottom:'<rect x="1.5" y="3" width="13" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 9.4h13" stroke="currentColor" stroke-width="1.4"/>',
-    zoomout:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14M4.6 6.8h4.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    zoomin:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14M4.6 6.8h4.4M6.8 4.6v4.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    search:'<circle cx="6.8" cy="6.8" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.2 10.2L14 14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    funnel:'<path d="M2 3h12l-4.6 5.4V13l-2.8-1.4V8.4z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    moon:'<path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    sun:'<circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9L13 13M13 3l-1.1 1.1M4.1 11.9L3 13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    gear:'<g transform="scale(.6667)" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></g>',
-    info:'<circle cx="8" cy="8" r="6.3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="4.9" r=".9" fill="currentColor"/>',
-    x:'<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>',
-    select:'<rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 8.2l2 2 4-4.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
-    props:'<rect x="2.5" y="2" width="11" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 8.5h6M5 11h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
-    copy:'<rect x="5.5" y="5.5" width="8" height="8.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 5.5V3.7a1.2 1.2 0 0 0-1.2-1.2H3.7a1.2 1.2 0 0 0-1.2 1.2v5.6a1.2 1.2 0 0 0 1.2 1.2h1.8" fill="none" stroke="currentColor" stroke-width="1.3"/>',
-    trash:'<path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.2 4.5l.6 8.3a1 1 0 0 0 1 .9h4.4a1 1 0 0 0 1-.9l.6-8.3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    open:'<path d="M9.5 2.5h4v4M13.5 2.5L7.5 8.5M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    folderOpen:'<path d="M1.5 4.2c0-.7.5-1.2 1.2-1.2h3.2l1.5 1.6h5.9c.7 0 1.2.5 1.2 1.2v1.2H4.1L2 12.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M2 12.5l2.1-5.5h10.4l-2 5.5z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>',
-    keyboard:'<rect x="1.5" y="4" width="13" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4 7h1M6.5 7h1M9 7h1M11.5 7h1M5 9.5h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    bug:'<rect x="5" y="4" width="6" height="9" rx="3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4V2M2 8h3M11 8h3M3 12l2-1.5M13 12l-2-1.5M3 4l2 1.5M13 4l-2 1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    idea:'<path d="M6 13h4M6.5 11h3a4.5 4.5 0 1 0-3 0z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
-    globe:'<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M2 8h12M8 2c2 2 2 10 0 12M8 2c-2 2-2 10 0 12" fill="none" stroke="currentColor" stroke-width="1.3"/>',
-    book:'<path d="M3 2.5h6l3 3v8H3z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9 2.5v3h3M5.5 8.5h5M5.5 11h5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    clock:'<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.5V8l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>',
-    pie:'<circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M8 2v6l4.2 2.4" fill="none" stroke="currentColor" stroke-width="1.3"/>',
-    arrow:'<path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>',
-    check:'<path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
-    download:'<path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    chev:'<path d="m6 9 6 6 6-6" />',
+    chevUp:'<path d="m18 15-6-6-6 6" />',
+    chevRight:'<path d="m9 18 6-6-6-6" />',
+    drive:'<line x1="22" x2="2" y1="12" y2="12" /> <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /> <line x1="6" x2="6.01" y1="16" y2="16" /> <line x1="10" x2="10.01" y1="16" y2="16" />',
+    ssd:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M13 8l-3.5 4.5H14L10.5 17"/>',
+    usbStick:'<rect x="2" y="7" width="13" height="10" rx="2"/><path d="M15 10h5v4h-5"/><path d="M17 12h1"/>',
+    usb:'<circle cx="10" cy="7" r="1" /> <circle cx="4" cy="20" r="1" /> <path d="M4.7 19.3 19 5" /> <path d="m21 3-3 1 2 2Z" /> <path d="M9.26 7.68 5 12l2 5" /> <path d="m10 14 5 2 3.5-3.5" /> <path d="m18 12 1-1 1 1-1 1Z" />',
+    folder:'<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />',
+    file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" />',
+    refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" />',
+    up:'<path d="m5 12 7-7 7 7" /> <path d="M12 19V5" />',
+    home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />',
+    panel:'<rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M9 3v18" />',
+    bottom:'<rect width="18" height="18" x="3" y="3" rx="2" /> <path d="M3 15h18" />',
+    treemap:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h11"/><path d="M14 3v18"/><path d="M14 15h7"/>',
+    zoomout:'<circle cx="11" cy="11" r="8" /> <line x1="21" x2="16.65" y1="21" y2="16.65" /> <line x1="8" x2="14" y1="11" y2="11" />',
+    zoomin:'<circle cx="11" cy="11" r="8" /> <line x1="21" x2="16.65" y1="21" y2="16.65" /> <line x1="11" x2="11" y1="8" y2="14" /> <line x1="8" x2="14" y1="11" y2="11" />',
+    search:'<circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" />',
+    funnel:'<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />',
+    moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />',
+    sun:'<circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" />',
+    gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /> <circle cx="12" cy="12" r="3" />',
+    info:'<circle cx="12" cy="12" r="10" /> <path d="M12 16v-4" /> <path d="M12 8h.01" />',
+    x:'<path d="M18 6 6 18" /> <path d="m6 6 12 12" />',
+    select:'<path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5" /> <path d="m9 11 3 3L22 4" />',
+    props:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M8 12h8" /> <path d="M10 11v2" /> <path d="M8 17h8" /> <path d="M14 16v2" />',
+    copy:'<rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />',
+    trash:'<path d="M3 6h18" /> <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /> <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /> <line x1="10" x2="10" y1="11" y2="17" /> <line x1="14" x2="14" y1="11" y2="17" />',
+    open:'<path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M4 7V4a2 2 0 0 1 2-2 2 2 0 0 0-2 2" /> <path d="M4.063 20.999a2 2 0 0 0 2 1L18 22a2 2 0 0 0 2-2V7l-5-5H6" /> <path d="m5 11-3 3" /> <path d="m5 17-3-3h10" />',
+    folderOpen:'<path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />',
+    keyboard:'<path d="M10 8h.01" /> <path d="M12 12h.01" /> <path d="M14 8h.01" /> <path d="M16 12h.01" /> <path d="M18 8h.01" /> <path d="M6 8h.01" /> <path d="M7 16h10" /> <path d="M8 12h.01" /> <rect width="20" height="16" x="2" y="4" rx="2" />',
+    bug:'<path d="m8 2 1.88 1.88" /> <path d="M14.12 3.88 16 2" /> <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /> <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /> <path d="M12 20v-9" /> <path d="M6.53 9C4.6 8.8 3 7.1 3 5" /> <path d="M6 13H2" /> <path d="M3 21c0-2.1 1.7-3.9 3.8-4" /> <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /> <path d="M22 13h-4" /> <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" />',
+    idea:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /> <path d="M9 18h6" /> <path d="M10 22h4" />',
+    globe:'<circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" />',
+    book:'<path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />',
+    clock:'<circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16.5 12" />',
+    pie:'<path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /> <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />',
+    arrow:'<path d="M5 12h14" /> <path d="m12 5 7 7-7 7" />',
+    check:'<path d="M20 6 9 17l-5-5" />',
+    download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" x2="12" y1="15" y2="3" />',
+    shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />',
+    monitor:'<rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" />',
   };
-  const svg = (name, cls) => `<svg viewBox="0 0 16 16"${cls ? ` class="${cls}"` : ""}>${ICONS[name]}</svg>`;
+  const svg = (name, cls) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"${cls ? ` class="${cls}"` : ""}>${ICONS[name]}</svg>`;
   // The mark: an amber block with a cube carved from its front corner (the 16 px shallow-carve version).
   const MARK = `<svg viewBox="0 0 100 100"><polygon points="50.00,10.00 86.37,31.00 69.05,41.00 50.00,30.00 30.95,41.00 13.63,31.00" fill="#FFD166"/><polygon points="13.63,31.00 30.95,41.00 30.95,63.00 50.00,74.00 50.00,94.00 13.63,73.00" fill="#F5B82E"/><polygon points="86.37,31.00 86.37,73.00 50.00,94.00 50.00,74.00 69.05,63.00 69.05,41.00" fill="#C98E22"/><polygon points="50.00,30.00 50.00,52.00 30.95,63.00 30.95,41.00" fill="#30363D"/><polygon points="50.00,30.00 69.05,41.00 69.05,63.00 50.00,52.00" fill="#161B22"/><polygon points="50.00,52.00 69.05,63.00 50.00,74.00 30.95,63.00" fill="#21262D"/></svg>`;
 
@@ -312,8 +340,10 @@
   const lift = (list, t) => list.map(h => mix(hex(h), [255, 255, 255], t));
   const fromList = (theme, folders, tint, cats) => {
     const c = folders.map(x => typeof x === "string" ? hex(x) : x);
-    return { theme, folder: d => c[d % c.length], file: d => mix(c[d % c.length], [255, 255, 255], tint), cats: cats ? cats.map(x => typeof x === "string" ? hex(x) : x) : [...Array(7)].map((_, i) => mix(c[i % c.length], [255, 255, 255], .2)).concat([hex("#B8B4AC")]) };
+    return { theme, folder: d => c[d % c.length], file: d => mix(c[d % c.length], [255, 255, 255], tint), cats: catColors(c, cats) };
   };
+  // One color per category: the ones a palette names, then the folder hues in turn, System a neutral steel, Other grey.
+  const catColors = (folders, given) => { const g = given ? given.map(x => typeof x === "string" ? hex(x) : x) : []; const n = 14; /* CATS.length; CATS is declared further down */ const out = []; for (let i = 0; i < n - 1; i++) out.push(i < g.length - 1 ? g[i] : i === 12 ? hex("#8FA3B8") : mix(folders[i % folders.length], [255, 255, 255], .2)); out.push(g.length ? g[g.length - 1] : hex("#B8B4AC")); return out; };
   const CB = ["#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#4477AA", "#EE6677", "#228833", "#AA3377", "#66CCEE"];
   const CBC = ["#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB"];
   const PALETTES = {
@@ -323,7 +353,7 @@
     "Forest": fromList("dark", ["#4F772D", "#6A994E", "#90A955", "#A7C957", "#7A9E7E", "#5C8D89", "#8C7A4F", "#9AB36A", "#5F8F55", "#B5A86A", "#6E9A77", "#87A33E"], .5, ["#A7C957", "#C8763D", "#9C7FB8", "#E3C567", "#5C8D89", "#D6DDB8", "#6A994E", "#B8B39E"]),
     "Vivid": fromList("dark", ["#4C8DFF", "#FF6B6B", "#2ECC71", "#FFC930", "#B463FF", "#1ABC9C", "#FF6FB5", "#F39C12", "#3498DB", "#9B59B6", "#27AE60", "#E74C3C"], .45),
     "Aurora": fromList("dark", ["#4FB3D9", "#E26A8A", "#5BC08E", "#E8B04B", "#9A7BD9", "#44B8B0", "#E27A55", "#86B64C", "#5A8FE0", "#D96AC0", "#D9A03F", "#4FAE8F"], .42, ["#5BC08E", "#E27A55", "#9A7BD9", "#E8B04B", "#4FB3D9", "#A9B8CC", "#44B8B0", "#8A93A3"]),
-    "Monochrome": { theme: "dark", folder: d => hsl(230, .06, .36 + (d % 6) * .06), file: d => hsl(230, .05, .72 + (d % 4) * .05), cats: ["#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"].map(hex) },
+    "Monochrome": { theme: "dark", folder: d => hsl(230, .06, .36 + (d % 6) * .06), file: d => hsl(230, .05, .72 + (d % 4) * .05), cats: catColors([...Array(12)].map((_, i) => hsl(230, .06, .36 + (i % 6) * .06)), ["#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"]) },
     "Color-blind safe": fromList("dark", CB, .45, CBC),
     "Pastel": fromList("light", ["#7FB3D5", "#F2A2A2", "#A8D8A8", "#F5CE84", "#C3A6E1", "#8FD3C7", "#F0B4D4", "#D4C58A", "#9FB9E8", "#F3B48A", "#B5D98B", "#D9A6C2"], .45, ["#78C890", "#E0806A", "#B795D6", "#EDC44D", "#6FA6DE", "#BAC4E2", "#6FC7B5", "#C8C0B4"]),
     "Paper": fromList("light", ["#C9B79C", "#A9C2C9", "#BFC9A6", "#D9B9A3", "#C2B3CF", "#A9CBBB", "#D6C3A3", "#B7C4D6", "#CDB5B5", "#B9CBA3", "#D2C1AD", "#A8BFC4"], .4),
@@ -333,9 +363,11 @@
     "Retro": fromList("light", ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A", "#8CA64B", "#D97E3E", "#6A7FD9", "#C9A24A", "#5FB58F"], .45),
     "Color-blind safe (light)": fromList("light", lift(CB, .25), .4, lift(CBC, .25))
   };
-  const CATS = ["Images", "Video", "Audio", "Archives", "Programs", "Documents", "Code", "Other"];
-  const EXT = {}; [[0, "jpg png gif bmp webp psd dds tga"], [1, "mp4 mkv avi mov webm"], [2, "mp3 wav flac ogg wem bnk"], [3, "zip rar 7z iso cab pak archive ba2 bsa rpa bundle"], [4, "exe dll sys msi so pyd jar"], [5, "pdf doc docx txt md csv"], [6, "cs js ts php py json xml html css"]].forEach(([c, l]) => l.split(" ").forEach(e => EXT[e] = c));
-  const category = (name) => { const m = /\.([^.]+)$/.exec(name); return m && EXT[m[1].toLowerCase()] !== undefined ? EXT[m[1].toLowerCase()] : 7; };
+  const CATS = ["Images", "Video", "Audio", "Archives", "Programs", "Documents", "Code", "Game data", "Installers", "Disk images", "Databases", "Fonts", "System", "Other"];
+  const OTHER = 13;
+  const EXT = {}; [[0, "jpg png gif bmp webp psd dds tga"], [1, "mp4 mkv avi mov webm"], [2, "mp3 wav flac ogg wem bnk"], [3, "zip rar 7z cab tgz"], [4, "exe dll so pyd jar"], [5, "pdf doc docx txt md csv"], [6, "cs js ts php py json xml html css"],
+    [7, "pak archive ba2 bsa rpa bundle uasset ubulk vpk pck sav"], [8, "msi msix appx nupkg"], [9, "iso img vhd vhdx vmdk wim"], [10, "db sqlite mdf"], [11, "ttf otf woff2"], [12, "sys mui etl evtx dmp pf"]].forEach(([c, l]) => l.split(" ").forEach(e => EXT[e] = c));
+  const category = (name) => { const m = /\.([^.]+)$/.exec(name); return m && EXT[m[1].toLowerCase()] !== undefined ? EXT[m[1].toLowerCase()] : OTHER; };
   const textFor = (c) => (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) > 128 ? [0x14, 0x14, 0x18] : [0xF2, 0xF2, 0xF6];
   const headerFill = (c, tint) => { const to = (0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]) > 96 ? [0, 0, 0] : [255, 255, 255]; return mix(c, to, tint / 100); };
   const SHADING = { Off: null, Soft: [30, 35, 55, 60], Classic: [55, 45, 50, 70], Deep: [85, 60, 45, 85] };   // cushion, height, brightness, scale
@@ -487,7 +519,9 @@
   }
 
   // ============================================================ insights for the panel under the map
-  const typeShares = () => { const t = Array(8).fill(0); for (const f of files) t[category(f.name)] += f.size; return t; };
+  const typeShares = () => { const t = Array(CATS.length).fill(0); for (const f of files) t[category(f.name)] += f.size; return t; };
+  // A donut as the app's DonutChart draws it: ring segments with a hairline gap, the total in the middle.
+  const ringChart = (parts, total, center, label) => { let off = 25; return `<svg viewBox="0 0 42 42">${parts.map(([v, col, op]) => { const len = Math.min(99.99, 100 * v / total); const o = off; off -= len; return `<circle cx="21" cy="21" r="15.9" fill="none" stroke="${rgb(col)}" stroke-width="6.5" opacity="${op}" stroke-dasharray="${Math.max(0, len - 1)} ${100 - Math.max(0, len - 1)}" stroke-dashoffset="${o - .5}"/>`; }).join("")}<text x="21" y="20.6" text-anchor="middle" font-size="6" font-weight="600" fill="currentColor">${center}</text><text x="21" y="25.6" text-anchor="middle" font-size="3.4" fill="var(--dim)">${label}</text></svg>`; };
   const monthBuckets = () => { const b = Array(36).fill(0); for (const f of files) { const m = monthsAgo(f); b[Math.min(35, m)] += f.size; } return b; };
   const bandSums = () => { const b = [0, 0, 0, 0]; for (const f of files) b[ageBand(f)] += f.size; return b; };
   const findDir = (name) => { let hit = null; (function walk(n) { if (hit) return; if (n.dir && n.name === name) { hit = n; return; } (n.children || []).forEach(walk); })(root); return hit; };
@@ -506,19 +540,19 @@
   };
 
   // ============================================================ the window
-  const SCENES = [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["drawer", "Filter drawer"], ["rail", "Filter rail"], ["panel", "Panel: by type"], ["cleanup", "Panel: safe to clear"], ["timeline", "Panel: when changed"], ["inspect", "Inspect"], ["multi", "Selection"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["settings", "Settings"], ["update", "Update notice"], ["whatsnew", "What's new"], ["start", "Start screen"], ["about", "About"]];
+  const SCENES = [["none", "Map"], ["hover", "Hover card"], ["menu", "Right-click"], ["drawer", "Filter drawer"], ["rail", "Filter rail"], ["insights", "Insights"], ["inspect", "Inspect"], ["multi", "Selection"], ["zoomed", "Zoomed in"], ["compare", "Since last scan"], ["settings", "Settings"], ["update", "Update notice"], ["whatsnew", "What's new"], ["start", "Start screen"], ["about", "About"]];
   const MODES = [["branch", "Top folder"], ["depth", "Depth"], ["type", "File type"], ["change", "Change"]];
 
   function mount(host, opts) {
     if (!document.getElementById("ssm-css")) { const st = document.createElement("style"); st.id = "ssm-css"; st.textContent = CSS; document.head.appendChild(st); }
-    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, bottom: "on", group: true, tag: true, w: 1600, h: 900, version: "2.0.0", interactive: true }, opts || {});
+    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.1.0", interactive: true }, opts || {});
     const E = makeEngine(state);
     host.innerHTML = `<div class="ssm">
       <div class="titlebar"><div class="app"><span class="mark">${MARK}</span><span class="title">SpaceSharp ${state.version}</span></div>
         <div class="caption"><span><svg viewBox="0 0 10 10"><path d="M0 5.5h10"/></svg></span><span><svg viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9"/></svg></span><span><svg viewBox="0 0 10 10"><path d="M0 0l10 10M10 0L0 10"/></svg></span></div></div>
       <div class="toolbar">
         <div class="btn accent">${svg("folder")}Scan folder</div><div class="btn">${svg("refresh")}</div><div class="divider"></div>
-        <div class="btn off nav">${svg("up")}</div><div class="btn off nav">${svg("home")}</div><div class="btn sidebtn">${svg("panel")}</div><div class="btn botbtn">${svg("bottom")}</div><div class="divider"></div>
+        <div class="btn off nav">${svg("up")}</div><div class="btn off nav">${svg("home")}</div><div class="btn sidebtn">${svg("panel")}</div><div class="divider"></div><div class="btn viewbtn mapbtn">${svg("treemap")}Map</div><div class="btn viewbtn insbtn">${svg("info")}Insights</div><div class="divider"></div>
         <div class="btn off nav">${svg("zoomout")}</div><div class="zoomlabel">100%</div><div class="btn">${svg("zoomin")}</div>
         <div class="spacer"></div>
         <span class="label">Color by</span><div class="combo" style="width:120px"><span class="modeText">Depth</span>${svg("chev", "chev")}</div>
@@ -535,11 +569,10 @@
           <div class="sub listSub">Largest files in C:\\</div><div class="rows"></div>
         </aside>
         <div class="mapcol">
-          <div class="map"><canvas></canvas><div class="start" hidden></div><div class="drawer" hidden></div><div class="sample-tag">Mockup with sample data · not the app, but close</div></div>
+          <div class="map"><canvas></canvas><div class="insights" hidden></div><div class="start" hidden></div><div class="drawer" hidden></div><div class="sample-tag">Mockup with sample data · not the app, but close</div></div>
         </div>
       </div>
       <div class="status"><div class="hover"></div><div class="scan"></div></div>
-      <div class="bottom"></div>
       <div class="ov tip" hidden></div><div class="ov cmenu" hidden></div>
       <div class="scrim" hidden><div class="dialog"></div></div>
     </div>`;
@@ -549,8 +582,8 @@
     let items = [], base = null;
 
     // ---- side panel
-    const DRIVES = [{ name: "C:  Local Disk", used: 271.37, total: 1024, fs: "NTFS" }, { name: "D:  Data", used: 1560, total: 1863, fs: "NTFS" }, { name: "E:  Games", used: 3120, total: 3726, fs: "NTFS" }, { name: "F:  Backup", used: 2210, total: 3726, fs: "exFAT" }, { name: "G:  USB Drive", used: 12.4, total: 57.6, fs: "Removable" }];
-    $(".drives").innerHTML = DRIVES.map(d => `<div class="drive">${svg("drive")}<span class="name">${d.name}</span><span class="free">${fmt((d.total - d.used) * GB)} free</span><div class="bar"><i style="width:${(100 * d.used / d.total).toFixed(1)}%"></i></div><div class="detail">${fmt(d.used * GB)} used of ${fmt(d.total * GB)} · ${d.fs}</div></div>`).join("");
+    const DRIVES = [{ name: "C:  Local Disk", used: 271.37, total: 1024, fs: "NVMe SSD · NTFS", icon: "ssd" }, { name: "D:  Data", used: 1560, total: 1863, fs: "Hard disk · NTFS", icon: "drive" }, { name: "E:  Games", used: 3120, total: 3726, fs: "SSD · NTFS", icon: "ssd" }, { name: "F:  Backup", used: 2210, total: 3726, fs: "USB · exFAT", icon: "usbStick" }, { name: "G:  USB Drive", used: 12.4, total: 57.6, fs: "USB · FAT32", icon: "usbStick" }];
+    $(".drives").innerHTML = DRIVES.map(d => `<div class="drive">${svg(d.icon)}<span class="name">${d.name}</span><span class="free">${fmt((d.total - d.used) * GB)} free</span><div class="bar"><i style="width:${(100 * d.used / d.total).toFixed(1)}%"></i></div><div class="detail">${fmt(d.used * GB)} used of ${fmt(d.total * GB)} · ${d.fs}</div></div>`).join("");
     function fillSideList(changes) {
       win.querySelectorAll(".side .tab").forEach(t => t.classList.toggle("on", changes ? t.classList.contains("tabChanges") : t.textContent === "Files"));
       if (!changes) {
@@ -599,43 +632,68 @@
       map.addEventListener("click", e => { if (state.scene !== "none") return; live.selected = nodeAt(...localPoint(e)); paintOverlay(); showInfo(live.selected); });
     }
 
-    // ---- the panel under the map
-    function buildBottom(peekType, peekBand) {
-      const el = $(".bottom");
-      // The drawer needs the map's full height, so it folds the panel down to its titles while it is open.
-      const mode = state.bottom === "on" && (state.scene === "drawer" || state.scene === "inspect") ? "collapsed" : state.bottom;
-      el.hidden = mode === "off"; el.classList.toggle("collapsed", mode === "collapsed");
+    // ---- the Insights view: the scan summed up, in the map's place
+    function buildInsights() {
+      const el = $(".insights");
+      el.hidden = state.view !== "insights";
       if (el.hidden) return;
-      if (state.scene === "start") {
-        // Before a scan the panel is only its titles and one line saying what it will do.
-        el.classList.add("empty");
-        el.innerHTML = `<div class="bsec"><h3>By type</h3><div class="sum">Scan a drive or folder and this panel sums it up.</div></div><div class="vsep"></div><div class="bsec"><h3>Safe to clear</h3></div><div class="vsep"></div><div class="bsec"><h3>When changed</h3></div><div class="bchev">${svg("chev")}</div>`;
-        return;
-      }
-      el.classList.remove("empty");
-      const shares = typeShares(), total = root.size, order = shares.map((v, i) => [i, v]).sort((a, b) => (a[0] === 7) - (b[0] === 7) || b[1] - a[1]);
-      const cols = E.cats();
-      const top = order[0];
-      const stack = `<div class="stack">${order.filter(([, v]) => v > 0).map(([i, v]) => `<i style="width:${(100 * v / total).toFixed(2)}%;background:${rgb(cols[i])};opacity:${peekType !== undefined && peekType !== i ? .35 : 1}">${v / total > .25 ? `${CATS[i]} · ${fmt(v)}` : ""}</i>`).join("")}</div>`;
-      const legend = `<div class="tlegend">${order.slice(0, 8).map(([i, v]) => `<span class="${peekType === i ? "on" : ""}"><i style="background:${rgb(cols[i])}"></i>${CATS[i]}<span class="z">${fmt(v)} &nbsp;${pct(v, total)}</span></span>`).join("")}</div>`;
-      const sumTop = order.slice(0, 3);
-      const typeSum = peekType !== undefined ? `${CATS[peekType]}: ${fmt(shares[peekType])} in ${num(files.filter(f => category(f.name) === peekType).length)} files` : `${sumTop.map(([i]) => CATS[i].toLowerCase()).join(", ")} are ${pct(sumTop.reduce((s, [, v]) => s + v, 0), total)} of the scan. Hover a type to see it on the map, click to filter.`;
-      const clean = cleanupRows(); const cleanTotal = clean.filter(r => r.action !== "How to").reduce((s, r) => s + r.size, 0);
-      const cleanRows = clean.slice(0, 5).map(r => `<span class="nm">${r.name}</span><span class="z">${fmt(r.size)}</span><span class="lk">Show</span><span class="act">${r.action}</span>`).join("");
-      const also = clean.slice(5).length ? `<div class="also">Also: ${clean.slice(5).map(r => `${r.name} (${fmtShort(r.size)})`).join(", ")}</div>` : "";
-      const months = monthBuckets(), mx = Math.max(...months); const bands = bandSums();
-      const bandCol = [[0xF5, 0xB8, 0x2E], [0xC4, 0x8F, 0x22], [0x8A, 0x65, 0x19], [0x4E, 0x5A, 0x68]];
+      const cols = E.cats(), total = root.size;
+      const shares = typeShares(), order = shares.map((v, i) => [i, v]).filter(([, v]) => v > 0).sort((a, b) => (a[0] === OTHER) - (b[0] === OTHER) || b[1] - a[1]);
+      const clean = cleanupRows(), clearable = clean.filter(r => r.action !== "How to"), picked = clean.filter(r => r.action === "Recycle").slice(0, 3);
+      const months = monthBuckets(), mx = Math.max(...months), bands = bandSums();
+      const bandCol = [[0xF5, 0xB8, 0x2E], [0xD9, 0x9C, 0x2B], [0xA8, 0x78, 0x2A], [0x6E, 0x5A, 0x35]], bandNames = ["This month", "This year", "1 to 3 years", "Older"];
       const bandOfMonth = (m) => m < 1 ? 0 : m < 12 ? 1 : m < 36 ? 2 : 3;
-      const hist = `<div class="hist">${months.map((v, m) => `<i style="height:${Math.max(2, 100 * v / mx).toFixed(1)}%;background:${rgb(bandCol[bandOfMonth(m)])};opacity:${peekBand !== undefined && bandOfMonth(m) !== peekBand ? .3 : 1}"></i>`).reverse().join("")}</div>`;
-      const bandNames = ["This month", "This year", "1 to 3 years", "Older"];
-      const bandsHtml = `<div class="bands">${bands.map((v, i) => `<div class="band${peekBand === i ? " on" : ""}"><span class="nm"><i style="background:${rgb(bandCol[i])}"></i><span>${bandNames[i]}</span></span><b>${fmtShort(v)}</b></div>`).join("")}</div>`;
-      const axis = `<div class="axis"><span>Oct 2023 and older</span><span>Oct 2026</span></div>`;
-      el.innerHTML = `
-        <div class="bsec"><h3>By type</h3><div class="sum">${typeSum}</div><div class="bbody">${stack}${legend}</div></div><div class="vsep"></div>
-        <div class="bsec"><h3>Safe to clear</h3><div class="sum">${fmt(cleanTotal)} in places that are usually safe to empty. Nothing is deleted until you say so.</div><div class="bbody"><div class="clean">${cleanRows}</div>${also}</div></div><div class="vsep"></div>
-        <div class="bsec"><h3>When changed</h3><div class="sum">${fmt(bands[2] + bands[3])} has not been touched in over a year. Hover a month to see it on the map, click to filter.</div><div class="bbody">${hist}${axis}${bandsHtml}</div></div>
-        <div class="bchev">${svg(mode === "collapsed" ? "chevUp" : "chev")}</div>`;
+      const bandFiles = [0, 0, 0, 0]; for (const f of files) bandFiles[ageBand(f)]++;
+      const dirs = []; (function walk(n) { for (const c of n.children) if (c.dir) { if (!(n !== root && n.size === c.size)) dirs.push(c); walk(c); } })(root); dirs.sort((a, b) => b.size - a.size);
+      const within = (p) => (typeof p === "string" ? p : p.path).replace(/^C:\\/, "");
+      const shortPath = (p) => { const parts = within(p).split("\\").filter(Boolean); return parts.length <= 3 ? parts.join("\\") : `${parts[0]}\\${parts[1]}\\…\\${parts[parts.length - 1]}`; };
+      const ago = (f) => { const m = monthsAgo(f); return m < 1 ? "this month" : m < 12 ? `${m} months` : m < 24 ? "a year" : `${Math.floor(m / 12)} years`; };
+      const old = files.filter(f => monthsAgo(f) >= 12).slice(0, 5);
+      const exts = {}; for (const f of files) { const m = /\.([^.]+)$/.exec(f.name); const k = m ? "." + m[1].toLowerCase() : "(none)"; const e = exts[k] ??= { bytes: 0, files: 0, by: {} }; e.bytes += f.size; e.files++; for (let p = f.parent; p; p = p.parent) e.by[p.path] = (e.by[p.path] || 0) + f.size; }
+      const topExt = Object.entries(exts).sort((a, b) => b[1].bytes - a[1].bytes).slice(0, 6).map(([k, e]) => { let home = null; for (const [path, v] of Object.entries(e.by)) if (v * 2 >= e.bytes && (!home || path.length > home[0].length)) home = [path, v]; return { ext: k, bytes: e.bytes, files: e.files, where: home ? `${home[0].replace(/^C:\\/, "") || "C:\\"} · ${pct(home[1], e.bytes)}` : `${num(e.files)} files` }; });
+      const clearBytes = clearable.reduce((s, r) => s + r.size, 0), pickedBytes = picked.reduce((s, r) => s + r.size, 0), oldBytes = bands[2] + bands[3];
+      const tile = (l, v, w, c, d) => `<div class="tile"><span class="l">${l}</span><span class="v">${v}</span><div class="bar"><i style="width:${w};background:${c}"></i></div><span class="d">${d}</span></div>`;
+      const tiles = `<div class="tiles">
+        ${tile("Scanned", fmt(total), "100%", "var(--accent)", `${num(root.files)} files · ${num(totalDirs - 1)} folders · from the file table`)}
+        ${tile("Free on C:", `${fmtShort((1024 - 271.37) * GB)} of 1 TB`, "26%", "#7FBF8E", "26% used · NVMe SSD · NTFS")}
+        ${tile("Safe to clear", fmt(clearBytes), pct(clearBytes, total), "var(--accent)", `${clearable.length} places · ${fmt(pickedBytes)} checked`)}
+        ${tile("Untouched for a year", fmt(oldBytes), pct(oldBytes, total), rgb(bandCol[2]), `${pct(oldBytes, total)} of the scan · ${num(bandFiles[2] + bandFiles[3])} files`)}
+        ${tile("Biggest folder", dirs[0].name, pct(dirs[0].size, total), "#4F7CAC", `${fmt(dirs[0].size)} · ${pct(dirs[0].size, total)} · ${num(dirs[0].files)} files`)}
+        ${state.mode === "change" ? tile("Since last scan", "+41.3 GB", "9%", "#E87A4F", "yesterday 18:42 · 312 new files") : tile("Since last scan", "No earlier scan", "0", "var(--accent)", "Scan again another day to see what changed")}
+      </div>`;
+      const top = order[0], second = order[1];
+      const types = `<div class="card"><h3>By type<small>${order.length} types · click a row to filter the map</small></h3>
+        <div style="display:flex;gap:14px;align-items:center;margin:2px 0 8px"><div style="width:104px;height:104px;flex:none">${ringChart(order.map(([i, v]) => [v, cols[i], 1]), total, fmtShort(total), `${num(root.files)} files`)}</div><div class="nob">${CATS[top[0]]} is ${pct(top[1], total)} of the scan, mostly under ${within(files.find(f => category(f.name) === top[0]).parent.path)}. Then ${CATS[second[0]].toLowerCase()} at ${pct(second[1], total)}.</div></div>
+        ${order.map(([i, v]) => `<div class="lrow typerow"><i class="sw" style="background:${rgb(cols[i])}"></i><span class="nm">${CATS[i]}</span><span><span class="hb" style="display:block;width:${(100 * v / top[1]).toFixed(1)}%;background:${rgb(cols[i])}"></span></span><span class="z">${fmt(v)}</span><span class="p">${pct(v, total)}</span></div>`).join("")}
+      </div>`;
+      const notes = { "Windows.old": "The previous Windows, 31 days old", "Recycle Bin": "Emptied through Windows, which asks first", "Hibernation and paging files": "hiberfil.sys, pagefile.sys · Windows manages these", "Temporary files": "Temp folders for you and for Windows", "Shader caches": "NVIDIA, Steam and DirectX · rebuilt as needed", "Windows Update downloads": "SoftwareDistribution\\Download · 474 files", "Browser caches": "Edge, Chrome, Firefox", "Downloads, untouched for a year": "23 files · the oldest from 2023" };
+      const cleanup = `<div class="card"><h3>Safe to clear<small>${fmt(clearBytes)} in places that are usually safe to empty · nothing is deleted until you say so</small></h3>
+        ${clean.map(r => `<div class="lrow cleanrow"><span>${r.action === "Recycle" ? `<span class="cb${picked.includes(r) ? " on" : ""}"></span>` : ""}</span><span class="nm"><b>${r.name}</b><small>${notes[r.name] || ""}</small></span><span class="sz">${fmt(r.size)}</span><span class="mini">Show</span><span class="mini o">${r.action}</span></div>`).join("")}
+        <div class="foot"><span>${picked.length} checked · ${fmtShort(pickedBytes)} · ${fmtShort((1024 - 271.37) * GB + pickedBytes)} free after</span><div class="btn accent">Recycle checked</div></div>
+      </div>`;
+      const timeline = `<div class="card"><h3>When changed<small>${fmt(oldBytes)} untouched for over a year · click a month or a band to filter</small></h3>
+        <div class="hist">${months.map((v, m) => `<i style="height:${Math.max(2, 100 * v / mx).toFixed(1)}%;background:${rgb(bandCol[bandOfMonth(m)])}"></i>`).reverse().join("")}</div>
+        <div class="axis"><span>Oct 2023 and older</span><span>Oct 2024</span><span>Oct 2025</span><span>Oct 2026</span></div>
+        <div class="bands">${bands.map((v, i) => `<div class="band"><span class="n"><i style="background:${rgb(bandCol[i])}"></i>${bandNames[i]}</span><b>${fmtShort(v)}</b><small>${num(bandFiles[i])} files</small></div>`).join("")}</div>
+        <div class="sect">Largest, untouched for a year or more</div>
+        ${old.map(f => `<div class="lrow oldrow"><span class="nm">${f.name} <span style="color:var(--dim);font-size:11px">${within(f.parent.path)}</span></span><span class="z">${fmt(f.size)}</span><span class="p">${ago(f)}</span></div>`).join("")}
+      </div>`;
+      const folders = `<div class="card"><h3>Largest folders<small>anywhere in the scan</small></h3>
+        ${dirs.slice(0, 5).map(d => `<div class="lrow frow"><span class="nm"><b>${within(d.path)}</b><span class="fb"><i style="width:${(100 * d.size / dirs[0].size).toFixed(1)}%"></i><small>${pct(d.size, total)}</small></span></span><span class="z">${fmt(d.size)}</span></div>`).join("")}
+      </div>`;
+      const largest = `<div class="card"><h3>Largest files<small>anywhere in the scan</small></h3>
+        ${files.slice(0, 5).map(f => `<div class="lrow filerow"><i class="sw" style="background-color:${rgb(cols[category(f.name)])}"></i><span class="nm"><b>${f.name}</b><small>${shortPath(f.parent.path) || "C:\\"}</small><i class="fb" style="width:${(100 * f.size / files[0].size).toFixed(1)}%;background:${rgb(cols[category(f.name)])}"></i></span><span class="z">${fmt(f.size)}<small>${ago(f)}</small></span></div>`).join("")}
+      </div>`;
+      const changes = state.mode === "change"
+        ? `<div class="card"><h3>Since last scan<small>yesterday 18:42 · +41.3 GB</small></h3><div class="stats"><div class="stat"><small>Grew</small><b style="color:#E87A4F">+52.0 GB</b></div><div class="stat"><small>Shrank</small><b style="color:#5DA9C9">−10.7 GB</b></div><div class="stat"><small>New</small><b style="color:var(--accent)">312 files</b></div></div>
+          ${[["Game Two", "Games Library\\common", "+38.1 GB", "#E87A4F"], ["Windows Update downloads", "Windows\\SoftwareDistribution", "+7.4 GB", "#E87A4F"], ["recording_03.mp4", "Users\\User\\Videos", "new · 4.3 GB", "#F5B82E"], ["Downloads", "Users\\User", "−6.2 GB", "#5DA9C9"], ["Temp", "Users\\User\\AppData\\Local", "−3.1 GB", "#5DA9C9"], ["DXCache", "AppData\\Local\\NVIDIA", "+1.9 GB", "#E87A4F"]].map(([n, p, d, c]) => `<div class="lrow filerow"><span class="nm">${n}<small>${p}</small></span><span class="z" style="font-weight:600;color:${c}">${d}</span></div>`).join("")}</div>`
+        : `<div class="card"><h3>Since last scan</h3><div class="nob">Scan this drive again another day and this card shows what grew, shrank and appeared in between. A saved scan can also be compared from Scan file › Compare with a saved scan.</div></div>`;
+      const extensions = `<div class="card"><h3>Biggest extensions<small>and where most of each lives</small></h3>
+        ${topExt.map(e => `<div class="lrow extrow"><b>${e.ext}</b><span class="wh">${e.where}</span><span class="z">${fmt(e.bytes)}</span></div>`).join("")}
+      </div>`;
+      el.innerHTML = `${tiles}<div class="irow one">${types}${cleanup}${timeline}</div><div class="irow two">${folders}${largest}${changes}${extensions}</div>`;
     }
+
 
     // ---- filter faces
     const isVideo = n => !n.dir && !n.group && category(n.name) === 1;
@@ -646,7 +704,7 @@
     const bandFilter = (b) => ({ matches(n) { return containsMatch(n, f => ageBand(f) === b); } });
     function buildDrawer(m, bytes) {
       const shares = typeShares(), total = root.size, cols = E.cats();
-      const order = shares.map((v, i) => [i, v]).sort((a, b) => (a[0] === 7) - (b[0] === 7) || b[1] - a[1]).slice(0, 5);
+      const order = shares.map((v, i) => [i, v]).sort((a, b) => (a[0] === OTHER) - (b[0] === OTHER) || b[1] - a[1]).slice(0, 5);
       const rows = order.map(([i, v]) => `<div class="trow"><span class="cb"></span><i style="background:${rgb(cols[i])}"></i><span class="nm">${CATS[i]}</span><span class="bar"><b style="width:${(100 * v / total).toFixed(1)}%;background:${rgb(cols[i])}"></b></span><span class="z">${fmtShort(v)}</span></div>`).join("");
       $(".drawer").innerHTML = `
         <div class="dh"><b>Filter</b><span class="x">Clear all ${svg("x")}</span></div>
@@ -691,16 +749,15 @@
       live.hovered = live.selected = live.zoomNode = live.filter = live.peek = null; live.multi = [];
       const fb = $(".filterbtn"); fb.classList.remove("on"); $(".ft").textContent = "Filter";
       const info = $(".crumbs .info"); info.textContent = `${fmt(root.size)} · ${num(root.files)} files`;
-      $(".crumbBar").innerHTML = `<div class="crumb current">${svg("drive")}C:\\</div>`;
+      $(".crumbBar").innerHTML = `<div class="crumb current">${svg("ssd")}C:\\</div>`;
       $(".zoomlabel").textContent = "100%";
       win.querySelectorAll(".toolbar .btn.nav").forEach(b => b.style.opacity = "");
       $(".status .hover").textContent = "";
       $(".status .scan").textContent = state.scene === "compare" ? `${num(root.files)} files · ${num(totalDirs)} folders · ${fmt(root.size)} · 2.1 s · file table  ·  compared with the scan from yesterday` : `${num(root.files)} files · ${num(totalDirs)} folders · ${fmt(root.size)} · 2.1 s · file table`;
-      let peekType, peekBand;
       switch (state.scene) {
         case "zoomed":
           live.zoomNode = largestFolder;
-          $(".crumbBar").innerHTML = `<div class="crumb">${svg("drive")}C:\\</div><span style="color:var(--dim)">›</span><div class="crumb current">${largestFolder.name}</div>`;
+          $(".crumbBar").innerHTML = `<div class="crumb">${svg("ssd")}C:\\</div><span style="color:var(--dim)">›</span><div class="crumb current">${largestFolder.name}</div>`;
           info.textContent = `${fmt(largestFolder.size)} · ${num(largestFolder.files)} files · ${pct(largestFolder.size, root.size)} of C:\\`;
           $(".zoomlabel").textContent = Math.round(100 * root.size / largestFolder.size) + "%";
           win.querySelectorAll(".toolbar .btn.nav").forEach(b => b.style.opacity = "1");
@@ -717,16 +774,16 @@
           buildRail(m.length, bytes); rail.hidden = false;
           break;
         }
-        case "panel": peekType = 1; live.peek = typeFilter(1).matches; break;
-        case "timeline": peekBand = 3; live.peek = bandFilter(3).matches; break;
-        case "cleanup": { const w = findDir("Windows.old"); if (w) { live.multi = [w]; } break; }
+        case "insights": case "panel": case "cleanup": case "timeline": break;
         case "multi": live.multi = sameFolder; break;
         case "hover": live.hovered = focusFile; break;
         case "menu": live.selected = focusFile; break;
         case "inspect": live.selected = largestFolder; break;
       }
-      if (state.scene === "panel" || state.scene === "cleanup" || state.scene === "timeline") { if (state.bottom === "off") state.bottom = "on"; }
-      buildBottom(peekType, peekBand);
+      state.view = state.scene === "insights" || state.scene === "panel" || state.scene === "cleanup" || state.scene === "timeline" ? "insights" : "map";
+      $(".mapbtn").classList.toggle("accent", state.view !== "insights"); $(".insbtn").classList.toggle("accent", state.view === "insights");
+      win.querySelectorAll(".toolbar .btn.nav").forEach(b => { if (state.view === "insights") b.style.opacity = ".4"; });
+      buildInsights();
       draw();
       const find = n => items.find(i => i.node === n);
       if (state.scene === "hover") {
@@ -807,7 +864,7 @@
       const types = {}; let nf = 0, nd = 0; const sizes = []; const ages = [0, 0, 0, 0];
       (function walk(n) { for (const c of n.children) { if (c.dir) { nd++; walk(c); } else { nf++; sizes.push(c.size); types[category(c.name)] = (types[category(c.name)] || 0) + c.size; ages[ageBand(c)] += c.size; } } })(f);
       sizes.sort((a, b) => a - b); const median = sizes.length ? sizes[sizes.length >> 1] : 0;
-      const typeRows = Object.entries(types).map(([k, v]) => [+k, v]).sort((a, b) => (a[0] === 7) - (b[0] === 7) || b[1] - a[1]);
+      const typeRows = Object.entries(types).map(([k, v]) => [+k, v]).sort((a, b) => (a[0] === OTHER) - (b[0] === OTHER) || b[1] - a[1]);
       const cols = E.cats(); const ageCol = [hex("#F5B82E"), hex("#C48F22"), hex("#8A6519"), hex("#4E5A68")];
       const donut = (parts, center, label) => { let off = 25; return `<svg viewBox="0 0 42 42">${parts.map(([v, col]) => { const len = Math.min(99.99, 100 * v / f.size); const o = off; off -= len; return `<circle cx="21" cy="21" r="15.9" fill="none" stroke="${rgb(col)}" stroke-width="7" stroke-dasharray="${Math.max(0, len - 1.5)} ${100 - Math.max(0, len - 1.5)}" stroke-dashoffset="${o - .75}"/>`; }).join("")}<text x="21" y="20.5" text-anchor="middle" font-size="5.5" font-weight="600" fill="currentColor">${center}</text><text x="21" y="26" text-anchor="middle" font-size="3.6" fill="var(--dim)">${label}</text></svg>`; };
       const legend = r => r.map(([n, v, col]) => `<div class="lg"><i style="background:${rgb(col)}"></i><span>${n}</span><span class="p">${pct(v, f.size)}</span></div>`).join("");
@@ -850,7 +907,6 @@
       fillSideList(state.mode === "change");
       $(".side").classList.toggle("hidden", !state.side);
       $(".sidebtn").classList.toggle("accent", state.side); $(".sidebtn").classList.toggle("only", state.side);
-      $(".botbtn").classList.toggle("accent", state.bottom !== "off"); $(".botbtn").classList.toggle("only", state.bottom !== "off");
       $(".sample-tag").hidden = !state.tag;
       applyScene();
     }

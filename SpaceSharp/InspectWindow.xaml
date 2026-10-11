@@ -36,10 +36,10 @@
                 <Button DockPanel.Dock="Right" Style="{StaticResource AccentButton}" Content="{u:T InspectWin_Close}" MinWidth="84"
                         IsDefault="True" IsCancel="True" Click="Close_Click" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource ToolButton}" Tag="&#xE8C8;" Content="{u:T InspectWin_CopyDetails}" Click="Copy_Click" />
-                    <Button x:Name="ExplorerButton" Style="{StaticResource ToolButton}" Tag="&#xE838;" Content="{u:T InspectWin_ShowInExplorer}"
+                    <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Copy}" Content="{u:T InspectWin_CopyDetails}" Click="Copy_Click" />
+                    <Button x:Name="ExplorerButton" Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.ScanFolder}" Content="{u:T InspectWin_ShowInExplorer}"
                             Margin="6,0,0,0" Click="Explorer_Click" />
-                    <Button x:Name="PropertiesButton" Style="{StaticResource ToolButton}" Tag="&#xE946;" Content="{u:T InspectWin_Properties}"
+                    <Button x:Name="PropertiesButton" Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Properties}" Content="{u:T InspectWin_Properties}"
                             Margin="6,0,0,0" Click="Properties_Click" />
                 </StackPanel>
             </DockPanel>
@@ -50,8 +50,8 @@
             <StackPanel>
                 <WrapPanel x:Name="Crumbs" Margin="-6,0,0,6" />
                 <DockPanel>
-                    <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontFamily="{StaticResource IconFont}" FontSize="22"
-                               Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" Text="&#xE8B7;" />
+                    <c:Icon x:Name="Glyph" DockPanel.Dock="Left" Width="22" Height="22"
+                            Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" Glyph="{StaticResource Icon.Folder}" />
                     <TextBlock x:Name="SizeText" DockPanel.Dock="Right" FontSize="30" FontWeight="SemiBold" VerticalAlignment="Center"
                                Margin="16,0,0,0" ToolTipService.InitialShowDelay="300" />
                     <StackPanel VerticalAlignment="Center">

@@ -69,7 +69,8 @@ public partial class App : Application
             message.AppendLine(ex.Message);
         }
 
-        Dialog.Error(Current?.MainWindow, Strings.Get("Crash_Title"), message.ToString());
+        try { Dialog.Error(Current?.MainWindow, Strings.Get("Crash_Title"), message.ToString()); }
+        catch (Exception) { MessageBox.Show(message.ToString(), "SpaceSharp", MessageBoxButton.OK, MessageBoxImage.Error); }   // the styled dialog needs the resources that may have just failed
         e.Handled = true;
     }
 }
