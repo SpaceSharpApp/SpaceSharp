@@ -71,7 +71,9 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 32-bit Windows gets the same three with **x86** in the name: **SpaceSharp-win-x86.exe**, **SpaceSharp-win-x86-Setup.exe** and **SpaceSharp-win-x86.msi**. They update from their own channel, so an x86 install never pulls an x64 package. A 32-bit process has less memory to work with, so a drive with several million files is better scanned with the x64 build.
 
 > [!NOTE]
-> The exe is not code-signed, so SmartScreen may show "Windows protected your PC" the first time. Click **More info**, then **Run anyway**.
+> Free code signing for releases is provided by [SignPath.io](https://signpath.io) and a certificate by the [SignPath Foundation](https://signpath.org). For a release that is not yet signed, SmartScreen may show "Windows protected your PC" the first time; click **More info**, then **Run anyway**.
+>
+> SpaceSharp collects no data. The only network requests it makes are the update check and What's new, which read the public release list on GitHub; the portable exe makes neither, and the check can be switched off in Settings.
 
 ## Using it
 

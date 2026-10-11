@@ -2,7 +2,7 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.1.0 (unreleased)
+## 2.1.0
 
 The panel under the map became a view of its own. Insights takes the map's whole area when you want the numbers, the icons are a consistent set, drives show what kind of disk they are, and there are fourteen file types instead of eight.
 
