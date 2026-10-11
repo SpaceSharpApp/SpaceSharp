@@ -216,7 +216,14 @@ def version_pill(d: ImageDraw.ImageDraw, x: int, y: int, px: int, label: str, ri
     d.text((x + pad, y + (h - (bbox[3] - bbox[1])) // 2 - bbox[1]), label, font=f, fill=(0x1C, 0x15, 0x00))
     return x + wdt
 
-VERSION_LABEL = "2.0"
+def version_label() -> str:
+    """major.minor from <Version> in SpaceSharp.csproj, so the badge follows the release."""
+    import re
+    text = (ROOT / "SpaceSharp" / "SpaceSharp.csproj").read_text(encoding="utf-8")
+    m = re.search(r"<Version>(\d+)\.(\d+)", text)
+    return f"{m.group(1)}.{m.group(2)}" if m else "2.0"
+
+VERSION_LABEL = version_label()
 
 def make_header(w=1280, h=360, scale=2):
     """README header, drawn at 2x so it stays sharp on high-DPI screens (the README shows it at 800 wide)."""
