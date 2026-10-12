@@ -1,15 +1,69 @@
-# Normalize line endings; keep Windows scripts and solution files as CRLF.
+# Line endings: LF in the repository, checked out as the platform likes, except files Windows tooling
+# reads directly, which are CRLF everywhere (the solution, PowerShell, and the WiX license text that
+# the MSI dialog shows verbatim). .editorconfig says the same thing to editors.
 * text=auto
 *.sln text eol=crlf
-*.csproj text eol=crlf
-*.pubxml text eol=crlf
 *.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+installer/*.txt text eol=crlf
+
+# Text we know about (so a file with an odd byte is never mistaken for binary)
+*.cs text
+*.xaml text
+*.resx text
+*.csproj text
+*.pubxml text
+*.props text
+*.targets text
+*.manifest text
+*.md text
+*.txt text
+*.yml text
+*.json text
+*.html text
+*.js text
+*.css text
+*.py text
+*.svg text
+LICENSE text
+CODEOWNERS text
 
 # Binary assets
 *.png binary
+*.jpg binary
+*.gif binary
+*.webp binary
 *.ico binary
 *.bmp binary
-*.jpg binary
+*.woff binary
 *.woff2 binary
+*.ttf binary
+*.otf binary
+*.exe binary
+*.dll binary
+*.msi binary
+*.zip binary
+*.pdf binary
 *.sscan binary
-*.svg text
+
+# Better hunk headers in diffs and blame ("@@ ... void ScanAsync()" instead of the nearest brace)
+*.cs diff=csharp
+*.py diff=python
+*.html diff=html
+*.css diff=css
+*.md diff=markdown
+
+# Hands off in merges: regenerate these instead of resolving them by hand
+SpaceSharp/Themes/Icons.xaml merge=binary
+docs/*.png merge=binary
+docs/*.webp merge=binary
+
+# GitHub language stats: count the app, not the landing page and the asset scripts
+docs/** linguist-documentation
+tools/** linguist-vendored=false linguist-detectable=false
+SpaceSharp/Themes/Icons.xaml linguist-generated
+
+# Keep CI and contributor files out of "Download ZIP" and release archives of the source
+.github/ export-ignore
+.gitattributes export-ignore
