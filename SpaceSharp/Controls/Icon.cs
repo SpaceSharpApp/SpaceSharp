@@ -35,6 +35,7 @@ public sealed class Icon : Viewbox
 
     public Icon()
     {
+        FlowDirection = FlowDirection.LeftToRight;   // glyphs keep their drawn shape in a right-to-left window
         _path = new Path
         {
             Width = 24, Height = 24, StrokeThickness = 2,

@@ -40,6 +40,7 @@ public partial class App : Application
         }
 
         DispatcherUnhandledException += OnDispatcherUnhandledException;
+        HookBackgroundErrors();
 
         AppLanguages.Apply(AppSettings.Current.Language);   // before any window, so every string and format follows it
         var theme = Enum.TryParse<AppTheme>(AppSettings.Current.Theme, out var saved) ? saved : AppTheme.System;
@@ -61,16 +62,43 @@ public partial class App : Application
 
     private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        // Show the whole exception chain: XAML errors hide the real cause in InnerException.
-        var message = new StringBuilder();
-        for (Exception? ex = e.Exception; ex is not null; ex = ex.InnerException)
-        {
-            if (message.Length > 0) message.AppendLine().AppendLine(Strings.Get("Crash_CausedBy"));
-            message.AppendLine(ex.Message);
-        }
-
-        try { Dialog.Error(Current?.MainWindow, Strings.Get("Crash_Title"), message.ToString()); }
-        catch (Exception) { MessageBox.Show(message.ToString(), "SpaceSharp", MessageBoxButton.OK, MessageBoxImage.Error); }   // the styled dialog needs the resources that may have just failed
+        Report(e.Exception, "UI thread");
         e.Handled = true;
+    }
+
+    /// <summary>Errors on other threads: logged, and shown through the UI thread when there still is one.</summary>
+    private void HookBackgroundErrors()
+    {
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            if (args.ExceptionObject is Exception ex) CrashLog.Write(ex, args.IsTerminating ? "background thread (fatal)" : "background thread");
+        };
+        TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            args.SetObserved();
+            Dispatcher.BeginInvoke(() => Report(args.Exception.GetBaseException(), "background task"));
+        };
+    }
+
+    /// <summary>
+    /// Writes the crash log, then shows the message chain with the log's location and a button that opens a bug
+    /// report on GitHub with the version, the system and the error filled in. XAML errors hide the real cause in
+    /// InnerException, so the whole chain is shown.
+    /// </summary>
+    private static void Report(Exception exception, string source)
+    {
+        string? log = CrashLog.Write(exception, source);
+        string message = CrashLog.MessageChain(exception) + "\n\n" +
+                         (log is null ? Strings.Get("Crash_NotSaved") : Strings.Format("Crash_Saved", log)) + " " + Strings.Get("Crash_PleaseReport");
+        bool report;
+        try { report = Dialog.Confirm(Current?.MainWindow, Strings.Get("Crash_Title"), message, Strings.Get("Crash_Report"), Strings.Get("Crash_Close")); }
+        catch (Exception)
+        {
+            // the styled dialog needs the resources that may have just failed
+            report = MessageBox.Show(message + "\n\n" + Strings.Get("Crash_ReportQuestion"), "SpaceSharp", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes;
+        }
+        if (!report) return;
+        try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(CrashLog.IssueUrl(exception, log)) { UseShellExecute = true }); }
+        catch (Exception) { }
     }
 }

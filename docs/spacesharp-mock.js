@@ -545,7 +545,7 @@
 
   function mount(host, opts) {
     if (!document.getElementById("ssm-css")) { const st = document.createElement("style"); st.id = "ssm-css"; st.textContent = CSS; document.head.appendChild(st); }
-    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.1.0", interactive: true }, opts || {});
+    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.1.1", interactive: true }, opts || {});
     const E = makeEngine(state);
     host.innerHTML = `<div class="ssm">
       <div class="titlebar"><div class="app"><span class="mark">${MARK}</span><span class="title">SpaceSharp ${state.version}</span></div>

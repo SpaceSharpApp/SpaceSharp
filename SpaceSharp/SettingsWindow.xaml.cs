@@ -281,7 +281,7 @@ public partial class SettingsWindow : Window
     private ComboBox LanguageCombo()
     {
         var cultures = AppLanguages.Available();
-        var labels = new List<string> { Strings.Format("Settings_Language_System", AppLanguages.DisplayName(AppLanguages.SystemCulture)) };
+        var labels = new List<string> { Strings.Get("Settings_Language_System") };
         labels.AddRange(cultures.Select(AppLanguages.DisplayName));
         int selected = 0;
         if (!string.IsNullOrWhiteSpace(_settings.Language))

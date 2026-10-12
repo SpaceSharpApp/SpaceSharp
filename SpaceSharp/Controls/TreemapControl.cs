@@ -81,6 +81,7 @@ public sealed partial class TreemapControl : FrameworkElement
 
     public TreemapControl()
     {
+        FlowDirection = FlowDirection.LeftToRight;   // the map is drawn in its own coordinates; a mirrored UI does not mirror it
         AddVisualChild(_mapVisual);
         AddVisualChild(_overlayVisual);
         RenderOptions.SetEdgeMode(_mapVisual, EdgeMode.Aliased);

@@ -40,7 +40,7 @@
   <data name="Settings_Language" xml:space="preserve"><value>Language</value></data>
   <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>App language</value></data>
   <data name="Settings_Language_Description" xml:space="preserve"><value>Languages appear here as translations are added. Takes effect after a restart.</value></data>
-  <data name="Settings_Language_System" xml:space="preserve"><value>Same as Windows ({0})</value><comment>{0} is the language Windows would give, for example "English"</comment></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Same as Windows</value></data>
   <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>Switch language</value></data>
   <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp switches to {0} the next time it starts. Restart now?</value></data>
   <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Restart now</value></data>
@@ -103,6 +103,12 @@
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>top folder</value></data>
   <data name="Crash_CausedBy" xml:space="preserve"><value>Caused by:</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Unexpected error</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>The details were saved to {0}.</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>The details could not be saved to a log file.</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>If you have a minute, report it: the form on GitHub opens with the version, your Windows and the error filled in, and the log can be attached.</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Report on GitHub</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>Open a bug report on GitHub?</value></data>
   <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} files</value></data>
   <data name="Crumb_NoScan" xml:space="preserve"><value>No scan yet</value></data>
   <data name="Delete_AndMore" xml:space="preserve"><value>
@@ -603,6 +609,8 @@
   <data name="About_WhatsNewSub" xml:space="preserve"><value>Changes in this version</value></data>
   <data name="About_ShortcutsSub" xml:space="preserve"><value>Every key and mouse action</value></data>
   <data name="About_ReportSub" xml:space="preserve"><value>Opens GitHub with your version and system filled in</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>Crash logs</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>Opens the folder where unexpected errors are written, to attach one to a report</value></data>
   <data name="About_Source" xml:space="preserve"><value>Source on GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT license</value></data>
   <data name="About_CreditsSub" xml:space="preserve"><value>Treemap algorithm, SpaceMonger, icons</value></data>

@@ -14,19 +14,27 @@
 # of releases.win-x64.json so they find 2.0 (a full package, no delta), after which they are on "win-x64" like
 # everyone else. Keep uploading it until nobody is left on 1.x.
 #
-# The real releases come from .github\workflows\release.yml, which runs this script in three stages so the
-# binaries can be code-signed in between (SignPath signs what the runner built, never what a PC built):
+# The real releases come from .github\workflows\release.yml, which runs this script in three stages, so that a
+# step can go between them later (code signing, say) without the script changing:
 #   -Stage Build    tests, then publishes the four app builds (portable and Velopack folder, x64 and x86)
-#                   -> sign publish\portable*\SpaceSharp.exe and publish\velopack*\SpaceSharp.exe
+#                   into publish\portable*\ and publish\velopack*\
 #   -Stage Pack     packs the installers, MSIs and update packages from those folders into Releases\
-#                   -> sign Releases\*-Setup.exe and Releases\*.msi
 #   -Stage Upload   creates the GitHub release as a draft with every asset
-# Without -Stage it runs Build and Pack in one go, unsigned, which is how you make a build to try on another PC:
+# Without -Stage it runs Build and Pack in one go, which is how you make a build to try on another PC:
 #
-#   .\installer\release.ps1                        # build everything, unsigned, into Releases\
+#   .\installer\release.ps1                        # build everything into Releases\
 #   .\installer\release.ps1 -SkipDelta             # first release on a channel, or offline: no delta package
 #   .\installer\release.ps1 -NoX86                 # x64 only
-#   .\installer\release.ps1 -Upload -Unsigned      # also upload, as a draft, although nothing is signed (needs $env:GITHUB_TOKEN)
+#   .\installer\release.ps1 -Upload -Force         # also upload, as a draft, from this PC (needs $env:GITHUB_TOKEN)
+#
+# Code signing happens on this PC, where the certificate lives (Certum SimplySign or a card; either shows up in the
+# Windows certificate store once its desktop software is running). -Sign takes the certificate's SHA-1 thumbprint
+# (certmgr.msc > Personal > Certificates > Details > Thumbprint) and signs everything in the right order: the app
+# exes after Build, every file inside the Velopack packages plus Setup.exe and Update.exe during Pack (vpk's own
+# --signParams), and the branded MSIs last. With -Sign, -Upload needs no -Force: a signed release from here is the
+# real thing.
+#
+#   .\installer\release.ps1 -Sign 0123456789ABCDEF0123456789ABCDEF01234567 -Upload
 #
 # Needs the .NET 10 SDK, vpk (dotnet tool install -g vpk) and, for Upload, the GitHub CLI (gh).
 
@@ -35,7 +43,8 @@ param(
     [string]$Stage = "All",
     [switch]$SkipDelta,
     [switch]$Upload,
-    [switch]$Unsigned,
+    [switch]$Force,
+    [string]$Sign = "",
     [switch]$NoX86
 )
 
@@ -55,11 +64,38 @@ $doBuild = $Stage -in @("All", "Build")
 $doPack = $Stage -in @("All", "Pack")
 $doUpload = $Stage -eq "Upload" -or ($Stage -eq "All" -and $Upload)
 
-if ($Stage -eq "All" -and $Upload -and -not $Unsigned) {
-    throw "A release from this PC is not code-signed. Push the tag and let the release workflow build it, or pass -Unsigned to upload anyway."
+if ($Stage -eq "All" -and $Upload -and -not $Force -and -not $Sign) {
+    throw "Releases are built by the release workflow so every one comes from the same clean runner. Push the tag and let it build, or pass -Force to upload from this PC anyway."
 }
 if (($doPack -or $doUpload) -and -not (Get-Command vpk -ErrorAction SilentlyContinue)) {
     throw "vpk is not installed. Run: dotnet tool install -g vpk"
+}
+
+# ------------------------------------------------------------------ Signing
+$signtool = $null
+$signParams = ""
+if ($Sign) {
+    if ($Sign -notmatch '^[0-9A-Fa-f]{40}$') { throw "-Sign wants the certificate's SHA-1 thumbprint: 40 hex characters, no spaces." }
+    $signtool = Get-Command signtool -ErrorAction SilentlyContinue | ForEach-Object Source
+    if (-not $signtool) {
+        $signtool = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" -ErrorAction SilentlyContinue |
+            Sort-Object FullName -Descending | Select-Object -First 1 -ExpandProperty FullName
+    }
+    if (-not $signtool) { throw "signtool.exe was not found. Install the Windows SDK (Signing Tools) or put signtool on PATH." }
+    $cert = Get-ChildItem Cert:\CurrentUser\My | Where-Object Thumbprint -eq $Sign.ToUpper()
+    if (-not $cert) { throw "No certificate with thumbprint $Sign in the current user's store. Start SimplySign Desktop (or the card software) and sign in first." }
+    "Signing as: $($cert.Subject)"
+    # RFC 3161 timestamp from Certum, SHA-256 digests. The same string goes to vpk, which calls signtool itself.
+    $signParams = "/sha1 $Sign /fd sha256 /tr http://time.certum.pl /td sha256"
+}
+
+function Sign-Files([string[]]$files) {
+    if (-not $Sign) { return }
+    foreach ($f in $files) {
+        if (-not (Test-Path $f)) { throw "Cannot sign $f: it does not exist." }
+        & $signtool sign /sha1 $Sign /fd sha256 /tr http://time.certum.pl /td sha256 /v $f
+        if ($LASTEXITCODE) { throw "Signing $f failed" }
+    }
 }
 
 # ------------------------------------------------------------------ Build
@@ -78,20 +114,26 @@ if ($doBuild) {
         dotnet publish .\SpaceSharp\SpaceSharp.csproj -p:PublishProfile=Velopack$suffix
         if ($LASTEXITCODE) { throw "Velopack publish ($arch) failed" }
     }
-    ""
-    "Built. Files to sign before packing:"
+    $appExes = @()
     foreach ($arch in $archs) {
         $p = if ($arch -eq "x64") { "portable" } else { "portable-x86" }
         $v = if ($arch -eq "x64") { "velopack" } else { "velopack-x86" }
-        "  publish\$p\SpaceSharp.exe"
-        "  publish\$v\SpaceSharp.exe"
+        $appExes += ".\publish\$p\SpaceSharp.exe", ".\publish\$v\SpaceSharp.exe"
+    }
+    if ($Sign) {
+        "== Signing the app exes"
+        Sign-Files $appExes
+    } else {
+        ""
+        "Built:"
+        $appExes | ForEach-Object { "  $_" }
     }
 }
 
 # ------------------------------------------------------------------ Pack
 if ($doPack) {
     New-Item -ItemType Directory -Force .\Releases | Out-Null
-    # The portable exes join the other assets in Releases\ under the release names (signed by now, on the runner).
+    # The portable exes join the other assets in Releases\ under the release names.
     foreach ($arch in $archs) {
         $src = if ($arch -eq "x64") { ".\publish\portable\SpaceSharp.exe" } else { ".\publish\portable-x86\SpaceSharp.exe" }
         if (-not (Test-Path $src)) { throw "$src is missing; run -Stage Build first." }
@@ -137,7 +179,8 @@ if ($doPack) {
             --instWelcome .\installer\welcome.txt `
             --instLicense .\installer\license.txt `
             --instConclusion .\installer\conclusion.txt `
-            --releaseNotes .\Releases\notes.md
+            --releaseNotes .\Releases\notes.md `
+            @(if ($signParams) { "--signParams", $signParams })
         if ($LASTEXITCODE) { throw "vpk pack ($channel) failed" }
 
         "== Naming the MSI ($arch)"
@@ -155,6 +198,10 @@ if ($doPack) {
 
         "== Branding the MSI ($arch)"
         & (Join-Path $PSScriptRoot "brand-msi.ps1") -Msi (Join-Path $root "Releases\$wanted")
+        if ($Sign) {
+            "== Signing the MSI ($arch)"
+            Sign-Files @(".\Releases\$wanted")      # after branding, which rewrites the file
+        }
     }
     Remove-Item .\Releases\notes.md -ErrorAction SilentlyContinue
 
@@ -165,9 +212,23 @@ if ($doPack) {
     Copy-Item .\Releases\releases.win-x64.json .\Releases\releases.win.json -Force
     if (Test-Path .\Releases\RELEASES-win-x64) { Copy-Item .\Releases\RELEASES-win-x64 .\Releases\RELEASES -Force }
 
-    ""
-    "Packed. Files to sign before uploading:"
-    foreach ($arch in $archs) { "  Releases\SpaceSharp-win-$arch-Setup.exe"; "  Releases\SpaceSharp-win-$arch.msi" }
+    "== SHA256SUMS.txt"
+    # One line per download, in the sha256sum format, so a download can be checked with Get-FileHash or sha256sum.
+    Get-ChildItem .\Releases\*.exe, .\Releases\*.msi | Sort-Object Name | ForEach-Object {
+        "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
+    } | Set-Content .\Releases\SHA256SUMS.txt -Encoding ascii
+
+    if ($Sign) {
+        "== Checking signatures"
+        Get-ChildItem .\Releases\*.exe, .\Releases\*.msi | Get-AuthenticodeSignature | ForEach-Object {
+            "  $($_.Status)  $(Split-Path $_.Path -Leaf)"
+            if ($_.Status -ne "Valid") { throw "$(Split-Path $_.Path -Leaf) is not validly signed" }
+        }
+    } else {
+        ""
+        "Packed. Files to sign before uploading:"
+        foreach ($arch in $archs) { "  Releases\SpaceSharp-win-$arch-Setup.exe"; "  Releases\SpaceSharp-win-$arch.msi" }
+    }
 }
 
 # ------------------------------------------------------------------ Upload
@@ -183,7 +244,7 @@ if ($doUpload) {
         if ($LASTEXITCODE) { throw "Upload (win-x86) failed" }
     }
     # vpk only uploads what it packed; the portable exes and the 1.x bridge manifests go up with the GitHub CLI.
-    $extra = @($archs | ForEach-Object { ".\Releases\SpaceSharp-win-$_.exe" }) + @(".\Releases\releases.win.json")
+    $extra = @($archs | ForEach-Object { ".\Releases\SpaceSharp-win-$_.exe" }) + @(".\Releases\releases.win.json", ".\Releases\SHA256SUMS.txt")
     if (Test-Path .\Releases\RELEASES) { $extra += ".\Releases\RELEASES" }
     if (Get-Command gh -ErrorAction SilentlyContinue) {
         "== Uploading the portable exes and the 1.x manifests"

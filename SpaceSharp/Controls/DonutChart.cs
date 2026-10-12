@@ -20,6 +20,8 @@ public sealed class DonutChart : FrameworkElement
     private readonly List<Slice> _slices = new();
     private int _hover = -1;
 
+    public DonutChart() => FlowDirection = FlowDirection.LeftToRight;   // drawn in its own coordinates, like the map
+
     public IReadOnlyList<Slice> Slices => _slices;
 
     public void SetSlices(IEnumerable<Slice> slices)

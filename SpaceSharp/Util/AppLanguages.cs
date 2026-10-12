@@ -54,6 +54,21 @@ public static class AppLanguages
         CultureInfo.CurrentCulture = culture;
         System.Windows.FrameworkElement.LanguageProperty.OverrideMetadata(typeof(System.Windows.FrameworkElement),
             new System.Windows.FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+
+        // Right-to-left languages (Arabic, Hebrew, Persian, Urdu) mirror every window: panels swap sides, text aligns
+        // right, the caption buttons move. Each window picks that up in ApplyDirection (TitleBarTheme.Attach calls it
+        // for every window the app makes); menus and tooltips inherit it from the window. The controls that draw with
+        // coordinates (the map, the donuts, the icons) pin themselves to left-to-right.
+        IsRightToLeft = culture.TextInfo.IsRightToLeft;
+    }
+
+    /// <summary>True when the chosen language reads right to left, so the windows are mirrored.</summary>
+    public static bool IsRightToLeft { get; private set; }
+
+    /// <summary>Mirrors the window for a right-to-left language. Overriding the property's metadata is not an option: Window's own static constructor overrides it too and refuses a second registration.</summary>
+    public static void ApplyDirection(System.Windows.Window window)
+    {
+        if (IsRightToLeft) window.FlowDirection = System.Windows.FlowDirection.RightToLeft;
     }
 
     /// <summary>"Norsk bokmål (Norge)" with the first letter capitalized, for the dropdown.</summary>

@@ -13,7 +13,7 @@ namespace SpaceSharp;
 
 /// <summary>
 /// "A new version is available": the update prompt, drawn in the app's own style. One narrow column: the mark on
-/// its tile, "SpaceSharp 2.0.0 is ready", the jump as two pills, a short paragraph led by the release's section
+/// its tile, "SpaceSharp 2.0.0 is ready", the version you have under it, a short paragraph led by the release's section
 /// headings, then Install and restart, Remind me later, and a What's new link that opens the release notes window.
 /// </summary>
 public static class UpdateWindow
@@ -38,24 +38,9 @@ public static class UpdateWindow
 
         var title = new TextBlock { Text = Strings.Format("Update_Ready", version), FontSize = 19, FontWeight = FontWeights.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 14, 0, 0) };
         body.Children.Add(title);
-        var status = new TextBlock { Text = Strings.Format("Update_YouHave", current), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 4, 0, 0) };
+        var status = new TextBlock { Text = Strings.Format("Update_YouHave", current), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) };
         status.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
         body.Children.Add(status);
-
-        // ---- the jump as two pills: the version you have, the one you are going to
-        var jump = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 14, 0, 0) };
-        var from = new Border { CornerRadius = new CornerRadius(999), Padding = new Thickness(12, 4, 12, 4) };
-        from.SetResourceReference(Border.BackgroundProperty, "Control");
-        var fromText = new TextBlock { Text = current, FontSize = 12.5 };
-        fromText.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
-        from.Child = fromText;
-        var arrow = Icons.Make("ArrowRight", 13, "TextDim");
-        arrow.Margin = new Thickness(10, 0, 10, 0);
-        var to = new Border { CornerRadius = new CornerRadius(999), Padding = new Thickness(12, 4, 12, 4) };
-        to.SetResourceReference(Border.BackgroundProperty, "Accent");
-        to.Child = new TextBlock { Text = version, FontSize = 12.5, FontWeight = FontWeights.SemiBold, Foreground = new SolidColorBrush(Color.FromRgb(0x1C, 0x15, 0x00)) };
-        jump.Children.Add(from); jump.Children.Add(arrow); jump.Children.Add(to);
-        body.Children.Add(jump);
 
         var progress = new ProgressBar { Height = 4, Minimum = 0, Maximum = 100, Margin = new Thickness(0, 14, 0, 0), Visibility = Visibility.Collapsed, BorderThickness = new Thickness(0) };
         progress.SetResourceReference(Control.BackgroundProperty, "Control");

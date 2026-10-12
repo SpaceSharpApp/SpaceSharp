@@ -42,6 +42,7 @@ public partial class AboutWindow : Window
         Row("Keyboard", Strings.Get("About_Shortcuts"), Strings.Get("About_ShortcutsSub"), null, () => new ShortcutsWindow { Owner = this }.ShowDialog());
         Row("Bug", Strings.Get("About_ReportABug"), Strings.Get("About_ReportSub"), null, () => ReportBug_Click(this, new RoutedEventArgs()));
         Row("Idea", Strings.Get("About_SuggestAFeature"), null, null, () => SuggestFeature_Click(this, new RoutedEventArgs()));
+        Row("ScanFolder", Strings.Get("About_CrashLogs"), Strings.Get("About_CrashLogsSub"), null, () => OpenFolder(CrashLog.Folder));
         Row("Globe", Strings.Get("About_Source"), Strings.Get("About_SourceSub"), null, () => OpenUrl(Repository));
         Row("Book", Strings.Get("About_Credits"), Strings.Get("About_CreditsSub"), null, () => Dialog.Info(this, Strings.Get("About_Credits"), Strings.Get("About_CreditsText")));
     }
@@ -149,6 +150,12 @@ public partial class AboutWindow : Window
                 $"&version={Uri.EscapeDataString(_version)}" +
                 $"&windows={Uri.EscapeDataString(SystemDescription())}" +
                 $"&install={Uri.EscapeDataString(install)}");
+    }
+
+    private void OpenFolder(string folder)
+    {
+        try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", $"\"{folder}\"") { UseShellExecute = true }); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception) { Dialog.Error(this, "SpaceSharp", ex.Message); }
     }
 
     private void OpenUrl(string url)

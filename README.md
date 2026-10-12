@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.exe"><img src="https://img.shields.io/badge/Download-SpaceSharp--win--x64.exe-F5B82E?style=for-the-badge" alt="Download SpaceSharp-win-x64.exe"></a>
-  <a href="https://spacesharpapp.github.io/SpaceSharp/"><img src="https://img.shields.io/badge/Website-spacesharpapp.github.io%2FSpaceSharp-21262D?style=for-the-badge" alt="Website"></a>
+  <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
 </p>
 
 <p align="center">
@@ -71,7 +71,7 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 32-bit Windows gets the same three with **x86** in the name: **SpaceSharp-win-x86.exe**, **SpaceSharp-win-x86-Setup.exe** and **SpaceSharp-win-x86.msi**. They update from their own channel, so an x86 install never pulls an x64 package. A 32-bit process has less memory to work with, so a drive with several million files is better scanned with the x64 build.
 
 > [!NOTE]
-> Free code signing for releases is provided by [SignPath.io](https://signpath.io) and a certificate by the [SignPath Foundation](https://signpath.org). For a release that is not yet signed, SmartScreen may show "Windows protected your PC" the first time; click **More info**, then **Run anyway**.
+> The downloads are not code-signed yet, so SmartScreen may show "Windows protected your PC" the first time; click **More info**, then **Run anyway**.
 >
 > SpaceSharp collects no data. The only network requests it makes are the update check and What's new, which read the public release list on GitHub; the portable exe makes neither, and the check can be switched off in Settings.
 
@@ -171,7 +171,7 @@ dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The only NuGet dependency is Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions. A release is a tag: push the bare version number (`git tag 2.1.0 && git push --tags`) and the release workflow runs the tests, publishes the builds, has them code-signed through SignPath, packs the installers and MSIs, signs those too, and drafts the GitHub release with every asset; you read the draft and press Publish. `installer\release.ps1` is the same build for your own PC, unsigned, when you want files to try on another machine. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
+The only NuGet dependency is Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions. A release is a tag: push the bare version number (`git tag 2.1.0 && git push --tags`) and the release workflow runs the tests, publishes the builds, packs the installers and MSIs, and drafts the GitHub release with every asset; you read the draft and press Publish. `installer\release.ps1` is the same build for your own PC, when you want files to try on another machine. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
 
 How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
 

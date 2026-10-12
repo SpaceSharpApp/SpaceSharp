@@ -2,6 +2,28 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.1.1 (unreleased)
+
+### Arabic, and right-to-left languages
+- SpaceSharp speaks Arabic. The translation is machine-made and read over, not yet checked by a native speaker; corrections are welcome through CONTRIBUTING.md. Settings › Language lists it.
+- The windows mirror for a right-to-left language (Arabic, Hebrew, Persian, Urdu): panels swap sides, text and numbers align right, menus and tooltips follow. The map, the donuts and the icons keep their drawn shape.
+
+### Crash reports
+- An unexpected error is written to a log under `%LocalAppData%\SpaceSharp\logs` (the whole exception chain with stack traces, the version, Windows and how the app was installed; the last twenty are kept), and the error dialog gains Report on GitHub, which opens the bug form with the version, the system, the install kind and the error already filled in and asks for the log to be attached. Errors on background threads are logged too. About has a Crash logs row that opens the folder.
+
+### Installer
+- The MSI dialogs have new art: a low-poly landscape of amber and graphite facets behind the mark in the left column, and a cut of the same in the banner. Drawn by `tools/make-assets.py` like every other brand image.
+
+### Accessibility
+- Icon-only toolbar buttons announce their tooltip as their name to screen readers, and show an accent outline when they have keyboard focus, so Tab is visible.
+
+### Website
+- The site is at https://spacesharp.app now, hosted separately; the GitHub Pages address redirects there. The README, the issue chooser and the social preview point at the new address.
+
+### Fixes
+- The update prompt no longer repeats the two version numbers as pills under "You have 2.0.0"; the line says it once.
+- The license page of the MSI installer wrapped the MIT text twice, once at the 80 columns of the file and once at the width of the dialog, so lines broke in odd places. The file is one line per paragraph now and the dialog wraps it once.
+
 ## 2.1.0
 
 The panel under the map became a view of its own. Insights takes the map's whole area when you want the numbers, the icons are a consistent set, drives show what kind of disk they are, and there are fourteen file types instead of eight.
@@ -33,7 +55,7 @@ The panel under the map became a view of its own. Insights takes the map's whole
 - The side panel is narrower (300 px instead of 360) now that Insights carries the long lists, and while Insights shows, its Largest items section is hidden and the drives get the whole height.
 
 ### Releasing
-- Releases are built by GitHub Actions when a version tag is pushed, code-signed through SignPath, and created as drafts. `installer\release.ps1` runs in stages so the signing fits between them, and refuses to upload an unsigned build from a PC unless told to.
+- Releases are built by GitHub Actions when a version tag is pushed and created as drafts. `installer\release.ps1` runs in stages, and refuses to upload a build from a PC unless told to.
 
 ### Website
 - The project moved to github.com/SpaceSharpApp/SpaceSharp and the site to spacesharpapp.github.io/SpaceSharp; every link in the app, the README and the page follows, and the update check and What's new read from the new address.

@@ -39,7 +39,7 @@
   <data name="Settings_Language" xml:space="preserve"><value>Språk</value></data>
   <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>Appspråk</value></data>
   <data name="Settings_Language_Description" xml:space="preserve"><value>Språk dukker opp her etter hvert som oversettelser legges til. Gjelder etter en omstart.</value></data>
-  <data name="Settings_Language_System" xml:space="preserve"><value>Samme som Windows ({0})</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Samme som Windows</value></data>
   <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>Bytt språk</value></data>
   <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp bytter til {0} neste gang det starter. Vil du starte på nytt nå?</value></data>
   <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Start på nytt nå</value></data>
@@ -102,6 +102,12 @@
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>toppmappe</value></data>
   <data name="Crash_CausedBy" xml:space="preserve"><value>Forårsaket av:</value></data>
   <data name="Crash_Title" xml:space="preserve"><value>Uventet feil</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>Detaljene ble lagret i {0}.</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>Detaljene kunne ikke lagres til en loggfil.</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>Har du et minutt, så meld det inn: skjemaet på GitHub åpner med versjonen, din Windows og feilen fylt ut, og loggen kan legges ved.</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Meld inn på GitHub</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>Lukk</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>Åpne en feilrapport på GitHub?</value></data>
   <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} filer</value></data>
   <data name="Crumb_NoScan" xml:space="preserve"><value>Ingen skanning enda</value></data>
   <data name="Delete_AndMore" xml:space="preserve"><value>
@@ -602,6 +608,8 @@
   <data name="About_WhatsNewSub" xml:space="preserve"><value>Endringer i denne versjonen</value></data>
   <data name="About_ShortcutsSub" xml:space="preserve"><value>Alle taster og musehandlinger</value></data>
   <data name="About_ReportSub" xml:space="preserve"><value>Åpner GitHub med versjon og system ferdig utfylt</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>Krasjlogger</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>Åpner mappen der uventede feil skrives, så en logg kan legges ved en rapport</value></data>
   <data name="About_Source" xml:space="preserve"><value>Kildekode på GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-lisens</value></data>
   <data name="About_CreditsSub" xml:space="preserve"><value>Trekart-algoritme, SpaceMonger, ikoner</value></data>

@@ -1779,6 +1779,12 @@ public partial class MainWindow : Window
         if (FilterRail.IsKeyboardFocusWithin || FilterDrawer.IsKeyboardFocusWithin) return; // the filter boxes handle their own keys
         bool ctrl = Keyboard.Modifiers.HasFlag(ModifierKeys.Control);
         bool alt = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt);
+        bool shift = Keyboard.Modifiers.HasFlag(ModifierKeys.Shift);
+
+        // Not in the shortcut list: Ctrl+Alt+Shift+F12 throws on the UI thread and F11 in a background task, to see
+        // the crash log and the report dialog without waiting for a real bug.
+        if (ctrl && alt && shift && e.Key == Key.F12) { e.Handled = true; throw new InvalidOperationException("Test crash from Ctrl+Alt+Shift+F12. Nothing is wrong."); }
+        if (ctrl && alt && shift && e.Key == Key.F11) { e.Handled = true; _ = Task.Run(() => throw new InvalidOperationException("Test crash from Ctrl+Alt+Shift+F11, on a background task. Nothing is wrong.")); return; }
 
         switch (e.Key)
         {

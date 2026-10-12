@@ -25,6 +25,7 @@ internal static class TitleBarTheme
     /// <summary>Applies the current theme now (or once the window has a handle).</summary>
     public static void Attach(Window window)
     {
+        AppLanguages.ApplyDirection(window);   // every window comes through here, so the mirroring for right-to-left languages lives here too
         if (new WindowInteropHelper(window).Handle != IntPtr.Zero)
             Set(window, ThemeManager.IsDark);
         else
