@@ -12,7 +12,6 @@ nine-cell icon used, so it reads as an app icon next to other apps' tiles.
 One definition here produces every brand file in the repository:
 
   SpaceSharp/Assets/SpaceSharp.svg        master mark (deep carve)
-  SpaceSharp/Assets/SpaceSharp-small.svg  shallow carve, used for 16 to 24 px
   SpaceSharp/Assets/SpaceSharp.ico        Windows icon on the tile: 16, 20, 24, 32, 48, 64, 128, 256
   SpaceSharp/Assets/SpaceSharp-256.png    the mark the app shows in its own UI
   docs/icon.png, docs/icon-512.png        landing page favicon and store icon
@@ -183,7 +182,6 @@ def png_bytes(im: Image.Image) -> bytes:
 
 def make_svgs():
     write("SpaceSharp/Assets/SpaceSharp.svg", mark_svg())
-    write("SpaceSharp/Assets/SpaceSharp-small.svg", mark_svg(CARVE_SMALL))
     lock = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" width="640" height="120" role="img" aria-label="SpaceSharp">'
             f'<style>text{{font-family:"Bricolage Grotesque","Segoe UI",sans-serif;letter-spacing:-0.035em}}</style>'
             f'<g transform="translate(10,10)">{mark_body()}</g>'
