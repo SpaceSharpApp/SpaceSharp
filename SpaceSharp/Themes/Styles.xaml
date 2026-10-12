@@ -11,11 +11,14 @@
     <!-- ============================================================ buttons -->
     <!-- Tag = icon geometry ({StaticResource Icon.Name}), Content = label. Either may be left out. -->
     <Style x:Key="ToolButton" TargetType="Button">
+        <!-- Icon-only buttons have no text for a screen reader; the tooltip is the name. Buttons with text and no
+             tooltip get null here, and UI Automation then falls back to the content, as usual. -->
+        <Setter Property="AutomationProperties.Name" Value="{Binding ToolTip, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Foreground" Value="{DynamicResource Text}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="9,0" />
         <Setter Property="Height" Value="32" />
         <Setter Property="MinWidth" Value="32" />
         <Setter Property="Cursor" Value="Hand" />
@@ -51,6 +54,11 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+            </Trigger>
+            <!-- Keyboard focus: the hover tone plus an accent edge, so Tab is visible without a dotted rectangle. -->
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="{DynamicResource ControlPressed}" />

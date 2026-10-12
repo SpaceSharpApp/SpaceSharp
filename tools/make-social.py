@@ -45,7 +45,7 @@ for line in ("See where your", "disk space went."):
 y += 18 * S
 d.text((x, y), "Your drive as a map. Free and open source, for Windows 10 and 11.", font=ma.font(500, 20 * S), fill=ma.MUTED)
 y += 50 * S
-d.text((x, y), "spacesharpapp.github.io/SpaceSharp", font=ma.font(500, 15 * S), fill=ma.HINT)
+d.text((x, y), "spacesharp.app", font=ma.font(500, 15 * S), fill=ma.HINT)
 
 out = im.resize((1280, 640), Image.LANCZOS).convert('RGB')
 out.save(HERE.parent / 'docs' / 'social-preview.png', optimize=True)

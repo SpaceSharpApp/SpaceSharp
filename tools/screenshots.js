@@ -5,7 +5,7 @@
 //
 // Each entry is a scene from the mockup tool plus its query string; the window is captured at 1600 x 900 and
 // 1.5x so the PNGs stay crisp on GitHub. All names in them are sample data. Afterwards run
-// tools/make-mobile-shots.py for the small WebP copies the landing page shows on phones.
+// tools/make-mobile-shots.py for the small WebP copies the website shows on phones.
 const path = require("path");
 const { chromium } = require("playwright");
 

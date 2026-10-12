@@ -1,4 +1,4 @@
-"""Writes docs/m/*.webp: the README screenshots at 1200 px wide, for the phone-sized landing page, which shows a
+"""Writes docs/m/*.webp (ignored by git): the README screenshots at 1200 px wide, for the website's phone gallery, which shows a
 gallery of pictures instead of the live preview. Run after tools/screenshots.js has refreshed docs/shot-*.png.
 Needs Pillow with WebP support (pip install pillow)."""
 from pathlib import Path

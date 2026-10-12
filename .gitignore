@@ -35,3 +35,6 @@ tools/fonts/
 SpaceSharp/Resources/Strings.nb.tracking.json
 SpaceSharp/Resources/Strings.resx.project.json
 tools/.fonts/
+
+# Website assets generated on demand (the site itself lives outside this repository)
+docs/m/

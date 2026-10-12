@@ -57,7 +57,6 @@ CODEOWNERS text
 # Hands off in merges: regenerate these instead of resolving them by hand
 SpaceSharp/Themes/Icons.xaml merge=binary
 docs/*.png merge=binary
-docs/*.webp merge=binary
 
 # GitHub language stats: count the app, not the landing page and the asset scripts
 docs/** linguist-documentation
