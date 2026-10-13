@@ -75,6 +75,12 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource AccentHover}" />
             </Trigger>
+            <!-- Overrides the base focus look, which would swap the amber fill for the gray hover tone and leave the
+                 dark label on it: the accent button keeps its fill and shows focus as a dark edge instead. -->
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Background" Value="{DynamicResource AccentHover}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentText}" />
+            </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="{DynamicResource AccentPressed}" />
             </Trigger>

@@ -2,6 +2,11 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.2.1 (unreleased)
+
+### Fixes
+- The Map and Insights buttons went gray with a dark label after a click, because the new keyboard-focus look for toolbar buttons replaced their amber fill. The accent buttons keep the fill and show focus as a dark edge.
+
 ## 2.2.0
 
 ### Sixteen more languages
