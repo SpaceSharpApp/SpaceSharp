@@ -142,46 +142,82 @@ public partial class MainWindow : Window
 
     // ============================================================ saved scans
 
-    /// <summary>The start screen's list of recent saved scans, one click to reopen.</summary>
+    /// <summary>
+    /// The start screen's saved scans as tiles: a ring that says how full the drive is right now (a folder icon for
+    /// a folder scan), the volume label, the scanned size and when. One click reopens the scan.
+    /// </summary>
     private void BuildRecentScans()
     {
-        RecentRows.Children.Clear();
+        RecentTiles.Children.Clear();
         var recent = ScanFile.RecentAutoSaves();
-        RecentCard.Visibility = recent.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         EmptyTitle.Text = recent.Count > 0 ? Strings.Get("Start_PickADriveOrContinue") : Strings.Get("Start_PickADrive");
         EmptySubtitle.Text = recent.Count > 0 ? Strings.Get("Start_RecentHint") : Strings.Get("Start_FirstHint");
+        long usedAll = 0, totalAll = 0;
         foreach (var info in recent)
         {
-            var grid = new Grid { Margin = new Thickness(14, 0, 12, 0), Height = 42 };
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(90) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             bool drive = DiskScanner.IsDriveRoot(info.RootPath);
-            var icon = Icons.Make(drive ? DriveKinds.IconName(DriveKinds.Detect(info.RootPath)) : "Folder", 14, "TextDim");
-            icon.Margin = new Thickness(0, 0, 14, 0);
-            var name = new TextBlock { Text = info.RootPath.TrimEnd('\\'), VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
-            var when = new TextBlock { Text = Ago(info.ScannedUtc), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) };
-            when.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
-            var size = new TextBlock { Text = SizeFormatter.Format(info.Bytes), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-            size.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
-            var chevron = Icons.Make("ChevronRight", 12, "TextDim");
-            chevron.Margin = new Thickness(10, 0, 0, 0);
-            Grid.SetColumn(name, 1); Grid.SetColumn(when, 2); Grid.SetColumn(size, 3); Grid.SetColumn(chevron, 4);
-            grid.Children.Add(icon); grid.Children.Add(name); grid.Children.Add(when); grid.Children.Add(size); grid.Children.Add(chevron);
+            DriveInfo? di = null;
+            if (drive) { try { var d = new DriveInfo(info.RootPath); if (d.IsReady) di = d; } catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { } }
+            double fraction = di is { TotalSize: > 0 } ? 1 - (double)di.AvailableFreeSpace / di.TotalSize : double.NaN;
+            if (di is not null) { usedAll += di.TotalSize - di.AvailableFreeSpace; totalAll += di.TotalSize; }
 
-            var button = new Button { Content = grid, Style = (Style)FindResource("ListRowButton"), HorizontalContentAlignment = HorizontalAlignment.Stretch, ToolTip = info.Path };
+            var stack = new StackPanel { Width = 132 };
+            stack.Children.Add(Ring(info, drive, fraction));
+            string title = drive
+                ? (string.IsNullOrWhiteSpace(di?.VolumeLabel) ? (DriveKinds.Label(DriveKinds.Detect(info.RootPath)) ?? info.RootPath.TrimEnd('\\')) : di!.VolumeLabel)
+                : Path.GetFileName(info.RootPath.TrimEnd('\\'));
+            stack.Children.Add(new TextBlock { Text = title, FontWeight = FontWeights.SemiBold, FontSize = 13.5, TextAlignment = TextAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 10, 0, 0) });
+            var line = new TextBlock { FontSize = 12, TextAlignment = TextAlignment.Center, Margin = new Thickness(0, 4, 0, 0), TextWrapping = TextWrapping.Wrap };
+            line.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+            line.Inlines.Add(Strings.Format("Start_ScannedSize", SizeFormatter.Format(info.Bytes)));
+            line.Inlines.Add(new System.Windows.Documents.LineBreak());
+            line.Inlines.Add(Ago(info.ScannedUtc));
+            stack.Children.Add(line);
+
+            var tile = new Button { Content = stack, Style = (Style)FindResource("StartTile"), Margin = new Thickness(6), ToolTip = info.RootPath };
             string file = info.Path;
-            button.Click += async (_, _) => await OpenScanFileAsync(file);
-            if (RecentRows.Children.Count > 0)
-            {
-                var rule = new Border { Height = 1, Margin = new Thickness(14, 0, 0, 0) };
-                rule.SetResourceReference(Border.BackgroundProperty, "Stroke");
-                RecentRows.Children.Add(rule);
-            }
-            RecentRows.Children.Add(button);
+            tile.Click += async (_, _) => await OpenScanFileAsync(file);
+            RecentTiles.Children.Add(tile);
         }
+        EmptyTotals.Text = totalAll > 0 ? Strings.Format("Start_Totals", SizeFormatter.Format(usedAll), SizeFormatter.Format(totalAll)) : string.Empty;
+        EmptyTotals.Visibility = totalAll > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    /// <summary>
+    /// The tile's ring: the used share of the drive as an arc, the drive letter inside, and the percentage under it;
+    /// warm when the drive is nearly full. A folder scan shows the folder icon in the ring's place instead.
+    /// </summary>
+    private Grid Ring(ScanFileInfo info, bool drive, double fraction)
+    {
+        const double size = 88, thickness = 5;
+        var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center };
+        if (!drive || double.IsNaN(fraction))
+        {
+            var icon = Icons.Make(drive ? DriveKinds.IconName(DriveKinds.Detect(info.RootPath)) : "Folder", 34, "TextDim");
+            icon.HorizontalAlignment = HorizontalAlignment.Center; icon.VerticalAlignment = VerticalAlignment.Center;
+            grid.Children.Add(icon);
+            return grid;
+        }
+        fraction = Math.Clamp(fraction, 0, 1);
+        var track = new System.Windows.Shapes.Ellipse { StrokeThickness = thickness };
+        track.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, "Control");
+        grid.Children.Add(track);
+        // dash lengths are in multiples of the stroke thickness; the arc starts at twelve o'clock
+        double circumference = Math.PI * (size - thickness) / thickness;
+        var arc = new System.Windows.Shapes.Ellipse
+        {
+            StrokeThickness = thickness, StrokeDashCap = PenLineCap.Round,
+            StrokeDashArray = new DoubleCollection { Math.Max(0.01, circumference * fraction), circumference },
+            RenderTransformOrigin = new Point(0.5, 0.5), RenderTransform = new RotateTransform(-90)
+        };
+        bool nearlyFull = fraction >= 0.85;
+        arc.SetResourceReference(System.Windows.Shapes.Shape.StrokeProperty, nearlyFull ? "Danger" : "Accent");
+        grid.Children.Add(arc);
+        var letter = new TextBlock { Text = info.RootPath.TrimEnd('\\'), FontSize = 18, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 0, 14) };
+        var pct = new TextBlock { Text = Strings.Format("Start_PercentUsed", (int)Math.Round(fraction * 100)), FontSize = 10.5, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 24, 0, 0) };
+        pct.SetResourceReference(TextBlock.ForegroundProperty, nearlyFull ? "Danger" : "TextDim");
+        grid.Children.Add(letter); grid.Children.Add(pct);
+        return grid;
     }
 
     private DateTime _scanTimeUtc = DateTime.MinValue;
@@ -531,7 +567,6 @@ public partial class MainWindow : Window
 
     private bool IsScanning => _scanCts is not null;
 
-
     // ================================================================= setup
 
     /// <summary>Fills the Drives section of the side panel. Called at startup and after every scan.</summary>
@@ -795,7 +830,6 @@ public partial class MainWindow : Window
             AccessText.Text = deniedFolders == 1 ? Strings.Get("Access_DeniedOne") : Strings.Format("Access_DeniedMany", deniedFolders);
     }
 
-
     /// <summary>
     /// For the access-denied notice: protected folders the normal scan could not enter need the whole app
     /// elevated, so this relaunches as administrator with the same drive and hands the instance over.
@@ -872,7 +906,6 @@ public partial class MainWindow : Window
         {
         }
 
-        _scanTarget = target;
         _scanFacts = facts;
         ScanTitle.Text = Strings.Format("Scan_Title", target);
         ScanSubtitle.Text = facts ?? Strings.Get("Scan_FolderFacts");
@@ -893,9 +926,7 @@ public partial class MainWindow : Window
     }
 
     private string? _scanMethodShown;
-    private string _scanTarget = string.Empty;
     private string? _scanFacts;
-    private string ScanTarget() => _scanTarget;
 
     /// <summary>Once the scanner has decided how it reads the drive, say so on the card.</summary>
     private void ShowScanMethod()
@@ -1197,14 +1228,6 @@ public partial class MainWindow : Window
 
     private void SettingsButton_Click(object sender, RoutedEventArgs e) => ShowSettings();
 
-    /// <summary>Flips a boolean setting from a shortcut and confirms it in the status bar.</summary>
-    private void ToggleSetting(Action<bool> set, bool current, string name)
-    {
-        set(!current);
-        ApplySettings();
-        StatusScan.Text = Strings.Format("Toggle_State", name, current ? Strings.Get("Word_Off") : Strings.Get("Word_On"));
-    }
-
     private void ShowSettings() => new SettingsWindow(this) { Owner = this }.ShowDialog();
 
     private void CloseAccessBar_Click(object sender, RoutedEventArgs e) => AccessBar.Visibility = Visibility.Collapsed;
@@ -1293,8 +1316,6 @@ public partial class MainWindow : Window
     }
 
     // =============================================================== actions
-
-    private void DeleteNode(FsNode node) => DeleteNodes(new[] { node });
 
     private void DeleteSelection() => DeleteNodes(Treemap.SelectedNodes.ToList());
 
@@ -1611,8 +1632,6 @@ public partial class MainWindow : Window
         string category = Strings.Category(Palette.Categorize(ext)).ToLowerInvariant();
         return ext.Length == 0 ? Strings.Format("Inspect_FileNoExtension", category) : Strings.Format("Inspect_FileWithExtension", ext.TrimStart('.').ToUpperInvariant(), category);
     }
-
-    private void CopyPath(FsNode node) => RunSafely(() => Clipboard.SetText(node.FullPath));
 
     private void RunSafely(Action action)
     {

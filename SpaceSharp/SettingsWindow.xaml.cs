@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -49,6 +50,8 @@ public partial class SettingsWindow : Window
             case "General":
                 Section(Strings.Get("Settings_Language"));
                 Row(Strings.Get("Settings_Language_AppLanguage"), Strings.Get("Settings_Language_Description"), LanguageCombo());
+                if (AppLanguages.IsMachineTranslated(AppLanguages.Current))
+                    Note(Strings.Format("Settings_Language_MachineNote", AppLanguages.DisplayName(AppLanguages.Current)));
 
                 Section(Strings.Get("Settings_Updates"));
                 Row(Strings.Get("Settings_CheckUpdates"), Updater.Instance.IsInstalled
@@ -233,6 +236,15 @@ public partial class SettingsWindow : Window
         Body.Children.Add(new Border { Style = (Style)FindResource("SettingsCard"), Child = _card });
     }
 
+    /// <summary>A line of small text in the card under the last row, in the accent color: a caveat about the row above.</summary>
+    private void Note(string text)
+    {
+        _card!.Children.Add(Themed(new TextBlock
+        {
+            Text = text, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(16, 0, 16, 12)
+        }, TextBlock.ForegroundProperty, "Accent"));
+    }
+
     /// <summary>Rows that depend on a switch are grayed out and inert while it is off.</summary>
     private static void SetEnabled(IEnumerable<FrameworkElement> rows, bool enabled)
     {
@@ -278,26 +290,47 @@ public partial class SettingsWindow : Window
         return box;
     }
 
+    /// <summary>One row of the language dropdown: a culture (null for "Same as Windows") under its group heading.</summary>
+    private sealed record LanguageChoice(string Name, CultureInfo? Culture, string Group)
+    {
+        public override string ToString() => Name;   // the combo's template shows the item's text, not DisplayMemberPath
+    }
+
+    /// <summary>
+    /// Grouped like the palette picker: "Translations" holds Same as Windows, English and the translations a native
+    /// speaker has read through; "Machine translations" holds the rest (Meta_MachineTranslated in each file decides).
+    /// </summary>
     private ComboBox LanguageCombo()
     {
-        var cultures = AppLanguages.Available();
-        var labels = new List<string> { Strings.Get("Settings_Language_System") };
-        labels.AddRange(cultures.Select(AppLanguages.DisplayName));
+        var choices = new List<LanguageChoice> { new(Strings.Get("Settings_Language_System"), null, Strings.Get("Settings_Language_Translations")) };
+        foreach (var c in AppLanguages.Available())
+        {
+            bool machine = AppLanguages.IsMachineTranslated(c);
+            choices.Add(new(AppLanguages.DisplayName(c), c, Strings.Get(machine ? "Settings_Language_MachineTranslations" : "Settings_Language_Translations")));
+        }
         int selected = 0;
         if (!string.IsNullOrWhiteSpace(_settings.Language))
         {
-            int i = cultures.ToList().FindIndex(c => string.Equals(c.Name, _settings.Language, StringComparison.OrdinalIgnoreCase));
-            if (i >= 0) selected = i + 1;
+            int i = choices.FindIndex(ch => ch.Culture is not null && string.Equals(ch.Culture.Name, _settings.Language, StringComparison.OrdinalIgnoreCase));
+            if (i >= 0) selected = i;
         }
-        return Combo(labels.ToArray(), selected, i =>
+
+        var view = new System.Windows.Data.ListCollectionView(choices);
+        view.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(nameof(LanguageChoice.Group)));
+        var combo = new ComboBox { Width = 230, MaxDropDownHeight = 560, ItemsSource = view, SelectedIndex = selected };
+        ScrollViewer.SetCanContentScroll(combo, false);   // pixel scrolling: grouped lists snap by whole groups otherwise
+        combo.GroupStyle.Add(new GroupStyle { HeaderTemplate = (DataTemplate)FindResource("ComboGroupHeader") });
+        combo.SelectionChanged += (_, _) =>
         {
-            string? chosen = i == 0 ? null : cultures[i - 1].Name;
+            if (combo.SelectedItem is not LanguageChoice choice) return;
+            string? chosen = choice.Culture?.Name;
             if (chosen == _settings.Language) return;
             _settings.Language = chosen;
             _settings.Save();
-            string name = i == 0 ? AppLanguages.DisplayName(AppLanguages.SystemCulture) : AppLanguages.DisplayName(cultures[i - 1]);
+            string name = choice.Culture is null ? AppLanguages.DisplayName(AppLanguages.SystemCulture) : choice.Name;
             if (Dialog.Confirm(this, Strings.Get("Settings_Language_RestartTitle"), Strings.Format("Settings_Language_RestartMessage", name), Strings.Get("Settings_Language_RestartNow"), Strings.Get("Settings_Language_Later"))) _main.RestartApp();
-        });
+        };
+        return combo;
     }
 
     /// <summary>The palettes for the current theme first, then the rest marked with their theme; picking one sets this theme's slot.</summary>

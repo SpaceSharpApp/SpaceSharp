@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    SpaceSharp user-visible text, Turkish. Machine translated, not yet reviewed by a native speaker: Meta_MachineTranslated says so.
+    Keys and placeholders must match Strings.resx; dotnet test checks that.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Settings_Language" xml:space="preserve"><value>Dil</value></data>
+  <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>Uygulama dili</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Çeviriler eklendikçe diller burada görünür. Yeniden başlatıldıktan sonra geçerli olur.</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Windows ile aynı</value></data>
+  <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>Dili değiştir</value></data>
+  <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp bir sonraki başlatılışında {0} diline geçer. Şimdi yeniden başlatılsın mı?</value></data>
+  <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Şimdi yeniden başlat</value></data>
+  <data name="Settings_Language_Later" xml:space="preserve"><value>Daha sonra</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} dili makine çevirisidir ve henüz ana dili bu olan biri tarafından denetlenmemiştir. Düzeltmeler GitHub üzerinden memnuniyetle karşılanır.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>Çeviriler</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>Makine çevirileri</value></data>
+  <data name="About_AboutSpaceSharp" xml:space="preserve"><value>SpaceSharp hakkında</value></data>
+  <data name="About_CheckForUpdates" xml:space="preserve"><value>Güncelleştirmeleri denetle</value></data>
+  <data name="About_Checking" xml:space="preserve"><value>Denetleniyor…</value></data>
+  <data name="About_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="About_CopyFailed" xml:space="preserve"><value>Kopyalama başarısız</value></data>
+  <data name="About_CopyVersionInfo" xml:space="preserve"><value>Sürüm bilgisini kopyala</value></data>
+  <data name="About_Credits" xml:space="preserve"><value>Katkıda bulunanlar</value></data>
+  <data name="About_Feedback" xml:space="preserve"><value>Geri bildirim</value></data>
+  <data name="About_FoundAProblemOr" xml:space="preserve"><value>Bir sorun mu buldunuz ya da bir fikriniz mi var? İkisi de projenin GitHub sayfasına gider. Hata bildirimleri, sürüm ve sistem alanları önceden doldurulmuş olarak açılır.</value></data>
+  <data name="About_InstallAndRestart" xml:space="preserve"><value>{0} sürümünü yükle ve yeniden başlat</value></data>
+  <data name="About_Portable" xml:space="preserve"><value>  ·  taşınabilir</value></data>
+  <data name="About_ReportABug" xml:space="preserve"><value>Hata bildir</value></data>
+  <data name="About_Shortcuts" xml:space="preserve"><value>Kısayollar</value></data>
+  <data name="About_SuggestAFeature" xml:space="preserve"><value>Özellik öner</value></data>
+  <data name="About_System" xml:space="preserve"><value>Sistem</value></data>
+  <data name="About_UpToDate" xml:space="preserve"><value>Güncelsiniz</value></data>
+  <data name="About_UpdateFailed" xml:space="preserve"><value>Güncelleştirme başarısız</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Sürüm {0}</value></data>
+  <data name="Access_DeniedMany" xml:space="preserve"><value>{0:N0} korumalı klasör okunamadı, bu yüzden haritada içerikleri eksik.</value></data>
+  <data name="Access_DeniedOne" xml:space="preserve"><value>1 korumalı klasör okunamadı, bu yüzden haritada içeriği eksik.</value></data>
+  <data name="Ago_Days" xml:space="preserve"><value>{0} gün önce</value></data>
+  <data name="Ago_Hours" xml:space="preserve"><value>{0} saat önce</value></data>
+  <data name="Ago_JustNow" xml:space="preserve"><value>az önce</value></data>
+  <data name="Ago_Minutes" xml:space="preserve"><value>{0} dakika önce</value></data>
+  <data name="Ago_Months" xml:space="preserve"><value>{0} ay önce</value></data>
+  <data name="Ago_Today" xml:space="preserve"><value>bugün</value></data>
+  <data name="Ago_Years" xml:space="preserve"><value>{0:0.#} yıl önce</value></data>
+  <data name="Ago_Yesterday" xml:space="preserve"><value>dün</value></data>
+  <data name="Category_Archives" xml:space="preserve"><value>Arşivler</value></data>
+  <data name="Category_Audio" xml:space="preserve"><value>Ses</value></data>
+  <data name="Category_Code" xml:space="preserve"><value>Kod</value></data>
+  <data name="Category_Documents" xml:space="preserve"><value>Belgeler</value></data>
+  <data name="Category_Images" xml:space="preserve"><value>Resimler</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>Diğer</value></data>
+  <data name="Category_Programs" xml:space="preserve"><value>Programlar</value></data>
+  <data name="Category_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="Category_GameData" xml:space="preserve"><value>Oyun verileri</value></data>
+  <data name="Category_Installers" xml:space="preserve"><value>Yükleyiciler</value></data>
+  <data name="Category_DiskImages" xml:space="preserve"><value>Disk görüntüleri</value></data>
+  <data name="Category_Databases" xml:space="preserve"><value>Veritabanları</value></data>
+  <data name="Category_Fonts" xml:space="preserve"><value>Yazı tipleri</value></data>
+  <data name="Category_System" xml:space="preserve"><value>Sistem</value></data>
+  <data name="Changes_Grew" xml:space="preserve"><value>büyüdü</value></data>
+  <data name="Changes_GrewFolder" xml:space="preserve"><value>büyüyen klasör</value></data>
+  <data name="Changes_New" xml:space="preserve"><value>yeni</value></data>
+  <data name="Changes_NewFolder" xml:space="preserve"><value>yeni klasör</value></data>
+  <data name="Changes_Shrank" xml:space="preserve"><value>küçüldü</value></data>
+  <data name="Changes_ShrankFolder" xml:space="preserve"><value>küçülen klasör</value></data>
+  <data name="ColorModeName_Change" xml:space="preserve"><value>Son taramadan bu yana değişim</value></data>
+  <data name="ColorModeName_Depth" xml:space="preserve"><value>Klasör derinliği</value></data>
+  <data name="ColorModeName_FileType" xml:space="preserve"><value>Dosya türü</value></data>
+  <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Üst klasör</value></data>
+  <data name="ColorMode_Change" xml:space="preserve"><value>son taramadan bu yana değişim</value></data>
+  <data name="ColorMode_Depth" xml:space="preserve"><value>derinlik</value></data>
+  <data name="ColorMode_FileType" xml:space="preserve"><value>dosya türü</value></data>
+  <data name="ColorMode_TopFolder" xml:space="preserve"><value>üst klasör</value></data>
+  <data name="Crash_CausedBy" xml:space="preserve"><value>Nedeni:</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Beklenmeyen hata</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>Ayrıntılar {0} konumuna kaydedildi.</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>Ayrıntılar bir günlük dosyasına kaydedilemedi.</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>Bir dakikanız varsa bildirin: GitHub'daki form sürüm, Windows sürümünüz ve hata doldurulmuş olarak açılır; günlük de eklenebilir.</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>GitHub'da bildir</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>GitHub'da bir hata bildirimi açılsın mı?</value></data>
+  <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} dosya</value></data>
+  <data name="Crumb_NoScan" xml:space="preserve"><value>Henüz tarama yok</value></data>
+  <data name="Delete_AndMore" xml:space="preserve"><value>
+… ve {0:N0} öğe daha</value></data>
+  <data name="Delete_ErrorTitle" xml:space="preserve"><value>Sil</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Her şey silinemedi.
+
+{0}</value></data>
+  <data name="Delete_Question" xml:space="preserve"><value>{0} Geri Dönüşüm Kutusu'na taşınsın mı?
+
+{1}</value></data>
+  <data name="Delete_Title" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Delete_WhatFile" xml:space="preserve"><value>"{0}" dosyası ({1})</value></data>
+  <data name="Delete_WhatFolder" xml:space="preserve"><value>"{0}" klasörü ({1:N0} dosya, {2})</value></data>
+  <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} öğe ({1:N0} dosya, {2})</value></data>
+  <data name="Describe_FilesOnly" xml:space="preserve"><value>yalnızca dosyalar</value></data>
+  <data name="Describe_FoldersOnly" xml:space="preserve"><value>yalnızca klasörler</value></data>
+  <data name="Describe_Modified" xml:space="preserve"><value>son {0} içinde değiştirilen</value></data>
+  <data name="Describe_Over" xml:space="preserve"><value>{0} üzeri</value></data>
+  <data name="Describe_Under" xml:space="preserve"><value>{0} altı</value></data>
+  <data name="Describe_Untouched" xml:space="preserve"><value>{0} boyunca dokunulmamış</value></data>
+  <data name="Dialog_ChooseFolder" xml:space="preserve"><value>Taranacak klasörü seçin</value></data>
+  <data name="Dialog_CompareScan" xml:space="preserve"><value>Kaydedilmiş bir taramayla karşılaştır</value></data>
+  <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Tarama açılamadı</value></data>
+  <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Yeniden başlatılamadı</value></data>
+  <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
+  <data name="Dialog_ExportCsv" xml:space="preserve"><value>CSV olarak dışa aktar</value></data>
+  <data name="Dialog_OpenScan" xml:space="preserve"><value>Kaydedilmiş bir tarama aç</value></data>
+  <data name="Dialog_RescanFailed" xml:space="preserve"><value>Yeniden tarama başarısız</value></data>
+  <data name="Dialog_SaveScan" xml:space="preserve"><value>Taramayı kaydet</value></data>
+  <data name="Dialog_ScanFailed" xml:space="preserve"><value>Tarama başarısız</value></data>
+  <data name="Dialog_OutOfMemory32" xml:space="preserve"><value>32 bit derleme, tarama bitmeden belleği tüketti. Bilgisayarda ne kadar RAM olursa olsun 32 bit bir işlem yalnızca birkaç gigabayt adresleyebilir; bu kadar çok dosya içeren bir sürücü için 64 bit derleme (SpaceSharp-win-x64) gerekir.</value></data>
+  <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp taraması (*.sscan)|*.sscan</value></data>
+  <data name="Drive_Free" xml:space="preserve"><value>{0} boş</value></data>
+  <data name="Drive_UsedOf" xml:space="preserve"><value>{1} alanın {0} kadarı kullanılıyor · {2}</value></data>
+  <data name="Filter_1Month" xml:space="preserve"><value>1 ay</value></data>
+  <data name="Filter_1Year" xml:space="preserve"><value>1 yıl</value></data>
+  <data name="Filter_2Years" xml:space="preserve"><value>2 yıl</value></data>
+  <data name="Filter_3Months" xml:space="preserve"><value>3 ay</value></data>
+  <data name="Filter_5Years" xml:space="preserve"><value>5 yıl</value></data>
+  <data name="Filter_6Months" xml:space="preserve"><value>6 ay</value></data>
+  <data name="Filter_AnySize" xml:space="preserve"><value>Herhangi bir boyut</value></data>
+  <data name="Filter_AnyTime" xml:space="preserve"><value>Herhangi bir zaman</value></data>
+  <data name="Filter_FilesAndFolders" xml:space="preserve"><value>Dosyalar ve klasörler</value></data>
+  <data name="Filter_FilesOnly" xml:space="preserve"><value>Yalnızca dosyalar</value></data>
+  <data name="Filter_FoldersOnly" xml:space="preserve"><value>Yalnızca klasörler</value></data>
+  <data name="Filter_LargerThan" xml:space="preserve"><value>Şundan büyük</value></data>
+  <data name="Filter_MatchCount" xml:space="preserve"><value>{0:N0} dosya · {1} eşleşme</value></data>
+  <data name="Filter_Matches" xml:space="preserve"><value>{0:N0} dosya · {1}: {2}</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>Adın bir parçası veya *.iso gibi bir desen</value></data>
+  <data name="Filter_NoFilter" xml:space="preserve"><value>Filtre yok: her şey gösteriliyor</value></data>
+  <data name="Filter_NotModifiedFor" xml:space="preserve"><value>Şu süredir değiştirilmemiş</value></data>
+  <data name="Filter_NothingMatches" xml:space="preserve"><value>Eşleşen yok: {0}</value></data>
+  <data name="Filter_NothingMatchesShort" xml:space="preserve"><value>Eşleşen yok</value></data>
+  <data name="Filter_QuickFilters" xml:space="preserve"><value>Hızlı filtreler</value></data>
+  <data name="Filter_Show" xml:space="preserve"><value>Göster</value></data>
+  <data name="Filter_SmallerThan" xml:space="preserve"><value>Şundan küçük</value></data>
+  <data name="Filter_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Hover_AccessDenied" xml:space="preserve"><value>    ⚠ bazı içerikler okunamadı</value></data>
+  <data name="Hover_FileSize" xml:space="preserve"><value> ({0} dosya boyutu)</value></data>
+  <data name="Hover_Files" xml:space="preserve"><value>    {0:N0} dosya</value></data>
+  <data name="Hover_FreeSpaceOn" xml:space="preserve"><value>Boş alan: </value></data>
+  <data name="Hover_HardLink" xml:space="preserve"><value>    sabit bağlantı, {0} zaten başka yerde sayıldı</value></data>
+  <data name="Hover_OnDisk" xml:space="preserve"><value> ({0} diskte)</value></data>
+  <data name="Hover_ShareOf" xml:space="preserve"><value>  ({1} içinde %{0:0.#})</value></data>
+  <data name="Hover_TooSmallIn" xml:space="preserve"><value> şurada gösterilemeyecek kadar küçük: </value></data>
+  <data name="Hover_ZoomToSee" xml:space="preserve"><value>    görmek için yakınlaştırın</value></data>
+  <data name="InspectWin_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="InspectWin_CopyDetails" xml:space="preserve"><value>Ayrıntıları kopyala</value></data>
+  <data name="InspectWin_Inspect" xml:space="preserve"><value>İncele</value></data>
+  <data name="InspectWin_Properties" xml:space="preserve"><value>Özellikler</value></data>
+  <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>Dosya Gezgini'nde göster</value></data>
+  <data name="Inspect_AccessDenied" xml:space="preserve"><value>Bazı içerikler okunamadı (erişim engellendi)</value></data>
+  <data name="Inspect_ExactBytes" xml:space="preserve"><value>  ({0:N0} bayt)</value></data>
+  <data name="Inspect_FileNoExtension" xml:space="preserve"><value>Dosya, uzantısız ({0})</value></data>
+  <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0} dosyası ({1})</value></data>
+  <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} dosya, {1:N0} klasör</value></data>
+  <data name="Inspect_Folder" xml:space="preserve"><value>Klasör</value></data>
+  <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}, zaten başka yerde sayıldı</value></data>
+  <data name="Inspect_InFolders" xml:space="preserve"><value>{0:N0} klasörde</value></data>
+  <data name="Inspect_Items" xml:space="preserve"><value>Öğeler</value></data>
+  <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} öğe seçildi</value></data>
+  <data name="Inspect_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="Inspect_TitleMany" xml:space="preserve"><value>İncele: {0:N0} öğe</value></data>
+  <data name="Inspect_TitleOne" xml:space="preserve"><value>İncele: {0}</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Bu pencereyi aç</value></data>
+  <data name="Key_AddSelection" xml:space="preserve"><value>Seçime ekle</value></data>
+  <data name="Key_CancelScan" xml:space="preserve"><value>Taramayı iptal et</value></data>
+  <data name="Key_Copy" xml:space="preserve"><value>Seçili yolları kopyala</value></data>
+  <data name="Key_Delete" xml:space="preserve"><value>Seçili öğeyi Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Key_Filter" xml:space="preserve"><value>Haritayı filtrele</value></data>
+  <data name="Key_Grouping" xml:space="preserve"><value>Yoğunluğu Her şey (gruplama yok) seçeneğine geçir ve geri al</value></data>
+  <data name="Key_Inspect" xml:space="preserve"><value>Seçimi incele</value></data>
+  <data name="Key_NextColor" xml:space="preserve"><value>Sonraki renk modu</value></data>
+  <data name="Key_OpenScan" xml:space="preserve"><value>Kaydedilmiş bir tarama aç</value></data>
+  <data name="Key_Pan" xml:space="preserve"><value>Yakınlaştırılmışken kaydır</value></data>
+  <data name="Key_Panel" xml:space="preserve"><value>En büyük dosyalar, klasörler ve türler paneli</value></data>
+  <data name="Key_Properties" xml:space="preserve"><value>Seçili öğe için Windows Özellikleri</value></data>
+  <data name="Key_Rescan" xml:space="preserve"><value>Yeniden tara</value></data>
+  <data name="Key_SaveScan" xml:space="preserve"><value>Taramayı dosyaya kaydet</value></data>
+  <data name="Key_SelectMatches" xml:space="preserve"><value>Filtreyle eşleşen her dosyayı seç</value></data>
+  <data name="Key_SelectRange" xml:space="preserve"><value>Bir aralık seç</value></data>
+  <data name="Key_Settings" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="Key_Up" xml:space="preserve"><value>Bir klasör yukarı</value></data>
+  <data name="Key_WholeMap" xml:space="preserve"><value>Haritanın tamamını göster</value></data>
+  <data name="Key_ZoomInOut" xml:space="preserve"><value>Yakınlaştır veya uzaklaştır</value></data>
+  <data name="Key_ZoomToFolder" xml:space="preserve"><value>Haritayı bir klasöre yakınlaştır</value></data>
+  <data name="LabelSize_Large" xml:space="preserve"><value>Büyük</value></data>
+  <data name="LabelSize_Larger" xml:space="preserve"><value>Daha büyük</value></data>
+  <data name="LabelSize_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="LabelSize_Smaller" xml:space="preserve"><value>Daha küçük</value></data>
+  <data name="LabelSize_Smallest" xml:space="preserve"><value>En küçük</value></data>
+  <data name="List_ByType" xml:space="preserve"><value>{0} içinde dosya türüne göre alan. Haritayı filtrelemek için bir türe tıklayın.</value></data>
+  <data name="List_ChangesSince" xml:space="preserve"><value>{0} tarihinden bu yana en büyük değişiklikler</value></data>
+  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Karşılaştırılan taramadan bu yana en büyük değişiklikler</value></data>
+  <data name="List_HintNoScan" xml:space="preserve"><value>En büyük öğeleri görmek için bir sürücü veya klasör tarayın.</value></data>
+  <data name="List_LargestFiles" xml:space="preserve"><value>{0} içindeki en büyük dosyalar</value></data>
+  <data name="List_LargestFolders" xml:space="preserve"><value>{0} içindeki en büyük klasörler</value></data>
+  <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp hakkında (F1)</value></data>
+  <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
+  <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Bir dahaki sefere yeniden sor</value></data>
+  <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
+  <data name="Main_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Main_Change" xml:space="preserve"><value>Değişim</value></data>
+  <data name="Main_Changes" xml:space="preserve"><value>Değişiklikler</value></data>
+  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Son taramadan bu yana değişiklikler</value></data>
+  <data name="Main_Clear" xml:space="preserve"><value>Temizle</value></data>
+  <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Filtreyi temizle (Esc)</value></data>
+  <data name="Main_ClickADriveOn" xml:space="preserve"><value>Soldan bir sürücüye tıklayın veya taranacak bir klasör seçin.</value></data>
+  <data name="Main_ClickADriveTo" xml:space="preserve"><value>Taramak için bir sürücüye tıklayın.</value></data>
+  <data name="Main_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Main_ColorBy" xml:space="preserve"><value>Renklendirme ölçütü</value></data>
+  <data name="Main_CompareWithASaved" xml:space="preserve"><value>Kaydedilmiş bir taramayla karşılaştır…</value></data>
+  <data name="Main_CopyName" xml:space="preserve"><value>Adı kopyala</value></data>
+  <data name="Main_CopyPath" xml:space="preserve"><value>Yolu kopyala</value></data>
+  <data name="Main_CtrlC" xml:space="preserve"><value>Ctrl+C</value></data>
+  <data name="Main_CtrlI" xml:space="preserve"><value>Ctrl+I</value></data>
+  <data name="Main_CtrlO" xml:space="preserve"><value>Ctrl+O</value></data>
+  <data name="Main_CtrlS" xml:space="preserve"><value>Ctrl+S</value></data>
+  <data name="Main_Del" xml:space="preserve"><value>Del</value></data>
+  <data name="Main_Depth" xml:space="preserve"><value>Derinlik</value></data>
+  <data name="Main_Dismiss" xml:space="preserve"><value>Kapat</value></data>
+  <data name="Main_Done" xml:space="preserve"><value>Bitti</value></data>
+  <data name="Main_DoubleClick" xml:space="preserve"><value>Çift tıklama</value></data>
+  <data name="Main_Drives" xml:space="preserve"><value>Sürücüler</value></data>
+  <data name="Main_DrivesAndLargestItems" xml:space="preserve"><value>Sürücüler ve en büyük öğeler paneli (L)</value></data>
+  <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
+  <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc de iptal eder</value></data>
+  <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Eşleşmeyen her şey haritada soluklaştırılır.</value></data>
+  <data name="Main_ExportToCSV" xml:space="preserve"><value>CSV olarak dışa aktar</value></data>
+  <data name="Main_FileType" xml:space="preserve"><value>Dosya türü</value></data>
+  <data name="Main_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="Main_Filter" xml:space="preserve"><value>Filtre</value></data>
+  <data name="Main_FilterMatches" xml:space="preserve"><value>Filtre eşleşmeleri</value></data>
+  <data name="Main_FilterOptions" xml:space="preserve"><value>Filtre seçenekleri</value></data>
+  <data name="Main_Folders" xml:space="preserve"><value>Klasörler</value></data>
+  <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Main_Inspect" xml:space="preserve"><value>İncele</value></data>
+  <data name="Main_InstallAndRestart" xml:space="preserve"><value>Yükle ve yeniden başlat</value></data>
+  <data name="Main_LargestFiles" xml:space="preserve"><value>En büyük dosyalar</value></data>
+  <data name="Main_LargestItems" xml:space="preserve"><value>En büyük öğeler</value></data>
+  <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Bir sürücünün tamamını saniyeler içinde haritalayın</value></data>
+  <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Main_NoFilter" xml:space="preserve"><value>Filtre yok</value></data>
+  <data name="Main_NotNow" xml:space="preserve"><value>Şimdi değil</value></data>
+  <data name="Main_Open" xml:space="preserve"><value>Aç</value></data>
+  <data name="Main_OpenSavedScan" xml:space="preserve"><value>Kaydedilmiş taramayı aç…</value></data>
+  <data name="Main_Palette" xml:space="preserve"><value>Palet</value></data>
+  <data name="Main_Properties" xml:space="preserve"><value>Özellikler</value></data>
+  <data name="Main_RescanF5" xml:space="preserve"><value>Yeniden tara (F5)</value></data>
+  <data name="Main_RescanThisFolder" xml:space="preserve"><value>Bu klasörü yeniden tara</value></data>
+  <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Yönetici olarak yeniden başlat</value></data>
+  <data name="Main_SaveScanAs" xml:space="preserve"><value>Taramayı farklı kaydet…</value></data>
+  <data name="Main_ScanFile" xml:space="preserve"><value>Tarama dosyası</value></data>
+  <data name="Main_ScanFolder" xml:space="preserve"><value>Klasörü tara</value></data>
+  <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Eşleşen her dosyayı seçin (Ctrl+A), sonra Geri Dönüşüm Kutusu'na taşımak için Del tuşuna basın</value></data>
+  <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Bu klasördeki her şeyi seç</value></data>
+  <data name="Main_SelectMatches" xml:space="preserve"><value>Eşleşenleri seç</value></data>
+  <data name="Main_SettingsCtrl" xml:space="preserve"><value>Ayarlar (Ctrl+,)</value></data>
+  <data name="Main_ShowInExplorer" xml:space="preserve"><value>Dosya Gezgini'nde göster</value></data>
+  <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Yalnızca bu dosya türünü göster</value></data>
+  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Haritanın tamamını göster</value></data>
+  <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Haritanın tamamını göster (Home / Ctrl+0)</value></data>
+  <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp, her klasörü tek tek dolaşmak yerine sürücünün dosya tablosunu doğrudan okuyabilir. Bunun için yönetici hakları gerekir; bu yüzden uygulamanın bir kez yeniden başlatılması gerekir. Klasörler ve diğer dosya sistemleri her durumda normal yolla taranır.</value></data>
+  <data name="Main_StopComparing" xml:space="preserve"><value>Karşılaştırmayı durdur</value></data>
+  <data name="Main_Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Main_ThisFolder" xml:space="preserve"><value>Bu klasör</value></data>
+  <data name="Main_TopFolder" xml:space="preserve"><value>Üst klasör</value></data>
+  <data name="Main_Types" xml:space="preserve"><value>Türler</value></data>
+  <data name="Main_UpOneFolder" xml:space="preserve"><value>Bir klasör yukarı</value></data>
+  <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Bir klasör yukarı (Backspace / fare geri düğmesi)</value></data>
+  <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Yakınlaştır (fare tekerleği / +)</value></data>
+  <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Uzaklaştır (fare tekerleği / −)</value></data>
+  <data name="Main_ZoomToFolder" xml:space="preserve"><value>Klasöre yakınlaştır</value></data>
+  <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} içeriği</value></data>
+  <data name="Menu_Delete" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} öğeyi Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Menu_KindGroup" xml:space="preserve"><value>gösterilemeyecek kadar küçük dosyalar</value></data>
+  <data name="Menu_KindFolder" xml:space="preserve"><value>klasör, {0:N0} dosya</value></data>
+  <data name="Menu_KindFile" xml:space="preserve"><value>{0} dosyası</value></data>
+  <data name="Menu_KindFileNoExt" xml:space="preserve"><value>dosya</value></data>
+  <data name="Menu_Inspect" xml:space="preserve"><value>İncele</value></data>
+  <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} öğeyi incele</value></data>
+  <data name="Menu_RescanName" xml:space="preserve"><value>{0} klasörünü yeniden tara</value></data>
+  <data name="Menu_RescanThis" xml:space="preserve"><value>Bu klasörü yeniden tara</value></data>
+  <data name="Menu_SelectIn" xml:space="preserve"><value>{0} içindeki her şeyi seç</value></data>
+  <data name="Menu_SelectInThis" xml:space="preserve"><value>Bu klasördeki her şeyi seç</value></data>
+  <data name="Menu_ShowOnlyExt" xml:space="preserve"><value>Yalnızca *{0} dosyalarını göster</value></data>
+  <data name="Menu_ShowOnlyType" xml:space="preserve"><value>Yalnızca bu dosya türünü göster</value></data>
+  <data name="Menu_ThisFolder" xml:space="preserve"><value>Bu klasör</value></data>
+  <data name="Mft_Building" xml:space="preserve"><value>Harita oluşturuluyor</value></data>
+  <data name="Mft_CannotOpen" xml:space="preserve"><value>{0} birimi açılamıyor. Dosya tablosunu okumak için yönetici hakları gerekir.</value></data>
+  <data name="Mft_Reading" xml:space="preserve"><value>Dosya tablosu okunuyor: {1:N0} kayıttan {0:N0} tanesi</value></data>
+  <data name="Palette_GroupCustom" xml:space="preserve"><value>Özel</value></data>
+  <data name="Palettes_CouldNotOpen" xml:space="preserve"><value>Paletler klasörü açılamadı</value></data>
+  <data name="Palettes_LoadedMany" xml:space="preserve"><value> {0} özel palet yüklendi.</value></data>
+  <data name="Palettes_LoadedOne" xml:space="preserve"><value> 1 özel palet yüklendi.</value></data>
+  <data name="Palettes_NotLoaded" xml:space="preserve"><value> Yüklenmedi: </value></data>
+  <data name="Palettes_Note" xml:space="preserve"><value>Kendi paletlerinizi ekleyin: paletler klasörüne her palet için bir JSON dosyası. Klasörde bir örnek ve bir README bulunur.</value></data>
+  <data name="Palettes_OpenFolder" xml:space="preserve"><value>Klasörü aç</value></data>
+  <data name="Palettes_Reload" xml:space="preserve"><value>Yeniden yükle</value></data>
+  <data name="Palettes_New" xml:space="preserve"><value>Yeni palet</value></data>
+  <data name="Palettes_Edit" xml:space="preserve"><value>{0} paletini düzenle</value></data>
+  <data name="Palettes_Copy" xml:space="preserve"><value>{0} paletinden başla</value></data>
+  <data name="Palettes_CopyName" xml:space="preserve"><value>{0} kopyası</value></data>
+  <data name="PaletteEd_Title" xml:space="preserve"><value>Palet</value></data>
+  <data name="PaletteEd_Name" xml:space="preserve"><value>Ad</value></data>
+  <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Palet listesinde görünecek ad</value></data>
+  <data name="PaletteEd_For" xml:space="preserve"><value>Hedef</value></data>
+  <data name="PaletteEd_Dark" xml:space="preserve"><value>Koyu</value></data>
+  <data name="PaletteEd_Light" xml:space="preserve"><value>Açık</value></data>
+  <data name="PaletteEd_Both" xml:space="preserve"><value>Her ikisi</value></data>
+  <data name="PaletteEd_Folders" xml:space="preserve"><value>Klasörler</value></data>
+  <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>on iki ton, üst düzey klasör başına bir tane, derinliğe göre döngüsel</value></data>
+  <data name="PaletteEd_FolderN" xml:space="preserve"><value>Klasör {0}</value></data>
+  <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>{0} numaralı üst düzey klasör ve aşağıya doğru her on ikinci düzey</value></data>
+  <data name="PaletteEd_Generate" xml:space="preserve"><value>Oluştur:</value></data>
+  <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Gökkuşağı</value></data>
+  <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Komşular</value></data>
+  <data name="PaletteEd_TwoTone" xml:space="preserve"><value>İki ton</value></data>
+  <data name="PaletteEd_OneHue" xml:space="preserve"><value>Tek ton</value></data>
+  <data name="PaletteEd_Random" xml:space="preserve"><value>Rastgele</value></data>
+  <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Rastgele bir temel renk ve dağılım. Hoşunuza giden bir şey çıkana kadar basın, sonra ayarlayın.</value></data>
+  <data name="PaletteEd_FromBase" xml:space="preserve"><value>temel:</value></data>
+  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Oluşturucunun başlangıç aldığı temel renk. Değiştirmek için tıklayın.</value></data>
+  <data name="PaletteEd_Base" xml:space="preserve"><value>Temel renk</value></data>
+  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>Oluştur'un başlangıç noktası; varsayılan olarak ilk klasör rengi</value></data>
+  <data name="PaletteEd_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="PaletteEd_FilesSub" xml:space="preserve"><value>klasör rengi, beyaza doğru açılmış</value></data>
+  <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Her dosya rengini kendiniz ayarlayın</value></data>
+  <data name="PaletteEd_FilesTint" xml:space="preserve"><value>Bunun yerine tek bir ton kullan</value></data>
+  <data name="PaletteEd_FileN" xml:space="preserve"><value>Dosya rengi {0}</value></data>
+  <data name="PaletteEd_FileDetail" xml:space="preserve"><value>on iki klasör renginden {0} numaralısının altındaki dosyalar</value></data>
+  <data name="PaletteEd_Types" xml:space="preserve"><value>Dosya türleri</value></data>
+  <data name="PaletteEd_TypesSub" xml:space="preserve"><value>klasörlerden önceden doldurulmuş; ayarlamak için birine tıklayın</value></data>
+  <data name="PaletteEd_TypeDerived" xml:space="preserve"><value>klasör renklerinden türetildi; ayarlarsanız öyle kalır</value></data>
+  <data name="PaletteEd_TypeOwn" xml:space="preserve"><value>sizin ayarladığınız</value></data>
+  <data name="PaletteEd_ResetDerived" xml:space="preserve"><value>Türetilmişe geri dön</value></data>
+  <data name="PaletteEd_Hue" xml:space="preserve"><value>Ton</value></data>
+  <data name="PaletteEd_Saturation" xml:space="preserve"><value>Doygunluk</value></data>
+  <data name="PaletteEd_Lightness" xml:space="preserve"><value>Açıklık</value></data>
+  <data name="PaletteEd_LabelOk" xml:space="preserve"><value>Üzerindeki etiketler: {0}, karşıtlık {1:0.0}:1</value></data>
+  <data name="PaletteEd_LabelLow" xml:space="preserve"><value>Üzerindeki etiketler: {0}, karşıtlık {1:0.0}:1, okunması zor</value></data>
+  <data name="PaletteEd_DarkText" xml:space="preserve"><value>koyu metin</value></data>
+  <data name="PaletteEd_LightText" xml:space="preserve"><value>açık metin</value></data>
+  <data name="PaletteEd_ClosePairs" xml:space="preserve"><value>Ayırt edilemeyecek kadar benzer klasörler: {0}</value></data>
+  <data name="PaletteEd_LowLabels" xml:space="preserve"><value>Etiketlerin zor okunduğu {0} klasör rengi</value></data>
+  <data name="PaletteEd_AllGood" xml:space="preserve"><value>Etiketler her klasör renginde okunuyor ve birbirine fazla benzeyen renk yok.</value></data>
+  <data name="PaletteEd_Preview" xml:space="preserve"><value>Önizleme</value></data>
+  <data name="PaletteEd_PreviewNote" xml:space="preserve"><value>örnek veriler, sizin gölgelendirmeniz</value></data>
+  <data name="PaletteEd_Export" xml:space="preserve"><value>JSON'u kopyala</value></data>
+  <data name="PaletteEd_Exported" xml:space="preserve"><value>Palet dosyası panoda.</value></data>
+  <data name="PaletteEd_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="PaletteEd_Save" xml:space="preserve"><value>Kaydet ve kullan</value></data>
+  <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Bu ad kullanımda</value></data>
+  <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} yerleşik bir palettir. Paletinize başka bir ad verin.</value></data>
+  <data name="PaletteEd_Replace" xml:space="preserve"><value>Palet değiştirilsin mi?</value></data>
+  <data name="PaletteEd_ReplaceDetail" xml:space="preserve"><value>{0} adlı özel bir palet zaten var. Kaydetmek onun yerine geçer.</value></data>
+  <data name="PaletteEd_ReplaceYes" xml:space="preserve"><value>Değiştir</value></data>
+  <data name="PaletteEd_CouldNotSave" xml:space="preserve"><value>Palet kaydedilemedi</value></data>
+  <data name="Period_Day" xml:space="preserve"><value>1 gün</value></data>
+  <data name="Period_Days" xml:space="preserve"><value>{0} gün</value></data>
+  <data name="Period_Month" xml:space="preserve"><value>1 ay</value></data>
+  <data name="Period_Months" xml:space="preserve"><value>{0} ay</value></data>
+  <data name="Period_Week" xml:space="preserve"><value>1 hafta</value></data>
+  <data name="Period_Weeks" xml:space="preserve"><value>{0} hafta</value></data>
+  <data name="Period_Year" xml:space="preserve"><value>1 yıl</value></data>
+  <data name="Period_Years" xml:space="preserve"><value>{0} yıl</value></data>
+  <data name="Preset_BigAndOld" xml:space="preserve"><value>Büyük ve eski</value></data>
+  <data name="Preset_BigVideos" xml:space="preserve"><value>Büyük videolar</value></data>
+  <data name="Preset_InstallersArchives" xml:space="preserve"><value>Yükleyiciler ve arşivler</value></data>
+  <data name="Preset_LargeFiles" xml:space="preserve"><value>Büyük dosyalar</value></data>
+  <data name="Preset_RecentlyChanged" xml:space="preserve"><value>Yakın zamanda değişen</value></data>
+  <data name="Preset_Untouched2Years" xml:space="preserve"><value>2 yıldır dokunulmamış</value></data>
+  <data name="ScanFile_Newer" xml:space="preserve"><value>Bu tarama dosyası daha yeni bir SpaceSharp sürümüyle yazılmış.</value></data>
+  <data name="ScanFile_NotAScan" xml:space="preserve"><value>Bu bir SpaceSharp tarama dosyası değil.</value></data>
+  <data name="Scan_FolderMissing" xml:space="preserve"><value>"{0}" klasörü yok.</value></data>
+  <data name="Scan_Rate" xml:space="preserve"><value>{0:0}</value></data>
+  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k</value></data>
+  <data name="Scan_Title" xml:space="preserve"><value>{0} taranıyor</value></data>
+  <data name="Scan_Used" xml:space="preserve"><value>{0} kullanılıyor</value></data>
+  <data name="Scan_FolderFacts" xml:space="preserve"><value>klasör</value></data>
+  <data name="Scan_MethodMft" xml:space="preserve"><value>dosya tablosu</value></data>
+  <data name="Scan_MethodWalk" xml:space="preserve"><value>klasör dolaşma</value></data>
+  <data name="Scan_StageFind" xml:space="preserve"><value>Dosyaları bul</value></data>
+  <data name="Scan_StageRead" xml:space="preserve"><value>Dosya tablosunu oku</value></data>
+  <data name="Scan_StageBuild" xml:space="preserve"><value>Ağacı oluştur</value></data>
+  <data name="Scan_StageDraw" xml:space="preserve"><value>Haritayı çiz</value></data>
+  <data name="Scan_SoFar" xml:space="preserve"><value>Şu ana kadar {1:N0} klasörde {0:N0} dosya</value></data>
+  <data name="Scan_FoundSoFar" xml:space="preserve"><value>şu ana kadar bulundu</value></data>
+  <data name="Scan_FoundOf" xml:space="preserve"><value>{0} içinden bulundu</value></data>
+  <data name="Scan_FilesPerSecond" xml:space="preserve"><value>dosya/saniye</value></data>
+  <data name="Scan_Elapsed" xml:space="preserve"><value>geçen süre</value></data>
+  <data name="Scan_ElapsedLeft" xml:space="preserve"><value>geçen süre · yaklaşık {0} kaldı</value></data>
+  <data name="Scan_ASecond" xml:space="preserve"><value>bir saniye</value></data>
+  <data name="Scan_Seconds" xml:space="preserve"><value>{0:0} sn</value></data>
+  <data name="Scan_Minutes" xml:space="preserve"><value>{0:0} dk</value></data>
+  <data name="SettingsWin_Close" xml:space="preserve"><value>Kapat</value></data>
+  <data name="SettingsWin_ResetToDefaults" xml:space="preserve"><value>Varsayılanlara sıfırla</value></data>
+  <data name="SettingsWin_Settings" xml:space="preserve"><value>Ayarlar</value></data>
+  <data name="Settings_AnimateZoom" xml:space="preserve"><value>Yakınlaştırmayı canlandır</value></data>
+  <data name="Settings_AnimateZoom_Desc" xml:space="preserve"><value>Klasörlere atlamak yerine içlerine doğru uçarak girer.</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>Görünüm</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>Başlangıçta güncelleştirmeleri denetle</value></data>
+  <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>SpaceSharp başladıktan birkaç saniye sonra GitHub'da yeni bir sürüm arar ve yüklemeyi önerir.</value></data>
+  <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Yalnızca SpaceSharp kurulum programıyla yüklendiğinde kullanılabilir. Taşınabilir exe kendini güncelleştirmez.</value></data>
+  <data name="Settings_ColorBy" xml:space="preserve"><value>Renklendirme ölçütü</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Üst klasör: üst düzey klasör başına bir ton, içeri doğru her düzeyde daha açık. Klasör derinliği: her düzey için farklı bir renk. Dosya türü: dosyalar türe göre renklendirilir. Değişim: aynı yerin önceki taramasından bu yana neyin büyüyüp neyin küçüldüğü.</value></data>
+  <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşımadan önce onay iste</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Silmeden önce sorar. Silinen öğeler her zaman Geri Dönüşüm Kutusu'ndan geri yüklenebilir.</value></data>
+  <data name="Settings_CustomPalettes" xml:space="preserve"><value>Özel paletler</value></data>
+  <data name="Settings_FastScan" xml:space="preserve"><value>Hızlı NTFS taraması</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Sürücünün dosya tablosunu doğrudan okur; böylece bir sürücünün tamamı dakikalar yerine saniyeler içinde haritalanır. Windows her tarama için bir kez yönetici izni ister; uygulamanın kendisi olduğu gibi kalır. Hayır derseniz normal tarama çalışır ve SpaceSharp yeniden başlatılana kadar bir daha sorulmaz. Diğer dosya sistemleri ve tek klasörler her zaman normal taramayı kullanır.</value></data>
+  <data name="Settings_HardLinks" xml:space="preserve"><value>Sabit bağlantıları bir kez say</value></data>
+  <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>Her dosyanın bağlantı sayısını okur; böylece Windows'un WinSxS klasörü gibi birden çok adı olan veriler bir kez sayılır. Büyük sürücülerde daha yavaştır.</value></data>
+  <data name="Settings_HoverDetails" xml:space="preserve"><value>Üzerine gelince ayrıntılar</value></data>
+  <data name="Settings_HoverDetails_Desc" xml:space="preserve"><value>Farenin yanında boyut, diskteki boyut, dosya sayısı ve son değiştirme tarihini gösteren küçük bir kart gösterir.</value></data>
+  <data name="Settings_IncludeHidden" xml:space="preserve"><value>Gizli ve sistem dosyalarını dahil et</value></data>
+  <data name="Settings_IncludeHidden_Desc" xml:space="preserve"><value>Kapalıyken pagefile.sys gibi Gizli veya Sistem özniteliği taşıyan dosya ve klasörler dışarıda bırakılır.</value></data>
+  <data name="Settings_LabelSize" xml:space="preserve"><value>Etiket boyutu</value></data>
+  <data name="Settings_LabelSize_Desc" xml:space="preserve"><value>Haritadaki metin boyutu, En küçük'ten Daha büyük'e kadar. Başlık çubukları buna göre küçülüp büyür.</value></data>
+  <data name="Settings_LeaveOut" xml:space="preserve"><value>Dışarıda bırak</value></data>
+  <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>İçindekilerle birlikte atlanacak adlar. Yollarla değil, dosya ve klasör adlarıyla eşleştirilir; * ve ? joker karakterlerdir.</value></data>
+  <data name="Settings_Map" xml:space="preserve"><value>Harita</value></data>
+  <data name="Settings_MergeChains" xml:space="preserve"><value>Tek klasörlü zincirleri birleştir</value></data>
+  <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Yalnızca tek bir klasör içeren klasörleri (Users › siz › AppData › Local) birleşik başlıklı tek bir kutu olarak çizer.</value></data>
+  <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Çerçeveli etiketler</value></data>
+  <data name="Settings_OutlinedLabels_Desc" xml:space="preserve"><value>Her etiketin çevresinde ince, zıt renkli bir çerçeve; böylece metin her renkte okunabilir kalır. Haritayı okumakta zorlanıyorsanız önerilir.</value></data>
+  <data name="Settings_Palette" xml:space="preserve"><value>Palet</value></data>
+  <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (özel)</value></data>
+  <data name="Settings_Palette_Desc" xml:space="preserve"><value>Haritadaki kutular için kullanılan renkler.</value></data>
+  <data name="Settings_Reopen" xml:space="preserve"><value>Başlangıçta son taramayı yeniden aç</value></data>
+  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Uygulama açılır açılmaz dünkü haritayı, bir önceki taramayla karşılaştırılmış olarak gösterir. Her sürücü taraması %LocalAppData%\SpaceSharp\scans içinde saklanır; F5 yeniden tarar.</value></data>
+  <data name="Settings_ResetQuestion" xml:space="preserve"><value>Tüm ayarlar varsayılan değerlerine sıfırlansın mı?</value></data>
+  <data name="Settings_ResetTitle" xml:space="preserve"><value>Ayarları sıfırla</value></data>
+  <data name="Settings_Safety" xml:space="preserve"><value>Güvenlik</value></data>
+  <data name="Settings_Scanning" xml:space="preserve"><value>Tarama</value></data>
+  <data name="Settings_Scanning_Desc" xml:space="preserve"><value>Buradaki değişiklikler bir sonraki taramada (F5) geçerli olur.</value></data>
+  <data name="Settings_ShowFreeSpace" xml:space="preserve"><value>Boş alanı göster</value></data>
+  <data name="Settings_ShowFreeSpace_Desc" xml:space="preserve"><value>Bir sürücünün tamamı tarandığında kullanılmayan alan için gri bir blok ekler. Dosya sildikçe büyür.</value></data>
+  <data name="Settings_SidePanel" xml:space="preserve"><value>Yan paneli göster</value></data>
+  <data name="Settings_SidePanel_Desc" xml:space="preserve"><value>Soldaki, sürücülerinizi ve en büyük dosyaları, klasörleri ve türleri gösteren panel. Kısayol: L.</value></data>
+  <data name="Settings_SizeMeasure" xml:space="preserve"><value>Boyut ölçüsü</value></data>
+  <data name="Settings_SizeMeasure_Desc" xml:space="preserve"><value>Diskteki boyut, sıkıştırılmış, seyrek ve bulut dosyaları için sıkıştırılmış boyutu kullanır ve her dosyayı Dosya Gezgini'nin "Diskteki boyutu" gibi tam kümelere yuvarlar.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Tema</value></data>
+  <data name="Settings_Theme_Desc" xml:space="preserve"><value>Windows ayarını izle ya da her zaman açık veya koyu kullan.</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>Güncelleştirmeler</value></data>
+  <data name="SizeMeasure_FileSize" xml:space="preserve"><value>Dosya boyutu</value></data>
+  <data name="SizeMeasure_OnDisk" xml:space="preserve"><value>Diskteki boyutu</value></data>
+  <data name="Status_ColorBy" xml:space="preserve"><value>Renklendirme ölçütü: {0}</value></data>
+  <data name="Status_ComparedWith" xml:space="preserve"><value>  {0} ile karşılaştırıldı.</value></data>
+  <data name="Status_ComparedWithSuffix" xml:space="preserve"><value>  ·  {0} tarihli taramayla karşılaştırılıyor</value></data>
+  <data name="Status_Comparing" xml:space="preserve"><value>{0} tarihli taramayla karşılaştırılıyor.</value></data>
+  <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>{0} tarihli taramayla karşılaştırılıyor. O tarama farklı bir yöntemle yapılmış ({1} ve {2}); bu yüzden bazı farklar diskten değil, bundan kaynaklanır.</value></data>
+  <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>{1} tarihli {0} taramasıyla karşılaştırılıyor; adlar klasör klasör eşleştiriliyor.</value></data>
+  <data name="Status_ComparisonCleared" xml:space="preserve"><value>Karşılaştırma temizlendi.</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} satır {1} konumuna aktarıldı (basit bir CSV: sabit sütunlar, daha fazla seçenek daha sonra)</value></data>
+  <data name="Status_FileTableSuffix" xml:space="preserve"><value> · dosya tablosu</value></data>
+  <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} öğe ({1}) Geri Dönüşüm Kutusu'na taşındı</value></data>
+  <data name="Status_MovedOne" xml:space="preserve"><value>{0} Geri Dönüşüm Kutusu'na taşındı</value></data>
+  <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} dosya · {3}. F5 yeniden tarar.</value></data>
+  <data name="Status_OpenedVerb" xml:space="preserve"><value>Açılan tarama:</value></data>
+  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Son tarama açılıyor…</value></data>
+  <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Önceki tarama farklı bir yöntemle yapılmış ({0} ve {1}); bu yüzden karşılaştırılmıyor. Aynı türdeki bir sonraki tarama karşılaştırılacak.</value></data>
+  <data name="Status_RescanCancelled" xml:space="preserve"><value>Yeniden tarama iptal edildi</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} yeniden tarandı: {1:N0} dosya · {2}</value></data>
+  <data name="Status_Rescanning" xml:space="preserve"><value>{0} yeniden taranıyor…</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>{0} kaydedildi</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Tarama iptal edildi</value></data>
+  <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} dosya · {1:N0} klasör · </value></data>
+  <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} sn</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>{0:N0} öğe seçildi · {1} · {2:N0} dosya    Del tuşu Geri Dönüşüm Kutusu'na taşır</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>Tema: Koyu</value></data>
+  <data name="Theme_DarkName" xml:space="preserve"><value>Koyu</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>Tema: Açık</value></data>
+  <data name="Theme_LightName" xml:space="preserve"><value>Açık</value></data>
+  <data name="Theme_MatchWindows" xml:space="preserve"><value>Windows ile eşleştir</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>Tema: Windows ile eşleştir ({0})</value></data>
+  <data name="Theme_WordDark" xml:space="preserve"><value>koyu</value></data>
+  <data name="Theme_WordLight" xml:space="preserve"><value>açık</value></data>
+  <data name="Tip_AccessDenied" xml:space="preserve"><value>Bazı içerikler okunamadı</value></data>
+  <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Aynı sürücüyü veya klasörü iki kez tarayın ya da karşılaştırmak için kaydedilmiş bir tarama açın.</value></data>
+  <data name="Tip_FreeSpace" xml:space="preserve"><value>Boş alan</value></data>
+  <data name="Tip_HintGroup" xml:space="preserve"><value>Bu öğeleri görmek için yakınlaştırın</value></data>
+  <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (sabit bağlantı, başka yerde sayıldı)</value></data>
+  <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} dosya · {1}</value></data>
+  <data name="TopList_FilesOfType" xml:space="preserve"><value>{0:N0} dosya · {1}</value></data>
+  <data name="TopList_NoExtension" xml:space="preserve"><value>(uzantısız)</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>SpaceSharp {0} kullanılabilir. Sizdeki sürüm: {1}.</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>Güncelleştirme indiriliyor… %{0}</value></data>
+  <data name="Update_Restarting" xml:space="preserve"><value>{0} sürümüyle yeniden başlatılıyor…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Güncelleştirme yüklenemedi: {0}</value></data>
+  <data name="Word_Off" xml:space="preserve"><value>kapalı</value></data>
+  <data name="Word_On" xml:space="preserve"><value>açık</value></data>
+  <data name="Dialog_Ok" xml:space="preserve"><value>Tamam</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Settings_ResetButton" xml:space="preserve"><value>Sıfırla</value></data>
+  <data name="About_BrowserFailed" xml:space="preserve"><value>Tarayıcı açılamadı.
+
+{0}
+
+{1}</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Disk alanınızın nereye gittiğini görün. SpaceSharp her dosya ve klasörü, kapladığı alana göre boyutlandırılmış bir kutu olarak haritalar; böylece en büyükleri öne çıkar.</value></data>
+  <data name="About_SystemLine" xml:space="preserve"><value>{0}, {1} üzerinde</value></data>
+  <data name="About_CreditsText" xml:space="preserve"><value>Kareleştirilmiş ağaç haritası düzeni: Bruls, Huizing ve van Wijk (2000). SpaceMonger'dan esinlenilmiştir. Arabirim simgeleri Lucide'den (ISC lisansı).</value></data>
+  <data name="Settings_SavedIn" xml:space="preserve"><value>Ayarlar %AppData%\SpaceSharp\settings.json içine kaydedilir.</value></data>
+  <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filtre, örn. 1 yıldan eski 500MB üzeri videolar</value></data>
+  <data name="Group_Files" xml:space="preserve"><value>dosya</value></data>
+  <data name="Group_Folders" xml:space="preserve"><value>klasör</value></data>
+  <data name="Group_Items" xml:space="preserve"><value>öğe</value></data>
+  <data name="Drive_Removable" xml:space="preserve"><value>Çıkarılabilir</value></data>
+  <data name="Drive_Network" xml:space="preserve"><value>Ağ</value></data>
+  <data name="Drive_Optical" xml:space="preserve"><value>Optik</value></data>
+  <data name="Drive_Hdd" xml:space="preserve"><value>Sabit disk</value></data>
+  <data name="Drive_Ssd" xml:space="preserve"><value>SSD</value></data>
+  <data name="Drive_Nvme" xml:space="preserve"><value>NVMe SSD</value></data>
+  <data name="Drive_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Settings_ExplorerMenu" xml:space="preserve"><value>Dosya Gezgini'nde "SpaceSharp ile tara"</value></data>
+  <data name="Settings_ExplorerMenu_Desc" xml:space="preserve"><value>Dosya Gezgini'nde klasörlerin, sürücülerin ve klasör arka planının sağ tıklama menüsüne bir giriş ekler. Yalnızca bu Windows kullanıcısı için; yönetici hakları gerekmez. SpaceSharp'ın bu kopyasını işaret eder; bu yüzden taşınabilir exe dosyasını taşımadan önce kapatın.</value></data>
+  <data name="Explorer_ScanWith" xml:space="preserve"><value>SpaceSharp ile tara</value></data>
+  <data name="Settings_CommandLine" xml:space="preserve"><value>Komut satırı</value></data>
+  <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>SpaceSharp'ı bir kısayoldan, betikten veya Çalıştır kutusundan bir sürücü, klasör ya da kaydedilmiş taramayla başlatın.</value></data>
+  <data name="Update_Title" xml:space="preserve"><value>Güncelleştirme var</value></data>
+  <data name="Update_Hint" xml:space="preserve"><value>Yükleme yaklaşık bir dakika sürer ve SpaceSharp'ı yeniden başlatır. Ayarlarınız ve kaydedilmiş taramalarınız korunur.</value></data>
+  <data name="Update_WhatsNew" xml:space="preserve"><value>Yenilikler</value></data>
+  <data name="Update_YouHave" xml:space="preserve"><value>Sizdeki sürüm: {0}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>SpaceSharp {0} hazır</value></data>
+  <data name="Update_RemindLater" xml:space="preserve"><value>Daha sonra anımsat</value></data>
+  <data name="Update_WhatsNewIn" xml:space="preserve"><value>{0} sürümündeki yenilikler</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>Daha sonra</value></data>
+  <data name="WhatsNew_Title" xml:space="preserve"><value>{0} sürümündeki yenilikler</value></data>
+  <data name="WhatsNew_TitleSince" xml:space="preserve"><value>{1} sürümünden bu yana yenilikler</value></data>
+  <data name="WhatsNew_Loading" xml:space="preserve"><value>Sürüm notları yükleniyor…</value></data>
+  <data name="WhatsNew_Unavailable" xml:space="preserve"><value>Sürüm notları yüklenemedi. Tam liste GitHub'da.</value></data>
+  <data name="WhatsNew_SeeAll" xml:space="preserve"><value>Tüm değişiklikleri GitHub'da gör</value></data>
+  <data name="Settings_Treemap" xml:space="preserve"><value>Ağaç haritası</value></data>
+  <data name="Settings_Treemap_Desc" xml:space="preserve"><value>Bunların hiçbiri zorunlu değil ama haritanın nasıl okunduğunu değiştirirler.</value></data>
+  <data name="Treemap_Density" xml:space="preserve"><value>Yoğunluk</value></data>
+  <data name="Treemap_Density_Desc" xml:space="preserve"><value>Harita, küçük öğeleri tek bir "312 dosya" kutusunda gruplamadan ya da dışarıda bırakmadan önce kaç tanesini çizer. Seyrek sakindir, En yüksek yalnızca en ufakları gruplar, Her şey hiç gruplamaz. Kısayol: G, Her şey'e geçer ve geri döner.</value></data>
+  <data name="Density_Sparse" xml:space="preserve"><value>Seyrek</value></data>
+  <data name="Density_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Density_Dense" xml:space="preserve"><value>Yoğun</value></data>
+  <data name="Density_Maximum" xml:space="preserve"><value>En yüksek</value></data>
+  <data name="Treemap_Bias" xml:space="preserve"><value>Eğilim</value></data>
+  <data name="Treemap_Bias_Desc" xml:space="preserve"><value>Düzenin geniş kutuları mı yoksa uzun kutuları mı tercih ettiği. Eşit, düz kareleştirilmiş düzendir.</value></data>
+  <data name="Treemap_Horizontal" xml:space="preserve"><value>Yatay</value></data>
+  <data name="Treemap_Equal" xml:space="preserve"><value>Eşit</value></data>
+  <data name="Treemap_Vertical" xml:space="preserve"><value>Dikey</value></data>
+  <data name="Treemap_Padding" xml:space="preserve"><value>Dolgu</value></data>
+  <data name="Treemap_Padding_Desc" xml:space="preserve"><value>Stilin kullandığına ek olarak her kutunun çevresindeki fazladan boşluk.</value></data>
+  <data name="Treemap_Border" xml:space="preserve"><value>Kılavuz çizgisi kalınlığı</value></data>
+  <data name="Treemap_Border_Desc" xml:space="preserve"><value>Kılavuz çizgilerinin ne kadar kalın olduğu.</value></data>
+  <data name="Unit_Pixels" xml:space="preserve"><value>{0} px</value></data>
+  <data name="Treemap_Font" xml:space="preserve"><value>Yazı tipi</value></data>
+  <data name="Treemap_Font_Desc" xml:space="preserve"><value>Haritadaki her etiketin yazı tipi. Etiket boyutu Görünüm altında ayarlanır.</value></data>
+  <data name="Treemap_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="Treemap_Files_Desc" xml:space="preserve"><value>Bir dosya kutusunun gösterdikleri.</value></data>
+  <data name="Treemap_Folders" xml:space="preserve"><value>Klasörler</value></data>
+  <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Bir klasör başlığının gösterdikleri.</value></data>
+  <data name="Treemap_CenterNames" xml:space="preserve"><value>Adları ortala</value></data>
+  <data name="Treemap_ShowSizes" xml:space="preserve"><value>Boyutları göster</value></data>
+  <data name="Treemap_ShowCounts" xml:space="preserve"><value>Dosya sayılarını göster</value></data>
+  <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} dosya</value></data>
+  <data name="Density_Everything" xml:space="preserve"><value>Her şey (gruplama yok)</value></data>
+  <data name="Status_Density" xml:space="preserve"><value>Yoğunluk: {0}</value></data>
+  <data name="SettingsTab_General" xml:space="preserve"><value>Genel</value></data>
+  <data name="SettingsTab_Appearance" xml:space="preserve"><value>Görünüm</value></data>
+  <data name="SettingsTab_Treemap" xml:space="preserve"><value>Ağaç haritası</value></data>
+  <data name="SettingsTab_Map" xml:space="preserve"><value>Harita</value></data>
+  <data name="SettingsTab_Scanning" xml:space="preserve"><value>Tarama</value></data>
+  <data name="About_Tagline" xml:space="preserve"><value>Disk alanınızın nereye gittiğini görün.</value></data>
+  <data name="About_Check" xml:space="preserve"><value>Denetle</value></data>
+  <data name="About_InstalledCheck" xml:space="preserve"><value>Yüklü. Daha yeni bir sürüm olup olmadığını denetleyin.</value></data>
+  <data name="About_PortableNoUpdates" xml:space="preserve"><value>Taşınabilir. Güncelleştirmeler otomatik değildir; en yeni sürüm GitHub'da.</value></data>
+  <data name="About_WhatsNewSub" xml:space="preserve"><value>Bu sürümdeki değişiklikler</value></data>
+  <data name="About_ShortcutsSub" xml:space="preserve"><value>Her tuş ve fare eylemi</value></data>
+  <data name="About_ReportSub" xml:space="preserve"><value>GitHub'ı sürümünüz ve sisteminiz doldurulmuş olarak açar</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>Çökme günlükleri</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>Beklenmeyen hataların yazıldığı klasörü açar; bir bildirime eklemek için</value></data>
+  <data name="About_Source" xml:space="preserve"><value>Kaynak kodu GitHub'da</value></data>
+  <data name="About_SourceSub" xml:space="preserve"><value>MIT lisansı</value></data>
+  <data name="About_CreditsSub" xml:space="preserve"><value>Ağaç haritası algoritması, SpaceMonger, simgeler</value></data>
+  <data name="Keys_Navigate" xml:space="preserve"><value>Gezinme</value></data>
+  <data name="Keys_Select" xml:space="preserve"><value>Seçme ve eylem</value></data>
+  <data name="Keys_View" xml:space="preserve"><value>Görünüm ve dosyalar</value></data>
+  <data name="Start_PickADrive" xml:space="preserve"><value>Soldan bir sürücü seçin</value></data>
+  <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Soldan bir sürücü seçin ya da kaldığınız yerden devam edin</value></data>
+  <data name="Start_RecentHint" xml:space="preserve"><value>Kaydedilmiş taramalar anında açılır ve yeni taramayla karşılaştırılır.</value></data>
+  <data name="Start_FirstHint" xml:space="preserve"><value>Her dosya ve klasör, kapladığı alana göre boyutlandırılmış bir kutuya dönüşür.</value></data>
+  <data name="Start_ScanAFolder" xml:space="preserve"><value>Klasör tara</value></data>
+  <data name="Start_OpenASavedScan" xml:space="preserve"><value>Kaydedilmiş bir tarama aç…</value></data>
+  <data name="Start_FastScanLine" xml:space="preserve"><value>Yönetici haklarıyla sürücülerin tamamı saniyeler içinde.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>%{0} dolu</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} tarandı</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>Sürücülerinizde {1} alanın {0} kadarı dolu</value></data>
+  <data name="Settings_KeepScans" xml:space="preserve"><value>Kaydedilmiş taramaları saklama süresi</value></data>
+  <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Bundan daha eski otomatik kayıtlar SpaceSharp başlarken silinir. Kendiniz dosya olarak kaydettiğiniz taramalara hiç dokunulmaz.</value></data>
+  <data name="KeepScans_Days" xml:space="preserve"><value>{0} gün</value></data>
+  <data name="KeepScans_Months" xml:space="preserve"><value>{0} ay</value></data>
+  <data name="KeepScans_OneYear" xml:space="preserve"><value>1 yıl</value></data>
+  <data name="KeepScans_Forever" xml:space="preserve"><value>Süresiz</value></data>
+  <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Tüm kaydedilmiş taramaları sil</value></data>
+  <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Kaydedilmiş tarama yok.</value></data>
+  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} kaydedilmiş tarama silinsin mi? Ekrandaki harita kalır; yenileri yapılana kadar önceki taramalarla karşılaştırma yapılamaz.</value></data>
+  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} kaydedilmiş tarama silindi.</value></data>
+  <data name="Exclude_Placeholder" xml:space="preserve"><value>Ad veya desen, örn. *.tmp</value></data>
+  <data name="Exclude_Add" xml:space="preserve"><value>Ekle</value></data>
+  <data name="Exclude_Remove" xml:space="preserve"><value>Kaldır</value></data>
+  <data name="Exclude_Suggestions" xml:space="preserve"><value>Yaygın olanlar:</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{1} içinde {0}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>Türe göre</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>Yaşa göre</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Alan nerede</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Haritayı buraya yakınlaştır</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>Haritayı bu klasöre yakınlaştır</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Bu ay</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Bu yıl</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ila 3 yıl</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>Daha eski</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>bir yıldan eski</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>En eski değişiklik: {0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>Bu {0} öğe klasörün {1} kadarını oluşturuyor. Diğer {2:N0} dosya {3} paylaşıyor.</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>Bu klasörün {0} kadarı tek bir şey: {1}, {2}.</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>diskte {0}</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} içinde {0}, tek klasörü</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{1} içinde {0}, tek dosyası</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{1} içinde {0}, {2} klasörünün en büyüğü</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{1} içinde {0}, {2} dosyasının en büyüğü</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{1} içinde {0}, boyuta göre {2} klasör arasında {3}. sırada</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{1} içinde {0}, boyuta göre {2} dosya arasında {3}. sırada</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Çoğunlukla {0} ({1})</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Çoğunlukla {0} ({1}) ve {2} ({3})</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0} ({1}), {2} ({3}) ve {4} ({5}) karışımı</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>ortanca dosya {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Son değişiklik: {0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Değiştirilme: {0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} bir yıldan uzun süredir dokunulmamış</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>son taramadan bu yana değişmedi</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>son taramadan bu yana {0} büyüdü</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>son taramadan bu yana {0} küçüldü</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>son taramadan bu yana yeni</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>Çoğunlukla {0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} dosya</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>son taramadan bu yana yeni</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>değişti: {0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>değiştirildi: {0}</value></data>
+  <data name="Settings_Shading" xml:space="preserve"><value>Gölgelendirme</value></data>
+  <data name="Settings_Shading_Desc" xml:space="preserve"><value>Dosyaların nasıl aydınlatıldığı. Üstteki harita örnek verilerdir ve her değişikliği izler.</value></data>
+  <data name="Settings_PreviewSample" xml:space="preserve"><value>Örnek veriler</value></data>
+  <data name="Settings_PreviewDrive" xml:space="preserve"><value>Örnek sürücü</value></data>
+  <data name="Shading_Light" xml:space="preserve"><value>Işık yönü</value></data>
+  <data name="Shading_Light_Desc" xml:space="preserve"><value>Işığın hangi taraftan geldiği. Orta, tam karşıdan demektir.</value></data>
+  <data name="Shading_Reset" xml:space="preserve"><value>Gölgelendirmeyi sıfırla</value></data>
+  <data name="Shading_Reset_Desc" xml:space="preserve"><value>Gölgelendirme, kılavuz ve vurgu ayarlarını ilk haline döndürür.</value></data>
+  <data name="Shading_ResetButton" xml:space="preserve"><value>Varsayılanlara sıfırla</value></data>
+  <data name="Settings_Grid" xml:space="preserve"><value>Kılavuz ve vurgu</value></data>
+  <data name="Grid_Show" xml:space="preserve"><value>Kılavuz çizgileri</value></data>
+  <data name="Grid_Show_Desc" xml:space="preserve"><value>Her kutunun arasına, dosya ve klasör çerçevelerinin çevresine bir çizgi.</value></data>
+  <data name="Grid_Color" xml:space="preserve"><value>Kılavuz rengi</value></data>
+  <data name="Grid_Color_Desc" xml:space="preserve"><value>Koyu çizgiler çoğu palete uyar; açık olanlar en koyu paletlerde iş görür.</value></data>
+  <data name="Highlight_Color" xml:space="preserve"><value>Vurgu çerçevesi</value></data>
+  <data name="Highlight_Color_Desc" xml:space="preserve"><value>Seçili kutuların çevresindeki çerçeve. Üzerine gelinen kutular beyaz çerçevesini korur.</value></data>
+  <data name="Settings_Layout" xml:space="preserve"><value>Düzen</value></data>
+  <data name="Shading_Enable" xml:space="preserve"><value>Yastık gölgelendirmesi</value></data>
+  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Her dosyada, SpaceMonger'ın çizdiği gibi açıktan koyuya gölgelendirme. Kapalıyken renkler düz olur ve aşağıdaki ayarlar işe yaramaz.</value></data>
+  <data name="Shading_Presets" xml:space="preserve"><value>Hazır ayarlar</value></data>
+  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Bir başlangıç noktası. Aşağıdaki kaydırıcılar ince ayar yapar.</value></data>
+  <data name="Preset_Soft" xml:space="preserve"><value>Yumuşak</value></data>
+  <data name="Preset_Classic" xml:space="preserve"><value>Klasik</value></data>
+  <data name="Preset_Deep" xml:space="preserve"><value>Derin</value></data>
+  <data name="Shading_Depth" xml:space="preserve"><value>Derinlik</value></data>
+  <data name="Shading_Depth_Desc" xml:space="preserve"><value>Gölgelendirmenin ne kadar belirgin olduğu; hafif bir parıltıdan derin bir yastığa.</value></data>
+  <data name="Shading_Spread" xml:space="preserve"><value>Yayılım</value></data>
+  <data name="Shading_Spread_Desc" xml:space="preserve"><value>Gölge devralmadan önce ışığın bir dosya üzerinde ne kadar uzağa ulaştığı.</value></data>
+  <data name="Shading_Tone" xml:space="preserve"><value>Ton</value></data>
+  <data name="Shading_Tone_Desc" xml:space="preserve"><value>Dosyalar genel olarak daha açık veya daha koyu. Klasörler rengini korur.</value></data>
+  <data name="Shading_Fade" xml:space="preserve"><value>Klasör içinde solma</value></data>
+  <data name="Shading_Fade_Desc" xml:space="preserve"><value>İç içe dosyaların ne kadar gölgelendirme koruduğu. Düşük değer derin düzeyleri sakinleştirir, böylece üst klasörler öne çıkar.</value></data>
+  <data name="Shading_LightSide" xml:space="preserve"><value>Işık bu taraftan</value></data>
+  <data name="Shading_LightAhead" xml:space="preserve"><value>Işık tam karşıdan</value></data>
+  <data name="Settings_LookDark" xml:space="preserve"><value>Koyu görünüm</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Koyu tema gösterilirken pencere, panel ve menü renkleri: Grafit, Arduvaz, Moka, Gece Yarısı veya Karbon.</value></data>
+  <data name="Settings_LookLight" xml:space="preserve"><value>Açık görünüm</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Açık tema için aynısı: Kâğıt, Keten, Sis, Kum veya Kar.</value></data>
+  <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, gölgelendirme ve metin</value></data>
+  <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Haritanın görünümüyle ilgili her şey, bir önizlemenin yanında, Ağaç haritası sayfasında.</value></data>
+  <data name="Settings_Colors" xml:space="preserve"><value>Renkler</value></data>
+  <data name="Settings_Colors_Desc" xml:space="preserve"><value>Yukarıdaki önizleme bu sayfadaki her değişikliği izler.</value></data>
+  <data name="Settings_Text" xml:space="preserve"><value>Metin ve başlık çubukları</value></data>
+  <data name="Settings_Text_Desc" xml:space="preserve"><value>Adların dosyalarda ve klasör başlık çubuklarında nasıl çizildiği.</value></data>
+  <data name="Text_FolderColor" xml:space="preserve"><value>Klasör adları</value></data>
+  <data name="Text_FolderColor_Desc" xml:space="preserve"><value>Başlık çubuklarındaki metnin rengi. Otomatik, her çubuk için koyu veya açık seçer.</value></data>
+  <data name="Text_FileColor" xml:space="preserve"><value>Dosya adları ve boyutları</value></data>
+  <data name="Text_FileColor_Desc" xml:space="preserve"><value>Dosyalardaki metnin rengi. Otomatik, her kutu için koyu veya açık seçer.</value></data>
+  <data name="Text_Auto" xml:space="preserve"><value>Otomatik</value></data>
+  <data name="Text_TitlePadding" xml:space="preserve"><value>Başlık çubuğu dolgusu</value></data>
+  <data name="Text_TitlePadding_Desc" xml:space="preserve"><value>Klasör adının üstündeki ve altındaki boşluk. Çubuk buna göre büyür.</value></data>
+  <data name="Text_TitleTint" xml:space="preserve"><value>Başlık çubuğu tonu</value></data>
+  <data name="Text_TitleTint_Desc" xml:space="preserve"><value>Çubuğun klasörün kendi renginden ne kadar gölgelendirildiği. 0 aynı renktir; kılavuz çizgisi yine de onu belirtir.</value></data>
+  <data name="Palette_GroupDark" xml:space="preserve"><value>Koyu tema için</value></data>
+  <data name="Palette_GroupLight" xml:space="preserve"><value>Açık tema için</value></data>
+  <data name="Palette_GroupAny" xml:space="preserve"><value>Her tema</value></data>
+  <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0} tema için palet. Her tema kendininkini anımsar; harita temayla birlikte değişir.</value></data>
+  <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1} tema için yapıldı</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Harita ile Öngörüler görünümü arasında geçiş yap</value></data>
+  <data name="Panel_TabType" xml:space="preserve"><value>Türe göre</value></data>
+  <data name="Panel_TabCleanup" xml:space="preserve"><value>Güvenle temizlenebilir</value></data>
+  <data name="Panel_TabTimeline" xml:space="preserve"><value>Değişiklik zamanı</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>Bir sürücü veya klasör tarayın; bu görünüm özetini çıkarır.</value></data>
+  <data name="Panel_TypeSummary" xml:space="preserve"><value>{0}, taramanın {1} kadarı. Haritada görmek için bir türün üzerine gelin, filtrelemek için tıklayın.</value></data>
+  <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}: {2:N0} dosyada {1}</value></data>
+  <data name="Panel_TypeFiles" xml:space="preserve"><value>{0:N0} dosya</value></data>
+  <data name="Panel_TypeLargest" xml:space="preserve"><value> · en büyüğü: {0} ({1})</value></data>
+  <data name="Panel_CleanupSummary" xml:space="preserve"><value>Genellikle güvenle boşaltılabilen yerlerde {0}. Siz onaylamadan hiçbir şey silinmez.</value></data>
+  <data name="Panel_CleanupNone" xml:space="preserve"><value>Temizlenecek belirgin bir şey yok.</value></data>
+  <data name="Panel_CleanupNoneHint" xml:space="preserve"><value>Windows.old yok, kayda değer önbellek yok, bir yıldır tozlanan Geri Dönüşüm Kutusu ya da İndirilenler yok. Bakılacak sonraki yer, soldaki en büyük öğeler.</value></data>
+  <data name="Panel_CleanupMore" xml:space="preserve"><value>Ayrıca: {0}</value></data>
+  <data name="Panel_TimelineSummary" xml:space="preserve"><value>{0} bir yıldan uzun süredir dokunulmamış. Haritada görmek için bir ayın üzerine gelin, filtrelemek için tıklayın.</value></data>
+  <data name="Panel_TimelineMonth" xml:space="preserve"><value>{0}: {2:N0} dosyada {1}</value></data>
+  <data name="Panel_TimelineFirst" xml:space="preserve"><value> (ve daha eski her şey)</value></data>
+  <data name="Panel_TimelineOldest" xml:space="preserve"><value>{0} ve daha eski</value></data>
+  <data name="Age_ThisMonth" xml:space="preserve"><value>Bu ay</value></data>
+  <data name="Age_ThisYear" xml:space="preserve"><value>Bu yıl</value></data>
+  <data name="Age_OneToThree" xml:space="preserve"><value>1 ila 3 yıl</value></data>
+  <data name="Age_Older" xml:space="preserve"><value>Daha eski</value></data>
+  <data name="Cleanup_Show" xml:space="preserve"><value>Göster</value></data>
+  <data name="Cleanup_Empty" xml:space="preserve"><value>Boşalt</value></data>
+  <data name="Cleanup_Review" xml:space="preserve"><value>Gözden geçir</value></data>
+  <data name="Cleanup_HowTo" xml:space="preserve"><value>Nasıl yapılır</value></data>
+  <data name="Cleanup_WindowsOld" xml:space="preserve"><value>Windows.old</value></data>
+  <data name="Cleanup_WindowsOld_Note" xml:space="preserve"><value>Bir Windows özellik güncelleştirmesinden kalma. Windows bunu 10 gün sonra kendisi kaldırır; bu hâlâ burada.</value></data>
+  <data name="Cleanup_RecycleBin" xml:space="preserve"><value>Geri Dönüşüm Kutusu</value></data>
+  <data name="Cleanup_RecycleBin_Note" xml:space="preserve"><value>Zaten sildikleriniz. Boşaltmak kalıcıdır; Windows önce sorar.</value></data>
+  <data name="Cleanup_SystemFiles" xml:space="preserve"><value>Hazırda bekletme ve disk belleği dosyaları</value></data>
+  <data name="Cleanup_SystemFiles_Note" xml:space="preserve"><value>hiberfil.sys, pagefile.sys ve swapfile.sys. Bunları Windows yönetir; SpaceSharp onlara dokunmaz.</value></data>
+  <data name="Cleanup_SystemFiles_HowTo" xml:space="preserve"><value>hiberfil.sys, hazırda bekletme ve hızlı başlatma için belleği tutar. Boşaltmak için bir yönetici komut istemi açıp şunu çalıştırın: powercfg /hibernate off
+
+pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş sistem ayarları › Performans › Sanal bellek altında ayarlanır. Bunları Windows'a bırakmak güvenli seçimdir.</value></data>
+  <data name="Cleanup_Temp" xml:space="preserve"><value>Geçici dosyalar</value></data>
+  <data name="Cleanup_Temp_Note" xml:space="preserve"><value>{0:N0} Temp klasörü, {1:N0} dosya. Programların arkalarını temizlemesi gerekir; çoğu bunu yapmaz.</value></data>
+  <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Paket önbellekleri</value></data>
+  <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} önbellek (npm, pnpm, NuGet, pip, Cargo, Gradle ve benzerleri), {1:N0} dosya. Gerektiğinde yeniden indirilirler.</value></data>
+  <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Tarayıcı önbellekleri</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} önbellek klasörü, {1:N0} dosya. Sonrasında sayfalar ilk açılışta biraz daha yavaş yüklenir.</value></data>
+  <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Gölgelendirici önbellekleri</value></data>
+  <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} klasör, {1:N0} dosya. Oyunlar ve sürücüler bir sonraki başlatmada yeniden oluşturur.</value></data>
+  <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update indirmeleri</value></data>
+  <data name="Cleanup_WindowsUpdate_Note" xml:space="preserve"><value>Windows Update'in zaten uyguladığı yükleyiciler. Windows gerekirse bunları yeniden indirir.</value></data>
+  <data name="Cleanup_OldDownloads" xml:space="preserve"><value>İndirilenler, bir yıldır dokunulmamış</value></data>
+  <data name="Cleanup_OldDownloads_Note" xml:space="preserve"><value>İndirilenler içinde bir yıldır değişmeyen {0:N0} öğe, çoğunlukla yükleyiciler ve arşivler. Gözden geçir, bunları haritada seçer.</value></data>
+  <data name="Panel_Collapse" xml:space="preserve"><value>Paneli sekmelerine daralt</value></data>
+  <data name="Panel_Expand" xml:space="preserve"><value>Paneli genişlet</value></data>
+  <data name="Cleanup_Emptied" xml:space="preserve"><value>Geri Dönüşüm Kutusu boşaltıldı, {0} boşaltıldı.</value></data>
+  <data name="Cleanup_Recycle" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Panel_BandTip" xml:space="preserve"><value>Haritayı son değişikliği {0} olan dosyalara göre filtrele</value></data>
+  <data name="Filter_ToggleTip" xml:space="preserve"><value>Filtreyi göster veya gizle (Ctrl+F)</value></data>
+  <data name="Filter_ToggleCount" xml:space="preserve"><value>Filtre · {0}</value></data>
+  <data name="Rail_Type" xml:space="preserve"><value>Tür</value></data>
+  <data name="Rail_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="Rail_Age" xml:space="preserve"><value>Yaş</value></data>
+  <data name="Rail_Show" xml:space="preserve"><value>Göster</value></data>
+  <data name="Rail_Try" xml:space="preserve"><value>Dene</value></data>
+  <data name="Rail_Any" xml:space="preserve"><value>herhangi</value></data>
+  <data name="Rail_Over" xml:space="preserve"><value>{0} üzeri</value></data>
+  <data name="Rail_Under" xml:space="preserve"><value>{0} altı</value></data>
+  <data name="Rail_Untouched" xml:space="preserve"><value>{0} dokunulmamış</value></data>
+  <data name="Rail_Within" xml:space="preserve"><value>son {0}</value></data>
+  <data name="Rail_Files" xml:space="preserve"><value>dosyalar</value></data>
+  <data name="Rail_Folders" xml:space="preserve"><value>klasörler</value></data>
+  <data name="Drawer_ShareOfScan" xml:space="preserve"><value>taramadaki payı</value></data>
+  <data name="Drawer_ClearAll" xml:space="preserve"><value>Tümünü temizle</value></data>
+  <data name="Settings_FilterLayout" xml:space="preserve"><value>Filtre düzeni</value></data>
+  <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Haritanın sağında tüm denetimleri içeren bir çekmece (varsayılan) ya da yolun altında her koşul için bir hap bulunan bir şerit. Ctrl+F ikisini de açar.</value></data>
+  <data name="FilterLayout_Rail" xml:space="preserve"><value>Yolun altında şerit</value></data>
+  <data name="FilterLayout_Drawer" xml:space="preserve"><value>Haritanın üzerinde çekmece</value></data>
+  <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Ad veya desen, örn. *.iso</value></data>
+  <data name="Main_ViewMap" xml:space="preserve"><value>Harita</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>Taramanın haritası (B iki görünüm arasında geçiş yapar)</value></data>
+  <data name="Main_ViewInsights" xml:space="preserve"><value>Öngörüler</value></data>
+  <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Taramanın özeti: türe göre, güvenle temizlenebilir, değişiklik zamanı, en büyük öğeler (B)</value></data>
+  <data name="Insights_Title" xml:space="preserve"><value>Öngörüler</value></data>
+  <data name="Insights_Scanning" xml:space="preserve"><value>Taranıyor… özet, tarama bitince görünür.</value></data>
+  <data name="Insights_Scanned" xml:space="preserve"><value>Tarandı</value></data>
+  <data name="Insights_ScannedDetail" xml:space="preserve"><value>{0:N0} dosya · {1:N0} klasör · {2}</value></data>
+  <data name="Insights_FromFileTable" xml:space="preserve"><value>dosya tablosundan</value></data>
+  <data name="Insights_FromWalk" xml:space="preserve"><value>klasör dolaşma</value></data>
+  <data name="Insights_FreeOn" xml:space="preserve"><value>{0} üzerinde boş</value></data>
+  <data name="Insights_FreeOf" xml:space="preserve"><value>{1} içinde {0}</value></data>
+  <data name="Insights_FreeDetail" xml:space="preserve"><value>{0} kullanılıyor · {1}</value></data>
+  <data name="Insights_Free" xml:space="preserve"><value>Boş alan</value></data>
+  <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} yer · {1} işaretli</value></data>
+  <data name="Insights_Untouched" xml:space="preserve"><value>Bir yıldır dokunulmamış</value></data>
+  <data name="Insights_UntouchedDetail" xml:space="preserve"><value>taramanın {0} kadarı · {1:N0} dosya</value></data>
+  <data name="Insights_BiggestFolder" xml:space="preserve"><value>En büyük klasör</value></data>
+  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} dosya</value></data>
+  <data name="Insights_SinceLast" xml:space="preserve"><value>Son taramadan bu yana</value></data>
+  <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} yeni dosya</value></data>
+  <data name="Insights_NoBaseline" xml:space="preserve"><value>Önceki tarama yok</value></data>
+  <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Neyin değiştiğini görmek için başka bir gün yeniden tarayın</value></data>
+  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} tür · haritayı filtrelemek için bir satıra tıklayın</value></data>
+  <data name="Insights_TypesReading" xml:space="preserve"><value>{0}, taramanın {1} kadarı, çoğunlukla {2} altında. Sonra {3}, {4} ile.</value></data>
+  <data name="Insights_ClearSub" xml:space="preserve"><value>genellikle güvenle boşaltılabilen yerlerde {0} · siz onaylamadan hiçbir şey silinmez</value></data>
+  <data name="Insights_NoneChecked" xml:space="preserve"><value>Birlikte Geri Dönüşüm Kutusu'na taşınacak yerleri işaretleyin</value></data>
+  <data name="Insights_Checked" xml:space="preserve"><value>{0} işaretli · {1} · {2} boş alan kalır</value></data>
+  <data name="Insights_CheckTip" xml:space="preserve"><value>İşaretlileri taşı'ya dahil et</value></data>
+  <data name="Insights_RecycleChecked" xml:space="preserve"><value>İşaretlileri taşı</value></data>
+  <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} bir yıldan uzun süredir dokunulmamış · filtrelemek için bir aya veya banda tıklayın</value></data>
+  <data name="Insights_OldestLargest" xml:space="preserve"><value>En büyükler, bir yıl veya daha uzun süredir dokunulmamış</value></data>
+  <data name="Insights_LargestFolders" xml:space="preserve"><value>En büyük klasörler</value></data>
+  <data name="Insights_AnywhereInScan" xml:space="preserve"><value>taramanın herhangi bir yerinde</value></data>
+  <data name="Insights_LargestFiles" xml:space="preserve"><value>En büyük dosyalar</value></data>
+  <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Bu sürücüyü başka bir gün yeniden tarayın; bu kart arada neyin büyüdüğünü, küçüldüğünü ve ortaya çıktığını gösterir. Kaydedilmiş bir tarama da Tarama dosyası › Kaydedilmiş bir taramayla karşılaştır üzerinden karşılaştırılabilir.</value></data>
+  <data name="Insights_Grew" xml:space="preserve"><value>Büyüdü</value></data>
+  <data name="Insights_Shrank" xml:space="preserve"><value>Küçüldü</value></data>
+  <data name="Insights_New" xml:space="preserve"><value>Yeni</value></data>
+  <data name="Insights_Extensions" xml:space="preserve"><value>En büyük uzantılar</value></data>
+  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>ve her birinin çoğunun bulunduğu yer</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+</root>

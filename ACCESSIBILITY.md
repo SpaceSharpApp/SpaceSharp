@@ -14,7 +14,7 @@ This page says plainly what SpaceSharp does and does not do for people who use a
 
 **The numbers without the map.** The Insights view (the button next to Map) is the map rewritten as text: totals, space by file type, what is safe to clear, when files were last changed, the largest folders and files, and what changed since the last scan, as ordinary lists a screen reader walks row by row. Every row is a button that zooms the map to that item. If the map is not usable for you, Insights carries the same information.
 
-**Language and direction.** English, Norwegian bokmål and Arabic; the app follows the Windows language by default and can be set in Settings › Language. For Arabic and other right-to-left languages every window mirrors: panels swap sides, text and numbers align right, menus and tooltips follow. The map, the donut charts and the icons keep their drawn shape, since mirroring a treemap would only move things without making it more readable.
+**Language and direction.** English, Norwegian bokmål, and machine-made translations into Arabic, Chinese (Simplified), Danish, Dutch, French, German, Italian, Japanese, Korean, Polish, Portuguese, Russian, Spanish, Swedish, Turkish and Ukrainian; the app follows the Windows language by default and can be set in Settings › Language, which says which translations are machine-made. For Arabic and other right-to-left languages every window mirrors: panels swap sides, text and numbers align right, menus and tooltips follow. The map, the donut charts and the icons keep their drawn shape, since mirroring a treemap would only move things without making it more readable.
 
 **Motion.** The zoom animation can be turned off in Settings › Map › Animate zoom. Nothing else in the app moves on its own except the progress sweep while a scan runs.
 
@@ -52,6 +52,6 @@ If you would rather not report publicly, use the contact on the maintainer's Git
 
 - New controls must be reachable with Tab and have a name a screen reader can speak. Buttons with only an icon get their name from their tooltip automatically (the `ToolButton` style binds `AutomationProperties.Name` to `ToolTip`), so give every icon button a tooltip; set `AutomationProperties.Name` by hand on anything else whose purpose is only shown by a picture.
 - Do not communicate state by color alone; add text, a glyph or a tooltip.
-- Keep every string in `Resources/Strings.resx` so screen readers get the user's language, and add the Norwegian and Arabic lines too; a key missing from a translation falls back to English silently, which is easy to miss.
+- Keep every string in `Resources/Strings.resx` so screen readers get the user's language, and add the Norwegian line; the machine-made files can be left for the next translation pass, since a key missing from a translation falls back to English.
 - Anything that draws with coordinates must pin `FlowDirection = LeftToRight` on itself, as `TreemapControl`, `DonutChart` and `Icon` do; everything else should use alignment, not fixed margins, so it mirrors in Arabic. Try it with `"Language": "ar"` in `settings.json`.
 - Test at 150 % scaling at least once; layouts that only work at 100 % are a bug. Test with Narrator once if you touched a window; it ships with Windows (Win+Ctrl+Enter).

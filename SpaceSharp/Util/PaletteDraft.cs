@@ -198,7 +198,8 @@ public sealed class PaletteDraft
         else if (s.StartsWith("0x", StringComparison.OrdinalIgnoreCase)) s = s[2..];
         if (s.Length == 3) s = string.Concat(s.Select(c => new string(c, 2)));
         if (s.Length != 6 || !s.All(Uri.IsHexDigit)) return false;
-        color = Color.FromRgb(byte.Parse(s[..2], NumberStyles.HexNumber), byte.Parse(s[2..4], NumberStyles.HexNumber), byte.Parse(s[4..], NumberStyles.HexNumber));
+        var inv = CultureInfo.InvariantCulture;
+        color = Color.FromRgb(byte.Parse(s[..2], NumberStyles.HexNumber, inv), byte.Parse(s[2..4], NumberStyles.HexNumber, inv), byte.Parse(s[4..], NumberStyles.HexNumber, inv));
         return true;
     }
 
@@ -211,15 +212,15 @@ public sealed class PaletteDraft
     {
         var sb = new StringBuilder();
         sb.AppendLine("{");
-        sb.AppendLine($"  \"name\": {Quote(Name)},");
-        sb.AppendLine($"  \"theme\": \"{(Theme == PaletteTheme.Light ? "light" : Theme == PaletteTheme.Dark ? "dark" : "any")}\",");
-        sb.AppendLine($"  \"folders\": [{string.Join(", ", Folders.Select(c => $"\"{ToHex(c)}\""))}],");
-        if (Files is { Count: > 0 }) sb.AppendLine($"  \"files\": [{string.Join(", ", Files.Select(c => $"\"{ToHex(c)}\""))}],");
-        else sb.AppendLine($"  \"fileTint\": {FileTint.ToString("0.##", CultureInfo.InvariantCulture)},");
+        sb.AppendLine(CultureInfo.InvariantCulture, $"  \"name\": {Quote(Name)},");
+        sb.AppendLine(CultureInfo.InvariantCulture, $"  \"theme\": \"{(Theme == PaletteTheme.Light ? "light" : Theme == PaletteTheme.Dark ? "dark" : "any")}\",");
+        sb.AppendLine(CultureInfo.InvariantCulture, $"  \"folders\": [{string.Join(", ", Folders.Select(c => $"\"{ToHex(c)}\""))}],");
+        if (Files is { Count: > 0 }) sb.AppendLine(CultureInfo.InvariantCulture, $"  \"files\": [{string.Join(", ", Files.Select(c => $"\"{ToHex(c)}\""))}],");
+        else sb.AppendLine(CultureInfo.InvariantCulture, $"  \"fileTint\": {FileTint.ToString("0.##", CultureInfo.InvariantCulture)},");
         var named = Enum.GetValues<FileCategory>().Select((cat, i) => (cat, color: Categories[i])).Where(x => x.color is not null).ToList();
         sb.AppendLine("  \"categories\": {");
         for (int i = 0; i < named.Count; i++)
-            sb.AppendLine($"    \"{named[i].cat.ToString().ToLowerInvariant()}\": \"{ToHex(named[i].color!.Value)}\"{(i < named.Count - 1 ? "," : "")}");
+            sb.AppendLine(CultureInfo.InvariantCulture, $"    \"{named[i].cat.ToString().ToLowerInvariant()}\": \"{ToHex(named[i].color!.Value)}\"{(i < named.Count - 1 ? "," : "")}");
         sb.AppendLine("  }");
         sb.AppendLine("}");
         return sb.ToString();

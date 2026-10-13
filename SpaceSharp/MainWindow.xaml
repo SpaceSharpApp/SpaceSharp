@@ -34,14 +34,7 @@
                               ScrollViewer.CanContentScroll="False"
                               SelectionChanged="ColorSettings_Changed">
                         <ComboBox.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" FontSize="11" FontWeight="SemiBold" Margin="8,8,8,3"
-                                                   Foreground="{DynamicResource TextDim}" />
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
+                            <GroupStyle HeaderTemplate="{StaticResource ComboGroupHeader}" />
                         </ComboBox.GroupStyle>
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -353,8 +346,9 @@
 
             <!-- start screen: pick a drive, or pick up where you left off (recent saved scans); the administrator offer is one footer line -->
             <Grid x:Name="EmptyHint">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="520">
-                    <DockPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="900">
+                    <DockPanel Margin="4,0">
+                        <TextBlock x:Name="EmptyTotals" DockPanel.Dock="Right" Foreground="{DynamicResource TextDim}" FontSize="12.5" VerticalAlignment="Bottom" Margin="24,0,0,4" />
                         <Image Source="/Assets/SpaceSharp-256.png" Width="44" Height="44" Margin="0,0,14,0" VerticalAlignment="Center"
                                RenderOptions.BitmapScalingMode="HighQuality" />
                         <StackPanel VerticalAlignment="Center">
@@ -362,16 +356,17 @@
                             <TextBlock x:Name="EmptySubtitle" Text="{u:T Start_RecentHint}" Foreground="{DynamicResource TextDim}" FontSize="12.5" Margin="0,3,0,0" TextWrapping="Wrap" />
                         </StackPanel>
                     </DockPanel>
-                    <Border x:Name="RecentCard" Margin="0,18,0,0" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}"
-                            BorderThickness="1" CornerRadius="10" SnapsToDevicePixels="True" Visibility="Collapsed">
-                        <StackPanel x:Name="RecentRows" />
-                    </Border>
-                    <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                        <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.ScanFolder}" Content="{u:T Start_ScanAFolder}" Click="ScanFolder_Click" />
-                        <Button Style="{StaticResource ToolButton}" Tag="{StaticResource Icon.Open}" Content="{u:T Start_OpenASavedScan}" Margin="8,0,0,0" Click="MenuOpenScan_Click" />
-                    </StackPanel>
+                    <!-- one tile per saved scan: a ring that says how full the drive is now, the label, the scanned size and when -->
+                    <WrapPanel x:Name="RecentTiles" Margin="0,18,0,0" HorizontalAlignment="Center" />
+                    <UniformGrid Columns="2" Margin="0,12,0,0">
+                        <Button Style="{StaticResource StartAction}" Margin="0,0,6,0" Click="ScanFolder_Click">
+                            <StackPanel Orientation="Horizontal"><controls:Icon Glyph="{StaticResource Icon.ScanFolder}" Width="15" Height="15" Margin="0,0,10,0" /><TextBlock Text="{u:T Start_ScanAFolder}" /></StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource StartAction}" Margin="6,0,0,0" Click="MenuOpenScan_Click">
+                            <StackPanel Orientation="Horizontal"><controls:Icon Glyph="{StaticResource Icon.Open}" Width="15" Height="15" Margin="0,0,10,0" /><TextBlock Text="{u:T Start_OpenASavedScan}" /></StackPanel>
+                        </Button>
+                    </UniformGrid>
                 </StackPanel>
-
             </Grid>
 
             <!-- the filter drawer (Settings › Map › Filter layout): a sheet over the right of the map -->

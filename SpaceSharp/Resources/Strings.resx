@@ -45,6 +45,10 @@
   <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp switches to {0} the next time it starts. Restart now?</value></data>
   <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Restart now</value></data>
   <data name="Settings_Language_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} is machine translated and has not been checked by a native speaker yet. Corrections are welcome on GitHub.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>Translations</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>Machine translations</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>false</value><comment>"true" in a translation file that was machine-made and not yet reviewed by a native speaker; the Settings dropdown lists those apart. Flip it to "false" once someone has read the file through.</comment></data>
   <data name="About_AboutSpaceSharp" xml:space="preserve"><value>About SpaceSharp</value></data>
   <data name="About_CheckForUpdates" xml:space="preserve"><value>Check for updates</value></data>
   <data name="About_Checking" xml:space="preserve"><value>Checking…</value></data>
@@ -624,6 +628,9 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Scan a folder</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Open a saved scan…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Whole drives in seconds with administrator rights.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% used</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} scanned</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>{0} used of {1} across your drives</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Keep saved scans for</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatic saves older than this are deleted when SpaceSharp starts. Scans you saved as files yourself are never touched.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} days</value></data>

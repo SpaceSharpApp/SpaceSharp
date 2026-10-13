@@ -51,12 +51,12 @@ SpaceSharp/
 ├── Models/FsNode.cs              the file and folder tree
 ├── Services/                     scanners, filter, insights, top lists, compare, CSV, updater, shell
 ├── Util/                         settings, palettes, custom palettes, color text, themes, strings, command line
-├── Resources/Strings*.resx       UI text: English, Norwegian bokmål, Arabic
+├── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
 ├── Themes/                       Styles.xaml, Dark.xaml, Light.xaml
 ├── Assets/                       the mark (SVG), the Windows icon, the 256 px PNG
 └── Properties/PublishProfiles/   Portable, Small, Velopack
 SpaceSharp.Tests/                 xUnit: layout, grouping, filter, insights, color text, formatting, tree ops, localization
-docs/                             README images, spacesharp-mock.js (the app drawn in a browser), screenshots, icon, social preview; index.html redirects to spacesharp.app
+docs/                             README images, spacesharp-mock.js (the app drawn in a browser), screenshots, icon, social preview (the website lives outside the repo)
 tools/make-assets.py              every icon, header and installer image from one definition of the mark
 tools/make-social.py              docs/social-preview.png, the message laid out as a treemap in amber
 tools/make-icons.py               SpaceSharp/Themes/Icons.xaml, the Lucide icons as path geometry
@@ -80,7 +80,7 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 
 **Add a shortcut.** `MainWindow.Window_PreviewKeyDown`, the list in `ShortcutsWindow.cs`, and the README's table.
 
-**Add UI text.** Every string is a key in `Resources/Strings.resx` with a Norwegian twin in `Strings.nb.resx`. `LocalizationTests` fails the build if a key used in code or XAML is missing. A new language is one more `Strings.<culture>.resx`; it appears in the language list on its own.
+**Add UI text.** Every string is a key in `Resources/Strings.resx` with a Norwegian twin in `Strings.nb.resx`. `LocalizationTests` fails the build if a key used in code or XAML is missing. A new language is one more `Strings.<culture>.resx`; it appears in the language list on its own. Each translation file carries `Meta_MachineTranslated`: `AppLanguages.IsMachineTranslated` reads it, the Settings dropdown groups them under a "Machine translations" heading after the "Translations" group (the same grouped list as the palette picker, sharing the ComboGroupHeader template), and shows a note under the dropdown while such a language is active. Set it to `false` once a native speaker has read the file; English and Norwegian are the only reviewed ones today. Most of the machine-made files were produced in one pass from the English strings with the Windows terminology of each language; `Strings.nb.resx` is the model for tone.
 
 **The icon.** The mark is an isometric amber block with a cube carved out of its front corner. Everything is generated from `tools/make-assets.py` (Python 3 with Pillow and cairosvg): the SVGs, the Windows icon on its rounded Graphite tile, the 256 px PNG the app shows, the header, the wordmark and the installer images (the MSI's banner and dialog art, "Facets", is a list of triangles in that file). Change the geometry or colors there, not in the files.
 
@@ -88,7 +88,7 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 
 **Right-to-left.** `AppLanguages.ApplyDirection(window)` sets a window's `FlowDirection` to RightToLeft when the culture reads right to left; `TitleBarTheme.Attach` calls it, and every window goes through that, so a new window needs nothing beyond the `Attach` call it has anyway. Menus and tooltips inherit the direction from their window. (Overriding the property metadata instead fails: `Window`'s static constructor overrides it too.) `TreemapControl`, `DonutChart` and `Icon` pin themselves to LeftToRight because they draw with coordinates. When adding a control that draws with a DrawingContext or positions things by x, do the same, and prefer `HorizontalAlignment`/`TextAlignment` over fixed margins for anything that should swap sides. To try it without a translation, put `"Language": "ar"` in `%AppData%\SpaceSharp\settings.json` (the dropdown only lists languages that have a resx): the strings fall back to English, mirrored.
 
-**Crash reporting.** `Util/CrashLog.cs` writes unexpected errors to `%LocalAppData%\SpaceSharp\logs` and builds the prefilled GitHub issue link; `App.xaml.cs` hooks the dispatcher, the AppDomain and unobserved tasks. To try it, press Ctrl+Alt+Shift+F12 in the main window (an exception on the UI thread) or Ctrl+Alt+Shift+F11 (one in a background task, which reaches the dialog when the finalizer notices it, so it can take a moment). Neither is in the shortcut list.
+**Crash reporting.** The publish profiles embed the symbols (`DebugType` embedded), so the stack traces in a log name the file and line. `Util/CrashLog.cs` writes unexpected errors to `%LocalAppData%\SpaceSharp\logs` and builds the prefilled GitHub issue link; `App.xaml.cs` hooks the dispatcher, the AppDomain and unobserved tasks. To try it, press Ctrl+Alt+Shift+F12 in the main window (an exception on the UI thread) or Ctrl+Alt+Shift+F11 (one in a background task, which reaches the dialog when the finalizer notices it, so it can take a moment). Neither is in the shortcut list.
 
 **Name, version and author** come from `SpaceSharp.csproj` and appear in About and in the exe's properties. Tag releases with the bare version number; the update window reads the changelog at that tag.
 

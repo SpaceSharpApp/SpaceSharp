@@ -44,6 +44,10 @@
   <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp bytter til {0} neste gang det starter. Vil du starte på nytt nå?</value></data>
   <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Start på nytt nå</value></data>
   <data name="Settings_Language_Later" xml:space="preserve"><value>Senere</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} er maskinoversatt og ikke lest gjennom av noen som har språket som morsmål ennå. Rettelser tas imot på GitHub.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>Oversettelser</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>Maskinoversettelser</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>false</value></data>
   <data name="About_AboutSpaceSharp" xml:space="preserve"><value>Om SpaceSharp</value></data>
   <data name="About_CheckForUpdates" xml:space="preserve"><value>Se etter oppdateringer</value></data>
   <data name="About_Checking" xml:space="preserve"><value>Ser etter…</value></data>
@@ -623,6 +627,9 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Skann en mappe</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Åpne en lagret skanning…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hele stasjoner på sekunder med administratorrettigheter.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0} % brukt</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} skannet</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>{0} brukt av {1} på diskene dine</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behold lagrede skanninger i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatiske lagringer eldre enn dette slettes når SpaceSharp starter. Skanninger du selv har lagret som filer, røres aldri.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dager</value></data>

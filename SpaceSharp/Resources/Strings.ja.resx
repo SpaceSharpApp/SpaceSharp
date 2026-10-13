@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    SpaceSharp user-visible text, Japanese. Machine translated, not yet reviewed by a native speaker: Meta_MachineTranslated says so.
+    Keys and placeholders must match Strings.resx; dotnet test checks that.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Settings_Language" xml:space="preserve"><value>言語</value></data>
+  <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>アプリの言語</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>翻訳が追加されると、ここに言語が表示されます。再起動後に有効になります。</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Windows と同じ</value></data>
+  <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>言語の切り替え</value></data>
+  <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>次回の起動時に SpaceSharp は{0}に切り替わります。今すぐ再起動しますか？</value></data>
+  <data name="Settings_Language_RestartNow" xml:space="preserve"><value>今すぐ再起動</value></data>
+  <data name="Settings_Language_Later" xml:space="preserve"><value>後で</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0}は機械翻訳であり、まだネイティブスピーカーによる確認を受けていません。修正は GitHub で歓迎します。</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>翻訳</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>機械翻訳</value></data>
+  <data name="About_AboutSpaceSharp" xml:space="preserve"><value>SpaceSharp について</value></data>
+  <data name="About_CheckForUpdates" xml:space="preserve"><value>更新プログラムの確認</value></data>
+  <data name="About_Checking" xml:space="preserve"><value>確認中…</value></data>
+  <data name="About_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="About_CopyFailed" xml:space="preserve"><value>コピーに失敗しました</value></data>
+  <data name="About_CopyVersionInfo" xml:space="preserve"><value>バージョン情報をコピー</value></data>
+  <data name="About_Credits" xml:space="preserve"><value>クレジット</value></data>
+  <data name="About_Feedback" xml:space="preserve"><value>フィードバック</value></data>
+  <data name="About_FoundAProblemOr" xml:space="preserve"><value>問題を見つけましたか？アイデアがありますか？どちらもプロジェクトの GitHub ページで受け付けています。バグ報告はバージョンとシステムの項目が入力済みの状態で開きます。</value></data>
+  <data name="About_InstallAndRestart" xml:space="preserve"><value>{0} をインストールして再起動</value></data>
+  <data name="About_Portable" xml:space="preserve"><value>  ·  ポータブル</value></data>
+  <data name="About_ReportABug" xml:space="preserve"><value>バグを報告</value></data>
+  <data name="About_Shortcuts" xml:space="preserve"><value>ショートカット</value></data>
+  <data name="About_SuggestAFeature" xml:space="preserve"><value>機能を提案</value></data>
+  <data name="About_System" xml:space="preserve"><value>システム</value></data>
+  <data name="About_UpToDate" xml:space="preserve"><value>最新の状態です</value></data>
+  <data name="About_UpdateFailed" xml:space="preserve"><value>更新に失敗しました</value></data>
+  <data name="About_Version" xml:space="preserve"><value>バージョン {0}</value></data>
+  <data name="Access_DeniedMany" xml:space="preserve"><value>{0:N0} 個の保護されたフォルダーを読み取れなかったため、マップにはその内容が含まれていません。</value></data>
+  <data name="Access_DeniedOne" xml:space="preserve"><value>1 個の保護されたフォルダーを読み取れなかったため、マップにはその内容が含まれていません。</value></data>
+  <data name="Ago_Days" xml:space="preserve"><value>{0} 日前</value></data>
+  <data name="Ago_Hours" xml:space="preserve"><value>{0} 時間前</value></data>
+  <data name="Ago_JustNow" xml:space="preserve"><value>たった今</value></data>
+  <data name="Ago_Minutes" xml:space="preserve"><value>{0} 分前</value></data>
+  <data name="Ago_Months" xml:space="preserve"><value>{0} か月前</value></data>
+  <data name="Ago_Today" xml:space="preserve"><value>今日</value></data>
+  <data name="Ago_Years" xml:space="preserve"><value>{0:0.#} 年前</value></data>
+  <data name="Ago_Yesterday" xml:space="preserve"><value>昨日</value></data>
+  <data name="Category_Archives" xml:space="preserve"><value>アーカイブ</value></data>
+  <data name="Category_Audio" xml:space="preserve"><value>オーディオ</value></data>
+  <data name="Category_Code" xml:space="preserve"><value>コード</value></data>
+  <data name="Category_Documents" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Category_Images" xml:space="preserve"><value>画像</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>その他</value></data>
+  <data name="Category_Programs" xml:space="preserve"><value>プログラム</value></data>
+  <data name="Category_Video" xml:space="preserve"><value>ビデオ</value></data>
+  <data name="Category_GameData" xml:space="preserve"><value>ゲームデータ</value></data>
+  <data name="Category_Installers" xml:space="preserve"><value>インストーラー</value></data>
+  <data name="Category_DiskImages" xml:space="preserve"><value>ディスクイメージ</value></data>
+  <data name="Category_Databases" xml:space="preserve"><value>データベース</value></data>
+  <data name="Category_Fonts" xml:space="preserve"><value>フォント</value></data>
+  <data name="Category_System" xml:space="preserve"><value>システム</value></data>
+  <data name="Changes_Grew" xml:space="preserve"><value>増加</value></data>
+  <data name="Changes_GrewFolder" xml:space="preserve"><value>増加したフォルダー</value></data>
+  <data name="Changes_New" xml:space="preserve"><value>新規</value></data>
+  <data name="Changes_NewFolder" xml:space="preserve"><value>新規フォルダー</value></data>
+  <data name="Changes_Shrank" xml:space="preserve"><value>減少</value></data>
+  <data name="Changes_ShrankFolder" xml:space="preserve"><value>減少したフォルダー</value></data>
+  <data name="ColorModeName_Change" xml:space="preserve"><value>前回のスキャンからの変化</value></data>
+  <data name="ColorModeName_Depth" xml:space="preserve"><value>フォルダーの深さ</value></data>
+  <data name="ColorModeName_FileType" xml:space="preserve"><value>ファイルの種類</value></data>
+  <data name="ColorModeName_TopFolder" xml:space="preserve"><value>最上位フォルダー</value></data>
+  <data name="ColorMode_Change" xml:space="preserve"><value>前回のスキャンからの変化</value></data>
+  <data name="ColorMode_Depth" xml:space="preserve"><value>深さ</value></data>
+  <data name="ColorMode_FileType" xml:space="preserve"><value>ファイルの種類</value></data>
+  <data name="ColorMode_TopFolder" xml:space="preserve"><value>最上位フォルダー</value></data>
+  <data name="Crash_CausedBy" xml:space="preserve"><value>原因：</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>予期しないエラー</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>詳細は {0} に保存されました。</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>詳細をログファイルに保存できませんでした。</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>お時間があれば報告してください。GitHub のフォームがバージョン、お使いの Windows、エラーが入力済みの状態で開き、ログを添付できます。</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>GitHub で報告</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>GitHub でバグ報告を開きますか？</value></data>
+  <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} ファイル</value></data>
+  <data name="Crumb_NoScan" xml:space="preserve"><value>まだスキャンしていません</value></data>
+  <data name="Delete_AndMore" xml:space="preserve"><value>
+… ほか {0:N0} 件</value></data>
+  <data name="Delete_ErrorTitle" xml:space="preserve"><value>削除</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>一部を削除できませんでした。
+
+{0}</value></data>
+  <data name="Delete_Question" xml:space="preserve"><value>{0}をごみ箱に移動しますか？
+
+{1}</value></data>
+  <data name="Delete_Title" xml:space="preserve"><value>ごみ箱に移動</value></data>
+  <data name="Delete_WhatFile" xml:space="preserve"><value>ファイル "{0}"（{1}）</value></data>
+  <data name="Delete_WhatFolder" xml:space="preserve"><value>フォルダー "{0}"（{1:N0} ファイル、{2}）</value></data>
+  <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} 個の項目（{1:N0} ファイル、{2}）</value></data>
+  <data name="Describe_FilesOnly" xml:space="preserve"><value>ファイルのみ</value></data>
+  <data name="Describe_FoldersOnly" xml:space="preserve"><value>フォルダーのみ</value></data>
+  <data name="Describe_Modified" xml:space="preserve"><value>過去 {0} 以内に更新</value></data>
+  <data name="Describe_Over" xml:space="preserve"><value>{0} 超</value></data>
+  <data name="Describe_Under" xml:space="preserve"><value>{0} 未満</value></data>
+  <data name="Describe_Untouched" xml:space="preserve"><value>{0} 以上未変更</value></data>
+  <data name="Dialog_ChooseFolder" xml:space="preserve"><value>スキャンするフォルダーを選択</value></data>
+  <data name="Dialog_CompareScan" xml:space="preserve"><value>保存したスキャンと比較</value></data>
+  <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>スキャンを開けませんでした</value></data>
+  <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>再起動できませんでした</value></data>
+  <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
+  <data name="Dialog_ExportCsv" xml:space="preserve"><value>CSV にエクスポート</value></data>
+  <data name="Dialog_OpenScan" xml:space="preserve"><value>保存したスキャンを開く</value></data>
+  <data name="Dialog_RescanFailed" xml:space="preserve"><value>再スキャンに失敗しました</value></data>
+  <data name="Dialog_SaveScan" xml:space="preserve"><value>スキャンを保存</value></data>
+  <data name="Dialog_ScanFailed" xml:space="preserve"><value>スキャンに失敗しました</value></data>
+  <data name="Dialog_OutOfMemory32" xml:space="preserve"><value>32 ビット版はスキャンが完了する前にメモリ不足になりました。32 ビットプロセスは PC の RAM 容量に関係なく数 GB しかアドレスできないため、これほど多くのファイルがあるドライブには 64 ビット版（SpaceSharp-win-x64）が必要です。</value></data>
+  <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp スキャン (*.sscan)|*.sscan</value></data>
+  <data name="Drive_Free" xml:space="preserve"><value>空き {0}</value></data>
+  <data name="Drive_UsedOf" xml:space="preserve"><value>{1} 中 {0} 使用 · {2}</value></data>
+  <data name="Filter_1Month" xml:space="preserve"><value>1 か月</value></data>
+  <data name="Filter_1Year" xml:space="preserve"><value>1 年</value></data>
+  <data name="Filter_2Years" xml:space="preserve"><value>2 年</value></data>
+  <data name="Filter_3Months" xml:space="preserve"><value>3 か月</value></data>
+  <data name="Filter_5Years" xml:space="preserve"><value>5 年</value></data>
+  <data name="Filter_6Months" xml:space="preserve"><value>6 か月</value></data>
+  <data name="Filter_AnySize" xml:space="preserve"><value>すべてのサイズ</value></data>
+  <data name="Filter_AnyTime" xml:space="preserve"><value>すべての期間</value></data>
+  <data name="Filter_FilesAndFolders" xml:space="preserve"><value>ファイルとフォルダー</value></data>
+  <data name="Filter_FilesOnly" xml:space="preserve"><value>ファイルのみ</value></data>
+  <data name="Filter_FoldersOnly" xml:space="preserve"><value>フォルダーのみ</value></data>
+  <data name="Filter_LargerThan" xml:space="preserve"><value>次より大きい</value></data>
+  <data name="Filter_MatchCount" xml:space="preserve"><value>{0:N0} ファイル · {1} が一致</value></data>
+  <data name="Filter_Matches" xml:space="preserve"><value>{0:N0} ファイル · {1}：{2}</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>名前の一部、または *.iso のようなパターン</value></data>
+  <data name="Filter_NoFilter" xml:space="preserve"><value>フィルターなし：すべて表示されています</value></data>
+  <data name="Filter_NotModifiedFor" xml:space="preserve"><value>未更新期間</value></data>
+  <data name="Filter_NothingMatches" xml:space="preserve"><value>一致するものがありません：{0}</value></data>
+  <data name="Filter_NothingMatchesShort" xml:space="preserve"><value>一致するものがありません</value></data>
+  <data name="Filter_QuickFilters" xml:space="preserve"><value>クイックフィルター</value></data>
+  <data name="Filter_Show" xml:space="preserve"><value>表示</value></data>
+  <data name="Filter_SmallerThan" xml:space="preserve"><value>次より小さい</value></data>
+  <data name="Filter_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Hover_AccessDenied" xml:space="preserve"><value>    ⚠ 一部の内容を読み取れませんでした</value></data>
+  <data name="Hover_FileSize" xml:space="preserve"><value>（ファイルサイズ {0}）</value></data>
+  <data name="Hover_Files" xml:space="preserve"><value>    {0:N0} ファイル</value></data>
+  <data name="Hover_FreeSpaceOn" xml:space="preserve"><value>空き領域：</value></data>
+  <data name="Hover_HardLink" xml:space="preserve"><value>    ハードリンク、{0} は別の場所で計上済み</value></data>
+  <data name="Hover_OnDisk" xml:space="preserve"><value>（ディスク上 {0}）</value></data>
+  <data name="Hover_ShareOf" xml:space="preserve"><value>  （{1} の {0:0.#}%）</value></data>
+  <data name="Hover_TooSmallIn" xml:space="preserve"><value> 小さすぎて表示できません：</value></data>
+  <data name="Hover_ZoomToSee" xml:space="preserve"><value>    拡大すると表示されます</value></data>
+  <data name="InspectWin_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="InspectWin_CopyDetails" xml:space="preserve"><value>詳細をコピー</value></data>
+  <data name="InspectWin_Inspect" xml:space="preserve"><value>詳細</value></data>
+  <data name="InspectWin_Properties" xml:space="preserve"><value>プロパティ</value></data>
+  <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
+  <data name="Inspect_AccessDenied" xml:space="preserve"><value>一部の内容を読み取れませんでした（アクセス拒否）</value></data>
+  <data name="Inspect_ExactBytes" xml:space="preserve"><value>  （{0:N0} バイト）</value></data>
+  <data name="Inspect_FileNoExtension" xml:space="preserve"><value>拡張子のないファイル（{0}）</value></data>
+  <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0} ファイル（{1}）</value></data>
+  <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} ファイル、{1:N0} フォルダー</value></data>
+  <data name="Inspect_Folder" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}、別の場所で計上済み</value></data>
+  <data name="Inspect_InFolders" xml:space="preserve"><value>{0:N0} 個のフォルダー内</value></data>
+  <data name="Inspect_Items" xml:space="preserve"><value>項目</value></data>
+  <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} 個の項目を選択中</value></data>
+  <data name="Inspect_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Inspect_TitleMany" xml:space="preserve"><value>詳細：{0:N0} 個の項目</value></data>
+  <data name="Inspect_TitleOne" xml:space="preserve"><value>詳細：{0}</value></data>
+  <data name="Key_About" xml:space="preserve"><value>このウィンドウを開く</value></data>
+  <data name="Key_AddSelection" xml:space="preserve"><value>選択範囲に追加</value></data>
+  <data name="Key_CancelScan" xml:space="preserve"><value>スキャンをキャンセル</value></data>
+  <data name="Key_Copy" xml:space="preserve"><value>選択したパスをコピー</value></data>
+  <data name="Key_Delete" xml:space="preserve"><value>選択した項目をごみ箱に移動</value></data>
+  <data name="Key_Filter" xml:space="preserve"><value>マップをフィルター</value></data>
+  <data name="Key_Grouping" xml:space="preserve"><value>密度を「すべて（グループ化なし）」と元の設定で切り替え</value></data>
+  <data name="Key_Inspect" xml:space="preserve"><value>選択範囲の詳細を表示</value></data>
+  <data name="Key_NextColor" xml:space="preserve"><value>次の色分けモード</value></data>
+  <data name="Key_OpenScan" xml:space="preserve"><value>保存したスキャンを開く</value></data>
+  <data name="Key_Pan" xml:space="preserve"><value>拡大中に移動</value></data>
+  <data name="Key_Panel" xml:space="preserve"><value>最大のファイル、フォルダー、種類のパネル</value></data>
+  <data name="Key_Properties" xml:space="preserve"><value>選択した項目の Windows プロパティ</value></data>
+  <data name="Key_Rescan" xml:space="preserve"><value>再スキャン</value></data>
+  <data name="Key_SaveScan" xml:space="preserve"><value>スキャンをファイルに保存</value></data>
+  <data name="Key_SelectMatches" xml:space="preserve"><value>フィルターに一致するすべてのファイルを選択</value></data>
+  <data name="Key_SelectRange" xml:space="preserve"><value>範囲を選択</value></data>
+  <data name="Key_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Key_Up" xml:space="preserve"><value>1 つ上のフォルダーへ</value></data>
+  <data name="Key_WholeMap" xml:space="preserve"><value>マップ全体を表示</value></data>
+  <data name="Key_ZoomInOut" xml:space="preserve"><value>拡大または縮小</value></data>
+  <data name="Key_ZoomToFolder" xml:space="preserve"><value>フォルダーにマップを拡大</value></data>
+  <data name="LabelSize_Large" xml:space="preserve"><value>大</value></data>
+  <data name="LabelSize_Larger" xml:space="preserve"><value>特大</value></data>
+  <data name="LabelSize_Normal" xml:space="preserve"><value>標準</value></data>
+  <data name="LabelSize_Smaller" xml:space="preserve"><value>小</value></data>
+  <data name="LabelSize_Smallest" xml:space="preserve"><value>最小</value></data>
+  <data name="List_ByType" xml:space="preserve"><value>{0} 内のファイルの種類別の容量。種類をクリックするとマップをフィルターします。</value></data>
+  <data name="List_ChangesSince" xml:space="preserve"><value>{0} 以降の最大の変化</value></data>
+  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>比較対象のスキャン以降の最大の変化</value></data>
+  <data name="List_HintNoScan" xml:space="preserve"><value>ドライブまたはフォルダーをスキャンすると、最大の項目が表示されます。</value></data>
+  <data name="List_LargestFiles" xml:space="preserve"><value>{0} 内の最大のファイル</value></data>
+  <data name="List_LargestFolders" xml:space="preserve"><value>{0} 内の最大のフォルダー</value></data>
+  <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp について (F1)</value></data>
+  <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
+  <data name="Main_AskAgainNextTime" xml:space="preserve"><value>次回も確認する</value></data>
+  <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
+  <data name="Main_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Main_Change" xml:space="preserve"><value>変化</value></data>
+  <data name="Main_Changes" xml:space="preserve"><value>変更点</value></data>
+  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>前回のスキャンからの変化</value></data>
+  <data name="Main_Clear" xml:space="preserve"><value>クリア</value></data>
+  <data name="Main_ClearFilterEsc" xml:space="preserve"><value>フィルターをクリア (Esc)</value></data>
+  <data name="Main_ClickADriveOn" xml:space="preserve"><value>左側のドライブをクリックするか、スキャンするフォルダーを選択してください。</value></data>
+  <data name="Main_ClickADriveTo" xml:space="preserve"><value>ドライブをクリックしてスキャンします。</value></data>
+  <data name="Main_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Main_ColorBy" xml:space="preserve"><value>色分け</value></data>
+  <data name="Main_CompareWithASaved" xml:space="preserve"><value>保存したスキャンと比較…</value></data>
+  <data name="Main_CopyName" xml:space="preserve"><value>名前をコピー</value></data>
+  <data name="Main_CopyPath" xml:space="preserve"><value>パスをコピー</value></data>
+  <data name="Main_CtrlC" xml:space="preserve"><value>Ctrl+C</value></data>
+  <data name="Main_CtrlI" xml:space="preserve"><value>Ctrl+I</value></data>
+  <data name="Main_CtrlO" xml:space="preserve"><value>Ctrl+O</value></data>
+  <data name="Main_CtrlS" xml:space="preserve"><value>Ctrl+S</value></data>
+  <data name="Main_Del" xml:space="preserve"><value>Del</value></data>
+  <data name="Main_Depth" xml:space="preserve"><value>深さ</value></data>
+  <data name="Main_Dismiss" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Main_Done" xml:space="preserve"><value>完了</value></data>
+  <data name="Main_DoubleClick" xml:space="preserve"><value>ダブルクリック</value></data>
+  <data name="Main_Drives" xml:space="preserve"><value>ドライブ</value></data>
+  <data name="Main_DrivesAndLargestItems" xml:space="preserve"><value>ドライブと最大の項目のパネル (L)</value></data>
+  <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
+  <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc でもキャンセルできます</value></data>
+  <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>一致しないものはマップ上で暗く表示されます。</value></data>
+  <data name="Main_ExportToCSV" xml:space="preserve"><value>CSV にエクスポート</value></data>
+  <data name="Main_FileType" xml:space="preserve"><value>ファイルの種類</value></data>
+  <data name="Main_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Main_Filter" xml:space="preserve"><value>フィルター</value></data>
+  <data name="Main_FilterMatches" xml:space="preserve"><value>フィルターの一致</value></data>
+  <data name="Main_FilterOptions" xml:space="preserve"><value>フィルターオプション</value></data>
+  <data name="Main_Folders" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Main_Inspect" xml:space="preserve"><value>詳細</value></data>
+  <data name="Main_InstallAndRestart" xml:space="preserve"><value>インストールして再起動</value></data>
+  <data name="Main_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
+  <data name="Main_LargestItems" xml:space="preserve"><value>最大の項目</value></data>
+  <data name="Main_MapAWholeDrive" xml:space="preserve"><value>ドライブ全体を数秒でマップ化</value></data>
+  <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>ごみ箱に移動</value></data>
+  <data name="Main_NoFilter" xml:space="preserve"><value>フィルターなし</value></data>
+  <data name="Main_NotNow" xml:space="preserve"><value>今はしない</value></data>
+  <data name="Main_Open" xml:space="preserve"><value>開く</value></data>
+  <data name="Main_OpenSavedScan" xml:space="preserve"><value>保存したスキャンを開く…</value></data>
+  <data name="Main_Palette" xml:space="preserve"><value>パレット</value></data>
+  <data name="Main_Properties" xml:space="preserve"><value>プロパティ</value></data>
+  <data name="Main_RescanF5" xml:space="preserve"><value>再スキャン (F5)</value></data>
+  <data name="Main_RescanThisFolder" xml:space="preserve"><value>このフォルダーを再スキャン</value></data>
+  <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>管理者として再起動</value></data>
+  <data name="Main_SaveScanAs" xml:space="preserve"><value>名前を付けてスキャンを保存…</value></data>
+  <data name="Main_ScanFile" xml:space="preserve"><value>スキャンファイル</value></data>
+  <data name="Main_ScanFolder" xml:space="preserve"><value>フォルダーをスキャン</value></data>
+  <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>一致するすべてのファイルを選択 (Ctrl+A) し、Del でごみ箱に移動</value></data>
+  <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>このフォルダー内のすべてを選択</value></data>
+  <data name="Main_SelectMatches" xml:space="preserve"><value>一致項目を選択</value></data>
+  <data name="Main_SettingsCtrl" xml:space="preserve"><value>設定 (Ctrl+,)</value></data>
+  <data name="Main_ShowInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
+  <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>このファイルの種類のみ表示</value></data>
+  <data name="Main_ShowWholeMap" xml:space="preserve"><value>マップ全体を表示</value></data>
+  <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>マップ全体を表示 (Home / Ctrl+0)</value></data>
+  <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp は、すべてのフォルダーをたどる代わりにドライブのファイルテーブルを直接読み取ることができます。これには管理者権限が必要なため、アプリを一度再起動する必要があります。フォルダーやその他のファイルシステムは、いずれの場合も通常の方法でスキャンされます。</value></data>
+  <data name="Main_StopComparing" xml:space="preserve"><value>比較を終了</value></data>
+  <data name="Main_Theme" xml:space="preserve"><value>テーマ</value></data>
+  <data name="Main_ThisFolder" xml:space="preserve"><value>このフォルダー</value></data>
+  <data name="Main_TopFolder" xml:space="preserve"><value>最上位フォルダー</value></data>
+  <data name="Main_Types" xml:space="preserve"><value>種類</value></data>
+  <data name="Main_UpOneFolder" xml:space="preserve"><value>1 つ上のフォルダーへ</value></data>
+  <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>1 つ上のフォルダーへ (Backspace / マウスの戻るボタン)</value></data>
+  <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>拡大 (マウスホイール / +)</value></data>
+  <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>縮小 (マウスホイール / −)</value></data>
+  <data name="Main_ZoomToFolder" xml:space="preserve"><value>フォルダーに拡大</value></data>
+  <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} の内容</value></data>
+  <data name="Menu_Delete" xml:space="preserve"><value>ごみ箱に移動</value></data>
+  <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} 個の項目をごみ箱に移動</value></data>
+  <data name="Menu_KindGroup" xml:space="preserve"><value>小さすぎて表示できないファイル</value></data>
+  <data name="Menu_KindFolder" xml:space="preserve"><value>フォルダー、{0:N0} ファイル</value></data>
+  <data name="Menu_KindFile" xml:space="preserve"><value>{0} ファイル</value></data>
+  <data name="Menu_KindFileNoExt" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Menu_Inspect" xml:space="preserve"><value>詳細</value></data>
+  <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} 個の項目の詳細</value></data>
+  <data name="Menu_RescanName" xml:space="preserve"><value>{0} を再スキャン</value></data>
+  <data name="Menu_RescanThis" xml:space="preserve"><value>このフォルダーを再スキャン</value></data>
+  <data name="Menu_SelectIn" xml:space="preserve"><value>{0} 内のすべてを選択</value></data>
+  <data name="Menu_SelectInThis" xml:space="preserve"><value>このフォルダー内のすべてを選択</value></data>
+  <data name="Menu_ShowOnlyExt" xml:space="preserve"><value>*{0} ファイルのみ表示</value></data>
+  <data name="Menu_ShowOnlyType" xml:space="preserve"><value>このファイルの種類のみ表示</value></data>
+  <data name="Menu_ThisFolder" xml:space="preserve"><value>このフォルダー</value></data>
+  <data name="Mft_Building" xml:space="preserve"><value>マップを作成中</value></data>
+  <data name="Mft_CannotOpen" xml:space="preserve"><value>ボリューム {0} を開けません。ファイルテーブルの読み取りには管理者権限が必要です。</value></data>
+  <data name="Mft_Reading" xml:space="preserve"><value>ファイルテーブルを読み取り中：{1:N0} レコード中 {0:N0}</value></data>
+  <data name="Palette_GroupCustom" xml:space="preserve"><value>カスタム</value></data>
+  <data name="Palettes_CouldNotOpen" xml:space="preserve"><value>パレットフォルダーを開けませんでした</value></data>
+  <data name="Palettes_LoadedMany" xml:space="preserve"><value> {0} 個のカスタムパレットを読み込みました。</value></data>
+  <data name="Palettes_LoadedOne" xml:space="preserve"><value> 1 個のカスタムパレットを読み込みました。</value></data>
+  <data name="Palettes_NotLoaded" xml:space="preserve"><value> 読み込めませんでした：</value></data>
+  <data name="Palettes_Note" xml:space="preserve"><value>独自のパレットを追加：パレットフォルダーにパレットごとに 1 つの JSON ファイルを置きます。フォルダーには例と README が含まれています。</value></data>
+  <data name="Palettes_OpenFolder" xml:space="preserve"><value>フォルダーを開く</value></data>
+  <data name="Palettes_Reload" xml:space="preserve"><value>再読み込み</value></data>
+  <data name="Palettes_New" xml:space="preserve"><value>新しいパレット</value></data>
+  <data name="Palettes_Edit" xml:space="preserve"><value>{0} を編集</value></data>
+  <data name="Palettes_Copy" xml:space="preserve"><value>{0} を元に作成</value></data>
+  <data name="Palettes_CopyName" xml:space="preserve"><value>{0} のコピー</value></data>
+  <data name="PaletteEd_Title" xml:space="preserve"><value>パレット</value></data>
+  <data name="PaletteEd_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>パレット一覧に表示される名前</value></data>
+  <data name="PaletteEd_For" xml:space="preserve"><value>対象</value></data>
+  <data name="PaletteEd_Dark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="PaletteEd_Light" xml:space="preserve"><value>ライト</value></data>
+  <data name="PaletteEd_Both" xml:space="preserve"><value>両方</value></data>
+  <data name="PaletteEd_Folders" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>12 色相、最上位フォルダーごとに 1 色、深さに応じて循環</value></data>
+  <data name="PaletteEd_FolderN" xml:space="preserve"><value>フォルダー {0}</value></data>
+  <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>最上位フォルダーの {0} 番目と、そこから 12 階層ごとの各階層</value></data>
+  <data name="PaletteEd_Generate" xml:space="preserve"><value>生成：</value></data>
+  <data name="PaletteEd_Rainbow" xml:space="preserve"><value>レインボー</value></data>
+  <data name="PaletteEd_Neighbors" xml:space="preserve"><value>近似色</value></data>
+  <data name="PaletteEd_TwoTone" xml:space="preserve"><value>ツートーン</value></data>
+  <data name="PaletteEd_OneHue" xml:space="preserve"><value>単一色相</value></data>
+  <data name="PaletteEd_Random" xml:space="preserve"><value>ランダム</value></data>
+  <data name="PaletteEd_RandomTip" xml:space="preserve"><value>ランダムな基本色と広がり。良さそうなものが出るまで押してから、調整してください。</value></data>
+  <data name="PaletteEd_FromBase" xml:space="preserve"><value>基準</value></data>
+  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>ジェネレーターの起点となる基本色。クリックして変更します。</value></data>
+  <data name="PaletteEd_Base" xml:space="preserve"><value>基本色</value></data>
+  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>「生成」の起点。既定では最初のフォルダーの色</value></data>
+  <data name="PaletteEd_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="PaletteEd_FilesSub" xml:space="preserve"><value>フォルダーの色を白に近づけたもの</value></data>
+  <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>各ファイルの色を自分で設定</value></data>
+  <data name="PaletteEd_FilesTint" xml:space="preserve"><value>代わりに 1 つの色合いを使用</value></data>
+  <data name="PaletteEd_FileN" xml:space="preserve"><value>ファイルの色 {0}</value></data>
+  <data name="PaletteEd_FileDetail" xml:space="preserve"><value>12 色中 {0} 番目のフォルダー色の下にあるファイル</value></data>
+  <data name="PaletteEd_Types" xml:space="preserve"><value>ファイルの種類</value></data>
+  <data name="PaletteEd_TypesSub" xml:space="preserve"><value>フォルダーから自動設定。クリックして設定します</value></data>
+  <data name="PaletteEd_TypeDerived" xml:space="preserve"><value>フォルダーの色から派生。設定するとその色が維持されます</value></data>
+  <data name="PaletteEd_TypeOwn" xml:space="preserve"><value>手動で設定</value></data>
+  <data name="PaletteEd_ResetDerived" xml:space="preserve"><value>派生色に戻す</value></data>
+  <data name="PaletteEd_Hue" xml:space="preserve"><value>色相</value></data>
+  <data name="PaletteEd_Saturation" xml:space="preserve"><value>彩度</value></data>
+  <data name="PaletteEd_Lightness" xml:space="preserve"><value>明度</value></data>
+  <data name="PaletteEd_LabelOk" xml:space="preserve"><value>ラベル：{0}、コントラスト {1:0.0}:1</value></data>
+  <data name="PaletteEd_LabelLow" xml:space="preserve"><value>ラベル：{0}、コントラスト {1:0.0}:1、読みにくい</value></data>
+  <data name="PaletteEd_DarkText" xml:space="preserve"><value>暗い文字</value></data>
+  <data name="PaletteEd_LightText" xml:space="preserve"><value>明るい文字</value></data>
+  <data name="PaletteEd_ClosePairs" xml:space="preserve"><value>似すぎて区別できないフォルダー：{0}</value></data>
+  <data name="PaletteEd_LowLabels" xml:space="preserve"><value>ラベルが読みにくいフォルダーの色：{0} 個</value></data>
+  <data name="PaletteEd_AllGood" xml:space="preserve"><value>すべてのフォルダーの色でラベルが読め、似すぎている色もありません。</value></data>
+  <data name="PaletteEd_Preview" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="PaletteEd_PreviewNote" xml:space="preserve"><value>サンプルデータ、現在のシェーディング</value></data>
+  <data name="PaletteEd_Export" xml:space="preserve"><value>JSON をコピー</value></data>
+  <data name="PaletteEd_Exported" xml:space="preserve"><value>パレットファイルをクリップボードにコピーしました。</value></data>
+  <data name="PaletteEd_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="PaletteEd_Save" xml:space="preserve"><value>保存して使用</value></data>
+  <data name="PaletteEd_NameTaken" xml:space="preserve"><value>その名前は既に使用されています</value></data>
+  <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} は組み込みのパレットです。別の名前を付けてください。</value></data>
+  <data name="PaletteEd_Replace" xml:space="preserve"><value>パレットを置き換えますか？</value></data>
+  <data name="PaletteEd_ReplaceDetail" xml:space="preserve"><value>{0} という名前のカスタムパレットは既に存在します。保存すると置き換えられます。</value></data>
+  <data name="PaletteEd_ReplaceYes" xml:space="preserve"><value>置き換える</value></data>
+  <data name="PaletteEd_CouldNotSave" xml:space="preserve"><value>パレットを保存できませんでした</value></data>
+  <data name="Period_Day" xml:space="preserve"><value>1 日</value></data>
+  <data name="Period_Days" xml:space="preserve"><value>{0} 日</value></data>
+  <data name="Period_Month" xml:space="preserve"><value>1 か月</value></data>
+  <data name="Period_Months" xml:space="preserve"><value>{0} か月</value></data>
+  <data name="Period_Week" xml:space="preserve"><value>1 週間</value></data>
+  <data name="Period_Weeks" xml:space="preserve"><value>{0} 週間</value></data>
+  <data name="Period_Year" xml:space="preserve"><value>1 年</value></data>
+  <data name="Period_Years" xml:space="preserve"><value>{0} 年</value></data>
+  <data name="Preset_BigAndOld" xml:space="preserve"><value>大きくて古い</value></data>
+  <data name="Preset_BigVideos" xml:space="preserve"><value>大きなビデオ</value></data>
+  <data name="Preset_InstallersArchives" xml:space="preserve"><value>インストーラーとアーカイブ</value></data>
+  <data name="Preset_LargeFiles" xml:space="preserve"><value>大きなファイル</value></data>
+  <data name="Preset_RecentlyChanged" xml:space="preserve"><value>最近変更</value></data>
+  <data name="Preset_Untouched2Years" xml:space="preserve"><value>2 年以上未変更</value></data>
+  <data name="ScanFile_Newer" xml:space="preserve"><value>このスキャンファイルは新しいバージョンの SpaceSharp で作成されました。</value></data>
+  <data name="ScanFile_NotAScan" xml:space="preserve"><value>SpaceSharp のスキャンファイルではありません。</value></data>
+  <data name="Scan_FolderMissing" xml:space="preserve"><value>フォルダー "{0}" は存在しません。</value></data>
+  <data name="Scan_Rate" xml:space="preserve"><value>{0:0}</value></data>
+  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k</value></data>
+  <data name="Scan_Title" xml:space="preserve"><value>{0} をスキャン中</value></data>
+  <data name="Scan_Used" xml:space="preserve"><value>{0} 使用</value></data>
+  <data name="Scan_FolderFacts" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Scan_MethodMft" xml:space="preserve"><value>ファイルテーブル</value></data>
+  <data name="Scan_MethodWalk" xml:space="preserve"><value>フォルダー走査</value></data>
+  <data name="Scan_StageFind" xml:space="preserve"><value>ファイルの検索</value></data>
+  <data name="Scan_StageRead" xml:space="preserve"><value>ファイルテーブルの読み取り</value></data>
+  <data name="Scan_StageBuild" xml:space="preserve"><value>ツリーの構築</value></data>
+  <data name="Scan_StageDraw" xml:space="preserve"><value>マップの描画</value></data>
+  <data name="Scan_SoFar" xml:space="preserve"><value>これまでに {1:N0} フォルダー内の {0:N0} ファイル</value></data>
+  <data name="Scan_FoundSoFar" xml:space="preserve"><value>検出済み</value></data>
+  <data name="Scan_FoundOf" xml:space="preserve"><value>{0} 中検出済み</value></data>
+  <data name="Scan_FilesPerSecond" xml:space="preserve"><value>ファイル/秒</value></data>
+  <data name="Scan_Elapsed" xml:space="preserve"><value>経過</value></data>
+  <data name="Scan_ElapsedLeft" xml:space="preserve"><value>経過 · 残り約 {0}</value></data>
+  <data name="Scan_ASecond" xml:space="preserve"><value>1 秒</value></data>
+  <data name="Scan_Seconds" xml:space="preserve"><value>{0:0} 秒</value></data>
+  <data name="Scan_Minutes" xml:space="preserve"><value>{0:0} 分</value></data>
+  <data name="SettingsWin_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="SettingsWin_ResetToDefaults" xml:space="preserve"><value>既定値に戻す</value></data>
+  <data name="SettingsWin_Settings" xml:space="preserve"><value>設定</value></data>
+  <data name="Settings_AnimateZoom" xml:space="preserve"><value>ズームをアニメーション</value></data>
+  <data name="Settings_AnimateZoom_Desc" xml:space="preserve"><value>フォルダーにジャンプする代わりに、飛び込むように移動します。</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>外観</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>起動時に更新プログラムを確認</value></data>
+  <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>SpaceSharp の起動から数秒後に GitHub で新しいバージョンを探し、インストールを提案します。</value></data>
+  <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>セットアッププログラムで SpaceSharp をインストールした場合にのみ利用できます。ポータブル版の exe は自動更新されません。</value></data>
+  <data name="Settings_ColorBy" xml:space="preserve"><value>色分け</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>最上位フォルダー：最上位フォルダーごとに 1 色相、内側の階層ほど明るくなります。フォルダーの深さ：階層ごとに異なる色。ファイルの種類：種類別に色分け。変化：同じ場所の前回のスキャンから増減したもの。</value></data>
+  <data name="Settings_ConfirmDelete" xml:space="preserve"><value>ごみ箱に移動する前に確認</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>削除前に確認します。削除した項目はいつでもごみ箱から復元できます。</value></data>
+  <data name="Settings_CustomPalettes" xml:space="preserve"><value>カスタムパレット</value></data>
+  <data name="Settings_FastScan" xml:space="preserve"><value>高速 NTFS スキャン</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>ドライブのファイルテーブルを直接読み取るため、ドライブ全体を数分ではなく数秒でマップ化します。Windows はスキャンごとに一度管理者権限を求めますが、アプリ自体はそのままです。拒否すると通常のスキャンが実行され、SpaceSharp を再起動するまで再度求められません。その他のファイルシステムと単一のフォルダーは常に通常のスキャンを使用します。</value></data>
+  <data name="Settings_HardLinks" xml:space="preserve"><value>ハードリンクを 1 回だけ計上</value></data>
+  <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>すべてのファイルのリンク数を読み取り、Windows の WinSxS フォルダーのように複数の名前を持つデータを 1 回だけ計上します。大きなドライブでは遅くなります。</value></data>
+  <data name="Settings_HoverDetails" xml:space="preserve"><value>ホバーの詳細</value></data>
+  <data name="Settings_HoverDetails_Desc" xml:space="preserve"><value>サイズ、ディスク上のサイズ、ファイル数、最終更新日を示す小さなカードをマウスの横に表示します。</value></data>
+  <data name="Settings_IncludeHidden" xml:space="preserve"><value>隠しファイルとシステムファイルを含める</value></data>
+  <data name="Settings_IncludeHidden_Desc" xml:space="preserve"><value>オフにすると、pagefile.sys のような「隠しファイル」または「システム」属性を持つファイルとフォルダーを除外します。</value></data>
+  <data name="Settings_LabelSize" xml:space="preserve"><value>ラベルのサイズ</value></data>
+  <data name="Settings_LabelSize_Desc" xml:space="preserve"><value>マップ上の文字サイズ。最小から特大まで。タイトルバーもそれに合わせて拡縮します。</value></data>
+  <data name="Settings_LeaveOut" xml:space="preserve"><value>除外</value></data>
+  <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>スキップする名前。その中身もすべて除外されます。パスではなくファイル名とフォルダー名に対して照合します。* と ? はワイルドカードです。</value></data>
+  <data name="Settings_Map" xml:space="preserve"><value>マップ</value></data>
+  <data name="Settings_MergeChains" xml:space="preserve"><value>単一フォルダーの連鎖を結合</value></data>
+  <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>フォルダーを 1 つだけ含むフォルダー（Users › あなた › AppData › Local）を、結合したタイトルの 1 つのボックスとして描画します。</value></data>
+  <data name="Settings_OutlinedLabels" xml:space="preserve"><value>ラベルの縁取り</value></data>
+  <data name="Settings_OutlinedLabels_Desc" xml:space="preserve"><value>すべてのラベルに細い対照色の縁取りを付け、どの色の上でも文字を読みやすくします。マップが読みにくい場合におすすめです。</value></data>
+  <data name="Settings_Palette" xml:space="preserve"><value>パレット</value></data>
+  <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  （カスタム）</value></data>
+  <data name="Settings_Palette_Desc" xml:space="preserve"><value>マップのボックスに使用する色。</value></data>
+  <data name="Settings_Reopen" xml:space="preserve"><value>起動時に前回のスキャンを開く</value></data>
+  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>アプリを開いた瞬間に昨日のマップを、その前のスキャンと比較して表示します。すべてのドライブスキャンは %LocalAppData%\SpaceSharp\scans に保存されます。F5 で再スキャンします。</value></data>
+  <data name="Settings_ResetQuestion" xml:space="preserve"><value>すべての設定を既定値に戻しますか？</value></data>
+  <data name="Settings_ResetTitle" xml:space="preserve"><value>設定のリセット</value></data>
+  <data name="Settings_Safety" xml:space="preserve"><value>安全</value></data>
+  <data name="Settings_Scanning" xml:space="preserve"><value>スキャン</value></data>
+  <data name="Settings_Scanning_Desc" xml:space="preserve"><value>ここでの変更は次回のスキャン (F5) から有効になります。</value></data>
+  <data name="Settings_ShowFreeSpace" xml:space="preserve"><value>空き領域を表示</value></data>
+  <data name="Settings_ShowFreeSpace_Desc" xml:space="preserve"><value>ドライブ全体をスキャンしたときに、未使用領域を灰色のブロックとして追加します。ファイルを削除すると大きくなります。</value></data>
+  <data name="Settings_SidePanel" xml:space="preserve"><value>サイドパネルを表示</value></data>
+  <data name="Settings_SidePanel_Desc" xml:space="preserve"><value>ドライブと最大のファイル、フォルダー、種類を示す左側のパネル。ショートカット：L。</value></data>
+  <data name="Settings_SizeMeasure" xml:space="preserve"><value>サイズの基準</value></data>
+  <data name="Settings_SizeMeasure_Desc" xml:space="preserve"><value>「ディスク上のサイズ」は、圧縮ファイル、スパースファイル、クラウドファイルの圧縮後サイズを使用し、エクスプローラーの「ディスク上のサイズ」と同様に、すべてのファイルをクラスター単位に切り上げます。</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>テーマ</value></data>
+  <data name="Settings_Theme_Desc" xml:space="preserve"><value>Windows の設定に従うか、常にライトまたはダークを使用します。</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>更新</value></data>
+  <data name="SizeMeasure_FileSize" xml:space="preserve"><value>ファイルサイズ</value></data>
+  <data name="SizeMeasure_OnDisk" xml:space="preserve"><value>ディスク上のサイズ</value></data>
+  <data name="Status_ColorBy" xml:space="preserve"><value>色分け：{0}</value></data>
+  <data name="Status_ComparedWith" xml:space="preserve"><value>  {0} と比較しました。</value></data>
+  <data name="Status_ComparedWithSuffix" xml:space="preserve"><value>  ·  {0} のスキャンと比較中</value></data>
+  <data name="Status_Comparing" xml:space="preserve"><value>{0} のスキャンと比較しています。</value></data>
+  <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>{0} のスキャンと比較しています。作成方法が異なる（{1} と {2}）ため、一部の差異はディスクではなくその違いによるものです。</value></data>
+  <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>{1} の {0} のスキャンと比較しています。名前はフォルダーごとに照合されます。</value></data>
+  <data name="Status_ComparisonCleared" xml:space="preserve"><value>比較を解除しました。</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} 行を {1} にエクスポートしました（基本的な CSV：固定列、オプションは今後追加予定）</value></data>
+  <data name="Status_FileTableSuffix" xml:space="preserve"><value> · ファイルテーブル</value></data>
+  <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} 個の項目（{1}）をごみ箱に移動しました</value></data>
+  <data name="Status_MovedOne" xml:space="preserve"><value>{0} をごみ箱に移動しました</value></data>
+  <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}：{2:N0} ファイル · {3}。F5 で再スキャンします。</value></data>
+  <data name="Status_OpenedVerb" xml:space="preserve"><value>次のスキャンを開きました：</value></data>
+  <data name="Status_OpeningLastScan" xml:space="preserve"><value>前回のスキャンを開いています…</value></data>
+  <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>前回のスキャンは作成方法が異なる（{0} と {1}）ため、比較されません。次回の同じ種類のスキャンから比較されます。</value></data>
+  <data name="Status_RescanCancelled" xml:space="preserve"><value>再スキャンをキャンセルしました</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} を再スキャンしました：{1:N0} ファイル · {2}</value></data>
+  <data name="Status_Rescanning" xml:space="preserve"><value>{0} を再スキャン中…</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>{0} を保存しました</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>スキャンをキャンセルしました</value></data>
+  <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} ファイル · {1:N0} フォルダー · </value></data>
+  <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} 秒</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>{0:N0} 個の項目を選択中 · {1} · {2:N0} ファイル    Del でごみ箱に移動</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>テーマ：ダーク</value></data>
+  <data name="Theme_DarkName" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>テーマ：ライト</value></data>
+  <data name="Theme_LightName" xml:space="preserve"><value>ライト</value></data>
+  <data name="Theme_MatchWindows" xml:space="preserve"><value>Windows に合わせる</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>テーマ：Windows に合わせる（{0}）</value></data>
+  <data name="Theme_WordDark" xml:space="preserve"><value>ダーク</value></data>
+  <data name="Theme_WordLight" xml:space="preserve"><value>ライト</value></data>
+  <data name="Tip_AccessDenied" xml:space="preserve"><value>一部の内容を読み取れませんでした</value></data>
+  <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>同じドライブまたはフォルダーを 2 回スキャンするか、保存したスキャンを開いて比較してください。</value></data>
+  <data name="Tip_FreeSpace" xml:space="preserve"><value>空き領域</value></data>
+  <data name="Tip_HintGroup" xml:space="preserve"><value>拡大するとこれらの項目が表示されます</value></data>
+  <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0}（ハードリンク、別の場所で計上済み）</value></data>
+  <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} ファイル · {1}</value></data>
+  <data name="TopList_FilesOfType" xml:space="preserve"><value>{0:N0} ファイル · {1}</value></data>
+  <data name="TopList_NoExtension" xml:space="preserve"><value>（拡張子なし）</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>SpaceSharp {0} が利用可能です。現在のバージョンは {1} です。</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>更新プログラムをダウンロード中… {0}%</value></data>
+  <data name="Update_Restarting" xml:space="preserve"><value>{0} で再起動しています…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>更新プログラムをインストールできませんでした：{0}</value></data>
+  <data name="Word_Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="Word_On" xml:space="preserve"><value>オン</value></data>
+  <data name="Dialog_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Settings_ResetButton" xml:space="preserve"><value>リセット</value></data>
+  <data name="About_BrowserFailed" xml:space="preserve"><value>ブラウザーを開けませんでした。
+
+{0}
+
+{1}</value></data>
+  <data name="About_Description" xml:space="preserve"><value>ディスク領域の使われ方を確認できます。SpaceSharp はすべてのファイルとフォルダーを使用領域に応じた大きさのボックスとして表示するため、最も大きいものが一目でわかります。</value></data>
+  <data name="About_SystemLine" xml:space="preserve"><value>{0}、{1}</value></data>
+  <data name="About_CreditsText" xml:space="preserve"><value>Squarified ツリーマップレイアウト：Bruls、Huizing、van Wijk（2000）。SpaceMonger に着想を得ています。インターフェイスアイコンは Lucide（ISC ライセンス）。</value></data>
+  <data name="Settings_SavedIn" xml:space="preserve"><value>設定は %AppData%\SpaceSharp\settings.json に保存されます。</value></data>
+  <data name="Main_FilterPlaceholder" xml:space="preserve"><value>フィルター。例：1 年以上前の 500MB を超えるビデオ</value></data>
+  <data name="Group_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Group_Folders" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Group_Items" xml:space="preserve"><value>項目</value></data>
+  <data name="Drive_Removable" xml:space="preserve"><value>リムーバブル</value></data>
+  <data name="Drive_Network" xml:space="preserve"><value>ネットワーク</value></data>
+  <data name="Drive_Optical" xml:space="preserve"><value>光学ドライブ</value></data>
+  <data name="Drive_Hdd" xml:space="preserve"><value>ハードディスク</value></data>
+  <data name="Drive_Ssd" xml:space="preserve"><value>SSD</value></data>
+  <data name="Drive_Nvme" xml:space="preserve"><value>NVMe SSD</value></data>
+  <data name="Drive_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Settings_ExplorerMenu" xml:space="preserve"><value>エクスプローラーに「SpaceSharp でスキャン」を表示</value></data>
+  <data name="Settings_ExplorerMenu_Desc" xml:space="preserve"><value>エクスプローラーのフォルダー、ドライブ、フォルダーの背景の右クリックメニューに項目を追加します。この Windows ユーザーのみが対象で、管理者権限は不要です。この SpaceSharp のコピーを指すため、ポータブル版の exe を移動する前にオフにしてください。</value></data>
+  <data name="Explorer_ScanWith" xml:space="preserve"><value>SpaceSharp でスキャン</value></data>
+  <data name="Settings_CommandLine" xml:space="preserve"><value>コマンドライン</value></data>
+  <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>ショートカット、スクリプト、または「ファイル名を指定して実行」から、ドライブ、フォルダー、または保存したスキャンを指定して SpaceSharp を起動します。</value></data>
+  <data name="Update_Title" xml:space="preserve"><value>更新プログラムが利用可能</value></data>
+  <data name="Update_Hint" xml:space="preserve"><value>インストールには約 1 分かかり、SpaceSharp が再起動します。設定と保存したスキャンは保持されます。</value></data>
+  <data name="Update_WhatsNew" xml:space="preserve"><value>新機能</value></data>
+  <data name="Update_YouHave" xml:space="preserve"><value>現在のバージョン：{0}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>SpaceSharp {0} の準備ができました</value></data>
+  <data name="Update_RemindLater" xml:space="preserve"><value>後で通知</value></data>
+  <data name="Update_WhatsNewIn" xml:space="preserve"><value>{0} の新機能</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>後で</value></data>
+  <data name="WhatsNew_Title" xml:space="preserve"><value>{0} の新機能</value></data>
+  <data name="WhatsNew_TitleSince" xml:space="preserve"><value>{1} 以降の新機能</value></data>
+  <data name="WhatsNew_Loading" xml:space="preserve"><value>リリースノートを読み込んでいます…</value></data>
+  <data name="WhatsNew_Unavailable" xml:space="preserve"><value>リリースノートを読み込めませんでした。完全な一覧は GitHub にあります。</value></data>
+  <data name="WhatsNew_SeeAll" xml:space="preserve"><value>GitHub ですべての変更を見る</value></data>
+  <data name="Settings_Treemap" xml:space="preserve"><value>ツリーマップ</value></data>
+  <data name="Settings_Treemap_Desc" xml:space="preserve"><value>いずれも必須ではありませんが、マップの見え方が変わります。</value></data>
+  <data name="Treemap_Density" xml:space="preserve"><value>密度</value></data>
+  <data name="Treemap_Density_Desc" xml:space="preserve"><value>小さな項目をいくつまで描画してから、1 つの「312 ファイル」ボックスにまとめるか省略するか。「少なめ」は落ち着いた表示、「最大」は最も小さいものだけをまとめ、「すべて」はまとめません。ショートカット：G で「すべて」と元の設定を切り替えます。</value></data>
+  <data name="Density_Sparse" xml:space="preserve"><value>少なめ</value></data>
+  <data name="Density_Normal" xml:space="preserve"><value>標準</value></data>
+  <data name="Density_Dense" xml:space="preserve"><value>多め</value></data>
+  <data name="Density_Maximum" xml:space="preserve"><value>最大</value></data>
+  <data name="Treemap_Bias" xml:space="preserve"><value>バイアス</value></data>
+  <data name="Treemap_Bias_Desc" xml:space="preserve"><value>レイアウトで横長のボックスと縦長のボックスのどちらを優先するか。「均等」は標準の squarified レイアウトです。</value></data>
+  <data name="Treemap_Horizontal" xml:space="preserve"><value>横</value></data>
+  <data name="Treemap_Equal" xml:space="preserve"><value>均等</value></data>
+  <data name="Treemap_Vertical" xml:space="preserve"><value>縦</value></data>
+  <data name="Treemap_Padding" xml:space="preserve"><value>余白</value></data>
+  <data name="Treemap_Padding_Desc" xml:space="preserve"><value>スタイルで使用される分に加えて、すべてのボックスの周囲に追加する余白。</value></data>
+  <data name="Treemap_Border" xml:space="preserve"><value>グリッド線の幅</value></data>
+  <data name="Treemap_Border_Desc" xml:space="preserve"><value>グリッド線の太さ。</value></data>
+  <data name="Unit_Pixels" xml:space="preserve"><value>{0} px</value></data>
+  <data name="Treemap_Font" xml:space="preserve"><value>フォント</value></data>
+  <data name="Treemap_Font_Desc" xml:space="preserve"><value>マップ上のすべてのラベルの書体。ラベルのサイズは「外観」で設定します。</value></data>
+  <data name="Treemap_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Treemap_Files_Desc" xml:space="preserve"><value>ファイルのボックスに表示する内容。</value></data>
+  <data name="Treemap_Folders" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Treemap_Folders_Desc" xml:space="preserve"><value>フォルダーのタイトルに表示する内容。</value></data>
+  <data name="Treemap_CenterNames" xml:space="preserve"><value>名前を中央揃え</value></data>
+  <data name="Treemap_ShowSizes" xml:space="preserve"><value>サイズを表示</value></data>
+  <data name="Treemap_ShowCounts" xml:space="preserve"><value>ファイル数を表示</value></data>
+  <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} ファイル</value></data>
+  <data name="Density_Everything" xml:space="preserve"><value>すべて（グループ化なし）</value></data>
+  <data name="Status_Density" xml:space="preserve"><value>密度：{0}</value></data>
+  <data name="SettingsTab_General" xml:space="preserve"><value>全般</value></data>
+  <data name="SettingsTab_Appearance" xml:space="preserve"><value>外観</value></data>
+  <data name="SettingsTab_Treemap" xml:space="preserve"><value>ツリーマップ</value></data>
+  <data name="SettingsTab_Map" xml:space="preserve"><value>マップ</value></data>
+  <data name="SettingsTab_Scanning" xml:space="preserve"><value>スキャン</value></data>
+  <data name="About_Tagline" xml:space="preserve"><value>ディスク領域の使われ方を確認できます。</value></data>
+  <data name="About_Check" xml:space="preserve"><value>確認</value></data>
+  <data name="About_InstalledCheck" xml:space="preserve"><value>インストール済み。新しいバージョンを確認します。</value></data>
+  <data name="About_PortableNoUpdates" xml:space="preserve"><value>ポータブル版。更新は自動ではありません。最新バージョンは GitHub にあります。</value></data>
+  <data name="About_WhatsNewSub" xml:space="preserve"><value>このバージョンの変更点</value></data>
+  <data name="About_ShortcutsSub" xml:space="preserve"><value>すべてのキーとマウス操作</value></data>
+  <data name="About_ReportSub" xml:space="preserve"><value>バージョンとシステムが入力済みの状態で GitHub を開きます</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>クラッシュログ</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>予期しないエラーが書き込まれるフォルダーを開きます。報告に添付するために使用します</value></data>
+  <data name="About_Source" xml:space="preserve"><value>GitHub のソースコード</value></data>
+  <data name="About_SourceSub" xml:space="preserve"><value>MIT ライセンス</value></data>
+  <data name="About_CreditsSub" xml:space="preserve"><value>ツリーマップアルゴリズム、SpaceMonger、アイコン</value></data>
+  <data name="Keys_Navigate" xml:space="preserve"><value>移動</value></data>
+  <data name="Keys_Select" xml:space="preserve"><value>選択と操作</value></data>
+  <data name="Keys_View" xml:space="preserve"><value>表示とファイル</value></data>
+  <data name="Start_PickADrive" xml:space="preserve"><value>左側のドライブを選択してください</value></data>
+  <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>左側のドライブを選択するか、前回の続きから始めてください</value></data>
+  <data name="Start_RecentHint" xml:space="preserve"><value>保存したスキャンはすぐに開き、新しいスキャンと比較されます。</value></data>
+  <data name="Start_FirstHint" xml:space="preserve"><value>すべてのファイルとフォルダーが、使用領域に応じた大きさのボックスになります。</value></data>
+  <data name="Start_ScanAFolder" xml:space="preserve"><value>フォルダーをスキャン</value></data>
+  <data name="Start_OpenASavedScan" xml:space="preserve"><value>保存したスキャンを開く…</value></data>
+  <data name="Start_FastScanLine" xml:space="preserve"><value>管理者権限があれば、ドライブ全体を数秒でスキャンできます。</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% 使用中</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} をスキャン済み</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>全ドライブ {1} 中 {0} を使用</value></data>
+  <data name="Settings_KeepScans" xml:space="preserve"><value>保存したスキャンの保持期間</value></data>
+  <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>この期間より古い自動保存は SpaceSharp の起動時に削除されます。ご自身でファイルとして保存したスキャンには影響しません。</value></data>
+  <data name="KeepScans_Days" xml:space="preserve"><value>{0} 日</value></data>
+  <data name="KeepScans_Months" xml:space="preserve"><value>{0} か月</value></data>
+  <data name="KeepScans_OneYear" xml:space="preserve"><value>1 年</value></data>
+  <data name="KeepScans_Forever" xml:space="preserve"><value>無期限</value></data>
+  <data name="KeepScans_DeleteAll" xml:space="preserve"><value>保存したスキャンをすべて削除</value></data>
+  <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>保存したスキャンはありません。</value></data>
+  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>保存した {0} 件のスキャンを削除しますか？画面上のマップはそのまま残りますが、新しいスキャンを作成するまで以前のスキャンとの比較はできなくなります。</value></data>
+  <data name="KeepScans_Deleted" xml:space="preserve"><value>保存した {0} 件のスキャンを削除しました。</value></data>
+  <data name="Exclude_Placeholder" xml:space="preserve"><value>名前またはパターン。例：*.tmp</value></data>
+  <data name="Exclude_Add" xml:space="preserve"><value>追加</value></data>
+  <data name="Exclude_Remove" xml:space="preserve"><value>削除</value></data>
+  <data name="Exclude_Suggestions" xml:space="preserve"><value>よく使われるもの：</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{1} 中 {0}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>種類別</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>経過期間別</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>領域の内訳</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>ここにマップを拡大</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>このフォルダーにマップを拡大</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>今月</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ～ 3 年</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>それ以前</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>1 年以上前</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>最も古い変更：{0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>これら {0} がフォルダーの {1} を占めています。残りの {2:N0} ファイルで {3} です。</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>このフォルダーの {0} は 1 つの項目です：{1}（{2}）。</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>ディスク上 {0}</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} の {0}、唯一のフォルダー</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{1} の {0}、唯一のファイル</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{1} の {0}、{2} 個のフォルダー中最大</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{1} の {0}、{2} 個のファイル中最大</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{1} の {0}、サイズ順で {2} 個のフォルダー中 {3} 番目</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{1} の {0}、サイズ順で {2} 個のファイル中 {3} 番目</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>大半は{0}（{1}）</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>大半は{0}（{1}）と{2}（{3}）</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0}（{1}）、{2}（{3}）、{4}（{5}）の混在</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>ファイルの中央値 {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>最終変更：{0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>更新：{0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} が 1 年以上未変更</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>前回のスキャンから変更なし</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>前回のスキャンから {0} 増加</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>前回のスキャンから {0} 減少</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>前回のスキャン以降に追加</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>大半は{0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} ファイル</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>前回のスキャン以降に追加</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>変更：{0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>更新：{0}</value></data>
+  <data name="Settings_Shading" xml:space="preserve"><value>シェーディング</value></data>
+  <data name="Settings_Shading_Desc" xml:space="preserve"><value>ファイルの光の当て方。上のマップはサンプルデータで、すべての変更を反映します。</value></data>
+  <data name="Settings_PreviewSample" xml:space="preserve"><value>サンプルデータ</value></data>
+  <data name="Settings_PreviewDrive" xml:space="preserve"><value>サンプルドライブ</value></data>
+  <data name="Shading_Light" xml:space="preserve"><value>光源の方向</value></data>
+  <data name="Shading_Light_Desc" xml:space="preserve"><value>光がどちらの側から当たるか。中央は正面からです。</value></data>
+  <data name="Shading_Reset" xml:space="preserve"><value>シェーディングをリセット</value></data>
+  <data name="Shading_Reset_Desc" xml:space="preserve"><value>シェーディング、グリッド、ハイライトの設定を初期状態に戻します。</value></data>
+  <data name="Shading_ResetButton" xml:space="preserve"><value>既定値に戻す</value></data>
+  <data name="Settings_Grid" xml:space="preserve"><value>グリッドとハイライト</value></data>
+  <data name="Grid_Show" xml:space="preserve"><value>グリッド線</value></data>
+  <data name="Grid_Show_Desc" xml:space="preserve"><value>ファイルとフォルダーの枠を問わず、すべてのボックスの間に線を引きます。</value></data>
+  <data name="Grid_Color" xml:space="preserve"><value>グリッドの色</value></data>
+  <data name="Grid_Color_Desc" xml:space="preserve"><value>暗い線はほとんどのパレットに合います。明るい線は最も暗いパレットに向いています。</value></data>
+  <data name="Highlight_Color" xml:space="preserve"><value>ハイライトの枠</value></data>
+  <data name="Highlight_Color_Desc" xml:space="preserve"><value>選択したボックスの周囲の枠。ホバー中のボックスは白い枠のままです。</value></data>
+  <data name="Settings_Layout" xml:space="preserve"><value>レイアウト</value></data>
+  <data name="Shading_Enable" xml:space="preserve"><value>クッションシェーディング</value></data>
+  <data name="Shading_Enable_Desc" xml:space="preserve"><value>SpaceMonger と同じように、すべてのファイルに明から暗へのシェーディングを付けます。オフにするとフラットな色になり、以下の設定は無効になります。</value></data>
+  <data name="Shading_Presets" xml:space="preserve"><value>プリセット</value></data>
+  <data name="Shading_Presets_Desc" xml:space="preserve"><value>出発点です。下のスライダーで微調整します。</value></data>
+  <data name="Preset_Soft" xml:space="preserve"><value>ソフト</value></data>
+  <data name="Preset_Classic" xml:space="preserve"><value>クラシック</value></data>
+  <data name="Preset_Deep" xml:space="preserve"><value>ディープ</value></data>
+  <data name="Shading_Depth" xml:space="preserve"><value>深さ</value></data>
+  <data name="Shading_Depth_Desc" xml:space="preserve"><value>シェーディングの強さ。かすかな光沢から深い膨らみまで。</value></data>
+  <data name="Shading_Spread" xml:space="preserve"><value>広がり</value></data>
+  <data name="Shading_Spread_Desc" xml:space="preserve"><value>影に変わるまでに光がファイル上でどこまで届くか。</value></data>
+  <data name="Shading_Tone" xml:space="preserve"><value>トーン</value></data>
+  <data name="Shading_Tone_Desc" xml:space="preserve"><value>ファイル全体を明るくまたは暗くします。フォルダーの色は変わりません。</value></data>
+  <data name="Shading_Fade" xml:space="preserve"><value>フォルダー内でのフェード</value></data>
+  <data name="Shading_Fade_Desc" xml:space="preserve"><value>入れ子になったファイルにどれだけシェーディングを残すか。低くすると深い階層が落ち着き、最上位フォルダーが目立ちます。</value></data>
+  <data name="Shading_LightSide" xml:space="preserve"><value>この側から光が当たります</value></data>
+  <data name="Shading_LightAhead" xml:space="preserve"><value>正面から光が当たります</value></data>
+  <data name="Settings_LookDark" xml:space="preserve"><value>ダークの外観</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ダークテーマ表示時のウィンドウ、パネル、メニューの色：グラファイト、スレート、モカ、ミッドナイト、カーボン。</value></data>
+  <data name="Settings_LookLight" xml:space="preserve"><value>ライトの外観</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>ライトテーマでの同様の設定：ペーパー、リネン、ミスト、サンド、スノー。</value></data>
+  <data name="Settings_LookMoved" xml:space="preserve"><value>パレット、シェーディング、文字</value></data>
+  <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>マップの見た目に関する設定はすべて「ツリーマップ」ページにあり、プレビューの横で設定できます。</value></data>
+  <data name="Settings_Colors" xml:space="preserve"><value>色</value></data>
+  <data name="Settings_Colors_Desc" xml:space="preserve"><value>上のプレビューはこのページのすべての変更を反映します。</value></data>
+  <data name="Settings_Text" xml:space="preserve"><value>文字とタイトルバー</value></data>
+  <data name="Settings_Text_Desc" xml:space="preserve"><value>ファイル上とフォルダーのタイトルバーでの名前の描画方法。</value></data>
+  <data name="Text_FolderColor" xml:space="preserve"><value>フォルダー名</value></data>
+  <data name="Text_FolderColor_Desc" xml:space="preserve"><value>タイトルバーの文字の色。「自動」はバーごとに暗い色か明るい色を選びます。</value></data>
+  <data name="Text_FileColor" xml:space="preserve"><value>ファイル名とサイズ</value></data>
+  <data name="Text_FileColor_Desc" xml:space="preserve"><value>ファイル上の文字の色。「自動」はボックスごとに暗い色か明るい色を選びます。</value></data>
+  <data name="Text_Auto" xml:space="preserve"><value>自動</value></data>
+  <data name="Text_TitlePadding" xml:space="preserve"><value>タイトルバーの余白</value></data>
+  <data name="Text_TitlePadding_Desc" xml:space="preserve"><value>フォルダー名の上下の余白。バーはそれに合わせて大きくなります。</value></data>
+  <data name="Text_TitleTint" xml:space="preserve"><value>タイトルバーの濃淡</value></data>
+  <data name="Text_TitleTint_Desc" xml:space="preserve"><value>フォルダー自体の色からバーをどれだけ変化させるか。0 は同じ色で、グリッド線で区切られます。</value></data>
+  <data name="Palette_GroupDark" xml:space="preserve"><value>ダークテーマ用</value></data>
+  <data name="Palette_GroupLight" xml:space="preserve"><value>ライトテーマ用</value></data>
+  <data name="Palette_GroupAny" xml:space="preserve"><value>すべてのテーマ</value></data>
+  <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}テーマのパレット。テーマごとに個別に記憶され、マップはテーマに合わせて切り替わります。</value></data>
+  <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1}テーマ用</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>マップとインサイト表示を切り替え</value></data>
+  <data name="Panel_TabType" xml:space="preserve"><value>種類別</value></data>
+  <data name="Panel_TabCleanup" xml:space="preserve"><value>安全に削除可能</value></data>
+  <data name="Panel_TabTimeline" xml:space="preserve"><value>変更時期</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>ドライブまたはフォルダーをスキャンすると、この表示に概要が表示されます。</value></data>
+  <data name="Panel_TypeSummary" xml:space="preserve"><value>{0}がスキャンの {1} を占めています。種類にホバーするとマップ上に表示され、クリックするとフィルターします。</value></data>
+  <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}：{2:N0} ファイルで {1}</value></data>
+  <data name="Panel_TypeFiles" xml:space="preserve"><value>{0:N0} ファイル</value></data>
+  <data name="Panel_TypeLargest" xml:space="preserve"><value> · 最大：{0}（{1}）</value></data>
+  <data name="Panel_CleanupSummary" xml:space="preserve"><value>通常は安全に空にできる場所に {0}。指示するまで何も削除されません。</value></data>
+  <data name="Panel_CleanupNone" xml:space="preserve"><value>明らかに削除できるものはありません。</value></data>
+  <data name="Panel_CleanupNoneHint" xml:space="preserve"><value>Windows.old も、大きなキャッシュも、1 年間放置されたごみ箱やダウンロードもありません。次は左側の「最大の項目」を確認してください。</value></data>
+  <data name="Panel_CleanupMore" xml:space="preserve"><value>その他：{0}</value></data>
+  <data name="Panel_TimelineSummary" xml:space="preserve"><value>{0} が 1 年以上変更されていません。月にホバーするとマップ上に表示され、クリックするとフィルターします。</value></data>
+  <data name="Panel_TimelineMonth" xml:space="preserve"><value>{0}：{2:N0} ファイルで {1}</value></data>
+  <data name="Panel_TimelineFirst" xml:space="preserve"><value>（およびそれ以前のすべて）</value></data>
+  <data name="Panel_TimelineOldest" xml:space="preserve"><value>{0} 以前</value></data>
+  <data name="Age_ThisMonth" xml:space="preserve"><value>今月</value></data>
+  <data name="Age_ThisYear" xml:space="preserve"><value>今年</value></data>
+  <data name="Age_OneToThree" xml:space="preserve"><value>1 ～ 3 年</value></data>
+  <data name="Age_Older" xml:space="preserve"><value>それ以前</value></data>
+  <data name="Cleanup_Show" xml:space="preserve"><value>表示</value></data>
+  <data name="Cleanup_Empty" xml:space="preserve"><value>空にする</value></data>
+  <data name="Cleanup_Review" xml:space="preserve"><value>確認</value></data>
+  <data name="Cleanup_HowTo" xml:space="preserve"><value>方法</value></data>
+  <data name="Cleanup_WindowsOld" xml:space="preserve"><value>Windows.old</value></data>
+  <data name="Cleanup_WindowsOld_Note" xml:space="preserve"><value>Windows の機能更新プログラムによって残されたもの。Windows は 10 日後に自動で削除しますが、これはまだ残っています。</value></data>
+  <data name="Cleanup_RecycleBin" xml:space="preserve"><value>ごみ箱</value></data>
+  <data name="Cleanup_RecycleBin_Note" xml:space="preserve"><value>既に削除したもの。空にすると元に戻せません。Windows が事前に確認します。</value></data>
+  <data name="Cleanup_SystemFiles" xml:space="preserve"><value>休止状態ファイルとページングファイル</value></data>
+  <data name="Cleanup_SystemFiles_Note" xml:space="preserve"><value>hiberfil.sys、pagefile.sys、swapfile.sys。Windows が管理しており、SpaceSharp は操作しません。</value></data>
+  <data name="Cleanup_SystemFiles_HowTo" xml:space="preserve"><value>hiberfil.sys は休止状態と高速スタートアップのためにメモリの内容を保持します。解放するには、管理者としてコマンドプロンプトを開き、次を実行します：powercfg /hibernate off
+
+pagefile.sys と swapfile.sys は仮想メモリです。サイズは「システム › システムの詳細設定 › パフォーマンス › 仮想メモリ」で設定します。Windows に任せるのが安全です。</value></data>
+  <data name="Cleanup_Temp" xml:space="preserve"><value>一時ファイル</value></data>
+  <data name="Cleanup_Temp_Note" xml:space="preserve"><value>{0:N0} 個の Temp フォルダー、{1:N0} ファイル。プログラムは自分で後片付けをするはずですが、多くはそうしません。</value></data>
+  <data name="Cleanup_PackageCaches" xml:space="preserve"><value>パッケージキャッシュ</value></data>
+  <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} 個のキャッシュ（npm、pnpm、NuGet、pip、Cargo、Gradle など）、{1:N0} ファイル。必要になれば再ダウンロードされます。</value></data>
+  <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>ブラウザーのキャッシュ</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} 個のキャッシュフォルダー、{1:N0} ファイル。削除後、初回のページ読み込みが少し遅くなります。</value></data>
+  <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>シェーダーキャッシュ</value></data>
+  <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} 個のフォルダー、{1:N0} ファイル。ゲームとドライバーが次回の起動時に再構築します。</value></data>
+  <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update のダウンロード</value></data>
+  <data name="Cleanup_WindowsUpdate_Note" xml:space="preserve"><value>Windows Update が既に適用したインストーラー。必要になれば Windows が再取得します。</value></data>
+  <data name="Cleanup_OldDownloads" xml:space="preserve"><value>1 年間未変更のダウンロード</value></data>
+  <data name="Cleanup_OldDownloads_Note" xml:space="preserve"><value>ダウンロード内で 1 年間変更されていない {0:N0} 個の項目。大半はインストーラーとアーカイブです。「確認」でマップ上で選択されます。</value></data>
+  <data name="Panel_Collapse" xml:space="preserve"><value>パネルをタブまで折りたたむ</value></data>
+  <data name="Panel_Expand" xml:space="preserve"><value>パネルを展開</value></data>
+  <data name="Cleanup_Emptied" xml:space="preserve"><value>ごみ箱を空にし、{0} を解放しました。</value></data>
+  <data name="Cleanup_Recycle" xml:space="preserve"><value>ごみ箱へ</value></data>
+  <data name="Panel_BandTip" xml:space="preserve"><value>最終変更が{0}のファイルでマップをフィルター</value></data>
+  <data name="Filter_ToggleTip" xml:space="preserve"><value>フィルターの表示と非表示 (Ctrl+F)</value></data>
+  <data name="Filter_ToggleCount" xml:space="preserve"><value>フィルター · {0}</value></data>
+  <data name="Rail_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Rail_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Rail_Age" xml:space="preserve"><value>経過期間</value></data>
+  <data name="Rail_Show" xml:space="preserve"><value>表示</value></data>
+  <data name="Rail_Try" xml:space="preserve"><value>試す</value></data>
+  <data name="Rail_Any" xml:space="preserve"><value>すべて</value></data>
+  <data name="Rail_Over" xml:space="preserve"><value>{0} 超</value></data>
+  <data name="Rail_Under" xml:space="preserve"><value>{0} 未満</value></data>
+  <data name="Rail_Untouched" xml:space="preserve"><value>{0} 未変更</value></data>
+  <data name="Rail_Within" xml:space="preserve"><value>{0} 以内</value></data>
+  <data name="Rail_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Rail_Folders" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Drawer_ShareOfScan" xml:space="preserve"><value>スキャンに占める割合</value></data>
+  <data name="Drawer_ClearAll" xml:space="preserve"><value>すべてクリア</value></data>
+  <data name="Settings_FilterLayout" xml:space="preserve"><value>フィルターのレイアウト</value></data>
+  <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>マップの右側に重なる完全な操作パネル（既定）か、パスの下に条件ごとのピルを並べるレール。Ctrl+F でどちらも開きます。</value></data>
+  <data name="FilterLayout_Rail" xml:space="preserve"><value>パスの下のレール</value></data>
+  <data name="FilterLayout_Drawer" xml:space="preserve"><value>マップ上のパネル</value></data>
+  <data name="Rail_NamePlaceholder" xml:space="preserve"><value>名前またはパターン。例：*.iso</value></data>
+  <data name="Main_ViewMap" xml:space="preserve"><value>マップ</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>スキャンのマップ（B で 2 つの表示を切り替え）</value></data>
+  <data name="Main_ViewInsights" xml:space="preserve"><value>インサイト</value></data>
+  <data name="Main_ViewInsightsTip" xml:space="preserve"><value>スキャンの概要：種類別、安全に削除可能、変更時期、最大の項目 (B)</value></data>
+  <data name="Insights_Title" xml:space="preserve"><value>インサイト</value></data>
+  <data name="Insights_Scanning" xml:space="preserve"><value>スキャン中… 完了すると概要が表示されます。</value></data>
+  <data name="Insights_Scanned" xml:space="preserve"><value>スキャン済み</value></data>
+  <data name="Insights_ScannedDetail" xml:space="preserve"><value>{0:N0} ファイル · {1:N0} フォルダー · {2}</value></data>
+  <data name="Insights_FromFileTable" xml:space="preserve"><value>ファイルテーブルから</value></data>
+  <data name="Insights_FromWalk" xml:space="preserve"><value>フォルダー走査</value></data>
+  <data name="Insights_FreeOn" xml:space="preserve"><value>{0} の空き領域</value></data>
+  <data name="Insights_FreeOf" xml:space="preserve"><value>{1} 中 {0}</value></data>
+  <data name="Insights_FreeDetail" xml:space="preserve"><value>{0} 使用 · {1}</value></data>
+  <data name="Insights_Free" xml:space="preserve"><value>空き領域</value></data>
+  <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} か所 · {1} をチェック済み</value></data>
+  <data name="Insights_Untouched" xml:space="preserve"><value>1 年間未変更</value></data>
+  <data name="Insights_UntouchedDetail" xml:space="preserve"><value>スキャンの {0} · {1:N0} ファイル</value></data>
+  <data name="Insights_BiggestFolder" xml:space="preserve"><value>最大のフォルダー</value></data>
+  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} ファイル</value></data>
+  <data name="Insights_SinceLast" xml:space="preserve"><value>前回のスキャンから</value></data>
+  <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · 新規ファイル {1:N0} 個</value></data>
+  <data name="Insights_NoBaseline" xml:space="preserve"><value>以前のスキャンがありません</value></data>
+  <data name="Insights_NoBaselineHint" xml:space="preserve"><value>別の日にもう一度スキャンすると変化がわかります</value></data>
+  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} 種類 · 行をクリックするとマップをフィルター</value></data>
+  <data name="Insights_TypesReading" xml:space="preserve"><value>{0}がスキャンの {1} を占め、大半は {2} の下にあります。次は{3}の {4} です。</value></data>
+  <data name="Insights_ClearSub" xml:space="preserve"><value>通常は安全に空にできる場所に {0} · 指示するまで何も削除されません</value></data>
+  <data name="Insights_NoneChecked" xml:space="preserve"><value>まとめてごみ箱に移動する場所にチェックを付けてください</value></data>
+  <data name="Insights_Checked" xml:space="preserve"><value>{0} をチェック済み · {1} · 空き領域は {2} になります</value></data>
+  <data name="Insights_CheckTip" xml:space="preserve"><value>「チェック済みをごみ箱へ」に含める</value></data>
+  <data name="Insights_RecycleChecked" xml:space="preserve"><value>チェック済みをごみ箱へ</value></data>
+  <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} が 1 年以上未変更 · 月または帯をクリックするとフィルター</value></data>
+  <data name="Insights_OldestLargest" xml:space="preserve"><value>1 年以上未変更の最大の項目</value></data>
+  <data name="Insights_LargestFolders" xml:space="preserve"><value>最大のフォルダー</value></data>
+  <data name="Insights_AnywhereInScan" xml:space="preserve"><value>スキャン全体</value></data>
+  <data name="Insights_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
+  <data name="Insights_NoBaselineLong" xml:space="preserve"><value>別の日にこのドライブをもう一度スキャンすると、その間に増加、減少、追加されたものがこのカードに表示されます。保存したスキャンは「スキャンファイル › 保存したスキャンと比較」からも比較できます。</value></data>
+  <data name="Insights_Grew" xml:space="preserve"><value>増加</value></data>
+  <data name="Insights_Shrank" xml:space="preserve"><value>減少</value></data>
+  <data name="Insights_New" xml:space="preserve"><value>新規</value></data>
+  <data name="Insights_Extensions" xml:space="preserve"><value>最大の拡張子</value></data>
+  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>と、それぞれの大半がある場所</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+</root>

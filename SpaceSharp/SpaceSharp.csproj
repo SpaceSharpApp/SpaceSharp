@@ -16,12 +16,27 @@
     <!-- Only ship English framework resources (keeps the published exe smaller). This filters referenced
          packages only; SpaceSharp's own Resources/Strings.*.resx are always built and bundled. -->
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <!-- Strings.resx is English, so the resource manager never looks for an English satellite assembly first. -->
+    <NeutralLanguage>en</NeutralLanguage>
+    <!-- The Small build runs on a newer major runtime when .NET 10 is gone from the PC, instead of refusing to start. -->
+    <RollForward>LatestMajor</RollForward>
+    <!-- Keep the version shown in About exactly <Version>, without the "+commit" the SDK appends from git. -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <!-- Same bytes for the same source on any machine, and CI builds carry no local paths. -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <!-- Have the IDE rules in .editorconfig checked at build time too, at their configured severity. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
 
     <!-- Shown in the About window and in the .exe's file properties. -->
     <Product>SpaceSharp</Product>
-    <Version>2.1.1</Version>
+    <Version>2.2.0</Version>
     <Authors>ClearanceClarence</Authors>
+    <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
+    <RepositoryUrl>https://github.com/SpaceSharpApp/SpaceSharp</RepositoryUrl>
+    <PackageProjectUrl>https://spacesharp.app/</PackageProjectUrl>
     <Description>See where your disk space went. SpaceSharp maps every file and folder as a box sized by the space it uses, so the biggest ones stand out.</Description>
   </PropertyGroup>
 

@@ -40,7 +40,7 @@ internal static class TitleBarTheme
         // The dark flag first: it picks the caption button glyphs (light on dark) and is all Windows 10 can do.
         int value = dark ? 1 : 0;
         if (DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref value, sizeof(int)) != 0)
-            DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_OLD, ref value, sizeof(int));
+            _ = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_OLD, ref value, sizeof(int));
 
         // Windows 11: paint the caption in the app's own colors. Fails harmlessly on Windows 10.
         if (ThemeColor("Bg") is { } bg && ThemeColor("Text") is { } text)
@@ -48,8 +48,8 @@ internal static class TitleBarTheme
             int caption = ColorRef(bg), textColor = ColorRef(text), border = ColorRef(ThemeColor("Stroke") ?? bg);
             if (DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, ref caption, sizeof(int)) == 0)
             {
-                DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR, ref textColor, sizeof(int));
-                DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, ref border, sizeof(int));
+                _ = DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR, ref textColor, sizeof(int));
+                _ = DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, ref border, sizeof(int));
             }
         }
     }

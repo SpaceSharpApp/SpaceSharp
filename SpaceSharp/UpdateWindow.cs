@@ -256,7 +256,7 @@ public static class UpdateWindow
         {
             string line = raw.TrimEnd();
             if (Regex.IsMatch(line, @"^#{1,3}\s*(Downloads?|Download|Nedlasting)", RegexOptions.IgnoreCase)) break;
-            if (line.StartsWith('|') || line.StartsWith("---") || line.Length == 0) { if (lines.Count > 0 && lines[^1].Length > 0 && line.Length == 0) lines.Add(string.Empty); continue; }
+            if (line.StartsWith('|') || line.StartsWith("---", StringComparison.Ordinal) || line.Length == 0) { if (lines.Count > 0 && lines[^1].Length > 0 && line.Length == 0) lines.Add(string.Empty); continue; }
             bool heading = line.StartsWith('#');
             line = Regex.Replace(line, @"^#{1,6}\s*", string.Empty);
             line = Regex.Replace(line, @"\[([^\]]+)\]\([^)]+\)", "$1");   // links -> their text

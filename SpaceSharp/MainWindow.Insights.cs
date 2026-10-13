@@ -229,7 +229,6 @@ public partial class MainWindow
         return card;
     }
 
-    private Border Rule() { var r = new Border { Height = 1, Opacity = 0.6 }; r.SetResourceReference(Border.BackgroundProperty, "Stroke"); return r; }
 
     private Border Hairline(FrameworkElement content, double height)
     {
@@ -684,7 +683,7 @@ public partial class MainWindow
         return card;
     }
 
-    private static string MonthLabel(MonthBucket b) => new DateTime(b.Year, b.Month, 1).ToString("MMM yyyy", System.Globalization.CultureInfo.CurrentUICulture);
+    private static string MonthLabel(MonthBucket b) => new DateTime(b.Year, b.Month, 1).ToString("MMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
 
     // Amber bright to dim, as Inspect's By age donut.
     private static readonly Brush[] BandBrushes =

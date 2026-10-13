@@ -2,10 +2,10 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.1.1 (unreleased)
+## 2.2.0
 
-### Arabic, and right-to-left languages
-- SpaceSharp speaks Arabic. The translation is machine-made and read over, not yet checked by a native speaker; corrections are welcome through CONTRIBUTING.md. Settings › Language lists it.
+### Sixteen more languages
+- SpaceSharp speaks Arabic, Chinese (Simplified), Danish, Dutch, French, German, Italian, Japanese, Korean, Polish, Portuguese, Russian, Spanish, Swedish, Turkish and Ukrainian. All sixteen are machine-made and not yet checked by a native speaker, and the app says so: Settings › Language lists them under a "Machine translations" heading, apart from English and Norwegian, and shows a note under the dropdown while one is in use. Each file carries a `Meta_MachineTranslated` entry that a reviewer flips to `false`; corrections are welcome through CONTRIBUTING.md.
 - The windows mirror for a right-to-left language (Arabic, Hebrew, Persian, Urdu): panels swap sides, text and numbers align right, menus and tooltips follow. The map, the donuts and the icons keep their drawn shape.
 
 ### Crash reports
@@ -14,11 +14,17 @@ What changed in each SpaceSharp release, newest first. The 1.x releases are in [
 ### Installer
 - The MSI dialogs have new art: a low-poly landscape of amber and graphite facets behind the mark in the left column, and a cut of the same in the banner. Drawn by `tools/make-assets.py` like every other brand image.
 
+### Start screen
+- The saved scans are tiles instead of rows: a ring shows how full each drive is right now (warm when it is nearly full), with the volume label, the scanned size and when it was scanned; a folder scan shows a folder icon in the ring's place. A line in the corner sums used and total space across the drives. Scan a folder and Open a saved scan are two wide buttons under the tiles.
+
+### Palettes
+- GitHub replaces Vivid in the dark theme and GitHub (light) replaces Retro in the light theme: the twelve accent colors of GitHub's Primer dark and light themes, the light set lifted a fifth toward white. A saved choice of Vivid or Retro falls back to the theme default.
+
 ### Accessibility
 - Icon-only toolbar buttons announce their tooltip as their name to screen readers, and show an accent outline when they have keyboard focus, so Tab is visible.
 
 ### Website
-- The site is at https://spacesharp.app now, hosted separately; the GitHub Pages address redirects there. The README, the issue chooser and the social preview point at the new address.
+- The site is at https://spacesharp.app now, hosted separately; GitHub Pages is off. The README, the issue chooser and the social preview point at the new address.
 
 ### Fixes
 - The update prompt no longer repeats the two version numbers as pills under "You have 2.0.0"; the line says it once.

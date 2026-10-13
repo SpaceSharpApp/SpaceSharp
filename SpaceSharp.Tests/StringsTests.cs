@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using SpaceSharp.Util;
@@ -55,5 +56,30 @@ public class StringsTests
         var list = AppLanguages.Available();
         Assert.Equal("en", list[0].Name);
         Assert.Equal(list.Count, list.Select(c => c.Name).Distinct().Count());
+    }
+
+    [Fact]
+    public void ReviewedTranslationsComeBeforeMachineMadeOnes()
+    {
+        var list = AppLanguages.Available();
+        Assert.False(AppLanguages.IsMachineTranslated(list[0]));                 // English
+        Assert.False(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("nb")));
+        Assert.True(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("de")));
+        // once the first machine-made language appears, every later one is machine-made too
+        int firstMachine = list.ToList().FindIndex(AppLanguages.IsMachineTranslated);
+        Assert.True(firstMachine > 1, "Norwegian should come before the machine-made languages");
+        Assert.All(list.Skip(firstMachine), c => Assert.True(AppLanguages.IsMachineTranslated(c), c.Name));
+    }
+
+    [Fact]
+    public void EveryTranslationSaysWhetherItIsMachineMade()
+    {
+        string dir = ResourcesDir();
+        foreach (string file in Directory.EnumerateFiles(dir, "Strings.*.resx"))
+        {
+            var doc = XDocument.Load(file);
+            string? flag = doc.Root!.Elements("data").FirstOrDefault(e => (string?)e.Attribute("name") == "Meta_MachineTranslated")?.Element("value")?.Value;
+            Assert.True(flag is "true" or "false", $"{Path.GetFileName(file)}: Meta_MachineTranslated must be \"true\" or \"false\"");
+        }
     }
 }

@@ -35,7 +35,7 @@ public static class RichText
         foreach (Match m in Slot.Matches(format))
         {
             if (m.Index > pos) parts.Add(Plain(format[pos..m.Index]));
-            int i = int.Parse(m.Groups[1].Value);
+            int i = int.Parse(m.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
             if (i < args.Length) parts.Add(args[i]);
             pos = m.Index + m.Length;
         }
@@ -51,7 +51,7 @@ public static class RichText
     public static Part[] Capitalized(Part[] parts)
     {
         if (parts.Length > 0 && parts[0].Text.Length > 0)
-            parts[0] = parts[0] with { Text = char.ToUpper(parts[0].Text[0]) + parts[0].Text[1..] };
+            parts[0] = parts[0] with { Text = char.ToUpper(parts[0].Text[0], System.Globalization.CultureInfo.CurrentCulture) + parts[0].Text[1..] };
         return parts;
     }
 

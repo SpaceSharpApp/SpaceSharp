@@ -351,7 +351,7 @@
     "Ocean": fromList("dark", ["#2E6F95", "#3C8DAD", "#48A9A6", "#5FB49C", "#7FC8A9", "#4A7FB0", "#6C9BD2", "#3A9C9C", "#5C8ACF", "#2F8F8B", "#86B7D4", "#4FA3B8"], .5, ["#5FB49C", "#E07A5F", "#9C8ADE", "#F2C45A", "#3C8DAD", "#A9C6E0", "#7FC8A9", "#AFBCC6"]),
     "Sunset": fromList("dark", ["#C8553D", "#E07A5F", "#F2A65A", "#F6C85F", "#D9738A", "#B0588E", "#8E5A9E", "#E59A6B", "#CC6670", "#F1B36A", "#A86A9C", "#D98A5A"], .5, ["#8FBF7F", "#C8553D", "#B0588E", "#F6C85F", "#E07A5F", "#F2D4B8", "#8E5A9E", "#C9B8AE"]),
     "Forest": fromList("dark", ["#4F772D", "#6A994E", "#90A955", "#A7C957", "#7A9E7E", "#5C8D89", "#8C7A4F", "#9AB36A", "#5F8F55", "#B5A86A", "#6E9A77", "#87A33E"], .5, ["#A7C957", "#C8763D", "#9C7FB8", "#E3C567", "#5C8D89", "#D6DDB8", "#6A994E", "#B8B39E"]),
-    "Vivid": fromList("dark", ["#4C8DFF", "#FF6B6B", "#2ECC71", "#FFC930", "#B463FF", "#1ABC9C", "#FF6FB5", "#F39C12", "#3498DB", "#9B59B6", "#27AE60", "#E74C3C"], .45),
+    "GitHub": fromList("dark", ["#58A6FF", "#3FB950", "#A371F7", "#DB6D28", "#F85149", "#D29922", "#DB61A2", "#F78166", "#388BFD", "#2EA043", "#8957E5", "#BF4B8A"], .45, ["#3FB950", "#DB6D28", "#A371F7", "#D29922", "#58A6FF", "#8B949E", "#39C5CF", "#6E7681"]),
     "Aurora": fromList("dark", ["#4FB3D9", "#E26A8A", "#5BC08E", "#E8B04B", "#9A7BD9", "#44B8B0", "#E27A55", "#86B64C", "#5A8FE0", "#D96AC0", "#D9A03F", "#4FAE8F"], .42, ["#5BC08E", "#E27A55", "#9A7BD9", "#E8B04B", "#4FB3D9", "#A9B8CC", "#44B8B0", "#8A93A3"]),
     "Monochrome": { theme: "dark", folder: d => hsl(230, .06, .36 + (d % 6) * .06), file: d => hsl(230, .05, .72 + (d % 4) * .05), cats: catColors([...Array(12)].map((_, i) => hsl(230, .06, .36 + (i % 6) * .06)), ["#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"]) },
     "Color-blind safe": fromList("dark", CB, .45, CBC),
@@ -360,7 +360,7 @@
     "Candy": fromList("light", ["#FF8FAB", "#FFB75E", "#FFE66D", "#8EE3B5", "#7FD1FF", "#B79CFF", "#FF9EE5", "#9CE0FF", "#FFD1A0", "#A8F0C6", "#C8B8FF", "#FFB3C6"], .4),
     "Nordic": fromList("light", ["#88C0D0", "#81A1C1", "#A3BE8C", "#EBCB8B", "#D08770", "#B48EAD", "#BF616A", "#5E81AC", "#8FBCBB", "#D8A657", "#A9B665", "#C98A8A"], .45),
     "Earth": fromList("light", ["#A47551", "#C2A878", "#8B9A6B", "#6E8B8B", "#B5856B", "#9C8A5A", "#7E9A7E", "#C9A86A", "#8A7A6A", "#A89A7A", "#6F8F7F", "#B39468"], .5),
-    "Retro": fromList("light", ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A", "#8CA64B", "#D97E3E", "#6A7FD9", "#C9A24A", "#5FB58F"], .45),
+    "GitHub (light)": fromList("light", lift(["#0969DA", "#1A7F37", "#8250DF", "#BC4C00", "#CF222E", "#9A6700", "#BF3989", "#C4432B", "#218BFF", "#2DA44E", "#A475F9", "#E85AAD"], .2), .45, lift(["#1A7F37", "#BC4C00", "#8250DF", "#9A6700", "#0969DA", "#57606A", "#1B7C83", "#6E7781"], .2)),
     "Color-blind safe (light)": fromList("light", lift(CB, .25), .4, lift(CBC, .25))
   };
   const CATS = ["Images", "Video", "Audio", "Archives", "Programs", "Documents", "Code", "Game data", "Installers", "Disk images", "Databases", "Fonts", "System", "Other"];
@@ -545,7 +545,7 @@
 
   function mount(host, opts) {
     if (!document.getElementById("ssm-css")) { const st = document.createElement("style"); st.id = "ssm-css"; st.textContent = CSS; document.head.appendChild(st); }
-    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.1.1", interactive: true }, opts || {});
+    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.2.0", interactive: true }, opts || {});
     const E = makeEngine(state);
     host.innerHTML = `<div class="ssm">
       <div class="titlebar"><div class="app"><span class="mark">${MARK}</span><span class="title">SpaceSharp ${state.version}</span></div>

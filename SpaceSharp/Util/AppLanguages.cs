@@ -29,8 +29,30 @@ public static class AppLanguages
             }
             catch (System.Resources.MissingManifestResourceException) { }
         }
-        return list.Take(1).Concat(list.Skip(1).OrderBy(c => c.NativeName, StringComparer.CurrentCultureIgnoreCase)).ToList();
+        // English, then the translations people have read through, then the machine-made ones; each group by native name.
+        return list.Take(1)
+            .Concat(list.Skip(1).OrderBy(IsMachineTranslated).ThenBy(c => c.NativeName, StringComparer.CurrentCultureIgnoreCase))
+            .ToList();
     }
+
+    /// <summary>
+    /// True when the translation file says so in its Meta_MachineTranslated entry: machine-made and not yet checked
+    /// by a native speaker. Settings lists those apart and says so under the dropdown; a contributor who reads the
+    /// file through flips the value to "false". English is never machine translated.
+    /// </summary>
+    public static bool IsMachineTranslated(CultureInfo culture)
+    {
+        if (culture.Equals(Neutral)) return false;
+        try
+        {
+            var set = Strings.Manager.GetResourceSet(culture, createIfNotExists: true, tryParents: false);
+            return string.Equals(set?.GetString("Meta_MachineTranslated"), "true", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (System.Resources.MissingManifestResourceException) { return false; }
+    }
+
+    /// <summary>The culture in use right now, for the note under the dropdown.</summary>
+    public static CultureInfo Current => CultureInfo.CurrentUICulture;
 
     /// <summary>The culture a setting value stands for: null or empty means "same as Windows".</summary>
     public static CultureInfo Resolve(string? setting)

@@ -150,6 +150,20 @@ dotnet_diagnostic.IDE0060.severity = suggestion   # unused parameter
 dotnet_diagnostic.CA1416.severity = none          # platform compatibility: this is a Windows-only app
 dotnet_diagnostic.CA2007.severity = none          # ConfigureAwait: WPF code wants the UI context back
 
+# Analyzer rules turned off on purpose (AnalysisLevel is latest-recommended, which enables these by default)
+dotnet_diagnostic.CA1305.severity = none          # IFormatProvider on every ToString: the UI formats for the user's culture on purpose; file formats pass InvariantCulture by hand
+dotnet_diagnostic.CA1304.severity = none          # same, for ToUpper/ToLower on display text
+dotnet_diagnostic.CA1310.severity = none          # StartsWith without StringComparison: the few uses are on markdown and paths and already say Ordinal where it matters
+dotnet_diagnostic.CA1859.severity = none          # "return the concrete type": the builder methods return FrameworkElement so callers stay free to change the control
+dotnet_diagnostic.CA1861.severity = none          # "cache constant arrays": the palette tables and category lists are built once at startup
+dotnet_diagnostic.CA1870.severity = none          # SearchValues for IndexOfAny: the filter parser runs on one line of text
+dotnet_diagnostic.CA1822.severity = suggestion    # "could be static": helpful, not worth a warning
+dotnet_diagnostic.CA1805.severity = none          # "initialized to its default": settings list every default explicitly so the file reads as documentation
+dotnet_diagnostic.CA1720.severity = none          # identifier contains a type name: InspectSummary.Single is the right word
+dotnet_diagnostic.CA1725.severity = none          # parameter names matching the base: "dc" for DrawingContext is the WPF convention
+dotnet_diagnostic.CA1001.severity = none          # MainWindow owns a CancellationTokenSource; the window lives as long as the process
+dotnet_diagnostic.CA5350.severity = none          # SHA1 names saved-scan files from a path; it is not used for security
+
 # Generated code: leave it alone
 [*.{g.cs,g.i.cs,Designer.cs}]
 generated_code = true

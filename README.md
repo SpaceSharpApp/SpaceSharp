@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.1.0-F5B82E" alt="Version 2.1.0"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.2.0-F5B82E" alt="Version 2.2.0"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -108,7 +108,7 @@ Everything applies at once and is saved. The pages:
 - **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
 - **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
 
-**Color by** is Top folder (one hue per top-level folder, lighter at each level), Depth (one color per level, like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Vivid, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes › New palette (or Start from the current one): a window with the twelve folder colors, the file tint and the fourteen type colors as swatches, each set by hex or hue, saturation and lightness sliders, with the sample map beside them and checks for labels that would be hard to read and folders too alike. It saves a JSON file in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too; Open folder writes an example and a README there.
+**Color by** is Top folder (one hue per top-level folder, lighter at each level), Depth (one color per level, like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, GitHub, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, GitHub (light), Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes › New palette (or Start from the current one): a window with the twelve folder colors, the file tint and the fourteen type colors as swatches, each set by hex or hue, saturation and lightness sliders, with the sample map beside them and checks for labels that would be hard to read and folders too alike. It saves a JSON file in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too; Open folder writes an example and a README there.
 
 ```json
 { "name": "Mine", "theme": "dark", "folders": ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A"] }

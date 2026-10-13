@@ -75,6 +75,8 @@ internal sealed class AppSettings
     public bool FolderShowCounts { get; set; } = true;                   // "Scan with SpaceSharp" in Explorer's right-click menu                          // culture name such as "nb"; null means same as Windows   // the startup notice about administrator rights was dismissed
     public bool ConfirmDelete { get; set; } = true;
     public bool CheckForUpdates { get; set; } = true;
+
+    private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     public bool ShowSidePanel { get; set; } = true;
     public string FilterLayout { get; set; } = "Drawer";            // Drawer (a sheet over the map, the default) or Rail (under the path)
     public bool ShowFilterRail { get; set; } = true;
@@ -143,7 +145,7 @@ internal sealed class AppSettings
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(FilePath, JsonSerializer.Serialize(this, JsonOptions));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

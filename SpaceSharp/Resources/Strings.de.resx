@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    SpaceSharp user-visible text, German. Machine translated, not yet reviewed by a native speaker: Meta_MachineTranslated says so.
+    Keys and placeholders must match Strings.resx; dotnet test checks that.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Settings_Language" xml:space="preserve"><value>Sprache</value></data>
+  <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>App-Sprache</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Sprachen erscheinen hier, sobald Übersetzungen hinzukommen. Wird nach einem Neustart wirksam.</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Wie Windows</value></data>
+  <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>Sprache wechseln</value></data>
+  <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp wechselt beim nächsten Start zu {0}. Jetzt neu starten?</value></data>
+  <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Jetzt neu starten</value></data>
+  <data name="Settings_Language_Later" xml:space="preserve"><value>Später</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} ist maschinell übersetzt und wurde noch nicht von einem Muttersprachler geprüft. Korrekturen sind auf GitHub willkommen.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>Übersetzungen</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>Maschinelle Übersetzungen</value></data>
+  <data name="About_AboutSpaceSharp" xml:space="preserve"><value>Info über SpaceSharp</value></data>
+  <data name="About_CheckForUpdates" xml:space="preserve"><value>Nach Updates suchen</value></data>
+  <data name="About_Checking" xml:space="preserve"><value>Wird gesucht…</value></data>
+  <data name="About_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="About_CopyFailed" xml:space="preserve"><value>Kopieren fehlgeschlagen</value></data>
+  <data name="About_CopyVersionInfo" xml:space="preserve"><value>Versionsinfo kopieren</value></data>
+  <data name="About_Credits" xml:space="preserve"><value>Danksagungen</value></data>
+  <data name="About_Feedback" xml:space="preserve"><value>Feedback</value></data>
+  <data name="About_FoundAProblemOr" xml:space="preserve"><value>Ein Problem gefunden oder eine Idee? Beides gehört auf die GitHub-Seite des Projekts. Fehlerberichte öffnen sich mit bereits ausgefüllten Versions- und Systemfeldern.</value></data>
+  <data name="About_InstallAndRestart" xml:space="preserve"><value>{0} installieren und neu starten</value></data>
+  <data name="About_Portable" xml:space="preserve"><value>  ·  portabel</value></data>
+  <data name="About_ReportABug" xml:space="preserve"><value>Fehler melden</value></data>
+  <data name="About_Shortcuts" xml:space="preserve"><value>Tastenkombinationen</value></data>
+  <data name="About_SuggestAFeature" xml:space="preserve"><value>Funktion vorschlagen</value></data>
+  <data name="About_System" xml:space="preserve"><value>System</value></data>
+  <data name="About_UpToDate" xml:space="preserve"><value>Sie sind auf dem neuesten Stand</value></data>
+  <data name="About_UpdateFailed" xml:space="preserve"><value>Update fehlgeschlagen</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="Access_DeniedMany" xml:space="preserve"><value>{0:N0} geschützte Ordner konnten nicht gelesen werden, daher fehlt ihr Inhalt in der Karte.</value></data>
+  <data name="Access_DeniedOne" xml:space="preserve"><value>1 geschützter Ordner konnte nicht gelesen werden, daher fehlt sein Inhalt in der Karte.</value></data>
+  <data name="Ago_Days" xml:space="preserve"><value>vor {0} Tagen</value></data>
+  <data name="Ago_Hours" xml:space="preserve"><value>vor {0} Stunden</value></data>
+  <data name="Ago_JustNow" xml:space="preserve"><value>gerade eben</value></data>
+  <data name="Ago_Minutes" xml:space="preserve"><value>vor {0} Minuten</value></data>
+  <data name="Ago_Months" xml:space="preserve"><value>vor {0} Monaten</value></data>
+  <data name="Ago_Today" xml:space="preserve"><value>heute</value></data>
+  <data name="Ago_Years" xml:space="preserve"><value>vor {0:0.#} Jahren</value></data>
+  <data name="Ago_Yesterday" xml:space="preserve"><value>gestern</value></data>
+  <data name="Category_Archives" xml:space="preserve"><value>Archive</value></data>
+  <data name="Category_Audio" xml:space="preserve"><value>Audio</value></data>
+  <data name="Category_Code" xml:space="preserve"><value>Code</value></data>
+  <data name="Category_Documents" xml:space="preserve"><value>Dokumente</value></data>
+  <data name="Category_Images" xml:space="preserve"><value>Bilder</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>Sonstiges</value></data>
+  <data name="Category_Programs" xml:space="preserve"><value>Programme</value></data>
+  <data name="Category_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="Category_GameData" xml:space="preserve"><value>Spieldaten</value></data>
+  <data name="Category_Installers" xml:space="preserve"><value>Installationsdateien</value></data>
+  <data name="Category_DiskImages" xml:space="preserve"><value>Datenträgerabbilder</value></data>
+  <data name="Category_Databases" xml:space="preserve"><value>Datenbanken</value></data>
+  <data name="Category_Fonts" xml:space="preserve"><value>Schriftarten</value></data>
+  <data name="Category_System" xml:space="preserve"><value>System</value></data>
+  <data name="Changes_Grew" xml:space="preserve"><value>gewachsen</value></data>
+  <data name="Changes_GrewFolder" xml:space="preserve"><value>Ordner gewachsen</value></data>
+  <data name="Changes_New" xml:space="preserve"><value>neu</value></data>
+  <data name="Changes_NewFolder" xml:space="preserve"><value>neuer Ordner</value></data>
+  <data name="Changes_Shrank" xml:space="preserve"><value>geschrumpft</value></data>
+  <data name="Changes_ShrankFolder" xml:space="preserve"><value>Ordner geschrumpft</value></data>
+  <data name="ColorModeName_Change" xml:space="preserve"><value>Änderung seit letztem Scan</value></data>
+  <data name="ColorModeName_Depth" xml:space="preserve"><value>Ordnertiefe</value></data>
+  <data name="ColorModeName_FileType" xml:space="preserve"><value>Dateityp</value></data>
+  <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Oberster Ordner</value></data>
+  <data name="ColorMode_Change" xml:space="preserve"><value>Änderung seit letztem Scan</value></data>
+  <data name="ColorMode_Depth" xml:space="preserve"><value>Tiefe</value></data>
+  <data name="ColorMode_FileType" xml:space="preserve"><value>Dateityp</value></data>
+  <data name="ColorMode_TopFolder" xml:space="preserve"><value>oberster Ordner</value></data>
+  <data name="Crash_CausedBy" xml:space="preserve"><value>Verursacht durch:</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Unerwarteter Fehler</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>Die Details wurden in {0} gespeichert.</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>Die Details konnten nicht in einer Protokolldatei gespeichert werden.</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>Wenn Sie eine Minute Zeit haben, melden Sie ihn: Das Formular auf GitHub öffnet sich mit Version, Ihrem Windows und dem Fehler bereits ausgefüllt, und das Protokoll kann angehängt werden.</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Auf GitHub melden</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>Fehlerbericht auf GitHub öffnen?</value></data>
+  <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} Dateien</value></data>
+  <data name="Crumb_NoScan" xml:space="preserve"><value>Noch kein Scan</value></data>
+  <data name="Delete_AndMore" xml:space="preserve"><value>
+… und {0:N0} weitere</value></data>
+  <data name="Delete_ErrorTitle" xml:space="preserve"><value>Löschen</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Es konnte nicht alles gelöscht werden.
+
+{0}</value></data>
+  <data name="Delete_Question" xml:space="preserve"><value>{0} in den Papierkorb verschieben?
+
+{1}</value></data>
+  <data name="Delete_Title" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
+  <data name="Delete_WhatFile" xml:space="preserve"><value>die Datei "{0}" ({1})</value></data>
+  <data name="Delete_WhatFolder" xml:space="preserve"><value>den Ordner "{0}" ({1:N0} Dateien, {2})</value></data>
+  <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} Elemente ({1:N0} Dateien, {2})</value></data>
+  <data name="Describe_FilesOnly" xml:space="preserve"><value>nur Dateien</value></data>
+  <data name="Describe_FoldersOnly" xml:space="preserve"><value>nur Ordner</value></data>
+  <data name="Describe_Modified" xml:space="preserve"><value>geändert in den letzten {0}</value></data>
+  <data name="Describe_Over" xml:space="preserve"><value>über {0}</value></data>
+  <data name="Describe_Under" xml:space="preserve"><value>unter {0}</value></data>
+  <data name="Describe_Untouched" xml:space="preserve"><value>unberührt seit {0}</value></data>
+  <data name="Dialog_ChooseFolder" xml:space="preserve"><value>Ordner zum Scannen auswählen</value></data>
+  <data name="Dialog_CompareScan" xml:space="preserve"><value>Mit gespeichertem Scan vergleichen</value></data>
+  <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Der Scan konnte nicht geöffnet werden</value></data>
+  <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Neustart nicht möglich</value></data>
+  <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
+  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Als CSV exportieren</value></data>
+  <data name="Dialog_OpenScan" xml:space="preserve"><value>Gespeicherten Scan öffnen</value></data>
+  <data name="Dialog_RescanFailed" xml:space="preserve"><value>Erneuter Scan fehlgeschlagen</value></data>
+  <data name="Dialog_SaveScan" xml:space="preserve"><value>Scan speichern</value></data>
+  <data name="Dialog_ScanFailed" xml:space="preserve"><value>Scan fehlgeschlagen</value></data>
+  <data name="Dialog_OutOfMemory32" xml:space="preserve"><value>Der 32-Bit-Version ging vor dem Ende des Scans der Arbeitsspeicher aus. Ein 32-Bit-Prozess kann nur wenige Gigabyte adressieren, egal wie viel RAM der PC hat. Ein Laufwerk mit so vielen Dateien braucht daher die 64-Bit-Version (SpaceSharp-win-x64).</value></data>
+  <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp-Scan (*.sscan)|*.sscan</value></data>
+  <data name="Drive_Free" xml:space="preserve"><value>{0} frei</value></data>
+  <data name="Drive_UsedOf" xml:space="preserve"><value>{0} von {1} belegt · {2}</value></data>
+  <data name="Filter_1Month" xml:space="preserve"><value>1 Monat</value></data>
+  <data name="Filter_1Year" xml:space="preserve"><value>1 Jahr</value></data>
+  <data name="Filter_2Years" xml:space="preserve"><value>2 Jahre</value></data>
+  <data name="Filter_3Months" xml:space="preserve"><value>3 Monate</value></data>
+  <data name="Filter_5Years" xml:space="preserve"><value>5 Jahre</value></data>
+  <data name="Filter_6Months" xml:space="preserve"><value>6 Monate</value></data>
+  <data name="Filter_AnySize" xml:space="preserve"><value>Beliebige Größe</value></data>
+  <data name="Filter_AnyTime" xml:space="preserve"><value>Beliebiger Zeitraum</value></data>
+  <data name="Filter_FilesAndFolders" xml:space="preserve"><value>Dateien und Ordner</value></data>
+  <data name="Filter_FilesOnly" xml:space="preserve"><value>Nur Dateien</value></data>
+  <data name="Filter_FoldersOnly" xml:space="preserve"><value>Nur Ordner</value></data>
+  <data name="Filter_LargerThan" xml:space="preserve"><value>Größer als</value></data>
+  <data name="Filter_MatchCount" xml:space="preserve"><value>{0:N0} Dateien · {1} Treffer</value></data>
+  <data name="Filter_Matches" xml:space="preserve"><value>{0:N0} Dateien · {1}: {2}</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>Teil des Namens oder ein Muster wie *.iso</value></data>
+  <data name="Filter_NoFilter" xml:space="preserve"><value>Kein Filter: Alles wird angezeigt</value></data>
+  <data name="Filter_NotModifiedFor" xml:space="preserve"><value>Nicht geändert seit</value></data>
+  <data name="Filter_NothingMatches" xml:space="preserve"><value>Keine Treffer: {0}</value></data>
+  <data name="Filter_NothingMatchesShort" xml:space="preserve"><value>Keine Treffer</value></data>
+  <data name="Filter_QuickFilters" xml:space="preserve"><value>Schnellfilter</value></data>
+  <data name="Filter_Show" xml:space="preserve"><value>Anzeigen</value></data>
+  <data name="Filter_SmallerThan" xml:space="preserve"><value>Kleiner als</value></data>
+  <data name="Filter_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Hover_AccessDenied" xml:space="preserve"><value>    ⚠ einige Inhalte konnten nicht gelesen werden</value></data>
+  <data name="Hover_FileSize" xml:space="preserve"><value> ({0} Dateigröße)</value></data>
+  <data name="Hover_Files" xml:space="preserve"><value>    {0:N0} Dateien</value></data>
+  <data name="Hover_FreeSpaceOn" xml:space="preserve"><value>Freier Speicher auf </value></data>
+  <data name="Hover_HardLink" xml:space="preserve"><value>    feste Verknüpfung, {0} bereits an anderer Stelle gezählt</value></data>
+  <data name="Hover_OnDisk" xml:space="preserve"><value> ({0} auf dem Datenträger)</value></data>
+  <data name="Hover_ShareOf" xml:space="preserve"><value>  ({0:0.#} % von {1})</value></data>
+  <data name="Hover_TooSmallIn" xml:space="preserve"><value> zu klein zum Anzeigen in </value></data>
+  <data name="Hover_ZoomToSee" xml:space="preserve"><value>    zum Anzeigen hineinzoomen</value></data>
+  <data name="InspectWin_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="InspectWin_CopyDetails" xml:space="preserve"><value>Details kopieren</value></data>
+  <data name="InspectWin_Inspect" xml:space="preserve"><value>Untersuchen</value></data>
+  <data name="InspectWin_Properties" xml:space="preserve"><value>Eigenschaften</value></data>
+  <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>Im Explorer anzeigen</value></data>
+  <data name="Inspect_AccessDenied" xml:space="preserve"><value>Einige Inhalte konnten nicht gelesen werden (Zugriff verweigert)</value></data>
+  <data name="Inspect_ExactBytes" xml:space="preserve"><value>  ({0:N0} Bytes)</value></data>
+  <data name="Inspect_FileNoExtension" xml:space="preserve"><value>Datei ohne Erweiterung ({0})</value></data>
+  <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0}-Datei ({1})</value></data>
+  <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} Dateien, {1:N0} Ordner</value></data>
+  <data name="Inspect_Folder" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}, bereits an anderer Stelle gezählt</value></data>
+  <data name="Inspect_InFolders" xml:space="preserve"><value>In {0:N0} Ordnern</value></data>
+  <data name="Inspect_Items" xml:space="preserve"><value>Elemente</value></data>
+  <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} Elemente ausgewählt</value></data>
+  <data name="Inspect_Size" xml:space="preserve"><value>Größe</value></data>
+  <data name="Inspect_TitleMany" xml:space="preserve"><value>Untersuchen: {0:N0} Elemente</value></data>
+  <data name="Inspect_TitleOne" xml:space="preserve"><value>Untersuchen: {0}</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Dieses Fenster öffnen</value></data>
+  <data name="Key_AddSelection" xml:space="preserve"><value>Zur Auswahl hinzufügen</value></data>
+  <data name="Key_CancelScan" xml:space="preserve"><value>Scan abbrechen</value></data>
+  <data name="Key_Copy" xml:space="preserve"><value>Ausgewählte Pfade kopieren</value></data>
+  <data name="Key_Delete" xml:space="preserve"><value>Ausgewähltes Element in den Papierkorb verschieben</value></data>
+  <data name="Key_Filter" xml:space="preserve"><value>Karte filtern</value></data>
+  <data name="Key_Grouping" xml:space="preserve"><value>Dichte auf Alles (keine Gruppierung) umschalten und zurück</value></data>
+  <data name="Key_Inspect" xml:space="preserve"><value>Auswahl untersuchen</value></data>
+  <data name="Key_NextColor" xml:space="preserve"><value>Nächster Farbmodus</value></data>
+  <data name="Key_OpenScan" xml:space="preserve"><value>Gespeicherten Scan öffnen</value></data>
+  <data name="Key_Pan" xml:space="preserve"><value>Verschieben bei Vergrößerung</value></data>
+  <data name="Key_Panel" xml:space="preserve"><value>Bereich mit den größten Dateien, Ordnern und Typen</value></data>
+  <data name="Key_Properties" xml:space="preserve"><value>Windows-Eigenschaften des ausgewählten Elements</value></data>
+  <data name="Key_Rescan" xml:space="preserve"><value>Erneut scannen</value></data>
+  <data name="Key_SaveScan" xml:space="preserve"><value>Scan in Datei speichern</value></data>
+  <data name="Key_SelectMatches" xml:space="preserve"><value>Alle Dateien auswählen, die dem Filter entsprechen</value></data>
+  <data name="Key_SelectRange" xml:space="preserve"><value>Bereich auswählen</value></data>
+  <data name="Key_Settings" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Key_Up" xml:space="preserve"><value>Einen Ordner nach oben</value></data>
+  <data name="Key_WholeMap" xml:space="preserve"><value>Gesamte Karte anzeigen</value></data>
+  <data name="Key_ZoomInOut" xml:space="preserve"><value>Vergrößern oder verkleinern</value></data>
+  <data name="Key_ZoomToFolder" xml:space="preserve"><value>Karte auf einen Ordner zoomen</value></data>
+  <data name="LabelSize_Large" xml:space="preserve"><value>Groß</value></data>
+  <data name="LabelSize_Larger" xml:space="preserve"><value>Größer</value></data>
+  <data name="LabelSize_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="LabelSize_Smaller" xml:space="preserve"><value>Kleiner</value></data>
+  <data name="LabelSize_Smallest" xml:space="preserve"><value>Am kleinsten</value></data>
+  <data name="List_ByType" xml:space="preserve"><value>Speicher nach Dateityp in {0}. Klicken Sie auf einen Typ, um die Karte zu filtern.</value></data>
+  <data name="List_ChangesSince" xml:space="preserve"><value>Größte Änderungen seit {0}</value></data>
+  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Größte Änderungen seit dem Vergleichsscan</value></data>
+  <data name="List_HintNoScan" xml:space="preserve"><value>Scannen Sie ein Laufwerk oder einen Ordner, um die größten Elemente zu sehen.</value></data>
+  <data name="List_LargestFiles" xml:space="preserve"><value>Größte Dateien in {0}</value></data>
+  <data name="List_LargestFolders" xml:space="preserve"><value>Größte Ordner in {0}</value></data>
+  <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Info über SpaceSharp (F1)</value></data>
+  <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Eingabe</value></data>
+  <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Beim nächsten Mal erneut fragen</value></data>
+  <data name="Main_Backspace" xml:space="preserve"><value>Rücktaste</value></data>
+  <data name="Main_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="Main_Change" xml:space="preserve"><value>Änderung</value></data>
+  <data name="Main_Changes" xml:space="preserve"><value>Änderungen</value></data>
+  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Änderungen seit letztem Scan</value></data>
+  <data name="Main_Clear" xml:space="preserve"><value>Leeren</value></data>
+  <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Filter leeren (Esc)</value></data>
+  <data name="Main_ClickADriveOn" xml:space="preserve"><value>Klicken Sie links auf ein Laufwerk oder wählen Sie einen Ordner zum Scannen.</value></data>
+  <data name="Main_ClickADriveTo" xml:space="preserve"><value>Klicken Sie auf ein Laufwerk, um es zu scannen.</value></data>
+  <data name="Main_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="Main_ColorBy" xml:space="preserve"><value>Färben nach</value></data>
+  <data name="Main_CompareWithASaved" xml:space="preserve"><value>Mit gespeichertem Scan vergleichen…</value></data>
+  <data name="Main_CopyName" xml:space="preserve"><value>Namen kopieren</value></data>
+  <data name="Main_CopyPath" xml:space="preserve"><value>Pfad kopieren</value></data>
+  <data name="Main_CtrlC" xml:space="preserve"><value>Strg+C</value></data>
+  <data name="Main_CtrlI" xml:space="preserve"><value>Strg+I</value></data>
+  <data name="Main_CtrlO" xml:space="preserve"><value>Strg+O</value></data>
+  <data name="Main_CtrlS" xml:space="preserve"><value>Strg+S</value></data>
+  <data name="Main_Del" xml:space="preserve"><value>Entf</value></data>
+  <data name="Main_Depth" xml:space="preserve"><value>Tiefe</value></data>
+  <data name="Main_Dismiss" xml:space="preserve"><value>Ausblenden</value></data>
+  <data name="Main_Done" xml:space="preserve"><value>Fertig</value></data>
+  <data name="Main_DoubleClick" xml:space="preserve"><value>Doppelklick</value></data>
+  <data name="Main_Drives" xml:space="preserve"><value>Laufwerke</value></data>
+  <data name="Main_DrivesAndLargestItems" xml:space="preserve"><value>Bereich mit Laufwerken und größten Elementen (L)</value></data>
+  <data name="Main_Enter" xml:space="preserve"><value>Eingabe</value></data>
+  <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc bricht ebenfalls ab</value></data>
+  <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Alles, was nicht passt, wird auf der Karte abgedunkelt.</value></data>
+  <data name="Main_ExportToCSV" xml:space="preserve"><value>Als CSV exportieren</value></data>
+  <data name="Main_FileType" xml:space="preserve"><value>Dateityp</value></data>
+  <data name="Main_Files" xml:space="preserve"><value>Dateien</value></data>
+  <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Main_FilterMatches" xml:space="preserve"><value>Filtertreffer</value></data>
+  <data name="Main_FilterOptions" xml:space="preserve"><value>Filteroptionen</value></data>
+  <data name="Main_Folders" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Main_Home" xml:space="preserve"><value>Pos1</value></data>
+  <data name="Main_Inspect" xml:space="preserve"><value>Untersuchen</value></data>
+  <data name="Main_InstallAndRestart" xml:space="preserve"><value>Installieren und neu starten</value></data>
+  <data name="Main_LargestFiles" xml:space="preserve"><value>Größte Dateien</value></data>
+  <data name="Main_LargestItems" xml:space="preserve"><value>Größte Elemente</value></data>
+  <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Ein ganzes Laufwerk in Sekunden abbilden</value></data>
+  <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
+  <data name="Main_NoFilter" xml:space="preserve"><value>Kein Filter</value></data>
+  <data name="Main_NotNow" xml:space="preserve"><value>Nicht jetzt</value></data>
+  <data name="Main_Open" xml:space="preserve"><value>Öffnen</value></data>
+  <data name="Main_OpenSavedScan" xml:space="preserve"><value>Gespeicherten Scan öffnen…</value></data>
+  <data name="Main_Palette" xml:space="preserve"><value>Palette</value></data>
+  <data name="Main_Properties" xml:space="preserve"><value>Eigenschaften</value></data>
+  <data name="Main_RescanF5" xml:space="preserve"><value>Erneut scannen (F5)</value></data>
+  <data name="Main_RescanThisFolder" xml:space="preserve"><value>Diesen Ordner erneut scannen</value></data>
+  <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Als Administrator neu starten</value></data>
+  <data name="Main_SaveScanAs" xml:space="preserve"><value>Scan speichern unter…</value></data>
+  <data name="Main_ScanFile" xml:space="preserve"><value>Scandatei</value></data>
+  <data name="Main_ScanFolder" xml:space="preserve"><value>Ordner scannen</value></data>
+  <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Alle passenden Dateien auswählen (Strg+A), dann Entf, um sie in den Papierkorb zu verschieben</value></data>
+  <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Alles in diesem Ordner auswählen</value></data>
+  <data name="Main_SelectMatches" xml:space="preserve"><value>Treffer auswählen</value></data>
+  <data name="Main_SettingsCtrl" xml:space="preserve"><value>Einstellungen (Strg+,)</value></data>
+  <data name="Main_ShowInExplorer" xml:space="preserve"><value>Im Explorer anzeigen</value></data>
+  <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Nur diesen Dateityp anzeigen</value></data>
+  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Gesamte Karte anzeigen</value></data>
+  <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Gesamte Karte anzeigen (Pos1 / Strg+0)</value></data>
+  <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp kann die Dateitabelle des Laufwerks direkt lesen, statt jeden Ordner zu durchlaufen. Dafür sind Administratorrechte nötig, daher muss die App einmal neu gestartet werden. Ordner und andere Dateisysteme werden in jedem Fall auf normalem Weg gescannt.</value></data>
+  <data name="Main_StopComparing" xml:space="preserve"><value>Vergleich beenden</value></data>
+  <data name="Main_Theme" xml:space="preserve"><value>Design</value></data>
+  <data name="Main_ThisFolder" xml:space="preserve"><value>Dieser Ordner</value></data>
+  <data name="Main_TopFolder" xml:space="preserve"><value>Oberster Ordner</value></data>
+  <data name="Main_Types" xml:space="preserve"><value>Typen</value></data>
+  <data name="Main_UpOneFolder" xml:space="preserve"><value>Einen Ordner nach oben</value></data>
+  <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Einen Ordner nach oben (Rücktaste / Maus-Zurück)</value></data>
+  <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Vergrößern (Mausrad / +)</value></data>
+  <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Verkleinern (Mausrad / −)</value></data>
+  <data name="Main_ZoomToFolder" xml:space="preserve"><value>Auf Ordner zoomen</value></data>
+  <data name="Menu_ContentsOf" xml:space="preserve"><value>Inhalt von {0}</value></data>
+  <data name="Menu_Delete" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
+  <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} Elemente in den Papierkorb verschieben</value></data>
+  <data name="Menu_KindGroup" xml:space="preserve"><value>Dateien, zu klein zum Anzeigen</value></data>
+  <data name="Menu_KindFolder" xml:space="preserve"><value>Ordner, {0:N0} Dateien</value></data>
+  <data name="Menu_KindFile" xml:space="preserve"><value>{0}-Datei</value></data>
+  <data name="Menu_KindFileNoExt" xml:space="preserve"><value>Datei</value></data>
+  <data name="Menu_Inspect" xml:space="preserve"><value>Untersuchen</value></data>
+  <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} Elemente untersuchen</value></data>
+  <data name="Menu_RescanName" xml:space="preserve"><value>{0} erneut scannen</value></data>
+  <data name="Menu_RescanThis" xml:space="preserve"><value>Diesen Ordner erneut scannen</value></data>
+  <data name="Menu_SelectIn" xml:space="preserve"><value>Alles in {0} auswählen</value></data>
+  <data name="Menu_SelectInThis" xml:space="preserve"><value>Alles in diesem Ordner auswählen</value></data>
+  <data name="Menu_ShowOnlyExt" xml:space="preserve"><value>Nur *{0}-Dateien anzeigen</value></data>
+  <data name="Menu_ShowOnlyType" xml:space="preserve"><value>Nur diesen Dateityp anzeigen</value></data>
+  <data name="Menu_ThisFolder" xml:space="preserve"><value>Dieser Ordner</value></data>
+  <data name="Mft_Building" xml:space="preserve"><value>Karte wird erstellt</value></data>
+  <data name="Mft_CannotOpen" xml:space="preserve"><value>Volume {0} kann nicht geöffnet werden. Zum Lesen der Dateitabelle sind Administratorrechte nötig.</value></data>
+  <data name="Mft_Reading" xml:space="preserve"><value>Dateitabelle wird gelesen: {0:N0} von {1:N0} Einträgen</value></data>
+  <data name="Palette_GroupCustom" xml:space="preserve"><value>Benutzerdefiniert</value></data>
+  <data name="Palettes_CouldNotOpen" xml:space="preserve"><value>Der Palettenordner konnte nicht geöffnet werden</value></data>
+  <data name="Palettes_LoadedMany" xml:space="preserve"><value> {0} benutzerdefinierte Paletten geladen.</value></data>
+  <data name="Palettes_LoadedOne" xml:space="preserve"><value> 1 benutzerdefinierte Palette geladen.</value></data>
+  <data name="Palettes_NotLoaded" xml:space="preserve"><value> Nicht geladen: </value></data>
+  <data name="Palettes_Note" xml:space="preserve"><value>Eigene hinzufügen: eine JSON-Datei pro Palette im Palettenordner. Der Ordner enthält ein Beispiel und eine README.</value></data>
+  <data name="Palettes_OpenFolder" xml:space="preserve"><value>Ordner öffnen</value></data>
+  <data name="Palettes_Reload" xml:space="preserve"><value>Neu laden</value></data>
+  <data name="Palettes_New" xml:space="preserve"><value>Neue Palette</value></data>
+  <data name="Palettes_Edit" xml:space="preserve"><value>{0} bearbeiten</value></data>
+  <data name="Palettes_Copy" xml:space="preserve"><value>Von {0} ausgehen</value></data>
+  <data name="Palettes_CopyName" xml:space="preserve"><value>{0} Kopie</value></data>
+  <data name="PaletteEd_Title" xml:space="preserve"><value>Palette</value></data>
+  <data name="PaletteEd_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>So heißt sie in der Palettenliste</value></data>
+  <data name="PaletteEd_For" xml:space="preserve"><value>Für</value></data>
+  <data name="PaletteEd_Dark" xml:space="preserve"><value>Dunkel</value></data>
+  <data name="PaletteEd_Light" xml:space="preserve"><value>Hell</value></data>
+  <data name="PaletteEd_Both" xml:space="preserve"><value>Beide</value></data>
+  <data name="PaletteEd_Folders" xml:space="preserve"><value>Ordner</value></data>
+  <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>zwölf Farbtöne, einer pro Ordner der obersten Ebene, nach Tiefe wiederholt</value></data>
+  <data name="PaletteEd_FolderN" xml:space="preserve"><value>Ordner {0}</value></data>
+  <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>Ordner Nummer {0} der obersten Ebene und jede zwölfte Ebene darunter</value></data>
+  <data name="PaletteEd_Generate" xml:space="preserve"><value>Erzeugen:</value></data>
+  <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regenbogen</value></data>
+  <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Nachbarn</value></data>
+  <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Zweifarbig</value></data>
+  <data name="PaletteEd_OneHue" xml:space="preserve"><value>Ein Farbton</value></data>
+  <data name="PaletteEd_Random" xml:space="preserve"><value>Zufällig</value></data>
+  <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Eine zufällige Grundfarbe und Streuung. Drücken Sie, bis etwas gut aussieht, und passen Sie dann an.</value></data>
+  <data name="PaletteEd_FromBase" xml:space="preserve"><value>ab</value></data>
+  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Die Grundfarbe, von der der Generator ausgeht. Zum Ändern klicken.</value></data>
+  <data name="PaletteEd_Base" xml:space="preserve"><value>Grundfarbe</value></data>
+  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>wovon Erzeugen ausgeht; standardmäßig die erste Ordnerfarbe</value></data>
+  <data name="PaletteEd_Files" xml:space="preserve"><value>Dateien</value></data>
+  <data name="PaletteEd_FilesSub" xml:space="preserve"><value>die Ordnerfarbe, Richtung Weiß aufgehellt</value></data>
+  <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Jede Dateifarbe selbst festlegen</value></data>
+  <data name="PaletteEd_FilesTint" xml:space="preserve"><value>Stattdessen eine Tönung verwenden</value></data>
+  <data name="PaletteEd_FileN" xml:space="preserve"><value>Dateifarbe {0}</value></data>
+  <data name="PaletteEd_FileDetail" xml:space="preserve"><value>Dateien unter Ordnerfarbe {0} von zwölf</value></data>
+  <data name="PaletteEd_Types" xml:space="preserve"><value>Dateitypen</value></data>
+  <data name="PaletteEd_TypesSub" xml:space="preserve"><value>aus den Ordnern vorbelegt; zum Festlegen auf einen klicken</value></data>
+  <data name="PaletteEd_TypeDerived" xml:space="preserve"><value>aus den Ordnerfarben abgeleitet; einmal festgelegt, bleibt es</value></data>
+  <data name="PaletteEd_TypeOwn" xml:space="preserve"><value>von Ihnen festgelegt</value></data>
+  <data name="PaletteEd_ResetDerived" xml:space="preserve"><value>Zurück zu abgeleitet</value></data>
+  <data name="PaletteEd_Hue" xml:space="preserve"><value>Farbton</value></data>
+  <data name="PaletteEd_Saturation" xml:space="preserve"><value>Sättigung</value></data>
+  <data name="PaletteEd_Lightness" xml:space="preserve"><value>Helligkeit</value></data>
+  <data name="PaletteEd_LabelOk" xml:space="preserve"><value>Beschriftungen darauf: {0}, Kontrast {1:0.0}:1</value></data>
+  <data name="PaletteEd_LabelLow" xml:space="preserve"><value>Beschriftungen darauf: {0}, Kontrast {1:0.0}:1, schwer lesbar</value></data>
+  <data name="PaletteEd_DarkText" xml:space="preserve"><value>dunkler Text</value></data>
+  <data name="PaletteEd_LightText" xml:space="preserve"><value>heller Text</value></data>
+  <data name="PaletteEd_ClosePairs" xml:space="preserve"><value>Ordner, die sich zu sehr ähneln: {0}</value></data>
+  <data name="PaletteEd_LowLabels" xml:space="preserve"><value>{0} Ordnerfarben, auf denen Beschriftungen schwer lesbar sind</value></data>
+  <data name="PaletteEd_AllGood" xml:space="preserve"><value>Beschriftungen sind auf jeder Ordnerfarbe lesbar, und keine zwei ähneln sich zu sehr.</value></data>
+  <data name="PaletteEd_Preview" xml:space="preserve"><value>Vorschau</value></data>
+  <data name="PaletteEd_PreviewNote" xml:space="preserve"><value>Beispieldaten, Ihre Schattierung</value></data>
+  <data name="PaletteEd_Export" xml:space="preserve"><value>JSON kopieren</value></data>
+  <data name="PaletteEd_Exported" xml:space="preserve"><value>Die Palettendatei liegt in der Zwischenablage.</value></data>
+  <data name="PaletteEd_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="PaletteEd_Save" xml:space="preserve"><value>Speichern und verwenden</value></data>
+  <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Dieser Name ist vergeben</value></data>
+  <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} ist eine integrierte Palette. Geben Sie Ihrer einen anderen Namen.</value></data>
+  <data name="PaletteEd_Replace" xml:space="preserve"><value>Palette ersetzen?</value></data>
+  <data name="PaletteEd_ReplaceDetail" xml:space="preserve"><value>Eine benutzerdefinierte Palette namens {0} existiert bereits. Speichern ersetzt sie.</value></data>
+  <data name="PaletteEd_ReplaceYes" xml:space="preserve"><value>Ersetzen</value></data>
+  <data name="PaletteEd_CouldNotSave" xml:space="preserve"><value>Die Palette konnte nicht gespeichert werden</value></data>
+  <data name="Period_Day" xml:space="preserve"><value>1 Tag</value></data>
+  <data name="Period_Days" xml:space="preserve"><value>{0} Tage</value></data>
+  <data name="Period_Month" xml:space="preserve"><value>1 Monat</value></data>
+  <data name="Period_Months" xml:space="preserve"><value>{0} Monate</value></data>
+  <data name="Period_Week" xml:space="preserve"><value>1 Woche</value></data>
+  <data name="Period_Weeks" xml:space="preserve"><value>{0} Wochen</value></data>
+  <data name="Period_Year" xml:space="preserve"><value>1 Jahr</value></data>
+  <data name="Period_Years" xml:space="preserve"><value>{0} Jahre</value></data>
+  <data name="Preset_BigAndOld" xml:space="preserve"><value>Groß und alt</value></data>
+  <data name="Preset_BigVideos" xml:space="preserve"><value>Große Videos</value></data>
+  <data name="Preset_InstallersArchives" xml:space="preserve"><value>Installationsdateien &amp; Archive</value></data>
+  <data name="Preset_LargeFiles" xml:space="preserve"><value>Große Dateien</value></data>
+  <data name="Preset_RecentlyChanged" xml:space="preserve"><value>Kürzlich geändert</value></data>
+  <data name="Preset_Untouched2Years" xml:space="preserve"><value>Seit 2 Jahren unberührt</value></data>
+  <data name="ScanFile_Newer" xml:space="preserve"><value>Diese Scandatei wurde von einer neueren SpaceSharp-Version geschrieben.</value></data>
+  <data name="ScanFile_NotAScan" xml:space="preserve"><value>Keine SpaceSharp-Scandatei.</value></data>
+  <data name="Scan_FolderMissing" xml:space="preserve"><value>Der Ordner "{0}" existiert nicht.</value></data>
+  <data name="Scan_Rate" xml:space="preserve"><value>{0:0}</value></data>
+  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k</value></data>
+  <data name="Scan_Title" xml:space="preserve"><value>{0} wird gescannt</value></data>
+  <data name="Scan_Used" xml:space="preserve"><value>{0} belegt</value></data>
+  <data name="Scan_FolderFacts" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Scan_MethodMft" xml:space="preserve"><value>Dateitabelle</value></data>
+  <data name="Scan_MethodWalk" xml:space="preserve"><value>Ordnerdurchlauf</value></data>
+  <data name="Scan_StageFind" xml:space="preserve"><value>Dateien suchen</value></data>
+  <data name="Scan_StageRead" xml:space="preserve"><value>Dateitabelle lesen</value></data>
+  <data name="Scan_StageBuild" xml:space="preserve"><value>Baum aufbauen</value></data>
+  <data name="Scan_StageDraw" xml:space="preserve"><value>Karte zeichnen</value></data>
+  <data name="Scan_SoFar" xml:space="preserve"><value>Bisher {0:N0} Dateien in {1:N0} Ordnern</value></data>
+  <data name="Scan_FoundSoFar" xml:space="preserve"><value>bisher gefunden</value></data>
+  <data name="Scan_FoundOf" xml:space="preserve"><value>von {0} gefunden</value></data>
+  <data name="Scan_FilesPerSecond" xml:space="preserve"><value>Dateien pro Sekunde</value></data>
+  <data name="Scan_Elapsed" xml:space="preserve"><value>vergangen</value></data>
+  <data name="Scan_ElapsedLeft" xml:space="preserve"><value>vergangen · noch etwa {0}</value></data>
+  <data name="Scan_ASecond" xml:space="preserve"><value>eine Sekunde</value></data>
+  <data name="Scan_Seconds" xml:space="preserve"><value>{0:0} s</value></data>
+  <data name="Scan_Minutes" xml:space="preserve"><value>{0:0} min</value></data>
+  <data name="SettingsWin_Close" xml:space="preserve"><value>Schließen</value></data>
+  <data name="SettingsWin_ResetToDefaults" xml:space="preserve"><value>Auf Standard zurücksetzen</value></data>
+  <data name="SettingsWin_Settings" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Settings_AnimateZoom" xml:space="preserve"><value>Zoom animieren</value></data>
+  <data name="Settings_AnimateZoom_Desc" xml:space="preserve"><value>In Ordner hineinfliegen, statt direkt zu ihnen zu springen.</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>Darstellung</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>Beim Start nach Updates suchen</value></data>
+  <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Sucht einige Sekunden nach dem Start von SpaceSharp auf GitHub nach einer neuen Version und bietet die Installation an.</value></data>
+  <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Nur verfügbar, wenn SpaceSharp mit dem Setup-Programm installiert wurde. Die portable EXE aktualisiert sich nicht selbst.</value></data>
+  <data name="Settings_ColorBy" xml:space="preserve"><value>Färben nach</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Oberster Ordner: ein Farbton pro Ordner der obersten Ebene, mit jeder Ebene darunter heller. Ordnertiefe: eine andere Farbe pro Ebene. Dateityp: Dateien nach Typ gefärbt. Änderung: was seit dem vorherigen Scan desselben Orts gewachsen oder geschrumpft ist.</value></data>
+  <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Vor dem Verschieben in den Papierkorb nachfragen</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vor dem Löschen nachfragen. Gelöschte Elemente lassen sich immer aus dem Papierkorb wiederherstellen.</value></data>
+  <data name="Settings_CustomPalettes" xml:space="preserve"><value>Benutzerdefinierte Paletten</value></data>
+  <data name="Settings_FastScan" xml:space="preserve"><value>Schneller NTFS-Scan</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Liest die Dateitabelle des Laufwerks direkt, sodass ein ganzes Laufwerk in Sekunden statt Minuten abgebildet wird. Windows fragt einmal pro Scan nach Administratorberechtigung; die App selbst bleibt, wie sie ist. Bei Nein läuft der normale Scan, und Sie werden bis zum Neustart von SpaceSharp nicht erneut gefragt. Andere Dateisysteme und einzelne Ordner verwenden immer den normalen Scan.</value></data>
+  <data name="Settings_HardLinks" xml:space="preserve"><value>Feste Verknüpfungen einmal zählen</value></data>
+  <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>Liest die Verknüpfungsanzahl jeder Datei, damit Daten mit mehreren Namen, etwa im WinSxS-Ordner von Windows, nur einmal gezählt werden. Auf großen Laufwerken langsamer.</value></data>
+  <data name="Settings_HoverDetails" xml:space="preserve"><value>Details beim Zeigen</value></data>
+  <data name="Settings_HoverDetails_Desc" xml:space="preserve"><value>Zeigt neben der Maus eine kleine Karte mit Größe, Größe auf dem Datenträger, Dateianzahl und letztem Änderungsdatum.</value></data>
+  <data name="Settings_IncludeHidden" xml:space="preserve"><value>Versteckte und Systemdateien einbeziehen</value></data>
+  <data name="Settings_IncludeHidden_Desc" xml:space="preserve"><value>Aus lässt Dateien und Ordner mit dem Attribut Versteckt oder System weg, etwa pagefile.sys.</value></data>
+  <data name="Settings_LabelSize" xml:space="preserve"><value>Beschriftungsgröße</value></data>
+  <data name="Settings_LabelSize_Desc" xml:space="preserve"><value>Textgröße auf der Karte, von Am kleinsten bis Größer. Titelleisten schrumpfen und wachsen entsprechend.</value></data>
+  <data name="Settings_LeaveOut" xml:space="preserve"><value>Auslassen</value></data>
+  <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namen, die samt Inhalt übersprungen werden. Wird mit Datei- und Ordnernamen verglichen, nicht mit Pfaden; * und ? sind Platzhalter.</value></data>
+  <data name="Settings_Map" xml:space="preserve"><value>Karte</value></data>
+  <data name="Settings_MergeChains" xml:space="preserve"><value>Ketten einzelner Ordner zusammenfassen</value></data>
+  <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Ordner, die nur einen Ordner enthalten (Benutzer › Sie › AppData › Local), als ein Feld mit kombiniertem Titel zeichnen.</value></data>
+  <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Beschriftungen mit Kontur</value></data>
+  <data name="Settings_OutlinedLabels_Desc" xml:space="preserve"><value>Eine dünne kontrastierende Kontur um jede Beschriftung, damit Text auf jeder Farbe lesbar bleibt. Empfohlen, wenn Sie die Karte schwer lesbar finden.</value></data>
+  <data name="Settings_Palette" xml:space="preserve"><value>Palette</value></data>
+  <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (benutzerdefiniert)</value></data>
+  <data name="Settings_Palette_Desc" xml:space="preserve"><value>Die Farben für die Felder auf der Karte.</value></data>
+  <data name="Settings_Reopen" xml:space="preserve"><value>Letzten Scan beim Start erneut öffnen</value></data>
+  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Zeigt die Karte von gestern, sobald die App startet, verglichen mit dem Scan davor. Jeder Laufwerksscan wird in %LocalAppData%\SpaceSharp\scans aufbewahrt; F5 scannt erneut.</value></data>
+  <data name="Settings_ResetQuestion" xml:space="preserve"><value>Alle Einstellungen auf ihren Standardwert zurücksetzen?</value></data>
+  <data name="Settings_ResetTitle" xml:space="preserve"><value>Einstellungen zurücksetzen</value></data>
+  <data name="Settings_Safety" xml:space="preserve"><value>Sicherheit</value></data>
+  <data name="Settings_Scanning" xml:space="preserve"><value>Scannen</value></data>
+  <data name="Settings_Scanning_Desc" xml:space="preserve"><value>Änderungen hier werden beim nächsten Scan (F5) wirksam.</value></data>
+  <data name="Settings_ShowFreeSpace" xml:space="preserve"><value>Freien Speicher anzeigen</value></data>
+  <data name="Settings_ShowFreeSpace_Desc" xml:space="preserve"><value>Beim Scan eines ganzen Laufwerks einen grauen Block für den ungenutzten Speicher hinzufügen. Er wächst, wenn Sie Dateien löschen.</value></data>
+  <data name="Settings_SidePanel" xml:space="preserve"><value>Seitenbereich anzeigen</value></data>
+  <data name="Settings_SidePanel_Desc" xml:space="preserve"><value>Der Bereich links mit Ihren Laufwerken und den größten Dateien, Ordnern und Typen. Tastenkombination: L.</value></data>
+  <data name="Settings_SizeMeasure" xml:space="preserve"><value>Größenmaß</value></data>
+  <data name="Settings_SizeMeasure_Desc" xml:space="preserve"><value>Größe auf dem Datenträger verwendet die komprimierte Größe komprimierter, dünn besetzter und Cloud-Dateien und rundet jede Datei auf ganze Cluster auf, wie die "Größe auf Datenträger" im Explorer.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Design</value></data>
+  <data name="Settings_Theme_Desc" xml:space="preserve"><value>Der Windows-Einstellung folgen oder immer Hell bzw. Dunkel verwenden.</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>Updates</value></data>
+  <data name="SizeMeasure_FileSize" xml:space="preserve"><value>Dateigröße</value></data>
+  <data name="SizeMeasure_OnDisk" xml:space="preserve"><value>Größe auf Datenträger</value></data>
+  <data name="Status_ColorBy" xml:space="preserve"><value>Färben nach: {0}</value></data>
+  <data name="Status_ComparedWith" xml:space="preserve"><value>  Verglichen mit {0}.</value></data>
+  <data name="Status_ComparedWithSuffix" xml:space="preserve"><value>  ·  verglichen mit dem Scan vom {0}</value></data>
+  <data name="Status_Comparing" xml:space="preserve"><value>Vergleich mit dem Scan vom {0}.</value></data>
+  <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Vergleich mit dem Scan vom {0}. Er wurde anders erstellt ({1} statt {2}), daher gehen manche Unterschiede darauf zurück und nicht auf den Datenträger.</value></data>
+  <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Vergleich mit einem Scan von {0} vom {1}; Namen werden Ordner für Ordner zugeordnet.</value></data>
+  <data name="Status_ComparisonCleared" xml:space="preserve"><value>Vergleich aufgehoben.</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} Zeilen nach {1} exportiert (einfache CSV: feste Spalten, mehr Optionen später)</value></data>
+  <data name="Status_FileTableSuffix" xml:space="preserve"><value> · Dateitabelle</value></data>
+  <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} Elemente, {1}, in den Papierkorb verschoben</value></data>
+  <data name="Status_MovedOne" xml:space="preserve"><value>{0} in den Papierkorb verschoben</value></data>
+  <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} Dateien · {3}. F5 scannt erneut.</value></data>
+  <data name="Status_OpenedVerb" xml:space="preserve"><value>Geöffnet: Scan vom</value></data>
+  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Letzter Scan wird geöffnet…</value></data>
+  <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Der vorherige Scan wurde anders erstellt ({0} statt {1}) und wird daher nicht verglichen. Der nächste Scan derselben Art wird es.</value></data>
+  <data name="Status_RescanCancelled" xml:space="preserve"><value>Erneuter Scan abgebrochen</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} erneut gescannt: {1:N0} Dateien · {2}</value></data>
+  <data name="Status_Rescanning" xml:space="preserve"><value>{0} wird erneut gescannt…</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>{0} gespeichert</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan abgebrochen</value></data>
+  <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} Dateien · {1:N0} Ordner · </value></data>
+  <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} s</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>{0:N0} Elemente ausgewählt · {1} · {2:N0} Dateien    Entf verschiebt sie in den Papierkorb</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>Design: Dunkel</value></data>
+  <data name="Theme_DarkName" xml:space="preserve"><value>Dunkel</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>Design: Hell</value></data>
+  <data name="Theme_LightName" xml:space="preserve"><value>Hell</value></data>
+  <data name="Theme_MatchWindows" xml:space="preserve"><value>Wie Windows</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>Design: Wie Windows ({0})</value></data>
+  <data name="Theme_WordDark" xml:space="preserve"><value>dunkel</value></data>
+  <data name="Theme_WordLight" xml:space="preserve"><value>hell</value></data>
+  <data name="Tip_AccessDenied" xml:space="preserve"><value>Einige Inhalte konnten nicht gelesen werden</value></data>
+  <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Scannen Sie dasselbe Laufwerk oder denselben Ordner zweimal, oder öffnen Sie einen gespeicherten Scan zum Vergleich.</value></data>
+  <data name="Tip_FreeSpace" xml:space="preserve"><value>Freier Speicher</value></data>
+  <data name="Tip_HintGroup" xml:space="preserve"><value>Hineinzoomen, um diese Elemente zu sehen</value></data>
+  <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (feste Verknüpfung, an anderer Stelle gezählt)</value></data>
+  <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} Dateien · {1}</value></data>
+  <data name="TopList_FilesOfType" xml:space="preserve"><value>{0:N0} Dateien · {1}</value></data>
+  <data name="TopList_NoExtension" xml:space="preserve"><value>(ohne Erweiterung)</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>SpaceSharp {0} ist verfügbar. Sie haben {1}.</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>Update wird heruntergeladen… {0} %</value></data>
+  <data name="Update_Restarting" xml:space="preserve"><value>Neustart mit {0}…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Das Update konnte nicht installiert werden: {0}</value></data>
+  <data name="Word_Off" xml:space="preserve"><value>aus</value></data>
+  <data name="Word_On" xml:space="preserve"><value>ein</value></data>
+  <data name="Dialog_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="Settings_ResetButton" xml:space="preserve"><value>Zurücksetzen</value></data>
+  <data name="About_BrowserFailed" xml:space="preserve"><value>Der Browser konnte nicht geöffnet werden.
+
+{0}
+
+{1}</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Sehen Sie, wohin Ihr Speicherplatz verschwunden ist. SpaceSharp bildet jede Datei und jeden Ordner als Feld ab, dessen Größe dem belegten Speicher entspricht, sodass die größten hervorstechen.</value></data>
+  <data name="About_SystemLine" xml:space="preserve"><value>{0} auf {1}</value></data>
+  <data name="About_CreditsText" xml:space="preserve"><value>Squarified-Treemap-Layout von Bruls, Huizing und van Wijk (2000). Inspiriert von SpaceMonger. Oberflächensymbole von Lucide (ISC-Lizenz).</value></data>
+  <data name="Settings_SavedIn" xml:space="preserve"><value>Einstellungen werden in %AppData%\SpaceSharp\settings.json gespeichert.</value></data>
+  <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, z. B. Videos über 500MB älter als 1 Jahr</value></data>
+  <data name="Group_Files" xml:space="preserve"><value>Dateien</value></data>
+  <data name="Group_Folders" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Group_Items" xml:space="preserve"><value>Elemente</value></data>
+  <data name="Drive_Removable" xml:space="preserve"><value>Wechseldatenträger</value></data>
+  <data name="Drive_Network" xml:space="preserve"><value>Netzwerk</value></data>
+  <data name="Drive_Optical" xml:space="preserve"><value>Optisch</value></data>
+  <data name="Drive_Hdd" xml:space="preserve"><value>Festplatte</value></data>
+  <data name="Drive_Ssd" xml:space="preserve"><value>SSD</value></data>
+  <data name="Drive_Nvme" xml:space="preserve"><value>NVMe-SSD</value></data>
+  <data name="Drive_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Settings_ExplorerMenu" xml:space="preserve"><value>"Mit SpaceSharp scannen" im Explorer</value></data>
+  <data name="Settings_ExplorerMenu_Desc" xml:space="preserve"><value>Fügt dem Kontextmenü von Ordnern, Laufwerken und dem Ordnerhintergrund im Datei-Explorer einen Eintrag hinzu. Nur für diesen Windows-Benutzer; keine Administratorrechte nötig. Verweist auf diese Kopie von SpaceSharp, also vor dem Verschieben der portablen EXE ausschalten.</value></data>
+  <data name="Explorer_ScanWith" xml:space="preserve"><value>Mit SpaceSharp scannen</value></data>
+  <data name="Settings_CommandLine" xml:space="preserve"><value>Befehlszeile</value></data>
+  <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>SpaceSharp aus einer Verknüpfung, einem Skript oder dem Ausführen-Dialog mit einem Laufwerk, einem Ordner oder einem gespeicherten Scan starten.</value></data>
+  <data name="Update_Title" xml:space="preserve"><value>Update verfügbar</value></data>
+  <data name="Update_Hint" xml:space="preserve"><value>Die Installation dauert etwa eine Minute und startet SpaceSharp neu. Ihre Einstellungen und gespeicherten Scans bleiben erhalten.</value></data>
+  <data name="Update_WhatsNew" xml:space="preserve"><value>Neuigkeiten</value></data>
+  <data name="Update_YouHave" xml:space="preserve"><value>Sie haben {0}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>SpaceSharp {0} ist bereit</value></data>
+  <data name="Update_RemindLater" xml:space="preserve"><value>Später erinnern</value></data>
+  <data name="Update_WhatsNewIn" xml:space="preserve"><value>Neu in {0}</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>Später</value></data>
+  <data name="WhatsNew_Title" xml:space="preserve"><value>Neu in {0}</value></data>
+  <data name="WhatsNew_TitleSince" xml:space="preserve"><value>Neu seit {1}</value></data>
+  <data name="WhatsNew_Loading" xml:space="preserve"><value>Versionshinweise werden geladen…</value></data>
+  <data name="WhatsNew_Unavailable" xml:space="preserve"><value>Die Versionshinweise konnten nicht geladen werden. Die vollständige Liste ist auf GitHub.</value></data>
+  <data name="WhatsNew_SeeAll" xml:space="preserve"><value>Alle Änderungen auf GitHub ansehen</value></data>
+  <data name="Settings_Treemap" xml:space="preserve"><value>Treemap</value></data>
+  <data name="Settings_Treemap_Desc" xml:space="preserve"><value>Nichts davon ist unverzichtbar, aber es ändert, wie die Karte wirkt.</value></data>
+  <data name="Treemap_Density" xml:space="preserve"><value>Dichte</value></data>
+  <data name="Treemap_Density_Desc" xml:space="preserve"><value>Wie viele kleine Elemente die Karte zeichnet, bevor sie zu einem Feld "312 Dateien" zusammengefasst oder weggelassen werden. Spärlich ist ruhig, Maximum fasst nur die winzigsten zusammen, Alles fasst nie zusammen. Tastenkombination: G schaltet auf Alles um und zurück.</value></data>
+  <data name="Density_Sparse" xml:space="preserve"><value>Spärlich</value></data>
+  <data name="Density_Normal" xml:space="preserve"><value>Normal</value></data>
+  <data name="Density_Dense" xml:space="preserve"><value>Dicht</value></data>
+  <data name="Density_Maximum" xml:space="preserve"><value>Maximum</value></data>
+  <data name="Treemap_Bias" xml:space="preserve"><value>Tendenz</value></data>
+  <data name="Treemap_Bias_Desc" xml:space="preserve"><value>Ob das Layout breite oder hohe Felder bevorzugt. Ausgeglichen ist das reine Squarified-Layout.</value></data>
+  <data name="Treemap_Horizontal" xml:space="preserve"><value>Horizontal</value></data>
+  <data name="Treemap_Equal" xml:space="preserve"><value>Ausgeglichen</value></data>
+  <data name="Treemap_Vertical" xml:space="preserve"><value>Vertikal</value></data>
+  <data name="Treemap_Padding" xml:space="preserve"><value>Abstand</value></data>
+  <data name="Treemap_Padding_Desc" xml:space="preserve"><value>Zusätzlicher Platz um jedes Feld, zusätzlich zu dem, was der Stil verwendet.</value></data>
+  <data name="Treemap_Border" xml:space="preserve"><value>Rasterlinienbreite</value></data>
+  <data name="Treemap_Border_Desc" xml:space="preserve"><value>Wie dick die Rasterlinien sind.</value></data>
+  <data name="Unit_Pixels" xml:space="preserve"><value>{0} px</value></data>
+  <data name="Treemap_Font" xml:space="preserve"><value>Schriftart</value></data>
+  <data name="Treemap_Font_Desc" xml:space="preserve"><value>Die Schrift für jede Beschriftung auf der Karte. Die Beschriftungsgröße wird unter Darstellung festgelegt.</value></data>
+  <data name="Treemap_Files" xml:space="preserve"><value>Dateien</value></data>
+  <data name="Treemap_Files_Desc" xml:space="preserve"><value>Was ein Dateifeld anzeigt.</value></data>
+  <data name="Treemap_Folders" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Was ein Ordnertitel anzeigt.</value></data>
+  <data name="Treemap_CenterNames" xml:space="preserve"><value>Namen zentrieren</value></data>
+  <data name="Treemap_ShowSizes" xml:space="preserve"><value>Größen anzeigen</value></data>
+  <data name="Treemap_ShowCounts" xml:space="preserve"><value>Dateianzahl anzeigen</value></data>
+  <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} Dateien</value></data>
+  <data name="Density_Everything" xml:space="preserve"><value>Alles (keine Gruppierung)</value></data>
+  <data name="Status_Density" xml:space="preserve"><value>Dichte: {0}</value></data>
+  <data name="SettingsTab_General" xml:space="preserve"><value>Allgemein</value></data>
+  <data name="SettingsTab_Appearance" xml:space="preserve"><value>Darstellung</value></data>
+  <data name="SettingsTab_Treemap" xml:space="preserve"><value>Treemap</value></data>
+  <data name="SettingsTab_Map" xml:space="preserve"><value>Karte</value></data>
+  <data name="SettingsTab_Scanning" xml:space="preserve"><value>Scannen</value></data>
+  <data name="About_Tagline" xml:space="preserve"><value>Sehen Sie, wohin Ihr Speicherplatz verschwunden ist.</value></data>
+  <data name="About_Check" xml:space="preserve"><value>Suchen</value></data>
+  <data name="About_InstalledCheck" xml:space="preserve"><value>Installiert. Nach einer neueren Version suchen.</value></data>
+  <data name="About_PortableNoUpdates" xml:space="preserve"><value>Portabel. Updates erfolgen nicht automatisch; die neueste Version ist auf GitHub.</value></data>
+  <data name="About_WhatsNewSub" xml:space="preserve"><value>Änderungen in dieser Version</value></data>
+  <data name="About_ShortcutsSub" xml:space="preserve"><value>Jede Tasten- und Mausaktion</value></data>
+  <data name="About_ReportSub" xml:space="preserve"><value>Öffnet GitHub mit Ihrer Version und Ihrem System bereits ausgefüllt</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>Absturzprotokolle</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>Öffnet den Ordner, in den unerwartete Fehler geschrieben werden, um eines an einen Bericht anzuhängen</value></data>
+  <data name="About_Source" xml:space="preserve"><value>Quellcode auf GitHub</value></data>
+  <data name="About_SourceSub" xml:space="preserve"><value>MIT-Lizenz</value></data>
+  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap-Algorithmus, SpaceMonger, Symbole</value></data>
+  <data name="Keys_Navigate" xml:space="preserve"><value>Navigieren</value></data>
+  <data name="Keys_Select" xml:space="preserve"><value>Auswählen und handeln</value></data>
+  <data name="Keys_View" xml:space="preserve"><value>Ansicht und Dateien</value></data>
+  <data name="Start_PickADrive" xml:space="preserve"><value>Wählen Sie links ein Laufwerk</value></data>
+  <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Wählen Sie links ein Laufwerk oder machen Sie dort weiter, wo Sie aufgehört haben</value></data>
+  <data name="Start_RecentHint" xml:space="preserve"><value>Gespeicherte Scans öffnen sich sofort und werden mit dem neuen verglichen.</value></data>
+  <data name="Start_FirstHint" xml:space="preserve"><value>Jede Datei und jeder Ordner wird zu einem Feld, dessen Größe dem belegten Speicher entspricht.</value></data>
+  <data name="Start_ScanAFolder" xml:space="preserve"><value>Ordner scannen</value></data>
+  <data name="Start_OpenASavedScan" xml:space="preserve"><value>Gespeicherten Scan öffnen…</value></data>
+  <data name="Start_FastScanLine" xml:space="preserve"><value>Ganze Laufwerke in Sekunden mit Administratorrechten.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0} % belegt</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} gescannt</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>{0} von {1} auf Ihren Laufwerken belegt</value></data>
+  <data name="Settings_KeepScans" xml:space="preserve"><value>Gespeicherte Scans aufbewahren für</value></data>
+  <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatische Speicherungen, die älter sind, werden beim Start von SpaceSharp gelöscht. Scans, die Sie selbst als Dateien gespeichert haben, werden nie angerührt.</value></data>
+  <data name="KeepScans_Days" xml:space="preserve"><value>{0} Tage</value></data>
+  <data name="KeepScans_Months" xml:space="preserve"><value>{0} Monate</value></data>
+  <data name="KeepScans_OneYear" xml:space="preserve"><value>1 Jahr</value></data>
+  <data name="KeepScans_Forever" xml:space="preserve"><value>Unbegrenzt</value></data>
+  <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Alle gespeicherten Scans löschen</value></data>
+  <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Es gibt keine gespeicherten Scans.</value></data>
+  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} gespeicherte Scans löschen? Die Karte auf dem Bildschirm bleibt; Vergleiche mit früheren Scans sind erst wieder möglich, wenn neue erstellt wurden.</value></data>
+  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} gespeicherte Scans gelöscht.</value></data>
+  <data name="Exclude_Placeholder" xml:space="preserve"><value>Name oder Muster, z. B. *.tmp</value></data>
+  <data name="Exclude_Add" xml:space="preserve"><value>Hinzufügen</value></data>
+  <data name="Exclude_Remove" xml:space="preserve"><value>Entfernen</value></data>
+  <data name="Exclude_Suggestions" xml:space="preserve"><value>Häufig:</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>Nach Typ</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>Nach Alter</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Wo der Speicher steckt</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Karte hierhin zoomen</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>Karte auf diesen Ordner zoomen</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Diesen Monat</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dieses Jahr</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 bis 3 Jahre</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>Älter</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>über ein Jahr alt</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Älteste Änderung: {0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>Diese {0} machen {1} des Ordners aus. Die übrigen {2:N0} Dateien teilen sich {3}.</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} dieses Ordners ist eine einzige Sache: {1} mit {2}.</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} auf dem Datenträger</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} von {1}, sein einziger Ordner</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} von {1}, seine einzige Datei</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} von {1}, der größte seiner {2} Ordner</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} von {1}, die größte seiner {2} Dateien</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} von {1}, Nummer {3} von {2} Ordnern nach Größe</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} von {1}, Nummer {3} von {2} Dateien nach Größe</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Überwiegend {0} ({1})</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Überwiegend {0} ({1}) und {2} ({3})</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Eine Mischung aus {0} ({1}), {2} ({3}) und {4} ({5})</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>mittlere Datei {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Zuletzt geändert {0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Geändert {0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} seit über einem Jahr unberührt</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>unverändert seit dem letzten Scan</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>seit dem letzten Scan um {0} gewachsen</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>seit dem letzten Scan um {0} geschrumpft</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>neu seit dem letzten Scan</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>Überwiegend {0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} Dateien</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>neu seit letztem Scan</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>geändert {0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>geändert {0}</value></data>
+  <data name="Settings_Shading" xml:space="preserve"><value>Schattierung</value></data>
+  <data name="Settings_Shading_Desc" xml:space="preserve"><value>Wie Dateien beleuchtet werden. Die Karte oben zeigt Beispieldaten und folgt jeder Änderung.</value></data>
+  <data name="Settings_PreviewSample" xml:space="preserve"><value>Beispieldaten</value></data>
+  <data name="Settings_PreviewDrive" xml:space="preserve"><value>Beispiellaufwerk</value></data>
+  <data name="Shading_Light" xml:space="preserve"><value>Licht von</value></data>
+  <data name="Shading_Light_Desc" xml:space="preserve"><value>Von welcher Seite das Licht kommt. Die Mitte ist direkt von vorn.</value></data>
+  <data name="Shading_Reset" xml:space="preserve"><value>Schattierung zurücksetzen</value></data>
+  <data name="Shading_Reset_Desc" xml:space="preserve"><value>Setzt die Einstellungen für Schattierung, Raster und Hervorhebung auf den Auslieferungszustand zurück.</value></data>
+  <data name="Shading_ResetButton" xml:space="preserve"><value>Auf Standard zurücksetzen</value></data>
+  <data name="Settings_Grid" xml:space="preserve"><value>Raster und Hervorhebung</value></data>
+  <data name="Grid_Show" xml:space="preserve"><value>Rasterlinien</value></data>
+  <data name="Grid_Show_Desc" xml:space="preserve"><value>Eine Linie zwischen allen Feldern, um Dateien ebenso wie um Ordnerrahmen.</value></data>
+  <data name="Grid_Color" xml:space="preserve"><value>Rasterfarbe</value></data>
+  <data name="Grid_Color_Desc" xml:space="preserve"><value>Dunkle Linien passen zu den meisten Paletten; helle eignen sich für die dunkelsten.</value></data>
+  <data name="Highlight_Color" xml:space="preserve"><value>Hervorhebungsrahmen</value></data>
+  <data name="Highlight_Color_Desc" xml:space="preserve"><value>Der Rahmen um ausgewählte Felder. Felder unter der Maus behalten einen weißen Rahmen.</value></data>
+  <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
+  <data name="Shading_Enable" xml:space="preserve"><value>Kissenschattierung</value></data>
+  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Hell-dunkel-Schattierung auf jeder Datei, so wie SpaceMonger sie gezeichnet hat. Aus ergibt flache Farben, und die Einstellungen darunter haben keine Wirkung.</value></data>
+  <data name="Shading_Presets" xml:space="preserve"><value>Voreinstellungen</value></data>
+  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Ein Ausgangspunkt. Die Regler darunter verfeinern ihn.</value></data>
+  <data name="Preset_Soft" xml:space="preserve"><value>Weich</value></data>
+  <data name="Preset_Classic" xml:space="preserve"><value>Klassisch</value></data>
+  <data name="Preset_Deep" xml:space="preserve"><value>Tief</value></data>
+  <data name="Shading_Depth" xml:space="preserve"><value>Tiefe</value></data>
+  <data name="Shading_Depth_Desc" xml:space="preserve"><value>Wie ausgeprägt die Schattierung ist, von einem leichten Schimmer bis zu einem tiefen Kissen.</value></data>
+  <data name="Shading_Spread" xml:space="preserve"><value>Ausbreitung</value></data>
+  <data name="Shading_Spread_Desc" xml:space="preserve"><value>Wie weit das Licht über eine Datei reicht, bevor der Schatten übernimmt.</value></data>
+  <data name="Shading_Tone" xml:space="preserve"><value>Ton</value></data>
+  <data name="Shading_Tone_Desc" xml:space="preserve"><value>Hellere oder dunklere Dateien insgesamt. Ordner behalten ihre Farbe.</value></data>
+  <data name="Shading_Fade" xml:space="preserve"><value>Abschwächung in Ordnern</value></data>
+  <data name="Shading_Fade_Desc" xml:space="preserve"><value>Wie viel Schattierung verschachtelte Dateien behalten. Niedrig beruhigt tiefe Ebenen, damit die obersten Ordner hervorstechen.</value></data>
+  <data name="Shading_LightSide" xml:space="preserve"><value>Licht von dieser Seite</value></data>
+  <data name="Shading_LightAhead" xml:space="preserve"><value>Licht direkt von vorn</value></data>
+  <data name="Settings_LookDark" xml:space="preserve"><value>Dunkles Erscheinungsbild</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Die Farben von Fenster, Bereichen und Menüs, wenn das dunkle Design aktiv ist: Graphit, Schiefer, Mokka, Mitternacht oder Carbon.</value></data>
+  <data name="Settings_LookLight" xml:space="preserve"><value>Helles Erscheinungsbild</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Dasselbe für das helle Design: Papier, Leinen, Nebel, Sand oder Schnee.</value></data>
+  <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, Schattierung und Text</value></data>
+  <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles zum Aussehen der Karte befindet sich auf der Seite Treemap, neben einer Vorschau.</value></data>
+  <data name="Settings_Colors" xml:space="preserve"><value>Farben</value></data>
+  <data name="Settings_Colors_Desc" xml:space="preserve"><value>Die Vorschau oben folgt jeder Änderung auf dieser Seite.</value></data>
+  <data name="Settings_Text" xml:space="preserve"><value>Text und Titelleisten</value></data>
+  <data name="Settings_Text_Desc" xml:space="preserve"><value>Wie Namen auf Dateien und in den Ordnertitelleisten gezeichnet werden.</value></data>
+  <data name="Text_FolderColor" xml:space="preserve"><value>Ordnernamen</value></data>
+  <data name="Text_FolderColor_Desc" xml:space="preserve"><value>Die Farbe des Texts in Titelleisten. Auto wählt für jede Leiste dunkel oder hell.</value></data>
+  <data name="Text_FileColor" xml:space="preserve"><value>Dateinamen und Größen</value></data>
+  <data name="Text_FileColor_Desc" xml:space="preserve"><value>Die Farbe des Texts auf Dateien. Auto wählt für jedes Feld dunkel oder hell.</value></data>
+  <data name="Text_Auto" xml:space="preserve"><value>Auto</value></data>
+  <data name="Text_TitlePadding" xml:space="preserve"><value>Abstand in Titelleisten</value></data>
+  <data name="Text_TitlePadding_Desc" xml:space="preserve"><value>Platz über und unter einem Ordnernamen. Die Leiste wächst damit.</value></data>
+  <data name="Text_TitleTint" xml:space="preserve"><value>Tönung der Titelleiste</value></data>
+  <data name="Text_TitleTint_Desc" xml:space="preserve"><value>Wie stark die Leiste gegenüber der eigenen Ordnerfarbe schattiert wird. 0 ist dieselbe Farbe; die Rasterlinie markiert sie weiterhin.</value></data>
+  <data name="Palette_GroupDark" xml:space="preserve"><value>Für das dunkle Design</value></data>
+  <data name="Palette_GroupLight" xml:space="preserve"><value>Für das helle Design</value></data>
+  <data name="Palette_GroupAny" xml:space="preserve"><value>Jedes Design</value></data>
+  <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Die Palette für das Design {0}. Jedes Design merkt sich seine eigene; die Karte wechselt mit dem Design.</value></data>
+  <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · für das Design {1} gemacht</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Zwischen Karte und Ansicht Einblicke wechseln</value></data>
+  <data name="Panel_TabType" xml:space="preserve"><value>Nach Typ</value></data>
+  <data name="Panel_TabCleanup" xml:space="preserve"><value>Gefahrlos löschbar</value></data>
+  <data name="Panel_TabTimeline" xml:space="preserve"><value>Wann geändert</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>Scannen Sie ein Laufwerk oder einen Ordner, und diese Ansicht fasst ihn zusammen.</value></data>
+  <data name="Panel_TypeSummary" xml:space="preserve"><value>{0} machen {1} des Scans aus. Zeigen Sie auf einen Typ, um ihn auf der Karte zu sehen, klicken Sie zum Filtern.</value></data>
+  <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}: {1} in {2:N0} Dateien</value></data>
+  <data name="Panel_TypeFiles" xml:space="preserve"><value>{0:N0} Dateien</value></data>
+  <data name="Panel_TypeLargest" xml:space="preserve"><value> · größte: {0} ({1})</value></data>
+  <data name="Panel_CleanupSummary" xml:space="preserve"><value>{0} an Orten, die sich meist gefahrlos leeren lassen. Nichts wird gelöscht, bevor Sie es sagen.</value></data>
+  <data name="Panel_CleanupNone" xml:space="preserve"><value>Nichts Offensichtliches zum Löschen.</value></data>
+  <data name="Panel_CleanupNoneHint" xml:space="preserve"><value>Kein Windows.old, keine nennenswerten Caches, kein Papierkorb und keine Downloads, die ein Jahr lang Staub angesetzt haben. Die größten Elemente links sind der nächste Ort zum Nachsehen.</value></data>
+  <data name="Panel_CleanupMore" xml:space="preserve"><value>Außerdem: {0}</value></data>
+  <data name="Panel_TimelineSummary" xml:space="preserve"><value>{0} wurden seit über einem Jahr nicht angerührt. Zeigen Sie auf einen Monat, um ihn auf der Karte zu sehen, klicken Sie zum Filtern.</value></data>
+  <data name="Panel_TimelineMonth" xml:space="preserve"><value>{0}: {1} in {2:N0} Dateien</value></data>
+  <data name="Panel_TimelineFirst" xml:space="preserve"><value> (und alles Ältere)</value></data>
+  <data name="Panel_TimelineOldest" xml:space="preserve"><value>{0} und älter</value></data>
+  <data name="Age_ThisMonth" xml:space="preserve"><value>Diesen Monat</value></data>
+  <data name="Age_ThisYear" xml:space="preserve"><value>Dieses Jahr</value></data>
+  <data name="Age_OneToThree" xml:space="preserve"><value>1 bis 3 Jahre</value></data>
+  <data name="Age_Older" xml:space="preserve"><value>Älter</value></data>
+  <data name="Cleanup_Show" xml:space="preserve"><value>Anzeigen</value></data>
+  <data name="Cleanup_Empty" xml:space="preserve"><value>Leeren</value></data>
+  <data name="Cleanup_Review" xml:space="preserve"><value>Prüfen</value></data>
+  <data name="Cleanup_HowTo" xml:space="preserve"><value>Anleitung</value></data>
+  <data name="Cleanup_WindowsOld" xml:space="preserve"><value>Windows.old</value></data>
+  <data name="Cleanup_WindowsOld_Note" xml:space="preserve"><value>Von einem Windows-Funktionsupdate zurückgelassen. Windows entfernt es nach 10 Tagen selbst; dieses ist noch da.</value></data>
+  <data name="Cleanup_RecycleBin" xml:space="preserve"><value>Papierkorb</value></data>
+  <data name="Cleanup_RecycleBin_Note" xml:space="preserve"><value>Was Sie bereits gelöscht haben. Leeren ist endgültig; Windows fragt vorher nach.</value></data>
+  <data name="Cleanup_SystemFiles" xml:space="preserve"><value>Ruhezustands- und Auslagerungsdateien</value></data>
+  <data name="Cleanup_SystemFiles_Note" xml:space="preserve"><value>hiberfil.sys, pagefile.sys und swapfile.sys. Windows verwaltet sie; SpaceSharp rührt sie nicht an.</value></data>
+  <data name="Cleanup_SystemFiles_HowTo" xml:space="preserve"><value>hiberfil.sys enthält den Arbeitsspeicher für Ruhezustand und Schnellstart. Um sie freizugeben, öffnen Sie eine Eingabeaufforderung als Administrator und führen Sie aus: powercfg /hibernate off
+
+pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird unter System › Erweiterte Systemeinstellungen › Leistung › Virtueller Arbeitsspeicher festgelegt. Sie Windows zu überlassen ist die sichere Wahl.</value></data>
+  <data name="Cleanup_Temp" xml:space="preserve"><value>Temporäre Dateien</value></data>
+  <data name="Cleanup_Temp_Note" xml:space="preserve"><value>{0:N0} Temp-Ordner, {1:N0} Dateien. Programme sollten hinter sich aufräumen; viele tun es nicht.</value></data>
+  <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Paket-Caches</value></data>
+  <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} Caches (npm, pnpm, NuGet, pip, Cargo, Gradle und dergleichen), {1:N0} Dateien. Sie werden bei Bedarf erneut heruntergeladen.</value></data>
+  <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Browser-Caches</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} Cache-Ordner, {1:N0} Dateien. Seiten laden danach beim ersten Mal etwas langsamer.</value></data>
+  <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shader-Caches</value></data>
+  <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} Ordner, {1:N0} Dateien. Spiele und Treiber bauen sie beim nächsten Start neu auf.</value></data>
+  <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update-Downloads</value></data>
+  <data name="Cleanup_WindowsUpdate_Note" xml:space="preserve"><value>Installationsdateien, die Windows Update bereits angewendet hat. Windows lädt sie bei Bedarf erneut herunter.</value></data>
+  <data name="Cleanup_OldDownloads" xml:space="preserve"><value>Downloads, seit einem Jahr unberührt</value></data>
+  <data name="Cleanup_OldDownloads_Note" xml:space="preserve"><value>{0:N0} Elemente in Downloads, seit einem Jahr unverändert, überwiegend Installationsdateien und Archive. Prüfen wählt sie auf der Karte aus.</value></data>
+  <data name="Panel_Collapse" xml:space="preserve"><value>Bereich auf seine Registerkarten einklappen</value></data>
+  <data name="Panel_Expand" xml:space="preserve"><value>Bereich ausklappen</value></data>
+  <data name="Cleanup_Emptied" xml:space="preserve"><value>Papierkorb geleert, {0} freigegeben.</value></data>
+  <data name="Cleanup_Recycle" xml:space="preserve"><value>In den Papierkorb</value></data>
+  <data name="Panel_BandTip" xml:space="preserve"><value>Karte auf Dateien filtern, die zuletzt {0} geändert wurden</value></data>
+  <data name="Filter_ToggleTip" xml:space="preserve"><value>Filter ein- oder ausblenden (Strg+F)</value></data>
+  <data name="Filter_ToggleCount" xml:space="preserve"><value>Filter · {0}</value></data>
+  <data name="Rail_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Rail_Size" xml:space="preserve"><value>Größe</value></data>
+  <data name="Rail_Age" xml:space="preserve"><value>Alter</value></data>
+  <data name="Rail_Show" xml:space="preserve"><value>Anzeigen</value></data>
+  <data name="Rail_Try" xml:space="preserve"><value>Probieren</value></data>
+  <data name="Rail_Any" xml:space="preserve"><value>beliebig</value></data>
+  <data name="Rail_Over" xml:space="preserve"><value>über {0}</value></data>
+  <data name="Rail_Under" xml:space="preserve"><value>unter {0}</value></data>
+  <data name="Rail_Untouched" xml:space="preserve"><value>unberührt {0}</value></data>
+  <data name="Rail_Within" xml:space="preserve"><value>innerhalb {0}</value></data>
+  <data name="Rail_Files" xml:space="preserve"><value>Dateien</value></data>
+  <data name="Rail_Folders" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Drawer_ShareOfScan" xml:space="preserve"><value>Anteil am Scan</value></data>
+  <data name="Drawer_ClearAll" xml:space="preserve"><value>Alle leeren</value></data>
+  <data name="Settings_FilterLayout" xml:space="preserve"><value>Filterlayout</value></data>
+  <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Ein Ausklappbereich rechts über der Karte mit allen Steuerelementen (Standard) oder eine Leiste unter dem Pfad mit einem Chip pro Bedingung. Strg+F öffnet beides.</value></data>
+  <data name="FilterLayout_Rail" xml:space="preserve"><value>Leiste unter dem Pfad</value></data>
+  <data name="FilterLayout_Drawer" xml:space="preserve"><value>Ausklappbereich über der Karte</value></data>
+  <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Name oder Muster, z. B. *.iso</value></data>
+  <data name="Main_ViewMap" xml:space="preserve"><value>Karte</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>Die Karte des Scans (B wechselt zwischen den beiden Ansichten)</value></data>
+  <data name="Main_ViewInsights" xml:space="preserve"><value>Einblicke</value></data>
+  <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Der Scan zusammengefasst: nach Typ, gefahrlos löschbar, wann geändert, größte Elemente (B)</value></data>
+  <data name="Insights_Title" xml:space="preserve"><value>Einblicke</value></data>
+  <data name="Insights_Scanning" xml:space="preserve"><value>Scan läuft… die Zusammenfassung erscheint, sobald er fertig ist.</value></data>
+  <data name="Insights_Scanned" xml:space="preserve"><value>Gescannt</value></data>
+  <data name="Insights_ScannedDetail" xml:space="preserve"><value>{0:N0} Dateien · {1:N0} Ordner · {2}</value></data>
+  <data name="Insights_FromFileTable" xml:space="preserve"><value>aus der Dateitabelle</value></data>
+  <data name="Insights_FromWalk" xml:space="preserve"><value>Ordnerdurchlauf</value></data>
+  <data name="Insights_FreeOn" xml:space="preserve"><value>Frei auf {0}</value></data>
+  <data name="Insights_FreeOf" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Insights_FreeDetail" xml:space="preserve"><value>{0} belegt · {1}</value></data>
+  <data name="Insights_Free" xml:space="preserve"><value>Freier Speicher</value></data>
+  <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} Orte · {1} ausgewählt</value></data>
+  <data name="Insights_Untouched" xml:space="preserve"><value>Seit einem Jahr unberührt</value></data>
+  <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} des Scans · {1:N0} Dateien</value></data>
+  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Größter Ordner</value></data>
+  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} Dateien</value></data>
+  <data name="Insights_SinceLast" xml:space="preserve"><value>Seit letztem Scan</value></data>
+  <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} neue Dateien</value></data>
+  <data name="Insights_NoBaseline" xml:space="preserve"><value>Kein früherer Scan</value></data>
+  <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Scannen Sie an einem anderen Tag erneut, um zu sehen, was sich geändert hat</value></data>
+  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} Typen · auf eine Zeile klicken, um die Karte zu filtern</value></data>
+  <data name="Insights_TypesReading" xml:space="preserve"><value>{0} macht {1} des Scans aus, überwiegend unter {2}. Dann {3} mit {4}.</value></data>
+  <data name="Insights_ClearSub" xml:space="preserve"><value>{0} an Orten, die sich meist gefahrlos leeren lassen · nichts wird gelöscht, bevor Sie es sagen</value></data>
+  <data name="Insights_NoneChecked" xml:space="preserve"><value>Haken Sie die Orte ab, die zusammen in den Papierkorb sollen</value></data>
+  <data name="Insights_Checked" xml:space="preserve"><value>{0} ausgewählt · {1} · würde {2} frei lassen</value></data>
+  <data name="Insights_CheckTip" xml:space="preserve"><value>In "Ausgewählte in den Papierkorb" einbeziehen</value></data>
+  <data name="Insights_RecycleChecked" xml:space="preserve"><value>Ausgewählte in den Papierkorb</value></data>
+  <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} seit über einem Jahr unberührt · auf einen Monat oder ein Band klicken, um zu filtern</value></data>
+  <data name="Insights_OldestLargest" xml:space="preserve"><value>Größte, seit mindestens einem Jahr unberührt</value></data>
+  <data name="Insights_LargestFolders" xml:space="preserve"><value>Größte Ordner</value></data>
+  <data name="Insights_AnywhereInScan" xml:space="preserve"><value>irgendwo im Scan</value></data>
+  <data name="Insights_LargestFiles" xml:space="preserve"><value>Größte Dateien</value></data>
+  <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Scannen Sie dieses Laufwerk an einem anderen Tag erneut, und diese Karte zeigt, was in der Zwischenzeit gewachsen, geschrumpft und neu hinzugekommen ist. Ein gespeicherter Scan lässt sich auch über Scandatei › Mit gespeichertem Scan vergleichen heranziehen.</value></data>
+  <data name="Insights_Grew" xml:space="preserve"><value>Gewachsen</value></data>
+  <data name="Insights_Shrank" xml:space="preserve"><value>Geschrumpft</value></data>
+  <data name="Insights_New" xml:space="preserve"><value>Neu</value></data>
+  <data name="Insights_Extensions" xml:space="preserve"><value>Größte Erweiterungen</value></data>
+  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>und wo der Großteil jeweils liegt</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+</root>

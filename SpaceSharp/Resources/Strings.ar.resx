@@ -45,6 +45,10 @@
   <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>سيتحول SpaceSharp إلى {0} عند تشغيله في المرة القادمة. هل تريد إعادة التشغيل الآن؟</value></data>
   <data name="Settings_Language_RestartNow" xml:space="preserve"><value>إعادة التشغيل الآن</value></data>
   <data name="Settings_Language_Later" xml:space="preserve"><value>لاحقًا</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} مترجمة آليًا ولم يراجعها متحدث أصلي بعد. التصحيحات مرحب بها على GitHub.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>الترجمات</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>الترجمات الآلية</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="About_AboutSpaceSharp" xml:space="preserve"><value>حول SpaceSharp</value></data>
   <data name="About_CheckForUpdates" xml:space="preserve"><value>البحث عن تحديثات</value></data>
   <data name="About_Checking" xml:space="preserve"><value>جارٍ البحث…</value></data>
@@ -624,6 +628,9 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>فحص مجلد</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>فتح فحص محفوظ…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>أقراص كاملة في ثوانٍ بصلاحيات المسؤول.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}٪ مستخدم</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} تم فحصها</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>{0} مستخدم من {1} عبر أقراصك</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>الاحتفاظ بالفحوصات المحفوظة لمدة</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>تُحذف الحفظات التلقائية الأقدم من هذا عند بدء SpaceSharp. الفحوصات التي حفظتها كملفات بنفسك لا تُمس أبدًا.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} أيام</value></data>

@@ -238,8 +238,10 @@ public static class Palette
                 new[] { "#4F772D", "#6A994E", "#90A955", "#A7C957", "#7A9E7E", "#5C8D89", "#8C7A4F", "#9AB36A", "#5F8F55", "#B5A86A", "#6E9A77", "#87A33E" }, 0.5,
                 Hex("#A7C957", "#C8763D", "#9C7FB8", "#E3C567", "#5C8D89", "#D6DDB8", "#6A994E", "#B8B39E")),
 
-            FromList("Vivid",
-                new[] { "#4C8DFF", "#FF6B6B", "#2ECC71", "#FFC930", "#B463FF", "#1ABC9C", "#FF6FB5", "#F39C12", "#3498DB", "#9B59B6", "#27AE60", "#E74C3C" }, 0.45),
+            // GitHub's dark theme (Primer): the accent set it uses on #0D1117.
+            FromList("GitHub",
+                new[] { "#58A6FF", "#3FB950", "#A371F7", "#DB6D28", "#F85149", "#D29922", "#DB61A2", "#F78166", "#388BFD", "#2EA043", "#8957E5", "#BF4B8A" }, 0.45,
+                Hex("#3FB950", "#DB6D28", "#A371F7", "#D29922", "#58A6FF", "#8B949E", "#39C5CF", "#6E7681")),
 
             // Saturated mid-tones for the dark theme: more color than Graphite, still room for the cushion.
             FromList("Aurora",
@@ -276,8 +278,10 @@ public static class Palette
             FromList("Earth",
                 new[] { "#A47551", "#C2A878", "#8B9A6B", "#6E8B8B", "#B5856B", "#9C8A5A", "#7E9A7E", "#C9A86A", "#8A7A6A", "#A89A7A", "#6F8F7F", "#B39468" }, 0.5),
 
-            FromList("Retro",
-                new[] { "#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A", "#8CA64B", "#D97E3E", "#6A7FD9", "#C9A24A", "#5FB58F" }, 0.45),
+            // GitHub's light theme (Primer), lifted a fifth toward white so the squares read on the light map.
+            FromList("GitHub (light)",
+                Lift(new[] { "#0969DA", "#1A7F37", "#8250DF", "#BC4C00", "#CF222E", "#9A6700", "#BF3989", "#C4432B", "#218BFF", "#2DA44E", "#A475F9", "#E85AAD" }, 0.2), 0.45,
+                Lift(new[] { "#1A7F37", "#BC4C00", "#8250DF", "#9A6700", "#0969DA", "#57606A", "#1B7C83", "#6E7781" }, 0.2).Select(h => Hex(h)[0]).ToArray()),
 
             // The same twelve as the dark one, lifted a quarter toward white so they sit on the light background.
             FromList("Color-blind safe (light)",

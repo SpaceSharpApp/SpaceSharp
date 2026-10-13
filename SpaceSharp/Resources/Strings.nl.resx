@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+    SpaceSharp user-visible text, Dutch. Machine translated, not yet reviewed by a native speaker: Meta_MachineTranslated says so.
+    Keys and placeholders must match Strings.resx; dotnet test checks that.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Settings_Language" xml:space="preserve"><value>Taal</value></data>
+  <data name="Settings_Language_AppLanguage" xml:space="preserve"><value>Taal van de app</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Talen verschijnen hier zodra vertalingen worden toegevoegd. Wordt van kracht na een herstart.</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Zelfde als Windows</value></data>
+  <data name="Settings_Language_RestartTitle" xml:space="preserve"><value>Taal wijzigen</value></data>
+  <data name="Settings_Language_RestartMessage" xml:space="preserve"><value>SpaceSharp schakelt over naar {0} bij de volgende start. Nu opnieuw starten?</value></data>
+  <data name="Settings_Language_RestartNow" xml:space="preserve"><value>Nu opnieuw starten</value></data>
+  <data name="Settings_Language_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="Settings_Language_MachineNote" xml:space="preserve"><value>{0} is automatisch vertaald en nog niet gecontroleerd door een moedertaalspreker. Correcties zijn welkom op GitHub.</value></data>
+  <data name="Settings_Language_Translations" xml:space="preserve"><value>Vertalingen</value></data>
+  <data name="Settings_Language_MachineTranslations" xml:space="preserve"><value>Automatische vertalingen</value></data>
+  <data name="About_AboutSpaceSharp" xml:space="preserve"><value>Over SpaceSharp</value></data>
+  <data name="About_CheckForUpdates" xml:space="preserve"><value>Controleren op updates</value></data>
+  <data name="About_Checking" xml:space="preserve"><value>Controleren…</value></data>
+  <data name="About_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="About_CopyFailed" xml:space="preserve"><value>Kopiëren mislukt</value></data>
+  <data name="About_CopyVersionInfo" xml:space="preserve"><value>Versie-info kopiëren</value></data>
+  <data name="About_Credits" xml:space="preserve"><value>Met dank aan</value></data>
+  <data name="About_Feedback" xml:space="preserve"><value>Feedback</value></data>
+  <data name="About_FoundAProblemOr" xml:space="preserve"><value>Een probleem gevonden of een idee? Beide gaan naar de GitHub-pagina van het project. Bugrapporten openen met de versie- en systeemvelden al ingevuld.</value></data>
+  <data name="About_InstallAndRestart" xml:space="preserve"><value>{0} installeren en opnieuw starten</value></data>
+  <data name="About_Portable" xml:space="preserve"><value>  ·  portable</value></data>
+  <data name="About_ReportABug" xml:space="preserve"><value>Een bug melden</value></data>
+  <data name="About_Shortcuts" xml:space="preserve"><value>Sneltoetsen</value></data>
+  <data name="About_SuggestAFeature" xml:space="preserve"><value>Een functie voorstellen</value></data>
+  <data name="About_System" xml:space="preserve"><value>Systeem</value></data>
+  <data name="About_UpToDate" xml:space="preserve"><value>U bent up-to-date</value></data>
+  <data name="About_UpdateFailed" xml:space="preserve"><value>Update mislukt</value></data>
+  <data name="About_Version" xml:space="preserve"><value>Versie {0}</value></data>
+  <data name="Access_DeniedMany" xml:space="preserve"><value>{0:N0} beveiligde mappen konden niet worden gelezen, dus hun inhoud ontbreekt op de kaart.</value></data>
+  <data name="Access_DeniedOne" xml:space="preserve"><value>1 beveiligde map kon niet worden gelezen, dus de inhoud ervan ontbreekt op de kaart.</value></data>
+  <data name="Ago_Days" xml:space="preserve"><value>{0} dagen geleden</value></data>
+  <data name="Ago_Hours" xml:space="preserve"><value>{0} uur geleden</value></data>
+  <data name="Ago_JustNow" xml:space="preserve"><value>zojuist</value></data>
+  <data name="Ago_Minutes" xml:space="preserve"><value>{0} minuten geleden</value></data>
+  <data name="Ago_Months" xml:space="preserve"><value>{0} maanden geleden</value></data>
+  <data name="Ago_Today" xml:space="preserve"><value>vandaag</value></data>
+  <data name="Ago_Years" xml:space="preserve"><value>{0:0.#} jaar geleden</value></data>
+  <data name="Ago_Yesterday" xml:space="preserve"><value>gisteren</value></data>
+  <data name="Category_Archives" xml:space="preserve"><value>Archieven</value></data>
+  <data name="Category_Audio" xml:space="preserve"><value>Audio</value></data>
+  <data name="Category_Code" xml:space="preserve"><value>Code</value></data>
+  <data name="Category_Documents" xml:space="preserve"><value>Documenten</value></data>
+  <data name="Category_Images" xml:space="preserve"><value>Afbeeldingen</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>Overig</value></data>
+  <data name="Category_Programs" xml:space="preserve"><value>Programma's</value></data>
+  <data name="Category_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="Category_GameData" xml:space="preserve"><value>Gamegegevens</value></data>
+  <data name="Category_Installers" xml:space="preserve"><value>Installatieprogramma's</value></data>
+  <data name="Category_DiskImages" xml:space="preserve"><value>Schijfkopieën</value></data>
+  <data name="Category_Databases" xml:space="preserve"><value>Databases</value></data>
+  <data name="Category_Fonts" xml:space="preserve"><value>Lettertypen</value></data>
+  <data name="Category_System" xml:space="preserve"><value>Systeem</value></data>
+  <data name="Changes_Grew" xml:space="preserve"><value>gegroeid</value></data>
+  <data name="Changes_GrewFolder" xml:space="preserve"><value>gegroeide map</value></data>
+  <data name="Changes_New" xml:space="preserve"><value>nieuw</value></data>
+  <data name="Changes_NewFolder" xml:space="preserve"><value>nieuwe map</value></data>
+  <data name="Changes_Shrank" xml:space="preserve"><value>gekrompen</value></data>
+  <data name="Changes_ShrankFolder" xml:space="preserve"><value>gekrompen map</value></data>
+  <data name="ColorModeName_Change" xml:space="preserve"><value>Wijziging sinds vorige scan</value></data>
+  <data name="ColorModeName_Depth" xml:space="preserve"><value>Mapdiepte</value></data>
+  <data name="ColorModeName_FileType" xml:space="preserve"><value>Bestandstype</value></data>
+  <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Hoofdmap</value></data>
+  <data name="ColorMode_Change" xml:space="preserve"><value>wijziging sinds vorige scan</value></data>
+  <data name="ColorMode_Depth" xml:space="preserve"><value>diepte</value></data>
+  <data name="ColorMode_FileType" xml:space="preserve"><value>bestandstype</value></data>
+  <data name="ColorMode_TopFolder" xml:space="preserve"><value>hoofdmap</value></data>
+  <data name="Crash_CausedBy" xml:space="preserve"><value>Veroorzaakt door:</value></data>
+  <data name="Crash_Title" xml:space="preserve"><value>Onverwachte fout</value></data>
+  <data name="Crash_Saved" xml:space="preserve"><value>De details zijn opgeslagen in {0}.</value></data>
+  <data name="Crash_NotSaved" xml:space="preserve"><value>De details konden niet in een logbestand worden opgeslagen.</value></data>
+  <data name="Crash_PleaseReport" xml:space="preserve"><value>Als u even tijd hebt, meld het dan: het formulier op GitHub opent met de versie, uw Windows en de fout ingevuld, en het logbestand kan worden bijgevoegd.</value></data>
+  <data name="Crash_Report" xml:space="preserve"><value>Melden op GitHub</value></data>
+  <data name="Crash_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="Crash_ReportQuestion" xml:space="preserve"><value>Een bugrapport op GitHub openen?</value></data>
+  <data name="Crumb_Info" xml:space="preserve"><value>{0} · {1:N0} bestanden</value></data>
+  <data name="Crumb_NoScan" xml:space="preserve"><value>Nog geen scan</value></data>
+  <data name="Delete_AndMore" xml:space="preserve"><value>
+… en nog {0:N0}</value></data>
+  <data name="Delete_ErrorTitle" xml:space="preserve"><value>Verwijderen</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Niet alles kon worden verwijderd.
+
+{0}</value></data>
+  <data name="Delete_Question" xml:space="preserve"><value>{0} naar de Prullenbak verplaatsen?
+
+{1}</value></data>
+  <data name="Delete_Title" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
+  <data name="Delete_WhatFile" xml:space="preserve"><value>het bestand "{0}" ({1})</value></data>
+  <data name="Delete_WhatFolder" xml:space="preserve"><value>de map "{0}" ({1:N0} bestanden, {2})</value></data>
+  <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} items ({1:N0} bestanden, {2})</value></data>
+  <data name="Describe_FilesOnly" xml:space="preserve"><value>alleen bestanden</value></data>
+  <data name="Describe_FoldersOnly" xml:space="preserve"><value>alleen mappen</value></data>
+  <data name="Describe_Modified" xml:space="preserve"><value>gewijzigd in de laatste {0}</value></data>
+  <data name="Describe_Over" xml:space="preserve"><value>groter dan {0}</value></data>
+  <data name="Describe_Under" xml:space="preserve"><value>kleiner dan {0}</value></data>
+  <data name="Describe_Untouched" xml:space="preserve"><value>onaangeroerd sinds {0}</value></data>
+  <data name="Dialog_ChooseFolder" xml:space="preserve"><value>Kies een map om te scannen</value></data>
+  <data name="Dialog_CompareScan" xml:space="preserve"><value>Vergelijken met een opgeslagen scan</value></data>
+  <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Kan de scan niet openen</value></data>
+  <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Kan niet opnieuw starten</value></data>
+  <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
+  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Exporteren naar CSV</value></data>
+  <data name="Dialog_OpenScan" xml:space="preserve"><value>Een opgeslagen scan openen</value></data>
+  <data name="Dialog_RescanFailed" xml:space="preserve"><value>Opnieuw scannen mislukt</value></data>
+  <data name="Dialog_SaveScan" xml:space="preserve"><value>Scan opslaan</value></data>
+  <data name="Dialog_ScanFailed" xml:space="preserve"><value>Scan mislukt</value></data>
+  <data name="Dialog_OutOfMemory32" xml:space="preserve"><value>De 32-bits versie had onvoldoende geheugen voordat de scan klaar was. Een 32-bits proces kan maar enkele gigabytes adresseren, hoeveel RAM de pc ook heeft, dus een station met zoveel bestanden heeft de 64-bits versie nodig (SpaceSharp-win-x64).</value></data>
+  <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp-scan (*.sscan)|*.sscan</value></data>
+  <data name="Drive_Free" xml:space="preserve"><value>{0} vrij</value></data>
+  <data name="Drive_UsedOf" xml:space="preserve"><value>{0} gebruikt van {1} · {2}</value></data>
+  <data name="Filter_1Month" xml:space="preserve"><value>1 maand</value></data>
+  <data name="Filter_1Year" xml:space="preserve"><value>1 jaar</value></data>
+  <data name="Filter_2Years" xml:space="preserve"><value>2 jaar</value></data>
+  <data name="Filter_3Months" xml:space="preserve"><value>3 maanden</value></data>
+  <data name="Filter_5Years" xml:space="preserve"><value>5 jaar</value></data>
+  <data name="Filter_6Months" xml:space="preserve"><value>6 maanden</value></data>
+  <data name="Filter_AnySize" xml:space="preserve"><value>Elke grootte</value></data>
+  <data name="Filter_AnyTime" xml:space="preserve"><value>Elke tijd</value></data>
+  <data name="Filter_FilesAndFolders" xml:space="preserve"><value>Bestanden en mappen</value></data>
+  <data name="Filter_FilesOnly" xml:space="preserve"><value>Alleen bestanden</value></data>
+  <data name="Filter_FoldersOnly" xml:space="preserve"><value>Alleen mappen</value></data>
+  <data name="Filter_LargerThan" xml:space="preserve"><value>Groter dan</value></data>
+  <data name="Filter_MatchCount" xml:space="preserve"><value>{0:N0} bestanden · {1} voldoen</value></data>
+  <data name="Filter_Matches" xml:space="preserve"><value>{0:N0} bestanden · {1}: {2}</value></data>
+  <data name="Filter_Name" xml:space="preserve"><value>Naam</value></data>
+  <data name="Filter_NamePlaceholder" xml:space="preserve"><value>Deel van de naam, of een patroon zoals *.iso</value></data>
+  <data name="Filter_NoFilter" xml:space="preserve"><value>Geen filter: alles wordt weergegeven</value></data>
+  <data name="Filter_NotModifiedFor" xml:space="preserve"><value>Niet gewijzigd sinds</value></data>
+  <data name="Filter_NothingMatches" xml:space="preserve"><value>Niets voldoet aan: {0}</value></data>
+  <data name="Filter_NothingMatchesShort" xml:space="preserve"><value>Niets voldoet</value></data>
+  <data name="Filter_QuickFilters" xml:space="preserve"><value>Snelfilters</value></data>
+  <data name="Filter_Show" xml:space="preserve"><value>Weergeven</value></data>
+  <data name="Filter_SmallerThan" xml:space="preserve"><value>Kleiner dan</value></data>
+  <data name="Filter_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Hover_AccessDenied" xml:space="preserve"><value>    ⚠ sommige inhoud kon niet worden gelezen</value></data>
+  <data name="Hover_FileSize" xml:space="preserve"><value> ({0} bestandsgrootte)</value></data>
+  <data name="Hover_Files" xml:space="preserve"><value>    {0:N0} bestanden</value></data>
+  <data name="Hover_FreeSpaceOn" xml:space="preserve"><value>Vrije ruimte op </value></data>
+  <data name="Hover_HardLink" xml:space="preserve"><value>    harde koppeling, {0} al elders geteld</value></data>
+  <data name="Hover_OnDisk" xml:space="preserve"><value> ({0} op schijf)</value></data>
+  <data name="Hover_ShareOf" xml:space="preserve"><value>  ({0:0.#}% van {1})</value></data>
+  <data name="Hover_TooSmallIn" xml:space="preserve"><value> te klein om weer te geven in </value></data>
+  <data name="Hover_ZoomToSee" xml:space="preserve"><value>    zoom in om ze te zien</value></data>
+  <data name="InspectWin_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="InspectWin_CopyDetails" xml:space="preserve"><value>Details kopiëren</value></data>
+  <data name="InspectWin_Inspect" xml:space="preserve"><value>Inspecteren</value></data>
+  <data name="InspectWin_Properties" xml:space="preserve"><value>Eigenschappen</value></data>
+  <data name="InspectWin_ShowInExplorer" xml:space="preserve"><value>Weergeven in Verkenner</value></data>
+  <data name="Inspect_AccessDenied" xml:space="preserve"><value>Sommige inhoud kon niet worden gelezen (toegang geweigerd)</value></data>
+  <data name="Inspect_ExactBytes" xml:space="preserve"><value>  ({0:N0} bytes)</value></data>
+  <data name="Inspect_FileNoExtension" xml:space="preserve"><value>Bestand, geen extensie ({0})</value></data>
+  <data name="Inspect_FileWithExtension" xml:space="preserve"><value>{0}-bestand ({1})</value></data>
+  <data name="Inspect_FilesFolders" xml:space="preserve"><value>{0:N0} bestanden, {1:N0} mappen</value></data>
+  <data name="Inspect_Folder" xml:space="preserve"><value>Map</value></data>
+  <data name="Inspect_HardLinkValue" xml:space="preserve"><value>{0}, al elders geteld</value></data>
+  <data name="Inspect_InFolders" xml:space="preserve"><value>In {0:N0} mappen</value></data>
+  <data name="Inspect_Items" xml:space="preserve"><value>Items</value></data>
+  <data name="Inspect_ItemsSelected" xml:space="preserve"><value>{0:N0} items geselecteerd</value></data>
+  <data name="Inspect_Size" xml:space="preserve"><value>Grootte</value></data>
+  <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspecteren: {0:N0} items</value></data>
+  <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspecteren: {0}</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Dit venster openen</value></data>
+  <data name="Key_AddSelection" xml:space="preserve"><value>Toevoegen aan selectie</value></data>
+  <data name="Key_CancelScan" xml:space="preserve"><value>Een scan annuleren</value></data>
+  <data name="Key_Copy" xml:space="preserve"><value>De geselecteerde paden kopiëren</value></data>
+  <data name="Key_Delete" xml:space="preserve"><value>Het geselecteerde item naar de Prullenbak verplaatsen</value></data>
+  <data name="Key_Filter" xml:space="preserve"><value>De kaart filteren</value></data>
+  <data name="Key_Grouping" xml:space="preserve"><value>Dichtheid wisselen tussen Alles (geen groepering) en terug</value></data>
+  <data name="Key_Inspect" xml:space="preserve"><value>De selectie inspecteren</value></data>
+  <data name="Key_NextColor" xml:space="preserve"><value>Volgende kleurmodus</value></data>
+  <data name="Key_OpenScan" xml:space="preserve"><value>Een opgeslagen scan openen</value></data>
+  <data name="Key_Pan" xml:space="preserve"><value>Verschuiven terwijl ingezoomd</value></data>
+  <data name="Key_Panel" xml:space="preserve"><value>Paneel met grootste bestanden, mappen en typen</value></data>
+  <data name="Key_Properties" xml:space="preserve"><value>Windows-eigenschappen van het geselecteerde item</value></data>
+  <data name="Key_Rescan" xml:space="preserve"><value>Opnieuw scannen</value></data>
+  <data name="Key_SaveScan" xml:space="preserve"><value>De scan opslaan in een bestand</value></data>
+  <data name="Key_SelectMatches" xml:space="preserve"><value>Elk bestand selecteren dat aan het filter voldoet</value></data>
+  <data name="Key_SelectRange" xml:space="preserve"><value>Een bereik selecteren</value></data>
+  <data name="Key_Settings" xml:space="preserve"><value>Instellingen</value></data>
+  <data name="Key_Up" xml:space="preserve"><value>Eén map omhoog</value></data>
+  <data name="Key_WholeMap" xml:space="preserve"><value>De hele kaart weergeven</value></data>
+  <data name="Key_ZoomInOut" xml:space="preserve"><value>In- of uitzoomen</value></data>
+  <data name="Key_ZoomToFolder" xml:space="preserve"><value>De kaart naar een map zoomen</value></data>
+  <data name="LabelSize_Large" xml:space="preserve"><value>Groot</value></data>
+  <data name="LabelSize_Larger" xml:space="preserve"><value>Groter</value></data>
+  <data name="LabelSize_Normal" xml:space="preserve"><value>Normaal</value></data>
+  <data name="LabelSize_Smaller" xml:space="preserve"><value>Kleiner</value></data>
+  <data name="LabelSize_Smallest" xml:space="preserve"><value>Kleinst</value></data>
+  <data name="List_ByType" xml:space="preserve"><value>Ruimte per bestandstype in {0}. Klik op een type om de kaart te filteren.</value></data>
+  <data name="List_ChangesSince" xml:space="preserve"><value>Grootste wijzigingen sinds {0}</value></data>
+  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Grootste wijzigingen sinds de vergeleken scan</value></data>
+  <data name="List_HintNoScan" xml:space="preserve"><value>Scan een station of map om de grootste items te zien.</value></data>
+  <data name="List_LargestFiles" xml:space="preserve"><value>Grootste bestanden in {0}</value></data>
+  <data name="List_LargestFolders" xml:space="preserve"><value>Grootste mappen in {0}</value></data>
+  <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Over SpaceSharp (F1)</value></data>
+  <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
+  <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Volgende keer opnieuw vragen</value></data>
+  <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
+  <data name="Main_Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="Main_Change" xml:space="preserve"><value>Wijziging</value></data>
+  <data name="Main_Changes" xml:space="preserve"><value>Wijzigingen</value></data>
+  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Wijzigingen sinds vorige scan</value></data>
+  <data name="Main_Clear" xml:space="preserve"><value>Wissen</value></data>
+  <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Filter wissen (Esc)</value></data>
+  <data name="Main_ClickADriveOn" xml:space="preserve"><value>Klik links op een station, of kies een map om te scannen.</value></data>
+  <data name="Main_ClickADriveTo" xml:space="preserve"><value>Klik op een station om het te scannen.</value></data>
+  <data name="Main_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="Main_ColorBy" xml:space="preserve"><value>Kleuren op</value></data>
+  <data name="Main_CompareWithASaved" xml:space="preserve"><value>Vergelijken met een opgeslagen scan…</value></data>
+  <data name="Main_CopyName" xml:space="preserve"><value>Naam kopiëren</value></data>
+  <data name="Main_CopyPath" xml:space="preserve"><value>Pad kopiëren</value></data>
+  <data name="Main_CtrlC" xml:space="preserve"><value>Ctrl+C</value></data>
+  <data name="Main_CtrlI" xml:space="preserve"><value>Ctrl+I</value></data>
+  <data name="Main_CtrlO" xml:space="preserve"><value>Ctrl+O</value></data>
+  <data name="Main_CtrlS" xml:space="preserve"><value>Ctrl+S</value></data>
+  <data name="Main_Del" xml:space="preserve"><value>Delete</value></data>
+  <data name="Main_Depth" xml:space="preserve"><value>Diepte</value></data>
+  <data name="Main_Dismiss" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="Main_Done" xml:space="preserve"><value>Gereed</value></data>
+  <data name="Main_DoubleClick" xml:space="preserve"><value>Dubbelklikken</value></data>
+  <data name="Main_Drives" xml:space="preserve"><value>Stations</value></data>
+  <data name="Main_DrivesAndLargestItems" xml:space="preserve"><value>Paneel met stations en grootste items (L)</value></data>
+  <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
+  <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc annuleert ook</value></data>
+  <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Alles wat niet voldoet, wordt op de kaart gedimd.</value></data>
+  <data name="Main_ExportToCSV" xml:space="preserve"><value>Exporteren naar CSV</value></data>
+  <data name="Main_FileType" xml:space="preserve"><value>Bestandstype</value></data>
+  <data name="Main_Files" xml:space="preserve"><value>Bestanden</value></data>
+  <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Main_FilterMatches" xml:space="preserve"><value>Filterresultaten</value></data>
+  <data name="Main_FilterOptions" xml:space="preserve"><value>Filteropties</value></data>
+  <data name="Main_Folders" xml:space="preserve"><value>Mappen</value></data>
+  <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Main_Inspect" xml:space="preserve"><value>Inspecteren</value></data>
+  <data name="Main_InstallAndRestart" xml:space="preserve"><value>Installeren en opnieuw starten</value></data>
+  <data name="Main_LargestFiles" xml:space="preserve"><value>Grootste bestanden</value></data>
+  <data name="Main_LargestItems" xml:space="preserve"><value>Grootste items</value></data>
+  <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Een heel station in seconden in kaart</value></data>
+  <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
+  <data name="Main_NoFilter" xml:space="preserve"><value>Geen filter</value></data>
+  <data name="Main_NotNow" xml:space="preserve"><value>Niet nu</value></data>
+  <data name="Main_Open" xml:space="preserve"><value>Openen</value></data>
+  <data name="Main_OpenSavedScan" xml:space="preserve"><value>Opgeslagen scan openen…</value></data>
+  <data name="Main_Palette" xml:space="preserve"><value>Palet</value></data>
+  <data name="Main_Properties" xml:space="preserve"><value>Eigenschappen</value></data>
+  <data name="Main_RescanF5" xml:space="preserve"><value>Opnieuw scannen (F5)</value></data>
+  <data name="Main_RescanThisFolder" xml:space="preserve"><value>Deze map opnieuw scannen</value></data>
+  <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Opnieuw starten als beheerder</value></data>
+  <data name="Main_SaveScanAs" xml:space="preserve"><value>Scan opslaan als…</value></data>
+  <data name="Main_ScanFile" xml:space="preserve"><value>Scanbestand</value></data>
+  <data name="Main_ScanFolder" xml:space="preserve"><value>Map scannen</value></data>
+  <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Elk passend bestand selecteren (Ctrl+A), dan Delete om ze naar de Prullenbak te verplaatsen</value></data>
+  <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Alles in deze map selecteren</value></data>
+  <data name="Main_SelectMatches" xml:space="preserve"><value>Resultaten selecteren</value></data>
+  <data name="Main_SettingsCtrl" xml:space="preserve"><value>Instellingen (Ctrl+,)</value></data>
+  <data name="Main_ShowInExplorer" xml:space="preserve"><value>Weergeven in Verkenner</value></data>
+  <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Alleen dit bestandstype weergeven</value></data>
+  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Hele kaart weergeven</value></data>
+  <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Hele kaart weergeven (Home / Ctrl+0)</value></data>
+  <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp kan de bestandstabel van het station rechtstreeks lezen in plaats van elke map te doorlopen. Daarvoor zijn beheerdersrechten nodig, dus de app moet eenmalig opnieuw starten. Mappen en andere bestandssystemen worden hoe dan ook op de normale manier gescand.</value></data>
+  <data name="Main_StopComparing" xml:space="preserve"><value>Vergelijken stoppen</value></data>
+  <data name="Main_Theme" xml:space="preserve"><value>Thema</value></data>
+  <data name="Main_ThisFolder" xml:space="preserve"><value>Deze map</value></data>
+  <data name="Main_TopFolder" xml:space="preserve"><value>Hoofdmap</value></data>
+  <data name="Main_Types" xml:space="preserve"><value>Typen</value></data>
+  <data name="Main_UpOneFolder" xml:space="preserve"><value>Eén map omhoog</value></data>
+  <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Eén map omhoog (Backspace / muisknop terug)</value></data>
+  <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Inzoomen (muiswiel / +)</value></data>
+  <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Uitzoomen (muiswiel / −)</value></data>
+  <data name="Main_ZoomToFolder" xml:space="preserve"><value>Zoomen naar map</value></data>
+  <data name="Menu_ContentsOf" xml:space="preserve"><value>Inhoud van {0}</value></data>
+  <data name="Menu_Delete" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
+  <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} items naar Prullenbak verplaatsen</value></data>
+  <data name="Menu_KindGroup" xml:space="preserve"><value>bestanden te klein om weer te geven</value></data>
+  <data name="Menu_KindFolder" xml:space="preserve"><value>map, {0:N0} bestanden</value></data>
+  <data name="Menu_KindFile" xml:space="preserve"><value>{0}-bestand</value></data>
+  <data name="Menu_KindFileNoExt" xml:space="preserve"><value>bestand</value></data>
+  <data name="Menu_Inspect" xml:space="preserve"><value>Inspecteren</value></data>
+  <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} items inspecteren</value></data>
+  <data name="Menu_RescanName" xml:space="preserve"><value>{0} opnieuw scannen</value></data>
+  <data name="Menu_RescanThis" xml:space="preserve"><value>Deze map opnieuw scannen</value></data>
+  <data name="Menu_SelectIn" xml:space="preserve"><value>Alles in {0} selecteren</value></data>
+  <data name="Menu_SelectInThis" xml:space="preserve"><value>Alles in deze map selecteren</value></data>
+  <data name="Menu_ShowOnlyExt" xml:space="preserve"><value>Alleen *{0}-bestanden weergeven</value></data>
+  <data name="Menu_ShowOnlyType" xml:space="preserve"><value>Alleen dit bestandstype weergeven</value></data>
+  <data name="Menu_ThisFolder" xml:space="preserve"><value>Deze map</value></data>
+  <data name="Mft_Building" xml:space="preserve"><value>Kaart wordt opgebouwd</value></data>
+  <data name="Mft_CannotOpen" xml:space="preserve"><value>Kan volume {0} niet openen. Beheerdersrechten zijn nodig om de bestandstabel te lezen.</value></data>
+  <data name="Mft_Reading" xml:space="preserve"><value>Bestandstabel wordt gelezen: {0:N0} van {1:N0} records</value></data>
+  <data name="Palette_GroupCustom" xml:space="preserve"><value>Aangepast</value></data>
+  <data name="Palettes_CouldNotOpen" xml:space="preserve"><value>Kan de palettenmap niet openen</value></data>
+  <data name="Palettes_LoadedMany" xml:space="preserve"><value> {0} aangepaste paletten geladen.</value></data>
+  <data name="Palettes_LoadedOne" xml:space="preserve"><value> 1 aangepast palet geladen.</value></data>
+  <data name="Palettes_NotLoaded" xml:space="preserve"><value> Niet geladen: </value></data>
+  <data name="Palettes_Note" xml:space="preserve"><value>Voeg uw eigen toe: één JSON-bestand per palet in de palettenmap. De map bevat een voorbeeld en een README.</value></data>
+  <data name="Palettes_OpenFolder" xml:space="preserve"><value>Map openen</value></data>
+  <data name="Palettes_Reload" xml:space="preserve"><value>Opnieuw laden</value></data>
+  <data name="Palettes_New" xml:space="preserve"><value>Nieuw palet</value></data>
+  <data name="Palettes_Edit" xml:space="preserve"><value>{0} bewerken</value></data>
+  <data name="Palettes_Copy" xml:space="preserve"><value>Beginnen met {0}</value></data>
+  <data name="Palettes_CopyName" xml:space="preserve"><value>{0} kopie</value></data>
+  <data name="PaletteEd_Title" xml:space="preserve"><value>Palet</value></data>
+  <data name="PaletteEd_Name" xml:space="preserve"><value>Naam</value></data>
+  <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Zo heet het in de paletlijst</value></data>
+  <data name="PaletteEd_For" xml:space="preserve"><value>Voor</value></data>
+  <data name="PaletteEd_Dark" xml:space="preserve"><value>Donker</value></data>
+  <data name="PaletteEd_Light" xml:space="preserve"><value>Licht</value></data>
+  <data name="PaletteEd_Both" xml:space="preserve"><value>Beide</value></data>
+  <data name="PaletteEd_Folders" xml:space="preserve"><value>Mappen</value></data>
+  <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>twaalf tinten, één per map op het hoogste niveau, herhaald per diepte</value></data>
+  <data name="PaletteEd_FolderN" xml:space="preserve"><value>Map {0}</value></data>
+  <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>map nummer {0} op het hoogste niveau, en elk twaalfde niveau daaronder</value></data>
+  <data name="PaletteEd_Generate" xml:space="preserve"><value>Genereren:</value></data>
+  <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regenboog</value></data>
+  <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Buren</value></data>
+  <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Tweekleurig</value></data>
+  <data name="PaletteEd_OneHue" xml:space="preserve"><value>Eén tint</value></data>
+  <data name="PaletteEd_Random" xml:space="preserve"><value>Willekeurig</value></data>
+  <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Een willekeurige basiskleur en spreiding. Druk erop tot iets er goed uitziet, en pas het dan aan.</value></data>
+  <data name="PaletteEd_FromBase" xml:space="preserve"><value>vanaf</value></data>
+  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>De basiskleur waar de generator mee begint. Klik om deze te wijzigen.</value></data>
+  <data name="PaletteEd_Base" xml:space="preserve"><value>Basiskleur</value></data>
+  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>waar Genereren mee begint; standaard de eerste mapkleur</value></data>
+  <data name="PaletteEd_Files" xml:space="preserve"><value>Bestanden</value></data>
+  <data name="PaletteEd_FilesSub" xml:space="preserve"><value>de mapkleur, opgelicht richting wit</value></data>
+  <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Elke bestandskleur zelf instellen</value></data>
+  <data name="PaletteEd_FilesTint" xml:space="preserve"><value>In plaats daarvan één tint gebruiken</value></data>
+  <data name="PaletteEd_FileN" xml:space="preserve"><value>Bestandskleur {0}</value></data>
+  <data name="PaletteEd_FileDetail" xml:space="preserve"><value>bestanden onder mapkleur {0} van twaalf</value></data>
+  <data name="PaletteEd_Types" xml:space="preserve"><value>Bestandstypen</value></data>
+  <data name="PaletteEd_TypesSub" xml:space="preserve"><value>vooraf ingevuld vanuit de mappen; klik op een type om het in te stellen</value></data>
+  <data name="PaletteEd_TypeDerived" xml:space="preserve"><value>afgeleid van de mapkleuren; stel het in en het blijft staan</value></data>
+  <data name="PaletteEd_TypeOwn" xml:space="preserve"><value>door u ingesteld</value></data>
+  <data name="PaletteEd_ResetDerived" xml:space="preserve"><value>Terug naar afgeleid</value></data>
+  <data name="PaletteEd_Hue" xml:space="preserve"><value>Tint</value></data>
+  <data name="PaletteEd_Saturation" xml:space="preserve"><value>Verzadiging</value></data>
+  <data name="PaletteEd_Lightness" xml:space="preserve"><value>Helderheid</value></data>
+  <data name="PaletteEd_LabelOk" xml:space="preserve"><value>Labels erop: {0}, contrast {1:0.0}:1</value></data>
+  <data name="PaletteEd_LabelLow" xml:space="preserve"><value>Labels erop: {0}, contrast {1:0.0}:1, slecht leesbaar</value></data>
+  <data name="PaletteEd_DarkText" xml:space="preserve"><value>donkere tekst</value></data>
+  <data name="PaletteEd_LightText" xml:space="preserve"><value>lichte tekst</value></data>
+  <data name="PaletteEd_ClosePairs" xml:space="preserve"><value>Mappen die te veel op elkaar lijken: {0}</value></data>
+  <data name="PaletteEd_LowLabels" xml:space="preserve"><value>{0} mapkleuren waarop labels slecht leesbaar zijn</value></data>
+  <data name="PaletteEd_AllGood" xml:space="preserve"><value>Labels zijn leesbaar op elke mapkleur, en geen twee lijken te veel op elkaar.</value></data>
+  <data name="PaletteEd_Preview" xml:space="preserve"><value>Voorbeeld</value></data>
+  <data name="PaletteEd_PreviewNote" xml:space="preserve"><value>voorbeeldgegevens, uw schaduwstijl</value></data>
+  <data name="PaletteEd_Export" xml:space="preserve"><value>JSON kopiëren</value></data>
+  <data name="PaletteEd_Exported" xml:space="preserve"><value>Het paletbestand staat op het klembord.</value></data>
+  <data name="PaletteEd_Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="PaletteEd_Save" xml:space="preserve"><value>Opslaan en gebruiken</value></data>
+  <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Die naam is al in gebruik</value></data>
+  <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} is een ingebouwd palet. Geef het uwe een andere naam.</value></data>
+  <data name="PaletteEd_Replace" xml:space="preserve"><value>Het palet vervangen?</value></data>
+  <data name="PaletteEd_ReplaceDetail" xml:space="preserve"><value>Er bestaat al een aangepast palet met de naam {0}. Opslaan vervangt het.</value></data>
+  <data name="PaletteEd_ReplaceYes" xml:space="preserve"><value>Vervangen</value></data>
+  <data name="PaletteEd_CouldNotSave" xml:space="preserve"><value>Kan het palet niet opslaan</value></data>
+  <data name="Period_Day" xml:space="preserve"><value>1 dag</value></data>
+  <data name="Period_Days" xml:space="preserve"><value>{0} dagen</value></data>
+  <data name="Period_Month" xml:space="preserve"><value>1 maand</value></data>
+  <data name="Period_Months" xml:space="preserve"><value>{0} maanden</value></data>
+  <data name="Period_Week" xml:space="preserve"><value>1 week</value></data>
+  <data name="Period_Weeks" xml:space="preserve"><value>{0} weken</value></data>
+  <data name="Period_Year" xml:space="preserve"><value>1 jaar</value></data>
+  <data name="Period_Years" xml:space="preserve"><value>{0} jaar</value></data>
+  <data name="Preset_BigAndOld" xml:space="preserve"><value>Groot en oud</value></data>
+  <data name="Preset_BigVideos" xml:space="preserve"><value>Grote video's</value></data>
+  <data name="Preset_InstallersArchives" xml:space="preserve"><value>Installatieprogramma's en archieven</value></data>
+  <data name="Preset_LargeFiles" xml:space="preserve"><value>Grote bestanden</value></data>
+  <data name="Preset_RecentlyChanged" xml:space="preserve"><value>Onlangs gewijzigd</value></data>
+  <data name="Preset_Untouched2Years" xml:space="preserve"><value>2 jaar onaangeroerd</value></data>
+  <data name="ScanFile_Newer" xml:space="preserve"><value>Dit scanbestand is geschreven door een nieuwere SpaceSharp.</value></data>
+  <data name="ScanFile_NotAScan" xml:space="preserve"><value>Geen SpaceSharp-scanbestand.</value></data>
+  <data name="Scan_FolderMissing" xml:space="preserve"><value>De map "{0}" bestaat niet.</value></data>
+  <data name="Scan_Rate" xml:space="preserve"><value>{0:0}</value></data>
+  <data name="Scan_RateK" xml:space="preserve"><value>{0:0.0}k</value></data>
+  <data name="Scan_Title" xml:space="preserve"><value>{0} wordt gescand</value></data>
+  <data name="Scan_Used" xml:space="preserve"><value>{0} gebruikt</value></data>
+  <data name="Scan_FolderFacts" xml:space="preserve"><value>map</value></data>
+  <data name="Scan_MethodMft" xml:space="preserve"><value>bestandstabel</value></data>
+  <data name="Scan_MethodWalk" xml:space="preserve"><value>mappen doorlopen</value></data>
+  <data name="Scan_StageFind" xml:space="preserve"><value>Bestanden zoeken</value></data>
+  <data name="Scan_StageRead" xml:space="preserve"><value>Bestandstabel lezen</value></data>
+  <data name="Scan_StageBuild" xml:space="preserve"><value>Structuur opbouwen</value></data>
+  <data name="Scan_StageDraw" xml:space="preserve"><value>Kaart tekenen</value></data>
+  <data name="Scan_SoFar" xml:space="preserve"><value>{0:N0} bestanden in {1:N0} mappen tot nu toe</value></data>
+  <data name="Scan_FoundSoFar" xml:space="preserve"><value>tot nu toe gevonden</value></data>
+  <data name="Scan_FoundOf" xml:space="preserve"><value>gevonden van {0}</value></data>
+  <data name="Scan_FilesPerSecond" xml:space="preserve"><value>bestanden per seconde</value></data>
+  <data name="Scan_Elapsed" xml:space="preserve"><value>verstreken</value></data>
+  <data name="Scan_ElapsedLeft" xml:space="preserve"><value>verstreken · nog ongeveer {0}</value></data>
+  <data name="Scan_ASecond" xml:space="preserve"><value>een seconde</value></data>
+  <data name="Scan_Seconds" xml:space="preserve"><value>{0:0} s</value></data>
+  <data name="Scan_Minutes" xml:space="preserve"><value>{0:0} min</value></data>
+  <data name="SettingsWin_Close" xml:space="preserve"><value>Sluiten</value></data>
+  <data name="SettingsWin_ResetToDefaults" xml:space="preserve"><value>Standaardwaarden herstellen</value></data>
+  <data name="SettingsWin_Settings" xml:space="preserve"><value>Instellingen</value></data>
+  <data name="Settings_AnimateZoom" xml:space="preserve"><value>Zoomen animeren</value></data>
+  <data name="Settings_AnimateZoom_Desc" xml:space="preserve"><value>Vlieg mappen in in plaats van ernaartoe te springen.</value></data>
+  <data name="Settings_Appearance" xml:space="preserve"><value>Uiterlijk</value></data>
+  <data name="Settings_CheckUpdates" xml:space="preserve"><value>Bij het starten controleren op updates</value></data>
+  <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Zoekt enkele seconden na het starten van SpaceSharp naar een nieuwe versie op GitHub en biedt aan deze te installeren.</value></data>
+  <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Alleen beschikbaar als SpaceSharp met het installatieprogramma is geïnstalleerd. De portable exe werkt zichzelf niet bij.</value></data>
+  <data name="Settings_ColorBy" xml:space="preserve"><value>Kleuren op</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Hoofdmap: één tint per map op het hoogste niveau, lichter met elk niveau erin. Mapdiepte: een andere kleur per niveau. Bestandstype: bestanden gekleurd op type. Wijziging: wat is gegroeid of gekrompen sinds de vorige scan van dezelfde plek.</value></data>
+  <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bevestigen voor verplaatsen naar de Prullenbak</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vraag voor het verwijderen. Verwijderde items kunnen altijd uit de Prullenbak worden teruggezet.</value></data>
+  <data name="Settings_CustomPalettes" xml:space="preserve"><value>Aangepaste paletten</value></data>
+  <data name="Settings_FastScan" xml:space="preserve"><value>Snelle NTFS-scan</value></data>
+  <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Leest de bestandstabel van het station rechtstreeks, zodat een heel station in seconden in plaats van minuten in kaart wordt gebracht. Windows vraagt eenmaal per scan om beheerderstoestemming; de app zelf blijft zoals hij is. Zeg nee en de normale scan wordt uitgevoerd, en u wordt niet opnieuw gevraagd tot SpaceSharp opnieuw start. Andere bestandssystemen en losse mappen gebruiken altijd de normale scan.</value></data>
+  <data name="Settings_HardLinks" xml:space="preserve"><value>Harde koppelingen eenmaal tellen</value></data>
+  <data name="Settings_HardLinks_Desc" xml:space="preserve"><value>Leest het aantal koppelingen van elk bestand, zodat gegevens met meerdere namen, zoals de WinSxS-map van Windows, eenmaal worden geteld. Trager op grote stations.</value></data>
+  <data name="Settings_HoverDetails" xml:space="preserve"><value>Details bij aanwijzen</value></data>
+  <data name="Settings_HoverDetails_Desc" xml:space="preserve"><value>Toon een kleine kaart met grootte, grootte op schijf, aantal bestanden en datum laatst gewijzigd naast de muis.</value></data>
+  <data name="Settings_IncludeHidden" xml:space="preserve"><value>Verborgen en systeembestanden opnemen</value></data>
+  <data name="Settings_IncludeHidden_Desc" xml:space="preserve"><value>Uit laat bestanden en mappen met het kenmerk Verborgen of Systeem weg, zoals pagefile.sys.</value></data>
+  <data name="Settings_LabelSize" xml:space="preserve"><value>Labelgrootte</value></data>
+  <data name="Settings_LabelSize_Desc" xml:space="preserve"><value>Tekstgrootte op de kaart, van Kleinst tot Groter. Titelbalken krimpen en groeien mee.</value></data>
+  <data name="Settings_LeaveOut" xml:space="preserve"><value>Weglaten</value></data>
+  <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namen om over te slaan, met alles erin. Vergeleken met bestands- en mapnamen, niet met paden; * en ? zijn jokertekens.</value></data>
+  <data name="Settings_Map" xml:space="preserve"><value>Kaart</value></data>
+  <data name="Settings_MergeChains" xml:space="preserve"><value>Ketens van enkele mappen samenvoegen</value></data>
+  <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Teken mappen die maar één map bevatten (Gebruikers › u › AppData › Local) als één vak met een gecombineerde titel.</value></data>
+  <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Labels met omtrek</value></data>
+  <data name="Settings_OutlinedLabels_Desc" xml:space="preserve"><value>Een dunne contrasterende omtrek rond elk label, zodat tekst op elke kleur leesbaar blijft. Aanbevolen als u de kaart slecht leesbaar vindt.</value></data>
+  <data name="Settings_Palette" xml:space="preserve"><value>Palet</value></data>
+  <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (aangepast)</value></data>
+  <data name="Settings_Palette_Desc" xml:space="preserve"><value>De kleuren voor de vakken op de kaart.</value></data>
+  <data name="Settings_Reopen" xml:space="preserve"><value>Laatste scan opnieuw openen bij het starten</value></data>
+  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Toont de kaart van gisteren zodra de app opent, vergeleken met de scan ervoor. Elke stationsscan wordt bewaard in %LocalAppData%\SpaceSharp\scans; F5 scant opnieuw.</value></data>
+  <data name="Settings_ResetQuestion" xml:space="preserve"><value>Elke instelling terugzetten naar de standaardwaarde?</value></data>
+  <data name="Settings_ResetTitle" xml:space="preserve"><value>Instellingen herstellen</value></data>
+  <data name="Settings_Safety" xml:space="preserve"><value>Veiligheid</value></data>
+  <data name="Settings_Scanning" xml:space="preserve"><value>Scannen</value></data>
+  <data name="Settings_Scanning_Desc" xml:space="preserve"><value>Wijzigingen hier worden van kracht bij de volgende scan (F5).</value></data>
+  <data name="Settings_ShowFreeSpace" xml:space="preserve"><value>Vrije ruimte weergeven</value></data>
+  <data name="Settings_ShowFreeSpace_Desc" xml:space="preserve"><value>Voeg een grijs blok toe voor de ongebruikte ruimte wanneer een heel station wordt gescand. Het groeit wanneer u bestanden verwijdert.</value></data>
+  <data name="Settings_SidePanel" xml:space="preserve"><value>Zijpaneel weergeven</value></data>
+  <data name="Settings_SidePanel_Desc" xml:space="preserve"><value>Het paneel links met uw stations en de grootste bestanden, mappen en typen. Sneltoets: L.</value></data>
+  <data name="Settings_SizeMeasure" xml:space="preserve"><value>Groottemaat</value></data>
+  <data name="Settings_SizeMeasure_Desc" xml:space="preserve"><value>Grootte op schijf gebruikt de gecomprimeerde grootte van gecomprimeerde, sparse en cloudbestanden en rondt elk bestand af naar hele clusters, zoals "Grootte op schijf" in Verkenner.</value></data>
+  <data name="Settings_Theme" xml:space="preserve"><value>Thema</value></data>
+  <data name="Settings_Theme_Desc" xml:space="preserve"><value>Volg de Windows-instelling, of gebruik altijd licht of donker.</value></data>
+  <data name="Settings_Updates" xml:space="preserve"><value>Updates</value></data>
+  <data name="SizeMeasure_FileSize" xml:space="preserve"><value>Bestandsgrootte</value></data>
+  <data name="SizeMeasure_OnDisk" xml:space="preserve"><value>Grootte op schijf</value></data>
+  <data name="Status_ColorBy" xml:space="preserve"><value>Kleuren op: {0}</value></data>
+  <data name="Status_ComparedWith" xml:space="preserve"><value>  Vergeleken met {0}.</value></data>
+  <data name="Status_ComparedWithSuffix" xml:space="preserve"><value>  ·  vergeleken met de scan van {0}</value></data>
+  <data name="Status_Comparing" xml:space="preserve"><value>Vergelijken met de scan van {0}.</value></data>
+  <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Vergelijken met de scan van {0}. Die is anders gemaakt ({1} vs {2}), dus sommige verschillen komen daardoor, niet door de schijf.</value></data>
+  <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Vergelijken met een scan van {0} van {1}; namen worden map voor map vergeleken.</value></data>
+  <data name="Status_ComparisonCleared" xml:space="preserve"><value>Vergelijking gewist.</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} rijen geëxporteerd naar {1} (een eenvoudige CSV: vaste kolommen, meer opties later)</value></data>
+  <data name="Status_FileTableSuffix" xml:space="preserve"><value> · bestandstabel</value></data>
+  <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} items, {1}, naar de Prullenbak verplaatst</value></data>
+  <data name="Status_MovedOne" xml:space="preserve"><value>{0} naar de Prullenbak verplaatst</value></data>
+  <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} bestanden · {3}. F5 scant opnieuw.</value></data>
+  <data name="Status_OpenedVerb" xml:space="preserve"><value>Scan geopend van</value></data>
+  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Laatste scan wordt geopend…</value></data>
+  <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>De vorige scan is anders gemaakt ({0} vs {1}), dus wordt die niet vergeleken. De volgende scan van dezelfde soort wel.</value></data>
+  <data name="Status_RescanCancelled" xml:space="preserve"><value>Opnieuw scannen geannuleerd</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} opnieuw gescand: {1:N0} bestanden · {2}</value></data>
+  <data name="Status_Rescanning" xml:space="preserve"><value>{0} wordt opnieuw gescand…</value></data>
+  <data name="Status_Saved" xml:space="preserve"><value>{0} opgeslagen</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan geannuleerd</value></data>
+  <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} bestanden · {1:N0} mappen · </value></data>
+  <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} s</value></data>
+  <data name="Status_Selection" xml:space="preserve"><value>{0:N0} items geselecteerd · {1} · {2:N0} bestanden    Delete verplaatst ze naar de Prullenbak</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>Thema: Donker</value></data>
+  <data name="Theme_DarkName" xml:space="preserve"><value>Donker</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>Thema: Licht</value></data>
+  <data name="Theme_LightName" xml:space="preserve"><value>Licht</value></data>
+  <data name="Theme_MatchWindows" xml:space="preserve"><value>Zelfde als Windows</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>Thema: Zelfde als Windows ({0})</value></data>
+  <data name="Theme_WordDark" xml:space="preserve"><value>donker</value></data>
+  <data name="Theme_WordLight" xml:space="preserve"><value>licht</value></data>
+  <data name="Tip_AccessDenied" xml:space="preserve"><value>Sommige inhoud kon niet worden gelezen</value></data>
+  <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Scan hetzelfde station of dezelfde map tweemaal, of open een opgeslagen scan om mee te vergelijken.</value></data>
+  <data name="Tip_FreeSpace" xml:space="preserve"><value>Vrije ruimte</value></data>
+  <data name="Tip_HintGroup" xml:space="preserve"><value>Zoom in om deze items te zien</value></data>
+  <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (harde koppeling, elders geteld)</value></data>
+  <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="TopList_FilesIn" xml:space="preserve"><value>{0:N0} bestanden · {1}</value></data>
+  <data name="TopList_FilesOfType" xml:space="preserve"><value>{0:N0} bestanden · {1}</value></data>
+  <data name="TopList_NoExtension" xml:space="preserve"><value>(geen extensie)</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>SpaceSharp {0} is beschikbaar. U hebt {1}.</value></data>
+  <data name="Update_Downloading" xml:space="preserve"><value>Update wordt gedownload… {0}%</value></data>
+  <data name="Update_Restarting" xml:space="preserve"><value>Opnieuw starten in {0}…</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>De update kon niet worden geïnstalleerd: {0}</value></data>
+  <data name="Word_Off" xml:space="preserve"><value>uit</value></data>
+  <data name="Word_On" xml:space="preserve"><value>aan</value></data>
+  <data name="Dialog_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>Annuleren</value></data>
+  <data name="Settings_ResetButton" xml:space="preserve"><value>Herstellen</value></data>
+  <data name="About_BrowserFailed" xml:space="preserve"><value>Kan de browser niet openen.
+
+{0}
+
+{1}</value></data>
+  <data name="About_Description" xml:space="preserve"><value>Zie waar uw schijfruimte is gebleven. SpaceSharp tekent elk bestand en elke map als een vak ter grootte van de ruimte die het inneemt, zodat de grootste opvallen.</value></data>
+  <data name="About_SystemLine" xml:space="preserve"><value>{0} op {1}</value></data>
+  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap-indeling van Bruls, Huizing en van Wijk (2000). Geïnspireerd door SpaceMonger. Interfacepictogrammen van Lucide (ISC-licentie).</value></data>
+  <data name="Settings_SavedIn" xml:space="preserve"><value>Instellingen worden opgeslagen in %AppData%\SpaceSharp\settings.json.</value></data>
+  <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, bijv. video's groter dan 500MB ouder dan 1 jaar</value></data>
+  <data name="Group_Files" xml:space="preserve"><value>bestanden</value></data>
+  <data name="Group_Folders" xml:space="preserve"><value>mappen</value></data>
+  <data name="Group_Items" xml:space="preserve"><value>items</value></data>
+  <data name="Drive_Removable" xml:space="preserve"><value>Verwisselbaar</value></data>
+  <data name="Drive_Network" xml:space="preserve"><value>Netwerk</value></data>
+  <data name="Drive_Optical" xml:space="preserve"><value>Optisch</value></data>
+  <data name="Drive_Hdd" xml:space="preserve"><value>Harde schijf</value></data>
+  <data name="Drive_Ssd" xml:space="preserve"><value>SSD</value></data>
+  <data name="Drive_Nvme" xml:space="preserve"><value>NVMe SSD</value></data>
+  <data name="Drive_Usb" xml:space="preserve"><value>USB</value></data>
+  <data name="Settings_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="Settings_ExplorerMenu" xml:space="preserve"><value>"Scannen met SpaceSharp" in Verkenner</value></data>
+  <data name="Settings_ExplorerMenu_Desc" xml:space="preserve"><value>Voegt een item toe aan het snelmenu van mappen, stations en de mapachtergrond in Verkenner. Alleen voor deze Windows-gebruiker; geen beheerdersrechten nodig. Verwijst naar dit exemplaar van SpaceSharp, dus zet het uit voordat u de portable exe verplaatst.</value></data>
+  <data name="Explorer_ScanWith" xml:space="preserve"><value>Scannen met SpaceSharp</value></data>
+  <data name="Settings_CommandLine" xml:space="preserve"><value>Opdrachtregel</value></data>
+  <data name="Settings_CommandLine_Desc" xml:space="preserve"><value>Start SpaceSharp vanuit een snelkoppeling, een script of het venster Uitvoeren met een station, een map of een opgeslagen scan.</value></data>
+  <data name="Update_Title" xml:space="preserve"><value>Update beschikbaar</value></data>
+  <data name="Update_Hint" xml:space="preserve"><value>Installeren duurt ongeveer een minuut en start SpaceSharp opnieuw. Uw instellingen en opgeslagen scans blijven bewaard.</value></data>
+  <data name="Update_WhatsNew" xml:space="preserve"><value>Wat is er nieuw</value></data>
+  <data name="Update_YouHave" xml:space="preserve"><value>U hebt {0}</value></data>
+  <data name="Update_Ready" xml:space="preserve"><value>SpaceSharp {0} staat klaar</value></data>
+  <data name="Update_RemindLater" xml:space="preserve"><value>Later herinneren</value></data>
+  <data name="Update_WhatsNewIn" xml:space="preserve"><value>Wat is er nieuw in {0}</value></data>
+  <data name="Update_Later" xml:space="preserve"><value>Later</value></data>
+  <data name="WhatsNew_Title" xml:space="preserve"><value>Wat is er nieuw in {0}</value></data>
+  <data name="WhatsNew_TitleSince" xml:space="preserve"><value>Wat is er nieuw sinds {1}</value></data>
+  <data name="WhatsNew_Loading" xml:space="preserve"><value>Releaseopmerkingen worden geladen…</value></data>
+  <data name="WhatsNew_Unavailable" xml:space="preserve"><value>De releaseopmerkingen konden niet worden geladen. De volledige lijst staat op GitHub.</value></data>
+  <data name="WhatsNew_SeeAll" xml:space="preserve"><value>Alle wijzigingen bekijken op GitHub</value></data>
+  <data name="Settings_Treemap" xml:space="preserve"><value>Treemap</value></data>
+  <data name="Settings_Treemap_Desc" xml:space="preserve"><value>Geen van deze is essentieel, maar ze veranderen hoe de kaart leest.</value></data>
+  <data name="Treemap_Density" xml:space="preserve"><value>Dichtheid</value></data>
+  <data name="Treemap_Density_Desc" xml:space="preserve"><value>Hoeveel kleine items de kaart tekent voordat ze worden gegroepeerd in één vak "312 bestanden" of worden weggelaten. Schaars is rustig, Maximaal groepeert alleen de allerkleinste, Alles groepeert nooit. Sneltoets: G schakelt naar Alles en terug.</value></data>
+  <data name="Density_Sparse" xml:space="preserve"><value>Schaars</value></data>
+  <data name="Density_Normal" xml:space="preserve"><value>Normaal</value></data>
+  <data name="Density_Dense" xml:space="preserve"><value>Dicht</value></data>
+  <data name="Density_Maximum" xml:space="preserve"><value>Maximaal</value></data>
+  <data name="Treemap_Bias" xml:space="preserve"><value>Voorkeur</value></data>
+  <data name="Treemap_Bias_Desc" xml:space="preserve"><value>Of de indeling brede of hoge vakken verkiest. Gelijk is de gewone squarified indeling.</value></data>
+  <data name="Treemap_Horizontal" xml:space="preserve"><value>Horizontaal</value></data>
+  <data name="Treemap_Equal" xml:space="preserve"><value>Gelijk</value></data>
+  <data name="Treemap_Vertical" xml:space="preserve"><value>Verticaal</value></data>
+  <data name="Treemap_Padding" xml:space="preserve"><value>Opvulling</value></data>
+  <data name="Treemap_Padding_Desc" xml:space="preserve"><value>Extra ruimte rond elk vak, bovenop wat de stijl gebruikt.</value></data>
+  <data name="Treemap_Border" xml:space="preserve"><value>Rasterlijndikte</value></data>
+  <data name="Treemap_Border_Desc" xml:space="preserve"><value>Hoe dik de rasterlijnen zijn.</value></data>
+  <data name="Unit_Pixels" xml:space="preserve"><value>{0} px</value></data>
+  <data name="Treemap_Font" xml:space="preserve"><value>Lettertype</value></data>
+  <data name="Treemap_Font_Desc" xml:space="preserve"><value>Het lettertype voor elk label op de kaart. De labelgrootte staat onder Uiterlijk.</value></data>
+  <data name="Treemap_Files" xml:space="preserve"><value>Bestanden</value></data>
+  <data name="Treemap_Files_Desc" xml:space="preserve"><value>Wat een bestandsvak toont.</value></data>
+  <data name="Treemap_Folders" xml:space="preserve"><value>Mappen</value></data>
+  <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Wat een maptitel toont.</value></data>
+  <data name="Treemap_CenterNames" xml:space="preserve"><value>Namen centreren</value></data>
+  <data name="Treemap_ShowSizes" xml:space="preserve"><value>Grootten weergeven</value></data>
+  <data name="Treemap_ShowCounts" xml:space="preserve"><value>Aantal bestanden weergeven</value></data>
+  <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} bestanden</value></data>
+  <data name="Density_Everything" xml:space="preserve"><value>Alles (geen groepering)</value></data>
+  <data name="Status_Density" xml:space="preserve"><value>Dichtheid: {0}</value></data>
+  <data name="SettingsTab_General" xml:space="preserve"><value>Algemeen</value></data>
+  <data name="SettingsTab_Appearance" xml:space="preserve"><value>Uiterlijk</value></data>
+  <data name="SettingsTab_Treemap" xml:space="preserve"><value>Treemap</value></data>
+  <data name="SettingsTab_Map" xml:space="preserve"><value>Kaart</value></data>
+  <data name="SettingsTab_Scanning" xml:space="preserve"><value>Scannen</value></data>
+  <data name="About_Tagline" xml:space="preserve"><value>Zie waar uw schijfruimte is gebleven.</value></data>
+  <data name="About_Check" xml:space="preserve"><value>Controleren</value></data>
+  <data name="About_InstalledCheck" xml:space="preserve"><value>Geïnstalleerd. Controleer op een nieuwere versie.</value></data>
+  <data name="About_PortableNoUpdates" xml:space="preserve"><value>Portable. Updates zijn niet automatisch; de nieuwste versie staat op GitHub.</value></data>
+  <data name="About_WhatsNewSub" xml:space="preserve"><value>Wijzigingen in deze versie</value></data>
+  <data name="About_ShortcutsSub" xml:space="preserve"><value>Elke toets- en muisactie</value></data>
+  <data name="About_ReportSub" xml:space="preserve"><value>Opent GitHub met uw versie en systeem ingevuld</value></data>
+  <data name="About_CrashLogs" xml:space="preserve"><value>Crashlogboeken</value></data>
+  <data name="About_CrashLogsSub" xml:space="preserve"><value>Opent de map waarin onverwachte fouten worden weggeschreven, om er een bij een melding te voegen</value></data>
+  <data name="About_Source" xml:space="preserve"><value>Broncode op GitHub</value></data>
+  <data name="About_SourceSub" xml:space="preserve"><value>MIT-licentie</value></data>
+  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap-algoritme, SpaceMonger, pictogrammen</value></data>
+  <data name="Keys_Navigate" xml:space="preserve"><value>Navigeren</value></data>
+  <data name="Keys_Select" xml:space="preserve"><value>Selecteren en handelen</value></data>
+  <data name="Keys_View" xml:space="preserve"><value>Weergave en bestanden</value></data>
+  <data name="Start_PickADrive" xml:space="preserve"><value>Kies links een station</value></data>
+  <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Kies links een station, of ga verder waar u was gebleven</value></data>
+  <data name="Start_RecentHint" xml:space="preserve"><value>Opgeslagen scans openen direct en worden vergeleken met de nieuwe.</value></data>
+  <data name="Start_FirstHint" xml:space="preserve"><value>Elk bestand en elke map wordt een vak ter grootte van de ruimte die het inneemt.</value></data>
+  <data name="Start_ScanAFolder" xml:space="preserve"><value>Een map scannen</value></data>
+  <data name="Start_OpenASavedScan" xml:space="preserve"><value>Een opgeslagen scan openen…</value></data>
+  <data name="Start_FastScanLine" xml:space="preserve"><value>Hele stations in seconden met beheerdersrechten.</value></data>
+  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% in gebruik</value></data>
+  <data name="Start_ScannedSize" xml:space="preserve"><value>{0} gescand</value></data>
+  <data name="Start_Totals" xml:space="preserve"><value>{0} in gebruik van {1} op uw stations</value></data>
+  <data name="Settings_KeepScans" xml:space="preserve"><value>Opgeslagen scans bewaren gedurende</value></data>
+  <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisch opgeslagen scans ouder dan dit worden verwijderd wanneer SpaceSharp start. Scans die u zelf als bestand hebt opgeslagen, blijven onaangeroerd.</value></data>
+  <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagen</value></data>
+  <data name="KeepScans_Months" xml:space="preserve"><value>{0} maanden</value></data>
+  <data name="KeepScans_OneYear" xml:space="preserve"><value>1 jaar</value></data>
+  <data name="KeepScans_Forever" xml:space="preserve"><value>Voor altijd</value></data>
+  <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Alle opgeslagen scans verwijderen</value></data>
+  <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Er zijn geen opgeslagen scans.</value></data>
+  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} opgeslagen scans verwijderen? De kaart op het scherm blijft; vergelijkingen met eerdere scans zijn pas weer mogelijk als er nieuwe zijn gemaakt.</value></data>
+  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} opgeslagen scans verwijderd.</value></data>
+  <data name="Exclude_Placeholder" xml:space="preserve"><value>Naam of patroon, bijv. *.tmp</value></data>
+  <data name="Exclude_Add" xml:space="preserve"><value>Toevoegen</value></data>
+  <data name="Exclude_Remove" xml:space="preserve"><value>Verwijderen</value></data>
+  <data name="Exclude_Suggestions" xml:space="preserve"><value>Veelgebruikt:</value></data>
+  <data name="Inspect_Of" xml:space="preserve"><value>{0} van {1}</value></data>
+  <data name="Inspect_ByType" xml:space="preserve"><value>Per type</value></data>
+  <data name="Inspect_ByAge" xml:space="preserve"><value>Per leeftijd</value></data>
+  <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Waar de ruimte zit</value></data>
+  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Kaart hierheen zoomen</value></data>
+  <data name="Inspect_RowTip" xml:space="preserve"><value>Kaart naar deze map zoomen</value></data>
+  <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Deze maand</value></data>
+  <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
+  <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 tot 3 jaar</value></data>
+  <data name="Inspect_Age_Older" xml:space="preserve"><value>Ouder</value></data>
+  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>ouder dan een jaar</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Oudste wijziging: {0}</value></data>
+  <data name="Inspect_Remainder" xml:space="preserve"><value>Deze {0} vormen {1} van de map. De overige {2:N0} bestanden delen {3}.</value></data>
+  <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} van deze map is één ding: {1} met {2}.</value></data>
+  <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} op schijf</value></data>
+  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} van {1}, de enige map erin</value></data>
+  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} van {1}, het enige bestand erin</value></data>
+  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} van {1}, de grootste van de {2} mappen</value></data>
+  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} van {1}, het grootste van de {2} bestanden</value></data>
+  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} van {1}, nummer {3} van {2} mappen op grootte</value></data>
+  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} van {1}, nummer {3} van {2} bestanden op grootte</value></data>
+  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Vooral {0} ({1})</value></data>
+  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Vooral {0} ({1}) en {2} ({3})</value></data>
+  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Een mix van {0} ({1}), {2} ({3}) en {4} ({5})</value></data>
+  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>mediaan bestand {0}</value></data>
+  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Laatst gewijzigd {0}</value></data>
+  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Gewijzigd {0}</value></data>
+  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} al meer dan een jaar onaangeroerd</value></data>
+  <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>ongewijzigd sinds de vorige scan</value></data>
+  <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>{0} gegroeid sinds de vorige scan</value></data>
+  <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>{0} gekrompen sinds de vorige scan</value></data>
+  <data name="Inspect_Ctx_New" xml:space="preserve"><value>nieuw sinds de vorige scan</value></data>
+  <data name="Tip_Mostly" xml:space="preserve"><value>Vooral {0}</value></data>
+  <data name="Tip_FilesInGroup" xml:space="preserve"><value>{0:N0} bestanden</value></data>
+  <data name="Tip_NewSinceLastScan" xml:space="preserve"><value>nieuw sinds vorige scan</value></data>
+  <data name="Tip_Changed" xml:space="preserve"><value>gewijzigd {0}</value></data>
+  <data name="Tip_Modified" xml:space="preserve"><value>gewijzigd {0}</value></data>
+  <data name="Settings_Shading" xml:space="preserve"><value>Schaduw</value></data>
+  <data name="Settings_Shading_Desc" xml:space="preserve"><value>Hoe bestanden worden belicht. De kaart bovenaan is voorbeeldgegevens en volgt elke wijziging.</value></data>
+  <data name="Settings_PreviewSample" xml:space="preserve"><value>Voorbeeldgegevens</value></data>
+  <data name="Settings_PreviewDrive" xml:space="preserve"><value>Voorbeeldstation</value></data>
+  <data name="Shading_Light" xml:space="preserve"><value>Licht vanuit</value></data>
+  <data name="Shading_Light_Desc" xml:space="preserve"><value>Van welke kant het licht komt. Het midden is recht van voren.</value></data>
+  <data name="Shading_Reset" xml:space="preserve"><value>Schaduw herstellen</value></data>
+  <data name="Shading_Reset_Desc" xml:space="preserve"><value>Zet de instellingen voor schaduw, raster en markering terug zoals ze geleverd worden.</value></data>
+  <data name="Shading_ResetButton" xml:space="preserve"><value>Standaardwaarden herstellen</value></data>
+  <data name="Settings_Grid" xml:space="preserve"><value>Raster en markering</value></data>
+  <data name="Grid_Show" xml:space="preserve"><value>Rasterlijnen</value></data>
+  <data name="Grid_Show_Desc" xml:space="preserve"><value>Een lijn tussen elk vak, rond bestanden en mapkaders gelijk.</value></data>
+  <data name="Grid_Color" xml:space="preserve"><value>Rasterkleur</value></data>
+  <data name="Grid_Color_Desc" xml:space="preserve"><value>Donkere lijnen passen bij de meeste paletten; lichte werken op de donkerste.</value></data>
+  <data name="Highlight_Color" xml:space="preserve"><value>Markeringskader</value></data>
+  <data name="Highlight_Color_Desc" xml:space="preserve"><value>Het kader rond geselecteerde vakken. Aangewezen vakken houden een wit kader.</value></data>
+  <data name="Settings_Layout" xml:space="preserve"><value>Indeling</value></data>
+  <data name="Shading_Enable" xml:space="preserve"><value>Kussenschaduw</value></data>
+  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Licht-naar-donker schaduw op elk bestand, zoals SpaceMonger ze tekende. Uit geeft vlakke kleuren, en de instellingen hieronder doen niets.</value></data>
+  <data name="Shading_Presets" xml:space="preserve"><value>Voorinstellingen</value></data>
+  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Een uitgangspunt. De schuifregelaars hieronder verfijnen het.</value></data>
+  <data name="Preset_Soft" xml:space="preserve"><value>Zacht</value></data>
+  <data name="Preset_Classic" xml:space="preserve"><value>Klassiek</value></data>
+  <data name="Preset_Deep" xml:space="preserve"><value>Diep</value></data>
+  <data name="Shading_Depth" xml:space="preserve"><value>Diepte</value></data>
+  <data name="Shading_Depth_Desc" xml:space="preserve"><value>Hoe uitgesproken de schaduw is, van een vage glans tot een diep kussen.</value></data>
+  <data name="Shading_Spread" xml:space="preserve"><value>Spreiding</value></data>
+  <data name="Shading_Spread_Desc" xml:space="preserve"><value>Hoe ver het licht over een bestand reikt voordat de schaduw het overneemt.</value></data>
+  <data name="Shading_Tone" xml:space="preserve"><value>Toon</value></data>
+  <data name="Shading_Tone_Desc" xml:space="preserve"><value>Lichtere of donkerdere bestanden in het algemeen. Mappen houden hun kleur.</value></data>
+  <data name="Shading_Fade" xml:space="preserve"><value>Vervagen in mappen</value></data>
+  <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hoeveel schaduw geneste bestanden behouden. Laag maakt diepe niveaus rustiger zodat de hoofdmappen opvallen.</value></data>
+  <data name="Shading_LightSide" xml:space="preserve"><value>Licht van deze kant</value></data>
+  <data name="Shading_LightAhead" xml:space="preserve"><value>Licht recht van voren</value></data>
+  <data name="Settings_LookDark" xml:space="preserve"><value>Donkere stijl</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>De kleuren van het venster, panelen en menu's wanneer het donkere thema actief is: Grafiet, Leisteen, Mokka, Middernacht of Carbon.</value></data>
+  <data name="Settings_LookLight" xml:space="preserve"><value>Lichte stijl</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Hetzelfde voor het lichte thema: Papier, Linnen, Nevel, Zand of Sneeuw.</value></data>
+  <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, schaduw en tekst</value></data>
+  <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles over hoe de kaart eruitziet staat op de pagina Treemap, naast een voorbeeld.</value></data>
+  <data name="Settings_Colors" xml:space="preserve"><value>Kleuren</value></data>
+  <data name="Settings_Colors_Desc" xml:space="preserve"><value>Het voorbeeld hierboven volgt elke wijziging op deze pagina.</value></data>
+  <data name="Settings_Text" xml:space="preserve"><value>Tekst en titelbalken</value></data>
+  <data name="Settings_Text_Desc" xml:space="preserve"><value>Hoe namen worden getekend op bestanden en in de maptitelbalken.</value></data>
+  <data name="Text_FolderColor" xml:space="preserve"><value>Mapnamen</value></data>
+  <data name="Text_FolderColor_Desc" xml:space="preserve"><value>De kleur van de tekst in titelbalken. Automatisch kiest donker of licht per balk.</value></data>
+  <data name="Text_FileColor" xml:space="preserve"><value>Bestandsnamen en grootten</value></data>
+  <data name="Text_FileColor_Desc" xml:space="preserve"><value>De kleur van de tekst op bestanden. Automatisch kiest donker of licht per vak.</value></data>
+  <data name="Text_Auto" xml:space="preserve"><value>Automatisch</value></data>
+  <data name="Text_TitlePadding" xml:space="preserve"><value>Opvulling titelbalk</value></data>
+  <data name="Text_TitlePadding_Desc" xml:space="preserve"><value>Ruimte boven en onder een mapnaam. De balk groeit mee.</value></data>
+  <data name="Text_TitleTint" xml:space="preserve"><value>Tint titelbalk</value></data>
+  <data name="Text_TitleTint_Desc" xml:space="preserve"><value>Hoe ver de balk is verschoven ten opzichte van de eigen kleur van de map. 0 is dezelfde kleur; de rasterlijn markeert hem nog steeds.</value></data>
+  <data name="Palette_GroupDark" xml:space="preserve"><value>Voor het donkere thema</value></data>
+  <data name="Palette_GroupLight" xml:space="preserve"><value>Voor het lichte thema</value></data>
+  <data name="Palette_GroupAny" xml:space="preserve"><value>Elk thema</value></data>
+  <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Het palet voor het {0} thema. Elk thema onthoudt zijn eigen palet; de kaart wisselt mee met het thema.</value></data>
+  <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · gemaakt voor het {1} thema</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Wisselen tussen de kaart en de weergave Inzichten</value></data>
+  <data name="Panel_TabType" xml:space="preserve"><value>Per type</value></data>
+  <data name="Panel_TabCleanup" xml:space="preserve"><value>Veilig op te ruimen</value></data>
+  <data name="Panel_TabTimeline" xml:space="preserve"><value>Wanneer gewijzigd</value></data>
+  <data name="Panel_NoScan" xml:space="preserve"><value>Scan een station of map en deze weergave vat het samen.</value></data>
+  <data name="Panel_TypeSummary" xml:space="preserve"><value>{0} vormen {1} van de scan. Wijs een type aan om het op de kaart te zien, klik om te filteren.</value></data>
+  <data name="Panel_TypeDetail" xml:space="preserve"><value>{0}: {1} in {2:N0} bestanden</value></data>
+  <data name="Panel_TypeFiles" xml:space="preserve"><value>{0:N0} bestanden</value></data>
+  <data name="Panel_TypeLargest" xml:space="preserve"><value> · grootste: {0} ({1})</value></data>
+  <data name="Panel_CleanupSummary" xml:space="preserve"><value>{0} op plekken die meestal veilig leeg te maken zijn. Er wordt niets verwijderd totdat u dat zegt.</value></data>
+  <data name="Panel_CleanupNone" xml:space="preserve"><value>Niets voor de hand liggends om op te ruimen.</value></data>
+  <data name="Panel_CleanupNoneHint" xml:space="preserve"><value>Geen Windows.old, geen omvangrijke caches, geen Prullenbak of Downloads met een jaar stof erop. Grootste items links is de volgende plek om te kijken.</value></data>
+  <data name="Panel_CleanupMore" xml:space="preserve"><value>Ook: {0}</value></data>
+  <data name="Panel_TimelineSummary" xml:space="preserve"><value>{0} is al meer dan een jaar niet aangeraakt. Wijs een maand aan om die op de kaart te zien, klik om te filteren.</value></data>
+  <data name="Panel_TimelineMonth" xml:space="preserve"><value>{0}: {1} in {2:N0} bestanden</value></data>
+  <data name="Panel_TimelineFirst" xml:space="preserve"><value> (en alles wat ouder is)</value></data>
+  <data name="Panel_TimelineOldest" xml:space="preserve"><value>{0} en ouder</value></data>
+  <data name="Age_ThisMonth" xml:space="preserve"><value>Deze maand</value></data>
+  <data name="Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
+  <data name="Age_OneToThree" xml:space="preserve"><value>1 tot 3 jaar</value></data>
+  <data name="Age_Older" xml:space="preserve"><value>Ouder</value></data>
+  <data name="Cleanup_Show" xml:space="preserve"><value>Weergeven</value></data>
+  <data name="Cleanup_Empty" xml:space="preserve"><value>Leegmaken</value></data>
+  <data name="Cleanup_Review" xml:space="preserve"><value>Bekijken</value></data>
+  <data name="Cleanup_HowTo" xml:space="preserve"><value>Hoe</value></data>
+  <data name="Cleanup_WindowsOld" xml:space="preserve"><value>Windows.old</value></data>
+  <data name="Cleanup_WindowsOld_Note" xml:space="preserve"><value>Achtergelaten door een Windows-onderdelenupdate. Windows verwijdert hem zelf na 10 dagen; deze staat er nog.</value></data>
+  <data name="Cleanup_RecycleBin" xml:space="preserve"><value>Prullenbak</value></data>
+  <data name="Cleanup_RecycleBin_Note" xml:space="preserve"><value>Wat u al hebt verwijderd. Leegmaken is definitief; Windows vraagt het eerst.</value></data>
+  <data name="Cleanup_SystemFiles" xml:space="preserve"><value>Slaapstand- en wisselbestanden</value></data>
+  <data name="Cleanup_SystemFiles_Note" xml:space="preserve"><value>hiberfil.sys, pagefile.sys en swapfile.sys. Windows beheert ze; SpaceSharp komt er niet aan.</value></data>
+  <data name="Cleanup_SystemFiles_HowTo" xml:space="preserve"><value>hiberfil.sys bewaart het geheugen voor de slaapstand en snel opstarten. Om het vrij te maken, opent u een opdrachtprompt als beheerder en voert u uit: powercfg /hibernate off
+
+pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld onder Systeem › Geavanceerde systeeminstellingen › Prestaties › Virtueel geheugen. Ze aan Windows overlaten is de veilige keuze.</value></data>
+  <data name="Cleanup_Temp" xml:space="preserve"><value>Tijdelijke bestanden</value></data>
+  <data name="Cleanup_Temp_Note" xml:space="preserve"><value>{0:N0} Temp-mappen, {1:N0} bestanden. Programma's horen zelf op te ruimen; veel doen dat niet.</value></data>
+  <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Pakketcaches</value></data>
+  <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} caches (npm, pnpm, NuGet, pip, Cargo, Gradle en dergelijke), {1:N0} bestanden. Ze worden opnieuw gedownload wanneer nodig.</value></data>
+  <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Browsercaches</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cachemappen, {1:N0} bestanden. Pagina's laden daarna de eerste keer iets trager.</value></data>
+  <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shadercaches</value></data>
+  <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} mappen, {1:N0} bestanden. Games en stuurprogramma's bouwen ze bij de volgende start opnieuw op.</value></data>
+  <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update-downloads</value></data>
+  <data name="Cleanup_WindowsUpdate_Note" xml:space="preserve"><value>Installatiebestanden die Windows Update al heeft toegepast. Windows haalt ze opnieuw op als ze ooit nodig zijn.</value></data>
+  <data name="Cleanup_OldDownloads" xml:space="preserve"><value>Downloads, een jaar onaangeroerd</value></data>
+  <data name="Cleanup_OldDownloads_Note" xml:space="preserve"><value>{0:N0} items in Downloads die in een jaar niet zijn gewijzigd, vooral installatieprogramma's en archieven. Bekijken selecteert ze op de kaart.</value></data>
+  <data name="Panel_Collapse" xml:space="preserve"><value>Paneel samenvouwen tot de tabbladen</value></data>
+  <data name="Panel_Expand" xml:space="preserve"><value>Paneel uitvouwen</value></data>
+  <data name="Cleanup_Emptied" xml:space="preserve"><value>Prullenbak geleegd, {0} vrijgemaakt.</value></data>
+  <data name="Cleanup_Recycle" xml:space="preserve"><value>Naar Prullenbak</value></data>
+  <data name="Panel_BandTip" xml:space="preserve"><value>De kaart filteren op bestanden laatst gewijzigd {0}</value></data>
+  <data name="Filter_ToggleTip" xml:space="preserve"><value>Het filter weergeven of verbergen (Ctrl+F)</value></data>
+  <data name="Filter_ToggleCount" xml:space="preserve"><value>Filter · {0}</value></data>
+  <data name="Rail_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Rail_Size" xml:space="preserve"><value>Grootte</value></data>
+  <data name="Rail_Age" xml:space="preserve"><value>Leeftijd</value></data>
+  <data name="Rail_Show" xml:space="preserve"><value>Weergeven</value></data>
+  <data name="Rail_Try" xml:space="preserve"><value>Probeer</value></data>
+  <data name="Rail_Any" xml:space="preserve"><value>alle</value></data>
+  <data name="Rail_Over" xml:space="preserve"><value>groter dan {0}</value></data>
+  <data name="Rail_Under" xml:space="preserve"><value>kleiner dan {0}</value></data>
+  <data name="Rail_Untouched" xml:space="preserve"><value>onaangeroerd {0}</value></data>
+  <data name="Rail_Within" xml:space="preserve"><value>binnen {0}</value></data>
+  <data name="Rail_Files" xml:space="preserve"><value>bestanden</value></data>
+  <data name="Rail_Folders" xml:space="preserve"><value>mappen</value></data>
+  <data name="Drawer_ShareOfScan" xml:space="preserve"><value>aandeel van scan</value></data>
+  <data name="Drawer_ClearAll" xml:space="preserve"><value>Alles wissen</value></data>
+  <data name="Settings_FilterLayout" xml:space="preserve"><value>Filterindeling</value></data>
+  <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Een paneel over de rechterkant van de kaart met alle opties (de standaard), of een balk onder het pad met één knop per voorwaarde. Ctrl+F opent beide.</value></data>
+  <data name="FilterLayout_Rail" xml:space="preserve"><value>Balk onder het pad</value></data>
+  <data name="FilterLayout_Drawer" xml:space="preserve"><value>Paneel over de kaart</value></data>
+  <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Naam of patroon, bijv. *.iso</value></data>
+  <data name="Main_ViewMap" xml:space="preserve"><value>Kaart</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>De kaart van de scan (B wisselt tussen de twee weergaven)</value></data>
+  <data name="Main_ViewInsights" xml:space="preserve"><value>Inzichten</value></data>
+  <data name="Main_ViewInsightsTip" xml:space="preserve"><value>De scan samengevat: per type, veilig op te ruimen, wanneer gewijzigd, grootste items (B)</value></data>
+  <data name="Insights_Title" xml:space="preserve"><value>Inzichten</value></data>
+  <data name="Insights_Scanning" xml:space="preserve"><value>Scannen… de samenvatting verschijnt zodra het klaar is.</value></data>
+  <data name="Insights_Scanned" xml:space="preserve"><value>Gescand</value></data>
+  <data name="Insights_ScannedDetail" xml:space="preserve"><value>{0:N0} bestanden · {1:N0} mappen · {2}</value></data>
+  <data name="Insights_FromFileTable" xml:space="preserve"><value>uit de bestandstabel</value></data>
+  <data name="Insights_FromWalk" xml:space="preserve"><value>mappen doorlopen</value></data>
+  <data name="Insights_FreeOn" xml:space="preserve"><value>Vrij op {0}</value></data>
+  <data name="Insights_FreeOf" xml:space="preserve"><value>{0} van {1}</value></data>
+  <data name="Insights_FreeDetail" xml:space="preserve"><value>{0} gebruikt · {1}</value></data>
+  <data name="Insights_Free" xml:space="preserve"><value>Vrije ruimte</value></data>
+  <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} plekken · {1} aangevinkt</value></data>
+  <data name="Insights_Untouched" xml:space="preserve"><value>Een jaar onaangeroerd</value></data>
+  <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} van de scan · {1:N0} bestanden</value></data>
+  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Grootste map</value></data>
+  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} bestanden</value></data>
+  <data name="Insights_SinceLast" xml:space="preserve"><value>Sinds vorige scan</value></data>
+  <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nieuwe bestanden</value></data>
+  <data name="Insights_NoBaseline" xml:space="preserve"><value>Geen eerdere scan</value></data>
+  <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Scan op een andere dag opnieuw om te zien wat er is veranderd</value></data>
+  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} typen · klik op een rij om de kaart te filteren</value></data>
+  <data name="Insights_TypesReading" xml:space="preserve"><value>{0} is {1} van de scan, vooral onder {2}. Daarna {3} met {4}.</value></data>
+  <data name="Insights_ClearSub" xml:space="preserve"><value>{0} op plekken die meestal veilig leeg te maken zijn · er wordt niets verwijderd totdat u dat zegt</value></data>
+  <data name="Insights_NoneChecked" xml:space="preserve"><value>Vink de plekken aan om ze samen naar de Prullenbak te verplaatsen</value></data>
+  <data name="Insights_Checked" xml:space="preserve"><value>{0} aangevinkt · {1} · zou {2} vrij laten</value></data>
+  <data name="Insights_CheckTip" xml:space="preserve"><value>Opnemen in Aangevinkte naar Prullenbak</value></data>
+  <data name="Insights_RecycleChecked" xml:space="preserve"><value>Aangevinkte naar Prullenbak</value></data>
+  <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} al meer dan een jaar onaangeroerd · klik op een maand of een band om te filteren</value></data>
+  <data name="Insights_OldestLargest" xml:space="preserve"><value>Grootste, een jaar of langer onaangeroerd</value></data>
+  <data name="Insights_LargestFolders" xml:space="preserve"><value>Grootste mappen</value></data>
+  <data name="Insights_AnywhereInScan" xml:space="preserve"><value>overal in de scan</value></data>
+  <data name="Insights_LargestFiles" xml:space="preserve"><value>Grootste bestanden</value></data>
+  <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Scan dit station op een andere dag opnieuw en deze kaart toont wat in de tussentijd is gegroeid, gekrompen en verschenen. Een opgeslagen scan kan ook worden vergeleken via Scanbestand › Vergelijken met een opgeslagen scan.</value></data>
+  <data name="Insights_Grew" xml:space="preserve"><value>Gegroeid</value></data>
+  <data name="Insights_Shrank" xml:space="preserve"><value>Gekrompen</value></data>
+  <data name="Insights_New" xml:space="preserve"><value>Nieuw</value></data>
+  <data name="Insights_Extensions" xml:space="preserve"><value>Grootste extensies</value></data>
+  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>en waar het meeste van elk staat</value></data>
+  <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+</root>

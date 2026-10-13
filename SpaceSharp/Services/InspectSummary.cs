@@ -167,7 +167,7 @@ public sealed class InspectSummary
         long size = folder.SizeFor(Measure);
         if (size <= 0) return false;
         var real = folder.Children.Where(c => c.IsReal);
-        return real.Count() > 0 && real.Max(c => c.SizeFor(Measure)) >= size * ThinWrapper;
+        return real.Any() && real.Max(c => c.SizeFor(Measure)) >= size * ThinWrapper;
     }
 
     public static string RelativeName(FsNode ancestor, FsNode node)
