@@ -92,7 +92,7 @@ if ($Sign) {
 function Sign-Files([string[]]$files) {
     if (-not $Sign) { return }
     foreach ($f in $files) {
-        if (-not (Test-Path $f)) { throw "Cannot sign $f: it does not exist." }
+        if (-not (Test-Path $f)) { throw "Cannot sign ${f}: it does not exist." }
         & $signtool sign /sha1 $Sign /fd sha256 /tr http://time.certum.pl /td sha256 /v $f
         if ($LASTEXITCODE) { throw "Signing $f failed" }
     }
