@@ -75,7 +75,7 @@
   .ssm .tabs { display:flex; gap:2px; margin:4px 10px; } .ssm .tab { height:28px; padding:0 12px; display:flex; align-items:center; border-radius:6px; color:var(--dim); } .ssm .tab.on { background:var(--control); color:var(--text); font-weight:600; } .ssm .tab[hidden] { display:none; }
   .ssm .rows { padding:0 4px; overflow:hidden; }
   .ssm .row { display:grid; grid-template-columns:1fr auto; gap:0 10px; padding:6px 8px; border-radius:5px; margin:1px 0; position:relative; }
-  .ssm .row > div { min-width:0; } .ssm .row .sw { position:absolute; left:8px; top:11px; width:9px; height:9px; border-radius:2px; } .ssm .row.chg { padding-left:24px; }
+  .ssm .row > div { min-width:0; } .ssm .row .sw { position:absolute; left:8px; top:11px; width:9px; height:9px; border-radius:2px; } .ssm .row .sw::after { content:none; } .ssm .row.chg { padding-left:24px; }
   .ssm .row .n { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .ssm .row .d { color:var(--dim); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .ssm .row .s { font-weight:600; align-self:center; white-space:nowrap; } .ssm .row .bar { position:absolute; left:8px; bottom:2px; height:3px; border-radius:2px; background:var(--accent); opacity:.55; }
   .ssm .mapcol { flex:1; display:flex; flex-direction:column; min-width:0; min-height:0; }
@@ -96,7 +96,7 @@
   .ssm .card h3 { flex:none; margin:0 0 8px; font-size:15px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .card h3 small { font-weight:400; font-size:12px; color:var(--dim); margin-left:10px; }
   .ssm .card .lrow { flex:none; display:grid; align-items:center; border-bottom:1px solid var(--stroke); font-size:12.5px; } .ssm .card .lrow .z { text-align:right; font-variant-numeric:tabular-nums; } .ssm .card .lrow .p { text-align:right; color:var(--dim); font-variant-numeric:tabular-nums; }
   .ssm .card .lrow .nm { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:8px; } .ssm .card .lrow .nm small { display:block; color:var(--dim); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .ssm .card .lrow i.sw { width:10px; height:10px; border-radius:2px; } .ssm .card .lrow .hb { height:7px; border-radius:4px; margin-right:10px; }
+  .ssm .card .lrow i.sw { width:10px; height:10px; border-radius:2px; } .ssm .card .lrow i.sw::after { content:none; } .ssm .card .lrow .hb { height:7px; border-radius:4px; margin-right:10px; }
   .ssm .card .typerow { grid-template-columns:16px 112px minmax(0,1fr) 76px 44px; height:24px; }
   .ssm .card .cleanrow { grid-template-columns:24px minmax(0,1fr) auto auto auto; height:38px; column-gap:0; } .ssm .card .cleanrow .cb { width:14px; height:14px; border-radius:3px; border:1px solid var(--dim); box-sizing:border-box; } .ssm .card .cleanrow .cb.on { background:var(--accent); border-color:var(--accent); }
   .ssm .card .cleanrow .sz { color:var(--accent); font-weight:600; min-width:64px; text-align:right; margin-right:10px; } .ssm .card .cleanrow .mini { height:24px; padding:0 8px; border-radius:6px; font-size:12px; display:flex; align-items:center; margin-left:4px; } .ssm .card .cleanrow .mini.o { border:1px solid var(--stroke); min-width:54px; justify-content:center; }
