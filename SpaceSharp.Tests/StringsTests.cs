@@ -13,7 +13,7 @@ public class StringsTests
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln"))) dir = dir.Parent;
         Assert.NotNull(dir);
-        return Path.Combine(dir!.FullName, "SpaceSharp", "Resources");
+        return Path.Combine(dir!.FullName, "SpaceSharp.Core", "Resources");
     }
 
     private static Dictionary<string, string> Read(string file) =>

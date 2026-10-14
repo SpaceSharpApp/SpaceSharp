@@ -7,7 +7,7 @@ namespace SpaceSharp.Util;
 /// Strings.&lt;culture&gt;.resx exists in the build; nothing else has to be registered, so the dropdown in
 /// Settings grows on its own as translations are added.
 /// </summary>
-public static class Localization
+public static class AppLanguages
 {
     public static readonly CultureInfo Neutral = CultureInfo.GetCultureInfo("en");
 
@@ -29,20 +29,43 @@ public static class Localization
             }
             catch (System.Resources.MissingManifestResourceException) { }
         }
-        return list.Take(1).Concat(list.Skip(1).OrderBy(c => c.NativeName, StringComparer.CurrentCultureIgnoreCase)).ToList();
+        // English, then the translations people have read through, then the machine-made ones; each group by native name.
+        return list.Take(1)
+            .Concat(list.Skip(1).OrderBy(IsMachineTranslated).ThenBy(c => c.NativeName, StringComparer.CurrentCultureIgnoreCase))
+            .ToList();
     }
+
+    /// <summary>
+    /// True when the translation file says so in its Meta_MachineTranslated entry: machine-made and not yet checked
+    /// by a native speaker. Settings lists those apart and says so under the dropdown; a contributor who reads the
+    /// file through flips the value to "false". English is never machine translated.
+    /// </summary>
+    public static bool IsMachineTranslated(CultureInfo culture)
+    {
+        if (culture.Equals(Neutral)) return false;
+        try
+        {
+            var set = Strings.Manager.GetResourceSet(culture, createIfNotExists: true, tryParents: false);
+            return string.Equals(set?.GetString("Meta_MachineTranslated"), "true", StringComparison.OrdinalIgnoreCase);
+        }
+        catch (System.Resources.MissingManifestResourceException) { return false; }
+    }
+
+    /// <summary>The culture in use right now, for the note under the dropdown.</summary>
+    public static CultureInfo Current => CultureInfo.CurrentUICulture;
 
     /// <summary>The culture a setting value stands for: null or empty means "same as Windows".</summary>
     public static CultureInfo Resolve(string? setting)
     {
         if (!string.IsNullOrWhiteSpace(setting))
         {
-            try { return CultureInfo.GetCultureInfo(setting); } catch (CultureNotFoundException) { }
+            // predefinedOnly: .NET would otherwise invent a culture for any well-formed name ("not" for "not-a-code").
+            try { return CultureInfo.GetCultureInfo(setting, predefinedOnly: true); } catch (CultureNotFoundException) { }
         }
         return SystemCulture;
     }
 
-    /// <summary>Applies the language for the whole process. Call once, before the first window is created.</summary>
+    /// <summary>Applies the language for the whole process. Call once, before the first window is created; the Windows app calls it through WindowLanguage.Apply, which also tells WPF.</summary>
     public static void Apply(string? setting)
     {
         var culture = Resolve(setting);
@@ -51,9 +74,16 @@ public static class Localization
         // Numbers and dates follow the same choice, so "1,5 GB" and "1.5 GB" match the words around them.
         CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.CurrentCulture = culture;
-        System.Windows.FrameworkElement.LanguageProperty.OverrideMetadata(typeof(System.Windows.FrameworkElement),
-            new System.Windows.FrameworkPropertyMetadata(System.Windows.Markup.XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+
+        // Right-to-left languages (Arabic, Hebrew, Persian, Urdu) mirror every window: panels swap sides, text aligns
+        // right, the caption buttons move. The front end reads this flag (the Windows app in WindowLanguage, which
+        // TitleBarTheme.Attach runs for every window); the controls that draw with coordinates (the map, the donuts,
+        // the icons) pin themselves to left-to-right.
+        IsRightToLeft = culture.TextInfo.IsRightToLeft;
     }
+
+    /// <summary>True when the chosen language reads right to left, so the windows are mirrored.</summary>
+    public static bool IsRightToLeft { get; private set; }
 
     /// <summary>"Norsk bokmål (Norge)" with the first letter capitalized, for the dropdown.</summary>
     public static string DisplayName(CultureInfo culture)

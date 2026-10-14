@@ -213,7 +213,7 @@ public sealed partial class TreemapControl
         // Lay out in the content's shape, then normalize so the same layout can be stretched to any zoom.
         var normalized = new Rect[children.Count];
         int index = 0;
-        Squarify.Layout(children, new Rect(0, 0, content.Width, content.Height), _measure, (_, rect) =>
+        Squarify.Layout(children, new LayoutRect(0, 0, content.Width, content.Height), _measure, (_, rect) =>
         {
             normalized[index++] = new Rect(rect.X / content.Width, rect.Y / content.Height,
                 rect.Width / content.Width, rect.Height / content.Height);

@@ -1,4 +1,3 @@
-using System.Windows;
 using SpaceSharp.Models;
 
 namespace SpaceSharp.Layout;
@@ -14,7 +13,7 @@ public static class Squarify
     /// How strongly the layout leans to one direction. 1 is the plain algorithm. Above 1 favors vertical strips
     /// (tall boxes), below 1 favors horizontal strips (wide boxes); the layout stays squarified either way.
     /// </param>
-    public static void Layout(IReadOnlyList<FsNode> nodes, Rect bounds, SizeMeasure measure, Action<FsNode, Rect> emit, double orientationBias = 1)
+    public static void Layout(IReadOnlyList<FsNode> nodes, LayoutRect bounds, SizeMeasure measure, Action<FsNode, LayoutRect> emit, double orientationBias = 1)
     {
         int count = 0;
         double total = 0;
@@ -59,7 +58,7 @@ public static class Squarify
                 for (int k = i; k < j; k++)
                 {
                     double itemHeight = nodes[k].SizeFor(measure) * scale / thickness;
-                    emit(nodes[k], new Rect(x, cy, thickness, itemHeight));
+                    emit(nodes[k], new LayoutRect(x, cy, thickness, itemHeight));
                     cy += itemHeight;
                 }
                 x += thickness;
@@ -73,7 +72,7 @@ public static class Squarify
                 for (int k = i; k < j; k++)
                 {
                     double itemWidth = nodes[k].SizeFor(measure) * scale / thickness;
-                    emit(nodes[k], new Rect(cx, y, itemWidth, thickness));
+                    emit(nodes[k], new LayoutRect(cx, y, itemWidth, thickness));
                     cx += itemWidth;
                 }
                 y += thickness;

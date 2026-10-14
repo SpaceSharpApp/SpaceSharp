@@ -42,7 +42,7 @@ public partial class App : Application
         DispatcherUnhandledException += OnDispatcherUnhandledException;
         HookBackgroundErrors();
 
-        AppLanguages.Apply(AppSettings.Current.Language);   // before any window, so every string and format follows it
+        WindowLanguage.Apply(AppSettings.Current.Language);   // before any window, so every string and format follows it
         var theme = Enum.TryParse<AppTheme>(AppSettings.Current.Theme, out var saved) ? saved : AppTheme.System;
         ThemeManager.Initialize(theme);
 

@@ -37,7 +37,13 @@ Items go to the Recycle Bin through the Windows shell with undo enabled. After a
 ## Project structure
 
 ```
-SpaceSharp/
+SpaceSharp.Core/                  the half that knows nothing about Windows or WPF (plain net10.0)
+├── Models/FsNode.cs              the file and folder tree
+├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
+├── Services/                     saved scans (ScanFile), compare, CSV
+├── Util/                         strings, languages, sizes, name patterns, command line, app info
+└── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
+SpaceSharp/                       the Windows app (WPF), references SpaceSharp.Core
 ├── App.xaml(.cs)                 startup, theme setup, error dialog
 ├── MainWindow.xaml(.cs)          toolbar, path row, map, status bar, settings application
 ├── MainWindow.FilterPanel.cs     the filter drawer and rail
@@ -47,11 +53,8 @@ SpaceSharp/
 │   ├── TreemapControl*.cs        fields, camera, layout, render, input
 │   ├── DonutChart.cs             the donuts in Inspect
 │   └── MapEnums.cs               ColorMode, TreemapItem
-├── Layout/                       Squarify.cs, Grouping.cs
-├── Models/FsNode.cs              the file and folder tree
-├── Services/                     scanners, filter, insights, top lists, compare, CSV, updater, shell
-├── Util/                         settings, palettes, custom palettes, color text, themes, strings, command line
-├── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
+├── Services/                     scanners (folder walk, MFT, elevated helper), filter, insights, top lists, updater, shell, Recycle Bin
+├── Util/                         settings, palettes, custom palettes, color text, themes, the {u:T} extension, window language
 ├── Themes/                       Styles.xaml, Dark.xaml, Light.xaml
 ├── Assets/                       the mark (SVG), the Windows icon, the 256 px PNG
 └── Properties/PublishProfiles/   Portable, Small, Velopack
@@ -66,7 +69,20 @@ tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots
 installer/                        wizard pages, dialog images, release.ps1, brand-msi.ps1
 ```
 
-## Where to change things
+## Two projects, and the line between them
+
+`SpaceSharp.Core` targets plain `net10.0` and may not reference `System.Windows`, Velopack or Win32; the compiler enforces it, since none of those exist for that target. It is what the planned Mac, Linux and Android builds will share with the Windows app: the tree, the layout, the saved-scan format, the strings and every translation, size formatting, the command line. `SpaceSharp` is the Windows front end on WPF and references Core. The test project references both.
+
+The rule when adding code: if it would work the same on a Mac, it goes in Core. Anything that draws, opens a window, talks to the shell, the Recycle Bin, the registry or the NTFS file table stays in the app. Where Core needs something from the platform (the right-to-left flag is the first case), it exposes a plain property or interface and the app fills it in: `AppLanguages.Apply` sets `IsRightToLeft`, and `WindowLanguage` in the app turns that into WPF's `FlowDirection`.
+
+The next moves toward a second front end, in the order they pay off:
+
+1. **The scanner behind an interface.** `DiskScanner` (the folder walk) uses only `System.IO` and can move to Core as is; `MftScanner` and `ElevatedScan` stay in the app behind an `IScanner` that Core defines. A Mac or Linux build gets the folder walk on day one and a native fast path later if one exists.
+2. **Palettes as plain colors.** `Palette`, `PaletteDraft` and `CustomPalettes` carry WPF's `Color` and `Brush`. A small `Rgb` struct in Core, with the brushes made at the edge in the app, moves the palette tables, the type map, the derivations and the JSON format to Core, and the tests for them off Windows.
+3. **Settings and insights.** `AppSettings` is a JSON model with a WPF-free shape already; `DriveInsights`, `TopLists`, `InspectSummary` and `FileFilter` are pure computation over the tree with a few `Brush` references to cut. All of them belong in Core.
+4. **The test project on plain net10.0**, once nothing it tests needs WPF, so the Core tests also run on the Linux and macOS runners.
+5. **The second front end**, which is Avalonia: the same XAML dialect and C#, Skia rendering (the map is drawn with coordinates and paths, which ports directly), Windows, macOS, Linux, Android and iOS from one project. The Windows app stays on WPF until the Avalonia one is at least as good on Windows, which is not a given; the Core split is what makes running both side by side cheap.
+
 
 **Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.
 
@@ -80,7 +96,7 @@ installer/                        wizard pages, dialog images, release.ps1, bran
 
 **Add a shortcut.** `MainWindow.Window_PreviewKeyDown`, the list in `ShortcutsWindow.cs`, and the README's table.
 
-**Add UI text.** Every string is a key in `Resources/Strings.resx` with a Norwegian twin in `Strings.nb.resx`. `LocalizationTests` fails the build if a key used in code or XAML is missing. A new language is one more `Strings.<culture>.resx`; it appears in the language list on its own. Each translation file carries `Meta_MachineTranslated`: `AppLanguages.IsMachineTranslated` reads it, the Settings dropdown groups them under a "Machine translations" heading after the "Translations" group (the same grouped list as the palette picker, sharing the ComboGroupHeader template), and shows a note under the dropdown while such a language is active. Set it to `false` once a native speaker has read the file; English and Norwegian are the only reviewed ones today. Most of the machine-made files were produced in one pass from the English strings with the Windows terminology of each language; `Strings.nb.resx` is the model for tone.
+**Add UI text.** Every string is a key in `SpaceSharp.Core/Resources/Strings.resx` with a Norwegian twin in `Strings.nb.resx`. `LocalizationTests` fails the build if a key used in code or XAML is missing. A new language is one more `Strings.<culture>.resx`; it appears in the language list on its own. Each translation file carries `Meta_MachineTranslated`: `AppLanguages.IsMachineTranslated` reads it, the Settings dropdown groups them under a "Machine translations" heading after the "Translations" group (the same grouped list as the palette picker, sharing the ComboGroupHeader template), and shows a note under the dropdown while such a language is active. Set it to `false` once a native speaker has read the file; English and Norwegian are the only reviewed ones today. Most of the machine-made files were produced in one pass from the English strings with the Windows terminology of each language; `Strings.nb.resx` is the model for tone.
 
 **The icon.** The mark is an isometric amber block with a cube carved out of its front corner. Everything is generated from `tools/make-assets.py` (Python 3 with Pillow and cairosvg): the SVGs, the Windows icon on its rounded Graphite tile, the 256 px PNG the app shows, the header, the wordmark and the installer images (the MSI's banner and dialog art, "Facets", is a list of triangles in that file). Change the geometry or colors there, not in the files.
 

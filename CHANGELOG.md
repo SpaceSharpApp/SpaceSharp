@@ -4,6 +4,9 @@ What changed in each SpaceSharp release, newest first. The 1.x releases are in [
 
 ## 2.2.1 (unreleased)
 
+### Under the hood
+- The code is two projects now. `SpaceSharp.Core` is the part that knows nothing about Windows or WPF: the file tree, the treemap layout, saved scans and compare, CSV export, every string and translation, size formatting and the command line. It targets plain .NET 10, so the compiler keeps Windows out of it, and it is what the planned Mac, Linux and Android versions will share with the Windows app. Nothing changes for users; DEVELOPING.md says what goes where and what moves next.
+
 ### Fixes
 - The Map and Insights buttons went gray with a dark label after a click, because the new keyboard-focus look for toolbar buttons replaced their amber fill. The accent buttons keep the fill and show focus as a dark edge.
 

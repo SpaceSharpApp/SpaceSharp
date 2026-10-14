@@ -13,9 +13,8 @@
     <RootNamespace>SpaceSharp</RootNamespace>
     <!-- Program.Main runs Velopack's install/update hooks before WPF starts. -->
     <StartupObject>SpaceSharp.Program</StartupObject>
-    <!-- Only ship English framework resources (keeps the published exe smaller). This filters referenced
-         packages only; SpaceSharp's own Resources/Strings.*.resx are always built and bundled. -->
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <!-- No SatelliteResourceLanguages here: it would also filter the translations, which now come from
+         SpaceSharp.Core as satellite assemblies, down to English. Velopack ships no satellites, so nothing is lost. -->
     <!-- Strings.resx is English, so the resource manager never looks for an English satellite assembly first. -->
     <NeutralLanguage>en</NeutralLanguage>
     <!-- The Small build runs on a newer major runtime when .NET 10 is gone from the PC, instead of refusing to start. -->
@@ -58,7 +57,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Lets the test project set sizes and dates on FsNode without a scanner. -->
+    <!-- The platform-neutral half: tree, layout, saved scans, strings, sizes. See SpaceSharp.Core/SpaceSharp.Core.csproj. -->
+    <ProjectReference Include="..\SpaceSharp.Core\SpaceSharp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Lets the test project reach the app's internals (the Core project grants its own). -->
     <InternalsVisibleTo Include="SpaceSharp.Tests" />
   </ItemGroup>
 
