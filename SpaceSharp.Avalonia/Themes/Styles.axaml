@@ -40,7 +40,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
   </Style>
 
-  <Style Selector="Button.accent">
+  <Style Selector="Button.primary">
     <Setter Property="Background" Value="{DynamicResource Accent}" />
     <Setter Property="Foreground" Value="{DynamicResource AccentText}" />
     <Setter Property="FontWeight" Value="SemiBold" />
@@ -51,7 +51,7 @@
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Cursor" Value="Hand" />
   </Style>
-  <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="#FFD166" />
     <Setter Property="Foreground" Value="{DynamicResource AccentText}" />
   </Style>

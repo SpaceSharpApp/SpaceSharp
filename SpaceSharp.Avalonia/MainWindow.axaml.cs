@@ -144,16 +144,23 @@ public partial class MainWindow : Window
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { continue; }
             if (total <= 0) continue;
 
-            string label = string.IsNullOrWhiteSpace(drive.VolumeLabel) ? drive.DriveType.ToString() : drive.VolumeLabel;
             string name = OperatingSystem.IsWindows() ? drive.Name.TrimEnd('\\') : drive.Name;
+            string title = string.IsNullOrWhiteSpace(drive.VolumeLabel) ? name : $"{name}  {drive.VolumeLabel}";
+            string kind = drive.DriveType switch
+            {
+                DriveType.Removable => Strings.Get("Drive_Removable"),
+                DriveType.Network => Strings.Get("Drive_Network"),
+                DriveType.CDRom => Strings.Get("Drive_Optical"),
+                _ => drive.DriveFormat
+            };
 
             var head = new DockPanel();
-            var freeText = new TextBlock { Text = $"{SizeFormatter.Format(free)} free", Classes = { "dim" } };
+            var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), Classes = { "dim" } };
             DockPanel.SetDock(freeText, Dock.Right);
             head.Children.Add(freeText);
-            head.Children.Add(new TextBlock { Text = $"{name}  {label}", FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
+            head.Children.Add(new TextBlock { Text = title, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
             var bar = new ProgressBar { Minimum = 0, Maximum = 1, Value = (double)(total - free) / total, Margin = new Thickness(0, 6, 0, 4) };
-            var line = new TextBlock { Text = $"{SizeFormatter.Format(total - free)} used of {SizeFormatter.Format(total)} · {drive.DriveFormat}", Classes = { "dim" }, FontSize = 11 };
+            var line = new TextBlock { Text = Strings.Format("Drive_UsedOf", SizeFormatter.Format(total - free), SizeFormatter.Format(total), kind), Classes = { "dim" }, FontSize = 11 };
 
             var button = new Button { Classes = { "drive" }, Content = new StackPanel { Children = { head, bar, line } }, Tag = drive.RootDirectory.FullName };
             button.Click += (_, _) => _ = ScanAsync((string)button.Tag!);
@@ -290,7 +297,7 @@ public partial class MainWindow : Window
     private async void ScanFolder_Click(object? sender, RoutedEventArgs e)
     {
         var picked = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions { Title = Strings.Get("Main_ScanFolder"), AllowMultiple = false });
-        var folder = picked.FirstOrDefault();
+        var folder = picked.Count > 0 ? picked[0] : null;
         string? path = folder?.TryGetLocalPath();
         if (path is not null) await ScanAsync(path);
     }

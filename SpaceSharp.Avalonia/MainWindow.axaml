@@ -15,7 +15,7 @@
 
     <!-- toolbar -->
     <DockPanel Grid.Row="0" Margin="8,6,8,2" LastChildFill="False">
-      <Button x:Name="ScanFolderButton" Classes="accent" Click="ScanFolder_Click" />
+      <Button x:Name="ScanFolderButton" Classes="primary" Click="ScanFolder_Click" />
       <Button x:Name="RescanButton" Classes="tool" Margin="6,0,0,0" Content="⟳" Click="Rescan_Click" />
       <Border Classes="divider" />
       <Button x:Name="UpButton" Classes="tool" Content="↑" Click="Up_Click" />
@@ -57,7 +57,7 @@
           <Image Source="avares://SpaceSharp.Avalonia/Assets/SpaceSharp-256.png" Width="72" Height="72" Margin="0,0,0,8" />
           <TextBlock x:Name="EmptyTitle" Classes="title" TextAlignment="Center" />
           <TextBlock x:Name="EmptyText" Classes="dim" TextAlignment="Center" TextWrapping="Wrap" />
-          <Button x:Name="EmptyScanButton" Classes="accent" HorizontalAlignment="Center" Margin="0,10,0,0" Click="ScanFolder_Click" />
+          <Button x:Name="EmptyScanButton" Classes="primary" HorizontalAlignment="Center" Margin="0,10,0,0" Click="ScanFolder_Click" />
         </StackPanel>
 
         <!-- while scanning -->
