@@ -41,8 +41,10 @@ SpaceSharp.Core/                  the half that knows nothing about Windows or W
 ├── Models/FsNode.cs              the file and folder tree
 ├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
 ├── Services/                     saved scans (ScanFile), compare, CSV
-├── Util/                         strings, languages, sizes, name patterns, command line, app info
+├── Scanning/                     FolderWalker (the System.IO scan every platform has), IPlatformFiles (what it asks the OS)
+├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings
 └── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
+SpaceSharp.Avalonia/              the cross-platform app (Avalonia, Skia): the map, drives, scanning; PARITY.md lists what is not ported yet
 SpaceSharp/                       the Windows app (WPF), references SpaceSharp.Core
 ├── App.xaml(.cs)                 startup, theme setup, error dialog
 ├── MainWindow.xaml(.cs)          toolbar, path row, map, status bar, settings application
@@ -81,7 +83,7 @@ The next moves toward a second front end, in the order they pay off:
 2. **Palettes as plain colors.** `Palette`, `PaletteDraft` and `CustomPalettes` carry WPF's `Color` and `Brush`. A small `Rgb` struct in Core, with the brushes made at the edge in the app, moves the palette tables, the type map, the derivations and the JSON format to Core, and the tests for them off Windows.
 3. **Settings and insights.** `AppSettings` is a JSON model with a WPF-free shape already; `DriveInsights`, `TopLists`, `InspectSummary` and `FileFilter` are pure computation over the tree with a few `Brush` references to cut. All of them belong in Core.
 4. **The test project on plain net10.0**, once nothing it tests needs WPF, so the Core tests also run on the Linux and macOS runners.
-5. **The second front end**, which is Avalonia: the same XAML dialect and C#, Skia rendering (the map is drawn with coordinates and paths, which ports directly), Windows, macOS, Linux, Android and iOS from one project. The Windows app stays on WPF until the Avalonia one is at least as good on Windows, which is not a given; the Core split is what makes running both side by side cheap.
+5. **The second front end**, which is Avalonia and exists: `SpaceSharp.Avalonia` has the map, the drives, the folder-walk scan and the main window; `SpaceSharp.Avalonia/PARITY.md` lists what is still WPF-only and the order to port it. The Windows app stays on WPF until the Avalonia one is at least as good on Windows; the Core split is what makes running both side by side cheap. `dotnet run --project SpaceSharp.Avalonia` starts it; the tests workflow builds it on Linux, macOS and Windows.
 
 
 **Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.

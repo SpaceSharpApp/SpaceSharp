@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSharp", "SpaceSharp\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSharp.Core", "SpaceSharp.Core\SpaceSharp.Core.csproj", "{A1E4C7D2-5B3F-4E8A-9C21-7D6F0B2E4A33}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSharp.Avalonia", "SpaceSharp.Avalonia\SpaceSharp.Avalonia.csproj", "{B7D2F9A4-3C1E-4D6B-8F5A-2E9C7A1D4B60}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSharp.Tests", "SpaceSharp.Tests\SpaceSharp.Tests.csproj", "{3F6D8B2A-91C4-4E7A-8D2F-6B1A0C9E5D21}"
 EndProject
 Global
@@ -22,6 +24,10 @@ Global
 		{A1E4C7D2-5B3F-4E8A-9C21-7D6F0B2E4A33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1E4C7D2-5B3F-4E8A-9C21-7D6F0B2E4A33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1E4C7D2-5B3F-4E8A-9C21-7D6F0B2E4A33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D2F9A4-3C1E-4D6B-8F5A-2E9C7A1D4B60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D2F9A4-3C1E-4D6B-8F5A-2E9C7A1D4B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D2F9A4-3C1E-4D6B-8F5A-2E9C7A1D4B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D2F9A4-3C1E-4D6B-8F5A-2E9C7A1D4B60}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F6D8B2A-91C4-4E7A-8D2F-6B1A0C9E5D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F6D8B2A-91C4-4E7A-8D2F-6B1A0C9E5D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F6D8B2A-91C4-4E7A-8D2F-6B1A0C9E5D21}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -30,6 +30,7 @@
     <!-- The scanners set sizes and dates on FsNode; the tests build trees the same way. -->
     <InternalsVisibleTo Include="SpaceSharp" />
     <InternalsVisibleTo Include="SpaceSharp.Tests" />
+    <InternalsVisibleTo Include="SpaceSharp.Avalonia" />
   </ItemGroup>
 
 </Project>

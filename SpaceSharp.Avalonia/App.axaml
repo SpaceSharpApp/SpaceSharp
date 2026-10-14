@@ -1,0 +1,55 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="SpaceSharp.App"
+             RequestedThemeVariant="Dark">
+  <!-- Graphite, the dark look of the Windows app: GitHub's grays with the amber accent. The light theme and the
+       other looks come later (PARITY.md). -->
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+          <Color x:Key="WindowBg">#0D1117</Color>
+          <Color x:Key="PanelBg">#161B22</Color>
+          <Color x:Key="ControlBg">#21262D</Color>
+          <Color x:Key="ControlHoverBg">#30363D</Color>
+          <Color x:Key="StrokeColor">#30363D</Color>
+          <Color x:Key="TextColor">#E6EDF3</Color>
+          <Color x:Key="TextDimColor">#8B949E</Color>
+          <Color x:Key="AccentColor">#F5B82E</Color>
+          <Color x:Key="AccentTextColor">#1C1500</Color>
+          <Color x:Key="DangerColor">#F85149</Color>
+          <Color x:Key="MapBgColor">#0D1117</Color>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <Color x:Key="WindowBg">#F6F8FA</Color>
+          <Color x:Key="PanelBg">#FFFFFF</Color>
+          <Color x:Key="ControlBg">#EAEEF2</Color>
+          <Color x:Key="ControlHoverBg">#D0D7DE</Color>
+          <Color x:Key="StrokeColor">#D0D7DE</Color>
+          <Color x:Key="TextColor">#1F2328</Color>
+          <Color x:Key="TextDimColor">#656D76</Color>
+          <Color x:Key="AccentColor">#D29922</Color>
+          <Color x:Key="AccentTextColor">#1C1500</Color>
+          <Color x:Key="DangerColor">#CF222E</Color>
+          <Color x:Key="MapBgColor">#F6F8FA</Color>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+      <SolidColorBrush x:Key="Window" Color="{DynamicResource WindowBg}" />
+      <SolidColorBrush x:Key="Panel" Color="{DynamicResource PanelBg}" />
+      <SolidColorBrush x:Key="Control" Color="{DynamicResource ControlBg}" />
+      <SolidColorBrush x:Key="ControlHover" Color="{DynamicResource ControlHoverBg}" />
+      <SolidColorBrush x:Key="Stroke" Color="{DynamicResource StrokeColor}" />
+      <SolidColorBrush x:Key="Text" Color="{DynamicResource TextColor}" />
+      <SolidColorBrush x:Key="TextDim" Color="{DynamicResource TextDimColor}" />
+      <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}" />
+      <SolidColorBrush x:Key="AccentText" Color="{DynamicResource AccentTextColor}" />
+      <SolidColorBrush x:Key="Danger" Color="{DynamicResource DangerColor}" />
+      <SolidColorBrush x:Key="MapBackground" Color="{DynamicResource MapBgColor}" />
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://SpaceSharp.Avalonia/Themes/Styles.axaml" />
+  </Application.Styles>
+</Application>

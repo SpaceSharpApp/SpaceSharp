@@ -1,0 +1,103 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SpaceSharp.Controls"
+        x:Class="SpaceSharp.MainWindow"
+        Title="SpaceSharp"
+        Width="1280" Height="800" MinWidth="820" MinHeight="520"
+        Icon="avares://SpaceSharp.Avalonia/Assets/SpaceSharp-256.png"
+        Background="{DynamicResource Window}">
+
+  <!-- The Windows app's main window, trimmed to what is ported: toolbar, path row, the side panel with the drives,
+       the map (or the start hint, or the scan card), and a status line. The text comes from the same Strings.resx
+       as the Windows app, set from code in Build() so the language setting applies. -->
+
+  <Grid RowDefinitions="44,32,*,26">
+
+    <!-- toolbar -->
+    <DockPanel Grid.Row="0" Margin="8,6,8,2" LastChildFill="False">
+      <Button x:Name="ScanFolderButton" Classes="accent" Click="ScanFolder_Click" />
+      <Button x:Name="RescanButton" Classes="tool" Margin="6,0,0,0" Content="⟳" Click="Rescan_Click" />
+      <Border Classes="divider" />
+      <Button x:Name="UpButton" Classes="tool" Content="↑" Click="Up_Click" />
+      <Button x:Name="HomeButton" Classes="tool" Content="⌂" Click="Fit_Click" />
+      <Button x:Name="PanelButton" Classes="tool" Content="▤" Click="Panel_Click" />
+      <Border Classes="divider" />
+      <Button x:Name="ZoomOutButton" Classes="tool" Content="−" Click="ZoomOut_Click" />
+      <TextBlock x:Name="ZoomLabel" Classes="dim" VerticalAlignment="Center" MinWidth="44" TextAlignment="Center" Text="100%" />
+      <Button x:Name="ZoomInButton" Classes="tool" Content="+" Click="ZoomIn_Click" />
+
+      <Button x:Name="ThemeButton" DockPanel.Dock="Right" Classes="tool" Content="◐" Click="Theme_Click" />
+      <ComboBox x:Name="PaletteCombo" DockPanel.Dock="Right" Width="190" Margin="6,0" SelectionChanged="Palette_Changed" />
+      <TextBlock x:Name="PaletteLabel" DockPanel.Dock="Right" Classes="dim" VerticalAlignment="Center" Margin="10,0,0,0" />
+      <ComboBox x:Name="ColorCombo" DockPanel.Dock="Right" Width="130" Margin="6,0" SelectionChanged="ColorMode_Changed" />
+      <TextBlock x:Name="ColorLabel" DockPanel.Dock="Right" Classes="dim" VerticalAlignment="Center" />
+    </DockPanel>
+
+    <!-- path row -->
+    <StackPanel x:Name="Crumbs" Grid.Row="1" Orientation="Horizontal" Margin="10,0" />
+
+    <!-- body -->
+    <Grid Grid.Row="2" x:Name="Body" ColumnDefinitions="280,1,*">
+      <Border Grid.Column="0" x:Name="SidePanel" Background="{DynamicResource Panel}" Padding="10">
+        <DockPanel>
+          <TextBlock x:Name="DrivesTitle" DockPanel.Dock="Top" FontWeight="SemiBold" FontSize="15" />
+          <TextBlock x:Name="DrivesHint" DockPanel.Dock="Top" Classes="dim" Margin="0,2,0,10" />
+          <ScrollViewer>
+            <StackPanel x:Name="DriveList" Spacing="2" />
+          </ScrollViewer>
+        </DockPanel>
+      </Border>
+      <Border Grid.Column="1" x:Name="PanelEdge" Background="{DynamicResource Stroke}" />
+
+      <Grid Grid.Column="2">
+        <controls:TreemapControl x:Name="Treemap" MapBackground="{DynamicResource MapBackground}" />
+
+        <!-- before the first scan -->
+        <StackPanel x:Name="EmptyHint" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="10" MaxWidth="520">
+          <Image Source="avares://SpaceSharp.Avalonia/Assets/SpaceSharp-256.png" Width="72" Height="72" Margin="0,0,0,8" />
+          <TextBlock x:Name="EmptyTitle" Classes="title" TextAlignment="Center" />
+          <TextBlock x:Name="EmptyText" Classes="dim" TextAlignment="Center" TextWrapping="Wrap" />
+          <Button x:Name="EmptyScanButton" Classes="accent" HorizontalAlignment="Center" Margin="0,10,0,0" Click="ScanFolder_Click" />
+        </StackPanel>
+
+        <!-- while scanning -->
+        <Border x:Name="ScanCard" IsVisible="False" VerticalAlignment="Center" HorizontalAlignment="Center" Width="560"
+                Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="10" Padding="24,20">
+          <StackPanel Spacing="10">
+            <DockPanel>
+              <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource Accent}" />
+              <TextBlock x:Name="ScanTitle" FontSize="22" FontWeight="SemiBold" />
+            </DockPanel>
+            <TextBlock x:Name="ScanSubtitle" Classes="dim" />
+            <ProgressBar x:Name="ScanBar" Minimum="0" Maximum="1" />
+            <Grid ColumnDefinitions="*,*,*" Margin="0,6,0,0">
+              <StackPanel Grid.Column="0">
+                <TextBlock x:Name="ScanSize" FontSize="26" FontWeight="SemiBold" />
+                <TextBlock x:Name="ScanSizeLabel" Classes="dim" />
+              </StackPanel>
+              <StackPanel Grid.Column="1">
+                <TextBlock x:Name="ScanRate" FontSize="26" FontWeight="SemiBold" />
+                <TextBlock x:Name="ScanRateLabel" Classes="dim" />
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock x:Name="ScanElapsed" FontSize="26" FontWeight="SemiBold" />
+                <TextBlock x:Name="ScanElapsedLabel" Classes="dim" />
+              </StackPanel>
+            </Grid>
+            <TextBlock x:Name="ScanPath" Classes="dim" FontFamily="Cascadia Mono, Consolas, Menlo, monospace" FontSize="12" TextTrimming="CharacterEllipsis" />
+            <DockPanel Margin="0,6,0,0">
+              <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Click="Cancel_Click" />
+              <TextBlock x:Name="CancelHint" Classes="dim" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
+            </DockPanel>
+          </StackPanel>
+        </Border>
+      </Grid>
+    </Grid>
+
+    <!-- status -->
+    <DockPanel Grid.Row="3" Margin="10,0" LastChildFill="True">
+      <TextBlock x:Name="StatusRight" DockPanel.Dock="Right" Classes="dim" VerticalAlignment="Center" />
+      <TextBlock x:Name="StatusText" Classes="dim" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+    </DockPanel>
+  </Grid>
+</Window>

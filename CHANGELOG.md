@@ -5,6 +5,7 @@ What changed in each SpaceSharp release, newest first. The 1.x releases are in [
 ## 2.2.1 (unreleased)
 
 ### Under the hood
+- A cross-platform SpaceSharp has started: `SpaceSharp.Avalonia` draws the same map with Avalonia and Skia and runs on Windows, macOS and Linux, with the drives, the folder-walk scan, palettes, Color by and the dark and light themes. It is a developer build for now (`dotnet run --project SpaceSharp.Avalonia`); the Windows release stays the WPF app until the new one matches it. `SpaceSharp.Avalonia/PARITY.md` tracks the gap. The folder walk moved to Core as `FolderWalker`, with the Win32 calls behind an `IPlatformFiles` interface, and `AppSettings` moved to Core so both apps read the same settings file.
 - The code is two projects now. `SpaceSharp.Core` is the part that knows nothing about Windows or WPF: the file tree, the treemap layout, saved scans and compare, CSV export, every string and translation, size formatting and the command line. It targets plain .NET 10, so the compiler keeps Windows out of it, and it is what the planned Mac, Linux and Android versions will share with the Windows app. Nothing changes for users; DEVELOPING.md says what goes where and what moves next.
 
 ### Fixes
