@@ -43,6 +43,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.3.*" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.*" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.*" />
+    <PackageReference Include="Velopack" Version="*" />
     <!-- The in-app inspector (F12) for Debug builds only. -->
     <PackageReference Include="Avalonia.Diagnostics" Version="11.3.*" Condition="'$(Configuration)' == 'Debug'" />
   </ItemGroup>

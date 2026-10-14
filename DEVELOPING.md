@@ -40,11 +40,11 @@ Items go to the Recycle Bin through the Windows shell with undo enabled. After a
 SpaceSharp.Core/                  the half that knows nothing about Windows or WPF (plain net10.0)
 ├── Models/FsNode.cs              the file and folder tree
 ├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
-├── Services/                     saved scans (ScanFile), compare, CSV
+├── Services/                     saved scans (ScanFile), compare, CSV, the filter (FileFilter), insights (DriveInsights), inspect (InspectSummary)
 ├── Scanning/                     FolderWalker (the System.IO scan every platform has), IPlatformFiles (what it asks the OS)
 ├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings
 └── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
-SpaceSharp.Avalonia/              the cross-platform app (Avalonia, Skia): the map, drives, scanning; PARITY.md lists what is not ported yet
+SpaceSharp.Avalonia/              the cross-platform app (Avalonia, Skia), the whole Windows app ported; PARITY.md says what each part is
 SpaceSharp/                       the Windows app (WPF), references SpaceSharp.Core
 ├── App.xaml(.cs)                 startup, theme setup, error dialog
 ├── MainWindow.xaml(.cs)          toolbar, path row, map, status bar, settings application
@@ -55,7 +55,7 @@ SpaceSharp/                       the Windows app (WPF), references SpaceSharp.C
 │   ├── TreemapControl*.cs        fields, camera, layout, render, input
 │   ├── DonutChart.cs             the donuts in Inspect
 │   └── MapEnums.cs               ColorMode, TreemapItem
-├── Services/                     scanners (folder walk, MFT, elevated helper), filter, insights, top lists, updater, shell, Recycle Bin
+├── Services/                     scanners (folder walk, MFT, elevated helper), top lists, updater, shell, Recycle Bin
 ├── Util/                         settings, palettes, custom palettes, color text, themes, the {u:T} extension, window language
 ├── Themes/                       Styles.xaml, Dark.xaml, Light.xaml
 ├── Assets/                       the mark (SVG), the Windows icon, the 256 px PNG
@@ -83,7 +83,7 @@ The next moves toward a second front end, in the order they pay off:
 2. **Palettes as plain colors.** `Palette`, `PaletteDraft` and `CustomPalettes` carry WPF's `Color` and `Brush`. A small `Rgb` struct in Core, with the brushes made at the edge in the app, moves the palette tables, the type map, the derivations and the JSON format to Core, and the tests for them off Windows.
 3. **Settings and insights.** `AppSettings` is a JSON model with a WPF-free shape already; `DriveInsights`, `TopLists`, `InspectSummary` and `FileFilter` are pure computation over the tree with a few `Brush` references to cut. All of them belong in Core.
 4. **The test project on plain net10.0**, once nothing it tests needs WPF, so the Core tests also run on the Linux and macOS runners.
-5. **The second front end**, which is Avalonia and exists: `SpaceSharp.Avalonia` has the map, the drives, the folder-walk scan and the main window; `SpaceSharp.Avalonia/PARITY.md` lists what is still WPF-only and the order to port it. The Windows app stays on WPF until the Avalonia one is at least as good on Windows; the Core split is what makes running both side by side cheap. `dotnet run --project SpaceSharp.Avalonia` starts it; the tests workflow builds it on Linux, macOS and Windows.
+5. **The second front end**, which is Avalonia and complete: `SpaceSharp.Avalonia` has everything the WPF app has, with the platform parts (trash, Reveal, the file table, Properties, the Explorer menu) spelled per platform; `SpaceSharp.Avalonia/PARITY.md` lists it. `dotnet run --project SpaceSharp.Avalonia` starts it; the tests workflow builds it on Linux, macOS and Windows. `release-avalonia.yml` packs it for macOS and Linux with Velopack and adds the files to a release (run by hand after the Windows release is drafted; the Windows download stays the WPF app for now). Mobile comes next: an Android or iOS head means turning `SpaceSharp.Avalonia` into a library with a desktop head beside it, a layout for a phone (one panel at a time), and the Android and iOS workloads; nothing in Core needs to change.
 
 
 **Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.

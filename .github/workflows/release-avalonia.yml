@@ -1,0 +1,142 @@
+name: Release (Mac and Linux)
+
+# Packs the Avalonia app for macOS and Linux with Velopack and adds the files to an existing release. Run it by
+# hand from the Actions tab after the Windows release workflow has drafted the release for the tag: it builds on a
+# Mac runner (Apple Silicon and Intel) and a Linux runner, packs each build as its own Velopack channel, and uploads
+# the installers and update packages to that release. The Windows release stays the WPF app (release.yml).
+#
+# Channels: osx-arm64, osx-x64, linux-x64. An installed copy updates from the channel it was installed with.
+# The macOS packages are not signed or notarized yet: Gatekeeper asks the person to allow the app the first time
+# (right-click > Open). Signing needs an Apple Developer account; the steps are marked below for when there is one.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: The release tag to add the files to (the bare version, like 2.3.0)
+        required: true
+        type: string
+      dry_run:
+        description: Build and pack only; upload nothing
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    name: Pack ${{ matrix.channel }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            rid: osx-arm64
+            channel: osx-arm64
+          - os: macos-13
+            rid: osx-x64
+            channel: osx-x64
+          - os: ubuntu-latest
+            rid: linux-x64
+            channel: linux-x64
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.tag }}
+
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install vpk
+        run: dotnet tool install -g vpk
+
+      - name: Check that the tag matches the project version
+        shell: bash
+        run: |
+          version=$(grep -o '<Version>[^<]*</Version>' SpaceSharp.Avalonia/SpaceSharp.Avalonia.csproj | sed 's/<[^>]*>//g')
+          if [ "$version" != "${{ inputs.tag }}" ]; then echo "Tag ${{ inputs.tag }} does not match <Version>$version</Version> in SpaceSharp.Avalonia.csproj"; exit 1; fi
+          echo "Packing SpaceSharp $version for ${{ matrix.channel }}"
+
+      - name: Publish
+        run: >
+          dotnet publish SpaceSharp.Avalonia/SpaceSharp.Avalonia.csproj
+          --configuration Release
+          --runtime ${{ matrix.rid }}
+          --self-contained
+          --output publish/${{ matrix.rid }}
+
+      - name: Release notes
+        shell: bash
+        run: |
+          version="${{ inputs.tag }}"
+          awk -v v="$version" '
+            $0 ~ "^## " v "[[:space:]]*$" { on = 1; print; next }
+            on && /^## / { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then echo "CHANGELOG.md has no '## $version' section"; exit 1; fi
+
+      # The Mac icon: an .icns made from the 256 px mark on the runner (iconutil wants the sizes as a folder).
+      - name: Mac icon
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          mkdir -p icon.iconset
+          for size in 16 32 64 128 256; do
+            sips -z $size $size SpaceSharp.Avalonia/Assets/SpaceSharp-256.png --out icon.iconset/icon_${size}x${size}.png >/dev/null
+          done
+          cp icon.iconset/icon_32x32.png icon.iconset/icon_16x16@2x.png
+          cp icon.iconset/icon_64x64.png icon.iconset/icon_32x32@2x.png
+          cp icon.iconset/icon_256x256.png icon.iconset/icon_128x128@2x.png
+          iconutil -c icns icon.iconset -o SpaceSharp.icns
+
+      # Signing and notarization go here once there is an Apple Developer account:
+      #   vpk pack ... --signAppIdentity "Developer ID Application: ..." --signInstallIdentity "Developer ID Installer: ..."
+      #                --notaryProfile <keychain profile from `xcrun notarytool store-credentials`>
+      - name: Pack (macOS)
+        if: runner.os == 'macOS'
+        run: >
+          vpk '[osx]' pack
+          --packId SpaceSharp
+          --packVersion ${{ inputs.tag }}
+          --packDir publish/${{ matrix.rid }}
+          --channel ${{ matrix.channel }}
+          --mainExe SpaceSharp.Avalonia
+          --packTitle SpaceSharp
+          --packAuthors ClearanceClarence
+          --icon SpaceSharp.icns
+          --releaseNotes notes.md
+          --outputDir Releases
+
+      - name: Pack (Linux)
+        if: runner.os == 'Linux'
+        run: >
+          vpk '[linux]' pack
+          --packId SpaceSharp
+          --packVersion ${{ inputs.tag }}
+          --packDir publish/${{ matrix.rid }}
+          --channel ${{ matrix.channel }}
+          --mainExe SpaceSharp.Avalonia
+          --packTitle SpaceSharp
+          --packAuthors ClearanceClarence
+          --icon SpaceSharp.Avalonia/Assets/SpaceSharp-256.png
+          --releaseNotes notes.md
+          --outputDir Releases
+
+      - name: Keep the assets with the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.channel }}
+          path: Releases
+          if-no-files-found: error
+
+      - name: Add the files to the release
+        if: inputs.dry_run != true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ inputs.tag }}" Releases/* --clobber --repo "${{ github.repository }}"

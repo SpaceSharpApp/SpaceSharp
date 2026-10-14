@@ -55,7 +55,7 @@ public static class DriveInsights
             long size = f.SizeFor(measure);
             if (size <= 0) continue;
             string ext = f.Extension;
-            int c = (int)Palette.Categorize(ext);
+            int c = (int)FileCategories.Categorize(ext);
             bytes[c] += size;
             files[c]++;
             if (largest[c] is null || largest[c]!.SizeFor(measure) < size) largest[c] = f;
@@ -75,7 +75,7 @@ public static class DriveInsights
     {
         var set = new HashSet<FsNode>();
         foreach (var f in root.DescendantFiles())
-            if (Palette.Categorize(f.Extension) == category) AddWithAncestors(set, f);
+            if (FileCategories.Categorize(f.Extension) == category) AddWithAncestors(set, f);
         return set;
     }
 

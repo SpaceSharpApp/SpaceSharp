@@ -962,7 +962,8 @@ public partial class MainWindow : Window
                 StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss");
                 SetStage(ScanStage.Build, StageState.Running, null);
             }
-            StageBuildDetail.Text = soFar;
+            StageBuildDetail.Text = p.CurrentPath == ElevatedScan.HandoverMarker ? soFar + " · " + Strings.Get("Scan_Handover") : soFar;
+            if (p.CurrentPath == ElevatedScan.HandoverMarker) ScanPathText.Text = string.Empty;
             ScanPercentText.Text = string.Empty;
             ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
             return;

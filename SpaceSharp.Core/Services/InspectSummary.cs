@@ -186,7 +186,7 @@ public sealed class InspectSummary
         var sums = new Dictionary<FileCategory, long>();
         foreach (var f in files)
         {
-            var c = Palette.Categorize(f.Extension);
+            var c = FileCategories.Categorize(f.Extension);
             sums[c] = sums.GetValueOrDefault(c) + f.SizeFor(Measure);
         }
         // Largest first, "Other" always last so the legend reads the same way every time.

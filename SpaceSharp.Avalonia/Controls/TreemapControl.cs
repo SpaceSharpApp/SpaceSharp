@@ -82,8 +82,13 @@ public sealed partial class TreemapControl : Panel
         _overlayLayer = new Layer(DrawOverlayLayer);
         Children.Add(_mapLayer);
         Children.Add(_overlayLayer);
-        RenderOptions.SetEdgeMode(_mapLayer, EdgeMode.Aliased);
-        RenderOptions.SetEdgeMode(_overlayLayer, EdgeMode.Aliased);
+        // Boxes are snapped to whole pixels before they are drawn, so antialiasing costs nothing on their edges and
+        // keeps the labels smooth. (Aliased mode in Avalonia turns antialiasing off for text too, which WPF's did not.)
+        foreach (var layer in new[] { _mapLayer, _overlayLayer })
+        {
+            RenderOptions.SetEdgeMode(layer, EdgeMode.Antialias);
+            RenderOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
+        }
         Background = Brushes.Transparent;   // so the panel itself is hit-testable everywhere
         ClipToBounds = true;
         Focusable = true;

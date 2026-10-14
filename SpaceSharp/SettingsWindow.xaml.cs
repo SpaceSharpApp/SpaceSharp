@@ -346,7 +346,7 @@ public partial class SettingsWindow : Window
             var swatches = new Border { CornerRadius = new CornerRadius(3), BorderThickness = new Thickness(1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center };
             swatches.SetResourceReference(Border.BorderBrushProperty, "Stroke");
             var strip = new StackPanel { Orientation = Orientation.Horizontal };
-            foreach (var c in look.Swatches) strip.Children.Add(new Border { Width = 9, Height = 14, Background = new SolidColorBrush(c) });
+            foreach (var c in look.WpfSwatches()) strip.Children.Add(new Border { Width = 9, Height = 14, Background = new SolidColorBrush(c) });
             swatches.Child = strip;
             row.Children.Add(swatches);
             row.Children.Add(new TextBlock { Text = look.Name, VerticalAlignment = VerticalAlignment.Center });

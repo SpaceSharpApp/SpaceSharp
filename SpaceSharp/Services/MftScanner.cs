@@ -201,6 +201,7 @@ internal sealed class MftScanner
         int chunkRecords = Math.Max(1, (8 << 20) / bytesPerRecord);          // 8 MB per read
         var buffer = new byte[chunkRecords * bytesPerRecord];
         int recordIndex = 0;
+        int nextReport = 0;   // progress every 16k records, counted from wherever a read ends: run boundaries do not land on round numbers
         foreach (var (runOffset, runLength) in runs)
         {
             long done = 0;
@@ -215,8 +216,11 @@ internal sealed class MftScanner
                 for (int off = 0; off + bytesPerRecord <= read && recordIndex < recordCount; off += bytesPerRecord, recordIndex++)
                     ParseRecord(buffer.AsSpan(off, bytesPerRecord), recordIndex);
                 done += read;
-                if ((recordIndex & 0x3FFF) == 0)
+                if (recordIndex >= nextReport)
+                {
+                    nextReport = recordIndex + 0x4000;
                     _progress(_files, _directories, _bytes, Strings.Format("Mft_Reading", recordIndex, recordCount));
+                }
             }
         }
         _progress(_files, _directories, _bytes, BuildingMarker);

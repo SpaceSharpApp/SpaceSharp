@@ -325,6 +325,7 @@
   <data name="Menu_ShowOnlyType" xml:space="preserve"><value>Show only this file type</value></data>
   <data name="Menu_ThisFolder" xml:space="preserve"><value>This folder</value></data>
   <data name="Mft_Building" xml:space="preserve"><value>Building the map</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>receiving the tree from the administrator helper</value></data>
   <data name="Mft_CannotOpen" xml:space="preserve"><value>Cannot open volume {0}. Administrator rights are needed to read the file table.</value></data>
   <data name="Mft_Reading" xml:space="preserve"><value>Reading the file table: {0:N0} of {1:N0} records</value></data>
   <data name="Palette_GroupCustom" xml:space="preserve"><value>Custom</value></data>

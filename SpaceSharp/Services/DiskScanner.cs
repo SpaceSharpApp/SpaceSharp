@@ -86,7 +86,7 @@ public sealed class DiskScanner
         Interlocked.Exchange(ref _directories, dirs);
         Interlocked.Exchange(ref _bytes, bytes);
         Volatile.Write(ref _currentPath, path);
-        if (path == MftScanner.BuildingMarker)   // also what the elevated helper sends, being the same program
+        if (path == MftScanner.BuildingMarker || path == ElevatedScan.HandoverMarker)   // also what the elevated helper sends, being the same program
             Volatile.Write(ref _phase, (int)ScanPhase.Building);
     }
 

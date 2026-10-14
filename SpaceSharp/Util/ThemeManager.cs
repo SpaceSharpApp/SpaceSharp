@@ -89,7 +89,7 @@ internal static class ThemeManager
         };
         // The look overrides the file's surfaces and text; the accent and Danger stay the file's.
         var look = UiLooks.Find(dark ? AppSettings.Current.LookDark : AppSettings.Current.LookLight, dark);
-        foreach (var (key, color) in look.Colors())
+        foreach (var (key, color) in look.WpfColors())
         {
             var brush = new SolidColorBrush(color);
             brush.Freeze();

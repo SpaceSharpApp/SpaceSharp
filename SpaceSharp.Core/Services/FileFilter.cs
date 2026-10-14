@@ -254,7 +254,7 @@ public sealed class FileFilter
         foreach (var word in _spec.Words)
             if (!node.Name.Contains(word, StringComparison.OrdinalIgnoreCase)) return false;
 
-        if (_spec.Types.Count > 0 && (node.IsDirectory || !_spec.Types.Contains(Palette.Categorize(node.Extension)))) return false;
+        if (_spec.Types.Count > 0 && (node.IsDirectory || !_spec.Types.Contains(FileCategories.Categorize(node.Extension)))) return false;
 
         long size = node.SizeFor(_measure);
         if (_spec.MinBytes is { } min && size < min) return false;
