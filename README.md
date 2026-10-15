@@ -31,7 +31,15 @@ Scan a drive, and the whole thing fills the window: folders are frames with a ti
 
 One portable `.exe`, or an installer that updates itself. Free and open source, and code-signed. Since 2.3 SpaceSharp is one app for Windows, macOS and Linux, built on [Avalonia](https://avaloniaui.net); the Mac and Linux packages follow in a later release.
 
-## What it does
+<a id="what-it-does"></a>
+<p align="center"><img src="docs/readme-banner-what.png" width="880" alt="What it does"></p>
+
+<p align="center"><img src="docs/readme-how.png" width="880" alt="Three steps: scan a drive, see the map, clean up from it"></p>
+
+<p align="center"><img src="docs/readme-features.png" width="880" alt="Scans a drive in seconds; one map, shaded your way; filter in plain words; Insights view; remembers every scan; cleans up safely"></p>
+
+<details>
+<summary>The same, as text</summary>
 
 | | |
 |---|---|
@@ -43,6 +51,8 @@ One portable `.exe`, or an installer that updates itself. Free and open source, 
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
 | **Thirteen palettes, twelve looks, and your own** | Seven palettes for the dark theme, six for the light one, twelve hues each, and six looks per theme for the window itself (Graphite, Slate, Mocha, Midnight, Carbon, GitHub Dark; Paper, Linen, Mist, Sand, Snow, GitHub Light). A palette creator makes new ones: generate twelve hues from a base color or set each one by hex or sliders, see them on a sample map as you go, and save. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
+
+</details>
 
 <table align="center">
   <tr>
@@ -59,7 +69,8 @@ One portable `.exe`, or an installer that updates itself. Free and open source, 
   </tr>
 </table>
 
-## Download
+<a id="download"></a>
+<p align="center"><img src="docs/readme-banner-download.png" width="880" alt="Download: Setup.exe, portable exe, MSI"></p>
 
 For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). Get them from the [latest release](https://github.com/SpaceSharpApp/SpaceSharp/releases/latest).
 
@@ -76,7 +87,8 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 >
 > SpaceSharp collects no data. The only network requests it makes are the update check and What's new, which read the public release list on GitHub; the portable exe makes neither, and the check can be switched off in Settings.
 
-## Using it
+<a id="using-it"></a>
+<p align="center"><img src="docs/readme-banner-using.png" width="880" alt="Using it"></p>
 
 1. Click a drive in the **Drives** list, or **Scan folder** for one folder. Windows asks for administrator rights for a drive scan; without them, protected folders are skipped and marked.
 2. The biggest boxes are the biggest space users. Hover for the path and size, double-click a folder to zoom in, Backspace or the mouse back button to go up.
@@ -108,6 +120,8 @@ Everything applies at once and is saved. The pages:
 - **Treemap**: a preview map of sample data pinned at the top, then Colors (palette per theme, Color by, custom palettes), Shading (cushion on or off, presets, Depth, Spread, Tone, Fade, Light from), Text and title bars (label size, font, folder and file text colors, outlined labels, title bar padding and tint), Grid and highlight, and Layout (density, bias, padding).
 - **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
 - **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
+
+<p align="center"><img src="docs/readme-palettes.png" width="880" alt="The thirteen palettes as swatch rows and the twelve looks as chips"></p>
 
 **Color by** is Top folder (one hue per top-level folder, lighter at each level), Depth (one color per level, like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes › New palette (or Start from the current one): a window with the twelve folder colors, the file tint and the fourteen type colors as swatches, each set by hex or hue, saturation and lightness sliders, with the sample map beside them and checks for labels that would be hard to read and folders too alike. It saves a JSON file in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too; Open folder writes an example and a README there.
 
