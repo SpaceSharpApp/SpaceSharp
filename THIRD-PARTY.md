@@ -42,7 +42,7 @@ On Windows the scanner, the Recycle Bin, the title bar colors and the drive dete
 ## Used to build and test, not shipped
 
 - **xUnit** 2.9 (Apache License 2.0), **xunit.runner.visualstudio** (Apache License 2.0) and **Microsoft.NET.Test.Sdk** (MIT): the test project, `SpaceSharp.Tests`.
-- **GitHub Actions**: `actions/checkout`, `actions/setup-dotnet` and `actions/upload-artifact` (MIT), in `.github/workflows`.
+- **GitHub Actions**: `actions/checkout` and `actions/setup-dotnet` (MIT), in `.github/workflows/tests.yml`.
 - **Windows SDK** `signtool.exe` for code signing (Microsoft Software License Terms), called by `installer/release.ps1`.
 
 ## Used for the website, the screenshots and the brand files, not shipped

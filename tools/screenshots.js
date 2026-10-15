@@ -30,6 +30,7 @@ const SHOTS = [
   const tool = "file://" + path.resolve(__dirname, "screenshot-mockup.html");
   for (const [file, query] of SHOTS) {
     await page.goto(`${tool}?${query}`, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(500);
     const win = await page.$("#host .ssm");
     await win.screenshot({ path: path.resolve(__dirname, "..", "docs", file) });

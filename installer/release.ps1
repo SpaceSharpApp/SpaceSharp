@@ -14,8 +14,7 @@
 # of releases.win-x64.json so they find 2.0 (a full package, no delta), after which they are on "win-x64" like
 # everyone else. Keep uploading it until nobody is left on 1.x.
 #
-# The release workflow (.github\workflows\release.yml) runs all three stages on a tag and leaves a draft release with
-# unsigned assets; sign-draft.ps1 then signs the downloads on this PC. The stages:
+# Releases are made here, on the PC with the code-signing certificate; GitHub Actions only runs the tests. The stages:
 #   -Stage Build    tests, then publishes the four app builds (portable and Velopack folder, x64 and x86)
 #                   into publish\portable*\ and publish\velopack*\
 #   -Stage Pack     packs the installers, MSIs and update packages from those folders into Releases\

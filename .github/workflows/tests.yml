@@ -1,7 +1,7 @@
 name: Tests
 
-# Test only. This workflow never publishes, packs or uploads anything built from SpaceSharp;
-# releases come from release.yml (Windows) and release-mac-linux.yml.
+# Test only. This is the only workflow: it never publishes, packs or uploads anything built from SpaceSharp.
+# Releases are built and signed on the developer's PC with installer\release.ps1.
 
 on:
   push:

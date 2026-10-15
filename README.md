@@ -4,7 +4,7 @@
 
 <p align="center">
   <b>See where your disk space went.</b><br>
-  A fast, zoomable treemap of your drives for Windows, in the spirit of <a href="https://www.stardock.com/products/spacemonger/">SpaceMonger</a>.
+  A fast, zoomable treemap of your drives, in the spirit of <a href="https://www.stardock.com/products/spacemonger/">SpaceMonger</a>.
 </p>
 
 <p align="center">
@@ -13,6 +13,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
   <img src="https://img.shields.io/badge/.NET-10-8C84D6" alt=".NET 10">
+  <img src="https://img.shields.io/badge/Avalonia-11-8B44AC" alt="Avalonia 11">
 </p>
 
 <p align="center">
@@ -28,7 +29,7 @@
 
 Scan a drive, and the whole thing fills the window: folders are frames with a title bar, files are boxes inside them, and the biggest boxes are where your space went. Zoom into any folder, filter in plain words, see what changed since last time, and send what you do not need to the Recycle Bin without leaving the map.
 
-One portable `.exe`, or an installer that updates itself. Free and open source.
+One portable `.exe`, or an installer that updates itself. Free and open source, and code-signed. Since 2.3 SpaceSharp is one app for Windows, macOS and Linux, built on [Avalonia](https://avaloniaui.net); the Mac and Linux packages follow in a later release.
 
 ## What it does
 
@@ -40,7 +41,7 @@ One portable `.exe`, or an installer that updates itself. Free and open source.
 | **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type with its biggest extensions; places that are usually safe to empty (Windows.old, caches, the Recycle Bin, old Downloads) with a checkbox per row and one Recycle button; a histogram of when files were last changed with the oldest big files; the largest folders and files; what grew, shrank and appeared since last scan; and the biggest extensions and where they live. Every row is a click back to the map, filtered to it. |
 | **Remembers every scan** | Opens with yesterday's map on screen. Color by change shows what grew, shrank or appeared since last time. |
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
-| **Fifteen palettes, and your own** | Eight for the dark theme, seven for the light one, twelve hues each. A palette creator makes new ones: generate twelve hues from a base color or set each one by hex or sliders, see them on a sample map as you go, and save. |
+| **Thirteen palettes, twelve looks, and your own** | Seven palettes for the dark theme, six for the light one, twelve hues each, and six looks per theme for the window itself (Graphite, Slate, Mocha, Midnight, Carbon, GitHub Dark; Paper, Linen, Mist, Sand, Snow, GitHub Light). A palette creator makes new ones: generate twelve hues from a base color or set each one by hex or sliders, see them on a sample map as you go, and save. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
 
 <table align="center">
@@ -71,7 +72,7 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 32-bit Windows gets the same three with **x86** in the name: **SpaceSharp-win-x86.exe**, **SpaceSharp-win-x86-Setup.exe** and **SpaceSharp-win-x86.msi**. They update from their own channel, so an x86 install never pulls an x64 package. A 32-bit process has less memory to work with, so a drive with several million files is better scanned with the x64 build.
 
 > [!NOTE]
-> The downloads are not code-signed yet, so SmartScreen may show "Windows protected your PC" the first time; click **More info**, then **Run anyway**.
+> Every download is code-signed, so Windows shows a verified publisher. SmartScreen may still show "Windows protected your PC" while a new certificate earns its reputation; click **More info**, then **Run anyway**.
 >
 > SpaceSharp collects no data. The only network requests it makes are the update check and What's new, which read the public release list on GitHub; the portable exe makes neither, and the check can be switched off in Settings.
 
@@ -103,7 +104,7 @@ Terms combine. **Select matches** (Ctrl+A) selects all of them; Del sends them t
 Everything applies at once and is saved. The pages:
 
 - **General**: language, update check, confirm before the Recycle Bin, "Scan with SpaceSharp" in Explorer's right-click menu, and the command-line options.
-- **Appearance**: theme (match Windows, light, dark).
+- **Appearance**: theme (match the system, light, dark) and the look: six for each theme, the GitHub Dark and GitHub Light ones drawn in GitHub's own grays.
 - **Treemap**: a preview map of sample data pinned at the top, then Colors (palette per theme, Color by, custom palettes), Shading (cushion on or off, presets, Depth, Spread, Tone, Fade, Light from), Text and title bars (label size, font, folder and file text colors, outlined labels, title bar padding and tint), Grid and highlight, and Layout (density, bias, padding).
 - **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
 - **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
@@ -164,14 +165,14 @@ Nothing leaves the machine except the update check against GitHub Releases, whic
 
 ## Building
 
-Windows 10 or 11 and the [.NET 10 SDK](https://dotnet.microsoft.com/download). Open `SpaceSharp.sln` in Rider or Visual Studio, or:
+The [.NET 10 SDK](https://dotnet.microsoft.com/download) on Windows, macOS or Linux. Open `SpaceSharp.sln` in Rider or Visual Studio, or:
 
 ```powershell
 dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The only NuGet dependency is Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions. Pushing a version tag (`git tag 2.3.0 && git push --tags`) makes the release workflow run the tests, publish the builds, pack the installers and MSIs and create the GitHub release as a draft. The code-signing certificate lives on the developer's PC, so `installer\sign-draft.ps1 -Sign <thumbprint>` is run there next: it downloads the draft's exes and MSIs, signs them, uploads them back and rewrites the checksums; then the draft is read and published. `installer\release.ps1 -Sign <thumbprint> -Upload` does the whole thing locally instead, with every file signed, when the workflow is not an option. The Mac and Linux packages, once they are ready to ship, come from the release-mac-linux workflow, run by hand against the tag afterwards. `installer\release.ps1` without `-Upload` is the same build for your own PC, when you want files to try on another machine. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
+The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions, on Windows, Linux and macOS; that is all the Actions do. A release is built on the developer's PC, where the code-signing certificate is: `installer\release.ps1 -Sign <thumbprint> -Upload` runs the tests, publishes the builds, packs the installers and MSIs, signs every file, checks the signatures and creates the GitHub release as a draft, which is read and published by hand; the version tag is pushed afterwards. `installer\release.ps1` without `-Upload` is the same build for your own PC, when you want files to try on another machine. The Mac and Linux packages are not built yet. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
 
 How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
 
@@ -189,6 +190,6 @@ How the scanner, layout, renderer, filter and updater work, and where to add a p
 
 ## Credits and license
 
-Squarified treemaps by Bruls, Huizing and van Wijk (2000). Inspired by [SpaceMonger](https://www.stardock.com/products/spacemonger/). Interface icons are [Lucide](https://lucide.dev) (ISC license; see THIRD-PARTY.md). The color-blind safe palette is Okabe and Ito's.
+Squarified treemaps by Bruls, Huizing and van Wijk (2000). Inspired by [SpaceMonger](https://www.stardock.com/products/spacemonger/). Built with [Avalonia UI](https://avaloniaui.net) and [SkiaSharp](https://github.com/mono/SkiaSharp) on .NET 10, in the [Inter](https://rsms.me/inter/) typeface, with [Velopack](https://velopack.io) for the installer and updates. Interface icons are [Lucide](https://lucide.dev). The color-blind safe palette is Okabe and Ito's. Licenses for all of it are in [THIRD-PARTY.md](THIRD-PARTY.md), and About › Credits in the app says the same.
 
 [MIT License](LICENSE). Made by ClearanceClarence.

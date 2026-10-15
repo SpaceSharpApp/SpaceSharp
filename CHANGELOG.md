@@ -16,7 +16,7 @@ What changed in each SpaceSharp release, newest first. The 1.x releases are in [
 
 ### Under the hood
 - The code is three projects: `SpaceSharp.Core` (the file tree, the treemap layout, scanning, saved scans and compare, CSV export, every string and translation, the settings, the looks, the command line; plain .NET 10 with the Win32 calls behind an `IPlatformFiles` interface), `SpaceSharp` (the app, on Avalonia), and the tests, which run on all three desktops. The WPF app that 2.2.x shipped as is gone; git history has it. DEVELOPING.md says what goes where.
-- Releases are signed. The Windows downloads (the portable exes, the Setup installers and the MSIs) carry a code signature from a Certum certificate, so SmartScreen learns the publisher over time instead of warning on every version.
+- Releases are signed. Every Windows download and every file inside the installers and update packages carries a code signature from a Certum certificate, so Windows shows a verified publisher and SmartScreen learns it over time instead of warning on every version. Releases are built and signed on the developer's PC; GitHub Actions only runs the tests.
 
 ## 2.2.0
 

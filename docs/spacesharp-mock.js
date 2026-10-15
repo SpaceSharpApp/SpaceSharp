@@ -22,7 +22,7 @@
   // ============================================================ styles for the window
   const CSS = `
   .ssm { --bg:#0D1117; --panel:#161B22; --control:#21262D; --hover:#2B3139; --stroke:#30363D; --text:#E6EDF3; --dim:#8B949E; --accent:#F5B82E; --accent-text:#1C1500; --mapbg:#0D1117; --titlebar:#161B22; --titletext:#fff; --menubg:#1C2128;
-    position:relative; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); color:var(--text); font:13px/1.3 "Segoe UI", system-ui, sans-serif; border-radius:8px; border:1px solid rgba(0,0,0,.35); box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.2); text-align:left; }
+    position:relative; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); color:var(--text); font:13px/1.3 Inter, "Segoe UI", system-ui, sans-serif; border-radius:8px; border:1px solid rgba(0,0,0,.35); box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.2); text-align:left; }
   .ssm * { box-sizing:border-box; }
   .ssm.light { --bg:#F3F3F6; --panel:#fff; --control:#ECECF1; --hover:#E2E2E9; --stroke:#D6D6DE; --text:#1C1C22; --dim:#61616F; --mapbg:#D9D9E1; --titlebar:#F3F3F3; --titletext:#1C1C22; --menubg:#fff; border-color:rgba(0,0,0,.18); }
   .ssm svg { display:block; }
@@ -169,7 +169,8 @@
   .ssm .start-actions { display:flex; gap:8px; margin-top:14px; } .ssm .start-actions .btn { border:1px solid var(--stroke); }
   .ssm .about-list { margin:0 24px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
   .ssm .about-row { display:flex; align-items:center; gap:14px; padding:9px 14px; border-top:1px solid var(--stroke); font-size:13.5px; } .ssm .about-row:first-child { border-top:0; } .ssm .about-row svg { width:16px; height:16px; color:var(--dim); } .ssm .about-row .sub { font-size:12px; color:var(--dim); margin-top:2px; } .ssm .about-row .c { margin-left:auto; color:var(--dim); }
-  .ssm .dialog.about { width:520px; } .ssm .about-head { display:flex; align-items:center; gap:16px; padding:20px 24px 14px; } .ssm .about-head svg { width:56px; height:56px; } .ssm .about-head .t { font-size:22px; font-weight:600; line-height:1.1; } .ssm .about-head .s { color:var(--dim); font-size:13px; margin-top:4px; }
+  .ssm .dialog.about { width:520px; } .ssm .about-cols { display:flex; min-height:380px; } .ssm .about-left { width:200px; flex:none; padding:32px 24px 24px; background:var(--panel); border-right:1px solid var(--stroke); display:flex; flex-direction:column; gap:8px; } .ssm .about-left svg { width:56px; height:56px; } .ssm .about-left .t { font-size:20px; font-weight:600; margin-top:10px; } .ssm .about-left .s { color:var(--dim); font-size:13px; line-height:18px; } .ssm .about-left .legal { margin-top:auto; color:var(--dim); font-size:11.5px; line-height:16px; }
+  .ssm .about-right { flex:1; padding:30px 28px 24px; display:flex; flex-direction:column; gap:22px; } .ssm .about-group .h { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--dim); margin-bottom:10px; } .ssm .about-link { display:flex; align-items:center; gap:12px; padding:4px 0; font-size:13px; } .ssm .about-link svg { width:16px; height:16px; color:var(--dim); } .ssm .about-right .sys { margin-top:auto; color:var(--dim); font-size:11.5px; } .ssm .about-head { display:flex; align-items:center; gap:16px; padding:20px 24px 14px; } .ssm .about-head svg { width:56px; height:56px; } .ssm .about-head .t { font-size:22px; font-weight:600; line-height:1.1; } .ssm .about-head .s { color:var(--dim); font-size:13px; margin-top:4px; }
   .ssm .about-copy { padding:10px 24px 12px; font-size:11.5px; color:var(--dim); }
   .ssm .dialog.settings { width:660px; }
   .ssm .st-tabs { display:flex; gap:4px; padding:14px 22px 12px; border-bottom:1px solid var(--stroke); } .ssm .st-tabs span { padding:6px 12px; border-radius:6px; color:var(--dim); font-size:13px; } .ssm .st-tabs span.on { background:var(--control); color:var(--text); }
@@ -351,7 +352,6 @@
     "Ocean": fromList("dark", ["#2E6F95", "#3C8DAD", "#48A9A6", "#5FB49C", "#7FC8A9", "#4A7FB0", "#6C9BD2", "#3A9C9C", "#5C8ACF", "#2F8F8B", "#86B7D4", "#4FA3B8"], .5, ["#5FB49C", "#E07A5F", "#9C8ADE", "#F2C45A", "#3C8DAD", "#A9C6E0", "#7FC8A9", "#AFBCC6"]),
     "Sunset": fromList("dark", ["#C8553D", "#E07A5F", "#F2A65A", "#F6C85F", "#D9738A", "#B0588E", "#8E5A9E", "#E59A6B", "#CC6670", "#F1B36A", "#A86A9C", "#D98A5A"], .5, ["#8FBF7F", "#C8553D", "#B0588E", "#F6C85F", "#E07A5F", "#F2D4B8", "#8E5A9E", "#C9B8AE"]),
     "Forest": fromList("dark", ["#4F772D", "#6A994E", "#90A955", "#A7C957", "#7A9E7E", "#5C8D89", "#8C7A4F", "#9AB36A", "#5F8F55", "#B5A86A", "#6E9A77", "#87A33E"], .5, ["#A7C957", "#C8763D", "#9C7FB8", "#E3C567", "#5C8D89", "#D6DDB8", "#6A994E", "#B8B39E"]),
-    "GitHub": fromList("dark", ["#58A6FF", "#3FB950", "#A371F7", "#DB6D28", "#F85149", "#D29922", "#DB61A2", "#F78166", "#388BFD", "#2EA043", "#8957E5", "#BF4B8A"], .45, ["#3FB950", "#DB6D28", "#A371F7", "#D29922", "#58A6FF", "#8B949E", "#39C5CF", "#6E7681"]),
     "Aurora": fromList("dark", ["#4FB3D9", "#E26A8A", "#5BC08E", "#E8B04B", "#9A7BD9", "#44B8B0", "#E27A55", "#86B64C", "#5A8FE0", "#D96AC0", "#D9A03F", "#4FAE8F"], .42, ["#5BC08E", "#E27A55", "#9A7BD9", "#E8B04B", "#4FB3D9", "#A9B8CC", "#44B8B0", "#8A93A3"]),
     "Monochrome": { theme: "dark", folder: d => hsl(230, .06, .36 + (d % 6) * .06), file: d => hsl(230, .05, .72 + (d % 4) * .05), cats: catColors([...Array(12)].map((_, i) => hsl(230, .06, .36 + (i % 6) * .06)), ["#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"]) },
     "Color-blind safe": fromList("dark", CB, .45, CBC),
@@ -360,7 +360,7 @@
     "Candy": fromList("light", ["#FF8FAB", "#FFB75E", "#FFE66D", "#8EE3B5", "#7FD1FF", "#B79CFF", "#FF9EE5", "#9CE0FF", "#FFD1A0", "#A8F0C6", "#C8B8FF", "#FFB3C6"], .4),
     "Nordic": fromList("light", ["#88C0D0", "#81A1C1", "#A3BE8C", "#EBCB8B", "#D08770", "#B48EAD", "#BF616A", "#5E81AC", "#8FBCBB", "#D8A657", "#A9B665", "#C98A8A"], .45),
     "Earth": fromList("light", ["#A47551", "#C2A878", "#8B9A6B", "#6E8B8B", "#B5856B", "#9C8A5A", "#7E9A7E", "#C9A86A", "#8A7A6A", "#A89A7A", "#6F8F7F", "#B39468"], .5),
-    "GitHub (light)": fromList("light", lift(["#0969DA", "#1A7F37", "#8250DF", "#BC4C00", "#CF222E", "#9A6700", "#BF3989", "#C4432B", "#218BFF", "#2DA44E", "#A475F9", "#E85AAD"], .2), .45, lift(["#1A7F37", "#BC4C00", "#8250DF", "#9A6700", "#0969DA", "#57606A", "#1B7C83", "#6E7781"], .2)),
+    "Retro": fromList("light", ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A"], .45),
     "Color-blind safe (light)": fromList("light", lift(CB, .25), .4, lift(CBC, .25))
   };
   const CATS = ["Images", "Video", "Audio", "Archives", "Programs", "Documents", "Code", "Game data", "Installers", "Disk images", "Databases", "Fonts", "System", "Other"];
@@ -488,7 +488,7 @@
       if (sr) ctx.fillRect(it.x + bw, it.y, 1, it.h);
       if (sb) ctx.fillRect(it.x, it.y + bh, bw, 1);
       const textCol = dimmed ? mix(mapBg(), [128, 128, 136], .6) : state.blackText ? [0, 0, 0] : textFor(fill);
-      const FONT = "'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif";
+      const FONT = "Inter, 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif";
       if (n.dir || (n.group && it.header)) {
         if (!it.header) return;
         const bar = dimmed ? fill : headerFill(fill, state.tint);
@@ -545,7 +545,7 @@
 
   function mount(host, opts) {
     if (!document.getElementById("ssm-css")) { const st = document.createElement("style"); st.id = "ssm-css"; st.textContent = CSS; document.head.appendChild(st); }
-    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.2.0", interactive: true }, opts || {});
+    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.3.0", interactive: true }, opts || {});
     const E = makeEngine(state);
     host.innerHTML = `<div class="ssm">
       <div class="titlebar"><div class="app"><span class="mark">${MARK}</span><span class="title">SpaceSharp ${state.version}</span></div>
@@ -814,23 +814,26 @@
         $(".side .rows").innerHTML = ""; $(".listSub").textContent = "Scan a drive or folder to see the largest items.";
       }
       if (state.scene === "about") {
-        const rows = [["info", "Version " + state.version, "Installed. Updates arrive on their own; the newest version is on GitHub.", false], ["file", "What's new", "Changes in this version", true], ["keyboard", "Shortcuts", "Every key and mouse action", true], ["bug", "Report a bug", "Opens GitHub with your version and system filled in", true], ["idea", "Suggest a feature", "", true], ["globe", "Source on GitHub", "MIT license", true], ["book", "Credits", "Treemap algorithm, SpaceMonger, icons", true]];
+        const link = (ic, text) => `<div class="about-link">${svg(ic)}<span>${text}</span></div>`;
+        const group = (h, links) => `<div class="about-group"><div class="h">${h}</div>${links.join("")}</div>`;
         dlg().className = "dialog about";
-        dlg().innerHTML = dialogTitle("About SpaceSharp") + `<div class="about-head">${MARK}<div><div class="t">SpaceSharp</div><div class="s">See where your disk space went.</div></div></div>
-          <div class="about-list">${rows.map(([ic, t, sub, chev]) => `<div class="about-row">${svg(ic)}<div><div>${t}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>${chev ? '<span class="c">›</span>' : ""}</div>`).join("")}</div>
-          <div class="about-copy">© 2026 ClearanceClarence  ·  .NET 10 on Windows 11 (x64)</div>
-          <div class="df"><div class="btn">${svg("copy")}Copy version info</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
+        dlg().innerHTML = dialogTitle("About SpaceSharp") + `<div class="about-cols"><div class="about-left">${MARK}<div class="t">SpaceSharp</div><div class="s">Version ${state.version}<br>Installed build</div><div class="s">See where your disk space went.</div><div class="legal">© 2026 ClearanceClarence<br>MIT license</div></div>
+          <div class="about-right">${group("This version", [link("file", "What's new in 2.3"), link("keyboard", "Keyboard shortcuts"), link("refresh", "Check for updates")])}
+          ${group("Help and feedback", [link("bug", "Report a bug"), link("idea", "Suggest a feature"), link("folder", "Crash logs")])}
+          ${group("Project", [link("globe", "Source on GitHub"), link("book", "Credits")])}
+          <div class="sys">.NET 10.0 on Windows 11 (x64)</div></div></div>
+          <div class="df"><span class="spacer"></span><div class="btn">${svg("copy")}Copy version info</div><div class="btn accent">Close</div></div>`;
         scrim.hidden = false;
       }
       if (state.scene === "update" || state.scene === "whatsnew") {
-        const next = state.version, cur = "1.6.1";
+        const next = state.version, cur = "2.2.0";
         dlg().className = "dialog " + (state.scene === "update" ? "update" : "notes");
         dlg().innerHTML = state.scene === "update"
           ? dialogTitle("Update available") + `<div class="ucol"><span class="tile">${MARK}</span><div class="t">SpaceSharp ${next} is ready</div><div class="h">You have ${cur}</div>
             <div class="jump"><span class="from">${cur}</span>${svg("arrow")}<span class="to">${next}</span></div>
-            <p>One look, shaded your way · The filter, redone · A panel under the map. Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</p>
-            <div class="btn accent big">Install and restart</div><div class="btn outline wide">Remind me later</div><a>What's new in 2.0</a></div>`
-          : dialogTitle(`What's new in ${next}`) + `<div class="nb"><b>ONE LOOK, SHADED YOUR WAY</b>\n•  One map: folder frames with title bars, cushioned files, a one-pixel grid. Shading, light, text and title bars are yours to set, with a live preview.\n\n<b>THE FILTER, REDONE</b>\n•  A drawer over the map with types, size, age and presets; or a rail of pills under the path.\n\n<b>A PANEL UNDER THE MAP</b>\n•  By type, Safe to clear, When changed.\n\n<b>PALETTES</b>\n•  Fifteen, twelve hues each, split by theme.\n…</div><div class="df"><div class="btn">${svg("open")}See all changes on GitHub</div><span class="spacer"></span><div class="btn accent">OK</div></div>`;
+            <p>One app for three desktops · GitHub Dark and Light looks · A new About and Credits · Signed downloads. Installing takes about a minute and restarts SpaceSharp. Your settings and saved scans are kept.</p>
+            <div class="btn accent big">Install and restart</div><div class="btn outline wide">Remind me later</div><a>What's new in 2.3</a></div>`
+          : dialogTitle(`What's new in ${next}`) + `<div class="nb"><b>ONE APP FOR THREE DESKTOPS</b>\n•  SpaceSharp draws the same map with Avalonia and Skia on Windows, macOS and Linux. Everything the Windows app had is in it; the Mac and Linux packages come in a later release.\n•  Two looks are new: GitHub Dark and GitHub Light, in Settings › Appearance. Retro is back in the light theme.\n•  About is laid out in two columns, and Credits is a window of its own.\n\n<b>FIXES</b>\n•  The fast NTFS scan through the administrator helper no longer fails with "Cannot open volume".\n•  The scan card keeps counting all the way through "Read the file table".\n\n<b>UNDER THE HOOD</b>\n•  Releases are signed: the downloads carry a code signature, so Windows shows a verified publisher.\n…</div><div class="df"><div class="btn">${svg("open")}See all changes on GitHub</div><span class="spacer"></span><div class="btn accent">OK</div></div>`;
         scrim.hidden = false;
       }
       if (state.scene === "settings") {
