@@ -8,12 +8,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.3.0-F5B82E" alt="Version 2.3.0"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.3.1-F5B82E" alt="Version 2.3.1"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
   <img src="https://img.shields.io/badge/.NET-10-8C84D6" alt=".NET 10">
-  <img src="https://img.shields.io/badge/Avalonia-11-8B44AC" alt="Avalonia 11">
+  <img src="https://img.shields.io/badge/Avalonia-12-8B44AC" alt="Avalonia 12">
 </p>
 
 <p align="center">
