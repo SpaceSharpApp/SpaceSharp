@@ -4,8 +4,8 @@ using Velopack.Sources;
 namespace SpaceSharp.Services;
 
 /// <summary>
-/// Checks GitHub Releases for a newer version and installs it. Only active when SpaceSharp was
-/// installed with the Velopack setup; the plain portable exe never updates itself.
+/// Checks GitHub Releases for a newer version and installs it, on every desktop Velopack packages for. Only active
+/// when SpaceSharp was installed with a Velopack setup; a plain portable copy never updates itself.
 /// </summary>
 internal sealed class Updater
 {
@@ -41,7 +41,7 @@ internal sealed class Updater
 
     /// <summary>
     /// Downloads the update, then exits and restarts into the new version. The apply step runs silently:
-    /// Velopack's own progress window is a stock Windows task dialog that cannot be themed, so the app
+    /// Velopack's own progress window is a stock system dialog that cannot be themed, so the app
     /// closes, the files are swapped with nothing on screen, and the new version opens a few seconds later.
     /// </summary>
     public async Task InstallAndRestartAsync(Action<int>? progress = null)

@@ -1,7 +1,7 @@
 name: Tests
 
 # Test only. This workflow never publishes, packs or uploads anything built from SpaceSharp;
-# releases come from release.yml when a version tag is pushed.
+# releases come from release.yml (Windows) and release-mac-linux.yml.
 
 on:
   push:
@@ -17,8 +17,13 @@ permissions:
 
 jobs:
   test:
-    name: Run the test suite
-    runs-on: windows-latest
+    name: Tests on ${{ matrix.os }}
+    # The app is for all three desktops, so the build and the tests run on all three.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v5
@@ -28,4 +33,4 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Test
-        run: dotnet test .\SpaceSharp.Tests\SpaceSharp.Tests.csproj --configuration Release
+        run: dotnet test SpaceSharp.Tests/SpaceSharp.Tests.csproj --configuration Release

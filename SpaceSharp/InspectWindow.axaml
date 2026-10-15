@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:SpaceSharp.Controls"
+        x:Class="SpaceSharp.InspectWindow"
+        Width="660" Height="880" MinWidth="520" MinHeight="480"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Icon="avares://SpaceSharp/Assets/SpaceSharp-256.png"
+        Background="{DynamicResource Window}">
+
+  <DockPanel>
+    <Border DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="16,12">
+      <DockPanel>
+        <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="primary" MinWidth="84" IsDefault="True" IsCancel="True" Click="Close_Click" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="6">
+          <Button x:Name="CopyButton" Classes="tool" Click="Copy_Click" />
+          <Button x:Name="RevealButton" Classes="tool" Click="Reveal_Click" />
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <Border DockPanel.Dock="Top" Padding="24,16,24,16" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1">
+      <StackPanel>
+        <WrapPanel x:Name="Crumbs" Margin="-6,0,0,6" />
+        <DockPanel>
+          <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="20" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" />
+          <TextBlock x:Name="SizeText" DockPanel.Dock="Right" FontSize="30" FontWeight="SemiBold" VerticalAlignment="Center" Margin="16,0,0,0" />
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock x:Name="NameText" FontSize="19" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="KindText" Classes="dim" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
+          </StackPanel>
+        </DockPanel>
+        <Grid x:Name="Context" Margin="0,14,0,0" ColumnDefinitions="22,*" />
+      </StackPanel>
+    </Border>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <StackPanel Margin="24,14,24,20">
+        <Border x:Name="Callout" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="3,0,0,0" Padding="12,9" Margin="0,2,0,0" IsVisible="False">
+          <TextBlock x:Name="CalloutText" TextWrapping="Wrap" FontSize="12.5" />
+        </Border>
+
+        <Grid x:Name="Charts" ColumnDefinitions="*,20,*">
+          <StackPanel x:Name="TypePanel" Grid.Column="0">
+            <TextBlock x:Name="TypeHeading" Classes="dim section" />
+            <DockPanel>
+              <c:DonutChart x:Name="TypeDonut" DockPanel.Dock="Left" Width="104" Height="104" Thickness="17" VerticalAlignment="Top" Margin="0,2,14,0"
+                            TextBrush="{DynamicResource Text}" DimBrush="{DynamicResource TextDim}" TrackBrush="{DynamicResource Control}" />
+              <StackPanel x:Name="TypeLegend" VerticalAlignment="Center" />
+            </DockPanel>
+          </StackPanel>
+          <StackPanel x:Name="AgePanel" Grid.Column="2">
+            <TextBlock x:Name="AgeHeading" Classes="dim section" />
+            <DockPanel>
+              <c:DonutChart x:Name="AgeDonut" DockPanel.Dock="Left" Width="104" Height="104" Thickness="17" VerticalAlignment="Top" Margin="0,2,14,0"
+                            TextBrush="{DynamicResource Text}" DimBrush="{DynamicResource TextDim}" TrackBrush="{DynamicResource Control}" />
+              <StackPanel x:Name="AgeLegend" VerticalAlignment="Center" />
+            </DockPanel>
+            <TextBlock x:Name="OldestText" Classes="dim" FontSize="11" Margin="0,8,0,0" />
+          </StackPanel>
+        </Grid>
+
+        <StackPanel x:Name="LargestPanel">
+          <TextBlock x:Name="LargestHeading" Classes="dim section" />
+          <StackPanel x:Name="LargestRows" />
+          <TextBlock x:Name="RemainderText" Classes="dim" FontSize="11" Margin="0,8,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

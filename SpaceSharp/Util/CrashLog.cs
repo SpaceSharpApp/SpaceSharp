@@ -5,7 +5,7 @@ using SpaceSharp.Services;
 namespace SpaceSharp.Util;
 
 /// <summary>
-/// Writes an unexpected error to a file under %LocalAppData%\SpaceSharp\logs and builds the link that opens a
+/// Writes an unexpected error to a file under the local app data folder (SpaceSharp/logs) and builds the link that opens a
 /// bug report on GitHub with the version, the system and the error already filled in. The file holds the whole
 /// exception chain with stack traces, which is what a report needs and what a dialog should not show.
 /// </summary>
@@ -24,7 +24,7 @@ public static class CrashLog
         }
     }
 
-    /// <summary>One line on the version, the runtime and Windows, as the About window shows them.</summary>
+    /// <summary>One line on the version, the runtime and the system, as the About window shows them.</summary>
     public static string SystemLine() =>
         $"SpaceSharp {AppInfo.Version} · {RuntimeInformation.FrameworkDescription} · {RuntimeInformation.OSDescription} ({RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant()})";
 
@@ -81,7 +81,7 @@ public static class CrashLog
         foreach (var f in frames) what.AppendLine(f);
         what.AppendLine("```");
         what.AppendLine();
-        what.AppendLine(logPath is null ? "(The crash log could not be written.)" : $"The full log is {Path.GetFileName(logPath)} in %LocalAppData%\\SpaceSharp\\logs; please attach it.");
+        what.AppendLine(logPath is null ? "(The crash log could not be written.)" : $"The full log is {Path.GetFileName(logPath)} in {Path.GetDirectoryName(logPath)}; please attach it.");
         what.AppendLine();
         what.AppendLine("What I was doing when it happened:");
 
@@ -95,7 +95,7 @@ public static class CrashLog
                $"&what-happened={Uri.EscapeDataString(body)}";
     }
 
-    private static string InstallKind() => Updater.Instance.IsInstalled ? "Setup.exe (one-click)" : "Portable SpaceSharp.exe";
+    private static string InstallKind() => (Updater.Instance.IsInstalled ? "Installed (Velopack)" : "Portable") + " · Avalonia";
 
     private static string Shorten(string s, int max) { s = s.Trim().Replace('\n', ' ').Replace('\r', ' '); return s.Length <= max ? s : s[..max].TrimEnd() + "…"; }
 

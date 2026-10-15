@@ -1,26 +1,28 @@
 using System.Globalization;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
 
 namespace SpaceSharp.Controls;
 
 /// <summary>
 /// A donut with a short line of text in the hole. Each slice has a label and a value; hovering a slice
 /// (or setting <see cref="Highlight"/> from a legend) shows that slice in the center, otherwise the center
-/// shows <see cref="CenterValue"/> and <see cref="CenterLabel"/>. Drawn directly, no templates.
+/// shows <see cref="CenterValue"/> and <see cref="CenterLabel"/>. Drawn directly, like the WPF app's (2.2).
 /// </summary>
-public sealed class DonutChart : FrameworkElement
+public sealed class DonutChart : Control
 {
-    public sealed record Slice(string Label, string Value, double Amount, Brush Fill);
+    public sealed record Slice(string Label, string Value, double Amount, IBrush Fill);
 
-    private static readonly Typeface Face = new("Segoe UI");
-    private static readonly Typeface FaceSemibold = new(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.SemiBold, FontStretches.Normal);
+    private static readonly Typeface Face = new(FontFamily.Default);
+    private static readonly Typeface FaceSemibold = new(FontFamily.Default, FontStyle.Normal, FontWeight.SemiBold);
 
     private readonly List<Slice> _slices = new();
     private int _hover = -1;
 
-    public DonutChart() => FlowDirection = FlowDirection.LeftToRight;   // drawn in its own coordinates, like the map
+    public DonutChart() => FlowDirection = FlowDirection.LeftToRight;
 
     public IReadOnlyList<Slice> Slices => _slices;
 
@@ -32,31 +34,29 @@ public sealed class DonutChart : FrameworkElement
         InvalidateVisual();
     }
 
-    public static readonly DependencyProperty CenterValueProperty = DependencyProperty.Register(nameof(CenterValue), typeof(string), typeof(DonutChart),
-        new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty CenterLabelProperty = DependencyProperty.Register(nameof(CenterLabel), typeof(string), typeof(DonutChart),
-        new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty HighlightProperty = DependencyProperty.Register(nameof(Highlight), typeof(int), typeof(DonutChart),
-        new FrameworkPropertyMetadata(-1, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty TextBrushProperty = DependencyProperty.Register(nameof(TextBrush), typeof(Brush), typeof(DonutChart),
-        new FrameworkPropertyMetadata(Brushes.White, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty DimBrushProperty = DependencyProperty.Register(nameof(DimBrush), typeof(Brush), typeof(DonutChart),
-        new FrameworkPropertyMetadata(Brushes.Gray, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty TrackBrushProperty = DependencyProperty.Register(nameof(TrackBrush), typeof(Brush), typeof(DonutChart),
-        new FrameworkPropertyMetadata(Brushes.DimGray, FrameworkPropertyMetadataOptions.AffectsRender));
-    public static readonly DependencyProperty ThicknessProperty = DependencyProperty.Register(nameof(Thickness), typeof(double), typeof(DonutChart),
-        new FrameworkPropertyMetadata(16.0, FrameworkPropertyMetadataOptions.AffectsRender));
+    public static readonly StyledProperty<string> CenterValueProperty = AvaloniaProperty.Register<DonutChart, string>(nameof(CenterValue), string.Empty);
+    public static readonly StyledProperty<string> CenterLabelProperty = AvaloniaProperty.Register<DonutChart, string>(nameof(CenterLabel), string.Empty);
+    public static readonly StyledProperty<int> HighlightProperty = AvaloniaProperty.Register<DonutChart, int>(nameof(Highlight), -1);
+    public static readonly StyledProperty<IBrush> TextBrushProperty = AvaloniaProperty.Register<DonutChart, IBrush>(nameof(TextBrush), Brushes.White);
+    public static readonly StyledProperty<IBrush> DimBrushProperty = AvaloniaProperty.Register<DonutChart, IBrush>(nameof(DimBrush), Brushes.Gray);
+    public static readonly StyledProperty<IBrush> TrackBrushProperty = AvaloniaProperty.Register<DonutChart, IBrush>(nameof(TrackBrush), Brushes.DimGray);
+    public static readonly StyledProperty<double> ThicknessProperty = AvaloniaProperty.Register<DonutChart, double>(nameof(Thickness), 16.0);
 
-    public string CenterValue { get => (string)GetValue(CenterValueProperty); set => SetValue(CenterValueProperty, value); }
-    public string CenterLabel { get => (string)GetValue(CenterLabelProperty); set => SetValue(CenterLabelProperty, value); }
+    static DonutChart()
+    {
+        AffectsRender<DonutChart>(CenterValueProperty, CenterLabelProperty, HighlightProperty, TextBrushProperty, DimBrushProperty, TrackBrushProperty, ThicknessProperty);
+    }
+
+    public string CenterValue { get => GetValue(CenterValueProperty); set => SetValue(CenterValueProperty, value); }
+    public string CenterLabel { get => GetValue(CenterLabelProperty); set => SetValue(CenterLabelProperty, value); }
     /// <summary>Index of the slice to show in the center, set from outside (a legend row); -1 for none.</summary>
-    public int Highlight { get => (int)GetValue(HighlightProperty); set => SetValue(HighlightProperty, value); }
-    public Brush TextBrush { get => (Brush)GetValue(TextBrushProperty); set => SetValue(TextBrushProperty, value); }
-    public Brush DimBrush { get => (Brush)GetValue(DimBrushProperty); set => SetValue(DimBrushProperty, value); }
-    public Brush TrackBrush { get => (Brush)GetValue(TrackBrushProperty); set => SetValue(TrackBrushProperty, value); }
-    public double Thickness { get => (double)GetValue(ThicknessProperty); set => SetValue(ThicknessProperty, value); }
+    public int Highlight { get => GetValue(HighlightProperty); set => SetValue(HighlightProperty, value); }
+    public IBrush TextBrush { get => GetValue(TextBrushProperty); set => SetValue(TextBrushProperty, value); }
+    public IBrush DimBrush { get => GetValue(DimBrushProperty); set => SetValue(DimBrushProperty, value); }
+    public IBrush TrackBrush { get => GetValue(TrackBrushProperty); set => SetValue(TrackBrushProperty, value); }
+    public double Thickness { get => GetValue(ThicknessProperty); set => SetValue(ThicknessProperty, value); }
 
-    /// <summary>Raised when the mouse moves onto another slice (or off the ring, index -1), so a legend can follow.</summary>
+    /// <summary>Raised when the pointer moves onto another slice (or off the ring, index -1), so a legend can follow.</summary>
     public event Action<int>? HoverChanged;
 
     protected override Size MeasureOverride(Size availableSize)
@@ -67,15 +67,15 @@ public sealed class DonutChart : FrameworkElement
         return new Size(s, s);
     }
 
-    protected override void OnRender(DrawingContext dc)
+    public override void Render(DrawingContext dc)
     {
-        double size = Math.Min(ActualWidth, ActualHeight);
+        double size = Math.Min(Bounds.Width, Bounds.Height);
         if (size < 8) return;
-        var center = new Point(ActualWidth / 2, ActualHeight / 2);
+        var center = new Point(Bounds.Width / 2, Bounds.Height / 2);
         double outer = size / 2, inner = outer - Thickness;
         double total = _slices.Sum(s => s.Amount);
 
-        // Hit-test surface so the mouse registers over the hole too.
+        // Hit-test surface so the pointer registers over the hole too.
         dc.DrawEllipse(Brushes.Transparent, null, center, outer, outer);
 
         if (total <= 0 || _slices.Count == 0)
@@ -113,41 +113,32 @@ public sealed class DonutChart : FrameworkElement
     }
 
     /// <summary>Shrinks the font until the text fits the hole, down to <paramref name="minSize"/>; only then does it trim.</summary>
-    private static FormattedText Fit(string? text, Typeface face, double size, double minSize, Brush brush, double maxWidth)
+    private static FormattedText Fit(string? text, Typeface face, double size, double minSize, IBrush brush, double maxWidth)
     {
         text ??= string.Empty;
         for (double s = size; s >= minSize; s -= 0.5)
         {
-            var probe = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, s, brush, 1.0);
+            var probe = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, s, brush);
             if (probe.Width <= maxWidth) return probe;
         }
-        return Text(text, face, minSize, brush, maxWidth);
-    }
-
-    private static FormattedText Text(string text, Typeface face, double size, Brush brush, double maxWidth)
-    {
-        return new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, size, brush, 1.0)
+        return new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, minSize, brush)
         {
             MaxTextWidth = Math.Max(1, maxWidth), MaxLineCount = 1, Trimming = TextTrimming.CharacterEllipsis
         };
     }
 
-    private static Brush Dim(Brush brush)
+    private static IBrush Dim(IBrush brush)
     {
-        if (brush is SolidColorBrush s)
+        if (brush is ISolidColorBrush s)
         {
             var c = s.Color;
-            var dim = new SolidColorBrush(Color.FromArgb(0x55, c.R, c.G, c.B));
-            dim.Freeze();
-            return dim;
+            return new ImmutableSolidColorBrush(Color.FromArgb(0x55, c.R, c.G, c.B));
         }
         return brush;
     }
 
     private static Geometry Ring(Point c, double outer, double inner, double startDeg, double sweepDeg)
     {
-        // A full turn has the same start and end point, and an arc between them is nothing; a hair short of
-        // a turn is a complete ring. Happens whenever one slice is the whole donut (a folder of one file type).
         sweepDeg = Math.Min(sweepDeg, 359.999);
         bool large = sweepDeg > 180;
         double a0 = startDeg * Math.PI / 180, a1 = (startDeg + sweepDeg) * Math.PI / 180;
@@ -155,24 +146,24 @@ public sealed class DonutChart : FrameworkElement
         var g = new StreamGeometry();
         using (var ctx = g.Open())
         {
-            ctx.BeginFigure(P(outer, a0), true, true);
-            ctx.ArcTo(P(outer, a1), new Size(outer, outer), 0, large, SweepDirection.Clockwise, true, false);
-            ctx.LineTo(P(inner, a1), true, false);
-            ctx.ArcTo(P(inner, a0), new Size(inner, inner), 0, large, SweepDirection.Counterclockwise, true, false);
+            ctx.BeginFigure(P(outer, a0), true);
+            ctx.ArcTo(P(outer, a1), new Size(outer, outer), 0, large, SweepDirection.Clockwise);
+            ctx.LineTo(P(inner, a1));
+            ctx.ArcTo(P(inner, a0), new Size(inner, inner), 0, large, SweepDirection.CounterClockwise);
+            ctx.EndFigure(true);
         }
-        g.Freeze();
         return g;
     }
 
-    protected override void OnMouseMove(MouseEventArgs e)
+    protected override void OnPointerMoved(PointerEventArgs e)
     {
-        base.OnMouseMove(e);
+        base.OnPointerMoved(e);
         SetHover(SliceAt(e.GetPosition(this)));
     }
 
-    protected override void OnMouseLeave(MouseEventArgs e)
+    protected override void OnPointerExited(PointerEventArgs e)
     {
-        base.OnMouseLeave(e);
+        base.OnPointerExited(e);
         SetHover(-1);
     }
 
@@ -186,8 +177,8 @@ public sealed class DonutChart : FrameworkElement
 
     private int SliceAt(Point p)
     {
-        double size = Math.Min(ActualWidth, ActualHeight);
-        var center = new Point(ActualWidth / 2, ActualHeight / 2);
+        double size = Math.Min(Bounds.Width, Bounds.Height);
+        var center = new Point(Bounds.Width / 2, Bounds.Height / 2);
         double dx = p.X - center.X, dy = p.Y - center.Y, r = Math.Sqrt(dx * dx + dy * dy);
         if (r > size / 2 || r < size / 2 - Thickness) return -1;
         double total = _slices.Sum(s => s.Amount);

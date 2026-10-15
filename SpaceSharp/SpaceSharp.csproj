@@ -1,37 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- The app: the same map on Windows, macOS and Linux, drawn with Skia through Avalonia (Android and iOS are
+       later heads on the same code). It references SpaceSharp.Core for everything that is not a window. -->
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\SpaceSharp.ico</ApplicationIcon>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>SpaceSharp</AssemblyName>
     <RootNamespace>SpaceSharp</RootNamespace>
-    <!-- Program.Main runs Velopack's install/update hooks before WPF starts. -->
-    <StartupObject>SpaceSharp.Program</StartupObject>
-    <!-- Only ship English framework resources (keeps the published exe smaller). This filters referenced
-         packages only; SpaceSharp's own Resources/Strings.*.resx are always built and bundled. -->
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <!-- Strings.resx is English, so the resource manager never looks for an English satellite assembly first. -->
     <NeutralLanguage>en</NeutralLanguage>
-    <!-- The Small build runs on a newer major runtime when .NET 10 is gone from the PC, instead of refusing to start. -->
     <RollForward>LatestMajor</RollForward>
-    <!-- Keep the version shown in About exactly <Version>, without the "+commit" the SDK appends from git. -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <!-- Same bytes for the same source on any machine, and CI builds carry no local paths. -->
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
-    <!-- Have the IDE rules in .editorconfig checked at build time too, at their configured severity. -->
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
-
-    <!-- Shown in the About window and in the .exe's file properties. -->
     <Product>SpaceSharp</Product>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
@@ -47,27 +39,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- WPF projects drop System.IO from the implicit usings (it clashes with
-         System.Windows.Shapes.Path), so add it back globally. -->
-    <Using Include="System.IO" />
+    <AvaloniaResource Include="Assets\**" />
+    <!-- The changelog travels inside the app, so What's new for the running version needs no network. -->
+    <EmbeddedResource Include="..\CHANGELOG.md" LogicalName="CHANGELOG.md" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Installer and auto-update framework. -->
-    <PackageReference Include="Velopack" Version="*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Lets the test project set sizes and dates on FsNode without a scanner. -->
+    <!-- Lets the test project reach the app's internals (the Core project grants its own). -->
     <InternalsVisibleTo Include="SpaceSharp.Tests" />
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Icon files embedded for the window icon and the About window. -->
-    <None Remove="Assets\SpaceSharp.ico" />
-    <None Remove="Assets\SpaceSharp-256.png" />
-    <Resource Include="Assets\SpaceSharp.ico" />
-    <Resource Include="Assets\SpaceSharp-256.png" />
+    <PackageReference Include="Avalonia" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.*" />
+    <PackageReference Include="Velopack" Version="*" />
+    <!-- The in-app inspector (F12) for Debug builds only. -->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.*" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceSharp.Core\SpaceSharp.Core.csproj" />
   </ItemGroup>
 
 </Project>

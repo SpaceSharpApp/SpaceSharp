@@ -18,7 +18,7 @@ public class LocalizationTests
 
     private static HashSet<string> NeutralKeys()
     {
-        var doc = XDocument.Load(Path.Combine(RepoRoot(), "SpaceSharp", "Resources", "Strings.resx"));
+        var doc = XDocument.Load(Path.Combine(RepoRoot(), "SpaceSharp.Core", "Resources", "Strings.resx"));
         return doc.Root!.Elements("data").Select(e => (string)e.Attribute("name")!).ToHashSet(StringComparer.Ordinal);
     }
 

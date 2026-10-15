@@ -1,57 +1,26 @@
-using System.Windows.Media;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using SpaceSharp.Controls;
 using SpaceSharp.Models;
-using SpaceSharp.Util;
 
 namespace SpaceSharp.Util;
 
 /// <summary>
-/// What a file is, by extension. The order is the order of colors in a palette; Other stays last. The six after
-/// Code came out of Other in 2.0 so that a gaming PC does not read as "58% other".
-/// </summary>
-public enum FileCategory
-{
-    Images,
-    Video,
-    Audio,
-    Archives,
-    Programs,
-    Documents,
-    Code,
-    GameData,
-    Installers,
-    DiskImages,
-    Databases,
-    Fonts,
-    System,
-    Other
-}
-
-/// <summary>Which window theme a palette is made for. The map background differs, so a palette rarely suits both.</summary>
-public enum PaletteTheme
-{
-    Dark,
-    Light,
-    /// <summary>Not tagged (a custom palette without a "theme" line): listed under both.</summary>
-    Any
-}
-
-/// <summary>
 /// One selectable color palette: folder/file colors per nesting depth, colors per file type,
-/// and the neutral folder colors used in "by file type" mode. Brushes are frozen and cached.
+/// and the neutral folder colors used in "by file type" mode. Brushes are immutable and cached.
 /// </summary>
 public sealed class ColorScheme
 {
     private const int DepthCycle = 12;
 
-    private static readonly Brush DarkText = Palette.Freeze(Color.FromRgb(0x14, 0x14, 0x18));
-    private static readonly Brush LightText = Palette.Freeze(Color.FromRgb(0xF2, 0xF2, 0xF6));
+    private static readonly IBrush DarkText = Palette.Freeze(Color.FromRgb(0x14, 0x14, 0x18));
+    private static readonly IBrush LightText = Palette.Freeze(Color.FromRgb(0xF2, 0xF2, 0xF6));
 
-    private readonly Brush[] _folders;
-    private readonly Brush[] _files;
-    private readonly Brush[] _neutral;
-    private readonly Dictionary<FileCategory, Brush> _categories;
-    private readonly Dictionary<Brush, Brush> _labels = new();
+    private readonly IBrush[] _folders;
+    private readonly IBrush[] _files;
+    private readonly IBrush[] _neutral;
+    private readonly Dictionary<FileCategory, IBrush> _categories;
+    private readonly Dictionary<IBrush, IBrush> _labels = new();
 
     /// <param name="categories">One color per <see cref="FileCategory"/>, in enum order. A shorter list names the
     /// first categories and Other (its last entry); the categories in between take the file tints in turn, except
@@ -91,13 +60,13 @@ public sealed class ColorScheme
     public string? SourceFile { get; internal set; }
 
     /// <summary>The folder hues in depth order (twelve), for the palette editor.</summary>
-    public IReadOnlyList<Color> FolderColors => _folders.Select(b => ((SolidColorBrush)b).Color).ToList();
+    public IReadOnlyList<Color> FolderColors => _folders.Select(b => TreemapControl.ColorOf(b)).ToList();
 
     /// <summary>The file colors in depth order (twelve).</summary>
-    public IReadOnlyList<Color> FileColors => _files.Select(b => ((SolidColorBrush)b).Color).ToList();
+    public IReadOnlyList<Color> FileColors => _files.Select(b => TreemapControl.ColorOf(b)).ToList();
 
     /// <summary>One color per <see cref="FileCategory"/>, in enum order.</summary>
-    public IReadOnlyList<Color> CategoryColors => Enum.GetValues<FileCategory>().Select(c => ((SolidColorBrush)_categories[c]).Color).ToList();
+    public IReadOnlyList<Color> CategoryColors => Enum.GetValues<FileCategory>().Select(c => TreemapControl.ColorOf(_categories[c])).ToList();
 
     /// <summary>True when the palette fits the given theme (an untagged one fits both).</summary>
     public bool Suits(bool dark) => Theme == PaletteTheme.Any || (Theme == PaletteTheme.Dark) == dark;
@@ -111,18 +80,18 @@ public sealed class ColorScheme
     };
 
     /// <summary>A few representative colors, shown in the palette picker.</summary>
-    public IReadOnlyList<Brush> Swatches { get; }
+    public IReadOnlyList<IBrush> Swatches { get; }
 
-    public IEnumerable<(FileCategory Category, Brush Brush)> Categories =>
+    public IEnumerable<(FileCategory Category, IBrush Brush)> Categories =>
         _categories.Select(kv => (kv.Key, kv.Value));
 
-    private readonly Dictionary<(int Branch, int Depth, bool Folder), Brush> _branchShades = new();
+    private readonly Dictionary<(int Branch, int Depth, bool Folder), IBrush> _branchShades = new();
 
     /// <summary>
     /// The box color. In "by top folder" mode every box inside a top-level folder shares that
     /// folder's hue and gets lighter with each level, so the hierarchy reads at a glance.
     /// </summary>
-    public Brush Fill(FsNode node, int depth, int branch, ColorMode mode)
+    public IBrush Fill(FsNode node, int depth, int branch, ColorMode mode)
     {
         if (mode != ColorMode.ByBranch || depth == 0) return Fill(node, depth, mode);
 
@@ -130,14 +99,14 @@ public sealed class ColorScheme
         var key = (branch % DepthCycle, level, node.IsDirectory);
         if (_branchShades.TryGetValue(key, out var shade)) return shade;
 
-        var hue = ((SolidColorBrush)_folders[branch % DepthCycle]).Color;
+        var hue = TreemapControl.ColorOf(_folders[branch % DepthCycle]);
         double t = node.IsDirectory ? level * 0.09 : 0.30 + level * 0.07;
         shade = Palette.Freeze(Palette.Mix(hue, Colors.White, t));
         _branchShades[key] = shade;
         return shade;
     }
 
-    public Brush Fill(FsNode node, int depth, ColorMode mode)
+    public IBrush Fill(FsNode node, int depth, ColorMode mode)
     {
         if (mode == ColorMode.ByDepth)
             return node.IsDirectory ? _folders[depth % DepthCycle] : _files[depth % DepthCycle];
@@ -148,11 +117,11 @@ public sealed class ColorScheme
     }
 
     /// <summary>Dark or light text, whichever reads better on the given fill.</summary>
-    public Brush LabelFor(Brush fill)
+    public IBrush LabelFor(IBrush fill)
     {
         if (_labels.TryGetValue(fill, out var label)) return label;
 
-        var c = fill is SolidColorBrush solid ? solid.Color : Colors.Gray;
+        var c = fill is ISolidColorBrush solid ? solid.Color : Colors.Gray;
         double luminance = 0.2126 * Linear(c.R) + 0.7152 * Linear(c.G) + 0.0722 * Linear(c.B);
         label = luminance > 0.2 ? DarkText : LightText;
         _labels[fill] = label;
@@ -170,11 +139,9 @@ public sealed class ColorScheme
 
 public static class Palette
 {
-    private static readonly Dictionary<string, FileCategory> Extensions = BuildExtensionMap();
-
     private static List<ColorScheme> _schemes = BuildSchemes().Concat(CustomPalettes.Load()).ToList();
 
-    /// <summary>Built-in palettes followed by the user's custom ones.</summary>
+    /// <summary>The built-in palettes, then the custom ones from the palettes folder.</summary>
     public static IReadOnlyList<ColorScheme> Schemes => _schemes;
 
     /// <summary>Re-reads the custom palette files. Returns the new list.</summary>
@@ -207,8 +174,8 @@ public static class Palette
     public static ColorScheme Find(string? name, bool dark) =>
         Schemes.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase)) ?? DefaultFor(dark);
 
-    public static FileCategory Categorize(string extension) =>
-        Extensions.TryGetValue(extension, out var category) ? category : FileCategory.Other;
+    /// <summary>What a file is, by its extension; the table is <see cref="FileCategories"/> in Core.</summary>
+    public static FileCategory Categorize(string extension) => FileCategories.Categorize(extension);
 
     // ------------------------------------------------------------ schemes
 
@@ -237,11 +204,6 @@ public static class Palette
             FromList("Forest",
                 new[] { "#4F772D", "#6A994E", "#90A955", "#A7C957", "#7A9E7E", "#5C8D89", "#8C7A4F", "#9AB36A", "#5F8F55", "#B5A86A", "#6E9A77", "#87A33E" }, 0.5,
                 Hex("#A7C957", "#C8763D", "#9C7FB8", "#E3C567", "#5C8D89", "#D6DDB8", "#6A994E", "#B8B39E")),
-
-            // GitHub's dark theme (Primer): the accent set it uses on #0D1117.
-            FromList("GitHub",
-                new[] { "#58A6FF", "#3FB950", "#A371F7", "#DB6D28", "#F85149", "#D29922", "#DB61A2", "#F78166", "#388BFD", "#2EA043", "#8957E5", "#BF4B8A" }, 0.45,
-                Hex("#3FB950", "#DB6D28", "#A371F7", "#D29922", "#58A6FF", "#8B949E", "#39C5CF", "#6E7681")),
 
             // Saturated mid-tones for the dark theme: more color than Graphite, still room for the cushion.
             FromList("Aurora",
@@ -278,10 +240,8 @@ public static class Palette
             FromList("Earth",
                 new[] { "#A47551", "#C2A878", "#8B9A6B", "#6E8B8B", "#B5856B", "#9C8A5A", "#7E9A7E", "#C9A86A", "#8A7A6A", "#A89A7A", "#6F8F7F", "#B39468" }, 0.5),
 
-            // GitHub's light theme (Primer), lifted a fifth toward white so the squares read on the light map.
-            FromList("GitHub (light)",
-                Lift(new[] { "#0969DA", "#1A7F37", "#8250DF", "#BC4C00", "#CF222E", "#9A6700", "#BF3989", "#C4432B", "#218BFF", "#2DA44E", "#A475F9", "#E85AAD" }, 0.2), 0.45,
-                Lift(new[] { "#1A7F37", "#BC4C00", "#8250DF", "#9A6700", "#0969DA", "#57606A", "#1B7C83", "#6E7781" }, 0.2).Select(h => Hex(h)[0]).ToArray()),
+            FromList("Retro",
+                new[] { "#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A" }, 0.45),
 
             // The same twelve as the dark one, lifted a quarter toward white so they sit on the light background.
             FromList("Color-blind safe (light)",
@@ -322,20 +282,20 @@ public static class Palette
     // ------------------------------------------------------------ helpers
 
     // ---- "Color by change": grew warm, shrank cool, unchanged grey, new items bright
-    public static readonly Brush GrewBrush = Freeze(Color.FromRgb(0xE8, 0x7A, 0x4F));
-    public static readonly Brush ShrankBrush = Freeze(Color.FromRgb(0x5D, 0xA9, 0xC9));
-    public static readonly Brush UnchangedBrush = Freeze(Color.FromRgb(0x6A, 0x6A, 0x74));
-    public static readonly Brush NewBrush = Freeze(Color.FromRgb(0xF5, 0xB8, 0x2E));
-    private static readonly Brush[] GrewRamp = Ramp(Color.FromRgb(0x8C, 0x7A, 0x6E), Color.FromRgb(0xE8, 0x7A, 0x4F), 6);
-    private static readonly Brush[] ShrankRamp = Ramp(Color.FromRgb(0x6E, 0x80, 0x8C), Color.FromRgb(0x5D, 0xA9, 0xC9), 6);
-    private static readonly Brush UnchangedFolder = Freeze(Color.FromRgb(0x55, 0x55, 0x60));
-    private static readonly Brush NoBaseline = Freeze(Color.FromRgb(0x62, 0x62, 0x6C));
+    public static readonly IBrush GrewBrush = Freeze(Color.FromRgb(0xE8, 0x7A, 0x4F));
+    public static readonly IBrush ShrankBrush = Freeze(Color.FromRgb(0x5D, 0xA9, 0xC9));
+    public static readonly IBrush UnchangedBrush = Freeze(Color.FromRgb(0x6A, 0x6A, 0x74));
+    public static readonly IBrush NewBrush = Freeze(Color.FromRgb(0xF5, 0xB8, 0x2E));
+    private static readonly IBrush[] GrewRamp = Ramp(Color.FromRgb(0x8C, 0x7A, 0x6E), Color.FromRgb(0xE8, 0x7A, 0x4F), 6);
+    private static readonly IBrush[] ShrankRamp = Ramp(Color.FromRgb(0x6E, 0x80, 0x8C), Color.FromRgb(0x5D, 0xA9, 0xC9), 6);
+    private static readonly IBrush UnchangedFolder = Freeze(Color.FromRgb(0x55, 0x55, 0x60));
+    private static readonly IBrush NoBaseline = Freeze(Color.FromRgb(0x62, 0x62, 0x6C));
 
     /// <summary>
     /// The color for the change mode. Intensity follows how much of the item's current size is change,
     /// so a folder that doubled is as loud as a file that appeared, and a 1% wobble stays quiet.
     /// </summary>
-    public static Brush ChangeFill(FsNode node, SizeMeasure measure)
+    public static IBrush ChangeFill(FsNode node, SizeMeasure measure)
     {
         if (!node.HasBaseline) return NoBaseline;
         long now = node.SizeFor(measure);
@@ -348,15 +308,11 @@ public static class Palette
         return delta > 0 ? GrewRamp[step] : ShrankRamp[step];
     }
 
-    private static Brush[] Ramp(Color from, Color to, int steps) =>
+    private static IBrush[] Ramp(Color from, Color to, int steps) =>
         Enumerable.Range(0, steps).Select(i => Freeze(Mix(from, to, i / (double)(steps - 1)))).ToArray();
 
-    internal static Brush Freeze(Color color)
-    {
-        var brush = new SolidColorBrush(color);
-        brush.Freeze();
-        return brush;
-    }
+    /// <summary>An immutable solid brush; the name is kept from the WPF app (2.2), where it froze a WPF brush.</summary>
+    internal static IBrush Freeze(Color color) => new ImmutableSolidColorBrush(color);
 
     private static Color[] Hex(params string[] values) => values.Select(v => Color.FromRgb(
         Convert.ToByte(v.Substring(1, 2), 16),
@@ -433,32 +389,4 @@ public static class Palette
     }
 
     private static byte ToByte(double v) => (byte)Math.Clamp(Math.Round(v * 255), 0, 255);
-
-    private static Dictionary<string, FileCategory> BuildExtensionMap()
-    {
-        var map = new Dictionary<string, FileCategory>(StringComparer.OrdinalIgnoreCase);
-        void Add(FileCategory category, params string[] extensions)
-        {
-            foreach (var ext in extensions) map[ext] = category;
-        }
-
-        Add(FileCategory.Images, ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".psd",
-            ".raw", ".cr2", ".nef", ".heic", ".svg", ".ico", ".dds", ".tga", ".exr", ".hdr");
-        Add(FileCategory.Video, ".mp4", ".mkv", ".avi", ".mov", ".wmv", ".webm", ".m4v", ".mpg", ".mpeg", ".flv", ".ts", ".bk2", ".bik");
-        Add(FileCategory.Audio, ".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma", ".opus", ".wem", ".bnk");
-        Add(FileCategory.Archives, ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".tgz", ".zst", ".lz4", ".cab");
-        Add(FileCategory.Programs, ".exe", ".dll", ".so", ".bin", ".pdb", ".lib", ".ocx", ".jar", ".pyd", ".node");
-        Add(FileCategory.GameData, ".pak", ".archive", ".ba2", ".bsa", ".vpk", ".rpa", ".uasset", ".ubulk", ".umap", ".upk",
-            ".forge", ".bundle", ".pck", ".wad", ".gcf", ".nif", ".esp", ".esm", ".esl", ".sav");
-        Add(FileCategory.Installers, ".msi", ".msp", ".msix", ".msixbundle", ".appx", ".appxbundle", ".nupkg", ".apk", ".deb", ".rpm");
-        Add(FileCategory.DiskImages, ".iso", ".img", ".vhd", ".vhdx", ".vmdk", ".vdi", ".qcow2", ".wim", ".esd", ".dmg");
-        Add(FileCategory.Databases, ".db", ".sqlite", ".sqlite3", ".mdf", ".ldf", ".ndf", ".accdb", ".mdb", ".edb", ".realm", ".db-wal");
-        Add(FileCategory.Fonts, ".ttf", ".otf", ".ttc", ".woff", ".woff2", ".fon", ".pfb");
-        Add(FileCategory.System, ".sys", ".drv", ".mui", ".etl", ".evtx", ".dmp", ".pf", ".manifest", ".cat", ".inf", ".winmd");
-        Add(FileCategory.Documents, ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".md",
-            ".rtf", ".odt", ".ods", ".odp", ".epub", ".csv", ".log");
-        Add(FileCategory.Code, ".cs", ".js", ".ts", ".tsx", ".jsx", ".php", ".py", ".cpp", ".c", ".h", ".hpp",
-            ".java", ".json", ".xml", ".html", ".css", ".scss", ".sql", ".xaml", ".reds", ".psc", ".pex", ".lua", ".yml", ".yaml");
-        return map;
-    }
 }

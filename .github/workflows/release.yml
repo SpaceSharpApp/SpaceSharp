@@ -1,22 +1,17 @@
 name: Release
 
-# Builds and drafts a release. Runs when a version tag is pushed (the tag is the bare version, "2.1.0",
-# matching <Version> in SpaceSharp.csproj), or by hand from the Actions tab as a dry run that builds everything
-# but creates no release.
-#
-# The build is installer/release.ps1 in three stages: Build (tests and the four app publishes), Pack (installers,
-# MSIs and update packages) and Upload (the draft release). They are separate steps so something can go between
-# them later, such as code signing of the app exes after Build and of the installers after Pack.
+# Builds the Windows release and creates it on GitHub as a draft. Runs when a version tag is pushed (the tag is the
+# bare version, "2.3.0", matching <Version> in SpaceSharp.csproj) and by hand from the Actions tab (build and pack
+# only, no release). The draft holds every asset unsigned; the code-signing certificate lives on the developer's PC,
+# so the last step is there: `.\installer\sign-draft.ps1 -Sign <thumbprint>` downloads the draft's exes and MSIs,
+# signs them, uploads them back and rewrites SHA256SUMS.txt. Then the draft is read and published by hand. Installed
+# copies only see published releases, so a broken run never reaches anyone.
+# When the macOS and Linux packages are ready to ship, release-mac-linux.yml adds them to the same release by hand.
 
 on:
   push:
     tags: ['[0-9]+.[0-9]+.[0-9]+']
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: Build only; create no release
-        type: boolean
-        default: true
 
 permissions:
   contents: write
@@ -27,10 +22,8 @@ concurrency:
 
 jobs:
   release:
-    name: Build and draft
+    name: Build, pack and draft the release
     runs-on: windows-latest
-    env:
-      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
 
     steps:
       - uses: actions/checkout@v5
@@ -77,10 +70,9 @@ jobs:
           if-no-files-found: error
 
       # ---------------------------------------------------------------- stage 3: the draft release
-      - name: Draft the GitHub release
-        if: env.DRY_RUN != 'true'
+      - name: Create the draft release
+        if: github.event_name == 'push'
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: .\installer\release.ps1 -Stage Upload

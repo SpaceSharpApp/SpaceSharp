@@ -1,12 +1,11 @@
-using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Windows.Media;
+using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
 /// <summary>
-/// Palettes the user adds as JSON files in %LocalAppData%\SpaceSharp\palettes. Each file is one
+/// Palettes the user adds as JSON files in the local app data folder (SpaceSharp/palettes), the same files as the WPF app (2.2) reads. Each file is one
 /// palette; the smallest valid file is a name and a list of folder colors. See <see cref="WriteExample"/>
 /// for the full format, which the app writes as Example.json and README.txt the first time the
 /// folder is opened from Settings.

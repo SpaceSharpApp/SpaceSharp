@@ -2,10 +2,21 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.2.1 (unreleased)
+## 2.3.0
+
+### One app for three desktops
+- SpaceSharp is one app for three desktops now. It draws the same map with Avalonia and Skia, and everything the Windows app had is in it: the map and its tooltip, scanning with the file table and the administrator helper on Windows, the filter drawer and rail, Insights, Inspect, saved scans and compare, CSV export, custom palettes and the palette editor, the looks, Settings, About with the update check, the command line, one instance per session, crash reports. The trash, Reveal and Open are spelled for each platform: the Recycle Bin and Explorer on Windows, the Finder's Trash on a Mac, the file manager and `gio trash` on Linux. Windows installs update to it through the usual channel. The macOS and Linux packages are not in this release; the app builds and runs there, and they come in a later version once they have been tried properly.
+- The windows follow the theme and the chosen look on every platform; on Windows the title bar is painted in the app's colors as before. Two looks are new: GitHub Dark (Primer's dark dimmed) and GitHub Light, in Settings › Appearance. The GitHub map palettes from 2.2.0 are gone; they were meant as these looks all along. Retro is back in the light theme; a saved choice of GitHub or GitHub (light) falls back to the theme default.
+- About is laid out in two columns, the app on the left and the links in three groups on the right, and Credits is a window of its own: who wrote the treemap paper, where the idea came from, which libraries and typeface the app is built with and under which licenses, with each name a link, and the full license texts (THIRD-PARTY.md) behind a link in the footer.
 
 ### Fixes
+- The fast NTFS scan through the administrator helper could fail with "Cannot open volume" and fall back to the folder walk, because the drive's trailing backslash escaped the closing quote on the helper's command line and the helper read the path as the drive letter plus the rest of the line. The backslash is doubled now.
+- The scan card stopped counting partway through "Read the file table" and jumped straight to building: the reader reported progress only when the record count landed on a multiple of 16,384, which stops happening once the file table's first extent ends. It reports every 16k records from wherever a read ends.
 - The Map and Insights buttons went gray with a dark label after a click, because the new keyboard-focus look for toolbar buttons replaced their amber fill. The accent buttons keep the fill and show focus as a dark edge.
+
+### Under the hood
+- The code is three projects: `SpaceSharp.Core` (the file tree, the treemap layout, scanning, saved scans and compare, CSV export, every string and translation, the settings, the looks, the command line; plain .NET 10 with the Win32 calls behind an `IPlatformFiles` interface), `SpaceSharp` (the app, on Avalonia), and the tests, which run on all three desktops. The WPF app that 2.2.x shipped as is gone; git history has it. DEVELOPING.md says what goes where.
+- Releases are signed. The Windows downloads (the portable exes, the Setup installers and the MSIs) carry a code signature from a Certum certificate, so SmartScreen learns the publisher over time instead of warning on every version.
 
 ## 2.2.0
 

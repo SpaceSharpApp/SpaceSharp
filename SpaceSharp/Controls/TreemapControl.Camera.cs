@@ -1,12 +1,7 @@
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using SpaceSharp.Layout;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
 using SpaceSharp.Models;
-using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
@@ -20,12 +15,13 @@ public sealed partial class TreemapControl
     private Rect _drawClip;
 
     private CameraAnimation? _animation;
-    private bool _renderingHooked;
+    private bool _frameRequested;
 
     private bool _panArmed;
     private bool _panning;
     private Point _panStart;
     private Vector _panStartOffset;
+    private IPointer? _panPointer;
 
     private sealed class CameraAnimation
     {
@@ -40,7 +36,7 @@ public sealed partial class TreemapControl
     // ================================================================ camera
 
     private (double Width, double Height) BaseSize() =>
-        (Math.Max(1, Math.Floor(ActualWidth) - 1), Math.Max(1, Math.Floor(ActualHeight) - 1));
+        (Math.Max(1, Math.Floor(Bounds.Width) - 1), Math.Max(1, Math.Floor(Bounds.Height) - 1));
 
     private Point CurrentCenter()
     {
@@ -128,32 +124,29 @@ public sealed partial class TreemapControl
             EndCenter = center,
             StartTime = _clock.Elapsed.TotalSeconds
         };
-
-        if (!_renderingHooked)
-        {
-            CompositionTarget.Rendering += OnRenderingFrame;
-            _renderingHooked = true;
-        }
+        RequestFrame();
     }
 
-    private void StopAnimation()
+    /// <summary>One animation frame from the window's compositor; the handler asks for the next while the animation runs.</summary>
+    private void RequestFrame()
     {
-        _animation = null;
-        if (_renderingHooked)
+        if (_frameRequested) return;
+        var top = TopLevel.GetTopLevel(this);
+        if (top is null) return;
+        _frameRequested = true;
+        top.RequestAnimationFrame(_ =>
         {
-            CompositionTarget.Rendering -= OnRenderingFrame;
-            _renderingHooked = false;
-        }
+            _frameRequested = false;
+            OnRenderingFrame();
+        });
     }
 
-    private void OnRenderingFrame(object? sender, EventArgs e)
+    private void StopAnimation() => _animation = null;
+
+    private void OnRenderingFrame()
     {
         var a = _animation;
-        if (a is null)
-        {
-            StopAnimation();
-            return;
-        }
+        if (a is null) return;
 
         double t = Math.Clamp((_clock.Elapsed.TotalSeconds - a.StartTime) / AnimationSeconds, 0, 1);
         double eased = 1 - Math.Pow(1 - t, 3); // ease-out cubic
@@ -173,6 +166,7 @@ public sealed partial class TreemapControl
             StopAnimation();
             if (a.Target is not null) SnapTo(a.Target);
         }
+        else RequestFrame();
     }
 
     /// <summary>
@@ -192,7 +186,7 @@ public sealed partial class TreemapControl
 
     private static double Lerp(double a, double b, double t) => a + (b - a) * t;
 
-    /// <summary>Immediate zoom around a screen point (mouse wheel).</summary>
+    /// <summary>Immediate zoom around a screen point (wheel).</summary>
     private void ZoomAt(double newZoom, Point anchor)
     {
         newZoom = Math.Clamp(newZoom, 1, MaxZoom);
@@ -208,13 +202,14 @@ public sealed partial class TreemapControl
         ZoomChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void BeginPan(Point position, bool immediately)
+    private void BeginPan(Point position, bool immediately, IPointer pointer)
     {
         _panArmed = true;
         _panning = immediately;
         _panStart = position;
         _panStartOffset = _offset;
-        CaptureMouse();
+        _panPointer = pointer;
+        pointer.Capture(this);
         if (immediately) StartPanning();
     }
 
@@ -224,7 +219,7 @@ public sealed partial class TreemapControl
         StopAnimation();
         _pinnedFocus = null;
         _panStartOffset = _offset;
-        Cursor = Cursors.SizeAll;
+        Cursor = new Cursor(StandardCursorType.SizeAll);
     }
 
     private void EndPan()
@@ -232,8 +227,8 @@ public sealed partial class TreemapControl
         if (!_panArmed) return;
         _panArmed = false;
         _panning = false;
-        Cursor = null;
-        if (IsMouseCaptured) ReleaseMouseCapture();
+        Cursor = Cursor.Default;
+        if (_panPointer?.Captured == this) _panPointer.Capture(null);
+        _panPointer = null;
     }
-
 }

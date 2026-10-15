@@ -1,4 +1,4 @@
-using System.Windows.Media;
+using Avalonia.Media;
 using SpaceSharp.Util;
 
 namespace SpaceSharp.Tests;

@@ -2,12 +2,17 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using Avalonia.Threading;
+using SpaceSharp.Controls;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
-using SpaceSharp.Controls;
 
 namespace SpaceSharp;
 
@@ -15,59 +20,55 @@ namespace SpaceSharp;
 /// "A new version is available": the update prompt, drawn in the app's own style. One narrow column: the mark on
 /// its tile, "SpaceSharp 2.0.0 is ready", the version you have under it, a short paragraph led by the release's section
 /// headings, then Install and restart, Remind me later, and a What's new link that opens the release notes window.
+/// The same as the WPF app's (2.2).
 /// </summary>
 public static class UpdateWindow
 {
     private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
 
-    public static void Show(Window owner)
+    public static async Task Show(Window owner)
     {
         var updater = Updater.Instance;
         if (updater.Available is null) return;
         string version = updater.AvailableVersion ?? string.Empty;
-        string current = updater.CurrentVersion ?? string.Empty;
+        string current = updater.CurrentVersion;
 
-        var window = Dialog.CreateWindow(owner, Strings.Get("Update_Title"), 420);
+        var window = CreateWindow(Strings.Get("Update_Title"), 420);
         var body = new StackPanel { Margin = new Thickness(32, 30, 32, 24) };
 
-        // ---- the mark on its rounded tile, as the Windows icon
+        // ---- the mark on its rounded tile, as the app icon
         var tile = new Border { Width = 84, Height = 84, CornerRadius = new CornerRadius(18), HorizontalAlignment = HorizontalAlignment.Center };
-        tile.SetResourceReference(Border.BackgroundProperty, "Panel");
-        tile.Child = new Image { Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Assets/SpaceSharp-256.png")), Width = 64, Height = 64 };
+        tile.Bind(Border.BackgroundProperty, window.GetResourceObservable("Panel"));
+        tile.Child = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 64, Height = 64 };
         body.Children.Add(tile);
 
-        var title = new TextBlock { Text = Strings.Format("Update_Ready", version), FontSize = 19, FontWeight = FontWeights.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 14, 0, 0) };
+        var title = new TextBlock { Text = Strings.Format("Update_Ready", version), FontSize = 19, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 14, 0, 0) };
         body.Children.Add(title);
-        var status = new TextBlock { Text = Strings.Format("Update_YouHave", current), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) };
-        status.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+        var status = new TextBlock { Text = Strings.Format("Update_YouHave", current), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0), Classes = { "dim" } };
         body.Children.Add(status);
 
-        var progress = new ProgressBar { Height = 4, Minimum = 0, Maximum = 100, Margin = new Thickness(0, 14, 0, 0), Visibility = Visibility.Collapsed, BorderThickness = new Thickness(0) };
-        progress.SetResourceReference(Control.BackgroundProperty, "Control");
-        progress.SetResourceReference(Control.ForegroundProperty, "Accent");
+        var progress = new ProgressBar { Height = 4, Minimum = 0, Maximum = 100, Margin = new Thickness(0, 14, 0, 0), IsVisible = false };
         body.Children.Add(progress);
 
         // ---- one short paragraph: the release's headings, then what installing does
-        var blurb = new TextBlock { Text = Strings.Get("Update_Hint"), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 19, Margin = new Thickness(0, 16, 0, 0) };
-        blurb.SetResourceReference(TextBlock.ForegroundProperty, "TextDim");
+        var blurb = new TextBlock { Text = Strings.Get("Update_Hint"), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 19, Margin = new Thickness(0, 16, 0, 0), Classes = { "dim" } };
         body.Children.Add(blurb);
 
         // ---- the buttons, stacked
-        var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Style = (Style)Application.Current.FindResource("AccentButton"), Height = 38, FontSize = 13.5, HorizontalAlignment = HorizontalAlignment.Stretch, Margin = new Thickness(0, 22, 0, 0), IsDefault = true };
-        var later = new Button { Content = Strings.Get("Update_RemindLater"), Style = (Style)Application.Current.FindResource("ToolButton"), Height = 34, HorizontalAlignment = HorizontalAlignment.Stretch, Margin = new Thickness(0, 8, 0, 0), IsCancel = true };
-        later.SetResourceReference(Control.BorderBrushProperty, "Stroke");
-        later.BorderThickness = new Thickness(1);
-        var whatsNew = new Button { Content = Strings.Format("Update_WhatsNewIn", ShortVersion(version)), Style = (Style)Application.Current.FindResource("LinkButton"), HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0) };
-        whatsNew.Click += (_, _) => ShowWhatsNew(window, version, current);
+        var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Classes = { "primary" }, Height = 38, FontSize = 13.5, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 22, 0, 0), IsDefault = true };
+        var later = new Button { Content = Strings.Get("Update_RemindLater"), Classes = { "tool" }, Height = 34, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 8, 0, 0), IsCancel = true, BorderThickness = new Thickness(1) };
+        later.Bind(TemplatedControl.BorderBrushProperty, window.GetResourceObservable("Stroke"));
+        var whatsNew = new Button { Content = Strings.Format("Update_WhatsNewIn", ShortVersion(version)), Classes = { "link" }, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0), FontSize = 12.5 };
+        whatsNew.Click += async (_, _) => await ShowWhatsNew(window, version, current);
         later.Click += (_, _) => window.Close();
         install.Click += async (_, _) =>
         {
             install.IsEnabled = false; later.IsEnabled = false; whatsNew.IsEnabled = false;
-            progress.Visibility = Visibility.Visible;
+            progress.IsVisible = true;
             status.Text = Strings.Format("Update_Downloading", 0);
             try
             {
-                await updater.InstallAndRestartAsync(percent => window.Dispatcher.BeginInvoke(() =>
+                await updater.InstallAndRestartAsync(percent => Dispatcher.UIThread.Post(() =>
                 {
                     progress.Value = percent;
                     status.Text = percent >= 100 ? Strings.Format("Update_Restarting", version) : Strings.Format("Update_Downloading", percent);
@@ -76,7 +77,7 @@ public static class UpdateWindow
             catch (Exception ex)
             {
                 status.Text = Strings.Format("Update_Failed", ex.Message);
-                progress.Visibility = Visibility.Collapsed;
+                progress.IsVisible = false;
                 install.IsEnabled = true; later.IsEnabled = true; whatsNew.IsEnabled = true;
             }
         };
@@ -85,12 +86,19 @@ public static class UpdateWindow
 
         // The release's section headings lead the paragraph once the notes have loaded.
         var load = SpansReleases(current, version) ? LoadNotesSinceAsync(current, version) : LoadNotesAsync(version);
-        window.Loaded += async (_, _) =>
+        window.Opened += async (_, _) =>
         {
             var highlights = Highlights(await load, 3);
             if (highlights.Count > 0) blurb.Text = string.Join(" · ", highlights) + ". " + Strings.Get("Update_Hint");
         };
-        window.ShowDialog();
+        await window.ShowDialog(owner);
+    }
+
+    private static Window CreateWindow(string title, double width)
+    {
+        var window = new Window { Title = title, Width = width, SizeToContent = SizeToContent.Height, CanResize = false, WindowStartupLocation = WindowStartupLocation.CenterOwner, ShowInTaskbar = false };
+        TitleBarTheme.Attach(window);
+        return window;
     }
 
     /// <summary>"2.0" for 2.0.0, "2.0.1" for a patch: the version as people say it.</summary>
@@ -125,29 +133,30 @@ public static class UpdateWindow
     /// <param name="version">The version whose notes to show.</param>
     /// <param name="sinceVersion">The installed version, when this is an update prompt: every release after it up to
     /// <paramref name="version"/> is shown, so someone two releases behind sees what the release in between did.</param>
-    public static void ShowWhatsNew(Window owner, string version, string? sinceVersion = null)
+    public static async Task ShowWhatsNew(Window owner, string version, string? sinceVersion = null)
     {
         bool span = SpansReleases(sinceVersion, version);
-        var window = Dialog.CreateWindow(owner, Strings.Format(span ? "WhatsNew_TitleSince" : "WhatsNew_Title", version, sinceVersion ?? string.Empty), 560);
-        var body = new StackPanel { Margin = new Thickness(24, 20, 24, 16) };
+        var window = CreateWindow(Strings.Format(span ? "WhatsNew_TitleSince" : "WhatsNew_Title", version, sinceVersion ?? string.Empty), 560);
+        var body = new DockPanel { Margin = new Thickness(24, 20, 24, 16) };
         var notes = new TextBlock { Text = Strings.Get("WhatsNew_Loading"), TextWrapping = TextWrapping.Wrap, LineHeight = 21 };
-        notes.SetResourceReference(TextBlock.ForegroundProperty, "Text");
         var scroll = new ScrollViewer { Content = notes, MaxHeight = 380, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        body.Children.Add(scroll);
 
-        var all = new Button { Content = Strings.Get("WhatsNew_SeeAll"), Style = (Style)Application.Current.FindResource("ToolButton"), Tag = Icons.Get("External"), Height = 32 };
-        all.Click += (_, _) => { try { Process.Start(new ProcessStartInfo(span ? $"{Repository}/blob/{version}/CHANGELOG.md" : $"{Repository}/releases/tag/{version}") { UseShellExecute = true }); } catch { } };
-        var close = new Button { Content = Strings.Get("Dialog_Ok"), Style = (Style)Application.Current.FindResource("AccentButton"), Height = 32, MinWidth = 84, IsDefault = true, IsCancel = true };
+        var all = new Button { Content = Icons.WithText("External", Strings.Get("WhatsNew_SeeAll")), Classes = { "tool" }, Height = 32 };
+        all.Click += (_, _) => { try { Process.Start(new ProcessStartInfo(span ? $"{Repository}/blob/{version}/CHANGELOG.md" : $"{Repository}/releases/tag/{version}") { UseShellExecute = true }); } catch (Exception) { } };
+        var close = new Button { Content = Strings.Get("Dialog_Ok"), Classes = { "primary" }, Height = 32, MinWidth = 84, IsDefault = true, IsCancel = true };
         close.Click += (_, _) => window.Close();
-        var footer = new DockPanel();
+        var footer = new DockPanel { Margin = new Thickness(0, 16, 0, 0) };
         DockPanel.SetDock(all, Dock.Left);
         var right = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right }; right.Children.Add(close);
         footer.Children.Add(all); footer.Children.Add(right);
-        Dialog.Finish(window, body, footer);
+        DockPanel.SetDock(footer, Dock.Bottom);
+        body.Children.Add(footer);
+        body.Children.Add(scroll);
+        window.Content = body;
 
         var load = span ? LoadNotesSinceAsync(sinceVersion!, version) : LoadNotesAsync(version);
-        window.Loaded += async (_, _) => notes.Text = Abridge(await load, span ? 40 : 14) ?? Strings.Get("WhatsNew_Unavailable");
-        window.ShowDialog();
+        window.Opened += async (_, _) => notes.Text = Abridge(await load, span ? 40 : 14) ?? Strings.Get("WhatsNew_Unavailable");
+        await window.ShowDialog(owner);
     }
 
     /// <summary>True when an update prompt should show more than one release: the installed version is known and at
@@ -156,8 +165,6 @@ public static class UpdateWindow
     {
         if (!TryVersion(since, out var a) || !TryVersion(target, out var b)) return false;
         if (a >= b) return false;
-        // One patch step (1.5.0 -> 1.5.1) or one minor step with no patches (1.5.x -> 1.6.0) is a single release; the
-        // changelog decides the rest. We cannot know without it, so assume a gap unless the versions are adjacent.
         return !(a.Major == b.Major && a.Minor == b.Minor && b.Build == a.Build + 1);
     }
 
@@ -229,6 +236,9 @@ public static class UpdateWindow
     {
         var release = Updater.Instance.Available?.TargetFullRelease;
         if (release is not null && !string.IsNullOrWhiteSpace(release.NotesMarkdown)) return release.NotesMarkdown;
+        // The running version's own notes are in the changelog built into the app: no network, and they exist
+        // before the release does (an "(unreleased)" heading still matches).
+        if (string.Equals(version, AppInfo.Version, StringComparison.OrdinalIgnoreCase) && EmbeddedSection(version) is { } own) return own;
         try
         {
             using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
@@ -242,6 +252,33 @@ public static class UpdateWindow
         {
             return null;
         }
+    }
+
+    /// <summary>The "## version" section of the CHANGELOG.md embedded in the app, without its heading; null when the file or the section is missing.</summary>
+    private static string? EmbeddedSection(string version)
+    {
+        try
+        {
+            using var stream = typeof(UpdateWindow).Assembly.GetManifestResourceStream("CHANGELOG.md");
+            if (stream is null) return null;
+            using var reader = new StreamReader(stream);
+            var lines = new List<string>();
+            bool inside = false;
+            while (reader.ReadLine() is { } line)
+            {
+                var m = Regex.Match(line, @"^##\s+(\S+)");
+                if (m.Success)
+                {
+                    if (inside) break;
+                    inside = TryVersion(m.Groups[1].Value, out var v) && TryVersion(version, out var want) && v == want;
+                    continue;
+                }
+                if (inside) lines.Add(line);
+            }
+            string text = string.Join("\n", lines).Trim();
+            return text.Length == 0 ? null : text;
+        }
+        catch (IOException) { return null; }
     }
 
     /// <summary>

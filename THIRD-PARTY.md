@@ -14,19 +14,23 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 ### Lucide icons
 
-The interface icons in `SpaceSharp/Themes/Icons.xaml` (and the copies in `docs/spacesharp-mock.js`) are from Lucide, https://lucide.dev, release 0.468.0, converted to WPF path geometry by `tools/make-icons.py`. A few drawn in the same style (the SSD and USB stick pictures) are SpaceSharp's own.
+The interface icons in `SpaceSharp/Themes/Icons.axaml` (and the copies in `docs/spacesharp-mock.js`) are from Lucide, https://lucide.dev, release 0.468.0, converted to path geometry by `tools/make-icons.py`. A few drawn in the same style (the SSD and USB stick pictures) are SpaceSharp's own.
 
 ISC License. Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2022.
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies. THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-### .NET and WPF
+### .NET, Avalonia and SkiaSharp
 
-The app is built on .NET 10 and Windows Presentation Foundation, https://github.com/dotnet/wpf, MIT license, Copyright (c) .NET Foundation and Contributors. The portable and Setup builds carry the runtime inside them (self-contained); the Small build expects the .NET Desktop Runtime to be installed. The interface uses Segoe UI, which is part of Windows; no font files ship with the app.
+The app is built on .NET 10, https://github.com/dotnet/runtime, MIT license, Copyright (c) .NET Foundation and Contributors. The interface is Avalonia UI, https://avaloniaui.net (NuGet packages `Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`), MIT license, Copyright (c) AvaloniaUI OÜ and contributors. Avalonia draws through SkiaSharp, https://github.com/mono/SkiaSharp, MIT license, Copyright (c) Microsoft Corporation, which wraps Google's Skia graphics library (BSD 3-Clause license, Copyright (c) Google LLC). The portable and Setup builds carry the runtime inside them (self-contained); the Small build expects the .NET Runtime to be installed.
+
+### Inter
+
+The interface typeface is Inter by Rasmus Andersson, https://rsms.me/inter/, SIL Open Font License 1.1, Copyright (c) The Inter Project Authors. It ships inside the app through the `Avalonia.Fonts.Inter` package.
 
 ### Windows APIs
 
-The scanner, the Recycle Bin, the title bar colors and the drive detection call Windows directly (`kernel32.dll`, `shell32.dll`, `dwmapi.dll`, and the registry through `Microsoft.Win32`). These are parts of Windows, used under its license; nothing from them is redistributed.
+On Windows the scanner, the Recycle Bin, the title bar colors and the drive detection call Windows directly (`kernel32.dll`, `shell32.dll`, `dwmapi.dll`, and the registry through `Microsoft.Win32`). These are parts of Windows, used under its license; nothing from them is redistributed.
 
 ### Algorithms and data
 
@@ -51,4 +55,4 @@ The scanner, the Recycle Bin, the title bar colors and the drive detection call 
 
 ## Trademarks
 
-Windows, .NET and Segoe are trademarks of Microsoft Corporation. GitHub is a trademark of GitHub, Inc. Mentioning them does not imply endorsement.
+Windows and .NET are trademarks of Microsoft Corporation. Avalonia is a trademark of AvaloniaUI OÜ. Skia is a trademark of Google LLC. GitHub is a trademark of GitHub, Inc. Mentioning them does not imply endorsement.

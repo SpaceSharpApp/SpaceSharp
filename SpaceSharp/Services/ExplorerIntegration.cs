@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace SpaceSharp.Services;
@@ -7,6 +8,7 @@ namespace SpaceSharp.Services;
 /// "Scan with SpaceSharp" in Explorer's right-click menu for folders, the folder background and drives.
 /// Written under HKEY_CURRENT_USER, so it needs no administrator rights and affects only this user.
 /// </summary>
+[SupportedOSPlatform("windows")]
 public static class ExplorerIntegration
 {
     private const string Verb = "SpaceSharp.Scan";

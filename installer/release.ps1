@@ -14,8 +14,8 @@
 # of releases.win-x64.json so they find 2.0 (a full package, no delta), after which they are on "win-x64" like
 # everyone else. Keep uploading it until nobody is left on 1.x.
 #
-# The real releases come from .github\workflows\release.yml, which runs this script in three stages, so that a
-# step can go between them later (code signing, say) without the script changing:
+# The release workflow (.github\workflows\release.yml) runs all three stages on a tag and leaves a draft release with
+# unsigned assets; sign-draft.ps1 then signs the downloads on this PC. The stages:
 #   -Stage Build    tests, then publishes the four app builds (portable and Velopack folder, x64 and x86)
 #                   into publish\portable*\ and publish\velopack*\
 #   -Stage Pack     packs the installers, MSIs and update packages from those folders into Releases\
@@ -65,7 +65,7 @@ $doPack = $Stage -in @("All", "Pack")
 $doUpload = $Stage -eq "Upload" -or ($Stage -eq "All" -and $Upload)
 
 if ($Stage -eq "All" -and $Upload -and -not $Force -and -not $Sign) {
-    throw "Releases are built by the release workflow so every one comes from the same clean runner. Push the tag and let it build, or pass -Force to upload from this PC anyway."
+    throw "A release should be signed: pass -Sign <thumbprint> with SimplySign running, or -Force to upload an unsigned build anyway."
 }
 if (($doPack -or $doUpload) -and -not (Get-Command vpk -ErrorAction SilentlyContinue)) {
     throw "vpk is not installed. Run: dotnet tool install -g vpk"

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The part of SpaceSharp that knows nothing about Windows or WPF: the tree, the layout, saved scans, the
+       strings and their translations, sizes, the command line. It is what a Mac, Linux or Android build will
+       share with the Windows app. Nothing in here may reference System.Windows, Velopack or Win32; the project
+       targets plain net10.0 so the compiler enforces that. -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Same namespaces and resource names as before the split, so the app and the tests needed no renames. -->
+    <RootNamespace>SpaceSharp</RootNamespace>
+    <AssemblyName>SpaceSharp.Core</AssemblyName>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Product>SpaceSharp</Product>
+    <Version>2.3.0</Version>
+    <Authors>ClearanceClarence</Authors>
+    <Company>ClearanceClarence</Company>
+    <Copyright>© 2026 ClearanceClarence</Copyright>
+    <RepositoryUrl>https://github.com/SpaceSharpApp/SpaceSharp</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The scanners set sizes and dates on FsNode; the tests build trees the same way. -->
+    <InternalsVisibleTo Include="SpaceSharp" />
+    <InternalsVisibleTo Include="SpaceSharp.Tests" />
+  </ItemGroup>
+
+</Project>

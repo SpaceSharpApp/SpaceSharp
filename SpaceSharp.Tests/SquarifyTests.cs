@@ -1,4 +1,3 @@
-using System.Windows;
 using SpaceSharp.Layout;
 using SpaceSharp.Models;
 
@@ -6,13 +5,13 @@ namespace SpaceSharp.Tests;
 
 public class SquarifyTests
 {
-    private static List<(FsNode Node, Rect Rect)> Run(Rect bounds, params long[] sizes)
+    private static List<(FsNode Node, LayoutRect Rect)> Run(LayoutRect bounds, params long[] sizes)
     {
         var root = TestTree.Dir(@"C:\");
         for (int i = 0; i < sizes.Length; i++) TestTree.File(root, $"f{i}", sizes[i]);
         root.FinishDirectory();
 
-        var result = new List<(FsNode, Rect)>();
+        var result = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => result.Add((n, r)));
         return result;
     }
@@ -20,7 +19,7 @@ public class SquarifyTests
     [Fact]
     public void SingleNodeFillsTheBounds()
     {
-        var items = Run(new Rect(10, 20, 300, 200), 42);
+        var items = Run(new LayoutRect(10, 20, 300, 200), 42);
         var rect = Assert.Single(items).Rect;
         Assert.Equal(10, rect.X, 6);
         Assert.Equal(20, rect.Y, 6);
@@ -31,7 +30,7 @@ public class SquarifyTests
     [Fact]
     public void AreasAreProportionalToSizes()
     {
-        var bounds = new Rect(0, 0, 400, 300);
+        var bounds = new LayoutRect(0, 0, 400, 300);
         var items = Run(bounds, 6, 3, 1);
 
         double total = bounds.Width * bounds.Height;
@@ -43,7 +42,7 @@ public class SquarifyTests
     [Fact]
     public void EveryRectStaysInsideTheBounds()
     {
-        var bounds = new Rect(5, 5, 640, 480);
+        var bounds = new LayoutRect(5, 5, 640, 480);
         var items = Run(bounds, 50, 30, 20, 10, 10, 5, 3, 2, 1, 1);
 
         Assert.Equal(10, items.Count);
@@ -59,12 +58,12 @@ public class SquarifyTests
     [Fact]
     public void RectsDoNotOverlap()
     {
-        var items = Run(new Rect(0, 0, 500, 500), 40, 25, 15, 10, 5, 3, 2);
+        var items = Run(new LayoutRect(0, 0, 500, 500), 40, 25, 15, 10, 5, 3, 2);
 
         for (int a = 0; a < items.Count; a++)
         for (int b = a + 1; b < items.Count; b++)
         {
-            var overlap = Rect.Intersect(items[a].Rect, items[b].Rect);
+            var overlap = LayoutRect.Intersect(items[a].Rect, items[b].Rect);
             Assert.True(overlap.IsEmpty || Area(overlap) < 1e-6, $"{items[a].Rect} overlaps {items[b].Rect}");
         }
     }
@@ -72,7 +71,7 @@ public class SquarifyTests
     [Fact]
     public void TotalAreaEqualsTheBounds()
     {
-        var bounds = new Rect(0, 0, 800, 450);
+        var bounds = new LayoutRect(0, 0, 800, 450);
         var items = Run(bounds, 100, 80, 60, 40, 20, 10, 5, 1);
         Assert.Equal(bounds.Width * bounds.Height, items.Sum(i => Area(i.Rect)), 4);
     }
@@ -80,7 +79,7 @@ public class SquarifyTests
     [Fact]
     public void ZeroSizedNodesAreSkipped()
     {
-        var items = Run(new Rect(0, 0, 100, 100), 10, 5, 0, 0);
+        var items = Run(new LayoutRect(0, 0, 100, 100), 10, 5, 0, 0);
         Assert.Equal(2, items.Count);
         Assert.All(items, i => Assert.True(i.Node.Size > 0));
     }
@@ -88,25 +87,25 @@ public class SquarifyTests
     [Fact]
     public void EmptyBoundsEmitNothing()
     {
-        Assert.Empty(Run(new Rect(0, 0, 0, 100), 10, 5));
-        Assert.Empty(Run(new Rect(0, 0, 100, 0), 10, 5));
+        Assert.Empty(Run(new LayoutRect(0, 0, 0, 100), 10, 5));
+        Assert.Empty(Run(new LayoutRect(0, 0, 100, 0), 10, 5));
     }
 
     [Fact]
     public void NoNodesEmitNothing()
     {
-        Assert.Empty(Run(new Rect(0, 0, 100, 100)));
+        Assert.Empty(Run(new LayoutRect(0, 0, 100, 100)));
     }
 
     [Fact]
     public void FirstRowGoesAlongTheShorterSide()
     {
         // Wide bounds: the first row is a vertical strip that spans the full height.
-        var wide = Run(new Rect(0, 0, 400, 100), 50, 50);
+        var wide = Run(new LayoutRect(0, 0, 400, 100), 50, 50);
         Assert.Equal(100, wide[0].Rect.Height, 6);
 
         // Tall bounds: the first row is a horizontal strip that spans the full width.
-        var tall = Run(new Rect(0, 0, 100, 400), 50, 50);
+        var tall = Run(new LayoutRect(0, 0, 100, 400), 50, 50);
         Assert.Equal(100, tall[0].Rect.Width, 6);
     }
 
@@ -118,13 +117,13 @@ public class SquarifyTests
         var root = TestTree.Dir(@"C:\");
         TestTree.File(root, "a", 50); TestTree.File(root, "b", 50);
         root.FinishDirectory();
-        var bounds = new Rect(0, 0, 200, 200);
+        var bounds = new LayoutRect(0, 0, 200, 200);
 
-        var plain = new List<(FsNode, Rect)>();
+        var plain = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => plain.Add((n, r)));
         Assert.Equal(200, plain[0].Item2.Width, 6);    // stacked: full width, half height
 
-        var wide = new List<(FsNode, Rect)>();
+        var wide = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => wide.Add((n, r)), orientationBias: 1 / 3.0);
         Assert.Equal(200, wide[0].Item2.Height, 6);    // side by side: full height, half width
 
@@ -142,12 +141,12 @@ public class SquarifyTests
         root.FinishDirectory();
         root.SortBy(SizeMeasure.SizeOnDisk);
 
-        var result = new List<(FsNode Node, Rect Rect)>();
-        Squarify.Layout(root.Children, new Rect(0, 0, 110, 100), SizeMeasure.SizeOnDisk, (n, r) => result.Add((n, r)));
+        var result = new List<(FsNode Node, LayoutRect Rect)>();
+        Squarify.Layout(root.Children, new LayoutRect(0, 0, 110, 100), SizeMeasure.SizeOnDisk, (n, r) => result.Add((n, r)));
 
         Assert.Equal("big-on-disk", result[0].Node.Name);
         Assert.Equal(10000, Area(result[0].Rect), 6);
     }
 
-    private static double Area(Rect r) => r.Width * r.Height;
+    private static double Area(LayoutRect r) => r.Width * r.Height;
 }

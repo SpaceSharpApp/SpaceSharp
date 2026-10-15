@@ -1,4 +1,4 @@
-using System.Windows.Media;
+using Avalonia.Media;
 using SpaceSharp.Models;
 using SpaceSharp.Util;
 
@@ -13,7 +13,7 @@ public sealed class TopRow
     /// <summary>0..1 share of the largest row, drawn as a bar behind the text.</summary>
     public double Fraction { get; init; }
     public double BarWidth => Math.Round(Fraction * 300);
-    public Brush Swatch { get; init; } = Brushes.Transparent;
+    public IBrush Swatch { get; init; } = Brushes.Transparent;
     /// <summary>The file or folder to zoom to, or null for a type row.</summary>
     public FsNode? Node { get; init; }
     /// <summary>Filter text to apply when the row is a file type.</summary>
@@ -95,10 +95,10 @@ public static class TopLists
         return ordered.Select(kv => new TopRow
         {
             Name = kv.Key,
-            Detail = Strings.Format("TopList_FilesOfType", kv.Value.Count, Strings.Category(Palette.Categorize(kv.Key)).ToLowerInvariant()),
+            Detail = Strings.Format("TopList_FilesOfType", kv.Value.Count, Strings.Category(FileCategories.Categorize(kv.Key)).ToLowerInvariant()),
             SizeText = SizeFormatter.Format(kv.Value.Bytes),
             Fraction = largest > 0 ? (double)kv.Value.Bytes / largest : 0,
-            Swatch = categories[Palette.Categorize(kv.Key)],
+            Swatch = categories[FileCategories.Categorize(kv.Key)],
             FilterText = kv.Key.StartsWith('.') ? "*" + kv.Key : null
         }).ToList();
     }

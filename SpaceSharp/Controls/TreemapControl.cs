@@ -1,22 +1,25 @@
 using System.Diagnostics;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using SpaceSharp.Layout;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using SpaceSharp.Models;
 using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
-// TreemapControl is split into partial files by concern:
+// TreemapControl is split into partial files by concern, the same way as the WPF app's (2.2):
 //   TreemapControl.cs         constants, fields, constructor, public properties and events
 //   TreemapControl.Camera.cs  zoom, pan, focus animation, viewport math
 //   TreemapControl.Layout.cs  rebuild, squarified layout cache, grouping, folder-chain merging
 //   TreemapControl.Render.cs  drawing of boxes, title bars, cushions, labels, hover and selection
-//   TreemapControl.Input.cs   mouse and keyboard handling
-//   MapEnums.cs               ColorMode, MapDensity and TreemapItem
+//   TreemapControl.Input.cs   pointer and keyboard handling
+//   MapEnums.cs               ColorMode, MapDensity, TreemapItem and the Rect helpers
+//
+// What differs from the WPF control: there are no retained DrawingVisuals, so the map and the overlay are two
+// child layers that each redraw in their Render override when invalidated; text is Avalonia's FormattedText
+// (no pixels-per-dip argument); the camera animation runs on the top level's animation frames; and the pointer
+// events replace the mouse ones. The layout and drawing code is otherwise the same, line for line where it could be.
 
 /// <summary>
 /// SpaceMonger-style nested treemap with a zoomable camera.
@@ -28,12 +31,8 @@ namespace SpaceSharp.Controls;
 /// "Focusing" a folder animates the camera so that folder fills the window. The focused
 /// folder is the one shown in the breadcrumb; wheel/pan changes it to whatever folder
 /// covers most of the window.
-///
-/// There is one look: folders are frames with a title bar, files are cushioned boxes, and a
-/// grid line separates every box. How strong the cushion is, where the light comes from and
-/// how the grid is drawn are the shading settings (Settings › Treemap).
 /// </summary>
-public sealed partial class TreemapControl : FrameworkElement
+public sealed partial class TreemapControl : Panel
 {
     public const double MaxZoom = 1_000_000;
 
@@ -47,9 +46,6 @@ public sealed partial class TreemapControl : FrameworkElement
     private double MinChildSize => _density switch { MapDensity.Sparse => BaseMinChildSize * 2, MapDensity.Dense => 2, MapDensity.Maximum or MapDensity.Everything => 1, _ => BaseMinChildSize };
     private double GroupBelowArea => _density switch { MapDensity.Sparse => BaseGroupBelowArea * 2.5, MapDensity.Dense => BaseGroupBelowArea * 0.4, MapDensity.Maximum => BaseGroupBelowArea * 0.12, _ => BaseGroupBelowArea };
 
-    // A folder whose children are all small by the scan-wide rule is cut by the pixels it has on screen, and
-    // there the question is only whether a box can be seen: about 10 × 10 px is enough, so a folder of two
-    // thousand equal photos opens into its grid as soon as each photo gets that much, not at 30 × 22.
     private const double BaseVisibleArea = 10 * 10;
     private double VisibleArea => _density switch { MapDensity.Sparse => BaseVisibleArea * 2.5, MapDensity.Dense => BaseVisibleArea * 0.6, MapDensity.Maximum => BaseVisibleArea * 0.36, _ => BaseVisibleArea };
     private const double TextSize = 11;
@@ -57,8 +53,8 @@ public sealed partial class TreemapControl : FrameworkElement
     private const double DragThreshold = 4;
     private const double AnimationSeconds = 0.4;
 
-    private readonly DrawingVisual _mapVisual = new();
-    private readonly DrawingVisual _overlayVisual = new();
+    private readonly Layer _mapLayer;
+    private readonly Layer _overlayLayer;
     private readonly List<TreemapItem> _items = new();
     private readonly Dictionary<FsNode, TreemapItem> _index = new();
     private readonly Stopwatch _clock = Stopwatch.StartNew();
@@ -82,36 +78,77 @@ public sealed partial class TreemapControl : FrameworkElement
     public TreemapControl()
     {
         FlowDirection = FlowDirection.LeftToRight;   // the map is drawn in its own coordinates; a mirrored UI does not mirror it
-        AddVisualChild(_mapVisual);
-        AddVisualChild(_overlayVisual);
-        RenderOptions.SetEdgeMode(_mapVisual, EdgeMode.Aliased);
-        RenderOptions.SetEdgeMode(_overlayVisual, EdgeMode.Aliased);
+        _mapLayer = new Layer(DrawMap);
+        _overlayLayer = new Layer(DrawOverlayLayer);
+        Children.Add(_mapLayer);
+        Children.Add(_overlayLayer);
+        // Boxes are snapped to whole pixels before they are drawn, so antialiasing costs nothing on their edges and
+        // keeps the labels smooth. (Aliased mode in Avalonia turns antialiasing off for text too, which WPF's did not.)
+        foreach (var layer in new[] { _mapLayer, _overlayLayer })
+        {
+            RenderOptions.SetEdgeMode(layer, EdgeMode.Antialias);
+            RenderOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
+        }
+        Background = Brushes.Transparent;   // so the panel itself is hit-testable everywhere
         ClipToBounds = true;
         Focusable = true;
         RebuildPens();
         RebuildCushions();
     }
 
-    /// <summary>Color shown behind and between the boxes (follows the light/dark theme).</summary>
-    public static readonly DependencyProperty MapBackgroundProperty = DependencyProperty.Register(
-        nameof(MapBackground), typeof(Brush), typeof(TreemapControl),
-        new PropertyMetadata(BackgroundBrush, (d, _) =>
-        {
-            var map = (TreemapControl)d;
-            map._dimmed.Clear();
-            map._headerFills.Clear();
-            map.Invalidate();
-        }));
-
-    public Brush MapBackground
+    /// <summary>A child that draws whatever the owner hands it; the map and the overlay are two of these.</summary>
+    private sealed class Layer : Control
     {
-        get => (Brush)GetValue(MapBackgroundProperty);
+        private readonly Action<DrawingContext> _draw;
+        public Layer(Action<DrawingContext> draw)
+        {
+            _draw = draw;
+            IsHitTestVisible = false;
+        }
+        public override void Render(DrawingContext context) => _draw(context);
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        foreach (var child in Children) child.Measure(availableSize);
+        return availableSize;
+    }
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        var bounds = new Rect(finalSize);
+        foreach (var child in Children) child.Arrange(bounds);
+        return finalSize;
+    }
+
+    // Declared here, above the property that uses it as a default: static initializers of a partial class run in
+    // an unspecified order across its files, so a field in another file could still be null at that point.
+    private static readonly IBrush BackgroundBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17));
+
+    /// <summary>Color shown behind and between the boxes (follows the light/dark theme).</summary>
+    public static readonly StyledProperty<IBrush?> MapBackgroundProperty =
+        AvaloniaProperty.Register<TreemapControl, IBrush?>(nameof(MapBackground), BackgroundBrush);
+
+    public IBrush? MapBackground
+    {
+        get => GetValue(MapBackgroundProperty);
         set => SetValue(MapBackgroundProperty, value);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == MapBackgroundProperty)
+        {
+            _dimmed.Clear();
+            _headerFills.Clear();
+            Invalidate();
+        }
     }
 
     public event EventHandler<FsNode?>? HoveredNodeChanged;
 
-    /// <summary>The item under the mouse, if any.</summary>
+    /// <summary>The item under the pointer, if any.</summary>
     public FsNode? HoveredNode => _hoveredNode;
     public event EventHandler<FsNode?>? SelectionChanged;
     public event EventHandler<FsNode>? NodeActivated;
@@ -165,7 +202,7 @@ public sealed partial class TreemapControl : FrameworkElement
         SelectionChanged?.Invoke(this, _selectedNode);
     }
 
-    /// <summary>Selects a range of siblings between the anchor and the node, like Shift+click in Explorer.</summary>
+    /// <summary>Selects a range of siblings between the anchor and the node, like Shift+click in a file manager.</summary>
     public void SelectRangeTo(FsNode node)
     {
         var anchor = _selectedNode;
@@ -266,7 +303,6 @@ public sealed partial class TreemapControl : FrameworkElement
 
     // Geometry. The gap is taken off each box before drawing; the inset is the space folders keep around
     // their children; the header height is the room reserved for the folder title.
-    // The title bar is one line of text plus the title padding above and below it.
     private double HeaderHeight => Math.Round(TitleLineHeight * _labelScale + 2 * _titlePadding);
     private const double TitleLineHeight = 15;
 
@@ -281,8 +317,7 @@ public sealed partial class TreemapControl : FrameworkElement
     private string _fontFamily = "Segoe UI";
     private bool _fileCenterNames = true, _fileShowSizes = true, _folderCenterNames, _folderShowSizes = true, _folderShowCounts;
 
-    /// <summary>How many small items are drawn before grouping or hiding them; Everything turns grouping off.</summary>
-    private bool _groupSmall => _density != MapDensity.Everything;
+    private bool GroupSmall => _density != MapDensity.Everything;
     public MapDensity Density { get => _density; set { if (_density == value) return; _density = value; InvalidateLayout(); } }
 
     /// <summary>-1 favors wide boxes, +1 tall boxes, 0 is the plain squarified layout.</summary>
@@ -319,19 +354,10 @@ public sealed partial class TreemapControl : FrameworkElement
     public static readonly Color DefaultGridColor = Color.FromRgb(0x10, 0x10, 0x14);
     public static readonly Color DefaultHighlightColor = Color.FromRgb(0xF5, 0xB8, 0x2E);
 
-    /// <summary>Light-to-dark shading on every file. Off draws files as flat color; the other shading settings then do nothing.</summary>
     public bool CushionEnabled { get => _cushionEnabled; set { if (_cushionEnabled == value) return; _cushionEnabled = value; Invalidate(); } }
-
-    /// <summary>How light the files are. 50 balances the lit and shadow sides of the cushion; lower dims files, higher lifts them. Folders are not affected.</summary>
     public int Brightness { get => _brightness; set { value = Math.Clamp(value, 0, 100); if (_brightness == value) return; _brightness = value; RebuildCushions(); Invalidate(); } }
-
-    /// <summary>Strength of the light-to-dark sweep across each box. 0 is flat.</summary>
     public int CushionShading { get => _cushion; set { value = Math.Clamp(value, 0, 100); if (_cushion == value) return; _cushion = value; RebuildCushions(); Invalidate(); } }
-
-    /// <summary>How far the lit side reaches before the box falls into shadow. Low is a thin rim, high a rounded pillow.</summary>
     public int CushionHeight { get => _cushionHeight; set { value = Math.Clamp(value, 0, 100); if (_cushionHeight == value) return; _cushionHeight = value; RebuildCushions(); Invalidate(); } }
-
-    /// <summary>How much shading nested levels keep: the cushion strength is multiplied by (scale/100) per level of depth.</summary>
     public int ShadingScale { get => _shadingScale; set { value = Math.Clamp(value, 0, 100); if (_shadingScale == value) return; _shadingScale = value; RebuildCushions(); Invalidate(); } }
 
     /// <summary>Where the light comes from, as a point in the unit square: (-1, -1) is top-left, (0, 0) straight ahead.</summary>
@@ -347,33 +373,26 @@ public sealed partial class TreemapControl : FrameworkElement
     public double LightX => _lightX;
     public double LightY => _lightY;
 
-    /// <summary>Draw a line between every box.</summary>
     public bool ShowGrid { get => _showGrid; set { if (_showGrid == value) return; _showGrid = value; Invalidate(); } }
-
-    /// <summary>Grid line width, 1 to 3 px.</summary>
     public double GridThickness { get => _gridThickness; set { value = Math.Clamp(value, 1, 3); if (_gridThickness == value) return; _gridThickness = value; RebuildPens(); Invalidate(); } }
-
     public Color GridColor { get => _gridColor; set { if (_gridColor == value) return; _gridColor = value; RebuildPens(); Invalidate(); } }
 
     // ---- text and title bars
     private double _titlePadding = DefaultTitlePadding;
     private int _titleBarTint = DefaultTitleBarTint;
-    private Brush? _folderText, _fileText;
+    private IBrush? _folderText, _fileText;
 
     public const double DefaultTitlePadding = 1;
     public const int DefaultTitleBarTint = 16;
 
-    /// <summary>Space above and below a folder's name in its title bar, 0 to 8 px. Changes the bar's height.</summary>
     public double TitlePadding { get => _titlePadding; set { value = Math.Clamp(value, 0, 8); if (_titlePadding == value) return; _titlePadding = value; InvalidateLayout(); } }
-
-    /// <summary>How far the title bar is shaded from the folder's color, 0 (same color) to 40 (%).</summary>
     public int TitleBarTint { get => _titleBarTint; set { value = Math.Clamp(value, 0, 40); if (_titleBarTint == value) return; _titleBarTint = value; _headerFills.Clear(); Invalidate(); } }
 
     /// <summary>Color of folder names, or null to pick dark or light per bar.</summary>
-    public Color? FolderTextColor { set { _folderText = value is null ? null : Frozen(new SolidColorBrush(value.Value)); Invalidate(); } }
+    public Color? FolderTextColor { set { _folderText = value is null ? null : new SolidColorBrush(value.Value); Invalidate(); } }
 
     /// <summary>Color of file names and sizes, or null to pick dark or light per box.</summary>
-    public Color? FileTextColor { set { _fileText = value is null ? null : Frozen(new SolidColorBrush(value.Value)); Invalidate(); } }
+    public Color? FileTextColor { set { _fileText = value is null ? null : new SolidColorBrush(value.Value); Invalidate(); } }
 
     /// <summary>Color of the frame around selected boxes.</summary>
     public Color HighlightColor { get => _highlightColor; set { if (_highlightColor == value) return; _highlightColor = value; RebuildPens(); DrawOverlay(); } }
@@ -416,7 +435,7 @@ public sealed partial class TreemapControl : FrameworkElement
         EnsureLayout();
 
         var visible = DeepestLaidOut(folder);
-        if (!animate || !AnimateZoom || visible is null || ActualWidth < 8)
+        if (!animate || !AnimateZoom || visible is null || Bounds.Width < 8)
         {
             StopAnimation();
             SnapTo(folder);
@@ -446,27 +465,13 @@ public sealed partial class TreemapControl : FrameworkElement
     /// <summary>Re-layouts and redraws (call after the tree was modified).</summary>
     public void Refresh() => InvalidateLayout();
 
-    protected override int VisualChildrenCount => 2;
-
-    protected override Visual GetVisualChild(int index) => index == 0 ? _mapVisual : _overlayVisual;
-
-    protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters) =>
-        new PointHitTestResult(this, hitTestParameters.HitPoint);
-
-    protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
-        base.OnRenderSizeChanged(sizeInfo);
-        var previous = sizeInfo.PreviousSize;
-        var current = sizeInfo.NewSize;
+        base.OnSizeChanged(e);
+        var previous = e.PreviousSize;
+        var current = e.NewSize;
         if (previous.Width > 0 && previous.Height > 0)
             _offset = new Vector(_offset.X * current.Width / previous.Width, _offset.Y * current.Height / previous.Height);
         InvalidateLayout();
     }
-
-    protected override void OnDpiChanged(DpiScale oldDpi, DpiScale newDpi)
-    {
-        base.OnDpiChanged(oldDpi, newDpi);
-        InvalidateLayout();
-    }
-
 }
