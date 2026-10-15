@@ -86,7 +86,10 @@
         <ScrollViewer x:Name="DriveScroller" Grid.Row="2" MaxHeight="320" MinHeight="72">
           <StackPanel x:Name="DriveList" Margin="8,0" Spacing="1" />
         </ScrollViewer>
-        <Border Grid.Row="3" Height="1" Margin="14,8,14,4" Background="{DynamicResource Stroke}" />
+        <!-- the line between Drives and Largest items doubles as the handle that sets the drive list's height -->
+        <Border x:Name="DriveResizeHandle" Grid.Row="3" Height="9" Margin="14,4,14,0" Background="Transparent" Cursor="SizeNorthSouth">
+          <Border Height="1" VerticalAlignment="Center" Background="{DynamicResource Stroke}" />
+        </Border>
         <TextBlock x:Name="ListsTitle" Grid.Row="4" FontSize="15" FontWeight="SemiBold" Margin="14,4,14,2" />
         <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10,4,10,4">
           <Button x:Name="ListFilesButton" Classes="tab" Height="28" Click="ListKind_Click" Tag="Files" />
@@ -98,6 +101,8 @@
         <ScrollViewer Grid.Row="7">
           <StackPanel x:Name="TopList" Margin="8,0,8,8" Spacing="1" />
         </ScrollViewer>
+        <!-- the panel's edge: drag to set its width -->
+        <Border x:Name="PanelResizeHandle" Grid.Row="0" Grid.RowSpan="8" Width="6" HorizontalAlignment="Right" Background="Transparent" Cursor="SizeWestEast" />
       </Grid>
     </Border>
 

@@ -55,6 +55,7 @@ public partial class MainWindow : Window
         ApplyView();
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
 
+        HookResizeHandles();
         KeyDown += OnKeyDown;
         Closing += (_, _) => { _scanCts?.Cancel(); _settings.Save(); };
         UpdateNavigation();
@@ -275,6 +276,39 @@ public partial class MainWindow : Window
         RefreshTopList();
         RefreshInsights();
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
+    }
+
+    /// <summary>
+    /// The two drag handles in the side panel: its right edge sets the panel's width, the line under the drive
+    /// list sets that list's height. Both land in the settings and are applied again by ApplyLook.
+    /// </summary>
+    private void HookResizeHandles()
+    {
+        Drag(PanelResizeHandle, horizontal: true, () => SidePanel.Bounds.Width, v =>
+        {
+            v = Math.Clamp(v, 220, Math.Max(220, Bounds.Width - 400));
+            SidePanel.Width = v; _settings.SidePanelWidth = v;
+        });
+        Drag(DriveResizeHandle, horizontal: false, () => DriveScroller.Bounds.Height, v =>
+        {
+            v = Math.Clamp(v, 72, Math.Max(72, SidePanel.Bounds.Height - 200));
+            DriveScroller.MaxHeight = v; _settings.DriveListHeight = v;
+        });
+    }
+
+    private void Drag(Control handle, bool horizontal, Func<double> start, Action<double> apply)
+    {
+        double origin = 0, startValue = 0; bool dragging = false;
+        double Along(PointerEventArgs e) { var p = e.GetPosition(this); return horizontal ? (FlowDirection == FlowDirection.RightToLeft ? -p.X : p.X) : p.Y; }
+        handle.PointerPressed += (_, e) =>
+        {
+            if (!e.GetCurrentPoint(handle).Properties.IsLeftButtonPressed) return;
+            dragging = true; origin = Along(e); startValue = start();
+            e.Pointer.Capture(handle); e.Handled = true;
+        };
+        handle.PointerMoved += (_, e) => { if (dragging) apply(startValue + Along(e) - origin); };
+        handle.PointerReleased += (_, e) => { if (!dragging) return; dragging = false; e.Pointer.Capture(null); _settings.Save(); };
+        handle.PointerCaptureLost += (_, _) => dragging = false;
     }
 
     private void ApplyLook()
@@ -788,7 +822,7 @@ public partial class MainWindow : Window
     private async void CopyToClipboard(string? text)
     {
         if (text is null || Clipboard is null) return;
-        await Clipboard.SetTextAsync(text);
+        await ClipboardText.SetAsync(Clipboard, text);
     }
 
     /// <summary>Moves items to the trash in one go and updates the map, the lists and the drives; the same rules as the WPF app (2.2).</summary>

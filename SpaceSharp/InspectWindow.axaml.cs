@@ -367,7 +367,7 @@ public partial class InspectWindow : Window
 
     private async void Copy_Click(object? sender, RoutedEventArgs e)
     {
-        if (Clipboard is not null) await Clipboard.SetTextAsync(_copy.ToString());
+        if (Clipboard is not null) await ClipboardText.SetAsync(Clipboard, _copy.ToString());
     }
 
     private void Reveal_Click(object? sender, RoutedEventArgs e)

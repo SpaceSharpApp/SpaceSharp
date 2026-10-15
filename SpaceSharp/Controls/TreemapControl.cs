@@ -87,7 +87,7 @@ public sealed partial class TreemapControl : Panel
         foreach (var layer in new[] { _mapLayer, _overlayLayer })
         {
             RenderOptions.SetEdgeMode(layer, EdgeMode.Antialias);
-            RenderOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
+            TextOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
         }
         Background = Brushes.Transparent;   // so the panel itself is hit-testable everywhere
         ClipToBounds = true;

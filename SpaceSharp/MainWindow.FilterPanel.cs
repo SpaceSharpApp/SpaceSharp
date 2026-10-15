@@ -381,7 +381,7 @@ public partial class MainWindow
     /// <summary>The name box: the search glyph at the left, the placeholder, and Esc and Enter handled as the WPF app (2.2) does.</summary>
     private TextBox NameBox(string placeholder, double height)
     {
-        var box = new TextBox { Height = height, MinHeight = height, Watermark = placeholder, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(30, 0, 10, 0) };
+        var box = new TextBox { Height = height, MinHeight = height, PlaceholderText = placeholder, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(30, 0, 10, 0) };
         var glyph = Icons.Make("Search", 13, "TextDim"); glyph.Margin = new Thickness(10, 0, 0, 0); glyph.HorizontalAlignment = HorizontalAlignment.Left;
         box.InnerLeftContent = glyph;
         box.TextChanged += (_, _) => NameBoxChanged(box);

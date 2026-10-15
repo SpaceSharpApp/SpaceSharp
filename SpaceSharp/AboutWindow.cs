@@ -156,7 +156,7 @@ public sealed class AboutWindow : Window
     {
         try
         {
-            if (Clipboard is { } clipboard) await clipboard.SetTextAsync($"SpaceSharp {_version} (Avalonia){Environment.NewLine}{SystemDescription()}");
+            if (Clipboard is { } clipboard) await ClipboardText.SetAsync(clipboard, $"SpaceSharp {_version} (Avalonia){Environment.NewLine}{SystemDescription()}");
         }
         catch (Exception ex)
         {

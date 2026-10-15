@@ -23,7 +23,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Product>SpaceSharp</Product>
-    <Version>2.3.0</Version>
+    <Version>2.3.1</Version>
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
@@ -50,13 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.*" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.*" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.*" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.*" />
+    <PackageReference Include="Avalonia" Version="12.1.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.*" />
     <PackageReference Include="Velopack" Version="*" />
-    <!-- The in-app inspector (F12) for Debug builds only. -->
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.*" Condition="'$(Configuration)' == 'Debug'" />
   </ItemGroup>
 
   <ItemGroup>

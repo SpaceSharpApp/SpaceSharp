@@ -2,6 +2,14 @@
 
 What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.3.1 (unreleased)
+
+### Fixes
+- The side panel can be resized again: drag its right edge for the width, and the line between Drives and Largest items for the drive list's height. Both were lost in the move to the new app in 2.3.0.
+
+### Under the hood
+- The app is on Avalonia 12.1. Nothing changes on screen; the clipboard goes through Avalonia's data-transfer API now, text boxes use the renamed placeholder property, and the in-app inspector package that 11.x had in Debug builds is gone, since 12 ships its developer tools separately.
+
 ## 2.3.0
 
 ### One app for three desktops

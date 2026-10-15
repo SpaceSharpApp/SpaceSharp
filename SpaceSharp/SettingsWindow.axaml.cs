@@ -436,7 +436,7 @@ public partial class SettingsWindow : Window
     {
         var panel = new StackPanel { Width = 320 };
         var chips = new WrapPanel();
-        var input = new TextBox { Watermark = Strings.Get("Exclude_Placeholder"), Height = 30, MinHeight = 30 };
+        var input = new TextBox { PlaceholderText = Strings.Get("Exclude_Placeholder"), Height = 30, MinHeight = 30 };
         var add = new Button { Classes = { "tool" }, Content = Strings.Get("Exclude_Add"), Height = 30, Margin = new Thickness(6, 0, 0, 0) };
         var suggestions = new WrapPanel { Margin = new Thickness(0, 8, 0, 0) };
 

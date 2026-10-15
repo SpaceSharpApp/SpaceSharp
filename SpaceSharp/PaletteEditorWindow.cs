@@ -180,7 +180,7 @@ public sealed class PaletteEditorWindow : Window
         top.Children.Add(theme);
         var name = new StackPanel();
         name.Children.Add(Dim(new TextBlock { Text = Strings.Get("PaletteEd_Name"), FontSize = 12, Margin = new Thickness(0, 0, 0, 5) }));
-        _nameBox = new TextBox { Text = _draft.Name, Watermark = Strings.Get("PaletteEd_NamePlaceholder"), Height = 30, MinHeight = 30 };
+        _nameBox = new TextBox { Text = _draft.Name, PlaceholderText = Strings.Get("PaletteEd_NamePlaceholder"), Height = 30, MinHeight = 30 };
         _nameBox.TextChanged += (_, _) => { _draft.Name = (_nameBox.Text ?? string.Empty).Trim(); _saveButton.IsEnabled = _draft.Name.Length > 0; };
         name.Children.Add(_nameBox);
         top.Children.Add(name);
@@ -523,7 +523,7 @@ public sealed class PaletteEditorWindow : Window
 
     private async void Export_Click(object? sender, RoutedEventArgs e)
     {
-        try { if (Clipboard is { } clipboard) await clipboard.SetTextAsync(_draft.ToJson()); }
+        try { if (Clipboard is { } clipboard) await ClipboardText.SetAsync(clipboard, _draft.ToJson()); }
         catch (Exception) { return; }
         _checks.Text = Strings.Get("PaletteEd_Exported");
         _checks.Classes.Set("danger", false); _checks.Classes.Set("dim", true);
