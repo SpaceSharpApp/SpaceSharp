@@ -1,7 +1,7 @@
 name: Tests
 
 # Test only. This workflow never publishes, packs or uploads anything built from SpaceSharp;
-# releases come from release.yml when a version tag is pushed.
+# releases come from release.yml (Windows) and release-mac-linux.yml.
 
 on:
   push:
@@ -17,27 +17,12 @@ permissions:
 
 jobs:
   test:
-    name: Run the test suite
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Test
-        run: dotnet test .\SpaceSharp.Tests\SpaceSharp.Tests.csproj --configuration Release
-
-  avalonia:
-    name: Build the cross-platform app
-    # The Avalonia front end must build on every platform it is meant for, so this runs on all three; it is a
-    # build only, since the project has no tests of its own yet.
+    name: Tests on ${{ matrix.os }}
+    # The app is for all three desktops, so the build and the tests run on all three.
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -47,5 +32,5 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Build
-        run: dotnet build SpaceSharp.Avalonia/SpaceSharp.Avalonia.csproj --configuration Release
+      - name: Test
+        run: dotnet test SpaceSharp.Tests/SpaceSharp.Tests.csproj --configuration Release

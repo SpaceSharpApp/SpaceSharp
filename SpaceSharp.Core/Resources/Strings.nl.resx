@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Zie waar uw schijfruimte is gebleven. SpaceSharp tekent elk bestand en elke map als een vak ter grootte van de ruimte die het inneemt, zodat de grootste opvallen.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} op {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap-indeling van Bruls, Huizing en van Wijk (2000). Geïnspireerd door SpaceMonger. Interfacepictogrammen van Lucide (ISC-licentie).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Instellingen worden opgeslagen in %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, bijv. video's groter dan 500MB ouder dan 1 jaar</value></data>
   <data name="Group_Files" xml:space="preserve"><value>bestanden</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Opent de map waarin onverwachte fouten worden weggeschreven, om er een bij een melding te voegen</value></data>
   <data name="About_Source" xml:space="preserve"><value>Broncode op GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-licentie</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap-algoritme, SpaceMonger, pictogrammen</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigeren</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Selecteren en handelen</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Weergave en bestanden</value></data>
@@ -852,4 +850,19 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Insights_Extensions" xml:space="preserve"><value>Grootste extensies</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>en waar het meeste van elk staat</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>de boom wordt ontvangen van de beheerdershelper</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Deze versie</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Hulp en feedback</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Project</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Draagbare versie</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Geïnstalleerd</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp is gebouwd op open werk</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Dank aan de mensen erachter.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>De kaart</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>De indeling is de squarified treemap van [Bruls, Huizing en van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), gepubliceerd in 2000. Het idee om een schijf als kaart te tonen komt van [SpaceMonger](https://www.stardock.com/products/spacemonger/) van Sean Werkema, en treemaps zelf van Ben Shneiderman (1991). Het kleurenblindvriendelijke palet gebruikt de acht kleuren van [Okabe en Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschreven in C# op [.NET 10](https://dotnet.microsoft.com). De interface is [Avalonia UI](https://avaloniaui.net), getekend met [SkiaSharp](https://github.com/mono/SkiaSharp), in het lettertype [Inter](https://rsms.me/inter/) van Rasmus Andersson. De pictogrammen komen van [Lucide](https://lucide.dev), een voortzetting van Feather van Cole Bemis. Het installatieprogramma en de updates op Windows komen van [Velopack](https://velopack.io) van Caelan Sayler. Alles valt onder de MIT-licentie, behalve Lucide (ISC) en Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Talen</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Noors is van de auteur zelf; de 16 andere vertalingen zijn machinaal gemaakt en wachten nog op controle door een moedertaalspreker. Klinkt iets verkeerd in jouw taal, [zeg het dan op GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Volledige licentieteksten</value></data>
 </root>

@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.2.0-F5B82E" alt="Version 2.2.0"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.3.0-F5B82E" alt="Version 2.3.0"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -108,7 +108,7 @@ Everything applies at once and is saved. The pages:
 - **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
 - **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
 
-**Color by** is Top folder (one hue per top-level folder, lighter at each level), Depth (one color per level, like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, GitHub, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, GitHub (light), Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes › New palette (or Start from the current one): a window with the twelve folder colors, the file tint and the fourteen type colors as swatches, each set by hex or hue, saturation and lightness sliders, with the sample map beside them and checks for labels that would be hard to read and folders too alike. It saves a JSON file in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too; Open folder writes an example and a README there.
+**Color by** is Top folder (one hue per top-level folder, lighter at each level), Depth (one color per level, like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes › New palette (or Start from the current one): a window with the twelve folder colors, the file tint and the fourteen type colors as swatches, each set by hex or hue, saturation and lightness sliders, with the sample map beside them and checks for labels that would be hard to read and folders too alike. It saves a JSON file in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too; Open folder writes an example and a README there.
 
 ```json
 { "name": "Mine", "theme": "dark", "folders": ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A"] }
@@ -171,13 +171,13 @@ dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The only NuGet dependency is Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions. A release is a tag: push the bare version number (`git tag 2.1.0 && git push --tags`) and the release workflow runs the tests, publishes the builds, packs the installers and MSIs, and drafts the GitHub release with every asset; you read the draft and press Publish. `installer\release.ps1` is the same build for your own PC, when you want files to try on another machine. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
+The only NuGet dependency is Velopack, for the installer and updates. `SpaceSharp.Tests` covers what does not need a screen: layout and grouping, the filter parser, the panel's numbers, formatting, and the tree operations behind delete and free space. Every push runs them on GitHub Actions. Pushing a version tag (`git tag 2.3.0 && git push --tags`) makes the release workflow run the tests, publish the builds, pack the installers and MSIs and create the GitHub release as a draft. The code-signing certificate lives on the developer's PC, so `installer\sign-draft.ps1 -Sign <thumbprint>` is run there next: it downloads the draft's exes and MSIs, signs them, uploads them back and rewrites the checksums; then the draft is read and published. `installer\release.ps1 -Sign <thumbprint> -Upload` does the whole thing locally instead, with every file signed, when the workflow is not an option. The Mac and Linux packages, once they are ready to ship, come from the release-mac-linux workflow, run by hand against the tag afterwards. `installer\release.ps1` without `-Upload` is the same build for your own PC, when you want files to try on another machine. Portable, Portable-x86 and Small (needs the .NET Desktop Runtime) exes come from the publish profiles in `SpaceSharp/Properties/PublishProfiles`; the script builds the x64 and x86 channels side by side (`-NoX86` skips the second).
 
 How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
 
 ## Known limitations
 
-- Windows only; it is WPF.
+- The macOS and Linux packages are not published yet; the app builds and runs there from source.
 - Size on disk is an estimate for files stored inside the MFT and leaves out alternate data streams.
 - Hard links count once per name unless "Count hard links once" is on, so `WinSxS` can look bigger than it is.
 - Junctions and symbolic links are not followed; the target counts where it lives.

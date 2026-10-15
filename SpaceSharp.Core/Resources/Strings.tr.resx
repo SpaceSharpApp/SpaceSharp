@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Disk alanınızın nereye gittiğini görün. SpaceSharp her dosya ve klasörü, kapladığı alana göre boyutlandırılmış bir kutu olarak haritalar; böylece en büyükleri öne çıkar.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0}, {1} üzerinde</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Kareleştirilmiş ağaç haritası düzeni: Bruls, Huizing ve van Wijk (2000). SpaceMonger'dan esinlenilmiştir. Arabirim simgeleri Lucide'den (ISC lisansı).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Ayarlar %AppData%\SpaceSharp\settings.json içine kaydedilir.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filtre, örn. 1 yıldan eski 500MB üzeri videolar</value></data>
   <data name="Group_Files" xml:space="preserve"><value>dosya</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Beklenmeyen hataların yazıldığı klasörü açar; bir bildirime eklemek için</value></data>
   <data name="About_Source" xml:space="preserve"><value>Kaynak kodu GitHub'da</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT lisansı</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Ağaç haritası algoritması, SpaceMonger, simgeler</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Gezinme</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Seçme ve eylem</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Görünüm ve dosyalar</value></data>
@@ -852,4 +850,19 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Insights_Extensions" xml:space="preserve"><value>En büyük uzantılar</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>ve her birinin çoğunun bulunduğu yer</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>ağaç yönetici yardımcısından alınıyor</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Bu sürüm</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Yardım ve geri bildirim</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Proje</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Taşınabilir sürüm</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Yüklü</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp açık çalışmaların üzerine kuruludur</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Arkasındaki insanlara teşekkürler.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>Harita</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Yerleşim, [Bruls, Huizing ve van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) tarafından 2000'de yayımlanan squarified treemap'tir. Bir diski harita olarak gösterme fikri Sean Werkema'nın [SpaceMonger](https://www.stardock.com/products/spacemonger/) programından, treemap'in kendisi ise Ben Shneiderman'dan (1991) gelir. Renk körlüğüne uygun palet [Okabe ve Ito](https://jfly.uni-koeln.de/color/)'nun sekiz rengini (2002) kullanır.</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Yazılım</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) üzerinde C# ile yazıldı. Arayüz [Avalonia UI](https://avaloniaui.net), çizim [SkiaSharp](https://github.com/mono/SkiaSharp) ile, yazı tipi Rasmus Andersson'un [Inter](https://rsms.me/inter/) fontudur. Simgeler, Cole Bemis'in Feather'ını sürdüren [Lucide](https://lucide.dev)'dan gelir. Windows yükleyicisi ve güncellemeler Caelan Sayler'ın [Velopack](https://velopack.io) aracından gelir. Lucide (ISC) ve Inter (SIL Open Font License) dışında hepsi MIT lisanslıdır.</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Diller</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Norveççe yazarın kendi çevirisidir; diğer 16 çeviri makine çevirisidir ve hâlâ ana dili konuşan birinin incelemesini beklemektedir. Kendi dilinizde yanlış görünen bir şey varsa [GitHub'da bildirin](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Tam lisans metinleri</value></data>
 </root>

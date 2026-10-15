@@ -1,14 +1,15 @@
 using System.Diagnostics;
-using System.IO;
 using System.IO.Pipes;
+using System.Runtime.Versioning;
 using System.Text;
 using SpaceSharp.Models;
+using SpaceSharp.Scanning;
 using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
 /// <summary>
-/// The fast NTFS scan without restarting the app. The main window (not elevated) launches a second copy of
+/// The fast NTFS scan without restarting the app (Windows). The main window (not elevated) launches a second copy of
 /// SpaceSharp with the "runas" verb and a <c>--mft-helper</c> command line; Windows shows the UAC prompt, the
 /// helper reads the volume's file table with administrator rights, streams progress and then the finished tree
 /// back over a named pipe, and exits. The window never closes and never has to be elevated itself.
@@ -20,6 +21,7 @@ namespace SpaceSharp.Services;
 /// gzip stream over a pipe is slow and hard to see into, and the scan-file reader is the fast path the app
 /// uses for every saved scan anyway.
 /// </summary>
+[SupportedOSPlatform("windows")]
 public static class ElevatedScan
 {
     public const string HelperFlag = "--mft-helper";
@@ -33,9 +35,9 @@ public static class ElevatedScan
 
     // ------------------------------------------------------------------ window side
 
-    public static FsNode Run(string rootPath, ScanOptions options, Action<long, long, long, string> progress, CancellationToken ct)
+    public static FsNode Run(string rootPath, WalkOptions options, Action<long, long, long, string> progress, CancellationToken ct)
     {
-        if (Environment.ProcessPath is not { } exe) throw new InvalidOperationException("Cannot locate SpaceSharp.exe.");
+        if (Environment.ProcessPath is not { } exe) throw new InvalidOperationException("Cannot locate the SpaceSharp executable.");
         string pipe = "SpaceSharp.Mft." + Guid.NewGuid().ToString("N");
 
         // A plain synchronous pipe: the reads below are synchronous and return as soon as a record arrives. (An

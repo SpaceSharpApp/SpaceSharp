@@ -15,7 +15,8 @@ public static class AppInfo
 
     private static string ReadVersion()
     {
-        var assembly = Assembly.GetExecutingAssembly();
+        // The app's version, not Core's: the two can differ while the WPF app ships 2.2.x and the Avalonia app is 2.3.
+        var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
         string version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
                          ?? assembly.GetName().Version?.ToString(3)
                          ?? "unknown";

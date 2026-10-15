@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>看看磁盘空间都去哪了。SpaceSharp 将每个文件和文件夹绘制为按占用空间大小确定尺寸的方块，最大的一目了然。</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0}，运行于 {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified 树状图布局来自 Bruls、Huizing 和 van Wijk (2000)。灵感来自 SpaceMonger。界面图标来自 Lucide（ISC 许可证）。</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>设置保存在 %AppData%\SpaceSharp\settings.json。</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>筛选，例如：超过 1 年、大于 500MB 的视频</value></data>
   <data name="Group_Files" xml:space="preserve"><value>个文件</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>打开记录意外错误的文件夹，以便在报告中附上日志</value></data>
   <data name="About_Source" xml:space="preserve"><value>GitHub 上的源代码</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT 许可证</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>树状图算法、SpaceMonger、图标</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>导航</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>选择和操作</value></data>
   <data name="Keys_View" xml:space="preserve"><value>视图和文件</value></data>
@@ -852,4 +850,19 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_Extensions" xml:space="preserve"><value>最大的扩展名</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>以及每种扩展名主要位于何处</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>正在从管理员助手接收目录树</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>此版本</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>帮助与反馈</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>项目</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>便携版</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>已安装</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp 建立在开放成果之上</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>感谢这些成果背后的人们。</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>地图</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>布局采用 [Bruls、Huizing 和 van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) 于 2000 年发表的 squarified treemap 算法。把磁盘显示为地图的想法来自 Sean Werkema 的 [SpaceMonger](https://www.stardock.com/products/spacemonger/)，treemap 本身则来自 Ben Shneiderman（1991 年）。色觉友好调色板使用 [Okabe 和 Ito](https://jfly.uni-koeln.de/color/) 的八种颜色（2002 年）。</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>软件</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>以 C# 编写，运行于 [.NET 10](https://dotnet.microsoft.com)。界面使用 [Avalonia UI](https://avaloniaui.net)，由 [SkiaSharp](https://github.com/mono/SkiaSharp) 绘制，字体为 Rasmus Andersson 的 [Inter](https://rsms.me/inter/)。图标来自 [Lucide](https://lucide.dev)，它延续了 Cole Bemis 的 Feather。Windows 安装程序和更新由 Caelan Sayler 的 [Velopack](https://velopack.io) 提供。除 Lucide（ISC）和 Inter（SIL Open Font License）外，均为 MIT 许可。</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>语言</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>挪威语由作者本人翻译；其他 16 种为机器翻译，尚待母语者校对。如果你的语言中有不通顺之处，请[在 GitHub 上告诉我们](https://github.com/SpaceSharpApp/SpaceSharp/issues)。</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>完整许可证文本</value></data>
 </root>

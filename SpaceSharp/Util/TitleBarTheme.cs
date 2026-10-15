@@ -1,15 +1,15 @@
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
+using System.Runtime.Versioning;
+using Avalonia.Controls;
+using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
 /// <summary>
-/// Makes the window's title bar part of the app: on Windows 11 the caption is painted in the theme's
-/// background color with the theme's text color, so there is no seam between the title bar and the
-/// toolbar below it; on Windows 10, which cannot color captions, it falls back to the dark or light
-/// system caption.
+/// Makes the window's title bar part of the app on Windows, as the WPF app (2.2) does: on Windows 11 the caption is
+/// painted in the theme's background color with the theme's text color, so there is no seam between the title bar
+/// and the toolbar below it; on Windows 10, which cannot color captions, it falls back to the dark or light system
+/// caption. Other platforms draw their own title bars and are left alone.
 /// </summary>
 internal static class TitleBarTheme
 {
@@ -22,30 +22,31 @@ internal static class TitleBarTheme
     [DllImport("dwmapi.dll")]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
 
-    /// <summary>Applies the current theme now (or once the window has a handle).</summary>
+    /// <summary>Applies the theme once the window has a handle, and again whenever the theme changes.</summary>
     public static void Attach(Window window)
     {
-        WindowLanguage.ApplyDirection(window);   // every window comes through here, so the mirroring for right-to-left languages lives here too
-        if (new WindowInteropHelper(window).Handle != IntPtr.Zero)
-            Set(window, ThemeManager.IsDark);
-        else
-            window.SourceInitialized += (_, _) => Set(window, ThemeManager.IsDark);
+        // every window comes through here, so the mirroring for right-to-left languages lives here too
+        if (AppLanguages.IsRightToLeft) window.FlowDirection = FlowDirection.RightToLeft;
+        if (!OperatingSystem.IsWindows()) return;
+        window.Opened += (_, _) => Apply(window);
+        window.ActualThemeVariantChanged += (_, _) => Apply(window);
     }
 
-    public static void Set(Window window, bool dark)
+    [SupportedOSPlatform("windows")]
+    private static void Apply(Window window)
     {
-        var hwnd = new WindowInteropHelper(window).Handle;
+        var hwnd = window.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         if (hwnd == IntPtr.Zero) return;
 
         // The dark flag first: it picks the caption button glyphs (light on dark) and is all Windows 10 can do.
-        int value = dark ? 1 : 0;
+        int value = App.IsDark ? 1 : 0;
         if (DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref value, sizeof(int)) != 0)
             _ = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_OLD, ref value, sizeof(int));
 
         // Windows 11: paint the caption in the app's own colors. Fails harmlessly on Windows 10.
-        if (ThemeColor("Bg") is { } bg && ThemeColor("Text") is { } text)
+        if (ThemeColor(window, "WindowBg") is { } bg && ThemeColor(window, "TextColor") is { } text)
         {
-            int caption = ColorRef(bg), textColor = ColorRef(text), border = ColorRef(ThemeColor("Stroke") ?? bg);
+            int caption = ColorRef(bg), textColor = ColorRef(text), border = ColorRef(ThemeColor(window, "StrokeColor") ?? bg);
             if (DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, ref caption, sizeof(int)) == 0)
             {
                 _ = DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR, ref textColor, sizeof(int));
@@ -54,8 +55,8 @@ internal static class TitleBarTheme
         }
     }
 
-    private static Color? ThemeColor(string key) =>
-        Application.Current?.Resources[key] is SolidColorBrush b ? b.Color : null;
+    private static Color? ThemeColor(Window window, string key) =>
+        window.TryFindResource(key, window.ActualThemeVariant, out var value) ? value switch { Color c => c, ISolidColorBrush b => b.Color, _ => null } : null;
 
     /// <summary>DWM wants a COLORREF: 0x00BBGGRR.</summary>
     private static int ColorRef(Color c) => c.R | (c.G << 8) | (c.B << 16);

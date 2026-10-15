@@ -4,17 +4,17 @@ How the pieces fit, where things live, and where to add a palette, a file type o
 
 ## How it works
 
-**Scanning** (`Services/DiskScanner.cs`, `Services/MftScanner.cs`, `Services/ElevatedScan.cs`)
-A whole NTFS drive is read from its Master File Table by an elevated helper process, which hands the finished tree back to the app, so the app itself never restarts. Anything else, a single folder, another file system, or a run without administrator rights, is walked with `DirectoryInfo.EnumerateFileSystemInfos` on background threads, the top three levels in parallel. Sizes are summed bottom-up and each folder's children are sorted largest first, which the layout depends on. Progress counters are read by the UI a few times per second, so the scan never waits on the UI.
+**Scanning** (`SpaceSharp.Core/Scanning/FolderWalker.cs`, `Services/MftScanner.cs`, `Services/ElevatedScan.cs`)
+On Windows a whole NTFS drive is read from its Master File Table, in process when the app has administrator rights and otherwise by an elevated helper process (a second copy of the app with `--mft-helper`), which streams progress over a pipe and hands the finished tree back as a scan file, so the app itself never restarts. Anything else, a single folder, another file system, a Mac or Linux, or a declined UAC prompt, is walked with `DirectoryInfo.EnumerateFileSystemInfos` on background threads, the top three levels in parallel. Sizes are summed bottom-up and each folder's children are sorted largest first, which the layout depends on. Progress counters are read by the UI a few times per second, so the scan never waits on the UI.
 
-**Sizes** (`Services/NativeFileInfo.cs`)
-Size on disk comes from `GetCompressedFileSizeW` for compressed, sparse, offline and cloud-placeholder files and from the plain length for everything else, rounded up to the volume's cluster size. Hard-link detection reads each file's link count and file ID with `GetFileInformationByHandle`; a file whose ID was already seen stays in the tree but contributes no size.
+**Sizes** (`Util/PlatformFiles.cs`, behind Core's `IPlatformFiles`)
+On Windows, size on disk comes from `GetCompressedFileSizeW` for compressed, sparse, offline and cloud-placeholder files and from the plain length for everything else, rounded up to the volume's cluster size; hard-link detection reads each file's link count and file ID with `GetFileInformationByHandle`, and a file whose ID was already seen stays in the tree but contributes no size. Elsewhere the plain implementation rounds to 4 KB clusters and treats every file as its own.
 
 **Layout** (`Layout/Squarify.cs`, `Layout/Grouping.cs`)
 Boxes are placed with the squarified treemap algorithm (Bruls, Huizing and van Wijk). Items are added to a row along the shorter side of the remaining space for as long as that improves the worst aspect ratio in the row. `Grouping` decides which children of a folder get a box of their own and which merge into one "312 files" block: first against a reference window so the large structure of the map is stable, then against the pixels the folder actually has on screen, quantized to powers of two so a smooth zoom does not shuffle the boxes.
 
 **Rendering and zoom** (`Controls/TreemapControl*.cs`, one partial class in five files)
-The map is a custom WPF element that draws into `DrawingVisual`s instead of creating a control per box, so tens of thousands of boxes stay fast. Zooming does not scale a picture: the map is laid out again on a virtual canvas that is the window size times the zoom level, and only boxes that intersect the window are laid out and drawn. Boxes snap to whole pixels and each leaves one grid-colored strip on its right and bottom, none where the folder's own line already is. Files get a cushion gradient per depth from the shading settings (`MakeCushion`); folder title bars are a tint of the folder's color. Zooming to a folder is an animated camera move that interpolates the zoom level logarithmically and refines the target every frame, since title bars have a fixed pixel height. Hover and selection outlines live on a separate overlay.
+The map is a custom Avalonia control that draws its boxes in two `Render` passes (the map and an overlay) instead of creating a control per box, so tens of thousands of boxes stay fast. Zooming does not scale a picture: the map is laid out again on a virtual canvas that is the window size times the zoom level, and only boxes that intersect the window are laid out and drawn. Boxes snap to whole pixels and each leaves one grid-colored strip on its right and bottom, none where the folder's own line already is. Files get a cushion gradient per depth from the shading settings (`MakeCushion`); folder title bars are a tint of the folder's color. Zooming to a folder is an animated camera move that interpolates the zoom level logarithmically and refines the target every frame, since title bars have a fixed pixel height. Hover and selection outlines live on a separate overlay.
 
 **Filtering** (`Services/FileFilter.cs`, `MainWindow.FilterPanel.cs`)
 The filter text is parsed into conditions (`FilterSpec`). The whole tree is evaluated once per change; files match on their own and a folder stays lit when anything inside it matches, so the path to every hit stays visible. Non-matching boxes are blended toward the background without changing the layout. The hidden filter box is the single source of truth: the drawer and the rail both read and write its text, so anything that sets a filter works with either face. `SetFilterMatches` can dim the map to any set of nodes without touching the real filter (used by Show in Insights).
@@ -22,77 +22,64 @@ The filter text is parsed into conditions (`FilterSpec`). The whole tree is eval
 **The Insights view** (`Services/DriveInsights.cs`, `MainWindow.Insights.cs`)
 `DriveInsights` is pure and tested: bytes by file type with the top extensions, bytes by month last written, the oldest large files, where each extension mostly lives, what changed against the baseline, and the cleanup suggestions, which are decided from names alone (`CachePatterns`). `MainWindow.Insights.cs` builds the tiles and cards from those results in the map's place (`InsightsView` over the `Treemap`, toggled by `ApplyView`) and refreshes them after a scan, a delete or a load. Every row calls back into the map: `ShowOnMap` selects and zooms, `FilterAndShowMap` sets the filter text and switches the view.
 
-**Themes** (`Util/ThemeManager.cs`, `Themes/`)
-All control styles are in `Styles.xaml` and reference colors through `DynamicResource`. Switching themes swaps `Dark.xaml` for `Light.xaml` and every open window recolors. In "Match Windows" mode the Windows app theme is read from the registry and watched for changes. Palettes are per theme (`PaletteTheme`); `AppSettings` keeps one choice for dark and one for light.
+**Themes** (`App.axaml(.cs)`, `Themes/Styles.axaml`)
+All control styles are in `Styles.axaml` and reference colors through `DynamicResource`. The dark and light colors are theme dictionaries in `App.axaml`; `App.ApplyTheme` picks the variant (light, dark, or the system's) and lays the chosen look (`UiLooks` in Core) over it, and every open window recolors. On Windows `TitleBarTheme` paints the caption in the same colors. Palettes are per theme (`PaletteTheme`); `AppSettings` keeps one choice for dark and one for light.
 
 **Top lists** (`Services/TopLists.cs`)
 The largest files and folders are found with a priority queue in one pass, so the side panel is instant on millions of files.
 
 **Updates** (`Services/Updater.cs`, `UpdateWindow.cs`, `Program.cs`)
-Velopack installs per user (Setup.exe) or wherever the user picks (the MSI); both update the same way. `Program.Main` runs Velopack's hooks before WPF loads. Installed copies check GitHub Releases a few seconds after launch and offer "Install and restart", which downloads a delta package and swaps in the new version. What's new is read from CHANGELOG.md at the new release's tag, so skipped releases are listed too. The portable exe never updates itself.
+Velopack installs per user (Setup.exe) or wherever the user picks (the MSI) on Windows, as a .pkg on macOS and an AppImage on Linux; all update the same way. `Program.Main` runs Velopack's hooks before Avalonia loads. Installed copies check GitHub Releases a few seconds after launch and offer "Install and restart", which downloads a delta package and swaps in the new version. What's new is read from CHANGELOG.md at the new release's tag, so skipped releases are listed too. The portable exe never updates itself.
 
-**Deleting** (`Services/RecycleBin.cs`)
-Items go to the Recycle Bin through the Windows shell with undo enabled. After a delete the node is removed from the tree and its size subtracted from every parent, so no rescan is needed.
+**Deleting** (`Util/Trash.cs`)
+Items go to the Recycle Bin through the Windows shell with undo enabled, to the Finder's Trash on a Mac (so Put Back works) and to the Freedesktop trash through `gio` on Linux. After a delete the node is removed from the tree and its size subtracted from every parent, so no rescan is needed.
 
 ## Project structure
 
 ```
-SpaceSharp.Core/                  the half that knows nothing about Windows or WPF (plain net10.0)
+SpaceSharp.Core/                  the half that knows nothing about a window or an OS (plain net10.0)
 ├── Models/FsNode.cs              the file and folder tree
 ├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
 ├── Services/                     saved scans (ScanFile), compare, CSV, the filter (FileFilter), insights (DriveInsights), inspect (InspectSummary)
 ├── Scanning/                     FolderWalker (the System.IO scan every platform has), IPlatformFiles (what it asks the OS)
-├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings
+├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings, the looks
 └── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
-SpaceSharp.Avalonia/              the cross-platform app (Avalonia, Skia), the whole Windows app ported; PARITY.md says what each part is
-SpaceSharp/                       the Windows app (WPF), references SpaceSharp.Core
-├── App.xaml(.cs)                 startup, theme setup, error dialog
-├── MainWindow.xaml(.cs)          toolbar, path row, map, status bar, settings application
+SpaceSharp/                       the app (Avalonia, Skia), references SpaceSharp.Core
+├── App.axaml(.cs)                startup, the command line, one instance, themes and looks, error reporting
+├── MainWindow.axaml(.cs)         toolbar, path row, map, side panel, scan card, status bar, settings application
 ├── MainWindow.FilterPanel.cs     the filter drawer and rail
-├── MainWindow.Insights.cs        The Insights view in the map's place
-├── AboutWindow, InspectWindow, SettingsWindow, UpdateWindow, ShortcutsWindow
+├── MainWindow.Insights.cs        the Insights view in the map's place
+├── MainWindow.Scans.cs           saved scans, compare, the start screen's tiles, CSV export
+├── MainWindow.Tooltip.cs         the hover tooltip on the map
+├── AboutWindow, InspectWindow, SettingsWindow, UpdateWindow, ShortcutsWindow, PaletteEditorWindow
 ├── Controls/
 │   ├── TreemapControl*.cs        fields, camera, layout, render, input
 │   ├── DonutChart.cs             the donuts in Inspect
+│   ├── Icon.cs                   the icon control and the Icons helper
 │   └── MapEnums.cs               ColorMode, TreemapItem
-├── Services/                     scanners (folder walk, MFT, elevated helper), top lists, updater, shell, Recycle Bin
-├── Util/                         settings, palettes, custom palettes, color text, themes, the {u:T} extension, window language
-├── Themes/                       Styles.xaml, Dark.xaml, Light.xaml
-├── Assets/                       the mark (SVG), the Windows icon, the 256 px PNG
-└── Properties/PublishProfiles/   Portable, Small, Velopack
-SpaceSharp.Tests/                 xUnit: layout, grouping, filter, insights, color text, formatting, tree ops, localization
-docs/                             README images, spacesharp-mock.js (the app drawn in a browser), screenshots, icon, social preview (the website lives outside the repo)
-tools/make-assets.py              every icon, header and installer image from one definition of the mark
-tools/make-social.py              docs/social-preview.png, the message laid out as a treemap in amber
-tools/make-icons.py               SpaceSharp/Themes/Icons.xaml, the Lucide icons as path geometry
-tools/screenshot-mockup.html      controls around docs/spacesharp-mock.js, for screenshots
-tools/screenshots.js              renders the README screenshots from it with headless Chromium
+├── Services/                     MFT scanner and the elevated helper (Windows), drive kinds, top lists, updater, shell properties, Explorer menu, single instance
+├── Util/                         palettes, custom palettes, the palette draft, color text, dialogs, rich text, trash, platform files, title bar, crash log
+├── Themes/                       Styles.axaml, Icons.axaml
+└── Properties/PublishProfiles/   Portable, Portable-x86, Small, Velopack, Velopack-x86 (Windows; the Mac and Linux builds are plain publishes)
 tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots at 1200 px for the website's phone gallery
-installer/                        wizard pages, dialog images, release.ps1, brand-msi.ps1
+installer/                        wizard pages, dialog images, release.ps1, sign-test.ps1, brand-msi.ps1
 ```
 
 ## Two projects, and the line between them
 
-`SpaceSharp.Core` targets plain `net10.0` and may not reference `System.Windows`, Velopack or Win32; the compiler enforces it, since none of those exist for that target. It is what the planned Mac, Linux and Android builds will share with the Windows app: the tree, the layout, the saved-scan format, the strings and every translation, size formatting, the command line. `SpaceSharp` is the Windows front end on WPF and references Core. The test project references both.
+`SpaceSharp.Core` targets plain `net10.0` and may not reference Avalonia, Velopack or Win32; the compiler enforces it, since none of those exist for that target. It holds the tree, the layout, scanning, the saved-scan format, the strings and every translation, size formatting, the settings, the looks and the command line. `SpaceSharp` is the app and references Core. The test project references both and runs on Windows, Linux and macOS.
 
-The rule when adding code: if it would work the same on a Mac, it goes in Core. Anything that draws, opens a window, talks to the shell, the Recycle Bin, the registry or the NTFS file table stays in the app. Where Core needs something from the platform (the right-to-left flag is the first case), it exposes a plain property or interface and the app fills it in: `AppLanguages.Apply` sets `IsRightToLeft`, and `WindowLanguage` in the app turns that into WPF's `FlowDirection`.
+The rule when adding code: if it would work the same on every platform, it goes in Core. Anything that draws, opens a window, talks to the shell, the trash, the registry or the NTFS file table stays in the app, behind an `OperatingSystem.IsWindows()` check or a `[SupportedOSPlatform]` attribute when it is one platform's. Where Core needs something from the platform, it exposes a plain property or interface and the app fills it in: `IPlatformFiles` for sizes and hard links, `AppLanguages.IsRightToLeft` for the window direction.
 
-The next moves toward a second front end, in the order they pay off:
-
-1. **The scanner behind an interface.** `DiskScanner` (the folder walk) uses only `System.IO` and can move to Core as is; `MftScanner` and `ElevatedScan` stay in the app behind an `IScanner` that Core defines. A Mac or Linux build gets the folder walk on day one and a native fast path later if one exists.
-2. **Palettes as plain colors.** `Palette`, `PaletteDraft` and `CustomPalettes` carry WPF's `Color` and `Brush`. A small `Rgb` struct in Core, with the brushes made at the edge in the app, moves the palette tables, the type map, the derivations and the JSON format to Core, and the tests for them off Windows.
-3. **Settings and insights.** `AppSettings` is a JSON model with a WPF-free shape already; `DriveInsights`, `TopLists`, `InspectSummary` and `FileFilter` are pure computation over the tree with a few `Brush` references to cut. All of them belong in Core.
-4. **The test project on plain net10.0**, once nothing it tests needs WPF, so the Core tests also run on the Linux and macOS runners.
-5. **The second front end**, which is Avalonia and complete: `SpaceSharp.Avalonia` has everything the WPF app has, with the platform parts (trash, Reveal, the file table, Properties, the Explorer menu) spelled per platform; `SpaceSharp.Avalonia/PARITY.md` lists it. `dotnet run --project SpaceSharp.Avalonia` starts it; the tests workflow builds it on Linux, macOS and Windows. `release-avalonia.yml` packs it for macOS and Linux with Velopack and adds the files to a release (run by hand after the Windows release is drafted; the Windows download stays the WPF app for now). Mobile comes next: an Android or iOS head means turning `SpaceSharp.Avalonia` into a library with a desktop head beside it, a layout for a phone (one panel at a time), and the Android and iOS workloads; nothing in Core needs to change.
-
+Until 2.3.0 the Windows app was a separate WPF project; git history has it. Next is mobile: an Android or iOS head means turning `SpaceSharp` into a library with a desktop head beside it, a layout for a phone (one panel at a time), and the Android and iOS workloads; nothing in Core needs to change.
 
 **Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.
 
-**Add a file type.** Extensions and their categories are in `BuildExtensionMap()` in `Util/Palette.cs`. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
+**Add a file type.** Extensions and their categories are in `FileCategories` in `SpaceSharp.Core/Util/FileCategory.cs`. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
 
-**Change theme colors.** Edit `Themes/Dark.xaml` or `Themes/Light.xaml`. Both must define the same keys.
+**Change theme colors.** The surfaces and text are the looks in `SpaceSharp.Core/Util/UiLooks.cs` (five per theme); the accent, Danger and the Fluent overrides are the theme dictionaries in `App.axaml`. Both dictionaries must define the same keys.
 
-**Add a setting.** A property with a default in `Util/AppSettings.cs` (and in `ResetToDefaults`), a row in `SettingsWindow.Build()`, and its effect in `MainWindow.ApplySettings()` or `ApplyLook()` if it changes the map. Map settings also show in the Settings preview, which runs through the same `ApplyLook`.
+**Add a setting.** A property with a default in `SpaceSharp.Core/Util/AppSettings.cs` (and in `ResetToDefaults`), a row in `SettingsWindow.Build()`, and its effect in `MainWindow.ApplySettings()` or `ApplyLook()` if it changes the map. Map settings also show in the Settings preview, which runs through the same `ApplyLook`.
 
 **Add or change an icon.** The icons are Lucide, as path geometry in `SpaceSharp/Themes/Icons.xaml`, which `tools/make-icons.py` generates: add a line to its `ICONS` table (app name, Lucide name) or a path to `CUSTOM`, run it, then use `{StaticResource Icon.Name}` on a `ToolButton`'s `Tag` or a `controls:Icon`'s `Glyph` in XAML, or `Icons.Get("Name")` / `Icons.Make("Name", size, "TextDim")` in code. `Controls/Icon.cs` draws any of them at any size with the stroke scaled along. The mockup's copies live in `docs/spacesharp-mock.js`; the drive pictures are picked by `Services/DriveKinds.cs`.
 

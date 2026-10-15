@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Se, hvor din diskplads blev af. SpaceSharp kortlægger hver fil og mappe som en boks, hvis størrelse svarer til den plads, den bruger, så de største skiller sig ud.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} på {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap-layout af Bruls, Huizing og van Wijk (2000). Inspireret af SpaceMonger. Ikoner i brugerfladen fra Lucide (ISC-licens).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Indstillinger gemmes i %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, f.eks. videoer over 500MB ældre end 1 år</value></data>
   <data name="Group_Files" xml:space="preserve"><value>filer</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Åbner den mappe, hvor uventede fejl skrives, så en kan vedhæftes en rapport</value></data>
   <data name="About_Source" xml:space="preserve"><value>Kildekode på GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-licens</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap-algoritme, SpaceMonger, ikoner</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Naviger</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Vælg og handl</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Visning og filer</value></data>
@@ -717,7 +715,7 @@
   <data name="Settings_LookDark" xml:space="preserve"><value>Mørkt udseende</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Farverne på vinduet, panelerne og menuerne, når det mørke tema vises: Grafit, Skifer, Mokka, Midnat eller Kulstof.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lyst udseende</value></data>
-  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Det samme for det lyse tema: Papir, Hør, Dis, Sand eller Sne.</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Det samme for det lyse tema: Papir, Hør, Dis, Sand, GitHub Light eller Sne.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, skygning og tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alt om kortets udseende findes på siden Treemap ved siden af et eksempel.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farver</value></data>
@@ -852,4 +850,19 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Insights_Extensions" xml:space="preserve"><value>Største filtypenavne</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>og hvor det meste af hver findes</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>modtager træet fra administratorhjælperen</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Denne version</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Hjælp og feedback</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Projekt</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Bærbar udgave</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Installeret</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp er bygget på åbent arbejde</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Tak til menneskene bag det.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>Kortet</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Layoutet er det kvadrerede trækort fra [Bruls, Huizing og van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), udgivet i 2000. Ideen om at vise en disk som et kort kommer fra [SpaceMonger](https://www.stardock.com/products/spacemonger/) af Sean Werkema, og trækort i sig selv fra Ben Shneiderman (1991). Den farveblindvenlige palet bruger de otte [Okabe og Ito](https://jfly.uni-koeln.de/color/)-farver (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Skrevet i C# på [.NET 10](https://dotnet.microsoft.com). Brugerfladen er [Avalonia UI](https://avaloniaui.net), tegnet med [SkiaSharp](https://github.com/mono/SkiaSharp), i skrifttypen [Inter](https://rsms.me/inter/) af Rasmus Andersson. Ikonerne er fra [Lucide](https://lucide.dev), en videreførelse af Feather af Cole Bemis. Installationsprogrammet og opdateringerne på Windows kommer fra [Velopack](https://velopack.io) af Caelan Sayler. Alle er MIT-licenseret, undtagen Lucide (ISC) og Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprog</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Norsk er forfatterens eget; de 16 andre oversættelser er maskinlavede og venter stadig på gennemgang af en med sproget som modersmål. Hvis noget lyder forkert på dit sprog, [sig til på GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Fulde licenstekster</value></data>
 </root>

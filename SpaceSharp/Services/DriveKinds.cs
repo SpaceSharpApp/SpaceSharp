@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using Microsoft.Win32.SafeHandles;
 using SpaceSharp.Util;
 
@@ -83,6 +84,7 @@ public static class DriveKinds
     private const int StorageDeviceSeekPenaltyProperty = 7;
     private const int BusTypeUsb = 7, BusTypeSd = 12, BusTypeNvme = 17;
 
+    [SupportedOSPlatform("windows")]
     private static DriveKind Query(string root)
     {
         // "\\.\C:" opens the volume; zero access is enough for property queries and needs no elevation.
@@ -100,6 +102,7 @@ public static class DriveKinds
         return bus == BusTypeNvme ? DriveKind.Nvme : DriveKind.Ssd;
     }
 
+    [SupportedOSPlatform("windows")]
     private static bool Query(SafeFileHandle handle, int property, byte[] output)
     {
         var query = new byte[12]; // STORAGE_PROPERTY_QUERY: PropertyId, QueryType (0 = standard), AdditionalParameters[1]

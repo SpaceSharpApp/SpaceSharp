@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Runtime.Versioning;
 using Microsoft.Win32.SafeHandles;
 using SpaceSharp.Models;
 using SpaceSharp.Util;
@@ -12,8 +13,9 @@ namespace SpaceSharp.Services;
 /// Scans a whole NTFS volume by reading its Master File Table directly, the way WizTree does, instead
 /// of walking folders. Every file and folder on the volume is one record in the MFT, so a drive with two
 /// million files is read in a few seconds. Needs administrator rights to open the volume; the caller
-/// falls back to <see cref="DiskScanner"/>'s folder walk when this isn't possible.
+/// falls back to the folder walk (FolderWalker in Core) when this isn't possible.
 /// </summary>
+[SupportedOSPlatform("windows")]
 internal sealed class MftScanner
 {
     /// <summary>Counters the scanner reports into while it works; the same ones the folder walk uses.</summary>
@@ -89,7 +91,7 @@ internal sealed class MftScanner
     /// <summary>True for a drive root formatted NTFS, whether or not this process may open it.</summary>
     public static bool IsNtfsDrive(string rootPath)
     {
-        if (!DiskScanner.IsDriveRoot(rootPath)) return false;
+        if (!PlatformFiles.Current.IsVolumeRoot(rootPath)) return false;
         try { return string.Equals(new DriveInfo(rootPath).DriveFormat, "NTFS", StringComparison.OrdinalIgnoreCase); }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return false; }
     }
@@ -97,7 +99,7 @@ internal sealed class MftScanner
     public static bool IsSupported(string rootPath, out string reason)
     {
         reason = string.Empty;
-        if (!DiskScanner.IsDriveRoot(rootPath)) { reason = "not a drive root"; return false; }
+        if (!PlatformFiles.Current.IsVolumeRoot(rootPath)) { reason = "not a drive root"; return false; }
         try
         {
             var drive = new DriveInfo(rootPath);

@@ -539,7 +539,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>اعرف أين ذهبت مساحة قرصك. يرسم SpaceSharp كل ملف ومجلد كمربع بحجم المساحة التي يشغلها، فتبرز الأكبر منها.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} على {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>تخطيط الخريطة الشجرية المربّعة من Bruls وHuizing وvan Wijk ‏(2000). مستوحى من SpaceMonger. أيقونات الواجهة من Lucide (رخصة ISC).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>تُحفظ الإعدادات في %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>تصفية، مثل: فيديوهات أكبر من 500MB أقدم من سنة</value></data>
   <data name="Group_Files" xml:space="preserve"><value>ملفات</value></data>
@@ -617,7 +616,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>يفتح المجلد الذي تُكتب فيه الأخطاء غير المتوقعة، لإرفاق أحدها ببلاغ</value></data>
   <data name="About_Source" xml:space="preserve"><value>المصدر على GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>رخصة MIT</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>خوارزمية الخريطة الشجرية، SpaceMonger، الأيقونات</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>التنقل</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>التحديد والإجراءات</value></data>
   <data name="Keys_View" xml:space="preserve"><value>العرض والملفات</value></data>
@@ -717,9 +715,9 @@
   <data name="Shading_LightSide" xml:space="preserve"><value>الضوء من هذه الجهة</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>الضوء من الأمام مباشرة</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>المظهر الداكن</value></data>
-  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ألوان النافذة واللوحات والقوائم عند عرض السمة الداكنة: Graphite أو Slate أو Mocha أو Midnight أو Carbon.</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ألوان النافذة واللوحات والقوائم عند عرض السمة الداكنة: Graphite أو Slate أو Mocha أو Midnight, GitHub Dark أو Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>المظهر الفاتح</value></data>
-  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>الشيء نفسه للسمة الفاتحة: Paper أو Linen أو Mist أو Sand أو Snow.</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>الشيء نفسه للسمة الفاتحة: Paper أو Linen أو Mist أو Sand, GitHub Light أو Snow.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>لوحة الألوان والتظليل والنص</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>كل ما يخص مظهر الخريطة موجود في صفحة «الخريطة الشجرية»، بجانب معاينة.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>الألوان</value></data>
@@ -853,4 +851,19 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Insights_New" xml:space="preserve"><value>جديد</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>أكبر الامتدادات</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>وأين يوجد معظم كل منها</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>يتم استلام الشجرة من مساعد المسؤول</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>هذا الإصدار</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>المساعدة والملاحظات</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>المشروع</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>نسخة محمولة</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>مثبّت</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp مبني على عمل مفتوح</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>شكرًا للأشخاص الذين يقفون خلفه.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>الخريطة</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>التخطيط هو خريطة الشجرة المربّعة من [Bruls وHuizing وvan Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)، المنشورة عام 2000. فكرة عرض القرص كخريطة مأخوذة من [SpaceMonger](https://www.stardock.com/products/spacemonger/) لـ Sean Werkema، وخرائط الشجرة نفسها من Ben Shneiderman (1991). تستخدم لوحة الألوان المناسبة لعمى الألوان ألوان [Okabe وIto](https://jfly.uni-koeln.de/color/) الثمانية (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>البرمجيات</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>مكتوب بلغة C# على [.NET 10](https://dotnet.microsoft.com). الواجهة هي [Avalonia UI](https://avaloniaui.net)، مرسومة بواسطة [SkiaSharp](https://github.com/mono/SkiaSharp)، بخط [Inter](https://rsms.me/inter/) لـ Rasmus Andersson. الأيقونات من [Lucide](https://lucide.dev)، استمرارًا لـ Feather لـ Cole Bemis. برنامج التثبيت والتحديثات على Windows من [Velopack](https://velopack.io) لـ Caelan Sayler. جميعها بترخيص MIT، باستثناء Lucide (ISC) وInter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>اللغات</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>الترجمة النرويجية من المؤلف نفسه؛ أما الترجمات الـ16 الأخرى فهي آلية ولا تزال بانتظار مراجعة متحدث أصلي. إذا بدا شيء خاطئًا بلغتك، [أخبرنا على GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>نصوص التراخيص كاملة</value></data>
 </root>

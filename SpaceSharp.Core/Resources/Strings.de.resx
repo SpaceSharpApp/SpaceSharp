@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Sehen Sie, wohin Ihr Speicherplatz verschwunden ist. SpaceSharp bildet jede Datei und jeden Ordner als Feld ab, dessen Größe dem belegten Speicher entspricht, sodass die größten hervorstechen.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} auf {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified-Treemap-Layout von Bruls, Huizing und van Wijk (2000). Inspiriert von SpaceMonger. Oberflächensymbole von Lucide (ISC-Lizenz).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Einstellungen werden in %AppData%\SpaceSharp\settings.json gespeichert.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, z. B. Videos über 500MB älter als 1 Jahr</value></data>
   <data name="Group_Files" xml:space="preserve"><value>Dateien</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Öffnet den Ordner, in den unerwartete Fehler geschrieben werden, um eines an einen Bericht anzuhängen</value></data>
   <data name="About_Source" xml:space="preserve"><value>Quellcode auf GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-Lizenz</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap-Algorithmus, SpaceMonger, Symbole</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigieren</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Auswählen und handeln</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Ansicht und Dateien</value></data>
@@ -717,7 +715,7 @@
   <data name="Settings_LookDark" xml:space="preserve"><value>Dunkles Erscheinungsbild</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Die Farben von Fenster, Bereichen und Menüs, wenn das dunkle Design aktiv ist: Graphit, Schiefer, Mokka, Mitternacht oder Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Helles Erscheinungsbild</value></data>
-  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Dasselbe für das helle Design: Papier, Leinen, Nebel, Sand oder Schnee.</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Dasselbe für das helle Design: Papier, Leinen, Nebel, Sand, GitHub Light oder Schnee.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, Schattierung und Text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles zum Aussehen der Karte befindet sich auf der Seite Treemap, neben einer Vorschau.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farben</value></data>
@@ -852,4 +850,19 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Insights_Extensions" xml:space="preserve"><value>Größte Erweiterungen</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>und wo der Großteil jeweils liegt</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>der Baum wird vom Administrator-Helfer übernommen</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Diese Version</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Hilfe und Feedback</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Projekt</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Portable Version</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Installiert</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp baut auf offener Arbeit auf</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Danke an die Menschen dahinter.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>Die Karte</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Das Layout ist die quadrierte Treemap von [Bruls, Huizing und van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), veröffentlicht im Jahr 2000. Die Idee, ein Laufwerk als Karte zu zeigen, stammt von [SpaceMonger](https://www.stardock.com/products/spacemonger/) von Sean Werkema, Treemaps selbst von Ben Shneiderman (1991). Die farbenblindfreundliche Palette verwendet die acht Farben von [Okabe und Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschrieben in C# auf [.NET 10](https://dotnet.microsoft.com). Die Oberfläche ist [Avalonia UI](https://avaloniaui.net), gezeichnet mit [SkiaSharp](https://github.com/mono/SkiaSharp), in der Schrift [Inter](https://rsms.me/inter/) von Rasmus Andersson. Die Symbole stammen von [Lucide](https://lucide.dev), der Fortführung von Feather von Cole Bemis. Das Installationsprogramm und die Updates unter Windows kommen von [Velopack](https://velopack.io) von Caelan Sayler. Alle stehen unter MIT-Lizenz, außer Lucide (ISC) und Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprachen</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Norwegisch stammt vom Autor selbst; die 16 anderen Übersetzungen sind maschinell erstellt und warten noch auf die Prüfung durch Muttersprachler. Wenn etwas in deiner Sprache falsch klingt, [sag es auf GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Vollständige Lizenztexte</value></data>
 </root>

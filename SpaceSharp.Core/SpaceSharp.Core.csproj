@@ -19,7 +19,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Product>SpaceSharp</Product>
-    <Version>2.2.0</Version>
+    <Version>2.3.0</Version>
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
@@ -30,7 +30,6 @@
     <!-- The scanners set sizes and dates on FsNode; the tests build trees the same way. -->
     <InternalsVisibleTo Include="SpaceSharp" />
     <InternalsVisibleTo Include="SpaceSharp.Tests" />
-    <InternalsVisibleTo Include="SpaceSharp.Avalonia" />
   </ItemGroup>
 
 </Project>

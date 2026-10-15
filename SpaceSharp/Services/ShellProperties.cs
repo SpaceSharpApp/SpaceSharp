@@ -1,9 +1,10 @@
-using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 namespace SpaceSharp.Services;
 
 /// <summary>Opens the Windows Properties dialog for a file, folder or drive, the same one Explorer shows.</summary>
+[SupportedOSPlatform("windows")]
 public static class ShellProperties
 {
     public static bool Show(string path)

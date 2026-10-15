@@ -540,7 +540,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>See where your disk space went. SpaceSharp maps every file and folder as a box sized by the space it uses, so the biggest ones stand out.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} on {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified treemap layout by Bruls, Huizing and van Wijk (2000). Inspired by SpaceMonger. Interface icons from Lucide (ISC license).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Settings are saved in %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filter, e.g. videos over 500MB older than 1 year</value></data>
   <data name="Group_Files" xml:space="preserve"><value>files</value></data>
@@ -618,7 +617,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Opens the folder where unexpected errors are written, to attach one to a report</value></data>
   <data name="About_Source" xml:space="preserve"><value>Source on GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT license</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Treemap algorithm, SpaceMonger, icons</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigate</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Select and act</value></data>
   <data name="Keys_View" xml:space="preserve"><value>View and files</value></data>
@@ -718,9 +716,9 @@
   <data name="Shading_LightSide" xml:space="preserve"><value>Light from this side</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Light from straight ahead</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Dark look</value></data>
-  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>The colors of the window, panels and menus when the dark theme is showing: Graphite, Slate, Mocha, Midnight or Carbon.</value></data>
+  <data name="Settings_LookDark_Desc" xml:space="preserve"><value>The colors of the window, panels and menus when the dark theme is showing: Graphite, Slate, Mocha, Midnight, GitHub Dark or Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Light look</value></data>
-  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>The same for the light theme: Paper, Linen, Mist, Sand or Snow.</value></data>
+  <data name="Settings_LookLight_Desc" xml:space="preserve"><value>The same for the light theme: Paper, Linen, Mist, Sand, GitHub Light or Snow.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, shading and text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Everything about how the map looks is on the Treemap page, next to a preview.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Colors</value></data>
@@ -854,4 +852,18 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Insights_New" xml:space="preserve"><value>New</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>Biggest extensions</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>and where most of each lives</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>This version</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Help and feedback</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Project</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Portable build</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Installed</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp is built on open work</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Thank you to the people behind it.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>The map</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>The layout is the squarified treemap from [Bruls, Huizing and van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), published in 2000. The idea of showing a disk as a map is from [SpaceMonger](https://www.stardock.com/products/spacemonger/) by Sean Werkema, and treemaps themselves from Ben Shneiderman (1991). The color-blind-safe palette uses the eight [Okabe and Ito](https://jfly.uni-koeln.de/color/) colors (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Written in C# on [.NET 10](https://dotnet.microsoft.com). The interface is [Avalonia UI](https://avaloniaui.net), drawn with [SkiaSharp](https://github.com/mono/SkiaSharp), in the [Inter](https://rsms.me/inter/) typeface by Rasmus Andersson. Icons are from [Lucide](https://lucide.dev), continued from Feather by Cole Bemis. The Windows installer and updates come from [Velopack](https://velopack.io) by Caelan Sayler. All are MIT licensed except Lucide (ISC) and Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Languages</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Norwegian is the author's own; the other 16 translations are machine-made and still waiting for a native speaker's review. If something reads wrong in your language, [say so on GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Full license texts</value></data>
 </root>

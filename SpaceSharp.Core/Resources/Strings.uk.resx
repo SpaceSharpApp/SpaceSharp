@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Побачте, куди поділося місце на диску. SpaceSharp зображує кожен файл і папку як блок, розмір якого відповідає зайнятому місцю, тож найбільші одразу впадають в око.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} на {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Алгоритм квадратизованої деревоподібної карти — Брулс, Гейзінг і ван Вейк (2000). Натхнено SpaceMonger. Піктограми інтерфейсу — Lucide (ліцензія ISC).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Параметри зберігаються в %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Фільтр, напр. відео понад 500 МБ старші за 1 рік</value></data>
   <data name="Group_Files" xml:space="preserve"><value>файли</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Відкриває папку, куди записуються неочікувані помилки, щоб долучити журнал до звіту</value></data>
   <data name="About_Source" xml:space="preserve"><value>Вихідний код на GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>Ліцензія MIT</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Алгоритм деревоподібної карти, SpaceMonger, піктограми</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Навігація</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Вибір і дії</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Вигляд і файли</value></data>
@@ -852,4 +850,19 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Insights_Extensions" xml:space="preserve"><value>Найбільші розширення</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>і де переважно міститься кожне</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>отримання дерева від помічника адміністратора</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Ця версія</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Допомога та відгуки</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Проєкт</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Портативна збірка</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Встановлено</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp побудовано на відкритій праці</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Дякуємо людям, які за нею стоять.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>Карта</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Розкладка — це squarified treemap із роботи [Брулса, Гейзінга та ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опублікованої 2000 року. Ідея показувати диск як карту походить зі [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркеми, а самі treemap — від Бена Шнейдермана (1991). Палітра для людей із порушенням кольоросприйняття використовує вісім кольорів [Окабе та Іто](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Програмне забезпечення</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Написано на C# для [.NET 10](https://dotnet.microsoft.com). Інтерфейс — [Avalonia UI](https://avaloniaui.net), малювання через [SkiaSharp](https://github.com/mono/SkiaSharp), шрифт [Inter](https://rsms.me/inter/) Расмуса Андерссона. Значки з [Lucide](https://lucide.dev), продовження Feather Коула Беміса. Інсталятор і оновлення у Windows — [Velopack](https://velopack.io) Кейлана Сейлера. Усе під ліцензією MIT, крім Lucide (ISC) та Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Мови</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Норвезький переклад зробив автор; решта 16 перекладів машинні й ще чекають на перевірку носієм мови. Якщо щось звучить неправильно вашою мовою, [напишіть на GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Повні тексти ліцензій</value></data>
 </root>

@@ -1,12 +1,6 @@
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
-using SpaceSharp.Layout;
+using Avalonia;
+using Avalonia.Input;
 using SpaceSharp.Models;
-using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
@@ -26,22 +20,23 @@ public sealed partial class TreemapControl
         return null;
     }
 
-    protected override void OnMouseWheel(MouseWheelEventArgs e)
+    protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
     {
-        base.OnMouseWheel(e);
+        base.OnPointerWheelChanged(e);
         if (_root is null) return;
         StopAnimation();
         _pinnedFocus = null;
-        ZoomAt(_zoom * Math.Pow(WheelStep, e.Delta / 120.0), e.GetPosition(this));
+        // Delta.Y is in notches (1 per click on a mouse wheel, fractions on a trackpad), where WPF used 120 per notch.
+        ZoomAt(_zoom * Math.Pow(WheelStep, e.Delta.Y), e.GetPosition(this));
         e.Handled = true;
     }
 
-    protected override void OnMouseMove(MouseEventArgs e)
+    protected override void OnPointerMoved(PointerEventArgs e)
     {
-        base.OnMouseMove(e);
+        base.OnPointerMoved(e);
         var position = e.GetPosition(this);
 
-        if (_panArmed && !_panning && (position - _panStart).Length >= DragThreshold)
+        if (_panArmed && !_panning && Distance(position, _panStart) >= DragThreshold)
         {
             StartPanning();
             _panStartOffset = _offset;
@@ -50,7 +45,7 @@ public sealed partial class TreemapControl
 
         if (_panning)
         {
-            _offset = _panStartOffset - (position - _panStart);
+            _offset = new Vector(_panStartOffset.X - (position.X - _panStart.X), _panStartOffset.Y - (position.Y - _panStart.Y));
             ClampOffset();
             Invalidate();
             return;
@@ -63,26 +58,54 @@ public sealed partial class TreemapControl
         HoveredNodeChanged?.Invoke(this, node);
     }
 
-    protected override void OnMouseLeave(MouseEventArgs e)
+    private static double Distance(Point a, Point b)
     {
-        base.OnMouseLeave(e);
+        double dx = a.X - b.X, dy = a.Y - b.Y;
+        return Math.Sqrt(dx * dx + dy * dy);
+    }
+
+    protected override void OnPointerExited(PointerEventArgs e)
+    {
+        base.OnPointerExited(e);
         if (_panning || _hoveredNode is null) return;
         _hoveredNode = null;
         DrawOverlay();
         HoveredNodeChanged?.Invoke(this, null);
     }
 
-    protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
-        base.OnMouseLeftButtonDown(e);
+        base.OnPointerPressed(e);
         Focus();
         var position = e.GetPosition(this);
+        var point = e.GetCurrentPoint(this);
         var node = NodeAt(position);
+
+        if (point.Properties.IsMiddleButtonPressed)
+        {
+            if (_zoom > 1)
+            {
+                BeginPan(position, immediately: true, e.Pointer);
+                e.Handled = true;
+            }
+            return;
+        }
+
+        if (point.Properties.IsRightButtonPressed)
+        {
+            // Right-clicking something outside the selection selects just that; inside keeps the selection.
+            if (node is not null && !_selection.Contains(node))
+                SelectedNode = node;
+            return;
+        }
+
+        if (!point.Properties.IsLeftButtonPressed) return;
+
         if (node is not null)
         {
-            var modifiers = Keyboard.Modifiers;
-            if (e.ClickCount == 1 && modifiers.HasFlag(ModifierKeys.Control)) ToggleSelected(node);
-            else if (e.ClickCount == 1 && modifiers.HasFlag(ModifierKeys.Shift)) SelectRangeTo(node);
+            var modifiers = e.KeyModifiers;
+            if (e.ClickCount == 1 && modifiers.HasFlag(KeyModifiers.Control)) ToggleSelected(node);
+            else if (e.ClickCount == 1 && modifiers.HasFlag(KeyModifiers.Shift)) SelectRangeTo(node);
             else SelectedNode = node;
         }
 
@@ -93,49 +116,24 @@ public sealed partial class TreemapControl
         }
         else if (_zoom > 1)
         {
-            BeginPan(position, immediately: false);
+            BeginPan(position, immediately: false, e.Pointer);
         }
 
         e.Handled = true;
     }
 
-    protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
-        base.OnMouseLeftButtonUp(e);
-        EndPan();
+        base.OnPointerReleased(e);
+        if (e.InitialPressMouseButton is MouseButton.Left or MouseButton.Middle) EndPan();
     }
 
-    protected override void OnMouseDown(MouseButtonEventArgs e)
+    protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
     {
-        base.OnMouseDown(e);
-        if (e.ChangedButton == MouseButton.Middle && _zoom > 1)
-        {
-            BeginPan(e.GetPosition(this), immediately: true);
-            e.Handled = true;
-        }
-    }
-
-    protected override void OnMouseUp(MouseButtonEventArgs e)
-    {
-        base.OnMouseUp(e);
-        if (e.ChangedButton == MouseButton.Middle) EndPan();
-    }
-
-    protected override void OnLostMouseCapture(MouseEventArgs e)
-    {
-        base.OnLostMouseCapture(e);
+        base.OnPointerCaptureLost(e);
         _panArmed = false;
         _panning = false;
-        Cursor = null;
-    }
-
-    protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-    {
-        base.OnMouseRightButtonDown(e);
-        Focus();
-        var node = NodeAt(e.GetPosition(this));
-        // Right-clicking something outside the selection selects just that; inside keeps the selection.
-        if (node is not null && !_selection.Contains(node))
-            SelectedNode = node;
+        _panPointer = null;
+        Cursor = Cursor.Default;
     }
 }

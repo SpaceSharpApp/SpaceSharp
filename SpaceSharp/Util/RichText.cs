@@ -1,8 +1,7 @@
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
+using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
@@ -10,23 +9,20 @@ namespace SpaceSharp.Util;
 /// Sentences built from a resource format string where some slots are emphasized: "48% of Users, the largest
 /// of its 6 folders" with the 48% in amber. A <see cref="Part"/> is a run of text with a theme brush key
 /// ("Text", "TextDim", "Accent") or a fixed brush; <see cref="Format"/> fills the {n} slots of a resource
-/// string and <see cref="Fill"/> renders parts into a TextBlock.
+/// string and <see cref="Fill"/> renders parts into a TextBlock. The same as the WPF app's (2.2).
 /// </summary>
 public static class RichText
 {
-    public sealed record Part(string Text, string BrushKey, Brush? Brush = null, bool Bold = false);
+    public sealed record Part(string Text, string BrushKey, IBrush? Brush = null, bool Bold = false);
 
     private static readonly Regex Slot = new(@"\{(\d+)\}", RegexOptions.Compiled);
     public const string Separator = "  ·  ";
 
-    /// <summary>Emphasized: amber and semibold.</summary>
     public static Part Accent(string text) => new(text, "Accent", null, true);
     public static Part Plain(string text) => new(text, "Text");
     public static Part Dim(string text) => new(text, "TextDim");
-    /// <summary>A fixed color (the change brushes), semibold.</summary>
-    public static Part Colored(string text, Brush brush) => new(text, string.Empty, brush, true);
+    public static Part Colored(string text, IBrush brush) => new(text, string.Empty, brush, true);
 
-    /// <summary>The resource string for <paramref name="key"/> with each {n} replaced by the matching part; text between slots is plain.</summary>
     public static Part[] Format(string key, params Part[] args)
     {
         string format = Strings.Get(key);
@@ -43,11 +39,9 @@ public static class RichText
         return parts.ToArray();
     }
 
-    /// <summary>The same parts in the dim color, after a separator; for the less important half of a line.</summary>
     public static IEnumerable<Part> Dimmed(IEnumerable<Part> parts) =>
         parts.Select(p => p.Brush is null ? p with { BrushKey = "TextDim", Bold = false } : p).Prepend(Dim(Separator));
 
-    /// <summary>Capitalizes the first part, for a sentence that ends up starting a line.</summary>
     public static Part[] Capitalized(Part[] parts)
     {
         if (parts.Length > 0 && parts[0].Text.Length > 0)
@@ -57,15 +51,16 @@ public static class RichText
 
     public static string ToPlainText(IEnumerable<Part> parts) => string.Concat(parts.Select(p => p.Text));
 
-    public static void Fill(TextBlock block, IEnumerable<Part> parts)
+    /// <param name="host">Where the theme brushes come from (the window), for the keyed parts.</param>
+    public static void Fill(TextBlock block, IEnumerable<Part> parts, IResourceHost host)
     {
-        block.Inlines.Clear();
+        block.Inlines!.Clear();
         foreach (var part in parts)
         {
             var run = new Run(part.Text);
             if (part.Brush is not null) run.Foreground = part.Brush;
-            else run.SetResourceReference(TextElement.ForegroundProperty, part.BrushKey);
-            if (part.Bold) run.FontWeight = FontWeights.SemiBold;
+            else run.Bind(TextElement.ForegroundProperty, host.GetResourceObservable(part.BrushKey));
+            if (part.Bold) run.FontWeight = FontWeight.SemiBold;
             block.Inlines.Add(run);
         }
     }

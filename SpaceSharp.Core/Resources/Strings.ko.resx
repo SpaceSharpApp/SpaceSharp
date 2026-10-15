@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>디스크 공간이 어디에 쓰였는지 확인하세요. SpaceSharp은(는) 모든 파일과 폴더를 사용 공간에 비례하는 크기의 상자로 표시하므로 가장 큰 항목이 한눈에 보입니다.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{1}의 {0}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Bruls, Huizing, van Wijk(2000)의 Squarified 트리맵 레이아웃. SpaceMonger에서 영감을 받았습니다. 인터페이스 아이콘은 Lucide(ISC 라이선스)를 사용했습니다.</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>설정은 %AppData%\SpaceSharp\settings.json에 저장됩니다.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>필터, 예: 1년 이상 지난 500MB 초과 비디오</value></data>
   <data name="Group_Files" xml:space="preserve"><value>파일</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>신고에 첨부할 수 있도록 예기치 않은 오류가 기록되는 폴더를 엽니다</value></data>
   <data name="About_Source" xml:space="preserve"><value>GitHub의 소스</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT 라이선스</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>트리맵 알고리즘, SpaceMonger, 아이콘</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>탐색</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>선택 및 동작</value></data>
   <data name="Keys_View" xml:space="preserve"><value>보기 및 파일</value></data>
@@ -852,4 +850,19 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Insights_Extensions" xml:space="preserve"><value>가장 큰 확장명</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>및 각 확장명이 주로 있는 위치</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>관리자 도우미에서 트리를 받는 중</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>이 버전</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>도움말 및 피드백</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>프로젝트</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>포터블 빌드</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>설치됨</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp는 열린 작업 위에 세워졌습니다</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>그 뒤에 있는 분들께 감사드립니다.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>지도</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>레이아웃은 [Bruls, Huizing, van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)가 2000년에 발표한 squarified treemap입니다. 디스크를 지도로 보여주는 아이디어는 Sean Werkema의 [SpaceMonger](https://www.stardock.com/products/spacemonger/)에서, treemap 자체는 Ben Shneiderman(1991)에서 왔습니다. 색약 친화 팔레트는 [Okabe와 Ito](https://jfly.uni-koeln.de/color/)의 여덟 가지 색(2002)을 사용합니다.</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>소프트웨어</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 위에서 C#으로 작성되었습니다. 인터페이스는 [Avalonia UI](https://avaloniaui.net)이며 [SkiaSharp](https://github.com/mono/SkiaSharp)로 그리고, 글꼴은 Rasmus Andersson의 [Inter](https://rsms.me/inter/)입니다. 아이콘은 Cole Bemis의 Feather를 이어받은 [Lucide](https://lucide.dev)에서 가져왔습니다. Windows 설치 프로그램과 업데이트는 Caelan Sayler의 [Velopack](https://velopack.io)에서 제공합니다. Lucide(ISC)와 Inter(SIL Open Font License)를 제외하면 모두 MIT 라이선스입니다.</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>언어</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>노르웨이어는 작성자가 직접 번역했고, 나머지 16개 번역은 기계 번역이며 아직 원어민의 검토를 기다리고 있습니다. 사용하는 언어에서 이상한 부분이 있으면 [GitHub에 알려 주세요](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>전체 라이선스 텍스트</value></data>
 </root>

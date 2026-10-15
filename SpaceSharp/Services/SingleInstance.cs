@@ -1,4 +1,3 @@
-using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
@@ -6,9 +5,10 @@ using System.Text.Json;
 namespace SpaceSharp.Services;
 
 /// <summary>
-/// Only one SpaceSharp per user session. The first instance holds a named mutex and listens on a named pipe;
-/// a second instance hands its command line over the pipe and exits, so "SpaceSharp.exe D:\" from Explorer or a
-/// shortcut lands in the window that is already open instead of opening another.
+/// Only one SpaceSharp per user session. The first instance holds a lock and listens on a named pipe; a second
+/// instance hands its command line over the pipe and exits, so "SpaceSharp D:\" from Explorer, the Finder or a
+/// shortcut lands in the window that is already open instead of opening another. The lock is a named mutex on
+/// Windows and a lock file elsewhere (named mutexes do not exist there); the pipe works the same on every platform.
 /// </summary>
 public sealed class SingleInstance : IDisposable
 {
@@ -16,6 +16,7 @@ public sealed class SingleInstance : IDisposable
     private const string PipeName = "SpaceSharp.SingleInstance";
 
     private Mutex? _mutex;
+    private FileStream? _lockFile;
     private CancellationTokenSource? _cts;
 
     /// <summary>Raised on a thread-pool thread with the other instance's arguments; marshal to the UI thread.</summary>
@@ -24,11 +25,23 @@ public sealed class SingleInstance : IDisposable
     /// <summary>True when this process is the first; false when another instance already runs.</summary>
     public bool TryClaim()
     {
-        _mutex = new Mutex(initiallyOwned: true, MutexName, out bool created);
-        if (created) return true;
-        _mutex.Dispose();
-        _mutex = null;
-        return false;
+        if (OperatingSystem.IsWindows())
+        {
+            _mutex = new Mutex(initiallyOwned: true, MutexName, out bool created);
+            if (created) return true;
+            _mutex.Dispose();
+            _mutex = null;
+            return false;
+        }
+        try
+        {
+            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SpaceSharp");
+            Directory.CreateDirectory(dir);
+            _lockFile = new FileStream(Path.Combine(dir, "instance.lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 1, FileOptions.DeleteOnClose);
+            return true;
+        }
+        catch (IOException) { return false; }
+        catch (UnauthorizedAccessException) { return true; } // cannot lock at all: better two windows than none
     }
 
     /// <summary>Starts accepting arguments from later instances. Call once, after the window exists.</summary>
@@ -83,6 +96,8 @@ public sealed class SingleInstance : IDisposable
         try { _mutex?.ReleaseMutex(); } catch (ApplicationException) { }
         _mutex?.Dispose();
         _mutex = null;
+        _lockFile?.Dispose();
+        _lockFile = null;
     }
 
     public void Dispose() => Release();

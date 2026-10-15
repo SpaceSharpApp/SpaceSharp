@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>Voyez où est passé votre espace disque. SpaceSharp représente chaque fichier et dossier par une boîte proportionnelle à l'espace qu'il occupe, pour que les plus gros sautent aux yeux.</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0} sur {1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Disposition en treemap « squarified » de Bruls, Huizing et van Wijk (2000). Inspiré de SpaceMonger. Icônes d'interface de Lucide (licence ISC).</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>Les paramètres sont enregistrés dans %AppData%\SpaceSharp\settings.json.</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>Filtrer, par ex. vidéos de plus de 500 Mo datant de plus d'1 an</value></data>
   <data name="Group_Files" xml:space="preserve"><value>fichiers</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>Ouvre le dossier où sont enregistrées les erreurs inattendues, pour en joindre un à un rapport</value></data>
   <data name="About_Source" xml:space="preserve"><value>Code source sur GitHub</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>Licence MIT</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>Algorithme de treemap, SpaceMonger, icônes</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigation</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Sélection et actions</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Affichage et fichiers</value></data>
@@ -852,4 +850,19 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Insights_Extensions" xml:space="preserve"><value>Plus grosses extensions</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>et où se trouve l'essentiel de chacune</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>réception de l'arborescence depuis l'assistant administrateur</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>Cette version</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>Aide et retours</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>Projet</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>Version portable</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>Installé</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp repose sur du travail ouvert</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>Merci aux personnes qui en sont à l'origine.</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>La carte</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>La disposition est le treemap « squarified » de [Bruls, Huizing et van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publié en 2000. L'idée de montrer un disque sous forme de carte vient de [SpaceMonger](https://www.stardock.com/products/spacemonger/) de Sean Werkema, et les treemaps eux-mêmes de Ben Shneiderman (1991). La palette adaptée au daltonisme utilise les huit couleurs d'[Okabe et Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Logiciels</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>Écrit en C# sur [.NET 10](https://dotnet.microsoft.com). L'interface est [Avalonia UI](https://avaloniaui.net), dessinée avec [SkiaSharp](https://github.com/mono/SkiaSharp), dans la police [Inter](https://rsms.me/inter/) de Rasmus Andersson. Les icônes viennent de [Lucide](https://lucide.dev), qui poursuit Feather de Cole Bemis. L'installateur et les mises à jour sous Windows viennent de [Velopack](https://velopack.io) de Caelan Sayler. Tous sont sous licence MIT, sauf Lucide (ISC) et Inter (SIL Open Font License).</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Langues</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>Le norvégien est de l'auteur lui-même ; les 16 autres traductions sont automatiques et attendent encore la relecture d'un locuteur natif. Si quelque chose sonne faux dans votre langue, [dites-le sur GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>Textes complets des licences</value></data>
 </root>

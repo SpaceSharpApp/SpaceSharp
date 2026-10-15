@@ -537,7 +537,6 @@
 {1}</value></data>
   <data name="About_Description" xml:space="preserve"><value>ディスク領域の使われ方を確認できます。SpaceSharp はすべてのファイルとフォルダーを使用領域に応じた大きさのボックスとして表示するため、最も大きいものが一目でわかります。</value></data>
   <data name="About_SystemLine" xml:space="preserve"><value>{0}、{1}</value></data>
-  <data name="About_CreditsText" xml:space="preserve"><value>Squarified ツリーマップレイアウト：Bruls、Huizing、van Wijk（2000）。SpaceMonger に着想を得ています。インターフェイスアイコンは Lucide（ISC ライセンス）。</value></data>
   <data name="Settings_SavedIn" xml:space="preserve"><value>設定は %AppData%\SpaceSharp\settings.json に保存されます。</value></data>
   <data name="Main_FilterPlaceholder" xml:space="preserve"><value>フィルター。例：1 年以上前の 500MB を超えるビデオ</value></data>
   <data name="Group_Files" xml:space="preserve"><value>ファイル</value></data>
@@ -615,7 +614,6 @@
   <data name="About_CrashLogsSub" xml:space="preserve"><value>予期しないエラーが書き込まれるフォルダーを開きます。報告に添付するために使用します</value></data>
   <data name="About_Source" xml:space="preserve"><value>GitHub のソースコード</value></data>
   <data name="About_SourceSub" xml:space="preserve"><value>MIT ライセンス</value></data>
-  <data name="About_CreditsSub" xml:space="preserve"><value>ツリーマップアルゴリズム、SpaceMonger、アイコン</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>移動</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>選択と操作</value></data>
   <data name="Keys_View" xml:space="preserve"><value>表示とファイル</value></data>
@@ -852,4 +850,19 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Insights_Extensions" xml:space="preserve"><value>最大の拡張子</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>と、それぞれの大半がある場所</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
+  <data name="Scan_Handover" xml:space="preserve"><value>管理者ヘルパーからツリーを受信中</value></data>
+  <data name="About_GroupVersion" xml:space="preserve"><value>このバージョン</value></data>
+  <data name="About_GroupHelp" xml:space="preserve"><value>ヘルプとフィードバック</value></data>
+  <data name="About_GroupProject" xml:space="preserve"><value>プロジェクト</value></data>
+  <data name="About_BuildPortable" xml:space="preserve"><value>ポータブル版</value></data>
+  <data name="About_BuildInstalled" xml:space="preserve"><value>インストール済み</value></data>
+  <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp はオープンな成果の上に築かれています</value></data>
+  <data name="Credits_Thanks" xml:space="preserve"><value>その背後にいる人々に感謝します。</value></data>
+  <data name="Credits_MapHeading" xml:space="preserve"><value>マップ</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>レイアウトは [Bruls、Huizing、van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) が 2000 年に発表した squarified treemap です。ディスクをマップとして表示する発想は Sean Werkema の [SpaceMonger](https://www.stardock.com/products/spacemonger/) から、treemap そのものは Ben Shneiderman (1991) から来ています。色覚多様性に配慮したパレットは [岡部・伊藤](https://jfly.uni-koeln.de/color/) の 8 色 (2002) を使っています。</value></data>
+  <data name="Credits_SoftwareHeading" xml:space="preserve"><value>ソフトウェア</value></data>
+  <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 上で C# で書かれています。インターフェースは [Avalonia UI](https://avaloniaui.net) で、[SkiaSharp](https://github.com/mono/SkiaSharp) で描画し、書体は Rasmus Andersson の [Inter](https://rsms.me/inter/) です。アイコンは Cole Bemis の Feather を受け継ぐ [Lucide](https://lucide.dev) のものです。Windows のインストーラーと更新は Caelan Sayler の [Velopack](https://velopack.io) によるものです。Lucide (ISC) と Inter (SIL Open Font License) を除き、すべて MIT ライセンスです。</value></data>
+  <data name="Credits_LanguagesHeading" xml:space="preserve"><value>言語</value></data>
+  <data name="Credits_LanguagesText" xml:space="preserve"><value>ノルウェー語は作者自身によるもので、他の 16 言語は機械翻訳で、ネイティブスピーカーによる確認はまだ行われていません。お使いの言語でおかしな箇所があれば、[GitHub で教えてください](https://github.com/SpaceSharpApp/SpaceSharp/issues)。</value></data>
+  <data name="Credits_Licenses" xml:space="preserve"><value>ライセンス全文</value></data>
 </root>

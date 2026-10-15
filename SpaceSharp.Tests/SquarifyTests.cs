@@ -5,13 +5,13 @@ namespace SpaceSharp.Tests;
 
 public class SquarifyTests
 {
-    private static List<(FsNode Node, Rect Rect)> Run(LayoutRect bounds, params long[] sizes)
+    private static List<(FsNode Node, LayoutRect Rect)> Run(LayoutRect bounds, params long[] sizes)
     {
         var root = TestTree.Dir(@"C:\");
         for (int i = 0; i < sizes.Length; i++) TestTree.File(root, $"f{i}", sizes[i]);
         root.FinishDirectory();
 
-        var result = new List<(FsNode, Rect)>();
+        var result = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => result.Add((n, r)));
         return result;
     }
@@ -119,11 +119,11 @@ public class SquarifyTests
         root.FinishDirectory();
         var bounds = new LayoutRect(0, 0, 200, 200);
 
-        var plain = new List<(FsNode, Rect)>();
+        var plain = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => plain.Add((n, r)));
         Assert.Equal(200, plain[0].Item2.Width, 6);    // stacked: full width, half height
 
-        var wide = new List<(FsNode, Rect)>();
+        var wide = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => wide.Add((n, r)), orientationBias: 1 / 3.0);
         Assert.Equal(200, wide[0].Item2.Height, 6);    // side by side: full height, half width
 
@@ -141,7 +141,7 @@ public class SquarifyTests
         root.FinishDirectory();
         root.SortBy(SizeMeasure.SizeOnDisk);
 
-        var result = new List<(FsNode Node, Rect Rect)>();
+        var result = new List<(FsNode Node, LayoutRect Rect)>();
         Squarify.Layout(root.Children, new LayoutRect(0, 0, 110, 100), SizeMeasure.SizeOnDisk, (n, r) => result.Add((n, r)));
 
         Assert.Equal("big-on-disk", result[0].Node.Name);

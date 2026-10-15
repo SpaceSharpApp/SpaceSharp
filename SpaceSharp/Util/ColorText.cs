@@ -1,4 +1,4 @@
-using System.Windows.Media;
+using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
@@ -6,13 +6,8 @@ namespace SpaceSharp.Util;
 public static class ColorText
 {
     /// <summary>"#RRGGBB" or "#AARRGGBB" to a color; anything else gives the fallback.</summary>
-    public static Color Parse(string? text, Color fallback)
-    {
-        if (string.IsNullOrWhiteSpace(text)) return fallback;
-        try { return (Color)ColorConverter.ConvertFromString(text.Trim()); }
-        catch (FormatException) { return fallback; }
-        catch (NotSupportedException) { return fallback; }
-    }
+    public static Color Parse(string? text, Color fallback) =>
+        !string.IsNullOrWhiteSpace(text) && Color.TryParse(text.Trim(), out var c) ? c : fallback;
 
     /// <summary>True for a six-digit "#RRGGBB" value, the only form the color boxes in Settings accept.</summary>
     public static bool IsHex(string? text) =>

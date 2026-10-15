@@ -1,9 +1,6 @@
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Threading;
 using SpaceSharp.Layout;
 using SpaceSharp.Models;
 using SpaceSharp.Util;
@@ -37,10 +34,10 @@ public sealed partial class TreemapControl
     {
         if (_rebuildPending) return;
         _rebuildPending = true;
-        Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             if (_rebuildPending) Rebuild();
-        }));
+        }, DispatcherPriority.Render);
     }
 
     private void EnsureLayout()
@@ -48,6 +45,10 @@ public sealed partial class TreemapControl
         if (_rebuildPending) Rebuild();
     }
 
+    /// <summary>
+    /// Lays the visible part of the map out and asks both layers to redraw. The drawing itself happens in the
+    /// layers' Render calls (<see cref="DrawMap"/> and <see cref="DrawOverlayLayer"/>), from the item list this builds.
+    /// </summary>
     private void Rebuild()
     {
         _rebuildPending = false;
@@ -57,10 +58,10 @@ public sealed partial class TreemapControl
         _subdivided.Clear();
         _siblingSide.Clear();
 
-        double width = ActualWidth;
-        double height = ActualHeight;
+        double width = Bounds.Width;
+        double height = Bounds.Height;
         _viewport = new Rect(0, 0, Math.Max(0, width), Math.Max(0, height));
-        _drawClip = Rect.Inflate(_viewport, 2, 2);
+        _drawClip = _viewport.Inflate(2);
 
         if (_root is not null && width >= 8 && height >= 8)
         {
@@ -69,13 +70,7 @@ public sealed partial class TreemapControl
             LayoutNode(_root, new Rect(-_offset.X, -_offset.Y, w * _zoom, h * _zoom), 0, 0);
         }
 
-        double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-        using (var dc = _mapVisual.RenderOpen())
-        {
-            dc.DrawRectangle(MapBackground ?? BackgroundBrush, null, _viewport);
-            foreach (var item in _items)
-                DrawItem(dc, item, pixelsPerDip);
-        }
+        _mapLayer.InvalidateVisual();
 
         if (_hoveredNode is not null && !_index.ContainsKey(_hoveredNode))
             _hoveredNode = null;
@@ -84,12 +79,16 @@ public sealed partial class TreemapControl
         UpdateFocus();
     }
 
+    private void DrawMap(DrawingContext dc)
+    {
+        dc.DrawRectangle(MapBackground ?? BackgroundBrush, null, _viewport);
+        foreach (var item in _items)
+            DrawItem(dc, item);
+    }
+
     /// <summary>Containers whose children were laid out this pass (so a group's own label is not drawn under its members).</summary>
     private readonly HashSet<FsNode> _subdivided = new();
 
-    /// <param name="sole">True when the node is its container's only laid-out child: a group standing for the whole content.</param>
-    /// <param name="flushRight">The box ends at its container's right content edge (no grid line of its own there).</param>
-    /// <param name="flushBottom">The same for the bottom edge.</param>
     private void LayoutNode(FsNode node, Rect bounds, int depth, int branch, bool sole = false, bool flushRight = true, bool flushBottom = true)
     {
         if (!bounds.IntersectsWith(_viewport)) return;
@@ -105,10 +104,6 @@ public sealed partial class TreemapControl
         }
 
         bool container = shown.IsDirectory || shown.GroupMembers is not null;
-        // A title bar needs room for itself and a strip of content under it. It stays on narrow folders too,
-        // with the name cut short or left out: the bar is what makes a folder read as a frame.
-        // A group that is the whole content of its folder gets no bar of its own: the folder's bar already
-        // names the place, and "312 files" sits in the body instead until the members have room.
         bool hasHeader = container && !(shown.IsGroup && sole)
             && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= HeaderHeight + MinHeaderBody;
         var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom);
@@ -123,8 +118,6 @@ public sealed partial class TreemapControl
 
         if (!container || ChildrenOf(shown).Count == 0) return;
 
-        // Small boxes get thinner frames; tiny ones aren't subdivided at all, so narrow folders
-        // don't turn into a pile of nested outlines.
         double inset = InsetFor(bounds);
         double top = hasHeader ? HeaderHeight : inset;
         double contentWidth = bounds.Width - 2 * inset;
@@ -141,7 +134,7 @@ public sealed partial class TreemapControl
         for (int i = 0; i < layout.Children.Count; i++)
         {
             var n = layout.Normalized[i];
-            if (n.IsEmpty) continue;
+            if (n.IsBlank()) continue;
             var rect = new Rect(
                 content.X + n.X * content.Width,
                 content.Y + n.Y * content.Height,
@@ -159,36 +152,25 @@ public sealed partial class TreemapControl
 
     /// <summary>
     /// The container's child layout, from the cache after the first time. Which children are grouped is
-    /// decided from the data alone (their share of the whole scan), never from the current zoom, so a box
-    /// keeps its place however far you zoom: a "312 files" group that gets room lays its members out inside
-    /// its own rectangle instead of the parent being laid out again.
-    ///
-    /// That rule has nothing to say about a folder whose every child is small by the scan's standard: a
-    /// 40 × 40 px folder on a 1 TB map. Laying all of its children out flat turned every such folder into a
-    /// pile of slivers, which is where the map used to fall apart. Those folders (and groups, whose members
-    /// are small by definition) are cut by the pixels they actually have: the children big enough to see
-    /// get a box, the rest merge into one block; when none is big enough the whole content is one block.
-    /// Only these small containers re-layout as you zoom; the large structure of the map stays put.
+    /// decided from the data alone (their share of the whole scan), never from the current zoom; folders whose
+    /// every child is small by that standard are cut by the pixels they actually have. See the Windows control
+    /// for the full reasoning; the code is the same.
     /// </summary>
     private CachedChildLayout ChildLayout(FsNode folder, Rect content)
     {
         var all = ChildrenOf(folder);
         int cutoff;
-        if (!_groupSmall) cutoff = all.Count;
+        if (!GroupSmall) cutoff = all.Count;
         else
         {
             cutoff = folder.IsGroup ? 0 : GroupCutoff(all);
             if (cutoff == 0)
                 cutoff = Grouping.CutoffOnScreen(all, _measure, folder.SizeFor(_measure), content.Width, content.Height, VisibleArea);
-            // A group that is still too small for any member to show stays one solid block; it is already the
-            // merged box, and a group inside it would only wrap the same pixels again.
             if (cutoff == 0 && folder.IsGroup) cutoff = -1;
         }
         if (_layoutCache.TryGetValue(folder, out var cached))
         {
             if (cached.Cutoff == cutoff) return cached;
-            // The cut moved (a small container got more or fewer pixels): the group it had is gone for good,
-            // so its own cached layout, and any nested group's, would only sit in the cache until the next scan.
             var stale = cached.Group;
             while (stale is not null && _layoutCache.Remove(stale, out var inner)) stale = inner.Group;
         }
@@ -207,7 +189,6 @@ public sealed partial class TreemapControl
         {
             var grouped = GroupSmallChildren(folder, all, cutoff, out group, out groupMatched);
             if (grouped is not null) children = grouped;
-            // Fewer than two small children: nothing to group; the requested cutoff stays the cache key.
         }
 
         // Lay out in the content's shape, then normalize so the same layout can be stretched to any zoom.
@@ -218,8 +199,7 @@ public sealed partial class TreemapControl
             normalized[index++] = new Rect(rect.X / content.Width, rect.Y / content.Height,
                 rect.Width / content.Width, rect.Height / content.Height);
         }, OrientationBias);
-        // Zero-sized children get no rectangle from squarify.
-        for (; index < normalized.Length; index++) normalized[index] = Rect.Empty;
+        for (; index < normalized.Length; index++) normalized[index] = Rects.Empty;
 
         cached = new CachedChildLayout(cutoff, children, normalized, group, groupMatched);
         _layoutCache[folder] = cached;
@@ -229,10 +209,6 @@ public sealed partial class TreemapControl
     /// <summary>The whole map's area at a reference size; grouping is judged against it, not the live window or zoom.</summary>
     private const double ReferenceArea = 1200.0 * 760.0;
 
-    /// <summary>
-    /// Index of the first child that would get fewer than <see cref="GroupBelowArea"/> pixels if the whole
-    /// scan filled the reference area at zoom 1. A pure function of the data (and density), so stable.
-    /// </summary>
     private int GroupCutoff(IReadOnlyList<FsNode> children)
     {
         double whole = _root?.SizeFor(_measure) ?? 0;
@@ -241,8 +217,7 @@ public sealed partial class TreemapControl
     }
 
     /// <summary>
-    /// A folder with hundreds of similar files (a photo shoot, a cache) would become a grid of tiny
-    /// boxes. Children that would get less than <see cref="GroupBelowArea"/> pixels are replaced by one
+    /// Children that would get less than <see cref="GroupBelowArea"/> pixels are replaced by one
     /// "312 files" box. Zooming in gives them more pixels, so they appear individually again.
     /// </summary>
     private IReadOnlyList<FsNode>? GroupSmallChildren(FsNode folder, IReadOnlyList<FsNode> children, int cutoff, out FsNode? group, out bool groupMatched)
@@ -293,10 +268,7 @@ public sealed partial class TreemapControl
         return list;
     }
 
-    /// <summary>
-    /// The folder's dominant child, if it is a folder holding at least 97% of the size. Steam › steamapps › common
-    /// still merges when Steam has a few small files next to the big folder.
-    /// </summary>
+    /// <summary>The folder's dominant child, if it is a folder holding at least 97% of the size.</summary>
     private FsNode? SingleSubfolder(FsNode node)
     {
         if (!node.IsDirectory || node.Children.Count == 0) return null;
@@ -322,8 +294,8 @@ public sealed partial class TreemapControl
             foreach (var item in _items)
             {
                 if (!item.Node.IsDirectory || !item.Bounds.Contains(center)) continue;
-                var visible = Rect.Intersect(item.Bounds, _viewport);
-                if (!visible.IsEmpty && visible.Width * visible.Height >= 0.5 * viewArea)
+                var visible = Rects.Intersect(item.Bounds, _viewport);
+                if (!visible.IsBlank() && visible.Width * visible.Height >= 0.5 * viewArea)
                     focus = item.Node;
             }
             focus ??= _root;
@@ -333,5 +305,4 @@ public sealed partial class TreemapControl
         _focus = focus;
         FocusChanged?.Invoke(this, EventArgs.Empty);
     }
-
 }

@@ -1,6 +1,6 @@
 using System.Globalization;
 using System.Text;
-using System.Windows.Media;
+using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
