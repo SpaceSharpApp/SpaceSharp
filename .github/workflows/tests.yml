@@ -17,13 +17,9 @@ permissions:
 
 jobs:
   test:
-    name: Tests on ${{ matrix.os }}
-    # The app is for all three desktops, so the build and the tests run on all three.
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    name: Tests on Windows
+    # Windows only until the Mac and Linux packages ship; then this becomes a matrix over the three desktops.
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v5

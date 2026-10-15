@@ -67,7 +67,7 @@ installer/                        wizard pages, dialog images, release.ps1, sign
 
 ## Two projects, and the line between them
 
-`SpaceSharp.Core` targets plain `net10.0` and may not reference Avalonia, Velopack or Win32; the compiler enforces it, since none of those exist for that target. It holds the tree, the layout, scanning, the saved-scan format, the strings and every translation, size formatting, the settings, the looks and the command line. `SpaceSharp` is the app and references Core. The test project references both and runs on Windows, Linux and macOS.
+`SpaceSharp.Core` targets plain `net10.0` and may not reference Avalonia, Velopack or Win32; the compiler enforces it, since none of those exist for that target. It holds the tree, the layout, scanning, the saved-scan format, the strings and every translation, size formatting, the settings, the looks and the command line. `SpaceSharp` is the app and references Core. The test project references both and runs on Windows, Linux and macOS; the GitHub workflow runs it on Windows only until the Mac and Linux packages ship.
 
 The rule when adding code: if it would work the same on every platform, it goes in Core. Anything that draws, opens a window, talks to the shell, the trash, the registry or the NTFS file table stays in the app, behind an `OperatingSystem.IsWindows()` check or a `[SupportedOSPlatform]` attribute when it is one platform's. Where Core needs something from the platform, it exposes a plain property or interface and the app fills it in: `IPlatformFiles` for sizes and hard links, `AppLanguages.IsRightToLeft` for the window direction.
 
