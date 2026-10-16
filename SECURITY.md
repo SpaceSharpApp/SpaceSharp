@@ -32,7 +32,7 @@ Only the latest release receives fixes. Please check that the problem is still p
 
 Release builds are produced by `installer/release.ps1` on the developer's PC and code-signed with a Certum certificate (Windows shows the publisher on every download); the commit they come from is tagged with the version. GitHub Actions only runs the tests. Each release lists its assets on the Releases page; download from there or through winget (`ClearanceClarence.SpaceSharp`), not from third-party download sites, which repackage at their own pace.
 
-The downloads are not code-signed yet, so SmartScreen may show "Windows protected your PC" the first time; choose More info, then Run anyway. If you want to verify a download before running it, compare its SHA-256 (`Get-FileHash .\SpaceSharp-win-x64.exe` in PowerShell) with the line for it in `SHA256SUMS.txt`, which every release carries as an asset. Once a code-signing certificate is in place the installers and exes will carry a signature you can check in the file's Properties › Digital Signatures, and this file will say so.
+Every exe, installer and MSI carries that signature; check it in the file's Properties › Digital Signatures, or with `Get-AuthenticodeSignature .\SpaceSharp-win-x64.exe` in PowerShell, which should say Valid. SmartScreen may still show "Windows protected your PC" while a new certificate earns its reputation; choose More info, then Run anyway. To verify a download independently of the signature, compare its SHA-256 (`Get-FileHash .\SpaceSharp-win-x64.exe`) with the line for it in `SHA256SUMS.txt`, which every release carries as an asset.
 
 ## Scope
 

@@ -2,8 +2,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Questions and ideas
-    url: https://github.com/SpaceSharpApp/SpaceSharp/discussions
-    about: Ask how something works, show a palette you made, or talk through a feature before it becomes an issue.
+    url: https://github.com/SpaceSharpApp/SpaceSharp/issues/new/choose
+    about: Ask how something works, show a palette you made, or talk through a feature. Pick the Feature request form, or a blank issue for anything else.
   - name: Website
     url: https://spacesharp.app/
     about: Downloads, a live preview of the app, and the short answers.
