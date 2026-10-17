@@ -3,9 +3,8 @@ using SpaceSharp.Models;
 namespace SpaceSharp.Services;
 
 /// <summary>
-/// A pretend PC for trying the app without scanning anything: the same sample drive the screenshot mockup
-/// (docs/spacesharp-mock.js) draws, with the same names, sizes, dates and "since last scan" changes, so the app
-/// and the pictures agree. Started with <c>--mock</c>, or Ctrl+Shift+Alt+M in the main window. Nothing in it
+/// A pretend PC for trying the app without scanning anything and for posing the README screenshots: a sample drive
+/// with generic names, sizes, dates and "since last scan" changes, the same every time, so the pictures stay stable. Started with <c>--mock</c>, or Ctrl+Shift+Alt+M in the main window. Nothing in it
 /// touches the disk: the tree is built in memory, the drives are a fixed list, and a rescan rebuilds the tree.
 /// </summary>
 public static class MockSystem
@@ -20,10 +19,30 @@ public static class MockSystem
     {
         new Drive(@"C:\", "Local Disk", (long)(271.37 * GB), 1 * TB, "Nvme", "NTFS"),
         new Drive(@"D:\", "Data", (long)(1.52 * TB), (long)(1.82 * TB), "Hdd", "NTFS"),
-        new Drive(@"E:\", "Games", (long)(3.05 * TB), (long)(3.64 * TB), "Ssd", "NTFS"),
+        new Drive(@"E:\", "Games", (long)(3.31 * TB), (long)(3.64 * TB), "Ssd", "NTFS"),
         new Drive(@"F:\", "Backup", (long)(2.16 * TB), (long)(3.64 * TB), "Usb", "exFAT"),
         new Drive(@"G:\", "USB Drive", (long)(12.4 * GB), (long)(57.6 * GB), "Usb", "FAT32")
     };
+
+    /// <summary>A saved scan the start screen lists on the pretend PC.</summary>
+    public sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total);
+
+    /// <summary>
+    /// The start screen's saved scans: the system drive from earlier today, the backup drive from a few days ago, the
+    /// nearly full games drive from last week, and a folder scan. Newest first, as the start screen wants them.
+    /// </summary>
+    public static IReadOnlyList<RecentScan> RecentScans()
+    {
+        var now = DateTime.UtcNow;
+        RecentScan Of(Drive d, TimeSpan ago, int files) => new(new ScanFileInfo(d.Root, now - ago, "mock", d.Total - d.Used, files, d.Used, string.Empty), true, d.Label, d.Total - d.Used, d.Total);
+        return new[]
+        {
+            Of(Drives[0], TimeSpan.FromHours(13), 2_133),
+            Of(Drives[3], TimeSpan.FromDays(3), 48_211),
+            Of(Drives[2], TimeSpan.FromDays(7), 612_904),
+            new RecentScan(new ScanFileInfo(@"C:\Users\User\Projects", now - TimeSpan.FromDays(14), "mock", 0, 184_302, (long)(38.2 * GB), string.Empty), false, null, 0, 0)
+        };
+    }
 
     /// <summary>The scanned "C:\" with its free space, every node marked against a pretend scan from yesterday.</summary>
     public static (FsNode Root, ScanFileInfo Info, ScanFileInfo Baseline) Build(string rootPath = @"C:\")

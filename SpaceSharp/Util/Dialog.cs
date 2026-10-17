@@ -48,7 +48,7 @@ internal static class Dialog
                 buttons
             }
         };
-        await window.ShowDialog(owner);
+        await window.ShowModal(owner);
         return result;
     }
 }

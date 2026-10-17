@@ -767,6 +767,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Fargene på vinduet, panelene og menyene når det mørke temaet vises: Graphite, Slate, Mocha, Midnight, GitHub Dark eller Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lyst utseende</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Det samme for det lyse temaet: Paper, Linen, Mist, Sand, GitHub Light eller Snow.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Demp bak vinduer</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hvor mye kartet mørkner mens Innstillinger, Undersøk, Om eller oppdateringsvinduet er åpent over det. 0 lar det være.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palett, skygge og tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alt om hvordan kartet ser ut ligger på Trekart-siden, ved siden av en forhåndsvisning.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farger</value></data>

@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Цвета окна, панелей и меню при тёмной теме: Графит, Сланец, Мокко, Полночь или Карбон.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Светлый вид</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>То же для светлой темы: Бумага, Лён, Дымка, Песок или Снег.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Затемнение за окнами</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Насколько темнеет карта, пока поверх неё открыты Настройки, Осмотр, О программе или окно обновления. 0 оставляет как есть.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Палитра, затенение и текст</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Всё о внешнем виде карты находится на странице Treemap, рядом с предпросмотром.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Цвета</value></data>

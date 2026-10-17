@@ -41,7 +41,7 @@ public sealed partial class LinkText : TextBlock
             }
             string label = m.Groups[1].Value;
             var run = new Run(label);
-            run.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("Accent"));
+            run.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("Link"));
             inlines.Add(run);
             _links.Add((position, position + label.Length, m.Groups[2].Value));
             position += label.Length;

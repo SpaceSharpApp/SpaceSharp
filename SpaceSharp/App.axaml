@@ -39,6 +39,8 @@
           <SolidColorBrush x:Key="Accent" Color="#F5B82E" />
           <SolidColorBrush x:Key="AccentText" Color="#1C1500" />
           <SolidColorBrush x:Key="AccentFaint" Color="#1C1A12" />
+          <SolidColorBrush x:Key="Link" Color="#F5B82E" />          <!-- amber as text: links and highlighted words; readable on this theme's surfaces -->
+          <SolidColorBrush x:Key="LinkHover" Color="#FFC94D" />
           <SolidColorBrush x:Key="Danger" Color="#FF7070" />
           <SolidColorBrush x:Key="Warn" Color="#F0883E" />
           <SolidColorBrush x:Key="MapBackground" Color="#0D1117" />
@@ -132,6 +134,8 @@
           <SolidColorBrush x:Key="Accent" Color="#F5B82E" />
           <SolidColorBrush x:Key="AccentText" Color="#1C1500" />
           <SolidColorBrush x:Key="AccentFaint" Color="#FFF4D6" />
+          <SolidColorBrush x:Key="Link" Color="#8A5A00" />          <!-- the amber too pale to read on white; a deep amber for text keeps the hue -->
+          <SolidColorBrush x:Key="LinkHover" Color="#5E3D00" />
           <SolidColorBrush x:Key="Danger" Color="#D33A3A" />
           <SolidColorBrush x:Key="Warn" Color="#D8731F" />
           <SolidColorBrush x:Key="MapBackground" Color="#D9D9E1" />

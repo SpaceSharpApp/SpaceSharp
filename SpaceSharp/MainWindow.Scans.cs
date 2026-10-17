@@ -250,8 +250,10 @@ public partial class MainWindow
     // ---------------------------------------------------------------- the start screen's recent scans
 
     /// <summary>What the start screen knows about one saved scan: the drive it is on, if any, and how full that drive is now.</summary>
-    private sealed record RecentScan(ScanFileInfo Info, bool IsDrive, DriveInfo? Drive, double Fraction)
+    /// <summary>A saved scan on the start screen. Label, Free and Total describe the drive as it is now (Total 0 when unknown).</summary>
+    private sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total)
     {
+        public double Fraction => IsDrive && Total > 0 ? 1 - (double)Free / Total : double.NaN;
         public bool NearlyFull => IsDrive && !double.IsNaN(Fraction) && Fraction >= 0.85;
     }
 
@@ -262,14 +264,15 @@ public partial class MainWindow
     private void BuildRecentScans()
     {
         RecentHost.Children.Clear();
-        var recent = ScanFile.RecentAutoSaves().Select(Describe).ToList();
+        var recent = _mock ? MockSystem.RecentScans().Select(m => new RecentScan(m.Info, m.IsDrive, m.Label, m.Free, m.Total)).ToList()
+                           : ScanFile.RecentAutoSaves().Select(Describe).ToList();
         EmptyTitle.Text = Strings.Get(recent.Count > 0 ? "Start_PickADriveOrContinue" : "Start_PickADrive");
         EmptyText.Text = Strings.Get(recent.Count > 0 ? "Start_RecentHint" : "Start_FirstHint");
         EmptyFastLine.Text = OperatingSystem.IsWindows() ? Strings.Get("Start_FastScanLine") : string.Empty;
 
         long usedAll = 0, totalAll = 0;
         foreach (var scan in recent)
-            if (scan.Drive is not null) { usedAll += scan.Drive.TotalSize - scan.Drive.AvailableFreeSpace; totalAll += scan.Drive.TotalSize; }
+            if (scan.Total > 0) { usedAll += scan.Total - scan.Free; totalAll += scan.Total; }
         EmptyTotalsUsed.Text = Strings.Format("Start_TotalsUsed", SizeFormatter.Format(usedAll));
         EmptyTotals.Text = Strings.Format("Start_TotalsOf", SizeFormatter.Format(totalAll));
         EmptyTotalsPanel.IsVisible = totalAll > 0;
@@ -302,8 +305,7 @@ public partial class MainWindow
         bool drive = PlatformFiles.Current.IsVolumeRoot(info.RootPath);
         DriveInfo? di = null;
         if (drive) { try { var d = new DriveInfo(info.RootPath); if (d.IsReady) di = d; } catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { } }
-        double fraction = di is { TotalSize: > 0 } ? 1 - (double)di.AvailableFreeSpace / di.TotalSize : double.NaN;
-        return new RecentScan(info, drive, di, fraction);
+        return new RecentScan(info, drive, di?.VolumeLabel, di?.AvailableFreeSpace ?? 0, di?.TotalSize ?? 0);
     }
 
     private static string ScanCount(int count) => count == 1 ? Strings.Get("Start_ScanCountOne") : Strings.Format("Start_ScanCount", count);
@@ -313,13 +315,13 @@ public partial class MainWindow
     {
         string name = DisplayName(scan.Info.RootPath);
         if (!scan.IsDrive) return (name, scan.Info.RootPath);
-        string? label = scan.Drive?.VolumeLabel;
+        string? label = scan.Label;
         return (name, string.IsNullOrWhiteSpace(label) ? DriveKinds.Label(DriveKinds.Detect(scan.Info.RootPath)) ?? string.Empty : label);
     }
 
     /// <summary>"50% used · 477 GB free" for a drive, "Folder · 184,302 files" for a folder scan.</summary>
-    private static string Usage(RecentScan scan) => scan.Drive is { } d
-        ? Strings.Format("Start_UsedFree", (int)Math.Round(Math.Clamp(scan.Fraction, 0, 1) * 100), SizeFormatter.Format(d.AvailableFreeSpace))
+    private static string Usage(RecentScan scan) => scan.Total > 0
+        ? Strings.Format("Start_UsedFree", (int)Math.Round(Math.Clamp(scan.Fraction, 0, 1) * 100), SizeFormatter.Format(scan.Free))
         : Strings.Format("Start_FolderFiles", scan.Info.FileCount.ToString("N0"));
 
     /// <summary>The name in one size and the detail dimmed beside it, on one baseline.</summary>
@@ -396,6 +398,7 @@ public partial class MainWindow
 
     private async Task OpenRecentAsync(ScanFileInfo info)
     {
+        if (_mock) { LoadMock(info.RootPath); return; }
         try
         {
             var (root, loaded) = await Task.Run(() => ScanFile.Load(info.Path));

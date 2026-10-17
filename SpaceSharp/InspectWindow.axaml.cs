@@ -7,6 +7,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using SpaceSharp.Controls;
 using SpaceSharp.Models;
 using SpaceSharp.Services;
@@ -49,24 +50,42 @@ public partial class InspectWindow : Window
         AgeHeading.Text = Strings.Get("Inspect_ByAge");
         LargestHeading.Text = Strings.Get("Inspect_WhereTheSpaceIs");
 
-        if (_settings.InspectWidth >= MinWidth && _settings.InspectHeight >= MinHeight)
-        {
-            Width = _settings.InspectWidth;
-            Height = _settings.InspectHeight;
-        }
+        if (_settings.InspectWidth >= MinWidth) Width = _settings.InspectWidth;
         BuildHeader(root);
         BuildCallout();
         BuildCharts();
         BuildLargest();
+        Opened += (_, _) => Dispatcher.UIThread.Post(FitHeightToContent, DispatcherPriority.Loaded);
+    }
+
+    /// <summary>
+    /// The window is as tall as what it shows: a folder with four rows under "Where the space is" gets a short window,
+    /// a selection with a long list a tall one, up to what the screen allows, after which the body scrolls. The width
+    /// is the one from last time; the height is never remembered, since it follows the content.
+    /// </summary>
+    private void FitHeightToContent()
+    {
+        if (WindowState != WindowState.Normal) return;
+        Scroll.UpdateLayout();
+        // the scroll viewer stretches short content to its viewport, so its extent says nothing; the body's own
+        // desired height is what the content really needs
+        Body.Measure(new Size(Scroll.Viewport.Width, double.PositiveInfinity));
+        double chrome = Bounds.Height - Scroll.Viewport.Height;          // header, footer, borders: everything but the scrolling part
+        double wanted = Math.Ceiling(Body.DesiredSize.Height + chrome + 2);
+        double limit = Screens.ScreenFromWindow(this) is { } screen ? screen.WorkingArea.Height / RenderScaling - 48 : 1000;
+        double height = Math.Clamp(wanted, MinHeight, Math.Max(MinHeight, limit));
+        if (Math.Abs(height - Bounds.Height) < 1) return;
+        var center = new PixelPoint(Position.X + (int)(Bounds.Width * RenderScaling / 2), Position.Y + (int)(Bounds.Height * RenderScaling / 2));
+        Height = height;
+        Position = new PixelPoint(center.X - (int)(Bounds.Width * RenderScaling / 2), center.Y - (int)(height * RenderScaling / 2));
     }
 
     protected override void OnClosed(EventArgs e)
     {
         base.OnClosed(e);
-        if (WindowState == WindowState.Normal && (Math.Abs(Bounds.Width - _settings.InspectWidth) > 1 || Math.Abs(Bounds.Height - _settings.InspectHeight) > 1))
+        if (WindowState == WindowState.Normal && Math.Abs(Bounds.Width - _settings.InspectWidth) > 1)
         {
             _settings.InspectWidth = Bounds.Width;
-            _settings.InspectHeight = Bounds.Height;
             _settings.Save();
         }
     }

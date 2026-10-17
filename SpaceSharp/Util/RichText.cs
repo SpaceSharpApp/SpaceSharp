@@ -18,7 +18,7 @@ public static class RichText
     private static readonly Regex Slot = new(@"\{(\d+)\}", RegexOptions.Compiled);
     public const string Separator = "  ·  ";
 
-    public static Part Accent(string text) => new(text, "Accent", null, true);
+    public static Part Accent(string text) => new(text, "Link", null, true);   // amber as text: the Link brush, which is a deeper amber on light surfaces
     public static Part Plain(string text) => new(text, "Text");
     public static Part Dim(string text) => new(text, "TextDim");
     public static Part Colored(string text, IBrush brush) => new(text, string.Empty, brush, true);

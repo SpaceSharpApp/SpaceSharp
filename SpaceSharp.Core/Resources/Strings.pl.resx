@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Kolory okna, paneli i menu, gdy wyświetlany jest ciemny motyw: Grafit, Łupek, Mokka, Północ lub Węgiel.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Jasny wygląd</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>To samo dla jasnego motywu: Papier, Len, Mgła, Piasek lub Śnieg.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Przyciemnienie za oknami</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>O ile mapa ciemnieje, gdy nad nią otwarte są Ustawienia, Zbadaj, O programie lub okno aktualizacji. 0 zostawia ją bez zmian.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Paleta, cieniowanie i tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Wszystko, co dotyczy wyglądu mapy, znajduje się na stronie Mapa drzewa, obok podglądu.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Kolory</value></data>

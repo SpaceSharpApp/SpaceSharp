@@ -52,6 +52,20 @@ public partial class SettingsWindow : Window
         }
     }
 
+    /// <summary>Opens a tab and scrolls so the section with this heading sits near the top (for the screenshot scenes).</summary>
+    internal void ShowSection(string tab, string sectionTitle)
+    {
+        _tab = tab;
+        Build();
+        Dispatcher.UIThread.Post(() =>
+        {
+            var heading = Body.Children.OfType<TextBlock>().FirstOrDefault(t => t.Text == sectionTitle && t.FontSize == 15);
+            if (heading is null) return;
+            Body.UpdateLayout();
+            Scroller.Offset = new Vector(0, Math.Max(0, heading.Bounds.Y - 170));
+        }, DispatcherPriority.Loaded);
+    }
+
     private void Build()
     {
         BuildTabs();
@@ -112,6 +126,7 @@ public partial class SettingsWindow : Window
                         i => { _settings.Theme = new[] { "System", "Light", "Dark" }[i]; App.ApplyTheme(); }));
                 Row(Strings.Get("Settings_LookDark"), Strings.Get("Settings_LookDark_Desc"), LookCombo(dark: true));
                 Row(Strings.Get("Settings_LookLight"), Strings.Get("Settings_LookLight_Desc"), LookCombo(dark: false));
+                Row(Strings.Get("Settings_DialogDim"), Strings.Get("Settings_DialogDim_Desc"), PercentSlider(_settings.DialogDim, v => _settings.DialogDim = v, 90));
                 Row(Strings.Get("Settings_LookMoved"), Strings.Get("Settings_LookMoved_Desc"), null);
                 break;
             case "Treemap":

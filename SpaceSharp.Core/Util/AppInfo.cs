@@ -13,6 +13,10 @@ public static class AppInfo
     /// <summary>"SpaceSharp 1.2.3", the window title.</summary>
     public static string Title => $"{Name} {Version}";
 
+    /// <summary>The release before this one ("2.4.0" while this is 2.4.1), from PreviousVersion in the app's csproj; null when the build has none.</summary>
+    public static string? PreviousVersion { get; } = (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly())
+        .GetCustomAttributes<AssemblyMetadataAttribute>().FirstOrDefault(a => a.Key == "PreviousVersion")?.Value is { Length: > 0 } v ? v : null;
+
     private static string ReadVersion()
     {
         // The app's version, not Core's: the two can differ while the WPF app ships 2.2.x and the Avalonia app is 2.3.

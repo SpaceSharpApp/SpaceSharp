@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ダークテーマ表示時のウィンドウ、パネル、メニューの色：グラファイト、スレート、モカ、ミッドナイト、カーボン。</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>ライトの外観</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>ライトテーマでの同様の設定：ペーパー、リネン、ミスト、サンド、スノー。</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>ウィンドウの背後を暗くする</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>設定、検査、バージョン情報、更新の案内が手前に開いている間、マップをどれだけ暗くするか。0 はそのままにします。</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>パレット、シェーディング、文字</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>マップの見た目に関する設定はすべて「ツリーマップ」ページにあり、プレビューの横で設定できます。</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>色</value></data>

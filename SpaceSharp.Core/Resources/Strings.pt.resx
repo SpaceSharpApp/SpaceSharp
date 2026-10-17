@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>As cores da janela, dos painéis e dos menus quando o tema escuro está ativo: Grafite, Ardósia, Mocha, Meia-noite ou Carbono.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Visual claro</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>O mesmo para o tema claro: Papel, Linho, Névoa, Areia ou Neve.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Escurecer atrás das janelas</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Quanto o mapa escurece enquanto Configurações, Inspecionar, Sobre ou o aviso de atualização estão abertos por cima. 0 deixa como está.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Paleta, sombreamento e texto</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Tudo sobre a aparência do mapa está na página Treemap, ao lado de uma visualização.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Cores</value></data>

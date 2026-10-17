@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>De kleuren van het venster, panelen en menu's wanneer het donkere thema actief is: Grafiet, Leisteen, Mokka, Middernacht of Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lichte stijl</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Hetzelfde voor het lichte thema: Papier, Linnen, Nevel, Zand of Sneeuw.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Dimmen achter vensters</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hoeveel de kaart donkerder wordt terwijl Instellingen, Inspecteren, Over of de updatemelding erboven open staat. 0 laat hem zoals hij is.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, schaduw en tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles over hoe de kaart eruitziet staat op de pagina Treemap, naast een voorbeeld.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Kleuren</value></data>

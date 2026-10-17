@@ -17,8 +17,12 @@ internal sealed class AppSettings
     public string? PaletteDark { get; set; }                        // the palette for each theme; the map switches with the theme
     public string? PaletteLight { get; set; }
 
-    /// <summary>The palette name chosen for the theme, falling back to the last one chosen at all.</summary>
-    public string? PaletteFor(bool dark) => (dark ? PaletteDark : PaletteLight) ?? Palette;
+    /// <summary>
+    /// The palette name chosen for the theme, or null when none was chosen for it: the caller then takes the
+    /// theme's default. The last palette chosen at all (<see cref="Palette"/>) is not a fallback here, because a
+    /// dark palette picked under the dark theme must not follow the app into the light theme.
+    /// </summary>
+    public string? PaletteFor(bool dark) => dark ? PaletteDark : PaletteLight;
 
     /// <summary>Remembers the palette for the theme it was picked under.</summary>
     public void SetPalette(bool dark, string name)
@@ -27,6 +31,7 @@ internal sealed class AppSettings
         Palette = name;
     }
     public string? ColorMode { get; set; } = "ByDepth";
+    public int DialogDim { get; set; } = 45;                        // how much the map darkens behind Settings, Inspect and the like, 0 to 90 percent
     public string LookDark { get; set; } = "Graphite";               // the app chrome's colors in the dark theme (UiLooks)
     public string LookLight { get; set; } = "Paper";                // and in the light theme
     public string? Theme { get; set; }
@@ -142,8 +147,12 @@ internal sealed class AppSettings
         return new AppSettings();
     }
 
+    /// <summary>True while posing screenshot scenes, so a theme or palette the scene flips is never written to disk.</summary>
+    public static bool Frozen { get; set; }
+
     public void Save()
     {
+        if (Frozen) return;
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);

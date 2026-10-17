@@ -34,8 +34,8 @@
       </StackPanel>
     </Border>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-      <StackPanel Margin="24,14,24,20">
+    <ScrollViewer x:Name="Scroll" VerticalScrollBarVisibility="Auto">
+      <StackPanel x:Name="Body" Margin="24,14,24,20">
         <Border x:Name="Callout" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="3,0,0,0" Padding="12,9" Margin="0,2,0,0" IsVisible="False">
           <TextBlock x:Name="CalloutText" TextWrapping="Wrap" FontSize="12.5" />
         </Border>

@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Кольори вікна, панелей і меню, коли показано темну тему: графіт, сланець, мокко, північ або карбон.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Світлий вигляд</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Те саме для світлої теми: папір, льон, імла, пісок або сніг.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Затемнення за вікнами</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Наскільки темнішає карта, поки над нею відкриті Налаштування, Огляд, Про програму або вікно оновлення. 0 залишає як є.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Палітра, затінення та текст</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Усе про вигляд карти є на сторінці «Деревоподібна карта» поруч із попереднім переглядом.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Кольори</value></data>

@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>어두운 테마일 때 창, 패널, 메뉴의 색상입니다: 그래파이트, 슬레이트, 모카, 미드나이트 또는 카본.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>밝은 모양</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>밝은 테마의 같은 설정입니다: 페이퍼, 리넨, 미스트, 샌드 또는 스노우.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>창 뒤 어둡게</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>설정, 검사, 정보, 업데이트 안내가 위에 열려 있는 동안 맵을 얼마나 어둡게 할지. 0이면 그대로 둡니다.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>팔레트, 음영 및 텍스트</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>맵의 모양에 관한 모든 설정은 미리 보기 옆의 트리맵 페이지에 있습니다.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>색상</value></data>

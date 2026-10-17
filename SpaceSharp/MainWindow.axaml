@@ -12,6 +12,7 @@
        panel with drives and largest items, the map (or the start screen, the Insights view, the scan card), and
        the status bar. The text is set in Build() from the same Strings.resx. -->
 
+  <Grid>
   <DockPanel>
     <!-- ============================================================ top bar -->
     <Border DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="10,8">
@@ -258,4 +259,7 @@
       </Grid>
     </Grid>
   </DockPanel>
+  <!-- the dim behind Settings, Inspect, About and the update prompt; its opacity is Settings › Appearance › Dim behind windows -->
+  <Border x:Name="DimOverlay" Background="Black" Opacity="0" IsVisible="False" IsHitTestVisible="False" />
+  </Grid>
 </Window>

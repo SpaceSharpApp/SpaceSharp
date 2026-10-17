@@ -768,6 +768,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ألوان النافذة واللوحات والقوائم عند عرض السمة الداكنة: Graphite أو Slate أو Mocha أو Midnight, GitHub Dark أو Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>المظهر الفاتح</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>الشيء نفسه للسمة الفاتحة: Paper أو Linen أو Mist أو Sand, GitHub Light أو Snow.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>تعتيم خلف النوافذ</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>مقدار تعتيم الخريطة أثناء فتح الإعدادات أو الفحص أو حول أو مطالبة التحديث فوقها. 0 يتركها كما هي.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>لوحة الألوان والتظليل والنص</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>كل ما يخص مظهر الخريطة موجود في صفحة «الخريطة الشجرية»، بجانب معاينة.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>الألوان</value></data>

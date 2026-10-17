@@ -38,4 +38,3 @@ tools/.fonts/
 
 # Website assets generated on demand (the site itself lives outside this repository)
 docs/m/
-tools/__pycache__/make-assets.cpython-313.pyc

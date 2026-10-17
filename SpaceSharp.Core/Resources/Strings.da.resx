@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Farverne på vinduet, panelerne og menuerne, når det mørke tema vises: Grafit, Skifer, Mokka, Midnat eller Kulstof.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lyst udseende</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Det samme for det lyse tema: Papir, Hør, Dis, Sand, GitHub Light eller Sne.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Dæmp bag vinduer</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hvor meget kortet mørkner, mens Indstillinger, Undersøg, Om eller opdateringsvinduet er åbent over det. 0 lader det være.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, skygning og tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alt om kortets udseende findes på siden Treemap ved siden af et eksempel.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farver</value></data>

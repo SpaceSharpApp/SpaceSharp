@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>I colori di finestra, pannelli e menu quando è attivo il tema scuro: Grafite, Ardesia, Moka, Mezzanotte o Carbonio.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Aspetto chiaro</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Lo stesso per il tema chiaro: Carta, Lino, Nebbia, Sabbia o Neve.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Oscura dietro le finestre</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Quanto si scurisce la mappa mentre Impostazioni, Ispeziona, Informazioni o l'avviso di aggiornamento sono aperti sopra. 0 la lascia com'è.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Tavolozza, ombreggiatura e testo</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Tutto ciò che riguarda l'aspetto della mappa è nella pagina Treemap, accanto a un'anteprima.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Colori</value></data>

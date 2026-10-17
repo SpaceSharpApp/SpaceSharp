@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Färgerna på fönstret, panelerna och menyerna när det mörka temat visas: Grafit, Skiffer, Mocka, Midnatt eller Kol.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Ljust utseende</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Samma sak för det ljusa temat: Papper, Linne, Dis, Sand, GitHub Light eller Snö.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Dämpa bakom fönster</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hur mycket kartan mörknar medan Inställningar, Undersök, Om eller uppdateringsrutan är öppen ovanpå. 0 lämnar den som den är.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palett, skuggning och text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Allt som rör kartans utseende finns på sidan Trädkarta, bredvid en förhandsgranskning.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Färger</value></data>

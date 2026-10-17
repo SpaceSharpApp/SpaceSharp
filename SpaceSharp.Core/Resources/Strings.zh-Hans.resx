@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>显示深色主题时窗口、面板和菜单的颜色：石墨、板岩、摩卡、午夜或碳黑。</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>浅色外观</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>浅色主题的对应设置：纸张、亚麻、薄雾、沙色或雪白。</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>窗口后方变暗</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>在设置、检查、关于或更新提示打开时，地图变暗的程度。0 表示保持原样。</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>配色、阴影和文字</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>有关地图外观的所有设置都在“树状图”页面，旁边有预览。</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>颜色</value></data>

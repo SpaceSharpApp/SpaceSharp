@@ -176,6 +176,13 @@ public sealed partial class TreemapControl : Panel
     /// <summary>The folder the camera is on (shown in the breadcrumb).</summary>
     public FsNode? FocusedFolder => _focus;
 
+    /// <summary>Where a node is drawn right now, in the control's coordinates, or null when it is not on screen (or merged into a cluster).</summary>
+    public Rect? BoundsOf(FsNode node)
+    {
+        EnsureLayout();
+        return _index.TryGetValue(node, out var item) ? item.Bounds : null;
+    }
+
     /// <summary>The last clicked item. Setting it replaces the whole selection with that one item.</summary>
     public FsNode? SelectedNode
     {

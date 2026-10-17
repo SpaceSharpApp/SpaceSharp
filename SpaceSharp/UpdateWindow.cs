@@ -36,13 +36,14 @@ public static class UpdateWindow
     }
 
     /// <summary>
-    /// The prompt with nothing behind it, for trying the window out: the next minor version as the one on offer,
-    /// canned release notes, and an Install that only plays the download. Ctrl+Shift+Alt+U in the main window.
+    /// The prompt with nothing behind it, for trying the window out and for the screenshots: this build's version as
+    /// the one on offer and the release before it (PreviousVersion in the csproj) as the one you have, canned release
+    /// notes, and an Install that only plays the download. Ctrl+Shift+Alt+U in the main window.
     /// </summary>
     public static Task ShowPreview(Window owner)
     {
-        string current = Updater.Instance.CurrentVersion;
-        string version = TryVersion(current, out var v) ? $"{v.Major}.{v.Minor + 1}.0" : "9.9.0";
+        string version = AppInfo.Version;
+        string current = AppInfo.PreviousVersion ?? (TryVersion(version, out var v) ? (v.Build > 0 ? $"{v.Major}.{v.Minor}.{v.Build - 1}" : $"{v.Major}.{Math.Max(0, v.Minor - 1)}.0") : "1.0.0");
         PreviewNotes = version;
         static async Task Install(Action<int> progress)
         {
@@ -57,7 +58,7 @@ public static class UpdateWindow
     private static string? PreviewNotes;
 
     private static string PreviewMarkdown(string version) =>
-        $"## {version}\n\n### Start screen\n- The start screen is laid out for any number of saved scans; the last one is a panel with a ring, the earlier ones are rows.\n\n### Drives\n- Each drive is a letter tile with the bar and the free space under the name.\n\n### Largest items\n- The list is a small table with a color per file type, a share column and a legend.\n\n### Fixes\n- Zoom to folder on a merged cluster fills the window with the cluster.\n- This is a preview of the update prompt; nothing is downloaded.";
+        $"## {version}\n\n### Start screen\n- The start screen is laid out for any number of saved scans; the last one is a panel with a ring, the earlier ones are rows.\n\n### Filter drawer\n- One stacked bar shows how the scan divides between the file types; size and age are scales with seven ticks each.\n\n### Drives\n- Each drive is a letter tile with the bar, used of total and free under the name.\n\n### Largest items\n- The list is a small table with a color per file type, a share column and a legend.\n\n### Fixes\n- Zoom to folder on a merged cluster fills the window with the cluster.\n- This is a preview of the update prompt; nothing is downloaded.";
 
     private static async Task Show(Window owner, string version, string current, Task<string?> load, Func<Action<int>, Task> installer)
     {
@@ -118,7 +119,7 @@ public static class UpdateWindow
             var highlights = Highlights(await load, 3);
             if (highlights.Count > 0) blurb.Text = string.Join(" · ", highlights) + ". " + Strings.Get("Update_Hint");
         };
-        await window.ShowDialog(owner);
+        await window.ShowModal(owner);
     }
 
     private static Window CreateWindow(string title, double width)
@@ -183,7 +184,7 @@ public static class UpdateWindow
 
         var load = version == PreviewNotes ? Task.FromResult<string?>(PreviewMarkdown(version)) : span ? LoadNotesSinceAsync(sinceVersion!, version) : LoadNotesAsync(version);
         window.Opened += async (_, _) => notes.Text = Abridge(await load, span ? 40 : 14) ?? Strings.Get("WhatsNew_Unavailable");
-        await window.ShowDialog(owner);
+        await window.ShowModal(owner);
     }
 
     /// <summary>True when an update prompt should show more than one release: the installed version is known and at

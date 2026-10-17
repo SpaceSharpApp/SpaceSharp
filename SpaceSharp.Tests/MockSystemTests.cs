@@ -61,6 +61,27 @@ public class MockSystemTests
     }
 
     [Fact]
+    public void SceneFlagsAreParsedAndImplyTheMock()
+    {
+        var c = CommandLine.Parse(new[] { "--scene", "Start", "--shot", "out/shot-start.png", "--size", "1600x900" });
+        Assert.True(c.Mock);
+        Assert.Equal("start", c.Scene);
+        Assert.EndsWith("shot-start.png", c.Shot);
+        Assert.Equal((1600, 900), c.Size);
+        Assert.Null(CommandLine.Parse(new[] { "--size", "tiny" }).Size);
+    }
+
+    [Fact]
+    public void RecentScansAreNewestFirstWithADriveAndAFolder()
+    {
+        var recent = MockSystem.RecentScans();
+        for (int i = 1; i < recent.Count; i++) Assert.True(recent[i - 1].Info.ScannedUtc > recent[i].Info.ScannedUtc);
+        Assert.True(recent[0].IsDrive);
+        Assert.Contains(recent, r => !r.IsDrive && r.Info.FileCount > 0);
+        Assert.All(recent.Where(r => r.IsDrive), r => Assert.True(r.Total > r.Free));
+    }
+
+    [Fact]
     public void MockFlagIsParsedAndKeptOutOfTheHelp()
     {
         Assert.True(CommandLine.Parse(new[] { "--mock" }).Mock);

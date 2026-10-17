@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Koyu tema gösterilirken pencere, panel ve menü renkleri: Grafit, Arduvaz, Moka, Gece Yarısı veya Karbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Açık görünüm</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Açık tema için aynısı: Kâğıt, Keten, Sis, Kum veya Kar.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Pencerelerin arkasını karart</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Ayarlar, İncele, Hakkında veya güncelleme uyarısı üstte açıkken haritanın ne kadar karardığı. 0 olduğu gibi bırakır.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, gölgelendirme ve metin</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Haritanın görünümüyle ilgili her şey, bir önizlemenin yanında, Ağaç haritası sayfasında.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Renkler</value></data>

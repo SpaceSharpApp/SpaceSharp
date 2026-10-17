@@ -17,8 +17,10 @@ namespace SpaceSharp;
 /// </summary>
 public sealed class ShortcutsWindow : Window
 {
-    // the widest row (Esc, a gap, F1 to F12, a half gap, Home, Del) is 16.5 units and 16 gaps, which fills the card at 900 px
-    private const double Unit = 44.5, Gap = 5, KeyHeight = 36;
+    // the widest row (Esc, a gap, F1 to F12, a half gap, Home, Del) is 16.5 units and 16 gaps, which fills the card
+    private const double WindowWidth = 980, Gap = 5, KeyHeight = 36;
+    // the key width that makes the widest row fill the card: window less the body margins (24 + 24) and the card padding (14 + 14)
+    private const double Unit = (WindowWidth - 48 - 28 - 16 * Gap) / 16.5;
     private static readonly bool Mac = OperatingSystem.IsMacOS();
     private static string Ctrl => Mac ? "⌘" : "Ctrl";
     private static readonly FontFamily Mono = new("Cascadia Mono, Consolas, Menlo, monospace");
@@ -40,7 +42,7 @@ public sealed class ShortcutsWindow : Window
     {
         Title = Strings.Get("About_Shortcuts");
         TitleBarTheme.Attach(this);
-        Width = 900; SizeToContent = SizeToContent.Height; CanResize = false;
+        Width = WindowWidth; SizeToContent = SizeToContent.Height; CanResize = false;
         WindowStartupLocation = WindowStartupLocation.CenterOwner; ShowInTaskbar = false;
 
         var settings = AppSettings.Current;
@@ -89,7 +91,8 @@ public sealed class ShortcutsWindow : Window
         body.Children.Add(mice);
 
         // the legend: three groups side by side, in the platform's key names
-        var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("*,18,*,18,*") };
+        // the first group has the short lines, so the other two get more of the width
+        var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("0.8*,18,1.1*,18,1.1*") };
         int column = 0;
         foreach (var (group, rows) in Groups())
         {
@@ -97,11 +100,12 @@ public sealed class ShortcutsWindow : Window
             list.Children.Add(new TextBlock { Text = group, FontSize = 11.5, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 4, 0, 4), Classes = { "dim" } });
             foreach (var (key, what) in rows)
             {
-                var row = new DockPanel { Height = 24 };
-                var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center, Child = new TextBlock { Text = key, FontSize = 10.5, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
+                // a line that does not fit its column wraps onto a second one (the row grows); nothing is trimmed
+                var row = new DockPanel { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
+                var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Top, Child = new TextBlock { Text = key, FontSize = 10.5, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
+                chip.Margin = new Thickness(0, 2, 8, 0);
                 row.Children.Add(chip);
-                row.Children.Add(new TextBlock { Text = what, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
-                ToolTip.SetTip(row, what);
+                row.Children.Add(new TextBlock { Text = what, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 17 });
                 list.Children.Add(row);
             }
             Grid.SetColumn(list, column); column += 2;
@@ -111,7 +115,7 @@ public sealed class ShortcutsWindow : Window
 
         // the footer
         var foot = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        var close = new Button { Content = Strings.Get("About_Close"), Classes = { "primary" }, IsDefault = true, IsCancel = true, MinWidth = 84 };
+        var close = new Button { Content = Strings.Get("About_Close"), Classes = { "primary" }, IsDefault = true, IsCancel = true, MinWidth = 84, Height = 32, VerticalAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         close.Click += (_, _) => Close();
         DockPanel.SetDock(close, Dock.Right);
         foot.Children.Add(close);

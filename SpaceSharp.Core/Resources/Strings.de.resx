@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Die Farben von Fenster, Bereichen und Menüs, wenn das dunkle Design aktiv ist: Graphit, Schiefer, Mokka, Mitternacht oder Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Helles Erscheinungsbild</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Dasselbe für das helle Design: Papier, Leinen, Nebel, Sand, GitHub Light oder Schnee.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Hinter Fenstern abdunkeln</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Wie stark die Karte abgedunkelt wird, solange Einstellungen, Untersuchen, Info oder die Update-Abfrage darüber offen sind. 0 lässt sie, wie sie ist.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, Schattierung und Text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles zum Aussehen der Karte befindet sich auf der Seite Treemap, neben einer Vorschau.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farben</value></data>

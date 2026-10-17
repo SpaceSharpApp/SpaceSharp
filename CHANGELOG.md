@@ -2,6 +2,24 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.4.1 (unreleased)
+
+### Windows over the map
+- While Settings, Inspect, About or the update prompt is open, the window behind it darkens, so the open window stands out. Settings › Appearance › Dim behind windows sets how much (45% to start; 0 turns it off), and the change shows at once.
+
+### Shortcuts
+- The Shortcuts window is wider, the keyboard scales to fill it, and the list under it gives the two longer groups more room, so every shortcut reads on one line; a line that still does not fit wraps instead of being cut off. Three of the lines are shorter ("Move the selection to the Recycle Bin", "Switch between the map and Insights", "Drives and largest items panel"), and the Close button is centered in the footer.
+
+### Fixes
+- Switching themes kept the other theme's palette: going from dark to light left the map on Graphite instead of Pastel, and back again. Each theme now opens with its own last pick, or its default when there is none.
+- The Inspect window is as tall as its content: a folder with four rows under "Where the space is" no longer sits in a window with half a screen of empty space under the rows, and a long selection grows the window up to what the screen allows before it scrolls. Only the width is remembered now.
+- Amber text was hard to read in the light theme: links such as Open folder and Reload, the "Common:" suggestions under Leave out, breadcrumbs and the amber words in the start screen and the filter line. Text in amber uses a deep amber on light surfaces now (the dark theme is unchanged). The Files / Folders / Types buttons sit on the window color instead of a gray fill, which read heavy in the light theme, and Delete all saved scans is a red outline that fills red under the pointer, in both themes.
+
+### Under the hood
+- The README screenshots come from the app itself now: `--scene <name>` poses the window on the pretend PC as one of the eleven pictures (the map, the drawer, Insights, color by change, Inspect, Settings, the right-click menu, the start screen, About, the update prompt, the light theme) and `--shot file.png` writes it and exits; `tools/screenshots.ps1` runs all of them. The settings are frozen during a pose.
+- The preview of the update prompt (Ctrl+Shift+Alt+U) offers this build's version and says "You have" the release before it, from `<PreviousVersion>` in the csproj, instead of a made-up version and "unknown".
+- The browser drawing of the window (docs/spacesharp-mock.js) and the screenshot tool built on it (tools/screenshot-mockup.html, tools/screenshots.js) are gone, since the app poses its own screenshots; `CHANGELOG-1.x.md` is gone too, the 1.x notes being on the GitHub releases.
+
 ## 2.4.0
 
 ### Start screen
@@ -24,7 +42,7 @@ What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x relea
 
 ### Under the hood
 - For trying the app without a scan: `--mock` starts on a pretend PC with the sample drive and drives from the screenshot mockup, Ctrl+Shift+Alt+M loads it in a running app, and Ctrl+Shift+Alt+U opens the update prompt with nothing behind it. None of the three are listed anywhere in the app.
-- The screenshot mockup (docs/spacesharp-mock.js) draws the new start screen, drawer, drive list, largest-items table and tab buttons, the Settings window as its own window with the sample-drive preview, the Custom palettes row, the Tone slider and the Light from tiles, the update prompt and What's new, and the Inspect age donut the way the app does, and takes its version from the page; the README screenshots, their mobile copies, the brand assets and the social preview are regenerated for 2.4, and the drawn README graphics (tools/readme-graphics.html, docs/readme-*.png) are gone, since the README no longer uses them.
+- The README screenshots, their mobile copies, the brand assets and the social preview are regenerated for 2.4, and the drawn README graphics (tools/readme-graphics.html, docs/readme-*.png) are gone, since the README no longer uses them.
 
 ### Fixes
 - Inspect's "By age" donut was drawn in four grays with no amber, because the accent was looked up before the window had a theme and came back empty; the bands run amber to gray again, in both themes. Its center showed a figure that was no slice (the two oldest bands added together, "over a year old", cut off mid-word); it shows the biggest band now, as the type donut shows its biggest type, and a label the hole cannot hold on one line wraps onto a second line instead of being trimmed. The band percentages are of the dated bytes, so they add up to 100% when some files carry no date.

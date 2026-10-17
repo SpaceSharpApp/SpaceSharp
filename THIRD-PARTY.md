@@ -14,7 +14,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 ### Lucide icons
 
-The interface icons in `SpaceSharp/Themes/Icons.axaml` (and the copies in `docs/spacesharp-mock.js`) are from Lucide, https://lucide.dev, release 0.468.0, converted to path geometry by `tools/make-icons.py`. A few drawn in the same style (the SSD and USB stick pictures) are SpaceSharp's own.
+The interface icons in `SpaceSharp/Themes/Icons.axaml` are from Lucide, https://lucide.dev, release 0.468.0, converted to path geometry by `tools/make-icons.py`. A few drawn in the same style (the SSD and USB stick pictures) are SpaceSharp's own.
 
 ISC License. Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2022.
 
@@ -49,7 +49,6 @@ On Windows the scanner, the Recycle Bin, the title bar colors and the drive dete
 
 - **Bricolage Grotesque** by Mathieu Triay, https://github.com/ateliertriay/bricolage, SIL Open Font License 1.1. The landing page loads it from Google Fonts; `tools/make-assets.py` downloads the TTF to draw the wordmark into the header, the installer bitmaps and the social preview. The font is not inside the app or the installers.
 - **Pillow** (MIT-CMU / HPND license) and **CairoSVG** (LGPL 3.0, used as a library, unmodified): `tools/make-assets.py`, `make-social.py` and `make-mobile-shots.py` render the icon, the images and the WebP screenshots.
-- **Playwright** (Apache License 2.0) with its bundled Chromium: `tools/screenshots.js` captures the README screenshots from `docs/spacesharp-mock.js`.
 - **Shields.io** badges in the README are images fetched from https://shields.io (CC0 for the service's output).
 - The landing page is plain HTML, CSS and JavaScript with no frameworks; it loads nothing but the Google Fonts stylesheet above.
 

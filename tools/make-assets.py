@@ -14,7 +14,8 @@ One definition here produces every brand file in the repository:
   SpaceSharp/Assets/SpaceSharp.svg        master mark (deep carve)
   SpaceSharp/Assets/SpaceSharp.ico        Windows icon on the tile: 16, 20, 24, 32, 48, 64, 128, 256
   SpaceSharp/Assets/SpaceSharp-256.png    the mark the app shows in its own UI
-  docs/icon.png, docs/icon-512.png        landing page favicon and store icon
+  docs/icon.png, docs/icon-512.png        landing page favicon and store icon (the bare mark)
+  docs/app-icon-256.png, -512.png         the Windows icon on its tile, as PNG, for listings that want the app icon
   docs/header.png                         README header, 1280x360 on GitHub's #0D1117
   docs/wordmark.svg                       horizontal lockup, mark + wordmark
   installer/banner.bmp                    WiX WixUIBannerBmp, 493x58 (branding at the right edge)
@@ -192,6 +193,8 @@ def make_pngs():
     write("SpaceSharp/Assets/SpaceSharp-256.png", png_bytes(mark_image(256)))
     write("docs/icon.png", png_bytes(mark_image(256)))
     write("docs/icon-512.png", png_bytes(mark_image(512)))
+    write("docs/app-icon-256.png", png_bytes(tile_image(256)))   # the Windows icon on its tile, for store listings
+    write("docs/app-icon-512.png", png_bytes(tile_image(512)))
 
 def make_ico(rel: str, sizes=(16, 20, 24, 32, 48, 64, 128, 256)):
     frames = [tile_image(px) for px in sizes]

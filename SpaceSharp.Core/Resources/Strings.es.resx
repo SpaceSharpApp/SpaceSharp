@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Los colores de la ventana, los paneles y los menús cuando se muestra el tema oscuro: Grafito, Pizarra, Moca, Medianoche o Carbón.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Aspecto claro</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Lo mismo para el tema claro: Papel, Lino, Bruma, Arena o Nieve.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Atenuar detrás de ventanas</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Cuánto se oscurece el mapa mientras Ajustes, Inspeccionar, Acerca de o el aviso de actualización están abiertos encima. 0 lo deja como está.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Paleta, sombreado y texto</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Todo lo relativo al aspecto del mapa está en la página Treemap, junto a una vista previa.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Colores</value></data>

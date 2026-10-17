@@ -766,6 +766,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Les couleurs de la fenêtre, des panneaux et des menus quand le thème sombre est affiché : Graphite, Ardoise, Moka, Minuit ou Carbone.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Style clair</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Idem pour le thème clair : Papier, Lin, Brume, Sable ou Neige.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Assombrir derrière les fenêtres</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>À quel point la carte s'assombrit pendant que Paramètres, Inspecter, À propos ou l'invite de mise à jour sont ouverts par-dessus. 0 la laisse telle quelle.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, ombrage et texte</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Tout ce qui concerne l'apparence de la carte se trouve sur la page Treemap, à côté d'un aperçu.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Couleurs</value></data>

@@ -68,6 +68,7 @@ public partial class MainWindow : Window
         Opened += async (_, _) =>
         {
             _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
+            if (App.Args.Scene is { } scene) { await PoseAsync(scene); return; }   // posing a screenshot: no update check either
             if (App.Args.Mock) LoadMock(MockSystem.Drives[0].Root);
             else if (App.Args.OpenFile is { } openFile) await OpenScanFileAsync(openFile);
             else if (App.Args.ScanPath is { } startPath)
@@ -267,6 +268,16 @@ public partial class MainWindow : Window
     // ------------------------------------------------------------------ look (Settings › Treemap, read from settings.json)
 
     /// <summary>Everything from the settings file, applied to this window: the map's look, the palette, the panel. Settings calls it after every change.</summary>
+    private int _dimDepth;
+
+    /// <summary>Darkens the whole window while a window is open over it; nested windows keep it dark until the last one closes.</summary>
+    public void Dim(bool on)
+    {
+        _dimDepth = Math.Max(0, _dimDepth + (on ? 1 : -1));
+        DimOverlay.Opacity = Math.Clamp(_settings.DialogDim, 0, 90) / 100.0;
+        DimOverlay.IsVisible = _dimDepth > 0 && DimOverlay.Opacity > 0;
+    }
+
     public void ApplySettings()
     {
         _building = true;
@@ -279,6 +290,7 @@ public partial class MainWindow : Window
         RefreshTopList();
         RefreshInsights();
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
+        if (_dimDepth > 0) { DimOverlay.Opacity = Math.Clamp(_settings.DialogDim, 0, 90) / 100.0; DimOverlay.IsVisible = DimOverlay.Opacity > 0; }
     }
 
     /// <summary>
@@ -440,16 +452,23 @@ public partial class MainWindow : Window
     /// <summary>
     /// Shows the sample drive from the screenshot mockup as if it had just been scanned, compared with a scan from
     /// yesterday, and swaps the Drives list for the pretend PC's drives. Rescans and drive clicks stay on the pretend
-    /// PC until the app is restarted. --mock on the command line, or Ctrl+Shift+Alt+M.
+    /// PC until the app is restarted; nothing on screen says so, so the screenshots read as the real thing. --mock on the command line, or Ctrl+Shift+Alt+M.
     /// </summary>
     private void LoadMock(string rootPath)
     {
         if (_scanCts is not null) return;
-        bool first = !_mock;
-        _mock = true;
+        EnterMock();
         var (root, info, baseline) = MockSystem.Build(rootPath);
-        if (first) { Title += "  (mock)"; BuildDrives(); }
         ShowLoadedScan(root, info, baseline, Strings.Get("Status_OpenedVerb"));
+    }
+
+    /// <summary>Switches to the pretend PC without opening a scan: its drives in the list, its saved scans on the start screen.</summary>
+    private void EnterMock()
+    {
+        if (_mock) return;
+        _mock = true;
+        BuildDrives();
+        BuildRecentScans();
     }
 
     /// <summary>The amber-on-control bar the drive rows and the top lists draw: the fraction as a share of the width.</summary>
@@ -858,7 +877,7 @@ public partial class MainWindow : Window
         var nodes = Treemap.SelectedNodes.Where(n => n.IsReal).ToList();   // not merged groups or the free-space box
         if (nodes.Count == 0 && Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is { } focus) nodes.Add(focus);
         if (nodes.Count == 0) return;
-        new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, n => { ShowView(insights: false); Treemap.FocusOn(n); }).ShowDialog(this);
+        _ = new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, n => { ShowView(insights: false); Treemap.FocusOn(n); }).ShowModal(this);
     }
 
     private void OpenSelected()
@@ -1130,8 +1149,8 @@ public partial class MainWindow : Window
         Treemap.Scheme = scheme;
     }
 
-    private void Settings_Click(object? sender, RoutedEventArgs e) => new SettingsWindow(this).ShowDialog(this);
-    private void About_Click(object? sender, RoutedEventArgs e) => new AboutWindow().ShowDialog(this);
+    private void Settings_Click(object? sender, RoutedEventArgs e) => _ = new SettingsWindow(this).ShowModal(this);
+    private void About_Click(object? sender, RoutedEventArgs e) => _ = new AboutWindow().ShowModal(this);
 
     /// <summary>Starts a fresh copy and closes this one (after a language change).</summary>
     public void RestartApp()

@@ -267,7 +267,7 @@
 
   <!-- settings page -->
   <Style Selector="TextBlock.accent">
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
   </Style>
   <Style Selector="Border.card">
     <Setter Property="Background" Value="{DynamicResource Panel}" />
@@ -347,7 +347,7 @@
 
   <!-- the Files / Folders / Types / Changes switch over the largest-items list: outlined buttons with an icon, the chosen one in amber -->
   <Style Selector="Button.segment">
-    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="Background" Value="{DynamicResource Window}" />
     <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
     <Setter Property="BorderThickness" Value="1" />
@@ -358,7 +358,7 @@
     <Setter Property="Cursor" Value="Hand" />
   </Style>
   <Style Selector="Button.segment:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+    <Setter Property="Background" Value="{DynamicResource Window}" />
     <Setter Property="BorderBrush" Value="{DynamicResource TextDim}" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
   </Style>
@@ -379,7 +379,7 @@
 
   <Style Selector="Button.link">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="MinHeight" Value="0" />
@@ -387,7 +387,7 @@
   </Style>
   <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Foreground" Value="{DynamicResource AccentHover}" />
+    <Setter Property="Foreground" Value="{DynamicResource LinkHover}" />
   </Style>
 
   <!-- a text link with an icon (About): no box, the text goes amber under the pointer -->
@@ -421,19 +421,22 @@
     <Setter Property="Height" Value="32" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
   </Style>
+  <!-- a destructive action that is not the default: red text in a red outline on the window color, red filled under the pointer -->
   <Style Selector="Button.danger-outline">
-    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Background" Value="{DynamicResource Window}" />
     <Setter Property="Foreground" Value="{DynamicResource Danger}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Danger}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="FontWeight" Value="Medium" />
     <Setter Property="Padding" Value="12,0" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Cursor" Value="Hand" />
   </Style>
   <Style Selector="Button.danger-outline:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource ControlHover}" />
-    <Setter Property="Foreground" Value="{DynamicResource Danger}" />
+    <Setter Property="Background" Value="{DynamicResource Danger}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Danger}" />
+    <Setter Property="Foreground" Value="White" />
   </Style>
 
   <Style Selector="ToggleButton.chip">
@@ -600,6 +603,6 @@
     <Setter Property="Background" Value="{DynamicResource Accent}" />
   </Style>
   <Style Selector="Button.crumb.accent-text">
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
   </Style>
 </Styles>

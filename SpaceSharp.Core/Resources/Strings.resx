@@ -206,14 +206,14 @@
   <data name="Key_AddSelection" xml:space="preserve"><value>Add to selection</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Cancel a scan</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Copy the selected paths</value></data>
-  <data name="Key_Delete" xml:space="preserve"><value>Move the selected item to the Recycle Bin</value></data>
+  <data name="Key_Delete" xml:space="preserve"><value>Move the selection to the Recycle Bin</value></data>
   <data name="Key_Filter" xml:space="preserve"><value>Filter the map</value></data>
   <data name="Key_Grouping" xml:space="preserve"><value>Switch density to Everything (no grouping) and back</value></data>
   <data name="Key_Inspect" xml:space="preserve"><value>Inspect the selection</value></data>
   <data name="Key_NextColor" xml:space="preserve"><value>Next color mode</value></data>
   <data name="Key_OpenScan" xml:space="preserve"><value>Open a saved scan</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Pan while zoomed in</value></data>
-  <data name="Key_Panel" xml:space="preserve"><value>Largest files, folders and types panel</value></data>
+  <data name="Key_Panel" xml:space="preserve"><value>Drives and largest items panel</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows Properties for the selected item</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Rescan</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>Save the scan to a file</value></data>
@@ -769,6 +769,8 @@
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>The colors of the window, panels and menus when the dark theme is showing: Graphite, Slate, Mocha, Midnight, GitHub Dark or Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Light look</value></data>
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>The same for the light theme: Paper, Linen, Mist, Sand, GitHub Light or Snow.</value></data>
+  <data name="Settings_DialogDim" xml:space="preserve"><value>Dim behind windows</value></data>
+  <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>How much the map darkens while Settings, Inspect, About or the update prompt is open over it. 0 leaves it as it is.</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, shading and text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Everything about how the map looks is on the Treemap page, next to a preview.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Colors</value></data>
@@ -789,7 +791,7 @@
   <data name="Palette_GroupAny" xml:space="preserve"><value>Any theme</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>The palette for the {0} theme. Each theme remembers its own; the map switches with the theme.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · made for the {1} theme</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Switch between the map and the Insights view</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Switch between the map and Insights</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>By type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Safe to clear</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>When changed</value></data>
