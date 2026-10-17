@@ -1,6 +1,6 @@
 # Changelog
 
-What changed in each SpaceSharp release, newest first. The 1.x releases are in [CHANGELOG-1.x.md](CHANGELOG-1.x.md). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
+What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
 ## 2.4.0
 
@@ -193,6 +193,6 @@ SpaceSharp 2.0 is a new map, a new filter and a new panel under the map. It is a
 
 ### Under the hood
 - Grouping moved into `Layout/Grouping.cs` with tests of its own (the data cutoff at a reference window, the on-screen cutoff quantized to powers of two). The panel's numbers come from `Services/DriveInsights.cs`, pure and tested: bytes by type, bytes by month, the cleanup suggestions and their filters. Color parsing for the new settings is in `Util/ColorText.cs`, tested. The update prompt's version shortening and highlight headings are tested too.
-- The changelog is split: this file holds 2.0 onward, `CHANGELOG-1.x.md` every 1.x release. The release script and the in-app What's new read the `## version` sections as before.
+- The changelog starts over at 2.0 in this file; the 1.x notes stay on the GitHub releases. The release script and the in-app What's new read the `## version` sections as before.
 - The README was rewritten to be short; the long material (how the scanner, layout, renderer, filter and updater work, the project structure, where to add a palette, file type, setting, shortcut or translation) is in `DEVELOPING.md`.
 - The landing page was rebuilt around a live drawing of the 2.0 window. On a phone, where there is nothing to hover and no room for the window, it shows a swipeable gallery of the screenshots instead, the comparison table stacks into one card per feature, and a card above the downloads sends the link to the PC. `docs/spacesharp-mock.js` is one engine shared by the page and `tools/screenshot-mockup.html`; it is a mockup of the app with sample data, not a build of it, and says so in the image. `node tools/screenshots.js` renders every README screenshot from it with headless Chromium; `tools/make-social.py` draws the social preview.
