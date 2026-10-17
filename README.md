@@ -14,11 +14,13 @@
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
   <img src="https://img.shields.io/badge/.NET-10-8C84D6" alt=".NET 10">
   <img src="https://img.shields.io/badge/Avalonia-12-8B44AC" alt="Avalonia 12">
+  <img src="https://img.shields.io/badge/languages-18-3FB950" alt="18 languages">
 </p>
 
 <p align="center">
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
   <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.4-21262D?style=for-the-badge" alt="What's new in 2.4"></a>
 </p>
 
 <p align="center">
@@ -27,37 +29,62 @@
   <sub>Every file and folder is a box sized by the space it uses. Sample data.</sub>
 </p>
 
-Scan a drive, and the whole thing fills the window: folders are frames with a title bar, files are boxes inside them, and the biggest boxes are where your space went. Zoom into any folder, filter in plain words, see what changed since last time, and send what you do not need to the Recycle Bin without leaving the map.
+Your drive is full and you have no idea why. SpaceSharp reads the whole thing in seconds and draws it as one picture: folders are frames with a title bar, files are boxes inside them, and the biggest boxes are where your space went. Zoom into any folder, type a filter in plain words, see what changed since last time, and send what you do not need to the Recycle Bin without leaving the map.
 
-One portable `.exe`, or an installer that updates itself. Free and open source, and code-signed. Since 2.3 SpaceSharp is one app for Windows, macOS and Linux, built on [Avalonia](https://avaloniaui.net); the Mac and Linux packages follow in a later release.
+One portable `.exe`, or an installer that updates itself. Free, open source, code-signed, and it sends nothing anywhere. Since 2.3 SpaceSharp is one app for Windows, macOS and Linux, built on [Avalonia](https://avaloniaui.net); the Mac and Linux packages follow in a later release.
+
+## Thirty seconds to an answer
+
+1. **Click a drive.** The NTFS file table is read directly, so a terabyte takes seconds, not minutes.
+2. **Look at the big boxes.** That is your space. Double-click to zoom in, Backspace to come back up.
+3. **Type what you are looking for.** `videos over 1GB older than a year` dims everything else. Select the matches, press Del, done.
+
+## Why people keep it installed
+
+- **It is fast where it counts.** A drive with a million files is on screen before you have finished reading this sentence. Scans are saved, so the next launch opens yesterday's map instantly and shows what grew.
+- **It speaks your language.** The filter understands `photos`, `over 500 MB`, `not modified in 2 years`, in any combination, and the drawer writes the same filter from checkboxes and scales. The interface itself comes in 18 languages.
+- **It tells you what is safe to clear.** Insights lists the usual suspects (Windows.old, caches, the Recycle Bin, stale Downloads) with the space they hold and one button each.
+- **It looks the way you want.** Thirteen palettes, twelve looks for the window, cushion shading with its own light direction, and a palette editor for your own colors, all with a live preview.
+- **It never surprises you.** Deleting always goes through the Recycle Bin, the map updates without a rescan, and the only network traffic is the update check, which the portable exe does not even make.
+
+## A tour
+
+<table align="center">
+  <tr>
+    <td align="center" width="50%"><a href="docs/shot-start.png"><img src="docs/shot-start.png" alt="The start screen"></a><br><sub><b>Start.</b> Your last scan ready to open, the earlier ones under it, how full every drive is now.</sub></td>
+    <td align="center" width="50%"><a href="docs/shot-insights.png"><img src="docs/shot-insights.png" alt="The Insights view"></a><br><sub><b>Insights.</b> The map swapped for the numbers, every row a click back to it.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/shot-filter.png"><img src="docs/shot-filter.png" alt="The filter drawer"></a><br><sub><b>Filter.</b> Pick types, set size and age on a scale, and the map dims to the matches.</sub></td>
+    <td align="center"><a href="docs/shot-change.png"><img src="docs/shot-change.png" alt="Color by change"></a><br><sub><b>What changed.</b> Grew warm, shrank cool, new in amber.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window"></a><br><sub><b>Inspect.</b> Where the space is, by type and by age.</sub></td>
+    <td align="center"><a href="docs/shot-menu.png"><img src="docs/shot-menu.png" alt="The right-click menu"></a><br><sub><b>Right-click.</b> Inspect, open, filter to this type, or send it to the Recycle Bin.</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="docs/shot-settings.png"><img src="docs/shot-settings.png" alt="Settings, Treemap page"></a><br><sub><b>Shading.</b> Every slider shows in the preview as you drag it.</sub></td>
+    <td align="center"><a href="docs/shot-light.png"><img src="docs/shot-light.png" alt="The light theme, colored by file type"></a><br><sub><b>Light theme.</b> Colored by file type, with the Pastel palette.</sub></td>
+  </tr>
+</table>
 
 ## What it does
 
 | | |
 |---|---|
 | **Scans a whole drive in seconds** | Reads the NTFS file table directly (asks for administrator rights once); a parallel folder walk covers everything else. Hidden and system files included, junctions skipped. |
-| **One map, shaded your way** | Folders are frames, files are cushioned boxes. Shading depth, light direction, title bars, text colors and grid are sliders in Settings with a live preview. |
-| **Filter in plain words** | `videos over 500MB older than 1 year` dims everything else and keeps the layout, so you see where the matches are. A drawer with checkboxes and sliders writes the same filter for you. |
-| **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty (Windows.old, caches, the Recycle Bin, old Downloads) with one Recycle button; when files were last changed; the largest folders and files; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
-| **Remembers every scan** | Opens with yesterday's map on screen. Color by change shows what grew, shrank or appeared since last time. |
+| **One map, shaded your way** | Folders are frames, files are cushioned boxes. Shading depth, spread, tone, fade and light direction, title bars, text colors and grid are controls in Settings with a live preview. |
+| **Filter in plain words** | `videos over 500MB older than 1 year` dims everything else and keeps the layout, so you see where the matches are. A drawer with type tiles, size and age scales and quick filters writes the same filter for you. |
+| **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty with one Recycle button; when files were last changed; the largest folders and files; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
+| **Remembers every scan** | Opens with yesterday's map on screen. Color by change shows what grew, shrank or appeared since last time. The side panel's Largest items has a Changes tab for the same. |
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
-| **Thirteen palettes, twelve looks, and your own** | Seven palettes for the dark theme, six for the light one, twelve hues each, and six looks per theme for the window itself. A palette creator makes new ones from a base color or by hex. |
+| **Thirteen palettes, twelve looks, and your own** | Seven palettes for the dark theme, six for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
+| **Knows your keyboard** | The shortcuts window draws your keyboard (QWERTY, Nordic, QWERTZ, AZERTY or Dvorak, Mac keys on a Mac) with the keys SpaceSharp uses lit up. |
 
-<table align="center">
-  <tr>
-    <td align="center" width="50%"><a href="docs/shot-insights.png"><img src="docs/shot-insights.png" alt="The Insights view"></a><br><sub><b>Insights.</b> The map swapped for the numbers, every row a click back to it.</sub></td>
-    <td align="center" width="50%"><a href="docs/shot-filter.png"><img src="docs/shot-filter.png" alt="The filter drawer"></a><br><sub><b>Filter.</b> Check types, set size and age, and the map dims to the matches.</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="docs/shot-change.png"><img src="docs/shot-change.png" alt="Color by change"></a><br><sub><b>What changed.</b> Grew warm, shrank cool, new in amber.</sub></td>
-    <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window"></a><br><sub><b>Inspect.</b> Where the space is, by type and by age.</sub></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="docs/shot-settings.png"><img src="docs/shot-settings.png" alt="Settings, Treemap page"></a><br><sub><b>Shading.</b> Every slider shows in the preview as you drag it.</sub></td>
-    <td align="center"><a href="docs/shot-menu.png"><img src="docs/shot-menu.png" alt="The right-click menu"></a><br><sub><b>Right-click.</b> Inspect, open, filter to this type, or send it to the Recycle Bin.</sub></td>
-  </tr>
-</table>
+### New in 2.4
+
+A redesigned start screen, filter drawer, drive list, largest-items table, palette editor and shortcuts window; a keyboard map that follows your layout; clusters that zoom properly; and a long list of fixes. The whole story is in the [changelog](CHANGELOG.md).
 
 ## Download
 
@@ -81,11 +108,12 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 1. Click a drive in the **Drives** list, or **Scan folder** for one folder. Windows asks for administrator rights for a drive scan; without them, protected folders are skipped and marked.
 2. The biggest boxes are the biggest space users. Hover for the path and size, double-click a folder to zoom in, Backspace or the mouse back button to go up.
 3. Right-click a box for Inspect, Open, Show in Explorer, Properties, copy, filter to its type, select its folder, or Recycle Bin.
-4. Press **B** to switch between the map and Insights, **Ctrl+F** for the filter, **L** for the side panel with your drives and the largest files, and the gear or **Ctrl+,** for Settings.
+4. Press **B** to switch between the map and Insights, **Ctrl+F** for the filter, **L** for the side panel with your drives and the largest files, and the gear or **Ctrl+,** for Settings. **F1** draws your keyboard with every shortcut on it.
 
-### The filter
+<details>
+<summary><b>The filter language</b></summary>
 
-The drawer (Ctrl+F) has file types as rows with a share bar, size and age controls, Files or Folders, and presets such as Large files and Untouched for 2 years. Its name box also takes the full syntax, and anything you type becomes checked rows and set controls. Settings › Map › Filter layout switches to a one-row rail instead.
+The drawer (Ctrl+F) has file types as tiles with a share bar, size and age scales, Files or Folders, and quick filters such as Large files and Untouched for 2 years. Its name box also takes the full syntax, and anything you type becomes picked tiles and set scales. Settings › Map › Filter layout switches to a one-row rail instead.
 
 | You can type | Meaning |
 |---|---|
@@ -99,7 +127,10 @@ The drawer (Ctrl+F) has file types as rows with a share bar, size and age contro
 
 Terms combine. **Select matches** (Ctrl+A) selects all of them; Del sends them to the Recycle Bin in one go.
 
-### Settings
+</details>
+
+<details>
+<summary><b>Settings</b></summary>
 
 Everything applies at once and is saved. The pages:
 
@@ -109,13 +140,16 @@ Everything applies at once and is saved. The pages:
 - **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
 - **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
 
-**Color by** is Top folder, Depth (like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes: twelve folder colors, the file tint and the type colors, by hex or sliders, with a sample map beside them. They are JSON files in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too:
+**Color by** is Top folder, Depth (like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes: twelve folder colors, the file tint and the type colors, typed as hex or picked with sliders, with a sample map beside them. They are JSON files in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too:
 
 ```json
 { "name": "Mine", "theme": "dark", "folders": ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A"] }
 ```
 
-### Command line
+</details>
+
+<details>
+<summary><b>Command line</b></summary>
 
 | | |
 |---|---|
@@ -126,7 +160,10 @@ Everything applies at once and is saved. The pages:
 
 Only one SpaceSharp runs at a time; starting it again hands the request to the open window.
 
-### Keyboard and mouse
+</details>
+
+<details>
+<summary><b>Keyboard and mouse</b></summary>
 
 | Input | Action |
 |---|---|
@@ -152,7 +189,12 @@ Only one SpaceSharp runs at a time; starting it again hands the request to the o
 | Esc | Cancel a scan, close the filter |
 | F1 | About and shortcuts |
 
-### Where things are stored
+The same list, drawn on your own keyboard layout, is under About › Keyboard shortcuts.
+
+</details>
+
+<details>
+<summary><b>Where things are stored</b></summary>
 
 | What | Where |
 |---|---|
@@ -162,6 +204,8 @@ Only one SpaceSharp runs at a time; starting it again hands the request to the o
 | The installed app | `%LocalAppData%\SpaceSharp\` |
 
 Nothing leaves the machine except the update check against GitHub Releases, which only installed copies make.
+
+</details>
 
 ## Building
 
