@@ -434,6 +434,24 @@ public sealed partial class TreemapControl : Panel
         _pinnedFocus = folder;
         EnsureLayout();
 
+        // A merged cluster ("171 items") is a stand-in the layout rebuilds at every zoom: its members leave it as they
+        // get pixels, so the box moves and shrinks on the way in. Aim at the folder's current cluster on every frame
+        // and stop when it is gone, rather than converging on the folder around it (which is already in view).
+        if (node.IsGroup)
+        {
+            if (!_index.TryGetValue(node, out var box)) { FocusOn(folder, animate); return; }
+            var (groupZoom, groupCenter) = FitView(box.Bounds);
+            if (!animate || !AnimateZoom || Bounds.Width < 8)
+            {
+                StopAnimation();
+                SetView(groupZoom, groupCenter);
+                SnapToGroup(node);
+            }
+            else StartAnimation(groupZoom, groupCenter, node);
+            UpdateFocus();
+            return;
+        }
+
         var visible = DeepestLaidOut(folder);
         if (!animate || !AnimateZoom || visible is null || Bounds.Width < 8)
         {

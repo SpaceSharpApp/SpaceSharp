@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>有 1 个受保护的文件夹无法读取，因此地图中缺少其内容。</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} 天前</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} 小时前</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>1 小时前</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>刚刚</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} 分钟前</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} 个月前</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp 扫描 (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} 可用</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>已用 {0}，共 {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>本地磁盘</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} / {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 个月</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 年</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 年</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>扫描驱动器或文件夹即可查看最大的项目。</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>{0} 中最大的文件</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>{0} 中最大的文件夹</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>文件</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>文件夹</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>类型</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>变化</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>占扫描的比例</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>大小</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>关于 SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>下次再询问</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>移至回收站</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>将 {0:N0} 个项目移至回收站</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>太小而无法显示的文件</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>地图上的聚合块无法检查：放大后选择一个文件或文件夹</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>可用空间无法检查</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>文件夹，{0:N0} 个文件</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>{0} 文件</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>文件</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>配色</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>名称</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>在配色列表中显示的名称</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>适用于</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>深色</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>浅色</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>两者</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>十二种色相，每个顶层文件夹一种，按深度循环</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>文件夹 {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>第 {0} 个顶层文件夹，以及向下每隔十二层的文件夹</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>生成：</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>彩虹</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>邻近色</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>双色</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>单一色相</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>随机</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>随机的基色和色彩分布。反复按下直到效果满意，然后再微调。</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>基于</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>生成器的起始基色。单击可更改。</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>基色</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>“生成”的起点；默认为第一个文件夹颜色</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>文件</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>文件夹颜色向白色提亮</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>自行设置每种文件颜色</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>配色文件已复制到剪贴板。</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>取消</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>保存并使用</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>调色板用于哪个主题</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>填充文件夹</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>四种都从文件夹 1 的颜色开始</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>色轮上均匀分布的十二种色相</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>接近文件夹 1 的色相</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>文件夹 1 的色相与其对色交替</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>仅文件夹 1 的深浅变化</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>粘贴 12 个十六进制</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>用剪贴板中的十六进制代码按顺序替换文件夹颜色</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>剪贴板中没有十六进制颜色</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>在任意行输入十六进制，或打开取色器</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>每个文件夹颜色下的文件颜色</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>文件夹</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>文件颜色</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>文件类型</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>十六进制</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>标签</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>示例</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>打开取色器：滑块和推荐色调</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>试试：</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>派生</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>文件：向白色 {0}%</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>文件：自定义颜色</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>该名称已被使用</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} 是内置配色。请为您的配色另取一个名称。</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>替换配色？</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>导航</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>选择和操作</value></data>
   <data name="Keys_View" xml:space="preserve"><value>视图和文件</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>SpaceSharp 使用的按键</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>键盘布局</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>按 {0} 键盘绘制；如果不对，请另选一种。</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>琥珀色按键是 SpaceSharp 使用的；角上的小 {0} 表示按住 {0}。</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>琥珀色按键是 SpaceSharp 使用的；角上的小 {0} 表示按住 Command。Delete 是 Return 上方的键。</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>在左侧选择一个驱动器</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>在左侧选择一个驱动器，或从上次停下的地方继续</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>已保存的扫描会立即打开，并与新扫描进行比较。</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>扫描文件夹</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>打开已保存的扫描…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>有管理员权限时，几秒内即可扫描整个驱动器。</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>已用 {0}%</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>已扫描 {0}</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>所有驱动器共 {1}，已用 {0}</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>已用 {0}</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>已扫描驱动器共 {0}</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>上次扫描 · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>打开地图</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>重新扫描并比较</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>更早的扫描</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 次扫描</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} 次扫描</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>最新在前</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>已用 {0}% · 可用 {1}</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>文件夹 · {0} 个文件</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存的扫描保留</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>SpaceSharp 启动时会删除早于此时限的自动保存。您自己保存为文件的扫描不受影响。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 天</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 到 3 年</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>更早</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>超过一年</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>最早的更改：{0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>这 {0} 占文件夹的 {1}。其余 {2:N0} 个文件共占 {3}。</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>此文件夹的 {0} 来自同一项：{1}，大小 {2}。</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>嵌套文件保留多少阴影。调低可使深层更平静，让顶层文件夹更突出。</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>光从此侧照来</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>光从正前方照来</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>左上</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>上</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>右上</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>左</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>正前方</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>右</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>左下</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>下</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>右下</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>深色外观</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>显示深色主题时窗口、面板和菜单的颜色：石墨、板岩、摩卡、午夜或碳黑。</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>浅色外观</value></data>
@@ -802,6 +852,16 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Rail_Files" xml:space="preserve"><value>文件</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>文件夹</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>占扫描比例</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>全部</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 个月</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 个月</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 个月</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 年</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 年</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 年</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>已选 {0} · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>未选择：所有类型</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>已扫描 {0} 中</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>全部清除</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>筛选布局</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>地图右侧带完整控件的抽屉（默认），或路径下方每个条件一个标签的横栏。Ctrl+F 都可打开。</value></data>

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -248,67 +249,179 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- the start screen's recent scans
 
-    /// <summary>The saved scans as tiles under the start hint: a ring that says how full the drive is now, the label, the scanned size and when.</summary>
-    private void BuildRecentScans()
+    /// <summary>What the start screen knows about one saved scan: the drive it is on, if any, and how full that drive is now.</summary>
+    private sealed record RecentScan(ScanFileInfo Info, bool IsDrive, DriveInfo? Drive, double Fraction)
     {
-        RecentTiles.Children.Clear();
-        var recent = ScanFile.RecentAutoSaves();
-        EmptyTitle.Text = Strings.Get(recent.Count > 0 ? "Start_PickADriveOrContinue" : "Start_PickADrive");
-        EmptyText.Text = Strings.Get(recent.Count > 0 ? "Start_RecentHint" : "Start_FirstHint");
-        long usedAll = 0, totalAll = 0;
-        foreach (var info in recent)
-        {
-            bool drive = PlatformFiles.Current.IsVolumeRoot(info.RootPath);
-            DriveInfo? di = null;
-            if (drive) { try { var d = new DriveInfo(info.RootPath); if (d.IsReady) di = d; } catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { } }
-            double fraction = di is { TotalSize: > 0 } ? 1 - (double)di.AvailableFreeSpace / di.TotalSize : double.NaN;
-            if (di is not null) { usedAll += di.TotalSize - di.AvailableFreeSpace; totalAll += di.TotalSize; }
-
-            var stack = new StackPanel { Width = 132 };
-            stack.Children.Add(Ring(info, drive, fraction));
-            string title = drive
-                ? (string.IsNullOrWhiteSpace(di?.VolumeLabel) ? (DriveKinds.Label(DriveKinds.Detect(info.RootPath)) ?? DisplayName(info.RootPath)) : di!.VolumeLabel)
-                : DisplayName(info.RootPath);
-            stack.Children.Add(new TextBlock { Text = title, FontWeight = FontWeight.SemiBold, FontSize = 13.5, TextAlignment = TextAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 10, 0, 0) });
-            stack.Children.Add(new TextBlock { Text = Strings.Format("Start_ScannedSize", SizeFormatter.Format(info.Bytes)) + "\n" + Ago(info.ScannedUtc), FontSize = 12, TextAlignment = TextAlignment.Center, Margin = new Thickness(0, 4, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
-
-            var tile = new Button { Content = stack, Classes = { "tile" }, Margin = new Thickness(6) };
-            ToolTip.SetTip(tile, info.RootPath);
-            var captured = info;
-            tile.Click += async (_, _) =>
-            {
-                try
-                {
-                    var (root, loaded) = await Task.Run(() => ScanFile.Load(captured.Path));
-                    ShowLoadedScan(root, loaded, null, Strings.Get("Status_OpenedVerb"));
-                }
-                catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
-                {
-                    await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
-                }
-            };
-            RecentTiles.Children.Add(tile);
-        }
-        EmptyTotals.Text = totalAll > 0 ? Strings.Format("Start_Totals", SizeFormatter.Format(usedAll), SizeFormatter.Format(totalAll)) : string.Empty;
-        EmptyTotals.IsVisible = totalAll > 0;
+        public bool NearlyFull => IsDrive && !double.IsNaN(Fraction) && Fraction >= 0.85;
     }
 
     /// <summary>
-    /// The tile's ring: the used share of the drive as an arc, the drive letter inside, and the percentage under it;
-    /// warm when the drive is nearly full. A folder scan shows the folder icon in the ring's place instead.
+    /// The saved scans under the start hint, newest first: the last scan as a panel with a large ring, its name,
+    /// what was scanned when, and buttons to open it or scan again; the earlier scans as rows in a list below.
     /// </summary>
-    private Grid Ring(ScanFileInfo info, bool drive, double fraction)
+    private void BuildRecentScans()
     {
-        const double size = 88, thickness = 5;
-        var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center };
-        if (!drive || double.IsNaN(fraction))
+        RecentHost.Children.Clear();
+        var recent = ScanFile.RecentAutoSaves().Select(Describe).ToList();
+        EmptyTitle.Text = Strings.Get(recent.Count > 0 ? "Start_PickADriveOrContinue" : "Start_PickADrive");
+        EmptyText.Text = Strings.Get(recent.Count > 0 ? "Start_RecentHint" : "Start_FirstHint");
+        EmptyFastLine.Text = OperatingSystem.IsWindows() ? Strings.Get("Start_FastScanLine") : string.Empty;
+
+        long usedAll = 0, totalAll = 0;
+        foreach (var scan in recent)
+            if (scan.Drive is not null) { usedAll += scan.Drive.TotalSize - scan.Drive.AvailableFreeSpace; totalAll += scan.Drive.TotalSize; }
+        EmptyTotalsUsed.Text = Strings.Format("Start_TotalsUsed", SizeFormatter.Format(usedAll));
+        EmptyTotals.Text = Strings.Format("Start_TotalsOf", SizeFormatter.Format(totalAll));
+        EmptyTotalsPanel.IsVisible = totalAll > 0;
+
+        if (recent.Count == 0) return;
+        RecentHost.Children.Add(FeaturedScan(recent[0]));
+        if (recent.Count == 1) return;
+
+        var head = new DockPanel { Margin = new Thickness(2, 6, 2, 0) };
+        var newest = new TextBlock { Text = Strings.Get("Start_NewestFirst"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } };
+        DockPanel.SetDock(newest, Dock.Right);
+        head.Children.Add(newest);
+        var title = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 };
+        title.Children.Add(new TextBlock { Text = Strings.Get("Start_EarlierScans").ToUpper(System.Globalization.CultureInfo.CurrentCulture), FontSize = 12, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.4, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } });
+        title.Children.Add(new TextBlock { Text = ScanCount(recent.Count - 1), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } });
+        head.Children.Add(title);
+        RecentHost.Children.Add(head);
+
+        var rows = new StackPanel();
+        for (int i = 1; i < recent.Count; i++)
         {
-            var icon = Icons.Make(drive ? DriveKinds.IconName(DriveKinds.Detect(info.RootPath)) : "Folder", 34, "TextDim");
+            if (i > 1) rows.Children.Add(new Border { Height = 1, Classes = { "rule" } });
+            rows.Children.Add(ScanRow(recent[i]));
+        }
+        RecentHost.Children.Add(new Border { Child = rows, CornerRadius = new CornerRadius(10), Classes = { "start-panel" } });
+    }
+
+    private static RecentScan Describe(ScanFileInfo info)
+    {
+        bool drive = PlatformFiles.Current.IsVolumeRoot(info.RootPath);
+        DriveInfo? di = null;
+        if (drive) { try { var d = new DriveInfo(info.RootPath); if (d.IsReady) di = d; } catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException) { } }
+        double fraction = di is { TotalSize: > 0 } ? 1 - (double)di.AvailableFreeSpace / di.TotalSize : double.NaN;
+        return new RecentScan(info, drive, di, fraction);
+    }
+
+    private static string ScanCount(int count) => count == 1 ? Strings.Get("Start_ScanCountOne") : Strings.Format("Start_ScanCount", count);
+
+    /// <summary>The drive letter (or the folder's name) and, dimmed beside it, the volume label or the folder's path.</summary>
+    private (string Name, string Detail) Names(RecentScan scan)
+    {
+        string name = DisplayName(scan.Info.RootPath);
+        if (!scan.IsDrive) return (name, scan.Info.RootPath);
+        string? label = scan.Drive?.VolumeLabel;
+        return (name, string.IsNullOrWhiteSpace(label) ? DriveKinds.Label(DriveKinds.Detect(scan.Info.RootPath)) ?? string.Empty : label);
+    }
+
+    /// <summary>"50% used · 477 GB free" for a drive, "Folder · 184,302 files" for a folder scan.</summary>
+    private static string Usage(RecentScan scan) => scan.Drive is { } d
+        ? Strings.Format("Start_UsedFree", (int)Math.Round(Math.Clamp(scan.Fraction, 0, 1) * 100), SizeFormatter.Format(d.AvailableFreeSpace))
+        : Strings.Format("Start_FolderFiles", scan.Info.FileCount.ToString("N0"));
+
+    /// <summary>The name in one size and the detail dimmed beside it, on one baseline.</summary>
+    private TextBlock NameLine(RecentScan scan, double nameSize, double detailSize)
+    {
+        var (name, detail) = Names(scan);
+        var block = new TextBlock { FontSize = nameSize, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
+        block.Inlines!.Add(new Run(name));
+        if (detail.Length > 0)
+        {
+            var run = new Run("  " + detail) { FontSize = detailSize, FontWeight = FontWeight.Normal };
+            run.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
+            block.Inlines.Add(run);
+        }
+        return block;
+    }
+
+    /// <summary>The newest scan: a large ring, "Last scan · 13 hours ago", the name, what was scanned, and the two buttons.</summary>
+    private Control FeaturedScan(RecentScan scan)
+    {
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 26 };
+        var ring = Ring(scan, 104, 7, 26);
+        ToolTip.SetTip(ring, scan.Info.RootPath);
+        grid.Children.Add(ring);
+
+        var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+        Grid.SetColumn(text, 1);
+        text.Children.Add(new TextBlock { Text = Strings.Format("Start_LastScan", Ago(scan.Info.ScannedUtc)).ToUpper(System.Globalization.CultureInfo.CurrentCulture), FontSize = 11.5, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.4, Classes = { "accent" } });
+        var name = NameLine(scan, 24, 18);
+        name.Margin = new Thickness(0, 4, 0, 0);
+        text.Children.Add(name);
+        text.Children.Add(new TextBlock { Text = Strings.Format("Start_ScannedSize", SizeFormatter.Format(scan.Info.Bytes)) + " · " + Usage(scan), FontSize = 13.5, Margin = new Thickness(0, 4, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, Classes = { scan.NearlyFull ? "danger" : "dim" } });
+
+        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 16, 0, 0) };
+        var open = new Button { Content = Icons.WithText("Treemap", Strings.Get("Start_OpenTheMap")), Classes = { "primary" }, Height = 36, Padding = new Thickness(16, 0) };
+        open.Click += (_, _) => _ = OpenRecentAsync(scan.Info);
+        buttons.Children.Add(open);
+        var again = new Button { Content = Icons.WithText("Refresh", Strings.Get("Start_ScanAgainCompare")), Classes = { "action" }, Height = 36 };
+        ToolTip.SetTip(again, Strings.Get("Start_RecentHint"));
+        again.Click += (_, _) => _ = ScanAsync(scan.Info.RootPath);
+        buttons.Children.Add(again);
+        text.Children.Add(buttons);
+        grid.Children.Add(text);
+
+        return new Border { Child = grid, Padding = new Thickness(28, 22), Classes = { "start-panel" } };
+    }
+
+    /// <summary>One earlier scan as a row: a small ring, the name, the scanned size, when, how full the drive is now, a chevron.</summary>
+    private Button ScanRow(RecentScan scan)
+    {
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("36,*,110,110,220,16"), ColumnSpacing = 16 };
+        grid.Children.Add(Ring(scan, 36, 4, 0));
+        var name = NameLine(scan, 14, 14);
+        Grid.SetColumn(name, 1);
+        grid.Children.Add(name);
+        var size = new TextBlock { Text = SizeFormatter.Format(scan.Info.Bytes), FontSize = 13, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+        Grid.SetColumn(size, 2);
+        grid.Children.Add(size);
+        var ago = new TextBlock { Text = Ago(scan.Info.ScannedUtc), FontSize = 13, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+        Grid.SetColumn(ago, 3);
+        grid.Children.Add(ago);
+        var use = new TextBlock { Text = Usage(scan), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { scan.NearlyFull ? "danger" : "dim" } };
+        Grid.SetColumn(use, 4);
+        grid.Children.Add(use);
+        var chevron = Icons.Make("ChevronRight", 16, "TextDim");
+        Grid.SetColumn(chevron, 5);
+        grid.Children.Add(chevron);
+
+        var row = new Button { Content = grid, Classes = { "row" } };
+        ToolTip.SetTip(row, scan.Info.RootPath);
+        row.Click += (_, _) => _ = OpenRecentAsync(scan.Info);
+        return row;
+    }
+
+    private async Task OpenRecentAsync(ScanFileInfo info)
+    {
+        try
+        {
+            var (root, loaded) = await Task.Run(() => ScanFile.Load(info.Path));
+            ShowLoadedScan(root, loaded, null, Strings.Get("Status_OpenedVerb"));
+        }
+        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+        {
+            await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// The ring: the used share of the drive as an arc, warm when the drive is nearly full, with the drive letter
+    /// inside when <paramref name="letterSize"/> is set. A folder scan, or a drive that is not there now, shows an icon instead.
+    /// </summary>
+    private Grid Ring(RecentScan scan, double size, double thickness, double letterSize)
+    {
+        var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+        if (!scan.IsDrive || double.IsNaN(scan.Fraction))
+        {
+            var icon = Icons.Make(scan.IsDrive ? DriveKinds.IconName(DriveKinds.Detect(scan.Info.RootPath)) : "Folder", Math.Round(size * 0.55), "TextDim");
             icon.HorizontalAlignment = HorizontalAlignment.Center; icon.VerticalAlignment = VerticalAlignment.Center;
             grid.Children.Add(icon);
             return grid;
         }
-        fraction = Math.Clamp(fraction, 0, 1);
+        double fraction = Math.Clamp(scan.Fraction, 0, 1);
         var track = new Avalonia.Controls.Shapes.Ellipse { StrokeThickness = thickness };
         track.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Control"));
         grid.Children.Add(track);
@@ -320,12 +433,10 @@ public partial class MainWindow
             StrokeDashArray = new AvaloniaList<double> { Math.Max(0.01, circumference * fraction), circumference },
             RenderTransformOrigin = RelativePoint.Center, RenderTransform = new RotateTransform(-90)
         };
-        bool nearlyFull = fraction >= 0.85;
-        arc.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable(nearlyFull ? "Danger" : "Accent"));
+        arc.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable(scan.NearlyFull ? "Danger" : "Accent"));
         grid.Children.Add(arc);
-        var letter = new TextBlock { Text = DisplayName(info.RootPath), FontSize = 18, FontWeight = FontWeight.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 0, 14) };
-        var pct = new TextBlock { Text = Strings.Format("Start_PercentUsed", (int)Math.Round(fraction * 100)), FontSize = 10.5, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 24, 0, 0), Classes = { nearlyFull ? "danger" : "dim" } };
-        grid.Children.Add(letter); grid.Children.Add(pct);
+        if (letterSize > 0)
+            grid.Children.Add(new TextBlock { Text = DisplayName(scan.Info.RootPath), FontSize = letterSize, FontWeight = FontWeight.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center });
         return grid;
     }
 

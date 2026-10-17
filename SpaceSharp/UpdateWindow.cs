@@ -32,7 +32,35 @@ public static class UpdateWindow
         if (updater.Available is null) return;
         string version = updater.AvailableVersion ?? string.Empty;
         string current = updater.CurrentVersion;
+        await Show(owner, version, current, SpansReleases(current, version) ? LoadNotesSinceAsync(current, version) : LoadNotesAsync(version), updater.InstallAndRestartAsync);
+    }
 
+    /// <summary>
+    /// The prompt with nothing behind it, for trying the window out: the next minor version as the one on offer,
+    /// canned release notes, and an Install that only plays the download. Ctrl+Shift+Alt+U in the main window.
+    /// </summary>
+    public static Task ShowPreview(Window owner)
+    {
+        string current = Updater.Instance.CurrentVersion;
+        string version = TryVersion(current, out var v) ? $"{v.Major}.{v.Minor + 1}.0" : "9.9.0";
+        PreviewNotes = version;
+        static async Task Install(Action<int> progress)
+        {
+            for (int i = 0; i <= 100; i += 4) { progress(i); await Task.Delay(60); }
+            await Task.Delay(900);
+            throw new InvalidOperationException("Preview only: nothing was installed.");
+        }
+        return Show(owner, version, current, Task.FromResult<string?>(PreviewMarkdown(version)), Install);
+    }
+
+    /// <summary>The version the preview pretends is out; the What's new window reads canned notes for it instead of GitHub.</summary>
+    private static string? PreviewNotes;
+
+    private static string PreviewMarkdown(string version) =>
+        $"## {version}\n\n### Start screen\n- The start screen is laid out for any number of saved scans; the last one is a panel with a ring, the earlier ones are rows.\n\n### Drives\n- Each drive is a letter tile with the bar and the free space under the name.\n\n### Largest items\n- The list is a small table with a color per file type, a share column and a legend.\n\n### Fixes\n- Zoom to folder on a merged cluster fills the window with the cluster.\n- This is a preview of the update prompt; nothing is downloaded.";
+
+    private static async Task Show(Window owner, string version, string current, Task<string?> load, Func<Action<int>, Task> installer)
+    {
         var window = CreateWindow(Strings.Get("Update_Title"), 420);
         var body = new StackPanel { Margin = new Thickness(32, 30, 32, 24) };
 
@@ -68,7 +96,7 @@ public static class UpdateWindow
             status.Text = Strings.Format("Update_Downloading", 0);
             try
             {
-                await updater.InstallAndRestartAsync(percent => Dispatcher.UIThread.Post(() =>
+                await installer(percent => Dispatcher.UIThread.Post(() =>
                 {
                     progress.Value = percent;
                     status.Text = percent >= 100 ? Strings.Format("Update_Restarting", version) : Strings.Format("Update_Downloading", percent);
@@ -85,7 +113,6 @@ public static class UpdateWindow
         window.Content = body;
 
         // The release's section headings lead the paragraph once the notes have loaded.
-        var load = SpansReleases(current, version) ? LoadNotesSinceAsync(current, version) : LoadNotesAsync(version);
         window.Opened += async (_, _) =>
         {
             var highlights = Highlights(await load, 3);
@@ -154,7 +181,7 @@ public static class UpdateWindow
         body.Children.Add(scroll);
         window.Content = body;
 
-        var load = span ? LoadNotesSinceAsync(sinceVersion!, version) : LoadNotesAsync(version);
+        var load = version == PreviewNotes ? Task.FromResult<string?>(PreviewMarkdown(version)) : span ? LoadNotesSinceAsync(sinceVersion!, version) : LoadNotesAsync(version);
         window.Opened += async (_, _) => notes.Text = Abridge(await load, span ? 40 : 14) ?? Strings.Get("WhatsNew_Unavailable");
         await window.ShowDialog(owner);
     }

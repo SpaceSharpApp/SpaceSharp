@@ -71,6 +71,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>تعذرت قراءة مجلد محمي واحد، لذا تنقص الخريطة محتوياته.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>قبل {0} أيام</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>قبل {0} ساعات</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>قبل ساعة</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>الآن</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>قبل {0} دقائق</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>قبل {0} أشهر</value></data>
@@ -148,6 +149,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>فحص SpaceSharp (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} متاح</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} مستخدم من {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>قرص محلي</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} من {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>شهر</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>سنة</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>سنتان</value></data>
@@ -232,6 +235,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>افحص قرصًا أو مجلدًا لرؤية أكبر العناصر.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>أكبر الملفات في {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>أكبر المجلدات في {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>ملف</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>مجلد</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>النوع</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>التغيير</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>الحصة من الفحص</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>الحجم</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>حول SpaceSharp ‏(F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>اسأل مجددًا في المرة القادمة</value></data>
@@ -312,6 +321,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>نقل إلى سلة المحذوفات</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>نقل {0:N0} عنصر إلى سلة المحذوفات</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>ملفات أصغر من أن تُعرض</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>لا يمكن فحص التجمعات على الخريطة: كبّر واختر ملفًا أو مجلدًا</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>لا يمكن فحص المساحة الحرة</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>مجلد، {0:N0} ملف</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>ملف {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>ملف</value></data>
@@ -342,7 +353,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>لوحة الألوان</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>الاسم</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>ما ستسميها قائمة لوحات الألوان</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>لـ</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>داكنة</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>فاتحة</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>كلتاهما</value></data>
@@ -350,17 +360,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>اثنا عشر لونًا، واحد لكل مجلد أعلى، تتكرر حسب العمق</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>المجلد {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>المجلد الأعلى رقم {0}، وكل مستوى ثانيَ عشر تحته</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>توليد:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>قوس قزح</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>متجاورة</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>لونان</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>لون واحد</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>عشوائي</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>لون أساس وتوزيع عشوائيان. اضغط حتى يعجبك شيء، ثم عدِّل.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>من</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>لون الأساس الذي يبدأ منه المولِّد. انقر لتغييره.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>لون الأساس</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>ما يبدأ منه التوليد؛ لون المجلد الأول افتراضيًا</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>الملفات</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>لون المجلد، مُفتَّحًا نحو الأبيض</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>حدد لون كل ملف بنفسك</value></data>
@@ -388,6 +393,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>ملف لوحة الألوان في الحافظة.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>إلغاء</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>حفظ واستخدام</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>لأي سمة هذه اللوحة</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>تعبئة المجلدات</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>تبدأ الأربعة كلها من لون المجلد 1</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>اثنا عشر لونًا موزعة بالتساوي على العجلة</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>ألوان قريبة من المجلد 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>لون المجلد 1 وضده بالتناوب</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>درجات المجلد 1 فقط</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>لصق 12 رمزًا سداسيًا</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>يستبدل ألوان المجلدات بالرموز السداسية في الحافظة بالترتيب</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>لا تحتوي الحافظة على ألوان سداسية</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>اكتب رمزًا سداسيًا في أي صف أو افتح المنتقي</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>لون الملفات تحت كل لون مجلد</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>المجلد</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>لون الملف</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>نوع الملف</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>سداسي</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>التسميات</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>عينة</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>فتح المنتقي: أشرطة تمرير ودرجات مقترحة</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>جرّب:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>مشتق</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>الملفات: {0}% نحو الأبيض</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>الملفات: ألوان خاصة</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>هذا الاسم مستخدم</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} لوحة ألوان مضمنة. أعطِ لوحتك اسمًا آخر.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>هل تريد استبدال لوحة الألوان؟</value></data>
@@ -619,6 +647,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>التنقل</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>التحديد والإجراءات</value></data>
   <data name="Keys_View" xml:space="preserve"><value>العرض والملفات</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>المفاتيح التي يستخدمها SpaceSharp</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>تخطيط لوحة المفاتيح</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>مرسوم للوحة مفاتيح {0}؛ اختر تخطيطًا آخر إن كان خاطئًا.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>المفاتيح الكهرمانية هي التي يستخدمها SpaceSharp؛ {0} الصغير في الزاوية يعني الضغط مع {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>المفاتيح الكهرمانية هي التي يستخدمها SpaceSharp؛ {0} الصغير في الزاوية يعني الضغط مع Command. مفتاح Delete هو المفتاح فوق Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>اختر قرصًا من اللوحة الجانبية</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>اختر قرصًا من اللوحة الجانبية، أو تابع من حيث توقفت</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>تُفتح الفحوصات المحفوظة فورًا وتُقارن بالفحص الجديد.</value></data>
@@ -626,9 +659,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>فحص مجلد</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>فتح فحص محفوظ…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>أقراص كاملة في ثوانٍ بصلاحيات المسؤول.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}٪ مستخدم</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>{0} تم فحصها</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>{0} مستخدم من {1} عبر أقراصك</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>{0} مستخدمة</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>من {0} على الأقراص المفحوصة</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>آخر فحص · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>فتح الخريطة</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>إعادة الفحص والمقارنة</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>فحوصات سابقة</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>فحص واحد</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} فحوصات</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>الأحدث أولًا</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>{0}% مستخدمة · {1} متاحة</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>مجلد · {0} ملفات</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>الاحتفاظ بالفحوصات المحفوظة لمدة</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>تُحذف الحفظات التلقائية الأقدم من هذا عند بدء SpaceSharp. الفحوصات التي حفظتها كملفات بنفسك لا تُمس أبدًا.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} أيام</value></data>
@@ -653,7 +695,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>هذه السنة</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>من سنة إلى 3 سنوات</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>أقدم</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>أقدم من سنة</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>أقدم تغيير: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>هذه الـ{0} تمثل {1} من المجلد. أما الملفات الـ{2:N0} الأخرى فتتشارك {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} من هذا المجلد شيء واحد: {1} بحجم {2}.</value></data>
@@ -714,6 +755,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>مقدار التظليل الذي تحتفظ به الملفات المتداخلة. القيمة المنخفضة تهدئ المستويات العميقة لتبرز المجلدات العليا.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>الضوء من هذه الجهة</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>الضوء من الأمام مباشرة</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>أعلى اليسار</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>أعلى</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>أعلى اليمين</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>يسار</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>من الأمام مباشرة</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>يمين</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>أسفل اليسار</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>أسفل</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>أسفل اليمين</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>المظهر الداكن</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>ألوان النافذة واللوحات والقوائم عند عرض السمة الداكنة: Graphite أو Slate أو Mocha أو Midnight, GitHub Dark أو Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>المظهر الفاتح</value></data>
@@ -804,6 +854,16 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Rail_Files" xml:space="preserve"><value>ملفات</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>مجلدات</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>الحصة من الفحص</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>الكل</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>شهر</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 أشهر</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 أشهر</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>سنة</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>سنتان</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 سنوات</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>{0} مختارة · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>لا شيء مختار: كل الأنواع</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>من {0} تم فحصها</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>مسح الكل</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>تخطيط عامل التصفية</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>درج فوق جانب الخريطة بعناصر تحكم كاملة (الافتراضي)، أو شريط تحت المسار بكبسولة لكل شرط. Ctrl+F يفتح أيًا منهما.</value></data>

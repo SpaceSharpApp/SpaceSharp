@@ -29,7 +29,7 @@ x = (MX + MARK + 72) * S
 y = 172 * S
 # the wordmark and the version pill
 end = ma.wordmark(d, x, y, 30 * S)
-pill = ma.font(800, 15 * S); label = "2.0"
+pill = ma.font(800, 15 * S); label = ma.VERSION_LABEL
 pw = int(d.textlength(label, font=pill)) + 24 * S
 px, py = end + 14 * S, y + 6 * S
 d.rounded_rectangle([px, py, px + pw, py + 26 * S], radius=13 * S, fill=ma.AMBER)

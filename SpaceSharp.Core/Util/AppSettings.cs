@@ -45,6 +45,7 @@ internal sealed class AppSettings
     public int KeepScansDays { get; set; } = 90;                    // automatic saves older than this are deleted at startup; 0 keeps them all
     public string? Language { get; set; }
     public bool ExplorerMenu { get; set; }
+    public string? KeyboardLayout { get; set; }                     // the Shortcuts window's keyboard; null = detect
     // Treemap options
     public string Density { get; set; } = "Dense";                  // Sparse, Normal, Dense, Maximum, Everything (no grouping)
     public string? DensityBeforeEverything { get; set; }            // what G returns to
@@ -107,6 +108,7 @@ internal sealed class AppSettings
         KeepScansDays = d.KeepScansDays;
         Language = d.Language;
         ExplorerMenu = d.ExplorerMenu;
+        KeyboardLayout = d.KeyboardLayout;
         Density = d.Density; DensityBeforeEverything = d.DensityBeforeEverything; Bias = d.Bias; Padding = d.Padding; BorderThickness = d.BorderThickness; MapFont = d.MapFont;
         ResetShading();
         FileCenterNames = d.FileCenterNames; FileShowSizes = d.FileShowSizes; FolderCenterNames = d.FolderCenterNames; FolderShowSizes = d.FolderShowSizes; FolderShowCounts = d.FolderShowCounts;

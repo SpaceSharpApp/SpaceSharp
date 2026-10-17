@@ -335,11 +335,14 @@ public partial class SettingsWindow : Window
         return note;
     }
 
-    /// <summary>New, Edit or Start from, Open folder, Reload: the ways into custom palettes, as in the WPF app (2.2).</summary>
+    /// <summary>
+    /// The ways into custom palettes: New and Edit (or Start from the current one) as the two real actions on one row,
+    /// and Open folder and Reload as small links under them, since those are housekeeping.
+    /// </summary>
     private Panel PaletteButtons()
     {
-        var panel = new WrapPanel { Width = 320, Margin = new Thickness(0, 0, -6, -6) };
-        var open = new Button { Classes = { "tool" }, Content = Icons.WithText("ScanFolder", Strings.Get("Palettes_OpenFolder")), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
+        var panel = new StackPanel { Spacing = 8, HorizontalAlignment = HorizontalAlignment.Right };
+        var open = new Button { Classes = { "link" }, Content = Icons.WithText("ScanFolder", Strings.Get("Palettes_OpenFolder"), 13), FontSize = 12.5, Padding = new Thickness(0) };
         open.Click += (_, _) =>
         {
             try
@@ -352,7 +355,7 @@ public partial class SettingsWindow : Window
                 _ = Dialog.Error(this, Strings.Get("Palettes_CouldNotOpen"), ex.Message);
             }
         };
-        var reload = new Button { Classes = { "tool" }, Content = Icons.WithText("Refresh", Strings.Get("Palettes_Reload")), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
+        var reload = new Button { Classes = { "link" }, Content = Icons.WithText("Refresh", Strings.Get("Palettes_Reload"), 13), FontSize = 12.5, Padding = new Thickness(0) };
         reload.Click += (_, _) =>
         {
             Palette.Reload();
@@ -361,12 +364,12 @@ public partial class SettingsWindow : Window
         };
         bool dark = App.IsDark;
         var current = Palette.Find(_settings.PaletteFor(dark), dark);
-        var create = new Button { Classes = { "tool" }, Content = Icons.WithText("Add", Strings.Get("Palettes_New")), Height = 30, Margin = new Thickness(0, 0, 6, 6) };
+        var create = new Button { Classes = { "action" }, Content = Icons.WithText("Add", Strings.Get("Palettes_New"), 14), Height = 32 };
         create.Click += async (_, _) => await OpenEditor(new PaletteDraft { Theme = dark ? PaletteTheme.Dark : PaletteTheme.Light, Folders = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), PaletteSpread.Rainbow) });
         var edit = new Button
         {
-            Classes = { "tool" }, Height = 30, Margin = new Thickness(0, 0, 6, 6),
-            Content = Icons.WithText("Palette", current.IsCustom ? Strings.Format("Palettes_Edit", current.Name) : Strings.Format("Palettes_Copy", current.Name))
+            Classes = { "action" }, Height = 32,
+            Content = Icons.WithText("Palette", current.IsCustom ? Strings.Format("Palettes_Edit", current.Name) : Strings.Format("Palettes_Copy", current.Name), 14)
         };
         edit.Click += async (_, _) =>
         {
@@ -375,10 +378,11 @@ public partial class SettingsWindow : Window
             catch (Exception ex) when (ex is IOException or InvalidDataException or FormatException or System.Text.Json.JsonException) { await Dialog.Error(this, Strings.Get("Palettes_CouldNotOpen"), ex.Message); return; }
             await OpenEditor(draft);
         };
-        panel.Children.Add(create);
-        panel.Children.Add(edit);
-        panel.Children.Add(open);
-        panel.Children.Add(reload);
+        var actions = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, HorizontalAlignment = HorizontalAlignment.Right };
+        actions.Children.Add(create); actions.Children.Add(edit);
+        var links = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 16, HorizontalAlignment = HorizontalAlignment.Right };
+        links.Children.Add(open); links.Children.Add(reload);
+        panel.Children.Add(actions); panel.Children.Add(links);
         return panel;
     }
 
@@ -668,32 +672,50 @@ public partial class SettingsWindow : Window
     }
 
     // The eight light directions, as (x, y) in the light's -1 … 1 space, plus straight ahead in the middle.
-    private static readonly (string Glyph, double X, double Y)[] Compass =
+    private static readonly (string Glyph, string Name, double X, double Y)[] Compass =
     {
-        ("↖", -0.5, -0.5), ("↑", 0, -0.7), ("↗", 0.5, -0.5),
-        ("←", -0.7, 0),    ("●", 0, 0),    ("→", 0.7, 0),
-        ("↙", -0.5, 0.5),  ("↓", 0, 0.7),  ("↘", 0.5, 0.5)
+        ("↖", "Light_TopLeft", -0.5, -0.5),   ("↑", "Light_Top", 0, -0.7),    ("↗", "Light_TopRight", 0.5, -0.5),
+        ("←", "Light_Left", -0.7, 0),         ("", "Light_Ahead", 0, 0),      ("→", "Light_Right", 0.7, 0),
+        ("↙", "Light_BottomLeft", -0.5, 0.5), ("↓", "Light_Bottom", 0, 0.7),  ("↘", "Light_BottomRight", 0.5, 0.5)
     };
 
-    /// <summary>Where the light comes from: nine buttons in a square, the lit one being the current direction.</summary>
+    /// <summary>Where the light comes from: nine flat tiles in a square with only the current one lit, a dot in the middle for straight ahead, and the name of the direction beside them.</summary>
     private Control LightCompass()
     {
-        var grid = new UniformGrid { Rows = 3, Columns = 3, Width = 102, Height = 102, HorizontalAlignment = HorizontalAlignment.Right };
         int current = 0; double best = double.MaxValue;
         for (int i = 0; i < Compass.Length; i++)
         {
             double d = Math.Pow(Compass[i].X - _settings.LightX, 2) + Math.Pow(Compass[i].Y - _settings.LightY, 2);
             if (d < best) { best = d; current = i; }
         }
+        var pad = new Grid { ColumnSpacing = 4, RowSpacing = 4, ColumnDefinitions = new ColumnDefinitions("32,32,32"), RowDefinitions = new RowDefinitions("32,32,32") };
         for (int i = 0; i < Compass.Length; i++)
         {
-            var (glyph, x, y) = Compass[i];
-            var button = new Button { Content = glyph, Classes = { i == current ? "primary" : "tool" }, Margin = new Thickness(1), Padding = new Thickness(0), FontSize = 14, MinWidth = 0, HorizontalContentAlignment = HorizontalAlignment.Center };
-            ToolTip.SetTip(button, Strings.Get(i == 4 ? "Shading_LightAhead" : "Shading_LightSide"));
-            button.Click += (_, _) => { Change(() => { _settings.LightX = x; _settings.LightY = y; }); Build(); };
-            grid.Children.Add(button);
+            var (glyph, name, x, y) = Compass[i];
+            bool on = i == current;
+            var ink = this.GetResourceObservable(on ? "Accent" : "TextDim");
+            Control face;
+            if (i == 4)
+            {
+                var dot = new Avalonia.Controls.Shapes.Ellipse { Width = 8, Height = 8 };
+                dot.Bind(Avalonia.Controls.Shapes.Shape.FillProperty, ink);
+                face = dot;
+            }
+            else
+            {
+                var arrow = new TextBlock { Text = glyph, FontSize = 14, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+                arrow.Bind(TextBlock.ForegroundProperty, ink);
+                face = arrow;
+            }
+            var tile = new ToggleButton { Classes = { "tile" }, IsChecked = on, Content = face, Padding = new Thickness(0), MinWidth = 0, Width = 32, Height = 32,
+                HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+            ToolTip.SetTip(tile, Strings.Get(name));
+            Grid.SetColumn(tile, i % 3); Grid.SetRow(tile, i / 3);
+            tile.Click += (_, _) => { Change(() => { _settings.LightX = x; _settings.LightY = y; }); Build(); };
+            pad.Children.Add(tile);
         }
-        return grid;
+        var label = new TextBlock { Text = Strings.Get(Compass[current].Name), Classes = { "dim" }, FontSize = 12.5, MinWidth = 76, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+        return new StackPanel { Orientation = Orientation.Horizontal, Spacing = 14, HorizontalAlignment = HorizontalAlignment.Right, Children = { pad, label } };
     }
 
     private static readonly (string Key, int Depth, int Spread, int Tone, int Fade)[] Presets =

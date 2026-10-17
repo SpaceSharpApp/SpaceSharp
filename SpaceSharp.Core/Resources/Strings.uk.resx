@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>Не вдалося прочитати 1 захищену папку, тому на карті бракує її вмісту.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} дн. тому</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} год тому</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>годину тому</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>щойно</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} хв тому</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} міс. тому</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>Сканування SpaceSharp (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} вільно</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} використано з {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Локальний диск</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} з {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 місяць</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 рік</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 роки</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Проскануйте диск або папку, щоб побачити найбільші елементи.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Найбільші файли в {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Найбільші папки в {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Файл</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Папка</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Тип</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Зміна</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Частка від сканування</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Розмір</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Про SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Запитати знову наступного разу</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Перемістити до Кошика</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Перемістити елементи ({0:N0}) до Кошика</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>файли, замалі для показу</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Групи на карті не можна переглянути: наблизьте й виберіть файл або папку</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Вільне місце не можна переглянути</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>папка, файлів: {0:N0}</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>файл {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>файл</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Палітра</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Ім'я</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Як її буде названо в списку палітр</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>Для</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Темна</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Світла</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Обидві</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>дванадцять відтінків, по одному на папку верхнього рівня, повторюються за глибиною</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Папка {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>папка верхнього рівня номер {0} і кожен дванадцятий рівень нижче</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Створити:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Веселка</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Сусідні</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Два тони</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>Один відтінок</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Випадково</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Випадковий базовий колір і розкид. Натискайте, доки не сподобається, а потім підлаштуйте.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>від</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Базовий колір, від якого починає генератор. Клацніть, щоб змінити.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Базовий колір</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>з чого починає «Створити»; за замовчуванням колір першої папки</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Файли</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>колір папки, освітлений у бік білого</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Задати кожен колір файлів власноруч</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Файл палітри скопійовано в буфер обміну.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Скасувати</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Зберегти й використати</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Для якої теми палітра</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Заповнити папки</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Усі чотири починаються з кольору папки 1</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>дванадцять відтінків рівномірно по колу</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>відтінки, близькі до папки 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>відтінок папки 1 і протилежний, по черзі</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>лише тони папки 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Вставити 12 hex</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Замінює кольори папок hex-кодами з буфера обміну по порядку</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>У буфері обміну немає hex-кольорів</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Введіть hex у будь-якому рядку або відкрийте палітру</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>колір файлів під кожним кольором папки</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Папка</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Колір файлів</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Тип файлу</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Підписи</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Зразок</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Відкрити палітру: повзунки та запропоновані тони</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Спробуйте:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>похідний</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Файли: {0}% до білого</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Файли: власні кольори</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Це ім'я вже зайняте</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} — вбудована палітра. Дайте своїй інше ім'я.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Замінити палітру?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Навігація</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Вибір і дії</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Вигляд і файли</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Клавіші SpaceSharp</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Розкладка клавіатури</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Намальовано для клавіатури {0}; виберіть іншу, якщо це не так.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Бурштинові клавіші використовує SpaceSharp; маленький {0} у куті означає утримувати {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Бурштинові клавіші використовує SpaceSharp; маленький {0} у куті означає утримувати Command. Delete — клавіша над Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Виберіть диск ліворуч</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Виберіть диск ліворуч або продовжте з того місця, де зупинилися</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Збережені сканування відкриваються миттєво й порівнюються з новим.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Сканувати папку</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Відкрити збережене сканування…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Цілі диски за секунди з правами адміністратора.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>Зайнято {0}%</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>Проскановано {0}</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>Зайнято {0} з {1} на ваших дисках</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>Зайнято {0}</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>із {0} на перевірених дисках</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Останнє сканування · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Відкрити карту</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Сканувати знову й порівняти</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Попередні сканування</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 сканування</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>Сканувань: {0}</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Спочатку нові</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>Зайнято {0}% · вільно {1}</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлів: {0}</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Зберігати сканування протягом</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Автоматичні збереження, старіші за цей термін, видаляються під час запуску SpaceSharp. Сканування, які ви зберегли у файли самостійно, не чіпаються.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} дн.</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Цього року</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>Від 1 до 3 років</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Старіші</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>старше року</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Найдавніша зміна: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>Ці {0} становлять {1} папки. Решта файлів ({2:N0}) ділять {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} цієї папки — це одне: {1} розміром {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Скільки затінення зберігають вкладені файли. Низьке значення заспокоює глибокі рівні, щоб папки верхнього рівня виділялися.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Світло з цього боку</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Світло прямо спереду</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Зверху зліва</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Зверху</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Зверху справа</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Зліва</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Прямо спереду</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Справа</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Знизу зліва</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Знизу</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Знизу справа</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Темний вигляд</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Кольори вікна, панелей і меню, коли показано темну тему: графіт, сланець, мокко, північ або карбон.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Світлий вигляд</value></data>
@@ -802,6 +852,16 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Rail_Files" xml:space="preserve"><value>файли</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>папки</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>частка сканування</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Будь-який</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 міс</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 міс</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 міс</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 рік</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 роки</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 років</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>Вибрано: {0} · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Нічого не вибрано: усі типи</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>із {0} перевірено</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Очистити все</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Макет фільтра</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Панель над правою частиною карти з повним набором елементів керування (за замовчуванням) або рядок під шляхом з однією кнопкою на умову. Ctrl+F відкриває будь-який.</value></data>

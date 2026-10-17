@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>Nie można odczytać 1 chronionego folderu, więc na mapie brakuje jego zawartości.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} dni temu</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} godz. temu</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>godzinę temu</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>przed chwilą</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} min temu</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} mies. temu</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>Skanowanie SpaceSharp (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} wolne</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} zajęte z {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Dysk lokalny</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} z {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 miesiąc</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 rok</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 lata</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Przeskanuj dysk lub folder, aby zobaczyć największe elementy.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Największe pliki w {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Największe foldery w {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Plik</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Folder</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Typ</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Zmiana</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Udział w skanie</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Rozmiar</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp — informacje (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Zapytaj ponownie następnym razem</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Przenieś do Kosza</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Przenieś {0:N0} elementów do Kosza</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>pliki za małe, aby je pokazać</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Grup na mapie nie można sprawdzić: powiększ i wybierz plik lub folder</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Wolnego miejsca nie można sprawdzić</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>folder, {0:N0} plików</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>plik {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>plik</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Paleta</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Nazwa</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Nazwa widoczna na liście palet</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>Dla</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Ciemny</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Jasny</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Oba</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>dwanaście odcieni, po jednym na folder najwyższego poziomu, cyklicznie według głębokości</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Folder {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>folder najwyższego poziomu numer {0} i co dwunasty poziom w głąb</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Generuj:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Tęcza</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Sąsiednie</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Dwutonowa</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>Jeden odcień</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Losowo</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Losowy kolor bazowy i rozrzut. Klikaj, aż coś będzie wyglądać dobrze, a potem dostrój.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>od</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Kolor bazowy, od którego zaczyna generator. Kliknij, aby go zmienić.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Kolor bazowy</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>od czego zaczyna Generuj; domyślnie kolor pierwszego folderu</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Pliki</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>kolor folderu rozjaśniony w stronę bieli</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Ustaw każdy kolor pliku samodzielnie</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Plik palety jest w schowku.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Anuluj</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Zapisz i użyj</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Dla którego motywu jest paleta</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Wypełnij foldery</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Wszystkie cztery zaczynają od koloru folderu 1</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>dwanaście odcieni równo rozłożonych na kole</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>odcienie bliskie folderowi 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>odcień folderu 1 i jego przeciwieństwo, na zmianę</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>tylko tony folderu 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Wklej 12 kodów hex</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Zastępuje kolory folderów kodami hex ze schowka, po kolei</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>Schowek nie zawiera kolorów hex</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Wpisz hex w dowolnym wierszu lub otwórz próbnik</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>kolor plików pod każdym kolorem folderu</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Kolor pliku</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Typ pliku</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Etykiety</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Próbka</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Otwórz próbnik: suwaki i proponowane tony</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Spróbuj:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>pochodny</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Pliki: {0}% w stronę bieli</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Pliki: własne kolory</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Ta nazwa jest zajęta</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} to paleta wbudowana. Nadaj swojej inną nazwę.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Zastąpić paletę?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Nawigacja</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Zaznaczanie i działania</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Widok i pliki</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Klawisze używane przez SpaceSharp</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Układ klawiatury</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Narysowano dla klawiatury {0}; wybierz inny, jeśli to nie ten.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Bursztynowe klawisze to te, których używa SpaceSharp; mały {0} w rogu oznacza przytrzymanie {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Bursztynowe klawisze to te, których używa SpaceSharp; mały {0} w rogu oznacza przytrzymanie Command. Delete to klawisz nad Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Wybierz dysk po lewej stronie</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Wybierz dysk po lewej stronie lub wróć do tego, na czym skończyłeś</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Zapisane skanowania otwierają się natychmiast i są porównywane z nowym.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Skanuj folder</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Otwórz zapisane skanowanie…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Całe dyski w kilka sekund dzięki uprawnieniom administratora.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% zajęte</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>Przeskanowano {0}</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>Zajęte {0} z {1} na Twoich dyskach</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>Użyto {0}</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>z {0} na przeskanowanych dyskach</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Ostatnie skanowanie · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Otwórz mapę</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Skanuj ponownie i porównaj</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Wcześniejsze skanowania</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanowanie</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>Skanowania: {0}</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Najnowsze najpierw</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>Użyto {0}% · wolne {1}</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · pliki: {0}</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Zachowuj zapisane skanowania przez</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatyczne zapisy starsze niż to są usuwane przy uruchomieniu SpaceSharp. Skanowania zapisane samodzielnie jako pliki nigdy nie są ruszane.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dni</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>W tym roku</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 do 3 lat</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Starsze</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>starsze niż rok</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Najstarsza zmiana: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>Te {0} to {1} folderu. Pozostałe {2:N0} plików dzieli {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} tego folderu to jedna rzecz: {1} o rozmiarze {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Ile cieniowania zachowują zagnieżdżone pliki. Niskie uspokaja głębokie poziomy, aby foldery główne się wyróżniały.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Światło z tej strony</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Światło wprost</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Lewy górny</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Góra</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Prawy górny</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Lewo</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Prosto z przodu</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Prawo</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Lewy dolny</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Dół</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Prawy dolny</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Ciemny wygląd</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Kolory okna, paneli i menu, gdy wyświetlany jest ciemny motyw: Grafit, Łupek, Mokka, Północ lub Węgiel.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Jasny wygląd</value></data>
@@ -802,6 +852,16 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Rail_Files" xml:space="preserve"><value>pliki</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>foldery</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>udział w skanowaniu</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Dowolne</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 mies.</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 mies.</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 mies.</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 rok</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 lata</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 lat</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>Wybrano: {0} · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Nic nie wybrano: wszystkie typy</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>z {0} przeskanowanych</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Wyczyść wszystko</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Układ filtru</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Szuflada nad prawą częścią mapy z pełnymi kontrolkami (domyślnie) albo pasek pod ścieżką z jedną pastylką na warunek. Ctrl+F otwiera każdy z nich.</value></data>

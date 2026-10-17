@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>1 beveiligde map kon niet worden gelezen, dus de inhoud ervan ontbreekt op de kaart.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} dagen geleden</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} uur geleden</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>een uur geleden</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>zojuist</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} minuten geleden</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} maanden geleden</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp-scan (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} vrij</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} gebruikt van {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Lokale schijf</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} van {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 maand</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 jaar</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 jaar</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan een station of map om de grootste items te zien.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Grootste bestanden in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Grootste mappen in {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Bestand</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Map</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Wijziging</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Aandeel in de scan</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Grootte</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Over SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Volgende keer opnieuw vragen</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} items naar Prullenbak verplaatsen</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>bestanden te klein om weer te geven</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Clusters op de kaart kunnen niet worden geïnspecteerd: zoom in en kies een bestand of map</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Vrije ruimte kan niet worden geïnspecteerd</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>map, {0:N0} bestanden</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>{0}-bestand</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>bestand</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Palet</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Naam</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Zo heet het in de paletlijst</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>Voor</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Donker</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Licht</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Beide</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>twaalf tinten, één per map op het hoogste niveau, herhaald per diepte</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Map {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>map nummer {0} op het hoogste niveau, en elk twaalfde niveau daaronder</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Genereren:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regenboog</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Buren</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Tweekleurig</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>Eén tint</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Willekeurig</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Een willekeurige basiskleur en spreiding. Druk erop tot iets er goed uitziet, en pas het dan aan.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>vanaf</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>De basiskleur waar de generator mee begint. Klik om deze te wijzigen.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Basiskleur</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>waar Genereren mee begint; standaard de eerste mapkleur</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Bestanden</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>de mapkleur, opgelicht richting wit</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Elke bestandskleur zelf instellen</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Het paletbestand staat op het klembord.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Annuleren</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Opslaan en gebruiken</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Voor welk thema het palet is</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Mappen vullen</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Alle vier beginnen bij de kleur van map 1</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>twaalf tinten gelijk verdeeld over het wiel</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>tinten dicht bij map 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>de tint van map 1 en zijn tegenpool, om en om</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>alleen schakeringen van map 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>12 hexcodes plakken</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Vervangt de mapkleuren door de hexcodes op het klembord, op volgorde</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>Het klembord bevat geen hexkleuren</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Typ een hexcode in een rij, of open de kiezer</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>de bestandskleur onder elke mapkleur</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Map</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Bestandskleur</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Bestandstype</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Labels</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Voorbeeld</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Kiezer openen: schuiven en voorgestelde tinten</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Probeer:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>afgeleid</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Bestanden: {0}% richting wit</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Bestanden: eigen kleuren</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Die naam is al in gebruik</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} is een ingebouwd palet. Geef het uwe een andere naam.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Het palet vervangen?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigeren</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Selecteren en handelen</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Weergave en bestanden</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Toetsen die SpaceSharp gebruikt</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Toetsenbordindeling</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Getekend voor een {0}-toetsenbord; kies een andere als dat niet klopt.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Gele toetsen gebruikt SpaceSharp; een kleine {0} in de hoek betekent {0} ingedrukt houden.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Gele toetsen gebruikt SpaceSharp; een kleine {0} in de hoek betekent Command ingedrukt houden. Delete is de toets boven Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Kies links een station</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Kies links een station, of ga verder waar u was gebleven</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Opgeslagen scans openen direct en worden vergeleken met de nieuwe.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Een map scannen</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Een opgeslagen scan openen…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hele stations in seconden met beheerdersrechten.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% in gebruik</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>{0} gescand</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>{0} in gebruik van {1} op uw stations</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>{0} gebruikt</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>van {0} op de gescande schijven</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Laatste scan · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Kaart openen</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Opnieuw scannen en vergelijken</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Eerdere scans</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scan</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} scans</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Nieuwste eerst</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>{0}% gebruikt · {1} vrij</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Map · {0} bestanden</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Opgeslagen scans bewaren gedurende</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisch opgeslagen scans ouder dan dit worden verwijderd wanneer SpaceSharp start. Scans die u zelf als bestand hebt opgeslagen, blijven onaangeroerd.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagen</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 tot 3 jaar</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Ouder</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>ouder dan een jaar</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Oudste wijziging: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>Deze {0} vormen {1} van de map. De overige {2:N0} bestanden delen {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} van deze map is één ding: {1} met {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hoeveel schaduw geneste bestanden behouden. Laag maakt diepe niveaus rustiger zodat de hoofdmappen opvallen.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Licht van deze kant</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Licht recht van voren</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Linksboven</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Boven</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Rechtsboven</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Links</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Recht van voren</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Rechts</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Linksonder</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Onder</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Rechtsonder</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Donkere stijl</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>De kleuren van het venster, panelen en menu's wanneer het donkere thema actief is: Grafiet, Leisteen, Mokka, Middernacht of Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lichte stijl</value></data>
@@ -802,6 +852,16 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Rail_Files" xml:space="preserve"><value>bestanden</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>mappen</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>aandeel van scan</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Alle</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 mnd</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 mnd</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 mnd</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 jr</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 jr</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 jr</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>{0} gekozen · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Niets gekozen: alle typen</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>van {0} gescand</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Alles wissen</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Filterindeling</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Een paneel over de rechterkant van de kaart met alle opties (de standaard), of een balk onder het pad met één knop per voorwaarde. Ctrl+F opent beide.</value></data>

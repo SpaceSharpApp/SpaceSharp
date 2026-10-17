@@ -21,10 +21,10 @@
 
   // ============================================================ styles for the window
   const CSS = `
-  .ssm { --bg:#0D1117; --panel:#161B22; --control:#21262D; --hover:#2B3139; --stroke:#30363D; --text:#E6EDF3; --dim:#8B949E; --accent:#F5B82E; --accent-text:#1C1500; --mapbg:#0D1117; --titlebar:#161B22; --titletext:#fff; --menubg:#1C2128;
+  .ssm { --bg:#0D1117; --panel:#161B22; --control:#21262D; --hover:#2B3139; --stroke:#30363D; --text:#E6EDF3; --dim:#8B949E; --accent:#F5B82E; --accent-text:#1C1500; --accentFaint:#1C1A12; --danger:#FF7070; --mapbg:#0D1117; --titlebar:#161B22; --titletext:#fff; --menubg:#1C2128;
     position:relative; display:flex; flex-direction:column; overflow:hidden; background:var(--bg); color:var(--text); font:13px/1.3 Inter, "Segoe UI", system-ui, sans-serif; border-radius:8px; border:1px solid rgba(0,0,0,.35); box-shadow:0 24px 60px rgba(0,0,0,.35), 0 4px 14px rgba(0,0,0,.2); text-align:left; }
   .ssm * { box-sizing:border-box; }
-  .ssm.light { --bg:#F3F3F6; --panel:#fff; --control:#ECECF1; --hover:#E2E2E9; --stroke:#D6D6DE; --text:#1C1C22; --dim:#61616F; --mapbg:#D9D9E1; --titlebar:#F3F3F3; --titletext:#1C1C22; --menubg:#fff; border-color:rgba(0,0,0,.18); }
+  .ssm.light { --bg:#F3F3F6; --panel:#fff; --control:#ECECF1; --hover:#E2E2E9; --stroke:#D6D6DE; --text:#1C1C22; --dim:#61616F; --mapbg:#D9D9E1; --titlebar:#F3F3F3; --titletext:#1C1C22; --menubg:#fff; --accentFaint:#FFF4D6; --danger:#D33A3A; border-color:rgba(0,0,0,.18); }
   .ssm svg { display:block; }
   .ssm .titlebar { height:32px; flex:none; display:flex; align-items:center; background:var(--titlebar); color:var(--titletext); font-size:12px; }
   .ssm .titlebar .app { display:flex; align-items:center; gap:9px; padding-left:10px; flex:1; }
@@ -65,19 +65,28 @@
   .ssm .side.hidden { display:none; }
   .ssm .side h2 { font-size:15px; font-weight:600; margin:12px 14px 4px; } .ssm .side .sub { color:var(--dim); font-size:12px; margin:0 14px 6px; }
   .ssm .drives { padding:0 4px; }
-  .ssm .drive { display:grid; grid-template-columns:auto 1fr auto; gap:0 10px; padding:9px 10px; border-radius:5px; margin:1px 0; }
-  .ssm .drive svg { width:16px; height:16px; color:var(--dim); margin-top:1px; }
-  .ssm .drive .name { font-weight:600; } .ssm .drive .free { color:var(--dim); }
-  .ssm .drive .bar { grid-column:2 / span 2; height:6px; margin:7px 0 5px; border-radius:3px; background:var(--control); position:relative; }
+  .ssm .drive { display:grid; grid-template-columns:46px 1fr; gap:0 12px; align-items:center; padding:8px 10px; border-radius:6px; margin:1px 0; }
+  .ssm .drive .ltile { position:relative; width:46px; height:46px; }
+  .ssm .drive .ltile b { position:absolute; left:0; top:0; width:40px; height:40px; box-sizing:border-box; border:1px solid var(--stroke); border-radius:8px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:15px; }
+  .ssm .drive.ext .ltile b { border-style:dashed; }
+  .ssm .drive .ltile svg { position:absolute; right:0; bottom:0; width:16px; height:16px; color:var(--dim); background:var(--panel); border-radius:50%; padding:1px; }
+  .ssm .drive .top, .ssm .drive .bot { display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
+  .ssm .drive .name { font-weight:600; font-size:14px; } .ssm .drive .kind { color:var(--dim); font-size:12px; }
+  .ssm .drive .bar { height:5px; margin:6px 0 5px; border-radius:3px; background:var(--control); position:relative; }
   .ssm .drive .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:3px; background:var(--accent); opacity:.9; }
-  .ssm .drive .detail { grid-column:2 / span 2; color:var(--dim); font-size:11px; }
+  .ssm .drive .bar i.warn { background:#F0883E; } .ssm .drive .bar i.danger { background:var(--danger, #FF7070); }
+  .ssm .drive .used { color:var(--dim); font-size:12px; } .ssm .drive .free { font-size:12px; font-weight:500; }
   .ssm .rule { height:1px; background:var(--stroke); margin:8px 14px 6px; }
-  .ssm .tabs { display:flex; gap:2px; margin:4px 10px; } .ssm .tab { height:28px; padding:0 12px; display:flex; align-items:center; border-radius:6px; color:var(--dim); } .ssm .tab.on { background:var(--control); color:var(--text); font-weight:600; } .ssm .tab[hidden] { display:none; }
+  .ssm .tabs { display:flex; gap:6px; margin:4px 14px 6px; } .ssm .tab { height:30px; box-sizing:border-box; padding:0 12px 0 10px; display:flex; align-items:center; gap:8px; border-radius:6px; border:1px solid var(--stroke); background:var(--control); color:var(--dim); } .ssm .tab svg { width:14px; height:14px; } .ssm .tab.on { background:var(--accentFaint, #1C1A12); border-color:var(--accent); color:var(--accent); font-weight:600; } .ssm .tab[hidden] { display:none; }
   .ssm .rows { padding:0 4px; overflow:hidden; }
-  .ssm .row { display:grid; grid-template-columns:1fr auto; gap:0 10px; padding:6px 8px; border-radius:5px; margin:1px 0; position:relative; }
-  .ssm .row > div { min-width:0; } .ssm .row .sw { position:absolute; left:8px; top:11px; width:9px; height:9px; border-radius:2px; } .ssm .row .sw::after { content:none; } .ssm .row.chg { padding-left:24px; }
-  .ssm .row .n { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .ssm .row .d { color:var(--dim); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .ssm .row .s { font-weight:600; align-self:center; white-space:nowrap; } .ssm .row .bar { position:absolute; left:8px; bottom:2px; height:3px; border-radius:2px; background:var(--accent); opacity:.55; }
+  .ssm .lkey { display:grid; grid-template-columns:repeat(3,1fr); gap:3px 10px; padding:0 8px 8px; color:var(--dim); font-size:12px; } .ssm .lkey span { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; } .ssm .lkey i { width:10px; height:10px; border-radius:2px; flex:none; }
+  .ssm .lhead { display:grid; grid-template-columns:10px 1fr 96px auto; gap:0 12px; padding:0 8px 4px; margin:0 0 2px; border-bottom:1px solid var(--stroke); color:var(--dim); font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; } .ssm .lhead > div { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .lhead .r { text-align:right; min-width:64px; }
+  .ssm .lhead.plain, .ssm .row.plain { grid-template-columns:0 1fr 96px auto; }
+  .ssm .row { display:grid; grid-template-columns:10px 1fr 96px auto; gap:0 12px; align-items:center; padding:5px 8px; border-radius:5px; margin:1px 0; }
+  .ssm .row > div { min-width:0; } .ssm .row .cs { width:10px; height:10px; border-radius:2px; display:block; }
+  .ssm .row .n { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; } .ssm .row .d { color:var(--dim); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ssm .row .b { display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; } .ssm .row .b .bar { height:6px; border-radius:3px; background:var(--control); position:relative; overflow:hidden; } .ssm .row .b .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:3px; background:var(--accent); opacity:.9; } .ssm .row .b em { font-style:normal; color:var(--dim); font-size:11px; min-width:34px; text-align:right; }
+  .ssm .row .s { font-weight:600; font-size:14px; white-space:nowrap; text-align:right; min-width:64px; }
   .ssm .mapcol { flex:1; display:flex; flex-direction:column; min-width:0; min-height:0; }
   .ssm .map { flex:1; position:relative; background:var(--mapbg); min-width:0; min-height:0; overflow:hidden; }
   .ssm .map canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
@@ -135,16 +144,16 @@
   .ssm .drawer { position:absolute; top:0; right:0; bottom:0; width:380px; z-index:5; display:flex; flex-direction:column; background:var(--panel); border-left:1px solid var(--stroke); box-shadow:-12px 0 30px rgba(0,0,0,.45); }
   .ssm .drawer[hidden] { display:none; }
   .ssm .drawer .dh { display:flex; align-items:center; height:44px; padding:0 16px; border-bottom:1px solid var(--stroke); flex:none; } .ssm .drawer .dh b { font-size:14px; } .ssm .drawer .dh .x { margin-left:auto; color:var(--dim); font-size:12px; display:flex; gap:14px; align-items:center; white-space:nowrap; } .ssm .drawer .dh .x svg { width:12px; height:12px; }
-  .ssm .drawer .dbody { flex:1; padding:10px 16px; display:flex; flex-direction:column; gap:9px; overflow:hidden; }
+  .ssm .drawer .dbody { flex:1; padding:10px 16px; display:flex; flex-direction:column; gap:8px; overflow:hidden; }
   .ssm .drawer .sec { display:flex; flex-direction:column; gap:4px; } .ssm .drawer .sh { display:flex; justify-content:space-between; color:var(--dim); font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; } .ssm .drawer .sh .v { color:var(--text); text-transform:none; letter-spacing:0; font-size:12.5px; }
-  .ssm .drawer .trow { display:flex; align-items:center; gap:10px; height:24px; font-size:13px; } .ssm .drawer .trow .cb { width:14px; height:14px; border-radius:3px; border:1px solid var(--dim); flex:none; } .ssm .drawer .trow .cb.on { background:var(--accent); border-color:var(--accent); position:relative; } .ssm .drawer .trow .cb.on::after { content:""; position:absolute; left:4px; top:1px; width:4px; height:8px; border:solid var(--accent-text); border-width:0 2px 2px 0; transform:rotate(45deg); }
-  .ssm .drawer .trow i { width:9px; height:9px; border-radius:2px; flex:none; } .ssm .drawer .trow .nm { width:78px; } .ssm .drawer .trow .bar { flex:1; height:6px; border-radius:3px; background:var(--control); overflow:hidden; } .ssm .drawer .trow .bar b { display:block; height:100%; } .ssm .drawer .trow .z { color:var(--dim); font-size:12px; width:60px; text-align:right; font-variant-numeric:tabular-nums; }
-  .ssm .drawer .more { color:var(--accent); font-size:12px; height:22px; display:flex; align-items:center; }
-  .ssm .drawer .slider { position:relative; height:22px; } .ssm .drawer .slider .tr { position:absolute; left:0; right:0; top:10px; height:4px; border-radius:2px; background:var(--stroke); } .ssm .drawer .slider .fl { position:absolute; top:10px; height:4px; border-radius:2px; background:var(--accent); } .ssm .drawer .slider .th { position:absolute; top:4px; width:16px; height:16px; margin-left:-8px; border-radius:8px; background:var(--accent); border:2px solid var(--bg); box-shadow:0 0 0 1px var(--accent); }
-  .ssm .drawer .ticks { display:flex; justify-content:space-between; color:var(--dim); font-size:11px; }
-  .ssm .drawer .seg { display:grid; grid-template-columns:repeat(4, 1fr); gap:2px; } .ssm .drawer .seg span { height:28px; display:flex; align-items:center; justify-content:center; border:1px solid var(--stroke); border-radius:6px; color:var(--dim); font-size:12px; } .ssm .drawer .seg span.on { background:var(--control); color:var(--text); border-color:var(--accent); }
-  .ssm .drawer .seg.three { grid-template-columns:repeat(3, 1fr); }
-  .ssm .drawer .chips { display:flex; flex-wrap:wrap; gap:6px; } .ssm .drawer .chip { height:25px; display:flex; align-items:center; padding:0 8px; border-radius:13px; border:1px solid var(--stroke); font-size:11.5px; color:var(--dim); white-space:nowrap; } .ssm .drawer .chip.on { border-color:var(--accent); color:var(--text); background:var(--control); }
+  .ssm .drawer .sh .v.on { color:var(--accent); }
+  .ssm .drawer .stack { display:flex; height:10px; border-radius:3px; overflow:hidden; gap:1px; margin-top:4px; background:var(--control); } .ssm .drawer .stack i { display:block; height:100%; }
+  .ssm .drawer .stl { display:flex; justify-content:space-between; color:var(--dim); font-size:11.5px; margin-top:1px; }
+  .ssm .drawer .tiles { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:4px; } .ssm .drawer .tiles.three { grid-template-columns:1fr 1fr 1fr; }
+  .ssm .drawer .tile { height:32px; box-sizing:border-box; display:flex; flex-direction:row; align-items:center; gap:7px; padding:0 10px; border:1px solid var(--stroke); border-radius:6px; background:var(--bg); font-size:12.5px; white-space:nowrap; overflow:hidden; } .ssm .drawer .tile i { width:9px; height:9px; border-radius:2px; flex:none; } .ssm .drawer .tile > span:not(.z) { flex:1; overflow:hidden; text-overflow:ellipsis; } .ssm .drawer .tile .z { color:var(--dim); font-size:11.5px; font-variant-numeric:tabular-nums; } .ssm .drawer .tile svg { width:13px; height:13px; color:var(--dim); flex:none; }
+  .ssm .drawer .qrow { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; } .ssm .drawer .qrow .tile { flex:none; }
+  .ssm .drawer .tile.c { justify-content:center; } .ssm .drawer .tile.on { border-color:var(--accent); color:var(--accent); background:#1C1A12; } .ssm.light .drawer .tile.on { background:#FFF4D6; } .ssm .drawer .tile.on svg { color:var(--accent); }
+  .ssm .drawer .scale { position:relative; height:40px; } .ssm .drawer .scale .ln { position:absolute; left:18px; right:18px; top:9px; height:2px; background:var(--stroke); } .ssm .drawer .scale .sp { position:absolute; top:9px; height:2px; background:var(--accent); } .ssm .drawer .scale .tk { position:absolute; top:4px; width:2px; height:12px; margin-left:-1px; background:var(--stroke); } .ssm .drawer .scale .tk.on { background:var(--accent); } .ssm .drawer .scale .tk.h { top:1px; height:18px; width:4px; margin-left:-2px; border-radius:2px; background:var(--accent); } .ssm .drawer .scale .lbl { position:absolute; top:22px; transform:translateX(-50%); font-size:11px; color:var(--dim); white-space:nowrap; } .ssm .drawer .scale .lbl.on { color:var(--accent); font-weight:600; } .ssm .drawer .scale .tk.h.any { background:var(--dim); } .ssm .drawer .scale .lbl.any { color:var(--text); font-weight:600; }
   .ssm .drawer .df { display:flex; align-items:center; gap:10px; padding:12px 16px; border-top:1px solid var(--stroke); background:var(--bg); flex:none; } .ssm .drawer .df b { color:var(--accent); font-weight:600; } .ssm .drawer .df span { color:var(--dim); font-size:12px; } .ssm .drawer .df .btn { margin-left:auto; height:30px; }
   .ssm .scrim { position:absolute; inset:0; z-index:6; background:rgba(0,0,0,.45); display:grid; place-items:center; } .ssm .scrim[hidden] { display:none; }
   .ssm .dialog { width:640px; background:var(--bg); border:1px solid var(--stroke); border-radius:8px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; color:var(--text); }
@@ -160,29 +169,42 @@
   .ssm .dialog.inspect .wr .bar { height:6px; border-radius:3px; background:var(--control); position:relative; } .ssm .dialog.inspect .wr .bar i { position:absolute; left:0; top:0; bottom:0; border-radius:3px; background:var(--accent); } .ssm .dialog.inspect .wr .s { text-align:right; } .ssm .dialog.inspect .wr .p { text-align:right; color:var(--dim); }
   .ssm .dialog.inspect .rem { font-size:11px; color:var(--dim); margin-top:8px; }
   .ssm .start { position:absolute; inset:0; background:var(--mapbg); display:flex; flex-direction:column; z-index:3; } .ssm .start[hidden] { display:none; }
-  .ssm .start-center { flex:1; display:flex; align-items:center; justify-content:center; } .ssm .start-center > div { width:520px; }
-  .ssm .start-head { display:flex; align-items:center; gap:14px; } .ssm .start-mark svg { width:44px; height:44px; }
-  .ssm .start-title { font-size:18px; font-weight:600; } .ssm .start-sub { color:var(--dim); font-size:12.5px; margin-top:3px; }
-  .ssm .start-card { margin-top:18px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
-  .ssm .start-row { display:flex; align-items:center; gap:14px; height:42px; padding:0 12px 0 14px; font-size:13px; border-top:1px solid var(--stroke); } .ssm .start-row:first-child { border-top:0; }
-  .ssm .start-row svg { width:14px; height:14px; color:var(--dim); } .ssm .start-row .n { flex:1; } .ssm .start-row .w, .ssm .start-row .s, .ssm .start-row .c { color:var(--dim); font-size:12.5px; white-space:nowrap; } .ssm .start-row .s { width:90px; text-align:right; }
-  .ssm .start-actions { display:flex; gap:8px; margin-top:14px; } .ssm .start-actions .btn { border:1px solid var(--stroke); }
+  .ssm .start-center { flex:1; display:flex; align-items:center; justify-content:center; padding:32px 40px; } .ssm .start-center > div { width:100%; max-width:900px; display:flex; flex-direction:column; gap:12px; }
+  .ssm .start-head { display:flex; align-items:center; gap:16px; margin-bottom:10px; } .ssm .start-mark svg { width:52px; height:52px; }
+  .ssm .start-title { font-size:20px; font-weight:600; } .ssm .start-sub { color:var(--dim); font-size:13.5px; margin-top:4px; }
+  .ssm .start-tot { margin-left:auto; text-align:right; flex:none; } .ssm .start-tot b { display:block; font-size:18px; font-weight:600; } .ssm .start-tot span { color:var(--dim); font-size:12.5px; }
+  .ssm .start-feat { display:flex; align-items:center; gap:26px; padding:22px 28px; background:var(--panel); border:1px solid var(--stroke); border-radius:12px; }
+  .ssm .start-ring { position:relative; flex:none; } .ssm .start-ring svg { display:block; } .ssm .start-ring b { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-weight:600; }
+  .ssm .start-eye { font-size:11.5px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:.04em; } .ssm .start-name { font-size:24px; font-weight:600; margin-top:4px; } .ssm .start-name span { color:var(--dim); font-weight:400; font-size:18px; margin-left:10px; } .ssm .start-line { color:var(--dim); font-size:13.5px; margin-top:4px; }
+  .ssm .start-btns { display:flex; gap:10px; margin-top:16px; } .ssm .start-btns .btn { height:36px; border:1px solid var(--stroke); border-radius:8px; padding:0 16px; } .ssm .start-btns .btn.accent { border-color:var(--accent); }
+  .ssm .start-sec { display:flex; align-items:baseline; gap:10px; margin-top:6px; padding:0 2px; } .ssm .start-sec b { font-size:12px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:.04em; } .ssm .start-sec span { color:var(--dim); font-size:12.5px; } .ssm .start-sec .r { margin-left:auto; }
+  .ssm .start-card { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
+  .ssm .start-row { display:grid; grid-template-columns:36px minmax(0,1fr) 110px 110px 220px 16px; gap:16px; align-items:center; height:50px; padding:0 16px; font-size:13px; border-top:1px solid var(--stroke); } .ssm .start-row:first-child { border-top:0; }
+  .ssm .start-row .n { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .start-row .n span { color:var(--dim); font-weight:400; margin-left:8px; } .ssm .start-row .s { text-align:right; } .ssm .start-row .w, .ssm .start-row .u { color:var(--dim); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .ssm .start-row .u.warn { color:#F47067; } .ssm .start-row .c { color:var(--dim); font-size:16px; } .ssm .start-row .fi { width:36px; height:36px; padding:6px; box-sizing:border-box; color:var(--dim); }
+  .ssm .start-actions { display:flex; align-items:center; gap:10px; margin-top:4px; } .ssm .start-actions .btn { height:38px; border:1px solid var(--stroke); border-radius:8px; padding:0 16px; } .ssm .start-actions .fast { margin-left:auto; color:var(--dim); font-size:12.5px; }
   .ssm .about-list { margin:0 24px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; overflow:hidden; }
   .ssm .about-row { display:flex; align-items:center; gap:14px; padding:9px 14px; border-top:1px solid var(--stroke); font-size:13.5px; } .ssm .about-row:first-child { border-top:0; } .ssm .about-row svg { width:16px; height:16px; color:var(--dim); } .ssm .about-row .sub { font-size:12px; color:var(--dim); margin-top:2px; } .ssm .about-row .c { margin-left:auto; color:var(--dim); }
   .ssm .dialog.about { width:520px; } .ssm .about-cols { display:flex; min-height:380px; } .ssm .about-left { width:200px; flex:none; padding:32px 24px 24px; background:var(--panel); border-right:1px solid var(--stroke); display:flex; flex-direction:column; gap:8px; } .ssm .about-left svg { width:56px; height:56px; } .ssm .about-left .t { font-size:20px; font-weight:600; margin-top:10px; } .ssm .about-left .s { color:var(--dim); font-size:13px; line-height:18px; } .ssm .about-left .legal { margin-top:auto; color:var(--dim); font-size:11.5px; line-height:16px; }
   .ssm .about-right { flex:1; padding:30px 28px 24px; display:flex; flex-direction:column; gap:22px; } .ssm .about-group .h { font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--dim); margin-bottom:10px; } .ssm .about-link { display:flex; align-items:center; gap:12px; padding:4px 0; font-size:13px; } .ssm .about-link svg { width:16px; height:16px; color:var(--dim); } .ssm .about-right .sys { margin-top:auto; color:var(--dim); font-size:11.5px; } .ssm .about-head { display:flex; align-items:center; gap:16px; padding:20px 24px 14px; } .ssm .about-head svg { width:56px; height:56px; } .ssm .about-head .t { font-size:22px; font-weight:600; line-height:1.1; } .ssm .about-head .s { color:var(--dim); font-size:13px; margin-top:4px; }
   .ssm .about-copy { padding:10px 24px 12px; font-size:11.5px; color:var(--dim); }
-  .ssm .dialog.settings { width:660px; }
-  .ssm .st-tabs { display:flex; gap:4px; padding:14px 22px 12px; border-bottom:1px solid var(--stroke); } .ssm .st-tabs span { padding:6px 12px; border-radius:6px; color:var(--dim); font-size:13px; } .ssm .st-tabs span.on { background:var(--control); color:var(--text); }
-  .ssm .st-preview { margin:16px 22px 0; height:150px; border:1px solid var(--stroke); border-radius:8px; overflow:hidden; position:relative; background:var(--mapbg); } .ssm .st-preview canvas { position:absolute; inset:0; width:100%; height:100%; }
-  .ssm .st-body { padding:14px 22px 10px; }
-  .ssm .st-section { font-size:15px; font-weight:600; margin:0 0 4px; } .ssm .st-note { color:var(--dim); font-size:12px; margin-bottom:10px; }
-  .ssm .st-card { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; }
-  .ssm .st-row { display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center; padding:11px 16px; border-top:1px solid var(--stroke); } .ssm .st-row:first-child { border-top:0; }
-  .ssm .st-row .t { font-size:13.5px; font-weight:600; } .ssm .st-row .d { color:var(--dim); font-size:12px; margin-top:2px; line-height:1.45; max-width:330px; }
-  .ssm .st-chips { display:flex; gap:6px; } .ssm .st-chips span { height:26px; padding:0 12px; display:flex; align-items:center; border-radius:13px; border:1px solid var(--stroke); font-size:12px; color:var(--dim); } .ssm .st-chips span.on { border-color:var(--accent); color:var(--text); background:var(--control); }
-  .ssm .st-slider { width:220px; } .ssm .st-slider .tr { height:4px; border-radius:2px; background:var(--hover); position:relative; margin:8px 0; } .ssm .st-slider .tr i { position:absolute; left:0; top:0; bottom:0; background:var(--accent); border-radius:2px; } .ssm .st-slider .tr b { position:absolute; top:50%; width:18px; height:18px; border-radius:50%; background:var(--accent); border:3px solid var(--bg); transform:translate(-50%,-50%); }
-  .ssm .st-slider .ends { display:flex; justify-content:space-between; font-size:11px; color:var(--dim); }
+  .ssm .dialog.settings { width:760px; height:860px; display:flex; flex-direction:column; } .ssm .dialog .dt .wc { margin-left:auto; display:flex; gap:26px; font-size:11px; color:var(--dim); padding-right:6px; } .ssm .dialog .dt .wc i { font-style:normal; }
+  .ssm .st-tabs { display:flex; gap:4px; padding:16px 26px 14px; border-bottom:1px solid var(--stroke); } .ssm .st-tabs span { padding:8px 14px; border-radius:8px; color:var(--dim); font-size:15px; } .ssm .st-tabs span.on { background:var(--control); color:var(--text); font-weight:600; }
+  .ssm .st-sample { margin:16px 26px 0; height:192px; position:relative; background:var(--mapbg); border:1px solid var(--stroke); border-radius:3px; overflow:hidden; font-size:10.5px; } .ssm .st-sample .sb { position:absolute; box-sizing:border-box; border:1px solid rgba(0,0,0,.25); overflow:hidden; display:flex; align-items:flex-start; padding:2px 4px; white-space:nowrap; color:#1C1C22; }
+  .ssm .st-sample .sb.root { inset:0; background:#6C8FBF; color:#1C1C22; font-weight:600; } .ssm .st-sample .sb.folder { background:#B96868; font-weight:600; } .ssm .st-sample .sb.file { background:#A7CDB9; align-items:center; justify-content:center; text-align:center; white-space:normal; line-height:1.25; } .ssm .st-sample .sb.sel { outline:2px solid var(--accent); outline-offset:-2px; }
+  .ssm .st-caption { text-align:right; color:var(--dim); font-size:12.5px; padding:6px 26px 10px; border-bottom:1px solid var(--stroke); }
+  .ssm .st-body { padding:0 26px 10px; flex:1; overflow:hidden; }
+  .ssm .st-section { font-size:17px; font-weight:600; margin:18px 0 4px; } .ssm .st-note { color:var(--dim); font-size:13px; margin-bottom:12px; }
+  .ssm .st-card { background:var(--panel); border:1px solid var(--stroke); border-radius:10px; } .ssm .st-card.cut { border-top:0; border-top-left-radius:0; border-top-right-radius:0; margin-top:-1px; }
+  .ssm .st-row { display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center; padding:14px 20px; border-top:1px solid var(--stroke); } .ssm .st-row:first-child { border-top:0; } .ssm .st-row.off .t, .ssm .st-row.off .d { opacity:.55; }
+  .ssm .st-row .t { font-size:15px; font-weight:600; } .ssm .st-row .d { color:var(--dim); font-size:13.5px; margin-top:2px; line-height:1.45; max-width:440px; }
+  .ssm .st-pal { display:flex; flex-direction:column; align-items:flex-end; gap:8px; } .ssm .st-pal .r { display:flex; gap:12px; } .ssm .st-pal .btn.outline { height:36px; font-size:15px; padding:0 18px; } .ssm .st-pal .links span { display:inline-flex; align-items:center; gap:7px; color:var(--accent); font-size:14.5px; } .ssm .st-pal .links svg { width:15px; height:15px; }
+  .ssm .st-light { display:flex; align-items:center; gap:14px; } .ssm .st-light .pad { display:grid; grid-template-columns:repeat(3,32px); grid-auto-rows:32px; gap:4px; } .ssm .st-light .pad span { box-sizing:border-box; border:1px solid var(--stroke); border-radius:6px; background:var(--bg); color:var(--dim); font-size:14px; display:flex; align-items:center; justify-content:center; } .ssm .st-light .pad span i { width:8px; height:8px; border-radius:50%; background:var(--dim); } .ssm .st-light .pad span.on { background:var(--accentFaint, #1C1A12); border-color:var(--accent); color:var(--accent); } .ssm .st-light .lbl { color:var(--dim); font-size:12.5px; min-width:76px; text-align:right; }
+  .ssm .st-chips { display:flex; gap:8px; } .ssm .st-chips span { height:36px; padding:0 14px; display:flex; align-items:center; border-radius:6px; background:var(--control); font-size:15px; color:var(--dim); } .ssm .st-chips span.on { background:var(--accent); color:var(--accent-text); opacity:.7; }
+  .ssm .st-row.off .st-chips span.on { opacity:.7; } .ssm .st-row.off .st-chips span, .ssm .st-row.off .st-slider, .ssm .st-row.off .st-val { opacity:.6; }
+  .ssm .st-sl { display:flex; align-items:center; white-space:nowrap; }
+  .ssm .st-slider { width:230px; display:inline-block; vertical-align:middle; } .ssm .st-slider .tr { height:4px; border-radius:2px; background:var(--hover); position:relative; margin:8px 0; } .ssm .st-slider .tr i { position:absolute; left:0; top:0; bottom:0; background:var(--accent); border-radius:2px; } .ssm .st-slider .tr b { position:absolute; top:50%; width:18px; height:18px; margin:-9px 0 0 -9px; border-radius:50%; background:var(--panel); border:1px solid var(--stroke); box-shadow:0 1px 3px rgba(0,0,0,.4); }
+  .ssm .st-val { display:inline-block; width:44px; text-align:right; color:var(--dim); font-size:15px; vertical-align:middle; margin-left:8px; }
+  .ssm .dialog.settings .df { padding:16px 26px; margin-top:auto; } .ssm .st-reset { font-size:15px; } .ssm .dialog.settings .df .btn.accent { height:40px; font-size:15px; padding:0 20px; }
   .ssm .sw { width:40px; height:22px; border-radius:11px; background:var(--accent); position:relative; } .ssm .sw::after { content:""; position:absolute; top:3px; right:3px; width:16px; height:16px; border-radius:50%; background:#1C1500; } .ssm .sw.off { background:var(--hover); } .ssm .sw.off::after { right:auto; left:3px; background:var(--dim); }
   .ssm .dialog.update { width:420px; } .ssm .ucol { padding:30px 32px 24px; display:flex; flex-direction:column; align-items:center; text-align:center; } .ssm .ucol .tile { width:84px; height:84px; border-radius:18px; background:var(--panel); display:grid; place-items:center; } .ssm .ucol .tile svg { width:64px; height:64px; } .ssm .ucol .t { font-size:19px; font-weight:600; margin-top:14px; } .ssm .ucol .h { color:var(--dim); margin-top:4px; } .ssm .ucol .jump { display:flex; align-items:center; gap:10px; margin-top:14px; font-size:12.5px; } .ssm .ucol .jump svg { width:14px; height:14px; color:var(--dim); } .ssm .ucol .from { padding:4px 12px; border-radius:999px; background:var(--control); color:var(--dim); } .ssm .ucol .to { padding:4px 12px; border-radius:999px; background:var(--accent); color:var(--accent-text); font-weight:600; } .ssm .ucol p { margin:16px 0 0; color:var(--dim); line-height:1.45; } .ssm .ucol .btn.big { width:100%; height:38px; margin-top:22px; font-size:13.5px; } .ssm .ucol .btn.wide { width:100%; height:34px; margin-top:8px; } .ssm .ucol a { color:var(--accent); font-size:12.5px; margin-top:12px; } .ssm .uhero { margin:20px 20px 0; padding:26px 24px 22px; background:var(--panel); border:1px solid var(--stroke); border-radius:10px; display:flex; flex-direction:column; align-items:center; text-align:center; } .ssm .uhero .mk svg { width:72px; height:72px; } .ssm .uhero .nm { display:flex; align-items:baseline; gap:10px; margin-top:10px; } .ssm .uhero .nm span { font-size:22px; font-weight:600; } .ssm .uhero .nm b { font-size:44px; font-weight:800; color:var(--accent); letter-spacing:-.03em; line-height:1; } .ssm .uhero .h { color:var(--dim); margin-top:6px; } .ssm .ulist { display:flex; flex-direction:column; gap:9px; padding:22px 36px 20px; font-size:13.5px; } .ssm .ulist div { display:flex; align-items:center; gap:12px; } .ssm .ulist svg { width:16px; height:16px; color:var(--accent); } .ssm .ulist a { color:var(--accent); font-size:12.5px; margin-left:28px; } .ssm .keeps { color:var(--dim); font-size:12px; } .ssm .dialog.notes { width:560px; }
   .ssm .dialog .ub { display:flex; gap:16px; padding:22px 24px 18px; } .ssm .dialog .ub .g { width:26px; height:26px; color:var(--accent); flex:none; margin-top:2px; }
@@ -201,6 +223,8 @@
     ssd:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M13 8l-3.5 4.5H14L10.5 17"/>',
     usbStick:'<rect x="2" y="7" width="13" height="10" rx="2"/><path d="M15 10h5v4h-5"/><path d="M17 12h1"/>',
     usb:'<circle cx="10" cy="7" r="1" /> <circle cx="4" cy="20" r="1" /> <path d="M4.7 19.3 19 5" /> <path d="m21 3-3 1 2 2Z" /> <path d="M9.26 7.68 5 12l2 5" /> <path d="m10 14 5 2 3.5-3.5" /> <path d="m18 12 1-1 1 1-1 1Z" />',
+    composition:'<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />',
+    sync:'<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" /><path d="M16 16h5v5" />',
     folder:'<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />',
     file:'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" />',
     refresh:'<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /> <path d="M21 3v5h-5" /> <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /> <path d="M8 16H3v5" />',
@@ -223,6 +247,8 @@
     copy:'<rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />',
     trash:'<path d="M3 6h18" /> <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /> <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /> <line x1="10" x2="10" y1="11" y2="17" /> <line x1="14" x2="14" y1="11" y2="17" />',
     open:'<path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M4 7V4a2 2 0 0 1 2-2 2 2 0 0 0-2 2" /> <path d="M4.063 20.999a2 2 0 0 0 2 1L18 22a2 2 0 0 0 2-2V7l-5-5H6" /> <path d="m5 11-3 3" /> <path d="m5 17-3-3h10" />',
+    plus:'<path d="M5 12h14" /><path d="M12 5v14" />',
+    palette:'<path d="M13,6.5 A0.5,0.5 0 1 0 14,6.5 A0.5,0.5 0 1 0 13,6.5 Z M17,10.5 A0.5,0.5 0 1 0 18,10.5 A0.5,0.5 0 1 0 17,10.5 Z M8,7.5 A0.5,0.5 0 1 0 9,7.5 A0.5,0.5 0 1 0 8,7.5 Z M6,12.5 A0.5,0.5 0 1 0 7,12.5 A0.5,0.5 0 1 0 6,12.5 Z" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />',
     folderOpen:'<path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2" />',
     keyboard:'<path d="M10 8h.01" /> <path d="M12 12h.01" /> <path d="M14 8h.01" /> <path d="M16 12h.01" /> <path d="M18 8h.01" /> <path d="M6 8h.01" /> <path d="M7 16h10" /> <path d="M8 12h.01" /> <rect width="20" height="16" x="2" y="4" rx="2" />',
     bug:'<path d="m8 2 1.88 1.88" /> <path d="M14.12 3.88 16 2" /> <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1" /> <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6" /> <path d="M12 20v-9" /> <path d="M6.53 9C4.6 8.8 3 7.1 3 5" /> <path d="M6 13H2" /> <path d="M3 21c0-2.1 1.7-3.9 3.8-4" /> <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4" /> <path d="M22 13h-4" /> <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4" />',
@@ -545,7 +571,7 @@
 
   function mount(host, opts) {
     if (!document.getElementById("ssm-css")) { const st = document.createElement("style"); st.id = "ssm-css"; st.textContent = CSS; document.head.appendChild(st); }
-    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.3.0", interactive: true }, opts || {});
+    const state = Object.assign({ theme: "dark", palette: "Graphite", mode: "depth", shading: "Off", padding: 2, grid: false, tint: 0, blackText: true, counts: true, scene: "none", side: true, view: "map", group: true, tag: true, w: 1600, h: 900, version: "2.4.0", interactive: true }, opts || {});
     const E = makeEngine(state);
     host.innerHTML = `<div class="ssm">
       <div class="titlebar"><div class="app"><span class="mark">${MARK}</span><span class="title">SpaceSharp ${state.version}</span></div>
@@ -565,7 +591,7 @@
         <aside class="side">
           <h2>Drives</h2><div class="sub">Click a drive to scan it.</div><div class="drives"></div><div class="rule"></div>
           <h2 style="margin-top:4px">Largest items</h2>
-          <div class="tabs"><span class="tab on">Files</span><span class="tab">Folders</span><span class="tab">Types</span><span class="tab tabChanges" hidden>Changes</span></div>
+          <div class="tabs"><span class="tab on">${svg("file")}Files</span><span class="tab">${svg("folder")}Folders</span><span class="tab">${svg("composition")}Types</span><span class="tab tabChanges" hidden>${svg("sync")}Changes</span></div>
           <div class="sub listSub">Largest files in C:\\</div><div class="rows"></div>
         </aside>
         <div class="mapcol">
@@ -583,19 +609,24 @@
 
     // ---- side panel
     const DRIVES = [{ name: "C:  Local Disk", used: 271.37, total: 1024, fs: "NVMe SSD · NTFS", icon: "ssd" }, { name: "D:  Data", used: 1560, total: 1863, fs: "Hard disk · NTFS", icon: "drive" }, { name: "E:  Games", used: 3120, total: 3726, fs: "SSD · NTFS", icon: "ssd" }, { name: "F:  Backup", used: 2210, total: 3726, fs: "USB · exFAT", icon: "usbStick" }, { name: "G:  USB Drive", used: 12.4, total: 57.6, fs: "USB · FAT32", icon: "usbStick" }];
-    $(".drives").innerHTML = DRIVES.map(d => `<div class="drive">${svg(d.icon)}<span class="name">${d.name}</span><span class="free">${fmt((d.total - d.used) * GB)} free</span><div class="bar"><i style="width:${(100 * d.used / d.total).toFixed(1)}%"></i></div><div class="detail">${fmt(d.used * GB)} used of ${fmt(d.total * GB)} · ${d.fs}</div></div>`).join("");
+    $(".drives").innerHTML = DRIVES.map(d => { const pct = 100 * d.used / d.total, cls = pct >= 92 ? "danger" : pct >= 85 ? "warn" : "", [letter, ...rest] = d.name.split(/\s+/), label = rest.join(" ") || "Local Disk", ext = d.icon === "usbStick";
+      return `<div class="drive${ext ? " ext" : ""}"><div class="ltile"><b>${letter.replace(":", "")}</b>${svg(d.icon)}</div><div><div class="top"><span class="name">${label}</span><span class="kind">${d.fs}</span></div><div class="bar"><i class="${cls}" style="width:${pct.toFixed(1)}%"></i></div><div class="bot"><span class="used">${fmt(d.used * GB)} of ${fmt(d.total * GB)}</span><span class="free">${fmt((d.total - d.used) * GB)} free</span></div></div></div>`; }).join("");
     function fillSideList(changes) {
-      win.querySelectorAll(".side .tab").forEach(t => t.classList.toggle("on", changes ? t.classList.contains("tabChanges") : t.textContent === "Files"));
+      win.querySelectorAll(".side .tab").forEach(t => t.classList.toggle("on", changes ? t.classList.contains("tabChanges") : t.textContent.trim() === "Files"));
       if (!changes) {
         const top = files.slice(0, 7), largest = top[0].size;
         $(".listSub").textContent = "Largest files in C:\\";
-        $(".rows").innerHTML = top.map(f => `<div class="row"><div><div class="n">${f.name}</div><div class="d">${f.parent.path}</div></div><div class="s">${fmt(f.size)}</div><div class="bar" style="width:${Math.round(292 * f.size / largest)}px"></div></div>`).join("");
+        const cols = E.cats(), seen = [...new Set(top.map(f => category(f.name)))], share = v => { const p = 100 * v / root.size; return p >= 0.05 ? p.toFixed(1) + "%" : "<0.1%"; };
+        $(".rows").innerHTML = `<div class="lkey">${seen.map(c => `<span><i style="background:${rgb(cols[c])}"></i>${CATS[c]}</span>`).join("")}</div><div class="lhead"><div></div><div>File</div><div>Share of the scan</div><div class="r">Size</div></div>`
+          + top.map(f => { const col = rgb(cols[category(f.name)]); return `<div class="row"><i class="cs" style="background:${col}"></i><div><div class="n">${f.name}</div><div class="d">${f.parent.path}</div></div><div class="b"><div class="bar"><i style="width:${(100 * f.size / largest).toFixed(1)}%;background:${col}"></i></div><em>${share(f.size)}</em></div><div class="s">${fmt(f.size)}</div></div>`; }).join("");
         return;
       }
       const rows = files.map(f => ({ f, d: changeOf(f) })).filter(x => x.d !== 0).map(x => ({ ...x, abs: Math.abs(x.d ?? x.f.size) })).sort((a, b) => b.abs - a.abs).slice(0, 7);
       const largest = rows[0].abs;
       $(".listSub").textContent = "Biggest changes since yesterday";
-      $(".rows").innerHTML = rows.map(({ f, d, abs }) => { const what = d === null ? "new" : d > 0 ? "grew" : "shrank", color = d === null ? "#F5B82E" : d > 0 ? "#E87A4F" : "#5DA9C9"; return `<div class="row chg"><span class="sw" style="background:${color}"></span><div><div class="n">${f.name}</div><div class="d">${what} · ${f.parent.path}</div></div><div class="s">${d === null || d > 0 ? "+" : "−"}${fmt(abs)}</div><div class="bar" style="width:${Math.round(292 * abs / largest)}px;left:24px"></div></div>`; }).join("");
+      const share = v => { const p = 100 * v / root.size; return p >= 0.05 ? p.toFixed(1) + "%" : "<0.1%"; };
+      $(".rows").innerHTML = `<div class="lkey"><span><i style="background:#E87A4F"></i>Grew</span><span><i style="background:#5DA9C9"></i>Shrank</span></div><div class="lhead"><div></div><div>Change</div><div>Share of the scan</div><div class="r">Size</div></div>`
+        + rows.map(({ f, d, abs }) => { const what = d === null ? "new" : d > 0 ? "grew" : "shrank", color = d === null || d > 0 ? "#E87A4F" : "#5DA9C9"; return `<div class="row"><i class="cs" style="background:${color}"></i><div><div class="n">${f.name}</div><div class="d">${what} · ${f.parent.path}</div></div><div class="b"><div class="bar"><i style="width:${(100 * abs / largest).toFixed(1)}%;background:${color}"></i></div><em>${share(abs)}</em></div><div class="s">${d === null || d > 0 ? "+" : "−"}${fmt(abs)}</div></div>`; }).join("");
     }
 
     // ---- map
@@ -703,18 +734,29 @@
     const typeFilter = (c) => ({ matches(n) { return containsMatch(n, f => category(f.name) === c); } });
     const bandFilter = (b) => ({ matches(n) { return containsMatch(n, f => ageBand(f) === b); } });
     function buildDrawer(m, bytes) {
+      // the drawer as the app draws it (2.3.2): a stacked share bar and a tile per type, tick scales for size and age, tiles for Show and the quick filters
       const shares = typeShares(), total = root.size, cols = E.cats();
-      const order = shares.map((v, i) => [i, v]).sort((a, b) => (a[0] === OTHER) - (b[0] === OTHER) || b[1] - a[1]).slice(0, 5);
-      const rows = order.map(([i, v]) => `<div class="trow"><span class="cb"></span><i style="background:${rgb(cols[i])}"></i><span class="nm">${CATS[i]}</span><span class="bar"><b style="width:${(100 * v / total).toFixed(1)}%;background:${rgb(cols[i])}"></b></span><span class="z">${fmtShort(v)}</span></div>`).join("");
+      const idx = shares.map((v, i) => i).filter(i => shares[i] > 0);
+      const stack = idx.map(i => `<i style="flex:${Math.max(shares[i], total / 300)};background:${rgb(cols[i])}"></i>`).join("");
+      const tiles = shares.map((v, i) => `<div class="tile"><i style="background:${rgb(cols[i])}"></i><span>${CATS[i]}</span><span class="z">${fmtShort(v)}</span></div>`).join("");
+      const scale = (labels, pick, toEnd) => {
+        const n = labels.length - 1, x = i => `calc(18px + (100% - 36px) * ${i / n})`;
+        let h = `<div class="scale"><div class="ln"></div>`;
+        if (pick > 0) h += `<div class="sp" style="left:${toEnd ? x(pick) : x(0)};right:${toEnd ? "18px" : `calc(100% - ${x(pick)})`}"></div>`;
+        labels.forEach((l, i) => { const lit = pick > 0 && (toEnd ? i >= pick : i <= pick); h += i === pick ? `<div class="tk h${pick === 0 ? " any" : ""}" style="left:${x(i)}"></div>` : `<div class="tk${lit ? " on" : ""}" style="left:${x(i)}"></div>`; h += `<div class="lbl${i === pick ? (pick === 0 ? " any" : " on") : ""}" style="left:${x(i)}">${l}</div>`; });
+        return h + `</div>`;
+      };
+      const sizes = ["Any", "1 MB", "10 MB", "100 MB", "1 GB", "10 GB", "100 GB"], ages = ["Any", "1 mo", "3 mo", "6 mo", "1 yr", "2 yr", "5 yr"];
       $(".drawer").innerHTML = `
         <div class="dh"><b>Filter</b><span class="x">Clear all ${svg("x")}</span></div>
         <div class="dbody">
-          <div class="sec"><div class="sh"><span>Type</span><span>share of scan</span></div>${rows}<div class="more">3 more…</div></div>
-          <div class="sec"><div class="sh"><span>Size</span><span class="v">over 1 GB</span></div><div class="slider"><div class="tr"></div><div class="fl" style="left:60%;right:0"></div><div class="th" style="left:60%"></div><div class="th" style="left:100%"></div></div><div class="ticks"><span>any</span><span>10 MB</span><span>100 MB</span><span>1 GB</span><span>10 GB</span><span>any</span></div></div>
-          <div class="sec"><div class="sh"><span>Not modified for</span></div><div class="seg"><span class="on">Any time</span><span>1 month</span><span>3 months</span><span>6 months</span><span>1 year</span><span>2 years</span><span>5 years</span></div></div>
-          <div class="sec"><div class="sh"><span>Show</span></div><div class="seg three"><span>Files and folders</span><span class="on">Files only</span><span>Folders only</span></div></div>
-          <div class="sec"><div class="sh"><span>Name</span></div><div class="railname" style="width:100%;border-radius:6px">Name or pattern, e.g. *.iso</div></div>
-          <div class="sec"><div class="sh"><span>Try</span></div><div class="chips"><span class="chip on">Large files</span><span class="chip">Big videos</span><span class="chip">Installers &amp; archives</span><span class="chip">Untouched for 2 years</span><span class="chip">Big and old</span><span class="chip">Recently changed</span></div></div>
+          <div class="sec"><div class="sh"><span>Name</span></div><div class="railname" style="width:100%;border-radius:6px">Part of the name, or a pattern like *.iso</div></div>
+          <div class="sec"><div class="sh"><span>Type</span><span>share of scan</span></div><div class="stack">${stack}</div><div class="stl"><span>Nothing picked: every type</span><span>of ${fmt(total)} scanned</span></div><div class="tiles">${tiles}</div></div>
+          <div class="sec"><div class="sh"><span>Larger than</span><span class="v on">1 GB</span></div>${scale(sizes, 4, true)}</div>
+          <div class="sec"><div class="sh"><span>Smaller than</span><span class="v">Any size</span></div>${scale(sizes, 0, false)}</div>
+          <div class="sec"><div class="sh"><span>Not modified for</span><span class="v">Any time</span></div>${scale(ages, 0, true)}</div>
+          <div class="sec"><div class="sh"><span>Show</span></div><div class="tiles"><div class="tile c" style="grid-column:1 / span 2">${svg("treemap")}Files and folders</div><div class="tile c on">${svg("file")}Files only</div><div class="tile c">${svg("folder")}Folders only</div></div></div>
+          <div class="sec"><div class="sh"><span>Quick filters</span></div><div class="qrow"><div class="tile">${svg("funnel")}Large files</div><div class="tile">${svg("funnel")}Big videos</div><div class="tile">${svg("funnel")}Installers &amp; archives</div><div class="tile">${svg("funnel")}Untouched for 2 years</div><div class="tile">${svg("funnel")}Big and old</div><div class="tile">${svg("funnel")}Recently changed</div></div></div>
         </div>
         <div class="df"><b>${num(m)} files · ${fmt(bytes)}</b><span>match</span><div class="btn accent">${svg("select")}Select matches</div></div>`;
     }
@@ -741,7 +783,7 @@
     const menuRow = (icon, text, key, cls = "") => `<div class="mi ${cls}">${icon ? svg(icon) : '<span class="blank"></span>'}<span>${text}</span>${key ? `<span class="k">${key}</span>` : ""}</div>`;
     const combo = (v) => `<div class="combo" style="width:220px;height:30px">${v}${svg("chev", "chev")}</div>`;
     const dlg = () => $(".dialog");
-    const dialogTitle = (t) => `<div class="dt"><span style="width:14px;height:14px;display:inline-block">${MARK}</span>${t}<span class="x">✕</span></div>`;
+    const dialogTitle = (t, win) => `<div class="dt"><span style="width:14px;height:14px;display:inline-block">${MARK}</span>${t}${win ? `<span class="wc"><i>─</i><i>☐</i><i>✕</i></span>` : `<span class="x">✕</span>`}</div>`;
 
     function applyScene() {
       const tip = $(".tip"), menu = $(".cmenu"), scrim = $(".scrim"), drawer = $(".drawer"), rail = $(".rail"), start = $(".start");
@@ -806,9 +848,14 @@
       if (state.scene === "multi") $(".status .hover").textContent = `${sameFolder.length} items selected · ${fmt(sameFolder.reduce((s, f) => s + f.size, 0))} · ${sameFolder.length} files    Del moves them to the Recycle Bin`;
       if (state.scene === "cleanup") { const w = findDir("Windows.old"); if (w) showInfo(w); }
       if (state.scene === "start") {
-        start.innerHTML = `<div class="start-center"><div><div class="start-head"><span class="start-mark">${MARK}</span><div><div class="start-title">Pick a drive on the left, or pick up where you left off</div><div class="start-sub">Saved scans open instantly and are compared with the new one.</div></div></div>
-          <div class="start-card"><div class="start-row">${svg("drive")}<span class="n">C:</span><span class="w">yesterday</span><span class="s">271.37 GB</span><span class="c">›</span></div><div class="start-row">${svg("drive")}<span class="n">E:</span><span class="w">4 days ago</span><span class="s">3.05 TB</span><span class="c">›</span></div><div class="start-row">${svg("folder")}<span class="n">C:\\Users\\User\\Downloads</span><span class="w">2 weeks ago</span><span class="s">14.44 GB</span><span class="c">›</span></div></div>
-          <div class="start-actions"><div class="btn">${svg("folder")}Scan a folder</div><div class="btn">${svg("file")}Open a saved scan…</div></div></div></div>`;
+        const ring = (size, thick, used, letter, warn) => { const r = (size - thick) / 2, c = 2 * Math.PI * r; return `<div class="start-ring" style="width:${size}px;height:${size}px"><svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="var(--control)" stroke-width="${thick}"></circle><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${warn ? "#F47067" : "var(--accent)"}" stroke-width="${thick}" stroke-linecap="round" stroke-dasharray="${Math.max(0.5, c * used)} ${c}" transform="rotate(-90 ${size / 2} ${size / 2})"></circle></svg>${letter ? `<b style="font-size:${Math.round(size / 4)}px">${letter}</b>` : ""}</div>`; };
+        const row = (icon, name, detail, size, when, use, warn) => `<div class="start-row">${icon}<span class="n">${name}<span>${detail}</span></span><span class="s">${size}</span><span class="w">${when}</span><span class="u${warn ? " warn" : ""}">${use}</span><span class="c">›</span></div>`;
+        start.innerHTML = `<div class="start-center"><div>
+          <div class="start-head"><span class="start-mark">${MARK}</span><div><div class="start-title">Pick a drive on the left, or pick up where you left off</div><div class="start-sub">Saved scans open instantly and are compared with the new one.</div></div><div class="start-tot"><b>1.73 TB used</b><span>of 2.82 TB across your scanned drives</span></div></div>
+          <div class="start-feat">${ring(104, 7, 0.5, "C:", false)}<div><div class="start-eye">Last scan · 13 hours ago</div><div class="start-name">C:<span>NVMe SSD</span></div><div class="start-line">454.85 GB scanned · 50% used · 477.11 GB free</div><div class="start-btns"><div class="btn accent">${svg("treemap")}Open the map</div><div class="btn">${svg("refresh")}Scan again and compare</div></div></div></div>
+          <div class="start-sec"><b>Earlier scans</b><span>3 scans</span><span class="r">Newest first</span></div>
+          <div class="start-card">${row(ring(36, 4, 0.45, "", false), "F:", "Portable HDD 3", "419.90 GB", "3 days ago", "45% used · 509.53 GB free", false)}${row(ring(36, 4, 0.89, "", true), "E:", "SSD III", "821.30 GB", "1 week ago", "89% used · 103.6 GB free", true)}${row(svg("folder", "fi"), "Projects", "C:\\Users\\User\\Projects", "38.20 GB", "2 weeks ago", "Folder · 184,302 files", false)}</div>
+          <div class="start-actions"><div class="btn">${svg("folder")}Scan a folder</div><div class="btn">${svg("file")}Open a saved scan…</div><span class="fast">Whole drives in seconds with administrator rights.</span></div></div></div>`;
         start.hidden = false; $(".status .scan").textContent = "Opening the last scan…";
         $(".crumbBar").innerHTML = `<span style="color:var(--dim);padding:0 6px">No scan yet</span>`; info.textContent = ""; $(".zoomlabel").textContent = "—";
         $(".side .rows").innerHTML = ""; $(".listSub").textContent = "Scan a drive or folder to see the largest items.";
@@ -837,23 +884,34 @@
         scrim.hidden = false;
       }
       if (state.scene === "settings") {
-        const row = (t, d, c) => `<div class="st-row"><div><div class="t">${t}</div><div class="d">${d}</div></div>${c}</div>`;
-        const slider = (pctv, a, b) => `<div class="st-slider"><div class="tr"><i style="width:${pctv}%"></i><b style="left:${pctv}%"></b></div><div class="ends"><span>${a}</span><span>${b}</span></div></div>`;
+        const row = (t, d, c, off) => `<div class="st-row${off ? " off" : ""}"><div><div class="t">${t}</div><div class="d">${d}</div></div>${c}</div>`;
+        const slider = (pctv, v) => `<div class="st-sl"><div class="st-slider"><div class="tr"><i style="width:${pctv}%"></i><b style="left:${pctv}%"></b></div></div><span class="st-val">${v}</span></div>`;
+        const on = state.shading !== "Off"; const preset = on ? state.shading : "Deep"; const vals = SHADING[preset] || [85, 60, 45, 85];
+        // the sample drive the real preview draws: five folders, 28 files, fixed
+        const box = (x, y, w, h, t, cls) => `<div class="sb ${cls || ""}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%">${t ? `<span>${t}</span>` : ""}</div>`;
+        const preview = `<div class="st-sample"><div class="sb root"><span>Sample drive · 100 GB · 28 files</span></div>
+          ${box(0.6, 10, 34, 88, "Photos · 34 GB · 6 files", "folder")}${box(1.2, 21, 10.5, 76, "DSC_0412.… 11 GB", "file sel")}${box(12.2, 21, 12, 50, "DSC_0388.NEF 8 GB", "file")}${box(24.6, 21, 9.5, 30, "Family.jpg 4 GB", "file")}${box(24.6, 52, 9.5, 19, "Beach.jpg 3 GB", "file")}${box(12.2, 72, 12, 25, "Summer.jpg 5 GB", "file")}${box(24.6, 72, 9.5, 25, "Trip.jpg 3 GB", "file")}
+          ${box(35.2, 10, 25, 88, "Videos · 26 GB · 3 files", "folder")}${box(35.8, 21, 12.5, 76, "Holiday 2024.m… 14 GB", "file")}${box(48.8, 21, 11, 48, "Birthday.mov 8 GB", "file")}${box(48.8, 70, 11, 27, "Clip.mp4 4 GB", "file")}
+          ${box(60.8, 10, 17.5, 88, "Programs · 18 GB · …", "folder")}${box(61.4, 21, 16.3, 46, "Steam · 12 GB · 4 …", "folder")}${box(62, 31, 6, 35, "game.… 5 GB", "file")}${box(68.5, 31, 8.6, 20, "textures.bin 4 GB", "file")}${box(68.5, 52, 8.6, 14, "", "file")}${box(61.4, 69, 11, 28, "setup.msi 4 GB", "file")}${box(72.8, 69, 5, 28, "", "file")}
+          ${box(78.9, 10, 20.5, 48, "Documents · 12 GB · 8 fi…", "folder")}${box(79.5, 21, 5, 36, "", "file")}${box(85, 21, 6.5, 17, "Budge… 1 GB", "file")}${box(85, 39, 6.5, 18, "Notes.… 2 GB", "file")}${box(92, 21, 3.5, 17, "", "file")}${box(95.8, 21, 3.4, 17, "", "file")}${box(92, 39, 7.2, 18, "", "file")}
+          ${box(78.9, 59, 20.5, 39, "Music · 10 GB · 5 files", "folder")}${box(79.5, 70, 5, 27, "", "file")}${box(85, 70, 3.5, 27, "", "file")}${box(89, 70, 3.5, 27, "", "file")}${box(93, 70, 6.2, 14, "", "file")}${box(93, 85, 6.2, 12, "", "file")}
+        </div><div class="st-caption">Sample data</div>`;
         dlg().className = "dialog settings";
-        dlg().innerHTML = dialogTitle("Settings") + `<div class="st-tabs"><span>General</span><span>Appearance</span><span class="on">Treemap</span><span>Map</span><span>Scanning</span></div>
-          <div class="st-preview"><canvas></canvas></div>
-          <div class="st-body"><div class="st-section">Shading</div><div class="st-note">How files are shaded inside their folders. The preview above follows every change.</div>
+        dlg().innerHTML = dialogTitle("Settings", true) + `<div class="st-tabs"><span>General</span><span>Appearance</span><span class="on">Treemap</span><span>Map</span><span>Scanning</span></div>
+          ${preview}
+          <div class="st-body"><div class="st-card cut">
+              ${row("Custom palettes", "Add your own: one JSON file per palette in the palettes folder. The folder comes with an example and a README.", `<div class="st-pal"><div class="r"><span class="btn outline">${svg("plus")}New palette</span><span class="btn outline">${svg("palette")}Start from ${state.palette}</span></div><div class="r links"><span>${svg("folderOpen")}Open folder</span><span>${svg("refresh")}Reload</span></div></div>`)}
+            </div>
+            <div class="st-section">Shading</div><div class="st-note">How files are lit. The map at the top is sample data and follows every change.</div>
             <div class="st-card">
-              ${row("Cushion shading", "Light-to-dark shading on files. Off is flat color.", `<span class="sw${state.shading === "Off" ? " off" : ""}"></span>`)}
-              ${row("Presets", "Starting points for the sliders below.", `<div class="st-chips">${["Soft", "Classic", "Deep"].map(p => `<span class="${state.shading === p ? "on" : ""}">${p}</span>`).join("")}</div>`)}
-              ${row("Depth", "How pronounced the shading is.", slider(SHADING[state.shading] ? SHADING[state.shading][0] : 55, "Flat", "Strong"))}
-              ${row("Spread", "How far the light reaches before the shadow.", slider(SHADING[state.shading] ? SHADING[state.shading][1] : 45, "Short", "Long"))}
-              ${row("Fade inside folders", "How much shading nested files keep.", slider(SHADING[state.shading] ? SHADING[state.shading][3] : 70, "Fades", "Keeps"))}
+              ${row("Cushion shading", "Light-to-dark shading on every file, the way SpaceMonger drew them. Off gives flat colors, and the settings below do nothing.", `<span class="sw${on ? "" : " off"}"></span>`)}
+              ${row("Presets", "A starting point. The sliders below fine-tune it.", `<div class="st-chips">${["Soft", "Classic", "Deep"].map(p => `<span class="${preset === p ? "on" : ""}">${p}</span>`).join("")}</div>`, !on)}
+              ${row("Depth", "How pronounced the shading is, from a faint sheen to a deep pillow.", slider(vals[0], vals[0]), !on)}
+              ${row("Spread", "How far the light reaches across a file before the shadow takes over.", slider(vals[1], vals[1]), !on)}
+              ${row("Tone", "How light or dark the shaded files read overall.", slider(vals[2], vals[2]), !on)}
             </div></div>
-          <div class="df"><div class="btn">${svg("refresh")}Reset to defaults</div><span class="spacer"></span><div class="btn accent">Close</div></div>`;
+          <div class="df"><span class="st-reset">Reset to defaults</span><span class="spacer"></span><div class="btn accent">Close</div></div>`;
         scrim.hidden = false;
-        const pc = dlg().querySelector(".st-preview canvas"); const pw = dlg().querySelector(".st-preview");
-        requestAnimationFrame(() => { E.render(pc, pw.clientWidth, pw.clientHeight, largestFolder, null, true); pc.style.width = "100%"; pc.style.height = "100%"; });
       }
       if (state.scene === "inspect") buildInspect(scrim);
     }
@@ -884,7 +942,7 @@
             ${svg("clock")}<div>Last changed <b>${agoText(rows[0] || f.children[0])}</b>, ${pct(old, f.size)} untouched for over a year <span class="d">· grew ${fmt(Math.round(f.size * .06))} since the last scan</span></div></div></div>
         <div class="ib">${dominant ? `<div class="callout"><b>${pct(top.size, f.size)}</b> of this folder is one thing: ${rel(top)} at ${fmt(top.size)}.</div>` : ""}
           <div class="charts"><div><h6>By type</h6><div class="donut">${donut(typeRows.map(([k, v]) => [v, cols[k]]), fmt(typeRows[0][1]), CATS[typeRows[0][0]])}<div>${legend(typeRows.map(([k, v]) => [CATS[k], v, cols[k]]))}</div></div></div>
-            <div><h6>By age</h6><div class="donut">${donut(ages.map((v, i) => [v, ageCol[i]]), fmt(old), "over a year old")}<div>${legend(ages.map((v, i) => [ageNames[i], v, ageCol[i]]))}</div></div></div></div>
+            <div><h6>By age</h6><div class="donut">${(() => { const big = ages.indexOf(Math.max(...ages)); return donut(ages.map((v, i) => [v, ageCol[i]]), fmt(ages[big]), ageNames[big].toLowerCase()); })()}<div>${legend(ages.map((v, i) => [ageNames[i], v, ageCol[i]]))}</div></div></div></div>
           <h6>Where the space is</h6>
           ${rows.map(r => `<div class="wr"><div class="nmx">${svg(r.dir ? "folder" : "file")}<span>${rel(r)}${r.dir ? "\\" : ""}</span></div><div class="bar"><i style="width:${(100 * r.size / f.size).toFixed(1)}%"></i></div><span class="s">${fmt(r.size)}</span><span class="p">${pct(r.size, f.size)}</span></div>`).join("")}
           <div class="rem">These ${rows.length} are ${pct(rows.reduce((a, r) => a + r.size, 0), f.size)} of the folder. The other ${num(nf - rows.reduce((a, r) => a + (r.dir ? countFiles(r) : 1), 0))} files share ${fmt(f.size - rows.reduce((a, r) => a + r.size, 0))}.</div></div>

@@ -1,5 +1,4 @@
-// Renders the README screenshots from tools/screenshot-mockup.html, and the drawn README graphics from
-// tools/readme-graphics.html, with headless Chromium.
+// Renders the README screenshots from tools/screenshot-mockup.html with headless Chromium.
 //
 //   npm i -D playwright && npx playwright install chromium
 //   node tools/screenshots.js
@@ -24,16 +23,6 @@ const SHOTS = [
   ["shot-light.png", "scene=none&theme=light&palette=Pastel&mode=type"]
 ];
 
-// The drawn pictures: an element id in readme-graphics.html and the file it becomes, captured at 2x.
-const GRAPHICS = [
-  ["how", "readme-how.png"],
-  ["features", "readme-features.png"],
-  ["palettes", "readme-palettes.png"],
-  ["banner-what", "readme-banner-what.png"],
-  ["banner-download", "readme-banner-download.png"],
-  ["banner-using", "readme-banner-using.png"]
-];
-
 (async () => {
   // CHROME_PATH points at a Chromium of your own (the CI container has one); otherwise Playwright uses its download.
   const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
@@ -48,14 +37,5 @@ const GRAPHICS = [
     console.log("  docs/" + file);
   }
 
-  const art = await browser.newPage({ viewport: { width: 1000, height: 1600 }, deviceScaleFactor: 2 });
-  await art.goto("file://" + path.resolve(__dirname, "readme-graphics.html"), { waitUntil: "load" });
-  await art.evaluate(() => document.fonts.ready);
-  await art.waitForTimeout(500);
-  for (const [id, file] of GRAPHICS) {
-    const el = await art.$("#" + id);
-    await el.screenshot({ path: path.resolve(__dirname, "..", "docs", file), omitBackground: true });
-    console.log("  docs/" + file);
-  }
   await browser.close();
 })();

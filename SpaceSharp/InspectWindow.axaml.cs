@@ -1,6 +1,8 @@
+using System.Globalization;
 using System.Text;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -36,6 +38,8 @@ public partial class InspectWindow : Window
         _summary = new InspectSummary(nodes, root, measure);
         _scheme = scheme;
         _navigate = navigate;
+        // nothing real to show (a merged group or the free-space box was passed): close as soon as the window opens
+        if (_summary.Nodes.Count == 0) Opened += (_, _) => Close();
 
         Title = Strings.Get("InspectWin_Inspect");
         CloseButton.Content = Strings.Get("InspectWin_Close");
@@ -166,31 +170,94 @@ public partial class InspectWindow : Window
         if (age.Count > 0) ContextLine("◷", age.ToArray());
     }
 
+    private List<FsNode>? _chain;
+    private double _crumbsWidth;
+
     private void BuildCrumbs(FsNode node)
     {
         var chain = new List<FsNode>();
         for (var n = node; n is not null; n = n.Parent) chain.Add(n);
         chain.Reverse();
-        if (chain.Count <= 1) { Crumbs.IsVisible = false; return; }
+        _chain = chain;
+        LayoutCrumbs();
+    }
 
-        for (int i = 0; i < chain.Count; i++)
+    private void Header_SizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        if (Math.Abs(e.NewSize.Width - _crumbsWidth) > 1 && _chain is not null) LayoutCrumbs();
+    }
+
+    /// <summary>
+    /// The path on one line, never wrapping: the root and the last folders are always shown, and as many of the
+    /// folders between them as fit; the rest fold into a "…" button whose flyout lists them, so the window keeps
+    /// its size however deep the path is.
+    /// </summary>
+    private void LayoutCrumbs()
+    {
+        Crumbs.Children.Clear();
+        if (_chain is null || _chain.Count <= 1) { Crumbs.IsVisible = false; return; }
+        Crumbs.IsVisible = true;
+        _crumbsWidth = Header.Bounds.Width > 0 ? Header.Bounds.Width : Width - 48;
+        double available = _crumbsWidth + 6;   // the panel starts 6 px into the padding
+
+        var typeface = new Typeface(FontFamily);
+        double TextWidth(string text) => new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, 11, null).Width;
+        double CrumbWidth(FsNode n) => TextWidth(n.Name) + 12;   // the crumb's padding
+        const double sep = 14, ellipsis = 26;
+
+        int n = _chain.Count;
+        var widths = _chain.Select(CrumbWidth).ToList();
+        double total = widths.Sum() + sep * (n - 1);
+        // fold from the second folder onward, leaving at least the root and the last one, until the line fits
+        int foldTo = 1;   // the folded range is [1, foldTo)
+        while (total > available && foldTo < n - 1)
         {
-            if (i > 0)
-                Crumbs.Children.Add(new TextBlock { Text = "›", Margin = new Thickness(2, 0, 2, 0), VerticalAlignment = VerticalAlignment.Center, FontSize = 11, Classes = { "dim" } });
+            if (foldTo == 1) total += ellipsis + sep;
+            total -= widths[foldTo] + sep;
+            foldTo++;
+        }
 
-            var crumb = chain[i];
-            if (i == chain.Count - 1 || _navigate is null)
+        for (int i = 0; i < n; i++)
+        {
+            if (i >= 1 && i < foldTo)
             {
-                Crumbs.Children.Add(new TextBlock { Text = crumb.Name, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 6, 0), Classes = { i == chain.Count - 1 ? "dim" : "accent" } });
+                if (i == 1) { Separator(); Crumbs.Children.Add(FoldButton(_chain.GetRange(1, foldTo - 1))); }
                 continue;
             }
-
-            var navigate = _navigate;
-            var button = new Button { Content = crumb.Name, Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22 };
-            ToolTip.SetTip(button, Strings.Get("Inspect_CrumbTip"));
-            button.Click += (_, _) => { Close(); navigate(crumb); };
-            Crumbs.Children.Add(button);
+            if (i > 0) Separator();
+            Crumbs.Children.Add(CrumbControl(_chain[i], last: i == n - 1));
         }
+    }
+
+    private void Separator() =>
+        Crumbs.Children.Add(new TextBlock { Text = "›", Margin = new Thickness(2, 0, 2, 0), VerticalAlignment = VerticalAlignment.Center, FontSize = 11, Classes = { "dim" } });
+
+    private Control CrumbControl(FsNode crumb, bool last)
+    {
+        if (last || _navigate is null)
+            return new TextBlock { Text = crumb.Name, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 6, 0), Classes = { last ? "dim" : "accent" } };
+        var navigate = _navigate;
+        var button = new Button { Content = crumb.Name, Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22 };
+        ToolTip.SetTip(button, Strings.Get("Inspect_CrumbTip"));
+        button.Click += (_, _) => { Close(); navigate(crumb); };
+        return button;
+    }
+
+    /// <summary>The "…" for the folded folders: its flyout lists them, each one a crumb that zooms the map there.</summary>
+    private Control FoldButton(List<FsNode> folded)
+    {
+        var button = new Button { Content = "…", Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22, Padding = new Thickness(7, 0) };
+        ToolTip.SetTip(button, string.Join("  ›  ", folded.Select(f => f.Name)));
+        var flyout = new MenuFlyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
+        foreach (var crumb in folded)
+        {
+            var item = new MenuItem { Header = crumb.Name, IsEnabled = _navigate is not null };
+            var captured = crumb;
+            if (_navigate is { } navigate) item.Click += (_, _) => { Close(); navigate(captured); };
+            flyout.Items.Add(item);
+        }
+        button.Flyout = flyout;
+        return button;
     }
 
     private static Part[] PlainParts(string text) => new[] { Plain(text) };
@@ -240,11 +307,15 @@ public partial class InspectWindow : Window
             AgePanel.IsVisible = false;
             return;
         }
-        var accent = TreemapControl.ColorOf(this.FindResource("Accent") as IBrush);
-        var dim = TreemapControl.ColorOf(this.FindResource("Control") as IBrush);
+        // The bands run amber (this month) to gray (older). The window is not attached yet, so a resource lookup for the
+        // accent would come back empty; the accent is the same amber in every look, and the look's Control color is at hand.
+        var accent = TreemapControl.ColorOf(Palette.NewBrush);
+        var dim = Color.Parse(App.Look.Control);
         var ageBrushes = new[] { Palette.Freeze(accent), Palette.Freeze(Palette.Mix(accent, dim, 0.3)), Palette.Freeze(Palette.Mix(accent, dim, 0.58)), Palette.UnchangedBrush };
         var ageSlices = s.ByAge.Select((a, i) => new DonutChart.Slice(Strings.Get("Inspect_Age_" + a.Bucket), SizeFormatter.Compact(a.Bytes), a.Bytes, ageBrushes[i])).ToList();
-        Donut(AgeDonut, AgeLegend, ageSlices, s.ByAge.Select(a => a.Share).ToList(), SizeFormatter.Compact(s.OlderThanYear), Strings.Get("Inspect_OverAYearOld"), Strings.Get("Inspect_ByAge"));
+        // at rest the center shows the biggest band, as the type donut shows its biggest type
+        var topAge = s.ByAge.MaxBy(a => a.Bytes)!;
+        Donut(AgeDonut, AgeLegend, ageSlices, s.ByAge.Select(a => a.Share).ToList(), SizeFormatter.Compact(topAge.Bytes), Strings.Get("Inspect_Age_" + topAge.Bucket), Strings.Get("Inspect_ByAge"));
         if (s.OldestUtc > DateTime.MinValue)
             OldestText.Text = Strings.Format("Inspect_OldestChange", s.OldestUtc.ToLocalTime().ToString("d", System.Globalization.CultureInfo.CurrentCulture));
     }

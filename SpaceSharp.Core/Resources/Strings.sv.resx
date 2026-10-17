@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>1 skyddad mapp kunde inte läsas, så dess innehåll saknas på kartan.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>för {0} dagar sedan</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>för {0} timmar sedan</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>för en timme sedan</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>nyss</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>för {0} minuter sedan</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>för {0} månader sedan</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp-skanning (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} ledigt</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} använt av {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Lokal disk</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} av {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 månad</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 år</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 år</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Skanna en enhet eller mapp för att se de största objekten.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Största filerna i {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Största mapparna i {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Fil</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Mapp</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Typ</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Ändring</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Andel av skanningen</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Storlek</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Om SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Retur</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Fråga igen nästa gång</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Flytta till Papperskorgen</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Flytta {0:N0} objekt till Papperskorgen</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>filer för små för att visas</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Kluster på kartan kan inte inspekteras: zooma in och välj en fil eller mapp</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Ledigt utrymme kan inte inspekteras</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>mapp, {0:N0} filer</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>{0}-fil</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>fil</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Palett</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Namn</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Vad den kallas i palettlistan</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>För</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Mörkt</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Ljust</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Båda</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>tolv nyanser, en per mapp på toppnivå, som upprepas efter djup</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Mapp {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>toppnivåmapp nummer {0}, och var tolfte nivå nedåt</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Generera:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regnbåge</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Grannar</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Tvåfärgad</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>En nyans</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Slumpmässig</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>En slumpmässig basfärg och spridning. Tryck tills något ser bra ut och justera sedan.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>från</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Basfärgen som generatorn utgår från. Klicka för att ändra den.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Basfärg</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>det Generera utgår från; den första mappfärgen som standard</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Filer</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>mappfärgen, ljusad mot vitt</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Ange varje filfärg själv</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Palettfilen finns i Urklipp.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Avbryt</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Spara och använd</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Vilket tema paletten är för</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Fyll mappar</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Alla fyra utgår från mapp 1:s färg</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>tolv nyanser jämnt fördelade runt hjulet</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>nyanser nära mapp 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>mapp 1:s nyans och dess motsats, varannan</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>bara toner av mapp 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Klistra in 12 hexkoder</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Ersätter mappfärgerna med hexkoderna i urklipp, i ordning</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>Urklipp innehåller inga hexfärger</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Skriv en hexkod i en rad, eller öppna väljaren</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>filfärgen under varje mappfärg</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Mapp</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Filfärg</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Filtyp</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Etiketter</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Exempel</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Öppna väljaren: reglage och föreslagna toner</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Prova:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>härledd</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Filer: {0} % mot vitt</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Filer: egna färger</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Namnet är upptaget</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} är en inbyggd palett. Ge din ett annat namn.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Vill du ersätta paletten?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigera</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Markera och agera</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Vy och filer</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Tangenterna SpaceSharp använder</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Tangentbordslayout</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Ritat för ett {0}-tangentbord; välj ett annat om det är fel.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Gula tangenter är de SpaceSharp använder; ett litet {0} i hörnet betyder håll {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Gula tangenter är de SpaceSharp använder; ett litet {0} i hörnet betyder håll Command. Delete är tangenten ovanför Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Välj en enhet till vänster</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Välj en enhet till vänster, eller fortsätt där du slutade</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Sparade skanningar öppnas direkt och jämförs med den nya.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Skanna en mapp</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Öppna en sparad skanning…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hela enheter på sekunder med administratörsbehörighet.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0} % använt</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>{0} skannat</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>{0} använt av {1} på dina enheter</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>{0} använt</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>av {0} på de skannade enheterna</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Senaste skanning · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Öppna kartan</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Skanna igen och jämför</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Tidigare skanningar</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanning</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} skanningar</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Nyaste först</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>{0} % använt · {1} ledigt</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Mapp · {0} filer</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behåll sparade skanningar i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatiskt sparade skanningar äldre än detta tas bort när SpaceSharp startar. Skanningar du själv har sparat som filer rörs aldrig.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagar</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>I år</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 till 3 år</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Äldre</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>över ett år gamla</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Äldsta ändring: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>De här {0} utgör {1} av mappen. De övriga {2:N0} filerna delar på {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} av den här mappen är en enda sak: {1} på {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hur mycket skuggning nästlade filer behåller. Lågt lugnar djupa nivåer så att toppmapparna sticker ut.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Ljus från den här sidan</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Ljus rakt framifrån</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Uppe till vänster</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Uppe</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Uppe till höger</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Vänster</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Rakt framifrån</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Höger</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Nere till vänster</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Nere</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Nere till höger</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Mörkt utseende</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Färgerna på fönstret, panelerna och menyerna när det mörka temat visas: Grafit, Skiffer, Mocka, Midnatt eller Kol.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Ljust utseende</value></data>
@@ -802,6 +852,16 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Rail_Files" xml:space="preserve"><value>filer</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>mappar</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>andel av skanningen</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Alla</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 mån</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 mån</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 mån</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 år</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 år</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 år</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>{0} valda · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Inget valt: alla typer</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>av {0} skannat</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Rensa alla</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Filterlayout</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>En panel över kartans högra del med alla reglage (standard), eller en rad under sökvägen med en knapp per villkor. Ctrl+F öppnar båda.</value></data>

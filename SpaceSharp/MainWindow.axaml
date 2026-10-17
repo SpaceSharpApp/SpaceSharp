@@ -91,11 +91,11 @@
           <Border Height="1" VerticalAlignment="Center" Background="{DynamicResource Stroke}" />
         </Border>
         <TextBlock x:Name="ListsTitle" Grid.Row="4" FontSize="15" FontWeight="SemiBold" Margin="14,4,14,2" />
-        <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10,4,10,4">
-          <Button x:Name="ListFilesButton" Classes="tab" Height="28" Click="ListKind_Click" Tag="Files" />
-          <Button x:Name="ListFoldersButton" Classes="tab" Height="28" Click="ListKind_Click" Tag="Folders" />
-          <Button x:Name="ListTypesButton" Classes="tab" Height="28" Click="ListKind_Click" Tag="Types" />
-          <Button x:Name="ListChangesButton" Classes="tab" Height="28" Click="ListKind_Click" Tag="Changes" IsVisible="False" />
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Spacing="6" Margin="14,4,14,6">
+          <Button x:Name="ListFilesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Files" />
+          <Button x:Name="ListFoldersButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Folders" />
+          <Button x:Name="ListTypesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Types" />
+          <Button x:Name="ListChangesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Changes" IsVisible="False" />
         </StackPanel>
         <TextBlock x:Name="ListHint" Grid.Row="6" Classes="dim" FontSize="12" Margin="14,0,14,6" TextTrimming="CharacterEllipsis" />
         <ScrollViewer Grid.Row="7">
@@ -117,25 +117,36 @@
 
       <!-- start screen: pick a drive, or pick up where you left off -->
       <Grid x:Name="EmptyHint">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="900">
-          <DockPanel Margin="4,0">
-            <TextBlock x:Name="EmptyTotals" DockPanel.Dock="Right" Classes="dim" FontSize="12.5" VerticalAlignment="Bottom" Margin="24,0,0,4" />
-            <Image DockPanel.Dock="Left" Source="avares://SpaceSharp/Assets/SpaceSharp-256.png" Width="44" Height="44" Margin="0,0,14,0" VerticalAlignment="Center" />
-            <StackPanel VerticalAlignment="Center">
-              <TextBlock x:Name="EmptyTitle" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" />
-              <TextBlock x:Name="EmptyText" Classes="dim" FontSize="12.5" Margin="0,3,0,0" TextWrapping="Wrap" />
-            </StackPanel>
-          </DockPanel>
-          <WrapPanel x:Name="RecentTiles" Margin="0,18,0,0" HorizontalAlignment="Center" />
-          <Grid ColumnDefinitions="*,*" Margin="0,12,0,0">
-            <Button x:Name="EmptyScanButton" Grid.Column="0" Classes="start" Margin="0,0,6,0" Click="ScanFolder_Click">
-              <Grid><Rectangle Classes="dash" /><StackPanel x:Name="EmptyScanContent" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" /></Grid>
-            </Button>
-            <Button x:Name="EmptyOpenButton" Grid.Column="1" Classes="start" Margin="6,0,0,0" Click="OpenScan_Click">
-              <Grid><Rectangle Classes="dash" /><StackPanel x:Name="EmptyOpenContent" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center" /></Grid>
-            </Button>
-          </Grid>
-        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" MaxWidth="900" Margin="40,32">
+            <!-- the header: the mark, the title and hint, the totals of the scanned drives on the right -->
+            <DockPanel Margin="4,0">
+              <StackPanel x:Name="EmptyTotalsPanel" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="24,0,0,0">
+                <TextBlock x:Name="EmptyTotalsUsed" FontSize="18" FontWeight="SemiBold" TextAlignment="Right" />
+                <TextBlock x:Name="EmptyTotals" Classes="dim" FontSize="12.5" TextAlignment="Right" Margin="0,2,0,0" />
+              </StackPanel>
+              <Image DockPanel.Dock="Left" Source="avares://SpaceSharp/Assets/SpaceSharp-256.png" Width="52" Height="52" Margin="0,0,16,0" VerticalAlignment="Center" />
+              <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="EmptyTitle" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" />
+                <TextBlock x:Name="EmptyText" Classes="dim" FontSize="13.5" Margin="0,4,0,0" TextWrapping="Wrap" />
+              </StackPanel>
+            </DockPanel>
+            <!-- the last scan as a panel, the earlier ones as a list; built by BuildRecentScans -->
+            <StackPanel x:Name="RecentHost" Margin="0,22,0,0" Spacing="12" />
+            <!-- the two actions, with the fast-scan line on the right -->
+            <DockPanel Margin="0,16,0,0">
+              <TextBlock x:Name="EmptyFastLine" DockPanel.Dock="Right" Classes="dim" FontSize="12.5" VerticalAlignment="Center" Margin="16,0,0,0" TextWrapping="Wrap" />
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button x:Name="EmptyScanButton" Classes="action" Click="ScanFolder_Click">
+                  <StackPanel x:Name="EmptyScanContent" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" />
+                </Button>
+                <Button x:Name="EmptyOpenButton" Classes="action" Click="OpenScan_Click">
+                  <StackPanel x:Name="EmptyOpenContent" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" />
+                </Button>
+              </StackPanel>
+            </DockPanel>
+          </StackPanel>
+        </ScrollViewer>
       </Grid>
 
       <!-- the hover tooltip: placed beside the pointer by code -->
@@ -191,8 +202,8 @@
                   <Border x:Name="StageFindFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="6" />
                 </Grid>
                 <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageFindIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                  <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="StageFindText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageFindDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
+                  <controls:Icon x:Name="StageFindIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                  <TextBlock VerticalAlignment="Top" Height="36" TextWrapping="Wrap"><Run x:Name="StageFindText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageFindDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
                 </DockPanel>
               </StackPanel>
               <StackPanel Grid.Column="2">
@@ -201,8 +212,8 @@
                   <Border x:Name="StageBuildFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0" />
                 </Grid>
                 <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageBuildIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                  <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="StageBuildText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageBuildDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
+                  <controls:Icon x:Name="StageBuildIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                  <TextBlock VerticalAlignment="Top" Height="36" TextWrapping="Wrap"><Run x:Name="StageBuildText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageBuildDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
                 </DockPanel>
               </StackPanel>
               <StackPanel Grid.Column="4">
@@ -211,8 +222,8 @@
                   <Border x:Name="StageDrawFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0" />
                 </Grid>
                 <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageDrawIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                  <TextBlock x:Name="StageDrawText" FontWeight="SemiBold" Classes="dim" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                  <controls:Icon x:Name="StageDrawIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                  <TextBlock x:Name="StageDrawText" FontWeight="SemiBold" Classes="dim" VerticalAlignment="Top" Height="36" TextWrapping="Wrap" />
                 </DockPanel>
               </StackPanel>
             </Grid>

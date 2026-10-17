@@ -86,6 +86,37 @@ public sealed partial class TreemapControl
                Math.Abs(center.Y - current.Y) * _zoom < 1e-3;
     }
 
+    /// <summary>
+    /// The cluster that stands where this one stood: the layout makes a new group node whenever the folder's
+    /// grouping changes with the zoom, so a group is found again through its folder. Null once the folder has none.
+    /// </summary>
+    private FsNode? CurrentGroupOf(FsNode group)
+    {
+        if (!group.IsGroup) return group;
+        if (_index.ContainsKey(group)) return group;
+        if (group.Parent is not { } parent || !_layoutCache.TryGetValue(parent, out var layout) || layout.Group is not { } now || !_index.ContainsKey(now)) return null;
+        // the same cluster, fewer members at most; a bigger one is the folder's outer cluster around a nested one, not this one
+        var was = group.GroupMembers; var members = now.GroupMembers;
+        return was is null || members is null || (members.Count <= was.Count && members.Count > 0 && was.Contains(members[0])) ? now : null;
+    }
+
+    /// <summary>Jumps to a cluster, re-aiming at the folder's current cluster each pass and stopping once it has dissolved.</summary>
+    private void SnapToGroup(FsNode group)
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            Rebuild();
+            var now = CurrentGroupOf(group);
+            if (now is null) break;
+            var (zoom, center) = FitView(_index[now].Bounds);
+            if (IsAt(zoom, center)) break;
+            SetView(zoom, center);
+        }
+
+        Rebuild();
+        ZoomChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     private FsNode? DeepestLaidOut(FsNode node)
     {
         for (var n = node; n is not null; n = n.Parent)
@@ -156,7 +187,9 @@ public sealed partial class TreemapControl
         Rebuild();
 
         // The target's exact position is only known once it's laid out at the current zoom; keep refining.
-        if (a.Target is not null && _index.TryGetValue(a.Target, out var item))
+        // A cluster is looked up afresh each frame, since the layout replaces it as its members come into view.
+        var aim = a.Target is { IsGroup: true } g ? CurrentGroupOf(g) : a.Target;
+        if (aim is not null && _index.TryGetValue(aim, out var item))
             (a.EndZoom, a.EndCenter) = FitView(item.Bounds);
 
         ZoomChanged?.Invoke(this, EventArgs.Empty);
@@ -164,7 +197,8 @@ public sealed partial class TreemapControl
         if (t >= 1)
         {
             StopAnimation();
-            if (a.Target is not null) SnapTo(a.Target);
+            if (a.Target is { IsGroup: true } target) SnapToGroup(target);
+            else if (a.Target is not null) SnapTo(a.Target);
         }
         else RequestFrame();
     }

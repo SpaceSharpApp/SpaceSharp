@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Globalization;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -66,7 +68,8 @@ public partial class MainWindow : Window
         Opened += async (_, _) =>
         {
             _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
-            if (App.Args.OpenFile is { } openFile) await OpenScanFileAsync(openFile);
+            if (App.Args.Mock) LoadMock(MockSystem.Drives[0].Root);
+            else if (App.Args.OpenFile is { } openFile) await OpenScanFileAsync(openFile);
             else if (App.Args.ScanPath is { } startPath)
             {
                 await ScanAsync(startPath);
@@ -194,15 +197,15 @@ public partial class MainWindow : Window
         DrawerClearButton.Content = Strings.Get("Drawer_ClearAll");
         ToolTip.SetTip(DrawerCloseButton, Strings.Get("Main_Close"));
         ListsTitle.Text = Strings.Get("Main_LargestItems");
-        ListFilesButton.Content = Strings.Get("Main_Files");
-        ListFoldersButton.Content = Strings.Get("Main_Folders");
-        ListTypesButton.Content = Strings.Get("Main_Types");
+        ListFilesButton.Content = Icons.WithText("File", Strings.Get("Main_Files"), 14);
+        ListFoldersButton.Content = Icons.WithText("Folder", Strings.Get("Main_Folders"), 14);
+        ListTypesButton.Content = Icons.WithText("Composition", Strings.Get("Main_Types"), 14);
         ListHint.Text = Strings.Get("List_HintNoScan");
         MarkListKind();
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
 
-        ListChangesButton.Content = Strings.Get("Main_Changes");
+        ListChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_Changes"), 14);
         FillPalettes();
         _building = false;
         UpdateCompareUi();
@@ -365,6 +368,12 @@ public partial class MainWindow : Window
     private void BuildDrives()
     {
         DriveList.Children.Clear();
+        if (_mock)
+        {
+            foreach (var d in MockSystem.Drives)
+                AddDriveRow(d.Root, d.Root.TrimEnd('\\'), d.Label, Enum.TryParse<DriveKind>(d.Kind, out var k) ? k : DriveKind.Unknown, d.Format, d.Total, d.Total - d.Used);
+            return;
+        }
         foreach (var drive in DriveInfo.GetDrives())
         {
             if (!drive.IsReady) continue;
@@ -375,30 +384,76 @@ public partial class MainWindow : Window
             if (total <= 0) continue;
 
             string name = OperatingSystem.IsWindows() ? drive.Name.TrimEnd('\\') : drive.Name;
-            string title = string.IsNullOrWhiteSpace(drive.VolumeLabel) ? name : $"{name}  {drive.VolumeLabel}";
-            var kind = DriveKinds.Detect(drive);
-            string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {drive.DriveFormat}" : drive.DriveFormat;
-
-            var grid = new Grid { Margin = new Thickness(2, 3), ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), RowDefinitions = new RowDefinitions("Auto,Auto,Auto") };
-            var icon = Icons.Make(DriveKinds.IconName(kind), 16, "TextDim"); icon.Margin = new Thickness(0, 1, 10, 0);
-            var nameText = new TextBlock { Text = title, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
-            var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), Classes = { "dim" }, Margin = new Thickness(10, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center };
-            Grid.SetColumn(nameText, 1); Grid.SetColumn(freeText, 2);
-            var bar = CapacityBar((double)(total - free) / total, 6);
-            bar.Margin = new Thickness(0, 7, 0, 5);
-            Grid.SetRow(bar, 1); Grid.SetColumn(bar, 1); Grid.SetColumnSpan(bar, 2);
-            var line = new TextBlock { Text = Strings.Format("Drive_UsedOf", SizeFormatter.Format(total - free), SizeFormatter.Format(total), kindText), Classes = { "dim" }, FontSize = 11, TextTrimming = TextTrimming.CharacterEllipsis };
-            Grid.SetRow(line, 2); Grid.SetColumn(line, 1); Grid.SetColumnSpan(line, 2);
-            grid.Children.Add(icon); grid.Children.Add(nameText); grid.Children.Add(freeText); grid.Children.Add(bar); grid.Children.Add(line);
-
-            var button = new Button { Classes = { "drive" }, Content = grid, Tag = drive.RootDirectory.FullName };
-            button.Click += (_, _) => _ = ScanAsync((string)button.Tag!);
-            DriveList.Children.Add(button);
+            AddDriveRow(drive.RootDirectory.FullName, name, drive.VolumeLabel, DriveKinds.Detect(drive), drive.DriveFormat, total, free);
         }
     }
 
+    /// <summary>One row of the Drives list; the pretend PC and the real drives both come through here.</summary>
+    private void AddDriveRow(string rootPath, string name, string? volumeLabel, DriveKind kind, string format, long total, long free)
+    {
+        string letter = OperatingSystem.IsWindows() || _mock ? name.TrimEnd(':') : name;
+        string title = string.IsNullOrWhiteSpace(volumeLabel) ? Strings.Get("Drive_NoLabel") : volumeLabel;
+        bool external = kind is DriveKind.Usb or DriveKind.Network or DriveKind.Optical;
+        string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {format}" : format;
+        double fraction = (double)(total - free) / total;
+
+        // The letter tile: the drive letter in a rounded square (dashed for drives that plug in), the kind's icon tucked in its corner.
+        var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
+        var square = new Avalonia.Controls.Shapes.Rectangle { Width = 40, Height = 40, RadiusX = 8, RadiusY = 8, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+        square.Bind(Avalonia.Controls.Shapes.Shape.FillProperty, this.GetResourceObservable("Window"));
+        square.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Stroke"));
+        if (external) square.StrokeDashArray = new AvaloniaList<double> { 3, 2 };
+        var letterText = new TextBlock { Text = letter, FontWeight = FontWeight.SemiBold, FontSize = letter.Length > 2 ? 11 : 15, Width = 40, Height = 40, TextAlignment = TextAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Padding = new Thickness(0, 10, 0, 0), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
+        var badge = new Border { CornerRadius = new CornerRadius(9), Padding = new Thickness(1), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Bottom, Child = Icons.Make(DriveKinds.IconName(kind), 16, "TextDim") };
+        badge.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+        tile.Children.Add(square); tile.Children.Add(letterText); tile.Children.Add(badge);
+
+        // The name and the kind on top, the bar, then used-of-total and free under it.
+        var top = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
+        var nameText = new TextBlock { Text = title, FontWeight = FontWeight.SemiBold, FontSize = 14, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Bottom };
+        var kindLabel = new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom };
+        Grid.SetColumn(kindLabel, 1);
+        top.Children.Add(nameText); top.Children.Add(kindLabel);
+        var bar = CapacityBar(fraction, 5, fraction >= 0.92 ? "Danger" : fraction >= 0.85 ? "Warn" : null);
+        bar.Margin = new Thickness(0, 6, 0, 5);
+        var bottom = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
+        var usedText = new TextBlock { Text = Strings.Format("Drive_UsedOfShort", SizeFormatter.Format(total - free), SizeFormatter.Format(total)), Classes = { "dim" }, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis };
+        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = 12, FontWeight = FontWeight.Medium };
+        Grid.SetColumn(freeText, 1);
+        bottom.Children.Add(usedText); bottom.Children.Add(freeText);
+        var body = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Children = { top, bar, bottom } };
+
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 12 };
+        Grid.SetColumn(body, 1);
+        grid.Children.Add(tile); grid.Children.Add(body);
+        ToolTip.SetTip(grid, $"{name}  {title}\n{Strings.Format("Drive_UsedOf", SizeFormatter.Format(total - free), SizeFormatter.Format(total), kindText)}");
+
+        var button = new Button { Classes = { "drive" }, Content = grid, Tag = rootPath };
+        button.Click += (_, _) => _ = ScanAsync((string)button.Tag!);
+        DriveList.Children.Add(button);
+    }
+
+    // ------------------------------------------------------------------ the pretend PC
+
+    private bool _mock;
+
+    /// <summary>
+    /// Shows the sample drive from the screenshot mockup as if it had just been scanned, compared with a scan from
+    /// yesterday, and swaps the Drives list for the pretend PC's drives. Rescans and drive clicks stay on the pretend
+    /// PC until the app is restarted. --mock on the command line, or Ctrl+Shift+Alt+M.
+    /// </summary>
+    private void LoadMock(string rootPath)
+    {
+        if (_scanCts is not null) return;
+        bool first = !_mock;
+        _mock = true;
+        var (root, info, baseline) = MockSystem.Build(rootPath);
+        if (first) { Title += "  (mock)"; BuildDrives(); }
+        ShowLoadedScan(root, info, baseline, Strings.Get("Status_OpenedVerb"));
+    }
+
     /// <summary>The amber-on-control bar the drive rows and the top lists draw: the fraction as a share of the width.</summary>
-    private static Grid CapacityBar(double fraction, double height)
+    private Grid CapacityBar(double fraction, double height, string? fillBrush = null)
     {
         fraction = Math.Clamp(fraction, 0, 1);
         var grid = new Grid { Height = height };
@@ -406,7 +461,9 @@ public partial class MainWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(1 - fraction, 0.001), GridUnitType.Star));
         var track = new Border { CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
         Grid.SetColumnSpan(track, 2);
-        var fill = new Border { CornerRadius = new CornerRadius(height / 2), Classes = { "accent-fill" }, Opacity = 0.9 };
+        var fill = new Border { CornerRadius = new CornerRadius(height / 2), Opacity = 0.9 };
+        if (fillBrush is null) fill.Classes.Add("accent-fill");
+        else fill.Bind(Border.BackgroundProperty, this.GetResourceObservable(fillBrush));
         grid.Children.Add(track); grid.Children.Add(fill);
         return grid;
     }
@@ -416,6 +473,7 @@ public partial class MainWindow : Window
     private async Task ScanAsync(string path)
     {
         if (_scanCts is not null) return;   // one scan at a time
+        if (_mock) { LoadMock(path); return; }
         _scanCts = new CancellationTokenSource();
         _scanRoot = path;
         _scanExpectedBytes = null;
@@ -620,9 +678,9 @@ public partial class MainWindow : Window
         StatusRight.Text = $"{root.FileCount:N0} {Strings.Get("Main_Files").ToLowerInvariant()} · {SizeFormatter.Format(root.Size)}";
         UpdateNavigation();
         UpdateCompareUi();
+        InvalidateInsights();
         ApplyFilter();
         RefreshTopList();
-        InvalidateInsights();
         ApplyView();
         RefreshInsights();
     }
@@ -762,10 +820,15 @@ public partial class MainWindow : Window
             bool real = node is { IsReal: true };
             bool scanning = _scanCts is not null;
             int count = Treemap.SelectedNodes.Count;
-            _menuInspect.IsEnabled = Treemap.SelectedNodes.Count > 0 || Treemap.FocusedFolder is not null;
+            // a merged group ("78 items") or the free-space box is not a thing to inspect; only real files and folders are
+            _menuInspect.IsEnabled = Treemap.SelectedNodes.Any(n => n.IsReal) || (Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is not null);
             _menuInspectTitle.Text = count > 1 ? Strings.Format("Menu_InspectMany", count) : Strings.Get("Menu_Inspect");
             // The sub-line under Inspect says what the menu is about: the item, its size and what it is.
-            if (count > 1) _menuInspectSub.Text = SizeFormatter.Format(Treemap.SelectedNodes.Sum(n => n.SizeFor(Treemap.SizeMode)));
+            // the reason for a disabled row wraps onto two lines; an item's name, size and kind stays on one and trims
+            _menuInspectSub.TextWrapping = !_menuInspect.IsEnabled && node is not null ? TextWrapping.Wrap : TextWrapping.NoWrap;
+            if (!_menuInspect.IsEnabled && node is not null)
+                _menuInspectSub.Text = Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");   // say why, rather than a gray row with no reason
+            else if (count > 1) _menuInspectSub.Text = SizeFormatter.Format(Treemap.SelectedNodes.Sum(n => n.SizeFor(Treemap.SizeMode)));
             else if (node is not null)
             {
                 string kind = node.IsGroup ? Strings.Get("Menu_KindGroup") : node.IsDirectory ? Strings.Format("Menu_KindFolder", node.FileCount) : node.Extension.Length > 0 ? Strings.Format("Menu_KindFile", node.Extension.TrimStart('.').ToUpperInvariant()) : Strings.Get("Menu_KindFileNoExt");
@@ -792,8 +855,8 @@ public partial class MainWindow : Window
     /// <summary>The Inspect window for the selection (Ctrl+I); a breadcrumb or a folder row in it flies the map there.</summary>
     private void ShowInspect()
     {
-        var nodes = Treemap.SelectedNodes.ToList();
-        if (nodes.Count == 0 && Treemap.FocusedFolder is { } focus) nodes.Add(focus);
+        var nodes = Treemap.SelectedNodes.Where(n => n.IsReal).ToList();   // not merged groups or the free-space box
+        if (nodes.Count == 0 && Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is { } focus) nodes.Add(focus);
         if (nodes.Count == 0) return;
         new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, n => { ShowView(insights: false); Treemap.FocusOn(n); }).ShowDialog(this);
     }
@@ -941,19 +1004,59 @@ public partial class MainWindow : Window
             TopListKind.Changes => _baselineInfo is { } b ? Strings.Format("List_ChangesSince", Ago(b.ScannedUtc)) : Strings.Get("List_ChangesSinceCompared"),
             _ => Strings.Format("List_ByType", _root.FullPath)
         };
-        foreach (var row in TopLists.Build(_root, _listKind, Treemap.SizeMode, Treemap.Scheme).Take(60))
+        var rows = TopLists.Build(_root, _listKind, Treemap.SizeMode, Treemap.Scheme).Take(60).ToList();
+        if (rows.Count == 0) return;
+        const string columns = "Auto,*,96,Auto";   // swatch, name and detail, bar with its share, size
+        bool colored = _listKind != TopListKind.Folders;
+
+        // The legend: one square per color the rows use, most rows first, in three aligned columns. The Types tab
+        // names its category on every row already, so it has none.
+        var legendKeys = _listKind == TopListKind.Types ? new List<(string Key, IBrush Swatch)>()
+            : rows.Where(r => r.LegendKey is not null).GroupBy(r => r.LegendKey!).OrderByDescending(g => g.Count()).Select(g => (Key: g.Key, g.First().Swatch)).ToList();
+        if (legendKeys.Count > 0)
         {
-            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto") };
-            var bar = new Border { Height = 3, CornerRadius = new CornerRadius(2), Classes = { "accent-fill" }, Opacity = 0.55, HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom, Width = Math.Max(2, row.Fraction * 260), Margin = new Thickness(0, 0, 0, -4) };
-            Grid.SetColumnSpan(bar, 3);
-            var swatch = new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(3), Background = row.Swatch, Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, IsVisible = _listKind is TopListKind.Types or TopListKind.Changes };
+            var legend = new UniformGrid { Columns = Math.Min(3, legendKeys.Count), Margin = new Thickness(8, 0, 8, 10) };
+            foreach (var (key, brush) in legendKeys)
+            {
+                var item = new StackPanel { Orientation = Avalonia.Layout.Orientation.Horizontal, Spacing = 6, Margin = new Thickness(0, 0, 10, 3) };
+                item.Children.Add(new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(2), Background = brush, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                item.Children.Add(new TextBlock { Text = Strings.Get(key), Classes = { "dim" }, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                legend.Children.Add(item);
+            }
+            TopList.Children.Add(legend);
+        }
+
+        // The column headings over a hairline.
+        var head = new Grid { ColumnDefinitions = new ColumnDefinitions(columns), ColumnSpacing = 12, Margin = new Thickness(8, 0, 8, 4) };
+        string nameHead = _listKind switch { TopListKind.Files => "List_HeadFile", TopListKind.Folders => "List_HeadFolder", TopListKind.Types => "List_HeadType", _ => "List_HeadChange" };
+        var h1 = ColumnHead(Strings.Get(nameHead)); Grid.SetColumn(h1, 1);
+        var h2 = ColumnHead(Strings.Get("List_HeadShare")); Grid.SetColumn(h2, 2);
+        var h3 = ColumnHead(Strings.Get("List_HeadSize")); Grid.SetColumn(h3, 3); h3.TextAlignment = TextAlignment.Right;
+        head.Children.Add(h1); head.Children.Add(h2); head.Children.Add(h3);
+        head.ColumnDefinitions[0].Width = new GridLength(colored ? 10 : 0);
+        var rule = new Border { Height = 1, Margin = new Thickness(8, 0, 8, 2) };
+        rule.Bind(Border.BackgroundProperty, this.GetResourceObservable("Stroke"));
+        TopList.Children.Add(head); TopList.Children.Add(rule);
+
+        foreach (var row in rows)
+        {
+            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions(columns), ColumnSpacing = 12 };
+            var swatch = new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(2), Background = row.Swatch, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, IsVisible = colored };
             var text = new StackPanel { VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
-            text.Children.Add(new TextBlock { Text = row.Name, TextTrimming = TextTrimming.CharacterEllipsis });
+            text.Children.Add(new TextBlock { Text = row.Name, FontWeight = FontWeight.Medium, TextTrimming = TextTrimming.CharacterEllipsis });
             text.Children.Add(new TextBlock { Text = row.Detail, Classes = { "dim" }, FontSize = 11, TextTrimming = TextTrimming.CharacterEllipsis });
-            var size = new TextBlock { Text = row.SizeText, FontWeight = FontWeight.SemiBold, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0) };
-            Grid.SetColumn(text, 1); Grid.SetColumn(size, 2);
-            grid.Children.Add(bar); grid.Children.Add(swatch); grid.Children.Add(text); grid.Children.Add(size);
-            var button = new Button { Classes = { "drive" }, Padding = new Thickness(8, 6, 8, 8), Content = grid };
+            var bar = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 8, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+            var fill = CapacityBar(row.Fraction, 6);
+            if (colored) ((Border)fill.Children[1]).Background = row.Swatch;
+            var share = new TextBlock { Text = ShareText(row.Share), Classes = { "dim" }, FontSize = 11, MinWidth = 34, TextAlignment = TextAlignment.Right, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+            Grid.SetColumn(share, 1);
+            bar.Children.Add(fill); bar.Children.Add(share);
+            var size = new TextBlock { Text = row.SizeText, FontWeight = FontWeight.SemiBold, FontSize = 14, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, MinWidth = 64, TextAlignment = TextAlignment.Right };
+            Grid.SetColumn(text, 1); Grid.SetColumn(bar, 2); Grid.SetColumn(size, 3);
+            grid.Children.Add(swatch); grid.Children.Add(text); grid.Children.Add(bar); grid.Children.Add(size);
+            if (!colored) grid.ColumnDefinitions[0].Width = new GridLength(0);
+            ToolTip.SetTip(grid, row.Name + "\n" + row.Detail);
+            var button = new Button { Classes = { "drive" }, Padding = new Thickness(8, 5, 8, 5), Content = grid };
             var captured = row;
             button.Click += (_, _) =>
             {
@@ -962,6 +1065,17 @@ public partial class MainWindow : Window
             };
             TopList.Children.Add(button);
         }
+    }
+
+    /// <summary>A small, dim, uppercase column heading for the lists.</summary>
+    private static TextBlock ColumnHead(string text) =>
+        new() { Text = text.ToUpperInvariant(), Classes = { "dim" }, FontSize = 11, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.4, TextTrimming = TextTrimming.CharacterEllipsis };
+
+    /// <summary>A share of the scan as a percentage: one decimal, "<0.1%" below that.</summary>
+    private static string ShareText(double share)
+    {
+        double pct = share * 100;
+        return pct >= 0.05 ? pct.ToString("0.0", CultureInfo.CurrentCulture) + "%" : "<0.1%";
     }
 
     // ------------------------------------------------------------------ toolbar
@@ -1061,6 +1175,9 @@ public partial class MainWindow : Window
             case Key.Add or Key.OemPlus when !FilterHasFocus: Treemap.ZoomBy(1.25); e.Handled = true; break;
             case Key.Subtract or Key.OemMinus when !FilterHasFocus: Treemap.ZoomBy(1 / 1.25); e.Handled = true; break;
             case Key.F5: Rescan_Click(null, new RoutedEventArgs()); e.Handled = true; break;
+            // hidden, for trying things out: the update prompt with nothing behind it, and the pretend PC
+            case Key.U when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): _ = UpdateWindow.ShowPreview(this); e.Handled = true; break;
+            case Key.M when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): LoadMock(MockSystem.Drives[0].Root); e.Handled = true; break;
             case Key.I when e.KeyModifiers.HasFlag(KeyModifiers.Control): ShowInspect(); e.Handled = true; break;
             case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = SaveScanAsAsync(); e.Handled = true; break;
             case Key.O when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = OpenScanAsync(); e.Handled = true; break;

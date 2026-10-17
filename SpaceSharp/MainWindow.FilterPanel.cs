@@ -34,6 +34,18 @@ public partial class MainWindow
         (Strings.Get("Filter_1Year"), 365), (Strings.Get("Filter_2Years"), 730), (Strings.Get("Filter_5Years"), 1825)
     };
 
+    // the drawer's scales: seven ticks each, a decade apart for size; the rail's dropdowns keep the finer SizeSteps
+    private static readonly (string Label, long Bytes)[] SizeTicks =
+    {
+        (Strings.Get("Filter_AnyShort"), 0), ("1 MB", 1L << 20), ("10 MB", 10L << 20), ("100 MB", 100L << 20), ("1 GB", 1L << 30), ("10 GB", 10L << 30), ("100 GB", 100L << 30)
+    };
+
+    private static readonly (string Label, int Days)[] AgeTicks =
+    {
+        (Strings.Get("Filter_AnyShort"), 0), (Strings.Get("Filter_1MonthShort"), 30), (Strings.Get("Filter_3MonthsShort"), 90), (Strings.Get("Filter_6MonthsShort"), 180),
+        (Strings.Get("Filter_1YearShort"), 365), (Strings.Get("Filter_2YearsShort"), 730), (Strings.Get("Filter_5YearsShort"), 1825)
+    };
+
     private static readonly (string Label, string Filter)[] Presets =
     {
         (Strings.Get("Preset_LargeFiles"), ">1GB is:file"),
@@ -56,9 +68,14 @@ public partial class MainWindow
 
     // drawer
     private TextBox? _drawerName;
-    private readonly Dictionary<FileCategory, (CheckBox Box, Border Bar, TextBlock Size)> _drawerTypes = new();
-    private ComboBox? _drawerMin, _drawerMax;
-    private readonly List<Button> _drawerAges = new(), _drawerKinds = new();
+    private readonly Dictionary<FileCategory, (ToggleButton Tile, Border Swatch, TextBlock Size)> _drawerTypes = new();
+    private Grid? _drawerStack;                                 // the stacked share bar, one column per type
+    private Border? _drawerStackBox;
+    private DockPanel? _drawerStackLine;
+    private TextBlock? _drawerPicked, _drawerOfScan;
+    private TickScale? _drawerMin, _drawerMax, _drawerAge;
+    private TextBlock? _drawerMinValue, _drawerMaxValue, _drawerAgeValue;
+    private readonly List<ToggleButton> _drawerKinds = new();
     private TextBlock? _drawerInfo;
     private Button? _drawerSelect;
 
@@ -216,7 +233,7 @@ public partial class MainWindow
 
     private string TypeSizeText(FileCategory category)
     {
-        var share = _typeShares?.FirstOrDefault(t => t.Category == category);
+        var share = TypeShares?.FirstOrDefault(t => t.Category == category);
         return share is null ? string.Empty : SizeFormatter.Format(share.Bytes);
     }
 
@@ -292,53 +309,70 @@ public partial class MainWindow
         _drawerName.Margin = new Thickness(0, 6, 0, 12);
         body.Children.Add(_drawerName);
 
-        var typeHead = new DockPanel();
-        var share = PanelHeading(Strings.Get("Drawer_ShareOfScan"));
-        DockPanel.SetDock(share, Dock.Right);
-        typeHead.Children.Add(share);
-        typeHead.Children.Add(PanelHeading(Strings.Get("Filter_Type")));
-        body.Children.Add(typeHead);
-        var types = new StackPanel { Margin = new Thickness(0, 4, 0, 12) };
+        // type: the stacked share bar, a line that says what is picked, and a tile per type
+        body.Children.Add(HeadingRow(Strings.Get("Filter_Type"), new TextBlock { Text = Strings.Get("Drawer_ShareOfScan"), FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } }));
+        _drawerStack = new Grid { Height = 10 };
+        _drawerStackBox = new Border { Child = _drawerStack, Height = 10, CornerRadius = new CornerRadius(3), ClipToBounds = true, Margin = new Thickness(0, 8, 0, 0), Classes = { "track" } };
+        body.Children.Add(_drawerStackBox);
+        _drawerStackLine = new DockPanel { Margin = new Thickness(0, 5, 0, 0) };
+        _drawerOfScan = new TextBlock { FontSize = 11.5, Margin = new Thickness(12, 0, 0, 0), Classes = { "dim" } };
+        DockPanel.SetDock(_drawerOfScan, Dock.Right);
+        _drawerStackLine.Children.Add(_drawerOfScan);
+        _drawerPicked = new TextBlock { FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        _drawerStackLine.Children.Add(_drawerPicked);
+        body.Children.Add(_drawerStackLine);
+        var tiles = new UniformGrid { Columns = 2, Margin = new Thickness(0, 8, -6, 6) };
         foreach (var category in Enum.GetValues<FileCategory>())
         {
-            var row = new DockPanel { Height = 26 };
-            var box = new CheckBox { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0), MinWidth = 0 };
-            var captured = category;
-            box.IsCheckedChanged += (_, _) => { if (!_syncingFilterUi) WriteSpec(s => { if (box.IsChecked == true) s.Types.Add(captured); else s.Types.Remove(captured); }); };
-            row.Children.Add(box);
-            var size = new TextBlock { FontSize = 12, Width = 62, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+            var content = new DockPanel();
+            var size = new TextBlock { FontSize = 11.5, Margin = new Thickness(8, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
             DockPanel.SetDock(size, Dock.Right);
-            row.Children.Add(size);
-            row.Children.Add(new Border { Width = 9, Height = 9, CornerRadius = new CornerRadius(2), Background = CategoryBrush(category), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center });
-            row.Children.Add(new TextBlock { Text = Strings.Category(category), Width = 84, VerticalAlignment = VerticalAlignment.Center });
-            var track = new Border { Height = 6, CornerRadius = new CornerRadius(3), Margin = new Thickness(4, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Stretch, Classes = { "track" } };
-            var bar = new Border { Height = 6, CornerRadius = new CornerRadius(3), HorizontalAlignment = HorizontalAlignment.Left, Width = 0, Background = CategoryBrush(category) };
-            track.Child = bar;
-            row.Children.Add(track);
-            _drawerTypes[category] = (box, bar, size);
-            types.Children.Add(row);
+            content.Children.Add(size);
+            var swatch = new Border { Width = 9, Height = 9, CornerRadius = new CornerRadius(2), Background = CategoryBrush(category), Margin = new Thickness(0, 0, 7, 0), VerticalAlignment = VerticalAlignment.Center };
+            content.Children.Add(swatch);
+            content.Children.Add(new TextBlock { Text = Strings.Category(category), VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap });
+            var tile = new ToggleButton { Content = content, Classes = { "tile" }, Margin = new Thickness(0, 0, 6, 6) };
+            var captured = category;
+            tile.IsCheckedChanged += (_, _) => { if (!_syncingFilterUi) WriteSpec(s => { if (tile.IsChecked == true) s.Types.Add(captured); else s.Types.Remove(captured); }); };
+            _drawerTypes[category] = (tile, swatch, size);
+            tiles.Children.Add(tile);
         }
-        body.Children.Add(types);
+        body.Children.Add(tiles);
 
-        var sizes = new Grid { Margin = new Thickness(0, 0, 0, 12), ColumnDefinitions = new ColumnDefinitions("*,12,*") };
-        _drawerMin = LabeledCombo(sizes, 0, Strings.Get("Filter_LargerThan"), SizeSteps.Select(s => s.Label), 0, i => { if (!_syncingFilterUi) WriteSpec(s => s.MinBytes = SizeSteps[i].Bytes > 0 ? SizeSteps[i].Bytes : null); });
-        _drawerMax = LabeledCombo(sizes, 2, Strings.Get("Filter_SmallerThan"), SizeSteps.Select(s => s.Label), 0, i => { if (!_syncingFilterUi) WriteSpec(s => s.MaxBytes = SizeSteps[i].Bytes > 0 ? SizeSteps[i].Bytes : null); });
-        body.Children.Add(sizes);
+        // size and age as scales: click a tick, and the span from it lights up
+        (_drawerMin, _drawerMinValue) = Scale(body, Strings.Get("Filter_LargerThan"), SizeTicks.Select(t => t.Label), spanToEnd: true, i => WriteSpec(s => s.MinBytes = SizeTicks[i].Bytes > 0 ? SizeTicks[i].Bytes : null));
+        (_drawerMax, _drawerMaxValue) = Scale(body, Strings.Get("Filter_SmallerThan"), SizeTicks.Select(t => t.Label), spanToEnd: false, i => WriteSpec(s => s.MaxBytes = SizeTicks[i].Bytes > 0 ? SizeTicks[i].Bytes : null));
+        (_drawerAge, _drawerAgeValue) = Scale(body, Strings.Get("Filter_NotModifiedFor"), AgeTicks.Select(a => a.Label), spanToEnd: true, i => WriteSpec(s => s.OlderThanDays = AgeTicks[i].Days > 0 ? AgeTicks[i].Days : null));
 
-        body.Children.Add(PanelHeading(Strings.Get("Filter_NotModifiedFor")));
-        body.Children.Add(Segmented(_drawerAges, AgeSteps.Select(a => a.Label), i => WriteSpec(s => s.OlderThanDays = AgeSteps[i].Days > 0 ? AgeSteps[i].Days : null)));
-
+        // show: three tiles with icons
         body.Children.Add(PanelHeading(Strings.Get("Filter_Show")));
-        body.Children.Add(Segmented(_drawerKinds, new[] { Strings.Get("Filter_FilesAndFolders"), Strings.Get("Filter_FilesOnly"), Strings.Get("Filter_FoldersOnly") }, i => WriteSpec(s => s.Kind = i switch { 1 => ItemKind.Files, 2 => ItemKind.Folders, _ => ItemKind.Any })));
+        // "Files and folders" on a row of its own, since three across does not fit it (nor its translations) at the drawer's width
+        var kinds = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), RowDefinitions = new RowDefinitions("Auto,Auto"), Margin = new Thickness(0, 6, -6, 6) };
+        int kindIndex = 0;
+        foreach (var (label, icon, kind) in new[] { (Strings.Get("Filter_FilesAndFolders"), "Treemap", ItemKind.Any), (Strings.Get("Filter_FilesOnly"), "File", ItemKind.Files), (Strings.Get("Filter_FoldersOnly"), "Folder", ItemKind.Folders) })
+        {
+            var tile = new ToggleButton { Content = TileText(icon, label, center: true), Classes = { "tile" }, Margin = new Thickness(0, 0, 6, 6) };
+            var captured = kind;
+            // the sync puts the three tiles right again, including a click on the one already picked (which the toggle would unpick)
+            tile.Click += (_, _) => { WriteSpec(s => s.Kind = captured); SyncFilterUi(); };
+            if (kindIndex == 0) Grid.SetColumnSpan(tile, 2);
+            else { Grid.SetRow(tile, 1); Grid.SetColumn(tile, kindIndex - 1); }
+            kindIndex++;
+            _drawerKinds.Add(tile);
+            kinds.Children.Add(tile);
+        }
+        body.Children.Add(kinds);
 
+        // quick filters: tiles that replace the whole filter text
         body.Children.Add(PanelHeading(Strings.Get("Filter_QuickFilters")));
-        var presets = new WrapPanel { Margin = new Thickness(0, 6, 0, 0) };
+        var presets = new WrapPanel { Margin = new Thickness(0, 6, -6, 0) };
         foreach (var (label, filter) in Presets)
         {
-            var chip = new ToggleButton { Content = label, Classes = { "chip" } };
+            var tile = new ToggleButton { Content = TileText("Filter", label), Classes = { "tile" }, Margin = new Thickness(0, 0, 6, 6), HorizontalAlignment = HorizontalAlignment.Left };
+            ToolTip.SetTip(tile, filter);
             string captured = filter;
-            chip.Click += (sender, _) => { ((ToggleButton)sender!).IsChecked = false; FilterBox.Text = captured; };
-            presets.Children.Add(chip);
+            tile.Click += (sender, _) => { ((ToggleButton)sender!).IsChecked = false; FilterBox.Text = captured; };
+            presets.Children.Add(tile);
         }
         body.Children.Add(presets);
 
@@ -351,26 +385,45 @@ public partial class MainWindow
         DrawerFooter.Children.Add(_drawerInfo);
     }
 
-    /// <summary>Equal buttons in rows of up to four; the active one has the Control background. <paramref name="buttons"/> keeps them for syncing.</summary>
-    private UniformGrid Segmented(List<Button> buttons, IEnumerable<string> labels, Action<int> onPick)
+    /// <summary>An icon and a label for a tile; a label too long for the tile wraps, and the tile grows, rather than being cut.</summary>
+    private static DockPanel TileText(string icon, string label, bool center = false)
     {
-        var all = labels.ToList();
-        var grid = new UniformGrid { Columns = Math.Min(4, all.Count), Margin = new Thickness(0, 6, 0, 12) };
-        int i = 0;
-        foreach (var label in all)
-        {
-            var b = new Button { Classes = { "tool" }, Content = label, Height = 28, FontSize = 12, Padding = new Thickness(4, 0, 4, 0), Margin = new Thickness(0, 0, 2, 2), HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center };
-            int index = i++;
-            b.Click += (_, _) => onPick(index);
-            buttons.Add(b);
-            grid.Children.Add(b);
-        }
-        return grid;
+        var panel = new DockPanel { HorizontalAlignment = center ? HorizontalAlignment.Center : HorizontalAlignment.Stretch };
+        var glyph = Icons.Make(icon, 13);
+        glyph.Margin = new Thickness(0, 0, 8, 0);
+        panel.Children.Add(glyph);
+        panel.Children.Add(new TextBlock { Text = label, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap });
+        return panel;
     }
 
-    private static void MarkSegment(List<Button> buttons, int active)
+    /// <summary>A heading with something docked at its right edge, on the same baseline.</summary>
+    private static DockPanel HeadingRow(string heading, Control right)
     {
-        for (int i = 0; i < buttons.Count; i++) buttons[i].Classes.Set("on", i == active);
+        var row = new DockPanel();
+        DockPanel.SetDock(right, Dock.Right);
+        row.Children.Add(right);
+        row.Children.Add(PanelHeading(heading));
+        return row;
+    }
+
+    /// <summary>A heading with the current value at its right, and a tick scale under it.</summary>
+    private (TickScale Scale, TextBlock Value) Scale(Panel body, string heading, IEnumerable<string> labels, bool spanToEnd, Action<int> onPick)
+    {
+        var value = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } };
+        body.Children.Add(HeadingRow(heading, value));
+        var scale = new TickScale { Labels = labels.ToList(), SpanToEnd = spanToEnd, Margin = new Thickness(0, 4, 0, 10) };
+        scale.Picked += onPick;
+        body.Children.Add(scale);
+        return (scale, value);
+    }
+
+    /// <summary>Puts a scale on its tick (or on none, when the filter holds a value between ticks) and writes the value beside the heading.</summary>
+    private static void SetScale(TickScale scale, TextBlock value, int index, string text, bool set)
+    {
+        scale.Selected = index;
+        value.Text = text;
+        value.Classes.Set("accent", set);
+        value.Classes.Set("dim", !set);
     }
 
     // ---------------------------------------------------------------- shared
@@ -381,7 +434,8 @@ public partial class MainWindow
     /// <summary>The name box: the search glyph at the left, the placeholder, and Esc and Enter handled as the WPF app (2.2) does.</summary>
     private TextBox NameBox(string placeholder, double height)
     {
-        var box = new TextBox { Height = height, MinHeight = height, PlaceholderText = placeholder, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(30, 0, 10, 0) };
+        // the glyph takes the box's own left slot, so the padding is only the gap between the glyph and the text
+        var box = new TextBox { Height = height, MinHeight = height, PlaceholderText = placeholder, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(7, 0, 10, 0) };
         var glyph = Icons.Make("Search", 13, "TextDim"); glyph.Margin = new Thickness(10, 0, 0, 0); glyph.HorizontalAlignment = HorizontalAlignment.Left;
         box.InnerLeftContent = glyph;
         box.TextChanged += (_, _) => NameBoxChanged(box);
@@ -496,19 +550,46 @@ public partial class MainWindow
             if (_drawerName is not null)
             {
                 if ((_drawerName.Text ?? string.Empty) != nameText && !_drawerName.IsFocused) _drawerName.Text = nameText;
-                long total = _typeShares?.Sum(t => t.Bytes) ?? 0;
-                foreach (var (category, (box, bar, size)) in _drawerTypes)
+                var shares = TypeShares;
+                long total = shares?.Sum(t => t.Bytes) ?? 0;
+                foreach (var (category, (tile, _, size)) in _drawerTypes)
                 {
-                    box.IsChecked = spec.Types.Contains(category);
-                    var share = _typeShares?.FirstOrDefault(t => t.Category == category);
+                    tile.IsChecked = spec.Types.Contains(category);
+                    var share = shares?.FirstOrDefault(t => t.Category == category);
                     size.Text = share is null ? string.Empty : SizeFormatter.Format(share.Bytes);
-                    double width = share is null || total <= 0 ? 0 : 120.0 * share.Bytes / total;
-                    bar.Width = Math.Max(0, width);
                 }
-                _drawerMin!.SelectedIndex = IndexOfSize(spec.MinBytes);
-                _drawerMax!.SelectedIndex = IndexOfSize(spec.MaxBytes);
-                MarkSegment(_drawerAges, Math.Max(0, Array.FindIndex(AgeSteps, a => a.Days == (spec.OlderThanDays ?? 0))));
-                MarkSegment(_drawerKinds, spec.Kind switch { ItemKind.Files => 1, ItemKind.Folders => 2, _ => 0 });
+
+                // the stacked bar: one segment per type in the tiles' order, the picked ones at full color
+                bool anyPicked = spec.Types.Count > 0;
+                _drawerStack!.ColumnDefinitions.Clear();
+                _drawerStack.Children.Clear();
+                bool haveShares = shares is not null && total > 0;
+                _drawerStackBox!.IsVisible = haveShares;
+                _drawerStackLine!.IsVisible = haveShares;
+                if (haveShares)
+                {
+                    int column = 0;
+                    foreach (var category in Enum.GetValues<FileCategory>())
+                    {
+                        var share = shares!.FirstOrDefault(t => t.Category == category);
+                        if (share is null || share.Bytes <= 0) continue;
+                        _drawerStack.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(share.Bytes, total / 300.0), GridUnitType.Star)); // a sliver at least, so tiny types still show
+                        var segment = new Border { Background = CategoryBrush(category), Opacity = !anyPicked || spec.Types.Contains(category) ? 1 : 0.3, Margin = new Thickness(0, 0, 1, 0) };
+                        Grid.SetColumn(segment, column++);
+                        _drawerStack.Children.Add(segment);
+                    }
+                    long pickedBytes = shares!.Where(t => spec.Types.Contains(t.Category)).Sum(t => t.Bytes);
+                    _drawerPicked!.Text = anyPicked
+                        ? Strings.Format("Drawer_Picked", string.Join(", ", Enum.GetValues<FileCategory>().Where(spec.Types.Contains).Select(Strings.Category)), SizeFormatter.Format(pickedBytes))
+                        : Strings.Get("Drawer_EveryType");
+                    _drawerOfScan!.Text = Strings.Format("Drawer_OfScanned", SizeFormatter.Format(total));
+                }
+
+                SetScale(_drawerMin!, _drawerMinValue!, Array.FindIndex(SizeTicks, t => t.Bytes == (spec.MinBytes ?? 0)), spec.MinBytes is { } min ? SizeFormatter.Format(min) : Strings.Get("Filter_AnySize"), spec.MinBytes is not null);
+                SetScale(_drawerMax!, _drawerMaxValue!, Array.FindIndex(SizeTicks, t => t.Bytes == (spec.MaxBytes ?? 0)), spec.MaxBytes is { } max ? SizeFormatter.Format(max) : Strings.Get("Filter_AnySize"), spec.MaxBytes is not null);
+                SetScale(_drawerAge!, _drawerAgeValue!, Array.FindIndex(AgeTicks, a => a.Days == (spec.OlderThanDays ?? 0)), spec.OlderThanDays is { } older ? FilterSpec.PeriodLocalized(older) : Strings.Get("Filter_AnyTime"), spec.OlderThanDays is not null);
+                int kindIndex = spec.Kind switch { ItemKind.Files => 1, ItemKind.Folders => 2, _ => 0 };
+                for (int i = 0; i < _drawerKinds.Count; i++) _drawerKinds[i].IsChecked = i == kindIndex;
                 _drawerInfo!.Text = info.Length == 0 ? Strings.Get("Filter_NoFilter") : info;
                 _drawerSelect!.IsEnabled = canSelect;
                 DrawerClearButton.IsEnabled = active;
@@ -523,9 +604,10 @@ public partial class MainWindow
         pill.Classes.Set("set", set);
     }
 
-    /// <summary>Recolors the type swatches after a palette change; the drawer keeps its bars.</summary>
+    /// <summary>Recolors the type swatches after a palette change; the stacked bar is rebuilt by the sync.</summary>
     private void RecolorFilterSwatches()
     {
-        foreach (var (category, (_, bar, _)) in _drawerTypes) bar.Background = CategoryBrush(category);
+        foreach (var (category, (_, swatch, _)) in _drawerTypes) swatch.Background = CategoryBrush(category);
+        if (_drawerTypes.Count > 0) SyncFilterUi();
     }
 }

@@ -12,6 +12,7 @@ namespace SpaceSharp.Util;
 ///   SpaceSharp.exe --compare old.sscan D:\   scan D:\ and compare it with a saved scan
 ///   SpaceSharp.exe --scan D:\            same as the bare path (kept for scripts that prefer a flag)
 ///   SpaceSharp.exe --help                print this and exit
+///   SpaceSharp.exe --mock                a pretend PC with sample data, for trying the app (not in the help text)
 /// Anything not understood is ignored rather than refused, so a stray argument never stops the app.
 /// </summary>
 public sealed class CommandLine
@@ -20,6 +21,8 @@ public sealed class CommandLine
     public string? OpenFile { get; private set; }
     public string? CompareFile { get; private set; }
     public bool ShowHelp { get; private set; }
+    /// <summary>Start on the pretend PC (<see cref="Services.MockSystem"/>) instead of the real drives.</summary>
+    public bool Mock { get; private set; }
 
     public static CommandLine Parse(string[] args)
     {
@@ -31,6 +34,9 @@ public sealed class CommandLine
             {
                 case "--help" or "-h" or "/?":
                     c.ShowHelp = true;
+                    break;
+                case "--mock":
+                    c.Mock = true;
                     break;
                 case "--scan" when i + 1 < args.Length:
                     c.ScanPath = Full(args[++i]);

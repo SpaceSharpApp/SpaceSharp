@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>1 beskyttet mappe kunne ikke læses, så kortet mangler dens indhold.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} dage siden</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} timer siden</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>for en time siden</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>lige nu</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} minutter siden</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} måneder siden</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp-scanning (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} ledig</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} brugt af {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Lokal disk</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} af {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 måned</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 år</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 år</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan et drev eller en mappe for at se de største elementer.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Største filer i {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Største mapper i {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Fil</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Mappe</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Ændring</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Andel af scanningen</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Om SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Spørg igen næste gang</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Flyt til Papirkurv</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Flyt {0:N0} elementer til Papirkurven</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>filer, der er for små til at vise</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Klynger på kortet kan ikke inspiceres: zoom ind og vælg en fil eller mappe</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Ledig plads kan ikke inspiceres</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>mappe, {0:N0} filer</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>{0}-fil</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>fil</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Palet</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Navn</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Det navn, den får på Palet-listen</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>Til</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Mørk</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Lys</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Begge</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>tolv farvetoner, én pr. mappe på øverste niveau, gentaget efter dybde</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Mappe {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>mappe nummer {0} på øverste niveau og hvert tolvte niveau nedefter</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Generér:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Regnbue</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Naboer</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Tofarvet</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>Én farvetone</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Tilfældig</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>En tilfældig grundfarve og spredning. Tryk, indtil noget ser rigtigt ud, og justér derefter.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>fra</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Den grundfarve, generatoren tager udgangspunkt i. Klik for at ændre den.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Grundfarve</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>det, Generér tager udgangspunkt i; som standard den første mappefarve</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Filer</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>mappefarven, lysnet mod hvid</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Vælg hver filfarve selv</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Paletfilen ligger i Udklipsholder.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Annuller</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Gem og brug</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Hvilket tema paletten er til</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Udfyld mapper</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Alle fire starter fra mappe 1's farve</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>tolv farvetoner jævnt fordelt rundt hjulet</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>farvetoner tæt på mappe 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>mappe 1's farvetone og dens modsatte, skiftevis</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>kun nuancer af mappe 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Indsæt 12 hex-koder</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Erstatter mappefarverne med hex-koderne i udklipsholderen, i rækkefølge</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>Udklipsholderen indeholder ingen hex-farver</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Skriv en hex-kode i en række, eller åbn vælgeren</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>filfarven under hver mappefarve</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Mappe</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Filfarve</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Filtype</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Etiketter</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Eksempel</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Åbn vælgeren: skydere og foreslåede nuancer</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Prøv:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>afledt</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Filer: {0} % mod hvid</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Filer: egne farver</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Navnet er optaget</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} er en indbygget palet. Giv din et andet navn.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Vil du erstatte paletten?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Naviger</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Vælg og handl</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Visning og filer</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Tasterne SpaceSharp bruger</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Tastaturlayout</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Tegnet til et {0}-tastatur; vælg et andet, hvis det er forkert.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Gule taster er dem, SpaceSharp bruger; et lille {0} i hjørnet betyder hold {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Gule taster er dem, SpaceSharp bruger; et lille {0} i hjørnet betyder hold Command. Delete er tasten over Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Vælg et drev til venstre</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Vælg et drev til venstre, eller fortsæt, hvor du slap</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Gemte scanninger åbnes med det samme og sammenlignes med den nye.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Scan en mappe</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Åbn en gemt scanning…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hele drev på sekunder med administratorrettigheder.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0} % brugt</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>{0} scannet</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>{0} brugt af {1} på dine drev</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>{0} brugt</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>af {0} på de scannede drev</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Seneste scanning · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Åbn kortet</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Scan igen og sammenlign</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Tidligere scanninger</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scanning</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} scanninger</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Nyeste først</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>{0} % brugt · {1} ledig</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Mappe · {0} filer</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behold gemte scanninger i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisk gemte scanninger, der er ældre end dette, slettes, når SpaceSharp starter. Scanninger, du selv har gemt som filer, røres aldrig.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dage</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>I år</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 til 3 år</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Ældre</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>over et år gammel</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Ældste ændring: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>Disse {0} udgør {1} af mappen. De øvrige {2:N0} filer deler {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} af denne mappe er én ting: {1} på {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hvor meget skygning indlejrede filer beholder. Lav dæmper de dybe niveauer, så de øverste mapper skiller sig ud.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Lys fra denne side</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Lys lige forfra</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Øverst til venstre</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Øverst</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Øverst til højre</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Venstre</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Lige forfra</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Højre</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Nederst til venstre</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Nederst</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Nederst til højre</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Mørkt udseende</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Farverne på vinduet, panelerne og menuerne, når det mørke tema vises: Grafit, Skifer, Mokka, Midnat eller Kulstof.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Lyst udseende</value></data>
@@ -802,6 +852,16 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Rail_Files" xml:space="preserve"><value>filer</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>mapper</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>andel af scanningen</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Alle</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 md.</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 md.</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 md.</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 år</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 år</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 år</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>{0} valgt · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Intet valgt: alle typer</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>af {0} scannet</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Ryd alle</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Filterlayout</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>En skuffe over højre side af kortet med alle knapper (standard) eller en bjælke under stien med én pille pr. betingelse. Ctrl+F åbner begge.</value></data>

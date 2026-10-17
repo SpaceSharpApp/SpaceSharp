@@ -39,7 +39,7 @@ ICONS = {
     # inspect
     "Warning": "triangle-alert", "Share": "chart-pie", "Composition": "layers", "Age": "clock-3",
     # about, update
-    "Sync": "refresh-ccw", "Notes": "file-text", "Keyboard": "keyboard", "Bug": "bug", "Idea": "lightbulb",
+    "Sync": "refresh-ccw", "Notes": "file-text", "Keyboard": "keyboard", "Mouse": "mouse", "Bug": "bug", "Idea": "lightbulb",
     "Globe": "globe", "Book": "book-open", "External": "external-link", "ArrowRight": "arrow-right",
     # dialogs and control chrome
     "Question": "circle-help", "Error": "circle-x", "Search": "search", "Check": "check",

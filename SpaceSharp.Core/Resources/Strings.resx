@@ -71,6 +71,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>1 protected folder couldn't be read, so the map is missing its contents.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} days ago</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} hours ago</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>an hour ago</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>just now</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} minutes ago</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} months ago</value></data>
@@ -148,6 +149,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>SpaceSharp scan (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} free</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} used of {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Local Disk</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} of {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 month</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 year</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 years</value></data>
@@ -232,6 +235,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan a drive or folder to see the largest items.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Largest files in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Largest folders in {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>File</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Folder</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Change</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Share of the scan</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Size</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>About SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Ask again next time</value></data>
@@ -312,6 +321,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Move to Recycle Bin</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Move {0:N0} items to Recycle Bin</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>files too small to show</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Map clusters can't be inspected: zoom in and pick a file or folder</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Free space can't be inspected</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>folder, {0:N0} files</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>{0} file</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>file</value></data>
@@ -343,7 +354,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Palette</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Name</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>What the Palette list will call it</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>For</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Dark</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Light</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Both</value></data>
@@ -351,17 +361,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>twelve hues, one per top-level folder, cycled by depth</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Folder {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>the top-level folder number {0}, and every twelfth level down</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Generate:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Rainbow</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Neighbors</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Two-tone</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>One hue</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Random</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>A random base color and spread. Press it until something looks right, then adjust.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>from</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>The base color the generator starts from. Click to change it.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Base color</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>what Generate starts from; the first folder color by default</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Files</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>the folder color, lifted toward white</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Set each file color yourself</value></data>
@@ -389,6 +394,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>The palette file is on the clipboard.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Cancel</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Save and use</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Which theme the palette is for</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Fill folders</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>All four start from Folder 1's color</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>twelve hues spread evenly around the wheel</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>hues close to Folder 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>Folder 1's hue and its opposite, alternating</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>shades of Folder 1 only</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Paste 12 hexes</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Replaces the folder colors with the hex codes on the clipboard, in order</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>The clipboard holds no hex colors</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Type a hex in any row, or open its picker</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>the file color under each folder color</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Folder</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>File color</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>File type</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Labels</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Sample</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Open the picker: sliders and suggested shades</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Try:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>derived</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Files: {0}% toward white</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Files: own colors</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>That name is taken</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} is a built-in palette. Give yours another name.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Replace the palette?</value></data>
@@ -620,6 +648,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigate</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Select and act</value></data>
   <data name="Keys_View" xml:space="preserve"><value>View and files</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Keys SpaceSharp uses</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Keyboard layout</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Drawn for a {0} keyboard; pick another if that is wrong.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Amber keys are the ones SpaceSharp uses; a small {0} in the corner means hold {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Amber keys are the ones SpaceSharp uses; a small {0} in the corner means hold Command. Delete is the key above Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Pick a drive on the left</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Pick a drive on the left, or pick up where you left off</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Saved scans open instantly and are compared with the new one.</value></data>
@@ -627,9 +660,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Scan a folder</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Open a saved scan…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Whole drives in seconds with administrator rights.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>{0}% used</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>{0} scanned</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>{0} used of {1} across your drives</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>{0} used</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>of {0} across your scanned drives</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Last scan · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Open the map</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Scan again and compare</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Earlier scans</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scan</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>{0} scans</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Newest first</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>{0}% used · {1} free</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · {0} files</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Keep saved scans for</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatic saves older than this are deleted when SpaceSharp starts. Scans you saved as files yourself are never touched.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} days</value></data>
@@ -654,7 +696,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>This year</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 to 3 years</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Older</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>over a year old</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Oldest change: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>These {0} are {1} of the folder. The other {2:N0} files share {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} of this folder is one thing: {1} at {2}.</value></data>
@@ -715,6 +756,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>How much shading nested files keep. Low calms deep levels so the top folders stand out.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Light from this side</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Light from straight ahead</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Top left</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Top</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Top right</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Left</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Straight ahead</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Right</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Bottom left</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Bottom</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Bottom right</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Dark look</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>The colors of the window, panels and menus when the dark theme is showing: Graphite, Slate, Mocha, Midnight, GitHub Dark or Carbon.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Light look</value></data>
@@ -805,6 +855,16 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Rail_Files" xml:space="preserve"><value>files</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>folders</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>share of scan</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Any</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 mo</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 mo</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 mo</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 yr</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 yr</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 yr</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>{0} picked · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Nothing picked: every type</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>of {0} scanned</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Clear all</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Filter layout</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>A drawer over the right of the map with full controls (the default), or a rail under the path with one pill per condition. Ctrl+F opens either.</value></data>

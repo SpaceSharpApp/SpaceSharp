@@ -69,6 +69,7 @@
   <data name="Access_DeniedOne" xml:space="preserve"><value>Не удалось прочитать 1 защищённую папку, поэтому её содержимое на карте отсутствует.</value></data>
   <data name="Ago_Days" xml:space="preserve"><value>{0} дн. назад</value></data>
   <data name="Ago_Hours" xml:space="preserve"><value>{0} ч назад</value></data>
+  <data name="Ago_OneHour" xml:space="preserve"><value>час назад</value></data>
   <data name="Ago_JustNow" xml:space="preserve"><value>только что</value></data>
   <data name="Ago_Minutes" xml:space="preserve"><value>{0} мин назад</value></data>
   <data name="Ago_Months" xml:space="preserve"><value>{0} мес. назад</value></data>
@@ -146,6 +147,8 @@
   <data name="Dialog_ScanFilter" xml:space="preserve"><value>Сканирование SpaceSharp (*.sscan)|*.sscan</value></data>
   <data name="Drive_Free" xml:space="preserve"><value>{0} свободно</value></data>
   <data name="Drive_UsedOf" xml:space="preserve"><value>{0} занято из {1} · {2}</value></data>
+  <data name="Drive_NoLabel" xml:space="preserve"><value>Локальный диск</value></data>
+  <data name="Drive_UsedOfShort" xml:space="preserve"><value>{0} из {1}</value></data>
   <data name="Filter_1Month" xml:space="preserve"><value>1 месяц</value></data>
   <data name="Filter_1Year" xml:space="preserve"><value>1 год</value></data>
   <data name="Filter_2Years" xml:space="preserve"><value>2 года</value></data>
@@ -230,6 +233,12 @@
   <data name="List_HintNoScan" xml:space="preserve"><value>Просканируйте диск или папку, чтобы увидеть крупнейшие элементы.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Крупнейшие файлы в {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Крупнейшие папки в {0}</value></data>
+  <data name="List_HeadFile" xml:space="preserve"><value>Файл</value></data>
+  <data name="List_HeadFolder" xml:space="preserve"><value>Папка</value></data>
+  <data name="List_HeadType" xml:space="preserve"><value>Тип</value></data>
+  <data name="List_HeadChange" xml:space="preserve"><value>Изменение</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Доля от сканирования</value></data>
+  <data name="List_HeadSize" xml:space="preserve"><value>Размер</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>О SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Спросить снова в следующий раз</value></data>
@@ -310,6 +319,8 @@
   <data name="Menu_Delete" xml:space="preserve"><value>Переместить в корзину</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Переместить элементы ({0:N0}) в корзину</value></data>
   <data name="Menu_KindGroup" xml:space="preserve"><value>файлы, слишком малые для показа</value></data>
+  <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Группы на карте нельзя просмотреть: приблизьте и выберите файл или папку</value></data>
+  <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Свободное место нельзя просмотреть</value></data>
   <data name="Menu_KindFolder" xml:space="preserve"><value>папка, файлов: {0:N0}</value></data>
   <data name="Menu_KindFile" xml:space="preserve"><value>файл {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>файл</value></data>
@@ -340,7 +351,6 @@
   <data name="PaletteEd_Title" xml:space="preserve"><value>Палитра</value></data>
   <data name="PaletteEd_Name" xml:space="preserve"><value>Имя</value></data>
   <data name="PaletteEd_NamePlaceholder" xml:space="preserve"><value>Как она будет называться в списке палитр</value></data>
-  <data name="PaletteEd_For" xml:space="preserve"><value>Для</value></data>
   <data name="PaletteEd_Dark" xml:space="preserve"><value>Тёмная</value></data>
   <data name="PaletteEd_Light" xml:space="preserve"><value>Светлая</value></data>
   <data name="PaletteEd_Both" xml:space="preserve"><value>Обе</value></data>
@@ -348,17 +358,12 @@
   <data name="PaletteEd_FoldersSub" xml:space="preserve"><value>двенадцать оттенков, по одному на папку верхнего уровня, повторяются по глубине</value></data>
   <data name="PaletteEd_FolderN" xml:space="preserve"><value>Папка {0}</value></data>
   <data name="PaletteEd_FolderDetail" xml:space="preserve"><value>папка верхнего уровня номер {0} и каждый двенадцатый уровень ниже</value></data>
-  <data name="PaletteEd_Generate" xml:space="preserve"><value>Создать:</value></data>
   <data name="PaletteEd_Rainbow" xml:space="preserve"><value>Радуга</value></data>
   <data name="PaletteEd_Neighbors" xml:space="preserve"><value>Соседние</value></data>
   <data name="PaletteEd_TwoTone" xml:space="preserve"><value>Два тона</value></data>
   <data name="PaletteEd_OneHue" xml:space="preserve"><value>Один оттенок</value></data>
   <data name="PaletteEd_Random" xml:space="preserve"><value>Случайно</value></data>
   <data name="PaletteEd_RandomTip" xml:space="preserve"><value>Случайный базовый цвет и разброс. Нажимайте, пока не понравится, затем подправьте.</value></data>
-  <data name="PaletteEd_FromBase" xml:space="preserve"><value>от</value></data>
-  <data name="PaletteEd_BaseTip" xml:space="preserve"><value>Базовый цвет, с которого начинает генератор. Щёлкните, чтобы изменить.</value></data>
-  <data name="PaletteEd_Base" xml:space="preserve"><value>Базовый цвет</value></data>
-  <data name="PaletteEd_BaseDetail" xml:space="preserve"><value>с чего начинает «Создать»; по умолчанию цвет первой папки</value></data>
   <data name="PaletteEd_Files" xml:space="preserve"><value>Файлы</value></data>
   <data name="PaletteEd_FilesSub" xml:space="preserve"><value>цвет папки, осветлённый к белому</value></data>
   <data name="PaletteEd_FilesOwn" xml:space="preserve"><value>Задать каждый цвет файлов вручную</value></data>
@@ -386,6 +391,29 @@
   <data name="PaletteEd_Exported" xml:space="preserve"><value>Файл палитры в буфере обмена.</value></data>
   <data name="PaletteEd_Cancel" xml:space="preserve"><value>Отмена</value></data>
   <data name="PaletteEd_Save" xml:space="preserve"><value>Сохранить и применить</value></data>
+  <data name="PaletteEd_ForTip" xml:space="preserve"><value>Для какой темы палитра</value></data>
+  <data name="PaletteEd_FillFolders" xml:space="preserve"><value>Заполнить папки</value></data>
+  <data name="PaletteEd_FromFolder1" xml:space="preserve"><value>Все четыре начинаются с цвета папки 1</value></data>
+  <data name="PaletteEd_RainbowDesc" xml:space="preserve"><value>двенадцать оттенков равномерно по кругу</value></data>
+  <data name="PaletteEd_NeighborsDesc" xml:space="preserve"><value>оттенки, близкие к папке 1</value></data>
+  <data name="PaletteEd_TwoToneDesc" xml:space="preserve"><value>оттенок папки 1 и противоположный, по очереди</value></data>
+  <data name="PaletteEd_OneHueDesc" xml:space="preserve"><value>только тона папки 1</value></data>
+  <data name="PaletteEd_PasteHexes" xml:space="preserve"><value>Вставить 12 hex</value></data>
+  <data name="PaletteEd_PasteHexesTip" xml:space="preserve"><value>Заменяет цвета папок hex-кодами из буфера обмена по порядку</value></data>
+  <data name="PaletteEd_PasteNone" xml:space="preserve"><value>В буфере обмена нет hex-цветов</value></data>
+  <data name="PaletteEd_RowHint" xml:space="preserve"><value>Введите hex в любой строке или откройте палитру</value></data>
+  <data name="PaletteEd_FilesOwnSub" xml:space="preserve"><value>цвет файлов под каждым цветом папки</value></data>
+  <data name="PaletteEd_Col_Folder" xml:space="preserve"><value>Папка</value></data>
+  <data name="PaletteEd_Col_File" xml:space="preserve"><value>Цвет файлов</value></data>
+  <data name="PaletteEd_Col_Type" xml:space="preserve"><value>Тип файла</value></data>
+  <data name="PaletteEd_Col_Hex" xml:space="preserve"><value>Hex</value></data>
+  <data name="PaletteEd_Col_Labels" xml:space="preserve"><value>Подписи</value></data>
+  <data name="PaletteEd_Col_Sample" xml:space="preserve"><value>Образец</value></data>
+  <data name="PaletteEd_PickTip" xml:space="preserve"><value>Открыть палитру: ползунки и предложенные тона</value></data>
+  <data name="PaletteEd_Try" xml:space="preserve"><value>Попробуйте:</value></data>
+  <data name="PaletteEd_Derived" xml:space="preserve"><value>производный</value></data>
+  <data name="PaletteEd_FilesMenu" xml:space="preserve"><value>Файлы: {0}% к белому</value></data>
+  <data name="PaletteEd_FilesOwnMenu" xml:space="preserve"><value>Файлы: свои цвета</value></data>
   <data name="PaletteEd_NameTaken" xml:space="preserve"><value>Это имя занято</value></data>
   <data name="PaletteEd_NameTakenDetail" xml:space="preserve"><value>{0} — встроенная палитра. Дайте своей другое имя.</value></data>
   <data name="PaletteEd_Replace" xml:space="preserve"><value>Заменить палитру?</value></data>
@@ -617,6 +645,11 @@
   <data name="Keys_Navigate" xml:space="preserve"><value>Навигация</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Выделение и действия</value></data>
   <data name="Keys_View" xml:space="preserve"><value>Вид и файлы</value></data>
+  <data name="Keys_Title" xml:space="preserve"><value>Клавиши SpaceSharp</value></data>
+  <data name="Keys_Layout" xml:space="preserve"><value>Раскладка клавиатуры</value></data>
+  <data name="Keys_LayoutNote" xml:space="preserve"><value>Нарисовано для клавиатуры {0}; выберите другую, если это не так.</value></data>
+  <data name="Keys_FootWin" xml:space="preserve"><value>Янтарные клавиши использует SpaceSharp; маленький {0} в углу означает удерживать {0}.</value></data>
+  <data name="Keys_FootMac" xml:space="preserve"><value>Янтарные клавиши использует SpaceSharp; маленький {0} в углу означает удерживать Command. Delete — клавиша над Return.</value></data>
   <data name="Start_PickADrive" xml:space="preserve"><value>Выберите диск слева</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Выберите диск слева или продолжите с того места, где остановились</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Сохранённые сканирования открываются мгновенно и сравниваются с новым.</value></data>
@@ -624,9 +657,18 @@
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Сканировать папку</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Открыть сохранённое сканирование…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Целые диски за секунды с правами администратора.</value></data>
-  <data name="Start_PercentUsed" xml:space="preserve"><value>Занято {0}%</value></data>
   <data name="Start_ScannedSize" xml:space="preserve"><value>Проверено {0}</value></data>
-  <data name="Start_Totals" xml:space="preserve"><value>Занято {0} из {1} на ваших дисках</value></data>
+  <data name="Start_TotalsUsed" xml:space="preserve"><value>Занято {0}</value></data>
+  <data name="Start_TotalsOf" xml:space="preserve"><value>из {0} на проверенных дисках</value></data>
+  <data name="Start_LastScan" xml:space="preserve"><value>Последняя проверка · {0}</value></data>
+  <data name="Start_OpenTheMap" xml:space="preserve"><value>Открыть карту</value></data>
+  <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Проверить снова и сравнить</value></data>
+  <data name="Start_EarlierScans" xml:space="preserve"><value>Предыдущие проверки</value></data>
+  <data name="Start_ScanCountOne" xml:space="preserve"><value>1 проверка</value></data>
+  <data name="Start_ScanCount" xml:space="preserve"><value>Проверок: {0}</value></data>
+  <data name="Start_NewestFirst" xml:space="preserve"><value>Сначала новые</value></data>
+  <data name="Start_UsedFree" xml:space="preserve"><value>Занято {0}% · свободно {1}</value></data>
+  <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлов: {0}</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Хранить сохранённые сканирования</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Автоматические сохранения старше этого срока удаляются при запуске SpaceSharp. Сканирования, которые вы сохранили в файлы сами, не трогаются.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} дн.</value></data>
@@ -651,7 +693,6 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>В этом году</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>От 1 до 3 лет</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Старше</value></data>
-  <data name="Inspect_OverAYearOld" xml:space="preserve"><value>старше года</value></data>
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Самое старое изменение: {0}</value></data>
   <data name="Inspect_Remainder" xml:space="preserve"><value>Эти {0} составляют {1} папки. Остальные файлы ({2:N0}) делят {3}.</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} этой папки — одно содержимое: {1} размером {2}.</value></data>
@@ -712,6 +753,15 @@
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Сколько затенения сохраняют вложенные файлы. Низкое значение успокаивает глубокие уровни, чтобы выделялись верхние папки.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Свет с этой стороны</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Свет прямо спереди</value></data>
+  <data name="Light_TopLeft" xml:space="preserve"><value>Сверху слева</value></data>
+  <data name="Light_Top" xml:space="preserve"><value>Сверху</value></data>
+  <data name="Light_TopRight" xml:space="preserve"><value>Сверху справа</value></data>
+  <data name="Light_Left" xml:space="preserve"><value>Слева</value></data>
+  <data name="Light_Ahead" xml:space="preserve"><value>Прямо спереди</value></data>
+  <data name="Light_Right" xml:space="preserve"><value>Справа</value></data>
+  <data name="Light_BottomLeft" xml:space="preserve"><value>Снизу слева</value></data>
+  <data name="Light_Bottom" xml:space="preserve"><value>Снизу</value></data>
+  <data name="Light_BottomRight" xml:space="preserve"><value>Снизу справа</value></data>
   <data name="Settings_LookDark" xml:space="preserve"><value>Тёмный вид</value></data>
   <data name="Settings_LookDark_Desc" xml:space="preserve"><value>Цвета окна, панелей и меню при тёмной теме: Графит, Сланец, Мокко, Полночь или Карбон.</value></data>
   <data name="Settings_LookLight" xml:space="preserve"><value>Светлый вид</value></data>
@@ -802,6 +852,16 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Rail_Files" xml:space="preserve"><value>файлы</value></data>
   <data name="Rail_Folders" xml:space="preserve"><value>папки</value></data>
   <data name="Drawer_ShareOfScan" xml:space="preserve"><value>доля сканирования</value></data>
+  <data name="Filter_AnyShort" xml:space="preserve"><value>Любой</value></data>
+  <data name="Filter_1MonthShort" xml:space="preserve"><value>1 мес</value></data>
+  <data name="Filter_3MonthsShort" xml:space="preserve"><value>3 мес</value></data>
+  <data name="Filter_6MonthsShort" xml:space="preserve"><value>6 мес</value></data>
+  <data name="Filter_1YearShort" xml:space="preserve"><value>1 год</value></data>
+  <data name="Filter_2YearsShort" xml:space="preserve"><value>2 года</value></data>
+  <data name="Filter_5YearsShort" xml:space="preserve"><value>5 лет</value></data>
+  <data name="Drawer_Picked" xml:space="preserve"><value>Выбрано: {0} · {1}</value></data>
+  <data name="Drawer_EveryType" xml:space="preserve"><value>Ничего не выбрано: все типы</value></data>
+  <data name="Drawer_OfScanned" xml:space="preserve"><value>из {0} проверено</value></data>
   <data name="Drawer_ClearAll" xml:space="preserve"><value>Сбросить всё</value></data>
   <data name="Settings_FilterLayout" xml:space="preserve"><value>Вид фильтра</value></data>
   <data name="Settings_FilterLayout_Desc" xml:space="preserve"><value>Панель справа поверх карты с полными элементами управления (по умолчанию) или строка под путём с одной кнопкой на условие. Ctrl+F открывает любой из них.</value></data>

@@ -14,6 +14,10 @@ public sealed class TopRow
     public double Fraction { get; init; }
     public double BarWidth => Math.Round(Fraction * 300);
     public IBrush Swatch { get; init; } = Brushes.Transparent;
+    /// <summary>0..1 share of everything scanned, shown as a percentage beside the bar.</summary>
+    public double Share { get; init; }
+    /// <summary>What the swatch stands for in the legend above the list: a file type's category, "grew" or "shrank". Null for rows without a color.</summary>
+    public string? LegendKey { get; init; }
     /// <summary>The file or folder to zoom to, or null for a type row.</summary>
     public FsNode? Node { get; init; }
     /// <summary>Filter text to apply when the row is a file type.</summary>
@@ -36,7 +40,7 @@ public static class TopLists
 
     public static List<TopRow> Build(FsNode root, TopListKind kind, SizeMeasure measure, ColorScheme scheme) => kind switch
     {
-        TopListKind.Files => LargestFiles(root, measure),
+        TopListKind.Files => LargestFiles(root, measure, scheme),
         TopListKind.Folders => LargestFolders(root, measure),
         TopListKind.Changes => Changes(root, measure),
         _ => ByType(root, measure, scheme)
@@ -50,6 +54,7 @@ public static class TopLists
             .Where(n => n.ChangeFor(measure) != 0);
         var top = TopN(candidates, n => Math.Abs(n.ChangeFor(measure)));
         long largest = top.Count > 0 ? Math.Abs(top[0].ChangeFor(measure)) : 1;
+        long total = Math.Max(1, root.SizeFor(measure));
         return top.Select(n =>
         {
             long change = n.ChangeFor(measure);
@@ -61,21 +66,24 @@ public static class TopLists
                 SizeText = (change > 0 ? "+" : "−") + SizeFormatter.Format(Math.Abs(change)),
                 Fraction = largest > 0 ? (double)Math.Abs(change) / largest : 0,
                 Swatch = change > 0 ? Palette.GrewBrush : Palette.ShrankBrush,
+                Share = (double)Math.Abs(change) / total,
+                LegendKey = change > 0 ? "Insights_Grew" : "Insights_Shrank",
                 Node = n
             };
         }).ToList();
     }
 
-    private static List<TopRow> LargestFiles(FsNode root, SizeMeasure measure)
+    private static List<TopRow> LargestFiles(FsNode root, SizeMeasure measure, ColorScheme scheme)
     {
         var top = TopN(root.DescendantFiles(), n => n.SizeFor(measure));
-        return ToRows(top, measure, n => n.Parent?.FullPath ?? string.Empty);
+        var categories = scheme.Categories.ToDictionary(c => c.Category, c => c.Brush);
+        return ToRows(top, root, measure, n => n.Parent?.FullPath ?? string.Empty, n => FileCategories.Categorize(n.Extension), categories);
     }
 
     private static List<TopRow> LargestFolders(FsNode root, SizeMeasure measure)
     {
         var top = TopN(root.DescendantDirectories().Where(d => !ReferenceEquals(d, root)), n => n.SizeFor(measure));
-        return ToRows(top, measure, n => Strings.Format("TopList_FilesIn", n.FileCount, n.Parent?.FullPath ?? string.Empty));
+        return ToRows(top, root, measure, n => Strings.Format("TopList_FilesIn", n.FileCount, n.Parent?.FullPath ?? string.Empty), null, null);
     }
 
     private static List<TopRow> ByType(FsNode root, SizeMeasure measure, ColorScheme scheme)
@@ -90,6 +98,7 @@ public static class TopLists
 
         var ordered = totals.OrderByDescending(kv => kv.Value.Bytes).Take(MaxRows).ToList();
         long largest = ordered.Count > 0 ? ordered[0].Value.Bytes : 1;
+        long total = Math.Max(1, totals.Values.Sum(t => t.Bytes));
         var categories = scheme.Categories.ToDictionary(c => c.Category, c => c.Brush);
 
         return ordered.Select(kv => new TopRow
@@ -99,20 +108,31 @@ public static class TopLists
             SizeText = SizeFormatter.Format(kv.Value.Bytes),
             Fraction = largest > 0 ? (double)kv.Value.Bytes / largest : 0,
             Swatch = categories[FileCategories.Categorize(kv.Key)],
+            Share = (double)kv.Value.Bytes / total,
+            LegendKey = "Category_" + FileCategories.Categorize(kv.Key),
             FilterText = kv.Key.StartsWith('.') ? "*" + kv.Key : null
         }).ToList();
     }
 
-    private static List<TopRow> ToRows(List<FsNode> nodes, SizeMeasure measure, Func<FsNode, string> detail)
+    private static List<TopRow> ToRows(List<FsNode> nodes, FsNode root, SizeMeasure measure, Func<FsNode, string> detail,
+        Func<FsNode, FileCategory>? category, Dictionary<FileCategory, IBrush>? brushes)
     {
         long largest = nodes.Count > 0 ? nodes[0].SizeFor(measure) : 1;
-        return nodes.Select(n => new TopRow
+        long total = Math.Max(1, root.SizeFor(measure));
+        return nodes.Select(n =>
         {
-            Name = n.Name,
-            Detail = detail(n),
-            SizeText = SizeFormatter.Format(n.SizeFor(measure)),
-            Fraction = largest > 0 ? (double)n.SizeFor(measure) / largest : 0,
-            Node = n
+            var cat = category?.Invoke(n);
+            return new TopRow
+            {
+                Name = n.Name,
+                Detail = detail(n),
+                SizeText = SizeFormatter.Format(n.SizeFor(measure)),
+                Fraction = largest > 0 ? (double)n.SizeFor(measure) / largest : 0,
+                Share = (double)n.SizeFor(measure) / total,
+                Swatch = cat is { } c && brushes is not null && brushes.TryGetValue(c, out var b) ? b : Brushes.Transparent,
+                LegendKey = cat is { } c2 ? "Category_" + c2 : null,
+                Node = n
+            };
         }).ToList();
     }
 

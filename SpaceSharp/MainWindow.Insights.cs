@@ -74,15 +74,33 @@ public partial class MainWindow
         _insightsRoot = null;
     }
 
+    /// <summary>Drops the cached figures when the scan or the size measure they were computed for has changed.</summary>
+    private void SyncInsightsSource()
+    {
+        if (ReferenceEquals(_insightsRoot, _root) && _insightsMeasure == Treemap.SizeMode) return;
+        InvalidateInsights();
+        _insightsRoot = _root; _insightsMeasure = Treemap.SizeMode; _insightsNow = DateTime.UtcNow;
+    }
+
+    /// <summary>
+    /// The per-type totals of the current scan, computed on first use and shared by the Insights view and the
+    /// filter drawer's "share of scan" column; null while there is no finished scan.
+    /// </summary>
+    private List<TypeShare>? TypeShares
+    {
+        get
+        {
+            if (_root is null || _scanCts is not null) return null;
+            SyncInsightsSource();
+            return _typeShares ??= DriveInsights.ByType(_root, Treemap.SizeMode);
+        }
+    }
+
     /// <summary>Rebuilds the whole view. Cheap when it is hidden or there is no scan.</summary>
     private void RefreshInsights()
     {
         if (!InsightsShowing) return;
-        if (!ReferenceEquals(_insightsRoot, _root) || _insightsMeasure != Treemap.SizeMode)
-        {
-            InvalidateInsights();
-            _insightsRoot = _root; _insightsMeasure = Treemap.SizeMode; _insightsNow = DateTime.UtcNow;
-        }
+        SyncInsightsSource();
 
         InsightsHost.Children.Clear();
         if (_root is null || _scanCts is not null)
@@ -230,6 +248,7 @@ public partial class MainWindow
         var age = DateTime.UtcNow - utc;
         return age.TotalMinutes < 2 ? Strings.Get("Ago_JustNow")
              : age.TotalHours < 1 ? Strings.Format("Ago_Minutes", (int)age.TotalMinutes)
+             : age.TotalHours < 2 ? Strings.Get("Ago_OneHour")
              : age.TotalDays < 1 ? Strings.Format("Ago_Hours", (int)age.TotalHours)
              : age.TotalDays < 2 ? Strings.Get("Ago_Yesterday")
              : age.TotalDays < 30 ? Strings.Format("Ago_Days", (int)age.TotalDays)

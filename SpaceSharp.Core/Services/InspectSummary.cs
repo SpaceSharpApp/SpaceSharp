@@ -204,7 +204,9 @@ public sealed class InspectSummary
             if (f.LastWriteUtc <= DateTime.MinValue) continue;
             sums[(int)BucketFor(f.LastWriteUtc, now)] += f.SizeFor(Measure);
         }
-        var bands = Enum.GetValues<AgeBucket>().Select(b => new AgeBand(b, sums[(int)b], Fraction(sums[(int)b], Size))).ToList();
+        // shares are of the dated bytes, so the four bands add up to 100% even when some files carry no date
+        long dated = sums.Sum();
+        var bands = Enum.GetValues<AgeBucket>().Select(b => new AgeBand(b, sums[(int)b], Fraction(sums[(int)b], dated))).ToList();
         return (bands, sums[2] + sums[3]);
     }
 

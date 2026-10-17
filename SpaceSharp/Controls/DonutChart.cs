@@ -105,15 +105,20 @@ public sealed class DonutChart : Control
         string label = shown >= 0 && shown < _slices.Count ? _slices[shown].Label : CenterLabel;
         double maxText = inner * 1.85;
         var v = Fit(value, FaceSemibold, inner * 0.36, 11, TextBrush, maxText);
-        var l = Fit(label, Face, inner * 0.22, 10, DimBrush, maxText);
+        var l = Fit(label, Face, inner * 0.22, 10, DimBrush, maxText, lines: 2);
         double blockHeight = v.Height + (label.Length > 0 ? l.Height : 0);
         double top = center.Y - blockHeight / 2;
         dc.DrawText(v, new Point(center.X - v.Width / 2, top));
-        if (label.Length > 0) dc.DrawText(l, new Point(center.X - l.Width / 2, top + v.Height - 1));
+        // a wrapped label is centered inside its own box; a one-line label by its width
+        bool wrapped = l.MaxTextWidth > 0 && double.IsFinite(l.MaxTextWidth);
+        if (label.Length > 0) dc.DrawText(l, new Point(center.X - (wrapped ? l.MaxTextWidth : l.Width) / 2, top + v.Height - 1));
     }
 
-    /// <summary>Shrinks the font until the text fits the hole, down to <paramref name="minSize"/>; only then does it trim.</summary>
-    private static FormattedText Fit(string? text, Typeface face, double size, double minSize, IBrush brush, double maxWidth)
+    /// <summary>
+    /// Shrinks the font until the text fits the hole, down to <paramref name="minSize"/>; what still does not fit wraps
+    /// onto up to <paramref name="lines"/> lines, and only a line that is too long on its own is trimmed.
+    /// </summary>
+    private static FormattedText Fit(string? text, Typeface face, double size, double minSize, IBrush brush, double maxWidth, int lines = 1)
     {
         text ??= string.Empty;
         for (double s = size; s >= minSize; s -= 0.5)
@@ -123,7 +128,7 @@ public sealed class DonutChart : Control
         }
         return new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, minSize, brush)
         {
-            MaxTextWidth = Math.Max(1, maxWidth), MaxLineCount = 1, Trimming = TextTrimming.CharacterEllipsis
+            MaxTextWidth = Math.Max(1, maxWidth), MaxLineCount = lines, Trimming = TextTrimming.CharacterEllipsis, TextAlignment = TextAlignment.Center
         };
     }
 

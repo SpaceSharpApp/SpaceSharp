@@ -10,7 +10,7 @@
   <DockPanel>
     <Border DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="16,12">
       <DockPanel>
-        <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="primary" MinWidth="84" IsDefault="True" IsCancel="True" Click="Close_Click" />
+        <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="primary" MinWidth="84" HorizontalContentAlignment="Center" IsDefault="True" IsCancel="True" Click="Close_Click" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="6">
           <Button x:Name="CopyButton" Classes="tool" Click="Copy_Click" />
           <Button x:Name="RevealButton" Classes="tool" Click="Reveal_Click" />
@@ -19,8 +19,9 @@
     </Border>
 
     <Border DockPanel.Dock="Top" Padding="24,16,24,16" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1">
-      <StackPanel>
-        <WrapPanel x:Name="Crumbs" Margin="-6,0,0,6" />
+      <StackPanel x:Name="Header" SizeChanged="Header_SizeChanged">
+        <!-- one line: the middle of a long path folds into a … button whose flyout lists the folded folders -->
+        <StackPanel x:Name="Crumbs" Orientation="Horizontal" Margin="-6,0,0,6" />
         <DockPanel>
           <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="20" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" />
           <TextBlock x:Name="SizeText" DockPanel.Dock="Right" FontSize="30" FontWeight="SemiBold" VerticalAlignment="Center" Margin="16,0,0,0" />

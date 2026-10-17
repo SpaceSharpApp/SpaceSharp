@@ -190,48 +190,48 @@
     <Setter Property="Background" Value="{DynamicResource ControlHover}" />
   </Style>
 
-  <!-- the start screen: a saved scan is a tile, the two actions are dashed buttons (StartTile and StartAction in WPF) -->
-  <Style Selector="Button.tile">
+  <!-- the start screen: the last scan is a panel, the earlier scans are rows in a second panel, the two actions are plain outlined buttons -->
+  <Style Selector="Border.start-panel">
     <Setter Property="Background" Value="{DynamicResource Panel}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
-    <Setter Property="Foreground" Value="{DynamicResource Text}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="CornerRadius" Value="12" />
-    <Setter Property="Padding" Value="12,18,12,14" />
-    <Setter Property="Cursor" Value="Hand" />
-    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="ClipToBounds" Value="True" />
   </Style>
-  <Style Selector="Button.tile:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource Control}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
-  </Style>
-  <!-- the dashed action buttons: the dash is a Rectangle inside the content, since a Border cannot dash -->
-  <Style Selector="Button.start">
+  <Style Selector="Button.row">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="CornerRadius" Value="10" />
-    <Setter Property="Height" Value="44" />
-    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Height" Value="50" />
+    <Setter Property="Padding" Value="16,0" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="HorizontalAlignment" Value="Stretch" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
   </Style>
-  <Style Selector="Button.start:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-    <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+  <Style Selector="Button.row:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
   </Style>
-  <Style Selector="Rectangle.dash">
-    <Setter Property="Stroke" Value="{DynamicResource Stroke}" />
-    <Setter Property="StrokeDashArray" Value="4,3" />
-    <Setter Property="StrokeThickness" Value="1" />
-    <Setter Property="RadiusX" Value="10" />
-    <Setter Property="RadiusY" Value="10" />
-    <Setter Property="Margin" Value="0.5" />
+  <Style Selector="Button.row:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
   </Style>
-  <Style Selector="Button.start:pointerover Rectangle.dash, Button.start:focus-visible Rectangle.dash">
-    <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+  <Style Selector="Button.action">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="8" />
+    <Setter Property="Height" Value="38" />
+    <Setter Property="Padding" Value="16,0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.action:pointerover /template/ ContentPresenter#PART_ContentPresenter, Button.action:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
   </Style>
   <Style Selector="TextBlock.danger">
     <Setter Property="Foreground" Value="{DynamicResource Danger}" />
@@ -309,6 +309,15 @@
     <Setter Property="Padding" Value="10,4,6,4" />
     <Setter Property="Margin" Value="0,0,6,6" />
   </Style>
+  <!-- the Shortcuts window's keycaps: a lit one is a key SpaceSharp uses -->
+  <Style Selector="Border.keycap">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+  </Style>
+  <Style Selector="Border.keycap-on">
+    <Setter Property="Background" Value="{DynamicResource Accent}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource AccentPressed}" />
+  </Style>
   <Style Selector="Border.swatch">
     <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
     <Setter Property="BorderThickness" Value="1" />
@@ -334,6 +343,38 @@
     <Setter Property="Background" Value="{DynamicResource Control}" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
     <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- the Files / Folders / Types / Changes switch over the largest-items list: outlined buttons with an icon, the chosen one in amber -->
+  <Style Selector="Button.segment">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Padding" Value="10,0,12,0" />
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.segment:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource TextDim}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+  </Style>
+  <Style Selector="Button.segment.active">
+    <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.segment.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="Button.segment:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
   </Style>
 
   <Style Selector="Button.link">
@@ -417,6 +458,35 @@
     <Setter Property="Background" Value="{DynamicResource Control}" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
     <Setter Property="BorderBrush" Value="{DynamicResource TextDim}" />
+  </Style>
+
+  <!-- the filter drawer's tiles: a type, a kind of item or a quick filter; a picked tile gets the amber edge, a faint amber fill and amber text -->
+  <Style Selector="ToggleButton.tile">
+    <Setter Property="Background" Value="{DynamicResource Window}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="Padding" Value="10,6" />
+    <Setter Property="FontSize" Value="12.5" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="ToggleButton.tile:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Window}" />
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource TextDim}" />
+  </Style>
+  <Style Selector="ToggleButton.tile:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.tile:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
+    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+  </Style>
+  <Style Selector="ToggleButton.tile:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
   </Style>
 
   <!-- the heading over a group of items in a dropdown (the palette and language pickers): small, dim, semibold, as in the WPF app (2.2) -->

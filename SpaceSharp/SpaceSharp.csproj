@@ -23,7 +23,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Product>SpaceSharp</Product>
-    <Version>2.3.1</Version>
+    <Version>2.4.0</Version>
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
