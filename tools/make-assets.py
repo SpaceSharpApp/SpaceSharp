@@ -32,7 +32,7 @@ import io, math, urllib.request
 from pathlib import Path
 
 import cairosvg
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -218,30 +218,50 @@ def version_pill(d: ImageDraw.ImageDraw, x: int, y: int, px: int, label: str, ri
     return x + wdt
 
 def version_label() -> str:
-    """major.minor from <Version> in SpaceSharp.csproj, so the badge follows the release."""
+    """The full <Version> from SpaceSharp.csproj, so the badge follows every release."""
     import re
     text = (ROOT / "SpaceSharp" / "SpaceSharp.csproj").read_text(encoding="utf-8")
-    m = re.search(r"<Version>(\d+)\.(\d+)", text)
-    return f"{m.group(1)}.{m.group(2)}" if m else "2.0"
+    m = re.search(r"<Version>([\d.]+)</Version>", text)
+    return m.group(1) if m else "2.0.0"
 
 VERSION_LABEL = version_label()
 
+def version_tag(d: ImageDraw.ImageDraw, x: int, y: int, px: int, label: str, fill=AMBER, ink=(0x1C, 0x15, 0x00), outline=None) -> int:
+    """A small rounded tag with the version. Returns the end x."""
+    f = font(700, px)
+    pad = int(px * 0.6)
+    h = int(px * 1.7)
+    wdt = int(d.textlength(label, font=f)) + 2 * pad
+    d.rounded_rectangle([x, y, x + wdt, y + h], radius=int(px * 0.35), fill=fill, outline=outline, width=2 if outline else 0)
+    bbox = f.getbbox(label)
+    d.text((x + pad, y + (h - (bbox[3] - bbox[1])) // 2 - bbox[1]), label, font=f, fill=ink)
+    return x + wdt
+
 def make_header(w=1280, h=360, scale=2):
-    """README header, drawn at 2x so it stays sharp on high-DPI screens (the README shows it at 800 wide)."""
+    """README header: the lockup on a Panel card with an amber accent bar, drawn at 2x for high-DPI screens."""
     S = scale
     im = Image.new("RGBA", (w * S, h * S), GRAPHITE + (255,))
-    paste_mark(im, 150 * S, ((w - 150) // 2 * S, 44 * S))
     d = ImageDraw.Draw(im)
-    # the version pill sits on the mark's upper right corner; the wordmark is centered on its own
-    px = 68 * S
-    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    pill_w = version_pill(probe, 0, 0, px, VERSION_LABEL)
-    mark_x, mark_y, mark_px = (w - 150) // 2 * S, 44 * S, 150 * S
-    version_pill(d, mark_x + mark_px - pill_w + 10 * S, mark_y + 2 * S, px, VERSION_LABEL, ring=5 * S)
-    wordmark(d, (w * S - wordmark_width(px)) // 2, 212 * S, px)
-    tag = font(500, 24 * S)
-    t = "See where your disk space went."
-    d.text(((w * S - d.textlength(t, font=tag)) // 2, 302 * S), t, font=tag, fill=MUTED)
+    stroke = (0x30, 0x36, 0x3D)
+    cx0, cy0, cx1, cy1 = 110 * S, 60 * S, (w - 110) * S, (h - 60) * S
+    radius = 24 * S
+    d.rounded_rectangle([cx0, cy0, cx1, cy1], radius=radius, fill=PANEL, outline=stroke, width=2 * S)
+    # the accent bar follows the card's corners: a rounded rectangle of the same radius, clipped to its first 10 px
+    bar = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    ImageDraw.Draw(bar).rounded_rectangle([cx0, cy0, cx0 + 2 * radius, cy1], radius=radius, fill=AMBER + (255,))
+    clip = Image.new("L", im.size, 0)
+    ImageDraw.Draw(clip).rectangle([cx0, cy0, cx0 + 10 * S, cy1], fill=255)
+    bar.putalpha(ImageChops.multiply(bar.getchannel("A"), clip))
+    im.alpha_composite(bar)
+    paste_mark(im, 150 * S, (cx0 + 60 * S, cy0 + 45 * S))
+    px = 76 * S
+    x = cx0 + 250 * S
+    end = wordmark(d, x, cy0 + 48 * S, px)
+    version_tag(d, end + 22 * S, cy0 + 60 * S, 22 * S, VERSION_LABEL)
+    tag = font(500, 25 * S)
+    d.text((x, cy0 + 150 * S), "See where your disk space went.", font=tag, fill=MUTED)
+    hint = font(500, 18 * S)
+    d.text((x, cy0 + 190 * S), "A disk space treemap for Windows, macOS and Linux", font=hint, fill=HINT)
     write("docs/header.png", png_bytes(im))
 
 # ---------------------------------------------------------------- installer art: "Facets"

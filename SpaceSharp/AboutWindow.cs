@@ -13,10 +13,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The About window of the WPF app (2.2): the icon and name, one list row per thing About can do, the copyright and
-/// system line, and a footer with Copy version info and Close; the same rows as the WPF app's (2.2).
-/// </summary>
+/// <summary>The About window.</summary>
 public sealed class AboutWindow : Window
 {
     private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
@@ -34,7 +31,7 @@ public sealed class AboutWindow : Window
         var root = new Grid { RowDefinitions = new RowDefinitions("*,Auto") };
         var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("200,*") };
 
-        // ---- left: the mark, the name, the version, the tagline; the copyright at the bottom
+        // ---- left column
         var left = new Border { BorderThickness = new Thickness(0, 0, 1, 0), Padding = new Thickness(24, 32, 24, 24) };
         left.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
         left.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
@@ -53,7 +50,7 @@ public sealed class AboutWindow : Window
         left.Child = leftStack;
         columns.Children.Add(left);
 
-        // ---- right: the links in three groups
+        // ---- right column
         var right = new StackPanel { Margin = new Thickness(28, 30, 28, 24), Spacing = 22 };
         var version = Group(Strings.Get("About_GroupVersion"));
         version.Children.Add(Link("Notes", Strings.Format("Update_WhatsNewIn", UpdateWindow.ShortVersion(_version)), () => _ = UpdateWindow.ShowWhatsNew(this, _version)));
@@ -79,7 +76,7 @@ public sealed class AboutWindow : Window
         columns.Children.Add(right);
         root.Children.Add(columns);
 
-        // ---- footer: Copy and Close
+        // ---- footer
         var foot = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12) };
         foot.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, HorizontalAlignment = HorizontalAlignment.Right };
@@ -96,7 +93,6 @@ public sealed class AboutWindow : Window
 
     private static string Copyright() => Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright ?? string.Empty;
 
-    /// <summary>A group of links under a small heading.</summary>
     private static StackPanel Group(string heading)
     {
         var group = new StackPanel { Spacing = 4 };
@@ -104,7 +100,6 @@ public sealed class AboutWindow : Window
         return group;
     }
 
-    /// <summary>One link: the glyph in the dim tone and the text, amber under the pointer; no box around it.</summary>
     private static Button Link(string glyph, string text, Action? onClick)
     {
         var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 };
@@ -129,7 +124,6 @@ public sealed class AboutWindow : Window
             return;
         }
 
-        // Same prompt as at startup: install, read what's new, or later.
         SetLinkText(_checkButton, Strings.Format("About_InstallAndRestart", Updater.Instance.AvailableVersion ?? string.Empty));
         _checkButton.IsEnabled = true;
         _checkButton.Click -= CheckUpdates_Click;
@@ -164,7 +158,7 @@ public sealed class AboutWindow : Window
         }
     }
 
-    /// <summary>Opens the bug form with the version and system fields already filled in.</summary>
+    /// <summary>Opens the bug report form with version and system prefilled.</summary>
     private void ReportBug() =>
         OpenUrl($"{Repository}/issues/new?template=bug_report.yml" +
                 $"&version={Uri.EscapeDataString(_version)}" +

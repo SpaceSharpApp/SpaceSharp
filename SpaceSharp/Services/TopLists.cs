@@ -4,23 +4,22 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
-/// <summary>One row in the side panel. Public properties so the list can bind to them.</summary>
+/// <summary>One row in a top list.</summary>
 public sealed class TopRow
 {
     public string Name { get; init; } = string.Empty;
     public string Detail { get; init; } = string.Empty;
     public string SizeText { get; init; } = string.Empty;
-    /// <summary>0..1 share of the largest row, drawn as a bar behind the text.</summary>
+    /// <summary>0..1 share of the largest row.</summary>
     public double Fraction { get; init; }
     public double BarWidth => Math.Round(Fraction * 300);
     public IBrush Swatch { get; init; } = Brushes.Transparent;
-    /// <summary>0..1 share of everything scanned, shown as a percentage beside the bar.</summary>
+    /// <summary>0..1 share of everything scanned.</summary>
     public double Share { get; init; }
-    /// <summary>What the swatch stands for in the legend above the list: a file type's category, "grew" or "shrank". Null for rows without a color.</summary>
+    /// <summary>Legend key for the swatch, or null for rows without a color.</summary>
     public string? LegendKey { get; init; }
-    /// <summary>The file or folder to zoom to, or null for a type row.</summary>
+    /// <summary>The node to zoom to, or null for a type row.</summary>
     public FsNode? Node { get; init; }
-    /// <summary>Filter text to apply when the row is a file type.</summary>
     public string? FilterText { get; init; }
 }
 
@@ -29,11 +28,10 @@ public enum TopListKind
     Files,
     Folders,
     Types,
-    /// <summary>What grew most since the compared scan.</summary>
     Changes
 }
 
-/// <summary>Builds the "largest files", "largest folders" and "space by type" lists.</summary>
+/// <summary>Builds the side panel's top lists.</summary>
 public static class TopLists
 {
     private const int MaxRows = 200;
@@ -46,7 +44,6 @@ public static class TopLists
         _ => ByType(root, measure, scheme)
     };
 
-    /// <summary>Files and folders that grew or appeared since the baseline, largest change first.</summary>
     private static List<TopRow> Changes(FsNode root, SizeMeasure measure)
     {
         if (!root.HasBaseline) return new List<TopRow>();
@@ -136,10 +133,10 @@ public static class TopLists
         }).ToList();
     }
 
-    /// <summary>The N largest items without sorting the whole collection (O(n log N)).</summary>
+    /// <summary>The N largest items, O(n log N).</summary>
     private static List<FsNode> TopN(IEnumerable<FsNode> items, Func<FsNode, long> size)
     {
-        var queue = new PriorityQueue<FsNode, long>(); // min-heap: the smallest of the kept items is on top
+        var queue = new PriorityQueue<FsNode, long>(); // min-heap
         foreach (var item in items)
         {
             long s = size(item);

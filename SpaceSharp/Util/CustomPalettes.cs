@@ -4,12 +4,8 @@ using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Palettes the user adds as JSON files in the local app data folder (SpaceSharp/palettes), the same files as the WPF app (2.2) reads. Each file is one
-/// palette; the smallest valid file is a name and a list of folder colors. See <see cref="WriteExample"/>
-/// for the full format, which the app writes as Example.json and README.txt the first time the
-/// folder is opened from Settings.
-/// </summary>
+/// <summary>Loads user palettes from JSON files in the local app data folder.</summary>
+/// <remarks>One palette per file; <see cref="WriteExample"/> documents the format.</remarks>
 public static class CustomPalettes
 {
     public static string Folder
@@ -22,7 +18,7 @@ public static class CustomPalettes
         }
     }
 
-    /// <summary>Problems found in files on the last load, one line per file, for the settings page.</summary>
+    /// <summary>Errors from the last load, one line per file.</summary>
     public static IReadOnlyList<string> LastErrors { get; private set; } = Array.Empty<string>();
 
     private sealed class PaletteFile
@@ -102,7 +98,7 @@ public static class CustomPalettes
         return schemes;
     }
 
-    /// <summary>Reads one palette file into a draft the editor can change. Throws the same errors <see cref="Load"/> lists.</summary>
+    /// <summary>Reads one palette file into an editable draft.</summary>
     public static PaletteDraft Read(string file)
     {
         var p = JsonSerializer.Deserialize<PaletteFile>(File.ReadAllText(file), Options) ?? throw new InvalidDataException("empty file");
@@ -122,7 +118,7 @@ public static class CustomPalettes
         return draft;
     }
 
-    /// <summary>Writes the draft to the palettes folder (over the file it came from, or a new one named after it) and returns the path.</summary>
+    /// <summary>Writes the draft to its source file or a new file and returns the path.</summary>
     public static string Save(PaletteDraft draft)
     {
         string path = draft.SourceFile ?? Path.Combine(Folder, draft.FileName());
@@ -140,7 +136,7 @@ public static class CustomPalettes
         return Color.FromRgb(Convert.ToByte(s[..2], 16), Convert.ToByte(s[2..4], 16), Convert.ToByte(s[4..], 16));
     }
 
-    /// <summary>Writes Example.json and README.txt into the folder if they are not there yet.</summary>
+    /// <summary>Writes Example.json and README.txt into the folder if missing.</summary>
     public static void WriteExample()
     {
         string folder = Folder;

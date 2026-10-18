@@ -9,7 +9,7 @@ public class DriveInsightsTests
     private static readonly DateTime Now = new(2026, 10, 8, 12, 0, 0, DateTimeKind.Utc);
     private const long GB = 1L << 30;
 
-    /// <summary>A small C:\ with the things the cleanup rules look for.</summary>
+    /// <summary>A small C:\ with cleanup targets.</summary>
     private static FsNode Drive()
     {
         var root = TestTree.Dir(@"C:\");
@@ -26,7 +26,7 @@ public class DriveInsightsTests
         var temp = TestTree.Dir("Temp", local);
         TestTree.File(temp, "junk.tmp", 500L << 20, modified: Now.AddMonths(-1));
         var small = TestTree.Dir("npm-cache", local);
-        TestTree.File(small, "tiny.json", 10 << 20, modified: Now); // under the 100 MB bar
+        TestTree.File(small, "tiny.json", 10 << 20, modified: Now); // under MinSuggestionBytes
         var pics = TestTree.Dir("Pictures", me);
         TestTree.File(pics, "a.jpg", 3 * GB, modified: Now.AddYears(-4));
         TestTree.File(pics, "b.mp4", 5 * GB, modified: Now.AddMonths(-13));
@@ -38,10 +38,10 @@ public class DriveInsightsTests
     {
         var shares = DriveInsights.ByType(Drive(), SizeMeasure.FileSize);
         var system = shares[0];
-        Assert.Equal(FileCategory.System, system.Category);       // hiberfil.sys
+        Assert.Equal(FileCategory.System, system.Category);
         Assert.Equal(12 * GB, system.Bytes);
         Assert.Equal("hiberfil.sys", system.Largest!.Name);
-        var programs = shares.Single(s => s.Category == FileCategory.Programs); // ntoskrnl.exe + old-setup.exe
+        var programs = shares.Single(s => s.Category == FileCategory.Programs);
         Assert.Equal(3 * GB, programs.Bytes);
         Assert.Equal(2, programs.Files);
         Assert.Equal("ntoskrnl.exe", programs.Largest!.Name);
@@ -49,7 +49,7 @@ public class DriveInsightsTests
         var video = shares.Single(s => s.Category == FileCategory.Video);
         Assert.Equal(5 * GB, video.Bytes);
         Assert.Equal("b.mp4", video.Largest!.Name);
-        Assert.Equal(500L << 20, shares.Single(s => s.Category == FileCategory.Other).Bytes); // junk.tmp
+        Assert.Equal(500L << 20, shares.Single(s => s.Category == FileCategory.Other).Bytes);
         Assert.True(shares.SequenceEqual(shares.OrderByDescending(s => s.Bytes)));
     }
 
@@ -72,24 +72,24 @@ public class DriveInsightsTests
         Assert.Equal((2023, 11), (buckets[0].Year, buckets[0].Month));
         Assert.Equal((2026, 10), (buckets[^1].Year, buckets[^1].Month));
         long Of(int year, int month) => buckets.Single(b => b.Year == year && b.Month == month).Bytes;
-        Assert.Equal(13 * GB + 10L * (1 << 20), Of(2026, 10));   // hiberfil, fresh.zip (3 days ago) and tiny.json
-        Assert.Equal(500L << 20, Of(2026, 9));                    // junk.tmp, a month ago
-        Assert.Equal(5 * GB, Of(2025, 9));                        // b.mp4, 13 months ago
-        Assert.Equal(1 * GB, Of(2024, 10));                       // old-setup.exe, two years ago, still inside the range
-        Assert.Equal(3 * GB, buckets[0].Bytes);                   // a.jpg, four years ago: folded into the first bar
+        Assert.Equal(13 * GB + 10L * (1 << 20), Of(2026, 10));
+        Assert.Equal(500L << 20, Of(2026, 9));
+        Assert.Equal(5 * GB, Of(2025, 9));
+        Assert.Equal(1 * GB, Of(2024, 10));
+        Assert.Equal(3 * GB, buckets[0].Bytes);                   // a.jpg, folded in
         Assert.Equal(1, buckets[0].Files);
     }
 
     [Fact]
     public void MonthFilterBracketsTheMonthInDays()
     {
-        var spec = DriveInsights.MonthFilter(Now, 36, 35);           // this month: nothing older than it
+        var spec = DriveInsights.MonthFilter(Now, 36, 35);           // this month
         Assert.Null(spec.OlderThanDays);
-        Assert.True(spec.NewerThanDays is >= 7 and <= 8);            // Oct 1 to Oct 8
-        var sep = DriveInsights.MonthFilter(Now, 36, 34);            // September 2026
-        Assert.True(sep.NewerThanDays is >= 37 and <= 38);           // since Sep 1
-        Assert.Equal(7, sep.OlderThanDays);                          // before Oct 1
-        var first = DriveInsights.MonthFilter(Now, 36, 0);           // the oldest bar has no lower bound
+        Assert.True(spec.NewerThanDays is >= 7 and <= 8);
+        var sep = DriveInsights.MonthFilter(Now, 36, 34);            // September
+        Assert.True(sep.NewerThanDays is >= 37 and <= 38);
+        Assert.Equal(7, sep.OlderThanDays);
+        var first = DriveInsights.MonthFilter(Now, 36, 0);           // oldest bar
         Assert.Null(first.NewerThanDays);
         Assert.Equal(ItemKind.Files, first.Kind);
     }
@@ -103,8 +103,8 @@ public class DriveInsightsTests
         Assert.Contains("SystemFiles", keys);
         Assert.Contains("Temp", keys);
         Assert.Contains("OldDownloads", keys);
-        Assert.DoesNotContain("PackageCaches", keys); // 10 MB is under the bar
-        Assert.DoesNotContain("RecycleBin", keys);    // no $Recycle.Bin on this drive
+        Assert.DoesNotContain("PackageCaches", keys); // too small
+        Assert.DoesNotContain("RecycleBin", keys);
 
         Assert.Equal(CleanupAction.Explain, list.Single(s => s.Key == "SystemFiles").Action);
         var downloads = list.Single(s => s.Key == "OldDownloads");

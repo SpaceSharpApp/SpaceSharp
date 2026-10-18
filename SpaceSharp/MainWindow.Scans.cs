@@ -13,11 +13,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// Saved scans and compare: every scan is saved next to the previous one of the same place and compared with it,
-/// the start screen lists the recent ones, and Open, Save As, Compare with and Stop comparing do what they say.
-/// The same flow as the WPF app's (2.2), over ScanFile and ScanCompare in Core.
-/// </summary>
+/// <summary>Saved scans, compare, and the start screen's recent list.</summary>
 public partial class MainWindow
 {
     private ScanFileInfo? _baselineInfo;
@@ -25,7 +21,7 @@ public partial class MainWindow
 
     private bool HasBaseline => _baselineInfo is not null;
 
-    /// <summary>How a scan saw the disk; two scans are only compared when this matches (see the WPF app (2.2)).</summary>
+    /// <summary>The scan method signature; scans are only compared when it matches.</summary>
     private string ScanSignature() =>
         (_scanMethod == "MFT" ? "MFT" : "folder walk") +
         (_scanMethod == "MFT" || _settings.DetectHardLinks ? ", links once" : string.Empty) +
@@ -34,7 +30,7 @@ public partial class MainWindow
 
     private static bool Comparable(string a, string b) => string.Equals(a, b, StringComparison.Ordinal);
 
-    /// <summary>After a scan: compare with the previous save of the same place, then save this one.</summary>
+    /// <summary>Compares a finished scan with the previous autosave, then saves it.</summary>
     private async Task SaveAndCompareAsync(FsNode root, string rootPath)
     {
         string auto = ScanFile.AutoPathFor(rootPath), prev = ScanFile.PreviousPathFor(rootPath);
@@ -81,7 +77,7 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>On startup: show the last map straight away, compared with the one before it.</summary>
+    /// <summary>Reopens the last autosaved scan with its baseline.</summary>
     private async Task ReopenLastScanAsync(string rootPath)
     {
         string file = ScanFile.AutoPathFor(rootPath);
@@ -120,7 +116,6 @@ public partial class MainWindow
                           (baseline is not null ? Strings.Format("Status_ComparedWith", Ago(baseline.ScannedUtc)) : string.Empty);
     }
 
-    /// <summary>Color by change is only offered while there is a baseline.</summary>
     private void UpdateCompareUi()
     {
         _building = true;
@@ -152,7 +147,6 @@ public partial class MainWindow
         await OpenScanFileAsync(file);
     }
 
-    /// <summary>Opens a saved scan by path: the picker, the command line and a second instance all end here.</summary>
     private async Task OpenScanFileAsync(string file)
     {
         if (_scanCts is not null) return;
@@ -204,7 +198,7 @@ public partial class MainWindow
         await CompareWithFileAsync(file);
     }
 
-    /// <summary>Sets a saved scan as the baseline of the scan on screen, by path.</summary>
+    /// <summary>Sets a saved scan as the current baseline.</summary>
     private async Task CompareWithFileAsync(string file)
     {
         if (_root is null || _scanCts is not null) return;
@@ -247,20 +241,15 @@ public partial class MainWindow
         StatusText.Text = Strings.Get("Status_ComparisonCleared");
     }
 
-    // ---------------------------------------------------------------- the start screen's recent scans
+    // ---------------------------------------------------------------- recent scans
 
-    /// <summary>What the start screen knows about one saved scan: the drive it is on, if any, and how full that drive is now.</summary>
-    /// <summary>A saved scan on the start screen. Label, Free and Total describe the drive as it is now (Total 0 when unknown).</summary>
+    /// <summary>A saved scan on the start screen; Total is 0 when the drive is unknown.</summary>
     private sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total)
     {
         public double Fraction => IsDrive && Total > 0 ? 1 - (double)Free / Total : double.NaN;
         public bool NearlyFull => IsDrive && !double.IsNaN(Fraction) && Fraction >= 0.85;
     }
 
-    /// <summary>
-    /// The saved scans under the start hint, newest first: the last scan as a panel with a large ring, its name,
-    /// what was scanned when, and buttons to open it or scan again; the earlier scans as rows in a list below.
-    /// </summary>
     private void BuildRecentScans()
     {
         RecentHost.Children.Clear();
@@ -310,7 +299,6 @@ public partial class MainWindow
 
     private static string ScanCount(int count) => count == 1 ? Strings.Get("Start_ScanCountOne") : Strings.Format("Start_ScanCount", count);
 
-    /// <summary>The drive letter (or the folder's name) and, dimmed beside it, the volume label or the folder's path.</summary>
     private (string Name, string Detail) Names(RecentScan scan)
     {
         string name = DisplayName(scan.Info.RootPath);
@@ -319,12 +307,10 @@ public partial class MainWindow
         return (name, string.IsNullOrWhiteSpace(label) ? DriveKinds.Label(DriveKinds.Detect(scan.Info.RootPath)) ?? string.Empty : label);
     }
 
-    /// <summary>"50% used · 477 GB free" for a drive, "Folder · 184,302 files" for a folder scan.</summary>
     private static string Usage(RecentScan scan) => scan.Total > 0
         ? Strings.Format("Start_UsedFree", (int)Math.Round(Math.Clamp(scan.Fraction, 0, 1) * 100), SizeFormatter.Format(scan.Free))
         : Strings.Format("Start_FolderFiles", scan.Info.FileCount.ToString("N0"));
 
-    /// <summary>The name in one size and the detail dimmed beside it, on one baseline.</summary>
     private TextBlock NameLine(RecentScan scan, double nameSize, double detailSize)
     {
         var (name, detail) = Names(scan);
@@ -339,7 +325,6 @@ public partial class MainWindow
         return block;
     }
 
-    /// <summary>The newest scan: a large ring, "Last scan · 13 hours ago", the name, what was scanned, and the two buttons.</summary>
     private Control FeaturedScan(RecentScan scan)
     {
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 26 };
@@ -369,7 +354,6 @@ public partial class MainWindow
         return new Border { Child = grid, Padding = new Thickness(28, 22), Classes = { "start-panel" } };
     }
 
-    /// <summary>One earlier scan as a row: a small ring, the name, the scanned size, when, how full the drive is now, a chevron.</summary>
     private Button ScanRow(RecentScan scan)
     {
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("36,*,110,110,220,16"), ColumnSpacing = 16 };
@@ -410,10 +394,7 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>
-    /// The ring: the used share of the drive as an arc, warm when the drive is nearly full, with the drive letter
-    /// inside when <paramref name="letterSize"/> is set. A folder scan, or a drive that is not there now, shows an icon instead.
-    /// </summary>
+    /// <summary>The drive usage ring, or an icon for folders and missing drives.</summary>
     private Grid Ring(RecentScan scan, double size, double thickness, double letterSize)
     {
         var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
@@ -428,7 +409,7 @@ public partial class MainWindow
         var track = new Avalonia.Controls.Shapes.Ellipse { StrokeThickness = thickness };
         track.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Control"));
         grid.Children.Add(track);
-        // dash lengths are in multiples of the stroke thickness; the arc starts at twelve o'clock
+        // dash lengths are in multiples of the stroke thickness
         double circumference = Math.PI * (size - thickness) / thickness;
         var arc = new Avalonia.Controls.Shapes.Ellipse
         {

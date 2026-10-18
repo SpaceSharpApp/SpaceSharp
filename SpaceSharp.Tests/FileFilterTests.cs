@@ -138,7 +138,6 @@ public class FileFilterTests
 
         var result = Filter("is:folder").Evaluate(root);
 
-        // The folders match on their own; no file counts toward the totals.
         Assert.Equal(0, result.FileCount);
         Assert.Equal(0, result.Bytes);
         Assert.Contains(docs, result.Matches);

@@ -9,11 +9,8 @@ using Path = Avalonia.Controls.Shapes.Path;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>
-/// Draws one of the app's icons (Themes/Icons.axaml, converted from the WPF app's (2.2) set) at any size. The geometry
-/// is on a 24 x 24 grid and is stroked 2 units wide with round caps and joins, as Lucide draws them; the Viewbox
-/// scales the picture and the stroke together. The color is <see cref="Foreground"/>, which inherits like text.
-/// </summary>
+/// <summary>Draws an icon from Themes/Icons.axaml at any size.</summary>
+/// <remarks>Geometry is on a 24 x 24 grid, stroked 2 units wide with round caps and joins (Lucide style).</remarks>
 public sealed class Icon : Viewbox
 {
     public static readonly StyledProperty<Geometry?> GlyphProperty = AvaloniaProperty.Register<Icon, Geometry?>(nameof(Glyph));
@@ -39,21 +36,21 @@ public sealed class Icon : Viewbox
         IsHitTestVisible = false;
     }
 
-    /// <summary>The path to draw, usually {StaticResource Icon.Name} or <see cref="Icons.Get"/>.</summary>
+    /// <summary>The geometry to draw.</summary>
     public Geometry? Glyph { get => GetValue(GlyphProperty); set => SetValue(GlyphProperty, value); }
 
     public IBrush? Foreground { get => GetValue(ForegroundProperty); set => SetValue(ForegroundProperty, value); }
 
-    /// <summary>Stroke width on the 24-unit grid; 2 is Lucide's own, 1.5 reads lighter at large sizes.</summary>
+    /// <summary>Stroke width on the 24-unit grid.</summary>
     public double StrokeWidth { get => GetValue(StrokeWidthProperty); set => SetValue(StrokeWidthProperty, value); }
 }
 
-/// <summary>Looks up icon geometry by name from code: Icons.Get("Delete") is {StaticResource Icon.Delete}.</summary>
+/// <summary>Looks up icon geometry by resource name.</summary>
 public static class Icons
 {
     public static Geometry? Get(string name) => Application.Current?.FindResource("Icon." + name) as Geometry;
 
-    /// <summary>A ready-made icon element, for code that builds its UI by hand.</summary>
+    /// <summary>Creates an icon element.</summary>
     public static Icon Make(string name, double size = 14, string? foregroundKey = null)
     {
         var icon = new Icon { Glyph = Get(name), Width = size, Height = size, VerticalAlignment = VerticalAlignment.Center };
@@ -61,7 +58,7 @@ public static class Icons
         return icon;
     }
 
-    /// <summary>An icon followed by text, for a button's content.</summary>
+    /// <summary>Creates an icon followed by text.</summary>
     public static StackPanel WithText(string name, string text, double size = 15)
     {
         var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };

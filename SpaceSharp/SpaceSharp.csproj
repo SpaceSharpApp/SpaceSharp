@@ -24,7 +24,7 @@
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Product>SpaceSharp</Product>
     <Version>2.4.1</Version>
-    <PreviousVersion>2.4.0</PreviousVersion>   <!-- the release before this one; the preview of the update prompt says "You have 2.3.1" -->
+    <PreviousVersion>2.4.0</PreviousVersion>   <!-- the release before this one -->
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>

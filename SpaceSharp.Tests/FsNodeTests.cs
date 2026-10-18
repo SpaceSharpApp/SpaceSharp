@@ -33,7 +33,6 @@ public class FsNodeTests
         Assert.Equal(@"C:\Videos\a.mp4", videos.Children[0].FullPath);
         Assert.Equal(@"C:\readme.md", root.Children.Single(c => c.Name == "readme.md").FullPath);
 
-        // A root without a trailing separator, and a group that answers with its folder's path.
         var sub = TestTree.Dir(@"D:\Work\Project");
         var deep = TestTree.Dir("src", sub);
         Assert.Equal(@"D:\Work\Project\src", deep.FullPath);
@@ -92,7 +91,6 @@ public class FsNodeTests
         Assert.Equal(260, root.Size);
         Assert.Equal(3, root.FileCount);
 
-        // Videos (200) is still first; removing b.mkv too drops it below Docs (50).
         videos.Children.Single().RemoveFromTree(SizeMeasure.FileSize);
         Assert.Equal(new[] { "Docs", "readme.md", "Videos" }, root.Children.Select(c => c.Name));
     }
@@ -165,8 +163,7 @@ public class FsNodeTests
         Assert.Equal("Videos", found!.Name);
         Assert.Same(root, root.FindDescendant(@"C:\"));
         Assert.Null(root.FindDescendant(@"C:\Music"));
-        // Files are not folders, so a file path resolves to null.
-        Assert.Null(root.FindDescendant(@"C:\Videos\a.mp4"));
+        Assert.Null(root.FindDescendant(@"C:\Videos\a.mp4"));   // folders only
     }
 
     [Fact]

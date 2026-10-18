@@ -4,15 +4,12 @@ using SpaceSharp.Services;
 
 namespace SpaceSharp.Tests;
 
-/// <summary>
-/// The MFT scanner against synthetic volume images (<see cref="MftImage"/>). These exercise how the table is read
-/// and turned into a tree; they do not touch a real volume, so they run anywhere and need no administrator rights.
-/// </summary>
+/// <summary>MFT scanner tests against synthetic <see cref="MftImage"/> volumes.</summary>
 public class MftScannerTests
 {
     private const int Docs = 24, A = 25, B = 26, Other = 27, Link = 30;
 
-    /// <summary>Root, a "Docs" folder with a 3000-byte file and a 10-byte resident file, and an "Other" folder.</summary>
+    /// <summary>Root, "Docs" with a 3000-byte file and a 10-byte resident file, and "Other".</summary>
     private static MftImage Basic(int recordCount = 64, int bytesPerCluster = 4096, params (long Clusters, long Lcn)[] extents)
     {
         var image = new MftImage(recordCount, bytesPerCluster: bytesPerCluster);
@@ -44,10 +41,10 @@ public class MftScannerTests
         Assert.Equal(DateTime.FromFileTimeUtc(132000000000000000), a.LastWriteUtc);
         var b = Child(docs, "b.bin");
         Assert.Equal(10, b.Size);
-        Assert.Equal(0, b.Allocated);   // resident: the bytes live in the record
+        Assert.Equal(0, b.Allocated);   // resident
         Assert.Equal(3010, root.Size);
         Assert.Equal(2, root.FileCount);
-        Assert.DoesNotContain(root.Children, c => c.Name == "$MFT");   // hidden+system, hidden files off
+        Assert.DoesNotContain(root.Children, c => c.Name == "$MFT");
     }
 
     [Fact]
@@ -58,9 +55,9 @@ public class MftScannerTests
     }
 
     [Theory]
-    [InlineData(1536)]   // one and a half records per read
-    [InlineData(1000)]   // less than a record per read
-    [InlineData(4097)]   // a cluster and one byte
+    [InlineData(1536)]
+    [InlineData(1000)]
+    [InlineData(4097)]
     public void ShortReadsDoNotShiftRecords(int maxRead)
     {
         var image = Basic();
@@ -73,7 +70,7 @@ public class MftScannerTests
     [Fact]
     public void RecordStraddlingAnExtentBoundaryIsParsed()
     {
-        // 512-byte clusters and 1 KB records: an extent of 49 clusters ends halfway through record 24 ("Docs").
+        // 49 clusters of 512 bytes end halfway through record 24
         var image = Basic(recordCount: 64, bytesPerCluster: 512, extents: new[] { (49L, 8L), (79L, 200L) });
         var root = Scan(image);
         Assert.Equal("Docs", Child(root, "Docs").Name);
@@ -83,7 +80,7 @@ public class MftScannerTests
     [Fact]
     public void FragmentedTableInOneAttributeIsFollowed()
     {
-        var image = Basic(extents: new[] { (4L, 8L), (6L, 40L), (6L, 100L) });   // 16 clusters = 64 records
+        var image = Basic(extents: new[] { (4L, 8L), (6L, 40L), (6L, 100L) });
         var root = Scan(image);
         Assert.Equal(2, root.FileCount);
     }
@@ -91,12 +88,11 @@ public class MftScannerTests
     [Fact]
     public void AttributeListPiecesAreResolved()
     {
-        // The table's runs are split over record 0 and two extension records named by the attribute list.
         var image = new MftImage(recordCount: 64).Extents((6L, 8L), (5L, 40L), (5L, 100L));
         image.PutMft((0, 1), (15, 7), (16, 9));
         image.PutRoot();
         image.Put(Docs, image.DirectoryRecord(Docs, 1, MftImage.Root, 5, "Docs"));
-        image.Put(60, image.FileRecord(60, 1, Docs, 1, "late.bin", size: 8192, allocated: 8192));   // in the third piece
+        image.Put(60, image.FileRecord(60, 1, Docs, 1, "late.bin", size: 8192, allocated: 8192));   // third piece
         var root = Scan(image);
         Assert.Equal(8192, Child(Child(root, "Docs"), "late.bin").Size);
     }
@@ -104,7 +100,7 @@ public class MftScannerTests
     [Fact]
     public void ExtentsShorterThanTheValidLengthAreRejected()
     {
-        var image = Basic(extents: new[] { (10L, 8L) });   // 40 KB of a 64 KB table
+        var image = Basic(extents: new[] { (10L, 8L) });   // 40 KB of 64 KB
         var ex = Assert.Throws<MftScanner.MftException>(() => Scan(image));
         Assert.Contains("valid length", ex.Message, StringComparison.Ordinal);
     }
@@ -115,7 +111,7 @@ public class MftScannerTests
         var image = Basic();
         var mft = image.Logical();
         var record0 = mft[..1024];
-        // Find the $DATA attribute's run list and overwrite its terminator with a run header.
+        // overwrite the $DATA run list terminator
         int off = 0x38;
         while (BinaryPrimitives.ReadUInt32LittleEndian(record0.AsSpan(off)) != 0x80) off += BinaryPrimitives.ReadInt32LittleEndian(record0.AsSpan(off + 4));
         int length = BinaryPrimitives.ReadInt32LittleEndian(record0.AsSpan(off + 4));
@@ -150,7 +146,7 @@ public class MftScannerTests
     {
         var image = Basic();
         var torn = image.FileRecord(A, 1, Docs, 1, "a.txt", size: 3000, allocated: 4096);
-        torn[1022] ^= 0xFF;   // one update sequence word disagrees: a torn write
+        torn[1022] ^= 0xFF;   // last update sequence word
         image.Put(A, torn);
         var scanner = image.Scanner();
         var root = scanner.Scan(CancellationToken.None);
@@ -164,7 +160,7 @@ public class MftScannerTests
     {
         var image = Basic();
         var bad = image.FileRecord(A, 1, Docs, 1, "a.txt", size: 3000, allocated: 4096);
-        BinaryPrimitives.WriteInt32LittleEndian(bad.AsSpan(0x38 + 4), 0);   // first attribute: length 0
+        BinaryPrimitives.WriteInt32LittleEndian(bad.AsSpan(0x38 + 4), 0);   // first attribute length
         MftImage.Fixup(bad);
         image.Put(A, bad);
         var scanner = image.Scanner();
@@ -186,7 +182,7 @@ public class MftScannerTests
     public void StaleParentReferenceIsNotLinked()
     {
         var image = Basic();
-        image.Put(A, image.FileRecord(A, 1, Docs, 2, "a.txt", size: 3000, allocated: 4096));   // Docs is at sequence 1
+        image.Put(A, image.FileRecord(A, 1, Docs, 2, "a.txt", size: 3000, allocated: 4096));   // Docs is sequence 1
         var root = Scan(image);
         Assert.DoesNotContain(Child(root, "Docs").Children, c => c.Name == "a.txt");
     }
@@ -201,7 +197,6 @@ public class MftScannerTests
             MftImage.FileName(Docs, 1, "second.dat"),
             MftImage.NonResidentData(0, 1, MftImage.Runs(new[] { (2L, 300L) }), 8192, 7000)));
 
-        // Both names reachable: the first owns the size, the second is a zero-size duplicate.
         var root = Scan(image);
         var primary = Child(Child(root, "Other"), "primary.dat");
         var second = Child(Child(root, "Docs"), "second.dat");
@@ -212,7 +207,7 @@ public class MftScannerTests
         Assert.Equal(7000, second.LinkedSize);
         Assert.Equal(3010 + 7000, root.Size);
 
-        // The primary name's folder excluded: the other name owns the size, so it is not lost.
+        // primary folder excluded
         root = Scan(image, exclude: new[] { "Other" });
         Assert.DoesNotContain(root.Children, c => c.Name == "Other");
         second = Child(Child(root, "Docs"), "second.dat");
@@ -221,11 +216,11 @@ public class MftScannerTests
         Assert.Equal(8192, second.Allocated);
         Assert.Equal(3010 + 7000, root.Size);
 
-        // The primary name itself excluded by pattern, same result.
+        // primary name excluded
         root = Scan(image, exclude: new[] { "primary.*" });
         Assert.Equal(7000, Child(Child(root, "Docs"), "second.dat").Size);
 
-        // An excluded secondary name does not appear at all.
+        // secondary name excluded
         root = Scan(image, exclude: new[] { "second.*" });
         Assert.DoesNotContain(Child(root, "Docs").Children, c => c.Name == "second.dat");
         Assert.Equal(7000, Child(Child(root, "Other"), "primary.dat").Size);
@@ -253,15 +248,14 @@ public class MftScannerTests
     {
         var image = Basic();
         const int Base = 41, Listed = 40, Stale = 42, Unlisted = 43;
-        // The base holds the names and lists its $DATA as living in record 40 (sequence 3). Record 40 comes before
-        // the base in the table, so the scanner must hold it until the base is known.
+        // the listed extension record precedes its base in the table
         var list = MftImage.ListEntry(0x10, 0, MftImage.Ref(Base, 1)).Concat(MftImage.ListEntry(0x30, 0, MftImage.Ref(Base, 1)))
             .Concat(MftImage.ListEntry(0x80, 0, MftImage.Ref(Listed, 3))).ToArray();
         image.Put(Base, image.Record(Base, 1, flags: 1, baseRef: 0,
             MftImage.StandardInformation(0), MftImage.Resident(0x20, list), MftImage.FileName(Docs, 1, "split.bin")));
         image.Put(Listed, image.Record(Listed, 3, flags: 1, baseRef: MftImage.Ref(Base, 1),
             MftImage.NonResidentData(0, 1, MftImage.Runs(new[] { (2L, 300L) }), 8192, 5000)));
-        // Leftovers: one names the base with an old sequence number, one has the right sequence but is not listed.
+        // stale sequence, and unlisted
         image.Put(Stale, image.Record(Stale, 1, flags: 1, baseRef: MftImage.Ref(Base, 9),
             MftImage.NonResidentData(0, 1, MftImage.Runs(new[] { (2L, 320L) }), 8192, 999)));
         image.Put(Unlisted, image.Record(Unlisted, 1, flags: 1, baseRef: MftImage.Ref(Base, 1),
@@ -279,13 +273,13 @@ public class MftScannerTests
     public void SparseAndCompressedUseTheOnDiskSize()
     {
         var image = Basic();
-        // Sparse, compression unit 0: 1 MB logical, one 4 KB cluster really allocated.
+        // sparse: 1 MB logical, 4 KB allocated
         image.Put(Link, image.Record(Link, 1, flags: 1, baseRef: 0, MftImage.StandardInformation(0), MftImage.FileName(Docs, 1, "sparse.bin"),
             MftImage.NonResidentData(0, 255, MftImage.Runs(new[] { (255L, -1L), (1L, 400L) }), 1 << 20, 1 << 20, flags: 0x8000, compressionUnit: 0, compressedSize: 4096)));
-        // Compressed, compression unit 4: 64 KB logical, 16 KB on disk.
+        // compressed: 64 KB logical, 16 KB on disk
         image.Put(31, image.Record(31, 1, flags: 1, baseRef: 0, MftImage.StandardInformation(0), MftImage.FileName(Docs, 1, "packed.bin"),
             MftImage.NonResidentData(0, 15, MftImage.Runs(new[] { (4L, 500L), (12L, -1L) }), 65536, 65536, flags: 0x0001, compressionUnit: 4, compressedSize: 16384)));
-        // An ordinary stream keeps its allocated size.
+        // plain
         image.Put(32, image.Record(32, 1, flags: 1, baseRef: 0, MftImage.StandardInformation(0), MftImage.FileName(Docs, 1, "plain.bin"),
             MftImage.NonResidentData(0, 3, MftImage.Runs(new[] { (4L, 600L) }), 16384, 15000)));
 
@@ -354,7 +348,7 @@ public class MftScannerTests
         early.Cancel();
         Assert.Throws<OperationCanceledException>(() => image.Scanner().Scan(early.Token));
 
-        // Cancelled the moment the read finishes and the build starts.
+        // canceled when the build starts
         using var late = new CancellationTokenSource();
         var scanner = image.Scanner(progress: (_, _, _, path) => { if (path == MftScanner.BuildingMarker) late.Cancel(); });
         Assert.Throws<OperationCanceledException>(() => scanner.Scan(late.Token));
@@ -370,6 +364,6 @@ public class MftScannerTests
         Assert.Equal("T:\\", last.path);
         Assert.Equal(root.FileCount, last.files);
         Assert.Equal(root.Size, last.bytes);
-        Assert.Equal(3, last.dirs);   // root, Docs, Other
+        Assert.Equal(3, last.dirs);
     }
 }

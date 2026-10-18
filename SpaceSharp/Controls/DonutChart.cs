@@ -7,11 +7,7 @@ using Avalonia.Media.Immutable;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>
-/// A donut with a short line of text in the hole. Each slice has a label and a value; hovering a slice
-/// (or setting <see cref="Highlight"/> from a legend) shows that slice in the center, otherwise the center
-/// shows <see cref="CenterValue"/> and <see cref="CenterLabel"/>. Drawn directly, like the WPF app's (2.2).
-/// </summary>
+/// <summary>A donut chart with a text label in the hole.</summary>
 public sealed class DonutChart : Control
 {
     public sealed record Slice(string Label, string Value, double Amount, IBrush Fill);
@@ -49,14 +45,14 @@ public sealed class DonutChart : Control
 
     public string CenterValue { get => GetValue(CenterValueProperty); set => SetValue(CenterValueProperty, value); }
     public string CenterLabel { get => GetValue(CenterLabelProperty); set => SetValue(CenterLabelProperty, value); }
-    /// <summary>Index of the slice to show in the center, set from outside (a legend row); -1 for none.</summary>
+    /// <summary>Index of the slice shown in the center, or -1 for none.</summary>
     public int Highlight { get => GetValue(HighlightProperty); set => SetValue(HighlightProperty, value); }
     public IBrush TextBrush { get => GetValue(TextBrushProperty); set => SetValue(TextBrushProperty, value); }
     public IBrush DimBrush { get => GetValue(DimBrushProperty); set => SetValue(DimBrushProperty, value); }
     public IBrush TrackBrush { get => GetValue(TrackBrushProperty); set => SetValue(TrackBrushProperty, value); }
     public double Thickness { get => GetValue(ThicknessProperty); set => SetValue(ThicknessProperty, value); }
 
-    /// <summary>Raised when the pointer moves onto another slice (or off the ring, index -1), so a legend can follow.</summary>
+    /// <summary>Raised when the hovered slice changes; -1 when the pointer leaves the ring.</summary>
     public event Action<int>? HoverChanged;
 
     protected override Size MeasureOverride(Size availableSize)
@@ -75,7 +71,7 @@ public sealed class DonutChart : Control
         double outer = size / 2, inner = outer - Thickness;
         double total = _slices.Sum(s => s.Amount);
 
-        // Hit-test surface so the pointer registers over the hole too.
+        // hit-test surface covering the hole
         dc.DrawEllipse(Brushes.Transparent, null, center, outer, outer);
 
         if (total <= 0 || _slices.Count == 0)
@@ -109,15 +105,11 @@ public sealed class DonutChart : Control
         double blockHeight = v.Height + (label.Length > 0 ? l.Height : 0);
         double top = center.Y - blockHeight / 2;
         dc.DrawText(v, new Point(center.X - v.Width / 2, top));
-        // a wrapped label is centered inside its own box; a one-line label by its width
         bool wrapped = l.MaxTextWidth > 0 && double.IsFinite(l.MaxTextWidth);
         if (label.Length > 0) dc.DrawText(l, new Point(center.X - (wrapped ? l.MaxTextWidth : l.Width) / 2, top + v.Height - 1));
     }
 
-    /// <summary>
-    /// Shrinks the font until the text fits the hole, down to <paramref name="minSize"/>; what still does not fit wraps
-    /// onto up to <paramref name="lines"/> lines, and only a line that is too long on its own is trimmed.
-    /// </summary>
+    /// <summary>Shrinks the font to <paramref name="minSize"/> to fit, then wraps onto up to <paramref name="lines"/> lines.</summary>
     private static FormattedText Fit(string? text, Typeface face, double size, double minSize, IBrush brush, double maxWidth, int lines = 1)
     {
         text ??= string.Empty;

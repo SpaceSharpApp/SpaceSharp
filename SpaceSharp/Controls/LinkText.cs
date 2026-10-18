@@ -6,11 +6,7 @@ using Avalonia.Input;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>
-/// A paragraph with links inside the prose. The text is written like Markdown, "[Lucide](https://lucide.dev)", so a
-/// translation can move a link wherever its sentence needs it. Link runs are drawn in the accent color; a click on one
-/// raises <see cref="LinkClicked"/> with its address. Everything else is a plain TextBlock.
-/// </summary>
+/// <summary>A TextBlock with Markdown-style "[label](url)" links that raise <see cref="LinkClicked"/>.</summary>
 public sealed partial class LinkText : TextBlock
 {
     private readonly List<(int Start, int End, string Url)> _links = new();

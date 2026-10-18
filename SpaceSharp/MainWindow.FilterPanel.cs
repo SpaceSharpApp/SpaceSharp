@@ -10,16 +10,8 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The filter's two faces, as in the WPF app (2.2). The text in <c>FilterBox</c> (hidden; it still accepts the full
-/// syntax from code and shortcuts) is the one source of truth: everything here reads it as a <see cref="FilterSpec"/>
-/// and writes back with <see cref="FilterSpec.ToText"/>, so the rail, the drawer and the parser never disagree.
-///
-/// The drawer (the default, Settings › Map › Filter layout) is a sheet over the right of the map with the conditions
-/// as full controls. The rail is a row under the path with one small button per condition: Type, Size, Age, Show,
-/// each opening a flyout that shows its value when set, a name box, and the live count. The button in the path row
-/// shows or hides whichever is chosen and says how many conditions are on.
-/// </summary>
+/// <summary>The filter rail and drawer.</summary>
+/// <remarks>The hidden <c>FilterBox</c> text is the single source of truth; both faces read it as a <see cref="FilterSpec"/> and write back with <see cref="FilterSpec.ToText"/>.</remarks>
 public partial class MainWindow
 {
     private static readonly (string Label, long Bytes)[] SizeSteps =
@@ -34,7 +26,7 @@ public partial class MainWindow
         (Strings.Get("Filter_1Year"), 365), (Strings.Get("Filter_2Years"), 730), (Strings.Get("Filter_5Years"), 1825)
     };
 
-    // the drawer's scales: seven ticks each, a decade apart for size; the rail's dropdowns keep the finer SizeSteps
+    // drawer scales
     private static readonly (string Label, long Bytes)[] SizeTicks =
     {
         (Strings.Get("Filter_AnyShort"), 0), ("1 MB", 1L << 20), ("10 MB", 10L << 20), ("100 MB", 100L << 20), ("1 GB", 1L << 30), ("10 GB", 10L << 30), ("100 GB", 100L << 30)
@@ -64,12 +56,12 @@ public partial class MainWindow
     private TextBox? _railName;
     private TextBlock? _railInfo;
     private Button? _railSelect, _railClear;
-    private readonly Dictionary<Button, TextBlock> _pillValues = new();   // the value text inside each pill
+    private readonly Dictionary<Button, TextBlock> _pillValues = new();
 
     // drawer
     private TextBox? _drawerName;
     private readonly Dictionary<FileCategory, (ToggleButton Tile, Border Swatch, TextBlock Size)> _drawerTypes = new();
-    private Grid? _drawerStack;                                 // the stacked share bar, one column per type
+    private Grid? _drawerStack;                                 // stacked share bar
     private Border? _drawerStackBox;
     private DockPanel? _drawerStackLine;
     private TextBlock? _drawerPicked, _drawerOfScan;
@@ -83,7 +75,7 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- layout
 
-    /// <summary>Shows the rail or the drawer as the settings say, and builds whichever has not been built yet.</summary>
+    /// <summary>Shows the rail or the drawer per the settings, building it on first use.</summary>
     private void ApplyFilterLayout()
     {
         if (DrawerLayout)
@@ -100,7 +92,6 @@ public partial class MainWindow
         SyncFilterUi();
     }
 
-    /// <summary>The path row's Filter button: shows or hides the rail, or opens and closes the drawer.</summary>
     private void FilterToggle_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (DrawerLayout)
@@ -119,7 +110,7 @@ public partial class MainWindow
         SyncFilterUi();
     }
 
-    /// <summary>Ctrl+F: put the cursor in the name box of whichever face is in use, opening it if needed.</summary>
+    /// <summary>Opens the active filter face and focuses its name box.</summary>
     private void FocusFilter()
     {
         if (DrawerLayout)
@@ -135,7 +126,6 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Opens whichever face is in use, for the top list's filter rows; a rail already showing stays as it is.</summary>
     private void ShowFilterFace()
     {
         if (DrawerLayout) { FilterDrawer.IsVisible = true; SyncFilterUi(); }
@@ -148,7 +138,7 @@ public partial class MainWindow
         Treemap.Focus();
     }
 
-    /// <summary>True when a filter name box has the keyboard, so the map's single-key shortcuts stay out of the way.</summary>
+    /// <summary>True when a filter name box has keyboard focus.</summary>
     private bool FilterHasFocus => FilterBox.IsFocused || _railName is { IsFocused: true } || _drawerName is { IsFocused: true };
 
     // ---------------------------------------------------------------- rail
@@ -187,7 +177,7 @@ public partial class MainWindow
         rail.Children.Add(left);
     }
 
-    /// <summary>A rail pill: a rounded button with a dim label and its value, opening a small flyout built on demand.</summary>
+    /// <summary>A rail pill button with a lazily built flyout.</summary>
     private Button Pill(string label, Func<Control> content, bool showValue = true)
     {
         var text = new StackPanel { Orientation = Orientation.Horizontal };
@@ -309,7 +299,6 @@ public partial class MainWindow
         _drawerName.Margin = new Thickness(0, 6, 0, 12);
         body.Children.Add(_drawerName);
 
-        // type: the stacked share bar, a line that says what is picked, and a tile per type
         body.Children.Add(HeadingRow(Strings.Get("Filter_Type"), new TextBlock { Text = Strings.Get("Drawer_ShareOfScan"), FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } }));
         _drawerStack = new Grid { Height = 10 };
         _drawerStackBox = new Border { Child = _drawerStack, Height = 10, CornerRadius = new CornerRadius(3), ClipToBounds = true, Margin = new Thickness(0, 8, 0, 0), Classes = { "track" } };
@@ -339,21 +328,18 @@ public partial class MainWindow
         }
         body.Children.Add(tiles);
 
-        // size and age as scales: click a tick, and the span from it lights up
         (_drawerMin, _drawerMinValue) = Scale(body, Strings.Get("Filter_LargerThan"), SizeTicks.Select(t => t.Label), spanToEnd: true, i => WriteSpec(s => s.MinBytes = SizeTicks[i].Bytes > 0 ? SizeTicks[i].Bytes : null));
         (_drawerMax, _drawerMaxValue) = Scale(body, Strings.Get("Filter_SmallerThan"), SizeTicks.Select(t => t.Label), spanToEnd: false, i => WriteSpec(s => s.MaxBytes = SizeTicks[i].Bytes > 0 ? SizeTicks[i].Bytes : null));
         (_drawerAge, _drawerAgeValue) = Scale(body, Strings.Get("Filter_NotModifiedFor"), AgeTicks.Select(a => a.Label), spanToEnd: true, i => WriteSpec(s => s.OlderThanDays = AgeTicks[i].Days > 0 ? AgeTicks[i].Days : null));
 
-        // show: three tiles with icons
         body.Children.Add(PanelHeading(Strings.Get("Filter_Show")));
-        // "Files and folders" on a row of its own, since three across does not fit it (nor its translations) at the drawer's width
         var kinds = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), RowDefinitions = new RowDefinitions("Auto,Auto"), Margin = new Thickness(0, 6, -6, 6) };
         int kindIndex = 0;
         foreach (var (label, icon, kind) in new[] { (Strings.Get("Filter_FilesAndFolders"), "Treemap", ItemKind.Any), (Strings.Get("Filter_FilesOnly"), "File", ItemKind.Files), (Strings.Get("Filter_FoldersOnly"), "Folder", ItemKind.Folders) })
         {
             var tile = new ToggleButton { Content = TileText(icon, label, center: true), Classes = { "tile" }, Margin = new Thickness(0, 0, 6, 6) };
             var captured = kind;
-            // the sync puts the three tiles right again, including a click on the one already picked (which the toggle would unpick)
+            // sync restores the toggle state after a click on the already picked tile
             tile.Click += (_, _) => { WriteSpec(s => s.Kind = captured); SyncFilterUi(); };
             if (kindIndex == 0) Grid.SetColumnSpan(tile, 2);
             else { Grid.SetRow(tile, 1); Grid.SetColumn(tile, kindIndex - 1); }
@@ -363,7 +349,6 @@ public partial class MainWindow
         }
         body.Children.Add(kinds);
 
-        // quick filters: tiles that replace the whole filter text
         body.Children.Add(PanelHeading(Strings.Get("Filter_QuickFilters")));
         var presets = new WrapPanel { Margin = new Thickness(0, 6, -6, 0) };
         foreach (var (label, filter) in Presets)
@@ -376,7 +361,6 @@ public partial class MainWindow
         }
         body.Children.Add(presets);
 
-        // footer
         _drawerInfo = new TextBlock { VerticalAlignment = VerticalAlignment.Center, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "accent" } };
         _drawerSelect = new Button { Classes = { "primary" }, Content = Strings.Get("Main_SelectMatches"), Height = 30, IsEnabled = false };
         _drawerSelect.Click += SelectMatches_Click;
@@ -385,7 +369,6 @@ public partial class MainWindow
         DrawerFooter.Children.Add(_drawerInfo);
     }
 
-    /// <summary>An icon and a label for a tile; a label too long for the tile wraps, and the tile grows, rather than being cut.</summary>
     private static DockPanel TileText(string icon, string label, bool center = false)
     {
         var panel = new DockPanel { HorizontalAlignment = center ? HorizontalAlignment.Center : HorizontalAlignment.Stretch };
@@ -396,7 +379,6 @@ public partial class MainWindow
         return panel;
     }
 
-    /// <summary>A heading with something docked at its right edge, on the same baseline.</summary>
     private static DockPanel HeadingRow(string heading, Control right)
     {
         var row = new DockPanel();
@@ -406,7 +388,6 @@ public partial class MainWindow
         return row;
     }
 
-    /// <summary>A heading with the current value at its right, and a tick scale under it.</summary>
     private (TickScale Scale, TextBlock Value) Scale(Panel body, string heading, IEnumerable<string> labels, bool spanToEnd, Action<int> onPick)
     {
         var value = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } };
@@ -417,7 +398,6 @@ public partial class MainWindow
         return (scale, value);
     }
 
-    /// <summary>Puts a scale on its tick (or on none, when the filter holds a value between ticks) and writes the value beside the heading.</summary>
     private static void SetScale(TickScale scale, TextBlock value, int index, string text, bool set)
     {
         scale.Selected = index;
@@ -431,10 +411,8 @@ public partial class MainWindow
     private static TextBlock PanelHeading(string text) =>
         new() { Text = text, FontSize = 12, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 2, 0, 0), Classes = { "dim" } };
 
-    /// <summary>The name box: the search glyph at the left, the placeholder, and Esc and Enter handled as the WPF app (2.2) does.</summary>
     private TextBox NameBox(string placeholder, double height)
     {
-        // the glyph takes the box's own left slot, so the padding is only the gap between the glyph and the text
         var box = new TextBox { Height = height, MinHeight = height, PlaceholderText = placeholder, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(7, 0, 10, 0) };
         var glyph = Icons.Make("Search", 13, "TextDim"); glyph.Margin = new Thickness(10, 0, 0, 0); glyph.HorizontalAlignment = HorizontalAlignment.Left;
         box.InnerLeftContent = glyph;
@@ -455,7 +433,7 @@ public partial class MainWindow
         return combo;
     }
 
-    /// <summary>Changes one part of the filter and writes the whole thing back to the text, which applies it.</summary>
+    /// <summary>Applies a change to the filter spec and writes it back to the text.</summary>
     private void WriteSpec(Action<FilterSpec> change)
     {
         if (_syncingFilterUi) return;
@@ -465,10 +443,7 @@ public partial class MainWindow
         if (text != (FilterBox.Text ?? string.Empty)) FilterBox.Text = text;
     }
 
-    /// <summary>
-    /// The name box takes a part of a name or a pattern, but also the full syntax: "type:video >500MB" typed here
-    /// becomes conditions, and the box keeps only the name part once the filter is applied.
-    /// </summary>
+    /// <summary>Handles name box input, which may contain full filter syntax.</summary>
     private void NameBoxChanged(TextBox box)
     {
         if (_syncingFilterUi) return;
@@ -505,7 +480,7 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Text → every control: pill values, drawer controls, counts, the path-row button. Called after each apply.</summary>
+    /// <summary>Updates every filter control from the filter text.</summary>
     private void SyncFilterUi()
     {
         if (FilterToggleButton is null) return;
@@ -519,7 +494,6 @@ public partial class MainWindow
                            + (spec.Patterns.Count + spec.Words.Count > 0 ? 1 : 0);
             string nameText = string.Join(" ", spec.Patterns.Concat(spec.Words));
 
-            // the button in the path row
             FilterToggleButton.Content = Icons.WithText("Filter", conditions == 0 ? Strings.Get("Main_Filter") : Strings.Format("Filter_ToggleCount", conditions));
             FilterToggleButton.Classes.Set("outline-accent", active);
             FilterToggleButton.Padding = new Thickness(8, 0, 10, 0);
@@ -559,7 +533,6 @@ public partial class MainWindow
                     size.Text = share is null ? string.Empty : SizeFormatter.Format(share.Bytes);
                 }
 
-                // the stacked bar: one segment per type in the tiles' order, the picked ones at full color
                 bool anyPicked = spec.Types.Count > 0;
                 _drawerStack!.ColumnDefinitions.Clear();
                 _drawerStack.Children.Clear();
@@ -573,7 +546,7 @@ public partial class MainWindow
                     {
                         var share = shares!.FirstOrDefault(t => t.Category == category);
                         if (share is null || share.Bytes <= 0) continue;
-                        _drawerStack.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(share.Bytes, total / 300.0), GridUnitType.Star)); // a sliver at least, so tiny types still show
+                        _drawerStack.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(share.Bytes, total / 300.0), GridUnitType.Star)); // minimum sliver for tiny types
                         var segment = new Border { Background = CategoryBrush(category), Opacity = !anyPicked || spec.Types.Contains(category) ? 1 : 0.3, Margin = new Thickness(0, 0, 1, 0) };
                         Grid.SetColumn(segment, column++);
                         _drawerStack.Children.Add(segment);
@@ -604,7 +577,6 @@ public partial class MainWindow
         pill.Classes.Set("set", set);
     }
 
-    /// <summary>Recolors the type swatches after a palette change; the stacked bar is rebuilt by the sync.</summary>
     private void RecolorFilterSwatches()
     {
         foreach (var (category, (_, swatch, _)) in _drawerTypes) swatch.Background = CategoryBrush(category);

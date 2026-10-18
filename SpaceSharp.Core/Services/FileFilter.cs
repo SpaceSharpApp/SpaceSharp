@@ -12,10 +12,7 @@ public enum ItemKind
     Folders
 }
 
-/// <summary>
-/// What a filter asks for, as data. Parsed from the filter box text and edited by the filter panel;
-/// <see cref="ToText"/> writes it back in a canonical form so both stay in sync.
-/// </summary>
+/// <summary>A parsed filter; <see cref="ToText"/> writes it back in canonical form.</summary>
 public sealed class FilterSpec
 {
     private static readonly Regex OlderPhrase = new(
@@ -72,7 +69,6 @@ public sealed class FilterSpec
         var spec = new FilterSpec();
         string rest = text.Trim();
 
-        // Phrases with spaces first, then what's left is split into single terms.
         rest = OlderPhrase.Replace(rest, m => { spec.OlderThanDays = Days(m); return " "; });
         rest = NewerPhrase.Replace(rest, m => { spec.NewerThanDays = Days(m); return " "; });
         rest = MinPhrase.Replace(rest, m => { spec.MinBytes = Bytes(m); return " "; });
@@ -125,7 +121,7 @@ public sealed class FilterSpec
 
     private static int Days(Match m)
     {
-        // "last week", "older than a year" and "one month" all mean 1.
+        // "a", "an", "one" and no number all mean 1
         string number = m.Groups[1].Value;
         int amount = number.Length > 0 && char.IsDigit(number[0])
             ? int.Parse(number, CultureInfo.InvariantCulture)
@@ -211,7 +207,7 @@ public sealed class FilterSpec
 
     private static string Plural(int n, string unit) => n == 1 ? $"1 {unit}" : $"{n} {unit}s";
 
-    /// <summary>Like <see cref="Period"/> but in the app's language, for the status line. Filter text itself stays English.</summary>
+    /// <summary>Like <see cref="Period"/> but localized.</summary>
     public static string PeriodLocalized(int days)
     {
         (int n, string unit) = days % 365 == 0 ? (days / 365, "Year") : days % 30 == 0 ? (days / 30, "Month") : days % 7 == 0 ? (days / 7, "Week") : (days, "Day");
@@ -243,7 +239,7 @@ public sealed class FileFilter
     public bool IsEmpty => _spec.IsEmpty;
     public string Description => _spec.Describe();
 
-    /// <summary>Does this single file or folder satisfy every term?</summary>
+    /// <summary>True when the node satisfies every term.</summary>
     public bool Matches(FsNode node)
     {
         if (node.Kind is NodeKind.FreeSpace or NodeKind.Group) return false;
@@ -265,10 +261,7 @@ public sealed class FileFilter
         return true;
     }
 
-    /// <summary>
-    /// Evaluates the whole tree. Files match on their own; a folder is included when it matches itself
-    /// or contains a match, so the path down to every hit stays lit.
-    /// </summary>
+    /// <summary>Evaluates the tree; a folder is included when it matches or contains a match.</summary>
     public FilterResult Evaluate(FsNode root)
     {
         var matches = new HashSet<FsNode>();

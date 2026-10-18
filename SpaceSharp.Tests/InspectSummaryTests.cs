@@ -8,10 +8,7 @@ public class InspectSummaryTests
 {
     private static readonly DateTime Now = new(2026, 10, 6, 12, 0, 0, DateTimeKind.Utc);
 
-    /// <summary>
-    /// C:\ (1000 free, not counted) › Local, holding a thin wrapper chain Google › Chrome › User Data with
-    /// one big file, a disk image, a cache folder with two files, and a few loose files of various ages.
-    /// </summary>
+    /// <summary>C:\ with 1000 free and a Local folder holding a thin wrapper chain and files of various ages.</summary>
     private static (FsNode Root, FsNode Local) Sample()
     {
         var root = TestTree.Dir(@"C:\");
@@ -43,13 +40,13 @@ public class InspectSummaryTests
 
         Assert.Equal(8100, s.Size);
         Assert.Equal(7, s.Files);
-        Assert.Equal(5, s.Folders);                          // Google, Chrome, User Data, Docker, Cache
+        Assert.Equal(5, s.Folders);
         Assert.Equal(Now.AddDays(-1), s.NewestUtc);
         Assert.Equal(Now.AddDays(-1500), s.OldestUtc);
         Assert.NotNull(s.OfParent);
         Assert.Equal(@"C:\", s.OfParent!.Value.Name);
-        Assert.Equal(8100.0 / 11000, s.OfParent.Value.Share, 6);   // the root counts its free space
-        Assert.Null(s.OfRoot);                                // the parent is the root; one bar is enough
+        Assert.Equal(8100.0 / 11000, s.OfParent.Value.Share, 6);   // root includes free space
+        Assert.Null(s.OfRoot);                                // parent is the root
     }
 
     [Fact]
@@ -59,8 +56,6 @@ public class InspectSummaryTests
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         var names = s.Largest.Select(r => r.Name).ToList();
-        // Google (4910) is 99.8% Chrome and Chrome is 100% User Data: both are skipped for the folder that actually holds the bytes.
-        // User Data itself stays, since its biggest file is only 84% of it. Docker is 100% one file, so the file is listed.
         Assert.Equal(new[] { @"Google\Chrome\User Data\", @"Docker\ext4.vhdx", @"Cache\", "readme.txt", @"Google\update.log" }, names);
         Assert.Equal(4900.0 / 8100, s.Largest[0].Share, 6);
         Assert.DoesNotContain(names, n => n.StartsWith(@"Google\Chrome\User Data\History"));
@@ -110,10 +105,10 @@ public class InspectSummaryTests
 
         Assert.Equal(4, s.ByAge.Count);
         Assert.Equal(8100, s.ByAge.Sum(a => a.Bytes));
-        Assert.Equal(4900 + 2200, s.ByAge[0].Bytes);          // this month: History, Cookies, ext4.vhdx
-        Assert.Equal(90, s.ByAge[1].Bytes);                   // this year: readme.txt
-        Assert.Equal(510, s.ByAge[2].Bytes);                  // 1 to 3 years: a.tmp, update.log
-        Assert.Equal(400, s.ByAge[3].Bytes);                  // older: b.tmp
+        Assert.Equal(4900 + 2200, s.ByAge[0].Bytes);
+        Assert.Equal(90, s.ByAge[1].Bytes);
+        Assert.Equal(510, s.ByAge[2].Bytes);
+        Assert.Equal(400, s.ByAge[3].Bytes);
         Assert.Equal(910, s.OlderThanYear);
     }
 
@@ -137,7 +132,7 @@ public class InspectSummaryTests
         Assert.Single(s.Callouts);
         Assert.Contains("60%", s.Callouts[0]);
         Assert.Contains(@"Google\Chrome\User Data", s.Callouts[0]);
-        Assert.DoesNotContain(@"User Data\", s.Callouts[0]);  // the trailing backslash is a list thing, not a sentence thing
+        Assert.DoesNotContain(@"User Data\", s.Callouts[0]);
     }
 
     [Fact]
@@ -154,7 +149,6 @@ public class InspectSummaryTests
         Assert.True(fresh.IsNew);
         Assert.Null(fresh.Change);
 
-        // The header's context line states the change; the callout is only for a dominant item.
         Assert.Single(grew.Callouts);
         Assert.Single(fresh.Callouts);
     }
@@ -165,12 +159,12 @@ public class InspectSummaryTests
         var (root, local) = Sample();
         var docker = local.FindDescendant(@"C:\Local\Docker")!;
         var cache = local.FindDescendant(@"C:\Local\Cache")!;
-        var readme = local.Children.Single(c => c.Name == "readme.txt");                 // FindDescendant walks folders only
+        var readme = local.Children.Single(c => c.Name == "readme.txt");
         var cookies = local.FindDescendant(@"C:\Local\Google\Chrome\User Data")!.Children.Single(c => c.Name == "Cookies");
 
-        Assert.Equal((2, 3), new InspectSummary(new[] { docker }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);   // Google 4910, Docker 2200, Cache 900
+        Assert.Equal((2, 3), new InspectSummary(new[] { docker }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
         Assert.Equal((3, 3), new InspectSummary(new[] { cache }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
-        Assert.Equal((1, 1), new InspectSummary(new[] { readme }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);   // the only file directly in Local
+        Assert.Equal((1, 1), new InspectSummary(new[] { readme }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
         Assert.Equal((2, 2), new InspectSummary(new[] { cookies }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
         Assert.Null(new InspectSummary(new[] { docker, cache }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
     }
@@ -215,7 +209,7 @@ public class InspectSummaryTests
         Assert.NotNull(s.OfRoot);
         Assert.Equal(3100.0 / 11000, s.OfRoot!.Value.Share, 6);
         Assert.Null(s.OfParent);
-        Assert.Empty(s.Callouts);                              // the dominant-item callout is for one folder, not a hand-picked set
+        Assert.Empty(s.Callouts);
     }
 
     [Fact]
@@ -228,7 +222,7 @@ public class InspectSummaryTests
         Assert.Empty(s.Largest);
         Assert.Equal(1, s.Files);
         Assert.Equal(0, s.Folders);
-        Assert.Equal(1.0, s.OfParent!.Value.Share, 6);         // the only thing in Docker
+        Assert.Equal(1.0, s.OfParent!.Value.Share, 6);
         Assert.Equal(2200.0 / 11000, s.OfRoot!.Value.Share, 6);
         Assert.Empty(s.Callouts);
     }

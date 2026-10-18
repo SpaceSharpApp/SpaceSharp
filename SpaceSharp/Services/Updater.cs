@@ -3,10 +3,8 @@ using Velopack.Sources;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// Checks GitHub Releases for a newer version and installs it, on every desktop Velopack packages for. Only active
-/// when SpaceSharp was installed with a Velopack setup; a plain portable copy never updates itself.
-/// </summary>
+/// <summary>Checks GitHub Releases for a newer version and installs it via Velopack.</summary>
+/// <remarks>Inactive for portable copies not installed through a Velopack setup.</remarks>
 internal sealed class Updater
 {
     private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
@@ -19,7 +17,7 @@ internal sealed class Updater
 
     public string CurrentVersion => _manager.CurrentVersion?.ToString() ?? "unknown";
 
-    /// <summary>The update found by the last check, if any.</summary>
+    /// <summary>The update found by the last check.</summary>
     public UpdateInfo? Available { get; private set; }
 
     public string? AvailableVersion => Available?.TargetFullRelease.Version.ToString();
@@ -34,16 +32,13 @@ internal sealed class Updater
         }
         catch (Exception)
         {
-            Available = null; // offline, rate limited, or the release has no Velopack assets
+            Available = null; // offline or rate limited
         }
         return Available;
     }
 
-    /// <summary>
-    /// Downloads the update, then exits and restarts into the new version. The apply step runs silently:
-    /// Velopack's own progress window is a stock system dialog that cannot be themed, so the app
-    /// closes, the files are swapped with nothing on screen, and the new version opens a few seconds later.
-    /// </summary>
+    /// <summary>Downloads the update, then exits and restarts into the new version.</summary>
+    /// <remarks>Applies silently; Velopack's own progress window cannot be themed.</remarks>
     public async Task InstallAndRestartAsync(Action<int>? progress = null)
     {
         if (Available is null) return;

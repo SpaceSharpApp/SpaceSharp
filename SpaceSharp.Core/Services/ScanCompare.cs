@@ -2,11 +2,7 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// Marks every node of a scan with its size in an older scan of the same place, so the map can color
-/// by change and the side panel can list what grew. Matching is by name within each folder, which needs
-/// no path strings and runs in one pass over both trees.
-/// </summary>
+/// <summary>Marks every node with its size in an older scan, matching by name within each folder.</summary>
 public static class ScanCompare
 {
     public static void Apply(FsNode current, FsNode baseline)
@@ -14,7 +10,7 @@ public static class ScanCompare
         Mark(current, baseline);
     }
 
-    /// <summary>Removes comparison data, for a fresh scan with nothing to compare against.</summary>
+    /// <summary>Removes comparison data from the subtree.</summary>
     public static void Clear(FsNode node)
     {
         node.HasBaseline = false;

@@ -8,18 +8,11 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// Every keyboard and mouse shortcut, drawn on a keyboard: the keys SpaceSharp uses are lit in amber, with a small
-/// Ctrl (⌘ on a Mac) in the corner when the modifier is held, and each lit key says what it does on hover. The
-/// keyboard follows the user's layout (QWERTY, Nordic, QWERTZ, AZERTY, Dvorak; detected on Windows, pickable
-/// everywhere) and the platform's key names. The mouse gestures are cards under the keyboard, and the full list
-/// in three groups is under those.
-/// </summary>
+/// <summary>The keyboard shortcuts window.</summary>
 public sealed class ShortcutsWindow : Window
 {
-    // the widest row (Esc, a gap, F1 to F12, a half gap, Home, Del) is 16.5 units and 16 gaps, which fills the card
     private const double WindowWidth = 980, Gap = 5, KeyHeight = 36;
-    // the key width that makes the widest row fill the card: window less the body margins (24 + 24) and the card padding (14 + 14)
+    // widest row is 16.5 units and 16 gaps; 48 and 28 are the body margins and card padding
     private const double Unit = (WindowWidth - 48 - 28 - 16 * Gap) / 16.5;
     private static readonly bool Mac = OperatingSystem.IsMacOS();
     private static string Ctrl => Mac ? "⌘" : "Ctrl";
@@ -28,7 +21,7 @@ public sealed class ShortcutsWindow : Window
     private readonly StackPanel _keyboard = new() { Spacing = Gap, HorizontalAlignment = HorizontalAlignment.Center };
     private readonly TextBlock _note = new() { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
 
-    /// <summary>What a lit key does; the letters are the same in every layout, the map just finds where they sit.</summary>
+    /// <summary>What each lit key does.</summary>
     private static readonly Dictionary<string, (string What, bool WithCtrl)> Uses = new(StringComparer.Ordinal)
     {
         ["A"] = (Strings.Get("Key_SelectMatches"), true), ["I"] = (Strings.Get("Key_Inspect"), true), ["C"] = (Strings.Get("Key_Copy"), true),
@@ -50,7 +43,7 @@ public sealed class ShortcutsWindow : Window
 
         var body = new StackPanel { Margin = new Thickness(24, 14, 24, 14), Spacing = 12 };
 
-        // the header: the title, the note, and the layout picker at the right
+        // ---- header
         var head = new DockPanel();
         var picker = new ComboBox { ItemsSource = KeyboardLayouts.All.Select(l => l.Name).ToList(), SelectedItem = KeyboardLayouts.Find(layoutName).Name, Height = 30, MinHeight = 30, MinWidth = 130 };
         ToolTip.SetTip(picker, Strings.Get("Keys_Layout"));
@@ -68,11 +61,11 @@ public sealed class ShortcutsWindow : Window
         head.Children.Add(titles);
         body.Children.Add(head);
 
-        // the keyboard
+        // ---- keyboard
         body.Children.Add(new Border { Child = _keyboard, Padding = new Thickness(14), CornerRadius = new CornerRadius(12), Classes = { "card", "flat" } });
         DrawKeyboard(KeyboardLayouts.Find(layoutName));
 
-        // the mouse
+        // ---- mouse
         var mice = new UniformGrid { Columns = 5, Margin = new Thickness(0, 0, -8, 0) };
         foreach (var (gesture, what) in new[]
         {
@@ -90,8 +83,7 @@ public sealed class ShortcutsWindow : Window
         }
         body.Children.Add(mice);
 
-        // the legend: three groups side by side, in the platform's key names
-        // the first group has the short lines, so the other two get more of the width
+        // ---- legend
         var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("0.8*,18,1.1*,18,1.1*") };
         int column = 0;
         foreach (var (group, rows) in Groups())
@@ -100,7 +92,6 @@ public sealed class ShortcutsWindow : Window
             list.Children.Add(new TextBlock { Text = group, FontSize = 11.5, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 4, 0, 4), Classes = { "dim" } });
             foreach (var (key, what) in rows)
             {
-                // a line that does not fit its column wraps onto a second one (the row grows); nothing is trimmed
                 var row = new DockPanel { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
                 var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Top, Child = new TextBlock { Text = key, FontSize = 10.5, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
                 chip.Margin = new Thickness(0, 2, 8, 0);
@@ -113,7 +104,7 @@ public sealed class ShortcutsWindow : Window
         }
         body.Children.Add(legend);
 
-        // the footer
+        // ---- footer
         var foot = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
         var close = new Button { Content = Strings.Get("About_Close"), Classes = { "primary" }, IsDefault = true, IsCancel = true, MinWidth = 84, Height = 32, VerticalAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         close.Click += (_, _) => Close();
@@ -153,7 +144,7 @@ public sealed class ShortcutsWindow : Window
         "Ctrl", "Shift", "Alt", "Tab", "Caps", "Enter", "Win", "", "fn", "tab", "shift", "return", "caps lock", "delete", "⌃ control", "⌥ option", "⌘ command"
     };
 
-    /// <summary>A key of <paramref name="units"/> key widths; a null label is a gap.</summary>
+    /// <summary>A key of <paramref name="units"/> widths; a null label is a gap.</summary>
     private static (string? Label, double Units) K(string? label, double units = 1) => (label, units);
 
     private static IEnumerable<(string? Label, double Units)> Keys(IEnumerable<string> labels) => labels.Select(l => K(l));
@@ -194,7 +185,7 @@ public sealed class ShortcutsWindow : Window
     private Control Key(string? label, double units)
     {
         double width = Unit * units + Gap * (units - 1);
-        if (label is null) return new Border { Width = width, Height = KeyHeight };   // a gap
+        if (label is null) return new Border { Width = width, Height = KeyHeight };   // gap
         bool lit = Uses.TryGetValue(label, out var use);
         var text = new TextBlock
         {

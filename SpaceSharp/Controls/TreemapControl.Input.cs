@@ -4,7 +4,7 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>Part of <see cref="TreemapControl"/>. TreemapControl.cs has the overview.</summary>
+/// <summary>Input part of <see cref="TreemapControl"/>.</summary>
 public sealed partial class TreemapControl
 {
     // ================================================================= input
@@ -26,7 +26,7 @@ public sealed partial class TreemapControl
         if (_root is null) return;
         StopAnimation();
         _pinnedFocus = null;
-        // Delta.Y is in notches (1 per click on a mouse wheel, fractions on a trackpad), where WPF used 120 per notch.
+        // Delta.Y is in notches; fractional on a trackpad
         ZoomAt(_zoom * Math.Pow(WheelStep, e.Delta.Y), e.GetPosition(this));
         e.Handled = true;
     }
@@ -93,7 +93,6 @@ public sealed partial class TreemapControl
 
         if (point.Properties.IsRightButtonPressed)
         {
-            // Right-clicking something outside the selection selects just that; inside keeps the selection.
             if (node is not null && !_selection.Contains(node))
                 SelectedNode = node;
             return;

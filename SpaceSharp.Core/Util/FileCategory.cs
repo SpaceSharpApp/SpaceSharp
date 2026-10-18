@@ -1,9 +1,6 @@
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// What a file is, by extension. The order is the order of colors in a palette; Other stays last. The six after
-/// Code came out of Other in 2.0 so that a gaming PC does not read as "58% other".
-/// </summary>
+/// <summary>A file type by extension; the order is the palette color order and Other stays last.</summary>
 public enum FileCategory
 {
     Images,
@@ -22,25 +19,25 @@ public enum FileCategory
     Other
 }
 
-/// <summary>Which window theme a palette is made for. The map background differs, so a palette rarely suits both.</summary>
+/// <summary>The window theme a palette is made for.</summary>
 public enum PaletteTheme
 {
     Dark,
     Light,
-    /// <summary>Not tagged (a custom palette without a "theme" line): listed under both.</summary>
+    /// <summary>Untagged; listed under both themes.</summary>
     Any
 }
 
-/// <summary>The extension table behind <see cref="FileCategory"/>: which category a file's extension puts it in.</summary>
+/// <summary>Maps file extensions to a <see cref="FileCategory"/>.</summary>
 public static class FileCategories
 {
     private static readonly Dictionary<string, FileCategory> Extensions = BuildExtensionMap();
 
-    /// <summary>The category for an extension with its dot (".mp4"), Other when unknown.</summary>
+    /// <summary>The category for an extension with its dot, or Other.</summary>
     public static FileCategory Categorize(string extension) =>
         Extensions.TryGetValue(extension, out var category) ? category : FileCategory.Other;
 
-    /// <summary>Every known extension, for the filter's suggestions and the tests.</summary>
+    /// <summary>Every known extension.</summary>
     public static IReadOnlyCollection<string> Known => Extensions.Keys;
 
     private static Dictionary<string, FileCategory> BuildExtensionMap()

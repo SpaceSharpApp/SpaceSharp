@@ -6,7 +6,7 @@ using SpaceSharp.Controls;
 
 namespace SpaceSharp.Util;
 
-/// <summary>Small modal message windows in the app's own look (Avalonia ships no message box).</summary>
+/// <summary>Modal message windows in the app's own look.</summary>
 internal static class Dialog
 {
     private enum Kind { Info, Error, Question, Danger }
@@ -17,7 +17,7 @@ internal static class Dialog
     public static Task Error(Window owner, string title, string message, string? details = null) =>
         Show(owner, Kind.Error, title, message, details, Strings.Get("Main_Close"), null);
 
-    /// <summary>True when the person pressed the first (confirming) button.</summary>
+    /// <summary>Returns true when the confirming button was pressed.</summary>
     public static Task<bool> Confirm(Window owner, string title, string message, string yes, string? no = null, bool danger = false) =>
         Show(owner, danger ? Kind.Danger : Kind.Question, title, message, null, yes, no ?? Strings.Get("Main_Cancel"));
 
@@ -35,7 +35,6 @@ internal static class Dialog
         };
         TitleBarTheme.Attach(window);
 
-        // Icon in a softly tinted square: amber for information and questions, red for errors and destructive choices.
         var (glyph, brushKey) = kind switch
         {
             Kind.Error => ("Warning", "Danger"),
@@ -56,7 +55,6 @@ internal static class Dialog
         text.Children.Add(new TextBlock { Text = message, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, LineHeight = 20 });
         if (!string.IsNullOrWhiteSpace(details))
         {
-            // Technical detail (which files, which error) sits in its own card so the plain message stays readable.
             var body = new TextBlock { Text = details.Trim(), TextWrapping = TextWrapping.Wrap, FontSize = 12.5, LineHeight = 18 };
             text.Children.Add(new Border
             {
@@ -79,7 +77,6 @@ internal static class Dialog
             cancel.Click += (_, _) => window.Close();
             buttons.Children.Add(cancel);
         }
-        // A plain Close for messages; the colored button is reserved for choices.
         var primaryClass = kind switch { Kind.Danger => "danger", Kind.Question => "primary", _ => "tool" };
         var ok = new Button { Content = primary, Classes = { primaryClass }, IsDefault = true, MinWidth = 88 };
         if (secondary is null) ok.IsCancel = true;

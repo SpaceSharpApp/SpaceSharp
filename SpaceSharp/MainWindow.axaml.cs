@@ -29,8 +29,8 @@ public partial class MainWindow : Window
     private string? _scanRoot;
     private long? _scanExpectedBytes;
     private string _scanMethod = "folder walk";
-    private WalkProgress _mftProgress;   // the file-table scan reports here; the walker has its own counters
-    private bool _building;   // true while Build() fills the combos, so their change handlers stay quiet
+    private WalkProgress _mftProgress;   // MFT scan progress
+    private bool _building;   // suppresses combo change handlers
     private readonly DispatcherTimer _filterTimer = new() { Interval = TimeSpan.FromMilliseconds(250) };
     private FileFilter? _filter;
     private FilterResult? _filterResult;
@@ -63,12 +63,10 @@ public partial class MainWindow : Window
         UpdateNavigation();
         if (IsElevated) Title += "  (Administrator)";
 
-        // Command line: a folder or drive scans right away (also how "Restart as administrator" comes back),
-        // a .sscan file opens, and --compare sets the baseline for the scan that follows.
         Opened += async (_, _) =>
         {
             _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
-            if (App.Args.Scene is { } scene) { await PoseAsync(scene); return; }   // posing a screenshot: no update check either
+            if (App.Args.Scene is { } scene) { await PoseAsync(scene); return; }
             if (App.Args.Mock) LoadMock(MockSystem.Drives[0].Root);
             else if (App.Args.OpenFile is { } openFile) await OpenScanFileAsync(openFile);
             else if (App.Args.ScanPath is { } startPath)
@@ -80,12 +78,11 @@ public partial class MainWindow : Window
             await CheckForUpdatesAsync();
         };
 
-        // Another launch while we're open: bring this window forward and do what its command line asked.
         App.Instance.ArgumentsReceived += args => Dispatcher.UIThread.Post(() => _ = HandleForwardedArgumentsAsync(args));
         App.Instance.Listen();
         if (OperatingSystem.IsWindows() && _settings.ExplorerMenu)
         {
-            try { ExplorerIntegration.Install(Strings.Get("Explorer_ScanWith")); } // keep the entry pointing at this exe
+            try { ExplorerIntegration.Install(Strings.Get("Explorer_ScanWith")); } // keeps the entry pointing at this exe
             catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException) { }
         }
     }
@@ -96,7 +93,7 @@ public partial class MainWindow : Window
     {
         if (WindowState == WindowState.Minimized) WindowState = WindowState.Normal;
         Activate();
-        Topmost = true; Topmost = false; // the reliable way to get in front of the window that launched us
+        Topmost = true; Topmost = false; // Activate alone does not reliably bring the window forward
         var args = CommandLine.Parse(rawArgs);
         if (args.ShowHelp) { await Dialog.Info(this, "SpaceSharp", CommandLine.HelpText.TrimEnd()); return; }
         if (_scanCts is not null) return;
@@ -111,7 +108,7 @@ public partial class MainWindow : Window
     private async Task CheckForUpdatesAsync()
     {
         if (!_settings.CheckForUpdates || !Updater.Instance.IsInstalled) return;
-        await Task.Delay(TimeSpan.FromSeconds(4)); // let the window settle first
+        await Task.Delay(TimeSpan.FromSeconds(4));
         if (await Updater.Instance.CheckAsync() is null) return;
         await UpdateWindow.Show(this);
     }
@@ -126,7 +123,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private bool _declinedElevation;   // one "no" to the UAC prompt per session is enough
+    private bool _declinedElevation;   // ask once per session
 
     private void ShowAccessBar(long deniedFolders)
     {
@@ -135,10 +132,7 @@ public partial class MainWindow : Window
         if (show) AccessText.Text = deniedFolders == 1 ? Strings.Get("Access_DeniedOne") : Strings.Format("Access_DeniedMany", deniedFolders);
     }
 
-    /// <summary>
-    /// For the access-denied notice: protected folders the normal scan could not enter need the whole app elevated,
-    /// so this relaunches as administrator with the same drive and hands the instance over.
-    /// </summary>
+    /// <summary>Relaunches the app as administrator with the same scan root.</summary>
     private void RestartElevated_Click(object? sender, RoutedEventArgs e)
     {
         if (!OperatingSystem.IsWindows() || Environment.ProcessPath is not { } exe) return;
@@ -151,13 +145,13 @@ public partial class MainWindow : Window
         }
         catch (System.ComponentModel.Win32Exception)
         {
-            if (App.Instance.TryClaim()) App.Instance.Listen(); // UAC cancelled: keep running and take the instance back
+            if (App.Instance.TryClaim()) App.Instance.Listen(); // UAC cancelled: reclaim the instance
         }
     }
 
     private void CloseAccessBar_Click(object? sender, RoutedEventArgs e) => AccessBar.IsVisible = false;
 
-    /// <summary>Every piece of text, from the same strings as the WPF app (2.2).</summary>
+    /// <summary>Applies the localized strings to the window.</summary>
     private void Build()
     {
         _building = true;
@@ -213,14 +207,10 @@ public partial class MainWindow : Window
         BuildRecentScans();
     }
 
-    private readonly List<ColorScheme?> _paletteItems = new();   // one per combo row; null for a group heading
+    private readonly List<ColorScheme?> _paletteItems = new();   // null for a group heading
 
     private sealed record PaletteRow(ColorScheme? Scheme, string Text);
 
-    /// <summary>
-    /// The palette picker as in the WPF app (2.2): a strip of eight swatches and the name per row, under group headings (this theme's,
-    /// the other theme's, custom). Rows are data with a template, so the closed box and the list each draw their own.
-    /// </summary>
     private void FillPalettes()
     {
         bool dark = App.IsDark;
@@ -256,7 +246,6 @@ public partial class MainWindow : Window
         Treemap.Scheme = current;
     }
 
-    /// <summary>Group headings in the palette list are rows that cannot be picked.</summary>
     private void PaletteCombo_ContainerPrepared(object? sender, ContainerPreparedEventArgs e)
     {
         if (e.Container is not ComboBoxItem item) return;
@@ -265,12 +254,11 @@ public partial class MainWindow : Window
         item.Classes.Set("heading", heading);
     }
 
-    // ------------------------------------------------------------------ look (Settings › Treemap, read from settings.json)
+    // ------------------------------------------------------------------ look
 
-    /// <summary>Everything from the settings file, applied to this window: the map's look, the palette, the panel. Settings calls it after every change.</summary>
     private int _dimDepth;
 
-    /// <summary>Darkens the whole window while a window is open over it; nested windows keep it dark until the last one closes.</summary>
+    /// <summary>Dims the window while a dialog is open over it; nested calls are counted.</summary>
     public void Dim(bool on)
     {
         _dimDepth = Math.Max(0, _dimDepth + (on ? 1 : -1));
@@ -293,10 +281,6 @@ public partial class MainWindow : Window
         if (_dimDepth > 0) { DimOverlay.Opacity = Math.Clamp(_settings.DialogDim, 0, 90) / 100.0; DimOverlay.IsVisible = DimOverlay.Opacity > 0; }
     }
 
-    /// <summary>
-    /// The two drag handles in the side panel: its right edge sets the panel's width, the line under the drive
-    /// list sets that list's height. Both land in the settings and are applied again by ApplyLook.
-    /// </summary>
     private void HookResizeHandles()
     {
         Drag(PanelResizeHandle, horizontal: true, () => SidePanel.Bounds.Width, v =>
@@ -337,7 +321,7 @@ public partial class MainWindow : Window
         RecolorFilterSwatches();
     }
 
-    /// <summary>The map options from the settings file, the same keys the WPF app (2.2) writes, so one file serves both windows and the Settings preview.</summary>
+    /// <summary>Applies the map options from the settings to a treemap control.</summary>
     internal static void ApplyLook(TreemapControl map, AppSettings s, bool dark)
     {
         map.Scheme = Palette.Find(s.PaletteFor(dark), dark);
@@ -400,7 +384,6 @@ public partial class MainWindow : Window
         }
     }
 
-    /// <summary>One row of the Drives list; the pretend PC and the real drives both come through here.</summary>
     private void AddDriveRow(string rootPath, string name, string? volumeLabel, DriveKind kind, string format, long total, long free)
     {
         string letter = OperatingSystem.IsWindows() || _mock ? name.TrimEnd(':') : name;
@@ -409,7 +392,6 @@ public partial class MainWindow : Window
         string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {format}" : format;
         double fraction = (double)(total - free) / total;
 
-        // The letter tile: the drive letter in a rounded square (dashed for drives that plug in), the kind's icon tucked in its corner.
         var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
         var square = new Avalonia.Controls.Shapes.Rectangle { Width = 40, Height = 40, RadiusX = 8, RadiusY = 8, StrokeThickness = 1, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top };
         square.Bind(Avalonia.Controls.Shapes.Shape.FillProperty, this.GetResourceObservable("Window"));
@@ -420,7 +402,6 @@ public partial class MainWindow : Window
         badge.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
         tile.Children.Add(square); tile.Children.Add(letterText); tile.Children.Add(badge);
 
-        // The name and the kind on top, the bar, then used-of-total and free under it.
         var top = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
         var nameText = new TextBlock { Text = title, FontWeight = FontWeight.SemiBold, FontSize = 14, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Bottom };
         var kindLabel = new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom };
@@ -445,15 +426,11 @@ public partial class MainWindow : Window
         DriveList.Children.Add(button);
     }
 
-    // ------------------------------------------------------------------ the pretend PC
+    // ------------------------------------------------------------------ mock system
 
     private bool _mock;
 
-    /// <summary>
-    /// Shows the sample drive from the screenshot mockup as if it had just been scanned, compared with a scan from
-    /// yesterday, and swaps the Drives list for the pretend PC's drives. Rescans and drive clicks stay on the pretend
-    /// PC until the app is restarted; nothing on screen says so, so the screenshots read as the real thing. --mock on the command line, or Ctrl+Shift+Alt+M.
-    /// </summary>
+    /// <summary>Opens a mock drive as a freshly compared scan (--mock or Ctrl+Shift+Alt+M).</summary>
     private void LoadMock(string rootPath)
     {
         if (_scanCts is not null) return;
@@ -462,7 +439,7 @@ public partial class MainWindow : Window
         ShowLoadedScan(root, info, baseline, Strings.Get("Status_OpenedVerb"));
     }
 
-    /// <summary>Switches to the pretend PC without opening a scan: its drives in the list, its saved scans on the start screen.</summary>
+    /// <summary>Switches the drives and recent scans to the mock system.</summary>
     private void EnterMock()
     {
         if (_mock) return;
@@ -471,7 +448,6 @@ public partial class MainWindow : Window
         BuildRecentScans();
     }
 
-    /// <summary>The amber-on-control bar the drive rows and the top lists draw: the fraction as a share of the width.</summary>
     private Grid CapacityBar(double fraction, double height, string? fillBrush = null)
     {
         fraction = Math.Clamp(fraction, 0, 1);
@@ -491,7 +467,7 @@ public partial class MainWindow : Window
 
     private async Task ScanAsync(string path)
     {
-        if (_scanCts is not null) return;   // one scan at a time
+        if (_scanCts is not null) return;
         if (_mock) { LoadMock(path); return; }
         _scanCts = new CancellationTokenSource();
         _scanRoot = path;
@@ -505,11 +481,11 @@ public partial class MainWindow : Window
         catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException) { }
 
         ScanCard.IsVisible = true;
-        ApplyView();   // off the start screen; the remembered view shows the scan as it comes
+        ApplyView();
         if (InsightsShowing) RefreshInsights();
         ScanTitle.Text = Strings.Format("Scan_Title", DisplayName(path));
         bool mft = OperatingSystem.IsWindows() && _settings.FastNtfsScan && _scanExpectedBytes is not null && FileTableSupported(path);
-        // Not allowed to open the volume ourselves: an elevated helper reads the file table and hands the tree back (Windows).
+        // Without elevation, a helper process reads the file table.
         bool elevate = !mft && OperatingSystem.IsWindows() && _settings.FastNtfsScan && _scanExpectedBytes is not null && !IsElevated && !_declinedElevation && IsNtfs(path);
         if (elevate) mft = true;
         _scanMethod = mft ? "MFT" : "folder walk";
@@ -554,7 +530,6 @@ public partial class MainWindow : Window
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
                 {
-                    // The file table could not be read after all: the folder walk takes over, as in the WPF app (2.2).
                     _scanMethod = "folder walk";
                     ScanSubtitle.Text = (_scanExpectedBytes is { } b3 ? Strings.Format("Scan_Used", SizeFormatter.Format(b3)) + " · " : string.Empty) + Strings.Get("Scan_MethodWalk") + " · " + ex.Message;
                     root = await _scanner.ScanAsync(path, options, _scanCts.Token);
@@ -587,7 +562,7 @@ public partial class MainWindow : Window
             _scanCts.Dispose();
             _scanCts = null;
             UpdateNavigation();
-            ApplyView();   // back to the start screen when a first scan was cancelled or failed
+            ApplyView();
         }
     }
 
@@ -597,7 +572,7 @@ public partial class MainWindow : Window
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private static bool IsNtfs(string path) => MftScanner.IsNtfsDrive(path);
 
-    /// <summary>The file table read by an elevated helper process (a UAC prompt), its progress mirrored here.</summary>
+    /// <summary>Reads the file table through an elevated helper process.</summary>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private Task<FsNode> ScanElevatedAsync(string path, WalkOptions options, CancellationToken token) => Task.Run(() =>
     {
@@ -606,7 +581,7 @@ public partial class MainWindow : Window
         return tree;
     }, token);
 
-    /// <summary>The NTFS file table read directly (administrator rights), the same scanner as the WPF app's (2.2).</summary>
+    /// <summary>Reads the NTFS file table directly; requires administrator rights.</summary>
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     private Task<FsNode> ScanWithFileTableAsync(string path, WalkOptions options, CancellationToken token) => Task.Run(() =>
     {
@@ -616,7 +591,7 @@ public partial class MainWindow : Window
         return tree;
     }, token);
 
-    /// <summary>"C:" for a drive root, the folder name otherwise.</summary>
+    /// <summary>The drive letter or folder name of a path.</summary>
     private static string DisplayName(string path)
     {
         string trimmed = path.TrimEnd('\\', '/');
@@ -634,8 +609,7 @@ public partial class MainWindow : Window
         ScanElapsed.Text = _scanClock.Elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
         bool handover = OperatingSystem.IsWindows() && p.CurrentPath == ElevatedScan.HandoverMarker;
         bool building = _scanMethod == "MFT" && (p.CurrentPath == MftBuildingMarker || handover);
-        // Files per second is the reading rate: once the table is read it is frozen at what the read achieved, instead
-        // of sinking while the tree is built and handed over.
+        // rate is frozen once the build stage starts
         if (!building) _readRate = p.Files / seconds;
         double rate = _readRate;
         ScanRate.Text = rate >= 1000 ? Strings.Format("Scan_RateK", rate / 1000) : Strings.Format("Scan_Rate", rate);
@@ -648,15 +622,14 @@ public partial class MainWindow : Window
                 _buildStageShown = true;
                 SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
                 SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: true, done: false);
-                StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);   // how long the read took
+                StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
             }
-            // Each stage's detail is kept short enough for its column: the counts while building, the handover alone after.
             StageBuildDetail.Text = handover ? Strings.Get("Scan_Handover") : soFar;
             if (handover) ScanPath.Text = string.Empty;
             ScanPercent.Text = string.Empty;
             return;
         }
-        StageFindDetail.Text = Strings.Format("Tip_FilesInGroup", p.Files);   // the folder count would not fit the column
+        StageFindDetail.Text = Strings.Format("Tip_FilesInGroup", p.Files);
         if (_scanExpectedBytes is { } expected && expected > 0)
         {
             double fraction = Math.Clamp((double)p.Bytes / expected, 0, 1);
@@ -665,7 +638,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            // No total to fill against: the bar sweeps.
+            // indeterminate: sweep
             double w = StageFindBar.Bounds.Width;
             double t = _scanClock.Elapsed.TotalSeconds % 1.6 / 1.6;
             StageFindFill.Width = Math.Max(6, w * 0.3);
@@ -673,12 +646,11 @@ public partial class MainWindow : Window
         }
     }
 
-    private bool _buildStageShown;   // the Build stage is switched on once per scan, not on every tick
-    private double _readRate;        // files per second while reading; held once the build starts
+    private bool _buildStageShown;
+    private double _readRate;        // files per second
 
     private static string MftBuildingMarker => OperatingSystem.IsWindows() ? MftScanner.BuildingMarker : string.Empty;
 
-    /// <summary>A stage's icon and bar: amber loader while running, a check when done, a dim circle while waiting.</summary>
     private void SetStage(Controls.Icon icon, Border fill, Grid bar, bool running, bool done)
     {
         icon.Glyph = Icons.Get(done ? "Check" : running ? "Loader" : "Circle");
@@ -705,7 +677,6 @@ public partial class MainWindow : Window
 
     // ------------------------------------------------------------------ path row and status
 
-    /// <summary>Up, Rescan, the zoom buttons and the path row, after anything that moves the map or the scan.</summary>
     private void UpdateNavigation()
     {
         bool scanning = _scanCts is not null;
@@ -767,7 +738,6 @@ public partial class MainWindow : Window
 
     private ContextMenu BuildMenu()
     {
-        // Each row as in the WPF app (2.2): an icon in the dim tone, the label, the key at the right.
         MenuItem Item(string key, string? gesture, Action action, string? icon = null, string? iconKey = "TextDim")
         {
             var item = new MenuItem { Header = Strings.Get(key), InputGesture = null };
@@ -776,7 +746,6 @@ public partial class MainWindow : Window
             item.Click += (_, _) => action();
             return item;
         }
-        // The first row: Inspect, taller and on the control tone, with the clicked item's name and size as a sub-line.
         var inspectHeader = new StackPanel();
         _menuInspectTitle = new TextBlock { Text = Strings.Get("Menu_Inspect"), FontWeight = FontWeight.SemiBold };
         _menuInspectSub = new TextBlock { FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 260, Classes = { "dim" } };
@@ -790,7 +759,7 @@ public partial class MainWindow : Window
         _menuOpen = Item("Main_Open", "Enter", OpenSelected, "Open");
         _menuReveal = Item("Main_ShowInExplorer", null, RevealSelected, "ScanFolder");
         _menuProperties = Item("Main_Properties", "Alt+Enter", ShowProperties, "Properties");
-        _menuProperties.IsVisible = OperatingSystem.IsWindows();   // the shell's Properties dialog; the Finder and file managers have no equivalent to call
+        _menuProperties.IsVisible = OperatingSystem.IsWindows();
         _menuCopy = Item("Main_CopyPath", "Ctrl+C", () => CopyToClipboard(Treemap.SelectedNode?.FullPath), "Copy");
         _menuCopyName = Item("Main_CopyName", null, () => CopyToClipboard(Treemap.SelectedNode?.Name), "Copy");
         _menuFilterType = Item("Main_ShowOnlyThisFile", null, () => { if (Treemap.SelectedNode is { Extension.Length: > 0 } n) FilterBox.Text = "*" + n.Extension; }, "Filter");
@@ -838,14 +807,11 @@ public partial class MainWindow : Window
             bool real = node is { IsReal: true };
             bool scanning = _scanCts is not null;
             int count = Treemap.SelectedNodes.Count;
-            // a merged group ("78 items") or the free-space box is not a thing to inspect; only real files and folders are
             _menuInspect.IsEnabled = Treemap.SelectedNodes.Any(n => n.IsReal) || (Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is not null);
             _menuInspectTitle.Text = count > 1 ? Strings.Format("Menu_InspectMany", count) : Strings.Get("Menu_Inspect");
-            // The sub-line under Inspect says what the menu is about: the item, its size and what it is.
-            // the reason for a disabled row wraps onto two lines; an item's name, size and kind stays on one and trims
             _menuInspectSub.TextWrapping = !_menuInspect.IsEnabled && node is not null ? TextWrapping.Wrap : TextWrapping.NoWrap;
             if (!_menuInspect.IsEnabled && node is not null)
-                _menuInspectSub.Text = Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");   // say why, rather than a gray row with no reason
+                _menuInspectSub.Text = Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");
             else if (count > 1) _menuInspectSub.Text = SizeFormatter.Format(Treemap.SelectedNodes.Sum(n => n.SizeFor(Treemap.SizeMode)));
             else if (node is not null)
             {
@@ -870,10 +836,9 @@ public partial class MainWindow : Window
         return menu;
     }
 
-    /// <summary>The Inspect window for the selection (Ctrl+I); a breadcrumb or a folder row in it flies the map there.</summary>
     private void ShowInspect()
     {
-        var nodes = Treemap.SelectedNodes.Where(n => n.IsReal).ToList();   // not merged groups or the free-space box
+        var nodes = Treemap.SelectedNodes.Where(n => n.IsReal).ToList();
         if (nodes.Count == 0 && Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is { } focus) nodes.Add(focus);
         if (nodes.Count == 0) return;
         _ = new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, n => { ShowView(insights: false); Treemap.FocusOn(n); }).ShowModal(this);
@@ -886,7 +851,6 @@ public partial class MainWindow : Window
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException) { StatusText.Text = ex.Message; }
     }
 
-    /// <summary>Alt+Enter on Windows: the shell's Properties dialog for the selected item.</summary>
     private void ShowProperties()
     {
         if (!OperatingSystem.IsWindows()) return;
@@ -906,7 +870,6 @@ public partial class MainWindow : Window
         await ClipboardText.SetAsync(Clipboard, text);
     }
 
-    /// <summary>Moves items to the trash in one go and updates the map, the lists and the drives; the same rules as the WPF app (2.2).</summary>
     private async Task DeleteNodes(IReadOnlyList<FsNode> nodes)
     {
         if (_scanCts is not null) return;
@@ -930,9 +893,7 @@ public partial class MainWindow : Window
             if (!await Dialog.Confirm(this, Strings.Get("Delete_Title"), Strings.Format("Delete_Question", what, list), Strings.Get("Delete_Title"), danger: true)) return;
         }
 
-        // The map is a snapshot. A file that is not what the scan saw (another size or write time, so edited or
-        // replaced since, or a different file now at that path) is left alone and named, instead of being sent on the
-        // strength of a path alone. Folders are sent as they are: their contents were never a single snapshot.
+        // Files changed since the scan are skipped and reported.
         var changed = items.Where(n => !n.IsDirectory && !MatchesScan(n)).ToList();
         var toSend = items.Except(changed).ToList();
         string? error = null;
@@ -970,26 +931,21 @@ public partial class MainWindow : Window
         StatusText.Text = removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size);
     }
 
-    /// <summary>
-    /// True when the file on disk still has the size and last-write time the scan recorded. Not a guarantee (the
-    /// file can change between this check and the shell call, which Windows gives no way to close), but it
-    /// catches a stale scan and a path that now names something else.
-    /// </summary>
+    /// <summary>True when the file on disk still matches the size and write time the scan recorded.</summary>
     private static bool MatchesScan(FsNode node)
     {
         try
         {
             var info = new FileInfo(node.FullPath);
-            if (!info.Exists) return true;   // nothing there to delete; TrySend treats it as already gone
+            if (!info.Exists) return true;   // TrySend treats it as already gone
             long size = node.IsHardLinkDuplicate ? node.LinkedSize : node.Size;
             if (info.Length != size) return false;
-            // Write times are compared only when the scan had one; a tick of tolerance absorbs FAT-style rounding on
-            // scans loaded from older files.
+            // 2 s tolerance for FAT-style timestamp rounding
             return node.LastWriteUtc == DateTime.MinValue || Math.Abs((info.LastWriteTimeUtc - node.LastWriteUtc).Ticks) <= TimeSpan.TicksPerSecond * 2;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
         {
-            return true;   // let the shell report what is wrong with it
+            return true;   // let the shell report the error
         }
     }
 
@@ -1013,7 +969,6 @@ public partial class MainWindow : Window
         Treemap.SelectMany(_filterResult.Matches.Where(n => !n.IsDirectory && _filter.Matches(n)));
     }
 
-    /// <summary>Evaluates the filter text over the whole tree and dims everything that does not match.</summary>
     private void ApplyFilter()
     {
         string text = (FilterBox.Text ?? string.Empty).Trim();
@@ -1060,11 +1015,10 @@ public partial class MainWindow : Window
         };
         var rows = TopLists.Build(_root, _listKind, Treemap.SizeMode, Treemap.Scheme).Take(60).ToList();
         if (rows.Count == 0) return;
-        const string columns = "Auto,*,96,Auto";   // swatch, name and detail, bar with its share, size
+        const string columns = "Auto,*,96,Auto";   // swatch, name, share, size
         bool colored = _listKind != TopListKind.Folders;
 
-        // The legend: one square per color the rows use, most rows first, in three aligned columns. The Types tab
-        // names its category on every row already, so it has none.
+        // legend (none for Types, whose rows already name the category)
         var legendKeys = _listKind == TopListKind.Types ? new List<(string Key, IBrush Swatch)>()
             : rows.Where(r => r.LegendKey is not null).GroupBy(r => r.LegendKey!).OrderByDescending(g => g.Count()).Select(g => (Key: g.Key, g.First().Swatch)).ToList();
         if (legendKeys.Count > 0)
@@ -1072,7 +1026,6 @@ public partial class MainWindow : Window
             var legend = new UniformGrid { Columns = Math.Min(3, legendKeys.Count), Margin = new Thickness(8, 0, 8, 10) };
             foreach (var (key, brush) in legendKeys)
             {
-                // a grid, not a stack panel: the label gets the cell's remaining width and trims inside it instead of running under the next cell
                 var item = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 6, Margin = new Thickness(0, 0, 10, 3) };
                 var label = new TextBlock { Text = Strings.Get(key), Classes = { "dim" }, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
                 Grid.SetColumn(label, 1);
@@ -1084,7 +1037,6 @@ public partial class MainWindow : Window
             TopList.Children.Add(legend);
         }
 
-        // The column headings over a hairline.
         var head = new Grid { ColumnDefinitions = new ColumnDefinitions(columns), ColumnSpacing = 12, Margin = new Thickness(8, 0, 8, 4) };
         string nameHead = _listKind switch { TopListKind.Files => "List_HeadFile", TopListKind.Folders => "List_HeadFolder", TopListKind.Types => "List_HeadType", _ => "List_HeadChange" };
         var h1 = ColumnHead(Strings.Get(nameHead)); Grid.SetColumn(h1, 1);
@@ -1125,11 +1077,9 @@ public partial class MainWindow : Window
         }
     }
 
-    /// <summary>A small, dim, uppercase column heading for the lists.</summary>
     private static TextBlock ColumnHead(string text) =>
         new() { Text = text.ToUpperInvariant(), Classes = { "dim" }, FontSize = 11, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.4, TextTrimming = TextTrimming.CharacterEllipsis };
 
-    /// <summary>A share of the scan as a percentage: one decimal, "<0.1%" below that.</summary>
     private static string ShareText(double share)
     {
         double pct = share * 100;
@@ -1191,7 +1141,6 @@ public partial class MainWindow : Window
     private void Settings_Click(object? sender, RoutedEventArgs e) => _ = new SettingsWindow(this).ShowModal(this);
     private void About_Click(object? sender, RoutedEventArgs e) => _ = new AboutWindow().ShowModal(this);
 
-    /// <summary>Starts a fresh copy and closes this one (after a language change).</summary>
     public void RestartApp()
     {
         if (Environment.ProcessPath is not { } exe) return;
@@ -1233,7 +1182,7 @@ public partial class MainWindow : Window
             case Key.Add or Key.OemPlus when !FilterHasFocus: Treemap.ZoomBy(1.25); e.Handled = true; break;
             case Key.Subtract or Key.OemMinus when !FilterHasFocus: Treemap.ZoomBy(1 / 1.25); e.Handled = true; break;
             case Key.F5: Rescan_Click(null, new RoutedEventArgs()); e.Handled = true; break;
-            // hidden, for trying things out: the update prompt with nothing behind it, and the pretend PC
+            // hidden debug shortcuts
             case Key.U when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): _ = UpdateWindow.ShowPreview(this); e.Handled = true; break;
             case Key.M when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): LoadMock(MockSystem.Drives[0].Root); e.Handled = true; break;
             case Key.I when e.KeyModifiers.HasFlag(KeyModifiers.Control): ShowInspect(); e.Handled = true; break;

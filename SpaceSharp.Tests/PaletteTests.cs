@@ -15,7 +15,7 @@ public class PaletteTests
     [Fact]
     public void AShortCategoryListIsPaddedToTheFullSet()
     {
-        // Eight colors name the first seven categories and Other, as palettes did before there were fourteen.
+        // legacy eight-color palette: seven categories plus Other
         var given = Enumerable.Range(0, 8).Select(i => Avalonia.Media.Color.FromRgb((byte)i, 0, 0)).ToArray();
         var scheme = new ColorScheme("test", d => Avalonia.Media.Colors.Gray, d => Avalonia.Media.Colors.Silver, given, d => Avalonia.Media.Colors.Gray);
         var categories = scheme.Categories.ToDictionary(c => c.Category, c => (Avalonia.Media.ISolidColorBrush)c.Brush);

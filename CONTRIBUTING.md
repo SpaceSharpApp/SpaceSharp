@@ -35,6 +35,9 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 
 ## Releasing (maintainer)
 
+Versions are `major.minor.patch`. Fixes and small improvements ship as often as they are ready and bump the patch number (2.4.2, 2.4.3, 2.4.17); there is no upper limit and no reason to hold a fix back for a bigger release. The minor bumps for a release with new features or changed behavior; the major only when the app changes shape (new file format, dropped platform, a different scanner).
+
+
 1. Bump `<Version>` in `SpaceSharp/SpaceSharp.csproj` and `SpaceSharp.Core/SpaceSharp.Core.csproj`, set the README's version badge to `<version>`, and move the "Unreleased" changelog entries under a `## <version>` heading.
 2. Run `.\installer\release.ps1 -Sign <thumbprint> -Upload` on the PC with the code-signing certificate. It runs the tests, builds the portable exes, the installers and the update packages into `Releases\`, signs every file, checks the signatures and creates the GitHub release as a draft with the changelog section as its notes.
 3. Read the draft on GitHub and publish it, then tag the released commit with the bare version number (`git tag <version> && git push origin <version>`).

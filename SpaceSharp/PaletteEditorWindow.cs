@@ -12,14 +12,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The palette creator: one list with a row per color. Twelve folder colors, the fourteen file types, and the
-/// twelve file colors when they are set by hand. Every row shows the color, which sample folder uses it, a hex box
-/// you can type or paste into, whether labels read on it, and a sample drawn the way the map draws it; a button
-/// at the row's end opens a picker with sliders and suggested shades. "Fill folders" makes all twelve from
-/// Folder 1 in one of four spreads, and the sample drive on the right redraws as you go. Save writes a custom
-/// palette file and selects it.
-/// </summary>
+/// <summary>The custom palette editor.</summary>
 public sealed class PaletteEditorWindow : Window
 {
     private enum Target { Folder, File, Category }
@@ -33,7 +26,7 @@ public sealed class PaletteEditorWindow : Window
     private static readonly FontFamily Mono = new("Cascadia Mono, Consolas, Menlo, monospace");
     private static readonly FileCategory[] Categories = Enum.GetValues<FileCategory>();
 
-    // the window's parts
+    // window parts
     private readonly StackPanel _list = new() { Margin = new Thickness(20, 0, 20, 12) };
     private readonly TreemapControl _preview = new() { IsHitTestVisible = false, Focusable = false };
     private readonly TextBlock _checks = new() { VerticalAlignment = VerticalAlignment.Center, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis };
@@ -46,7 +39,6 @@ public sealed class PaletteEditorWindow : Window
     private TextBlock _tintValue = null!;
     private Button _filesOwnButton = null!;
 
-    /// <summary>One row of the list; the picker popover edits the same target.</summary>
     private sealed class Row
     {
         public Target Target; public int Index;
@@ -58,7 +50,7 @@ public sealed class PaletteEditorWindow : Window
     private readonly List<Row> _rows = new();
     private readonly string[] _sampleFolders;
 
-    // the picker popover, one for all rows
+    // picker popover, shared by all rows
     private readonly Flyout _picker = new() { Placement = PlacementMode.BottomEdgeAlignedRight, ShowMode = FlyoutShowMode.Transient };
     private Row? _editing;
     private Border _pickerSwatch = null!;
@@ -68,7 +60,7 @@ public sealed class PaletteEditorWindow : Window
     private readonly List<Button> _suggestions = new();
     private Button _resetCategory = null!;
 
-    /// <summary>True after Save, so the caller can refresh its palette list.</summary>
+    /// <summary>True after a successful Save.</summary>
     public bool Saved { get; private set; }
 
     public PaletteEditorWindow(MainWindow? main, PaletteDraft draft)
@@ -80,7 +72,7 @@ public sealed class PaletteEditorWindow : Window
         TitleBarTheme.Attach(this);
         _main = main;
         _draft = draft;
-        // Twelve folder colors, always: a palette with fewer cycles them, and the editor shows the cycle.
+        // Pad or trim to exactly FolderCount folder colors.
         if (_draft.Folders.Count == 0) _draft.Folders.Add(Colors.Gray);
         int given = _draft.Folders.Count;
         while (_draft.Folders.Count < PaletteDraft.FolderCount) _draft.Folders.Add(_draft.Folders[_draft.Folders.Count % given]);
@@ -107,13 +99,12 @@ public sealed class PaletteEditorWindow : Window
         RefreshAll();
     }
 
-    // ------------------------------------------------------------------ the window
+    // ------------------------------------------------------------------ window
 
     private Control BuildWindow()
     {
         var root = new DockPanel();
 
-        // footer: the checks on the left, the ways out on the right
         var footer = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12) };
         footer.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
         footer.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
@@ -135,7 +126,6 @@ public sealed class PaletteEditorWindow : Window
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("640,*") };
 
-        // the editor: name and theme, the toolbar, the list
         var left = new Border { BorderThickness = new Thickness(0, 0, 1, 0), Classes = { "frame" } };
         var editor = new DockPanel();
         var head = new DockPanel { Margin = new Thickness(20, 16, 20, 10) };
@@ -163,7 +153,6 @@ public sealed class PaletteEditorWindow : Window
         left.Child = editor;
         grid.Children.Add(left);
 
-        // the preview: the sample drive in the palette being made, in any color mode
         var right = new DockPanel();
         var phead = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(16, 9), Classes = { "frame" } };
         var headRow = new DockPanel();
@@ -191,7 +180,6 @@ public sealed class PaletteEditorWindow : Window
         return root;
     }
 
-    /// <summary>"Fill folders" (a menu of the four spreads, Shuffle and Paste), and "Files" (a flyout with the lift slider and the own-colors switch).</summary>
     private Control BuildToolbar()
     {
         var bar = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Margin = new Thickness(20, 0, 20, 10) };
@@ -256,10 +244,10 @@ public sealed class PaletteEditorWindow : Window
         return bar;
     }
 
-    /// <summary>The app's flyout presenter is transparent, so each flyout draws its own card (as the filter rail does).</summary>
+    /// <summary>Wraps flyout content in a card, since the app's flyout presenter is transparent.</summary>
     private static Border FlyoutCard(Control content)
     {
-        // painted from the look directly: a popup has no sure path to the window's theme resources
+        // popups cannot reliably resolve the window's theme resources
         var look = App.Look;
         return new Border
         {
@@ -277,7 +265,7 @@ public sealed class PaletteEditorWindow : Window
         return s;
     }
 
-    /// <summary>Replaces the folder colors with the hex codes on the clipboard, in order; fewer than twelve cycle.</summary>
+    /// <summary>Replaces the folder colors with hex codes from the clipboard.</summary>
     private async Task PasteHexesAsync()
     {
         string text;
@@ -291,7 +279,7 @@ public sealed class PaletteEditorWindow : Window
         RefreshAll();
     }
 
-    // ------------------------------------------------------------------ the list
+    // ------------------------------------------------------------------ list
 
     private void BuildList()
     {
@@ -345,7 +333,6 @@ public sealed class PaletteEditorWindow : Window
         DockPanel.SetDock(row.Tag, Dock.Right);
         name.Children.Add(row.Tag);
         var label = new TextBlock { VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
-        // the folder's number, and dimmed beside it the sample folder that wears this color in the preview
         string eg = target == Target.Folder && index < _sampleFolders.Length ? _sampleFolders[index].Split(" · ")[0] : string.Empty;
         label.Inlines!.Add(new Avalonia.Controls.Documents.Run(target switch
         {
@@ -405,7 +392,6 @@ public sealed class PaletteEditorWindow : Window
         _ => _draft.Category(row.Index)
     };
 
-    /// <summary>Puts a color on a row's target and refreshes everything that shows it.</summary>
     private void SetColor(Row row, Color color, bool fromHex)
     {
         switch (row.Target)
@@ -416,7 +402,7 @@ public sealed class PaletteEditorWindow : Window
         }
         RefreshRow(row, skipHex: fromHex);
         if (_editing == row) RefreshPicker(skipSliders: !fromHex);
-        if (row.Target == Target.Folder) foreach (var other in _rows) if (other != row && other.Target != Target.Folder) RefreshRow(other);   // files and derived types follow the folders
+        if (row.Target == Target.Folder) foreach (var other in _rows) if (other != row && other.Target != Target.Folder) RefreshRow(other);   // derived colors follow the folders
         RefreshPreview();
         RefreshChecks();
     }
@@ -454,7 +440,7 @@ public sealed class PaletteEditorWindow : Window
         }
     }
 
-    // ------------------------------------------------------------------ the picker popover
+    // ------------------------------------------------------------------ picker popover
 
     private Control BuildPicker()
     {
@@ -540,7 +526,7 @@ public sealed class PaletteEditorWindow : Window
         _pickerCheck.Text = Strings.Format(contrast >= 4.5 ? "PaletteEd_LabelOk" : "PaletteEd_LabelLow", Strings.Get(dark ? "PaletteEd_DarkText" : "PaletteEd_LightText"), contrast);
         _pickerCheck.Classes.Set("danger", contrast < 4.5);
         _pickerCheck.Classes.Set("dim", contrast >= 4.5);
-        // suggestions: the same hue, two shades darker and two lighter
+        // suggestions: same hue, two darker and two lighter
         var (hh, ss, ll) = Palette.ToHsl(color);
         var steps = new[] { -0.22, -0.11, 0.11, 0.22 };
         for (int i = 0; i < _suggestions.Count; i++)
@@ -551,7 +537,7 @@ public sealed class PaletteEditorWindow : Window
         }
     }
 
-    // ------------------------------------------------------------------ refreshing what shows the draft
+    // ------------------------------------------------------------------ refresh
 
     private void RefreshAll()
     {
@@ -593,7 +579,7 @@ public sealed class PaletteEditorWindow : Window
         _checks.Classes.Set("dim", !warn);
     }
 
-    // ------------------------------------------------------------------ the preview
+    // ------------------------------------------------------------------ preview
 
     private FsNode? _previewSelected;
 
@@ -617,7 +603,7 @@ public sealed class PaletteEditorWindow : Window
         foreach (var (m, b) in _modeButtons) b.Classes.Set("active", m == _mode);
     }
 
-    // ------------------------------------------------------------------ out
+    // ------------------------------------------------------------------ save and close
 
     private async void Export_Click(object? sender, RoutedEventArgs e)
     {
@@ -629,7 +615,7 @@ public sealed class PaletteEditorWindow : Window
     private async void Save_Click(object? sender, RoutedEventArgs e)
     {
         if (_draft.Name.Length == 0) return;
-        // A new palette with a built-in's name would hide it in the list; a custom one of that name is what Save replaces.
+        // A custom palette may not shadow a built-in name.
         var clash = Palette.Schemes.FirstOrDefault(s => string.Equals(s.Name, _draft.Name, StringComparison.OrdinalIgnoreCase));
         if (clash is not null && !clash.IsCustom)
         {

@@ -4,10 +4,7 @@ using Microsoft.Win32;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// "Scan with SpaceSharp" in Explorer's right-click menu for folders, the folder background and drives.
-/// Written under HKEY_CURRENT_USER, so it needs no administrator rights and affects only this user.
-/// </summary>
+/// <summary>Explorer context menu entry for folders, folder backgrounds and drives, under HKEY_CURRENT_USER.</summary>
 [SupportedOSPlatform("windows")]
 public static class ExplorerIntegration
 {
@@ -21,7 +18,7 @@ public static class ExplorerIntegration
         return cmd is not null && Environment.ProcessPath is { } exe && cmd.Contains(exe, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>Adds or refreshes the entries so they point at this exe (the portable exe may have moved).</summary>
+    /// <summary>Adds or refreshes the entries to point at this exe.</summary>
     public static void Install(string label)
     {
         if (Environment.ProcessPath is not { } exe) return;
@@ -31,7 +28,7 @@ public static class ExplorerIntegration
             key.SetValue(null, label);
             key.SetValue("Icon", $"\"{exe}\",0");
             using var command = key.CreateSubKey("command");
-            // %V is the folder or drive that was right-clicked (or whose background was), quoted for spaces.
+            // %V is the background folder
             command.SetValue(null, root.Contains("Background") ? $"\"{exe}\" \"%V\"" : $"\"{exe}\" \"%1\"");
         }
     }

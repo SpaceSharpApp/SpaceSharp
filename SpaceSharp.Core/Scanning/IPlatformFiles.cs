@@ -1,29 +1,21 @@
 namespace SpaceSharp.Scanning;
 
-/// <summary>
-/// What the folder walk needs from the operating system beyond System.IO: the cluster size of a volume (so
-/// "size on disk" rounds the way the OS does), the compressed size of a file, and hard-link detection. The
-/// Windows app answers with Win32; anything else gets <see cref="Plain"/>, which rounds to 4 KB clusters and
-/// treats every file as its own.
-/// </summary>
+/// <summary>Platform file services beyond System.IO; <see cref="Plain"/> is the portable fallback.</summary>
 public interface IPlatformFiles
 {
     /// <summary>Bytes per allocation unit on the volume holding the path.</summary>
     long ClusterSize(string path);
 
-    /// <summary>The bytes a compressed or sparse file actually occupies, or -1 when unknown.</summary>
+    /// <summary>The bytes a compressed or sparse file occupies, or -1 when unknown.</summary>
     long CompressedSize(string path);
 
-    /// <summary>
-    /// True when the file's data was already counted under another name in this scan. Called only when
-    /// <see cref="WalkOptions.DetectHardLinks"/> is on; the implementation keeps the "seen" set for the scan.
-    /// </summary>
+    /// <summary>True when the file's data was already counted under another name in this scan.</summary>
     bool IsDuplicateHardLink(string path, object scanToken);
 
-    /// <summary>Whether the path is the root of a volume ("C:\", "/").</summary>
+    /// <summary>True when the path is a volume root.</summary>
     bool IsVolumeRoot(string path);
 
-    /// <summary>Free bytes on the volume holding the path, for the free-space box.</summary>
+    /// <summary>Free bytes on the volume holding the path.</summary>
     long FreeBytes(string path);
 
     /// <summary>The fallback: 4 KB clusters, no compression, no hard links.</summary>

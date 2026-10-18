@@ -6,24 +6,21 @@ public enum NodeKind
     Directory,
     /// <summary>Pseudo node for the unused space of a drive.</summary>
     FreeSpace,
-    /// <summary>Transient pseudo node standing in for many small children of a folder.</summary>
+    /// <summary>Pseudo node standing in for many small children.</summary>
     Group
 }
 
-/// <summary>Which size drives the layout and labels.</summary>
+/// <summary>The size used for layout and labels.</summary>
 public enum SizeMeasure
 {
     /// <summary>Logical file size.</summary>
     FileSize,
-    /// <summary>Space actually taken on the volume: compressed size rounded up to whole clusters.</summary>
+    /// <summary>Compressed size rounded up to whole clusters.</summary>
     SizeOnDisk
 }
 
-/// <summary>
-/// A file or folder in the scanned tree. A drive holds millions of these, and the 32-bit build has to fit them
-/// all in a 2 to 4 GB address space, so the node keeps as little as it can: the full path is not stored but
-/// rebuilt from the parent chain, files share one empty child list, and the baseline sizes are plain longs.
-/// </summary>
+/// <summary>A file or folder in the scanned tree.</summary>
+/// <remarks>Kept small: the path is rebuilt from the parent chain and files share one empty child list.</remarks>
 public sealed class FsNode
 {
     private static readonly List<FsNode> NoChildren = new(0);
@@ -39,15 +36,12 @@ public sealed class FsNode
         Parent = parent;
     }
 
-    /// <summary>The file or folder name. A scan root carries its full path as its name.</summary>
+    /// <summary>The file or folder name; a scan root's name is its full path.</summary>
     public string Name { get; internal set; }
     public NodeKind Kind { get; }
     public FsNode? Parent { get; private set; }
 
-    /// <summary>
-    /// The full path, built from the names up the tree. A group or the free-space block answers with its folder's
-    /// path. Costs an allocation per call, so hold on to it inside a loop rather than asking again.
-    /// </summary>
+    /// <summary>The full path, rebuilt from the parent chain on each call.</summary>
     public string FullPath
     {
         get
@@ -55,7 +49,6 @@ public sealed class FsNode
             if (Parent is null) return Name;
             if (!IsReal) return Parent.FullPath;
 
-            // Measure first, then write the names into one string from the end backwards.
             var root = this;
             int length = 0;
             while (root.Parent is not null) { length += root.Name.Length + 1; root = root.Parent!; }
@@ -93,23 +86,17 @@ public sealed class FsNode
     /// <summary>True if the folder (or part of it) could not be read.</summary>
     public bool AccessDenied { get; internal set; }
 
-    /// <summary>
-    /// True for a hard link whose data was already counted under another name. Its
-    /// <see cref="Size"/> and <see cref="Allocated"/> are 0; <see cref="LinkedSize"/> holds the real size.
-    /// </summary>
+    /// <summary>True for a hard link already counted under another name; <see cref="LinkedSize"/> holds the real size.</summary>
     public bool IsHardLinkDuplicate { get; internal set; }
 
     public long LinkedSize { get; internal set; }
 
-    /// <summary>
-    /// Size of this item in the scan it is being compared with, or null when it did not exist then.
-    /// Set by <see cref="Services.ScanCompare"/>; <see cref="HasBaseline"/> says whether a comparison is loaded at all.
-    /// </summary>
+    /// <summary>Size in the compared scan, or null when it did not exist there. Set by <see cref="Services.ScanCompare"/>.</summary>
     public long? BaselineSize { get => _baselineSize < 0 ? null : _baselineSize; internal set => _baselineSize = value ?? NoBaseline; }
     public long? BaselineAllocated { get => _baselineAllocated < 0 ? null : _baselineAllocated; internal set => _baselineAllocated = value ?? NoBaseline; }
     public bool HasBaseline { get; internal set; }
 
-    /// <summary>Bytes grown since the baseline (negative when shrunk). A new item counts fully as growth.</summary>
+    /// <summary>Bytes grown since the baseline; negative when shrunk.</summary>
     public long ChangeFor(SizeMeasure measure)
     {
         long now = SizeFor(measure);
@@ -117,16 +104,13 @@ public sealed class FsNode
         return now - (then ?? 0);
     }
 
-    /// <summary>
-    /// Children sorted by the current measure, largest first. A file answers with a shared empty list that must
-    /// not be added to; only folders (and the pseudo nodes) get a list of their own.
-    /// </summary>
+    /// <summary>Children sorted largest first; files return a shared empty list that must not be modified.</summary>
     public List<FsNode> Children => Kind == NodeKind.File ? NoChildren : (_children ??= new());
 
-    /// <summary>The "Free space" pseudo node, only on the root of a whole-drive scan.</summary>
+    /// <summary>The free-space pseudo node, present only on a drive scan root.</summary>
     public FsNode? FreeSpaceNode { get; private set; }
 
-    /// <summary>Unused bytes on the drive; shown through <see cref="FreeSpaceNode"/> when visible.</summary>
+    /// <summary>Unused bytes on the drive.</summary>
     public long FreeBytes { get; private set; }
 
     public bool FreeSpaceVisible { get; private set; } = true;
@@ -135,9 +119,9 @@ public sealed class FsNode
     public bool IsFreeSpace => Kind == NodeKind.FreeSpace;
     public bool IsGroup => Kind == NodeKind.Group;
 
-    /// <summary>For a group pseudo node: the real children it stands for, so the group can be laid out inside its own box when it gets room.</summary>
+    /// <summary>The real children a group node stands for.</summary>
     public IReadOnlyList<FsNode>? GroupMembers { get; internal set; }
-    /// <summary>True for a real file or folder on disk (not free space or a group).</summary>
+    /// <summary>True for a real file or folder on disk.</summary>
     public bool IsReal => Kind is NodeKind.File or NodeKind.Directory;
 
     public string Extension => IsDirectory ? string.Empty : Path.GetExtension(Name).ToLowerInvariant();
@@ -172,7 +156,7 @@ public sealed class FsNode
         foreach (var child in Children) child.SortBy(measure);
     }
 
-    /// <summary>Adds the "Free space" pseudo node (root of a drive scan only).</summary>
+    /// <summary>Adds the free-space pseudo node.</summary>
     internal void AddFreeSpace(long freeBytes)
     {
         FreeBytes = Math.Max(0, freeBytes);
@@ -186,7 +170,7 @@ public sealed class FsNode
         Allocated += FreeBytes;
     }
 
-    /// <summary>Shows or hides the free-space block, keeping the root totals consistent.</summary>
+    /// <summary>Shows or hides the free-space node and adjusts the root totals.</summary>
     public void SetFreeSpaceVisible(bool visible, SizeMeasure measure)
     {
         FreeSpaceVisible = visible;
@@ -201,7 +185,7 @@ public sealed class FsNode
         Children.Sort((a, b) => b.SizeFor(measure).CompareTo(a.SizeFor(measure)));
     }
 
-    /// <summary>Called after a delete: the freed bytes become free space.</summary>
+    /// <summary>Adds freed bytes to the free space.</summary>
     public void RegisterFreedSpace(long bytes, SizeMeasure measure)
     {
         if (FreeSpaceNode is null) return;
@@ -209,16 +193,13 @@ public sealed class FsNode
         SetFreeSpaceVisible(FreeSpaceVisible, measure);
     }
 
-    /// <summary>
-    /// Swaps a child for a freshly scanned version of the same folder, keeping every ancestor's totals and
-    /// order correct. Used by "Rescan this folder".
-    /// </summary>
+    /// <summary>Replaces a child with a rescanned version and updates every ancestor's totals.</summary>
     public void ReplaceChild(FsNode oldChild, FsNode newChild, SizeMeasure measure)
     {
         int index = Children.IndexOf(oldChild);
         if (index < 0) throw new InvalidOperationException("The node is not a child of this folder.");
         newChild.Parent = this;
-        newChild.Name = oldChild.Name; // a scan root carries its full path as its name; inside the tree it is just the folder
+        newChild.Name = oldChild.Name; // the rescanned root's name is a full path
         newChild.BaselineSize = oldChild.BaselineSize;
         newChild.BaselineAllocated = oldChild.BaselineAllocated;
         newChild.HasBaseline = oldChild.HasBaseline;

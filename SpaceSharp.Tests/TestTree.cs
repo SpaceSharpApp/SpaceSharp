@@ -2,7 +2,7 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Tests;
 
-/// <summary>Builds small in-memory trees the way DiskScanner would, without touching a disk.</summary>
+/// <summary>Builds small in-memory trees for tests.</summary>
 internal static class TestTree
 {
     public static FsNode Dir(string name, FsNode? parent = null)
@@ -25,7 +25,7 @@ internal static class TestTree
         return file;
     }
 
-    /// <summary>Sums sizes bottom-up and sorts children, like the scanner does after a folder is read.</summary>
+    /// <summary>Sums sizes bottom-up and sorts children.</summary>
     public static FsNode Finish(FsNode dir)
     {
         foreach (var child in dir.Children)
@@ -34,7 +34,7 @@ internal static class TestTree
         return dir;
     }
 
-    /// <summary>A loose file with just a name, size and date, for filter tests.</summary>
+    /// <summary>A single file under a throwaway root.</summary>
     public static FsNode LooseFile(string name, long size = 1, DateTime? modified = null)
     {
         var root = Dir(@"C:\");

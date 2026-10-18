@@ -15,10 +15,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The Insights view: the scan summed up in cards, in the map's place, with the numbers from the Core services
-/// (DriveInsights, TopLists). "Since last scan" needs a baseline: the previous scan of the same place, or a saved one.
-/// </summary>
+/// <summary>The Insights view.</summary>
 public partial class MainWindow
 {
     private const int TimelineMonths = 36;
@@ -55,12 +52,9 @@ public partial class MainWindow
         RefreshInsights();
     }
 
-    /// <summary>Shows one view and hides the other; the map's own buttons dim while the insights are up.</summary>
     private void ApplyView()
     {
         bool insights = InsightsShowing;
-        // Nothing scanned and nothing scanning: the start screen, whichever view is remembered. The remembered
-        // view takes over as soon as a scan starts or a saved one is opened.
         bool idle = _root is null && _scanCts is null;
         InsightsView.IsVisible = insights && !idle;
         Treemap.IsVisible = !insights || idle;
@@ -77,7 +71,7 @@ public partial class MainWindow
         _insightsRoot = null;
     }
 
-    /// <summary>Drops the cached figures when the scan or the size measure they were computed for has changed.</summary>
+    /// <summary>Invalidates the cache when the scan or size measure changed.</summary>
     private void SyncInsightsSource()
     {
         if (ReferenceEquals(_insightsRoot, _root) && _insightsMeasure == Treemap.SizeMode) return;
@@ -85,10 +79,7 @@ public partial class MainWindow
         _insightsRoot = _root; _insightsMeasure = Treemap.SizeMode; _insightsNow = DateTime.UtcNow;
     }
 
-    /// <summary>
-    /// The per-type totals of the current scan, computed on first use and shared by the Insights view and the
-    /// filter drawer's "share of scan" column; null while there is no finished scan.
-    /// </summary>
+    /// <summary>The per-type totals of the current scan, or null without a finished scan.</summary>
     private List<TypeShare>? TypeShares
     {
         get
@@ -99,7 +90,6 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Rebuilds the whole view. Cheap when it is hidden or there is no scan.</summary>
     private void RefreshInsights()
     {
         if (!InsightsShowing) return;
@@ -142,7 +132,7 @@ public partial class MainWindow
 
     private void InsightsView_SizeChanged(object? sender, SizeChangedEventArgs e) => ArrangeInsights();
 
-    /// <summary>Four, three, two or one across on a twelve-unit grid, for the width there is; cards are built once and only moved.</summary>
+    /// <summary>Lays the cards out on a twelve-unit grid for the available width.</summary>
     private void ArrangeInsights()
     {
         if (_cards is null || _tiles is null || !InsightsShowing) return;
@@ -215,7 +205,6 @@ public partial class MainWindow
 
     private static Border Swatch(IBrush fill, int size = 10) => new() { Width = size, Height = size, CornerRadius = new CornerRadius(2), Background = fill, VerticalAlignment = VerticalAlignment.Center };
 
-    /// <summary>A track with a fill that is a share of its width: two star columns, the fill in the first.</summary>
     private Border Bar(double fraction, IBrush fill, double height = 6)
     {
         fraction = Math.Clamp(fraction, 0, 1);
@@ -229,7 +218,6 @@ public partial class MainWindow
         return new Border { Child = grid, VerticalAlignment = VerticalAlignment.Center };
     }
 
-    /// <summary>A row that reacts to the pointer like the lists do: hand cursor, lighter on hover, a click handler.</summary>
     private static void Clickable(Control row, Action onClick)
     {
         row.Cursor = new Cursor(StandardCursorType.Hand);
@@ -258,7 +246,7 @@ public partial class MainWindow
              : utc.ToLocalTime().ToString("d MMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
     }
 
-    // ---------------------------------------------------------------- the headline strip
+    // ---------------------------------------------------------------- headline strip
 
     private UniformGrid BuildTiles()
     {
@@ -548,7 +536,7 @@ public partial class MainWindow
             var hit = new Rectangle { Fill = Brushes.Transparent, Cursor = new Cursor(StandardCursorType.Hand) };
             Grid.SetColumn(hit, i);
             bars.Children.Add(rect);
-            bars.Children.Add(hit);   // on top, so it catches the pointer for the whole column
+            bars.Children.Add(hit);   // topmost: catches the pointer for the whole column
             rects.Add(rect);
             int index = i;
             string tip = Strings.Format("Panel_TimelineMonth", MonthLabel(bucket), SizeFormatter.Format(bucket.Bytes), bucket.Files) + (index == 0 ? Strings.Get("Panel_TimelineFirst") : string.Empty);
@@ -621,14 +609,14 @@ public partial class MainWindow
 
     private static string MonthLabel(MonthBucket b) => new DateTime(b.Year, b.Month, 1).ToString("MMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
 
-    // Amber bright to dim, as Inspect's By age donut.
+    // amber, bright to dim
     private static readonly IBrush[] BandBrushes =
     {
         new ImmutableSolidColorBrush(Color.FromRgb(0xF5, 0xB8, 0x2E)), new ImmutableSolidColorBrush(Color.FromRgb(0xD9, 0x9C, 0x2B)), new ImmutableSolidColorBrush(Color.FromRgb(0xA8, 0x78, 0x2A)), new ImmutableSolidColorBrush(Color.FromRgb(0x6E, 0x5A, 0x35))
     };
     private static IBrush BandBrush(int band) => BandBrushes[Math.Clamp(band, 0, 3)];
 
-    // ---------------------------------------------------------------- the second row
+    // ---------------------------------------------------------------- second row
 
     private Border BuildFoldersCard()
     {
@@ -671,8 +659,6 @@ public partial class MainWindow
         double largest = top.Count > 0 ? top[0].SizeFor(measure) : 1;
         foreach (var f in top)
         {
-            // The swatch in the file's type color beside the name over a short path; the size over the age at the right;
-            // under all of it a thin bar says how the file compares to the largest.
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("20,*,90"), RowDefinitions = new RowDefinitions("*,Auto"), Margin = new Thickness(0, 0, 0, 9) };
             var fill = Treemap.Scheme.Fill(f, 0, ColorMode.ByFileType);
             var swatch = Swatch(fill); swatch.VerticalAlignment = VerticalAlignment.Center; swatch.HorizontalAlignment = HorizontalAlignment.Left;
@@ -768,7 +754,7 @@ public partial class MainWindow
 
     private static readonly char Sep = System.IO.Path.DirectorySeparatorChar;
 
-    /// <summary>A path relative to the scan root, so rows do not all start with the drive letter.</summary>
+    /// <summary>The path relative to the scan root.</summary>
     private string PathWithin(FsNode? node)
     {
         if (node is null) return string.Empty;
@@ -779,7 +765,7 @@ public partial class MainWindow
         return string.Join(Sep, parts);
     }
 
-    /// <summary>The path within the scan with the middle folded: "Users\…\Qwen3-VL", so the start and the end both show.</summary>
+    /// <summary>The path within the scan with the middle folded.</summary>
     private string PathShort(FsNode? node)
     {
         if (node is null) return string.Empty;

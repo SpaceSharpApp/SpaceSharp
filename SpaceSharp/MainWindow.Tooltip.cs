@@ -8,12 +8,8 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The hover tooltip on the map, as in the WPF app (2.2): after 450 ms over an item, a card beside the pointer with
-/// the name and size, then a line on what it is and its share of the folder in view, and a line on what it mostly
-/// holds, when it changed and the change since the last scan. It is a Border over the map rather than a popup, so
-/// it behaves the same on every platform and never leaves the map.
-/// </summary>
+/// <summary>The hover tooltip over the map.</summary>
+/// <remarks>Drawn as a Border over the map, not a popup, for consistent cross-platform behavior.</remarks>
 public partial class MainWindow
 {
     private readonly DispatcherTimer _tipTimer = new() { Interval = TimeSpan.FromMilliseconds(450) };
@@ -23,7 +19,7 @@ public partial class MainWindow
     private void WireTooltip()
     {
         _tipTimer.Tick += (_, _) => { _tipTimer.Stop(); ShowTooltip(); };
-        // The map marks its pointer events handled, so these listen to handled events too.
+        // The map marks pointer events handled.
         Treemap.AddHandler(PointerMovedEvent, (_, e) => { _pointerPosition = e.GetPosition(MapHost); if (HoverTip.IsVisible) PlaceTooltip(); }, Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
         Treemap.HoveredNodeChanged += (_, node) => ArmTooltip(node);
         Treemap.AddHandler(PointerExitedEvent, (_, _) => HideTooltip(), Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
@@ -71,7 +67,7 @@ public partial class MainWindow
             return;
         }
 
-        // Line 1: what it is, and its share of the folder being looked at. "Folder · 583 files · 25% of Images"
+        // Line 1: type and share of the focused folder
         var first = new List<RichText.Part> { RichText.Dim(node.IsDirectory ? Strings.Get("Inspect_Folder") : DescribeType(node)) };
         if (node.IsDirectory) first.Add(RichText.Dim(RichText.Separator + Strings.Format("Tip_FilesInGroup", node.FileCount)));
         if (node.IsHardLinkDuplicate) first.Add(RichText.Dim(RichText.Separator + Strings.Format("Tip_SizeHardLink", SizeFormatter.Format(node.LinkedSize))));
@@ -80,11 +76,11 @@ public partial class MainWindow
         {
             first.Add(RichText.Dim(RichText.Separator));
             var share = RichText.Format("Inspect_Of", RichText.Accent(InspectSummary.Percent(InspectSummary.Fraction(node.SizeFor(measure), whole.SizeFor(measure)))), RichText.Plain(whole.Name));
-            first.AddRange(share.Select(part => part.Bold ? part : part with { BrushKey = "TextDim" })); // the percentage stays amber, the words go dim
+            first.AddRange(share.Select(part => part.Bold ? part : part with { BrushKey = "TextDim" }));
         }
         TipLine(first);
 
-        // Line 2: what it mostly is, when it changed, and the change since the last scan. "Mostly images · changed 27 Apr 2026 · +3.1 GB"
+        // Line 2: top category, last change, delta since baseline
         var second = new List<RichText.Part>();
         if (node.IsDirectory && node.FileCount > 0 && node.FileCount <= 250_000 && TopCategory(node, measure) is { } top)
             second.Add(RichText.Dim(Strings.Format("Tip_Mostly", Strings.Category(top).ToLowerInvariant())));
@@ -115,11 +111,8 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>
-    /// Beside the pointer, on the other side when it would leave the map, and never past the map's edges. The card
-    /// is measured against its own maximum width, never the room left beside the pointer, so its size (and so the
-    /// side it lands on) does not depend on where it was last placed.
-    /// </summary>
+    /// <summary>Positions the tooltip beside the pointer, clamped to the map.</summary>
+    /// <remarks>Measures against MaxWidth so the card's size does not depend on its previous position.</remarks>
     private void PlaceTooltip()
     {
         HoverTip.Measure(new Size(HoverTip.MaxWidth, double.PositiveInfinity));
@@ -145,7 +138,7 @@ public partial class MainWindow
         TipLines.Children.Add(block);
     }
 
-    /// <summary>The file category holding the most bytes under a folder, or null when nothing has a size.</summary>
+    /// <summary>The file category with the most bytes under a folder, or null.</summary>
     private static FileCategory? TopCategory(FsNode folder, SizeMeasure measure)
     {
         var sums = new long[Enum.GetValues<FileCategory>().Length];

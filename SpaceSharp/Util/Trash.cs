@@ -4,14 +4,10 @@ using System.Runtime.Versioning;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Moves files and folders to the system's trash: the Recycle Bin on Windows (the same shell call as the Windows
-/// app), the Finder's Trash on macOS, and the Freedesktop trash through gio on Linux. Nothing is ever deleted
-/// outright. Also opens items and shows them in the file manager, the three ways those are spelled.
-/// </summary>
+/// <summary>Moves items to the system trash, and opens or reveals them in the file manager.</summary>
 internal static class Trash
 {
-    /// <summary>Sends every path to the trash in one go. False with a message when something stayed behind.</summary>
+    /// <summary>Sends the paths to the trash; returns false with a message when something stayed behind.</summary>
     public static bool TrySend(IReadOnlyCollection<string> paths, out string? error)
     {
         if (paths.Count == 0) { error = null; return true; }
@@ -31,14 +27,14 @@ internal static class Trash
 
     private static string? MacTrash(string path)
     {
-        // The Finder does the move, so the item lands in the Trash with "Put back" working.
+        // via Finder, so "Put back" works
         string escaped = path.Replace("\\", "\\\\").Replace("\"", "\\\"");
         return Run("osascript", "-e", $"tell application \"Finder\" to delete POSIX file \"{escaped}\"");
     }
 
     private static string? LinuxTrash(string path) => Run("gio", "trash", "--", path);
 
-    /// <summary>Runs a command and returns null on success, its error text otherwise.</summary>
+    /// <summary>Runs a command; returns null on success, else its error text.</summary>
     private static string? Run(string file, params string[] args)
     {
         try
@@ -57,7 +53,7 @@ internal static class Trash
         }
     }
 
-    /// <summary>Empties the Recycle Bin of a drive (Windows); elsewhere there is no per-drive bin, so false with a note.</summary>
+    /// <summary>Empties a drive's Recycle Bin on Windows; returns false elsewhere.</summary>
     public static bool TryEmpty(string? driveRoot, out string? error)
     {
         if (OperatingSystem.IsWindows()) return Windows.TryEmpty(driveRoot, out error);
@@ -73,7 +69,7 @@ internal static class Trash
         else Process.Start("xdg-open", new[] { path });
     }
 
-    /// <summary>Shows the item selected in its folder: Explorer, the Finder, or the folder in the default file manager.</summary>
+    /// <summary>Shows the item selected in its folder.</summary>
     public static void Reveal(string path)
     {
         if (OperatingSystem.IsWindows()) Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{path}\"") { UseShellExecute = true });
@@ -88,7 +84,7 @@ internal static class Trash
         private const int FOF_NOCONFIRMATION = 0x0010;
         private const int FOF_ALLOWUNDO = 0x0040;
         private const int FOF_WANTNUKEWARNING = 0x4000;
-        private const int FOF_NORECURSEREPARSE = 0x8000;   // a junction or symlink is the item, never what it points at
+        private const int FOF_NORECURSEREPARSE = 0x8000;   // do not follow junctions or symlinks
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct SHFILEOPSTRUCT
@@ -112,7 +108,7 @@ internal static class Trash
         public static bool TryEmpty(string? driveRoot, out string? error)
         {
             int result = SHEmptyRecycleBin(IntPtr.Zero, driveRoot, 0);
-            if (result == 0 || result == unchecked((int)0x8000FFFF)) { error = null; return true; } // E_UNEXPECTED: already empty
+            if (result == 0 || result == unchecked((int)0x8000FFFF)) { error = null; return true; } // E_UNEXPECTED = already empty
             error = Strings.Format("Trash_Code", $"0x{result:X}");
             return false;
         }
@@ -122,30 +118,25 @@ internal static class Trash
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern uint GetShortPathName(string longPath, [Out] char[] shortPath, uint bufferLength);
 
-        /// <summary>
-        /// Sends the paths to the Recycle Bin. The shell call takes the whole list at once and gives up on all of it when
-        /// one path is bad (0x7C, DE_INVALIDFILES: longer than MAX_PATH, or gone), which is what happens with browser
-        /// caches: files come and go while the browser runs, and some sit in very deep folders. So: paths that have
-        /// vanished since the scan are left out, over-long paths go in their short (8.3) form when the volume has one,
-        /// and when the batch still fails each item is tried on its own so the message names what stayed and why.
-        /// </summary>
+        /// <summary>Sends the paths to the Recycle Bin.</summary>
+        /// <remarks>SHFileOperation fails the whole batch on one bad path (DE_INVALIDFILES), so vanished paths are skipped, long paths use 8.3 form, and a failed batch is retried per item.</remarks>
         public static bool TrySend(IReadOnlyCollection<string> paths, out string? error)
         {
             var present = paths.Where(p => File.Exists(p) || Directory.Exists(p)).ToList();
-            if (present.Count == 0) { error = null; return true; }   // already gone: nothing to do, nothing wrong
+            if (present.Count == 0) { error = null; return true; }
 
             var sendable = present.Select(ShellPath).ToList();
             int result = Send(sendable, out bool aborted);
             if (result == 0 && !aborted) { error = Remaining(present, paths.Count); return error is null; }
 
-            // one at a time, so one bad path does not stop the rest, and the message can say which it was
+            // retry one at a time
             var failed = new List<(string Path, int Code)>();
             foreach (var (original, shell) in present.Zip(sendable))
             {
                 if (!File.Exists(original) && !Directory.Exists(original)) continue;
                 int one = Send(new[] { shell }, out bool oneAborted);
                 if (one != 0) failed.Add((original, one));
-                else if (oneAborted && (File.Exists(original) || Directory.Exists(original))) failed.Add((original, Skipped));   // the shell gave up on it without saying why
+                else if (oneAborted && (File.Exists(original) || Directory.Exists(original))) failed.Add((original, Skipped));
             }
             if (failed.Count == 0) { error = Remaining(present, paths.Count); return error is null; }
 
@@ -169,7 +160,7 @@ internal static class Trash
             return result;
         }
 
-        /// <summary>The path as the shell will take it: itself when it fits, its 8.3 form when it is longer than MAX_PATH and the volume keeps one.</summary>
+        /// <summary>The path, or its 8.3 form when longer than MAX_PATH.</summary>
         private static string ShellPath(string path)
         {
             if (path.Length <= MaxPath) return path;
@@ -187,7 +178,6 @@ internal static class Trash
 
         private static string Shorten(string path) => path.Length <= 70 ? path : path[..30] + "…" + path[^38..];
 
-        /// <summary>The shell's and Win32's error codes in words, for the ones a Recycle Bin move actually hits.</summary>
         private const int Skipped = -1;
 
         private static string Describe(int code) => code switch

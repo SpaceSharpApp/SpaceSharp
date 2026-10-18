@@ -5,12 +5,11 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>Part of <see cref="TreemapControl"/>. TreemapControl.cs has the overview.</summary>
+/// <summary>Camera part of <see cref="TreemapControl"/>.</summary>
 public sealed partial class TreemapControl
 {
-    // Camera. _offset is the window's top-left on the zoomed canvas, in pixels.
     private double _zoom = 1;
-    private Vector _offset;
+    private Vector _offset; // window top-left on the zoomed canvas, px
     private Rect _viewport;
     private Rect _drawClip;
 
@@ -28,7 +27,7 @@ public sealed partial class TreemapControl
         public FsNode? Target;
         public double StartZoom;
         public double EndZoom;
-        public Point StartCenter;   // normalized canvas coordinates (0..1)
+        public Point StartCenter;   // normalized 0..1
         public Point EndCenter;
         public double StartTime;
     }
@@ -66,7 +65,7 @@ public sealed partial class TreemapControl
             Math.Clamp(_offset.Y, 0, h * (_zoom - 1)));
     }
 
-    /// <summary>Camera (zoom, normalized center) that makes a laid-out rectangle fill the window.</summary>
+    /// <summary>Returns the camera that makes a laid-out rectangle fill the window.</summary>
     private (double Zoom, Point Center) FitView(Rect bounds)
     {
         var (w, h) = BaseSize();
@@ -86,21 +85,19 @@ public sealed partial class TreemapControl
                Math.Abs(center.Y - current.Y) * _zoom < 1e-3;
     }
 
-    /// <summary>
-    /// The cluster that stands where this one stood: the layout makes a new group node whenever the folder's
-    /// grouping changes with the zoom, so a group is found again through its folder. Null once the folder has none.
-    /// </summary>
+    /// <summary>Returns the group node currently replacing <paramref name="group"/>, or null once it has dissolved.</summary>
+    /// <remarks>The layout creates a new group node whenever a folder's grouping changes with zoom.</remarks>
     private FsNode? CurrentGroupOf(FsNode group)
     {
         if (!group.IsGroup) return group;
         if (_index.ContainsKey(group)) return group;
         if (group.Parent is not { } parent || !_layoutCache.TryGetValue(parent, out var layout) || layout.Group is not { } now || !_index.ContainsKey(now)) return null;
-        // the same cluster, fewer members at most; a bigger one is the folder's outer cluster around a nested one, not this one
+        // a larger group is the folder's outer cluster, not this one
         var was = group.GroupMembers; var members = now.GroupMembers;
         return was is null || members is null || (members.Count <= was.Count && members.Count > 0 && was.Contains(members[0])) ? now : null;
     }
 
-    /// <summary>Jumps to a cluster, re-aiming at the folder's current cluster each pass and stopping once it has dissolved.</summary>
+    /// <summary>Jumps to a group, stopping once it has dissolved.</summary>
     private void SnapToGroup(FsNode group)
     {
         for (int i = 0; i < 40; i++)
@@ -124,10 +121,8 @@ public sealed partial class TreemapControl
         return null;
     }
 
-    /// <summary>
-    /// Jumps to a folder. Header bars have a fixed pixel height, so a folder's relative position
-    /// shifts slightly with zoom; a few fit/re-layout passes converge on the exact framing.
-    /// </summary>
+    /// <summary>Jumps to a folder.</summary>
+    /// <remarks>Fixed-height headers shift relative positions with zoom, so several fit passes are needed to converge.</remarks>
     private void SnapTo(FsNode folder)
     {
         for (int i = 0; i < 40; i++)
@@ -136,7 +131,7 @@ public sealed partial class TreemapControl
             var visible = DeepestLaidOut(folder);
             if (visible is null) break;
             var (zoom, center) = FitView(_index[visible].Bounds);
-            if (IsAt(zoom, center)) break; // either done, or the folder is too small to ever appear
+            if (IsAt(zoom, center)) break;
             SetView(zoom, center);
         }
 
@@ -158,7 +153,6 @@ public sealed partial class TreemapControl
         RequestFrame();
     }
 
-    /// <summary>One animation frame from the window's compositor; the handler asks for the next while the animation runs.</summary>
     private void RequestFrame()
     {
         if (_frameRequested) return;
@@ -186,8 +180,7 @@ public sealed partial class TreemapControl
         SetView(zoom, InterpolateCenter(a, zoom, eased));
         Rebuild();
 
-        // The target's exact position is only known once it's laid out at the current zoom; keep refining.
-        // A cluster is looked up afresh each frame, since the layout replaces it as its members come into view.
+        // refine the target each frame; its position depends on the current zoom's layout
         var aim = a.Target is { IsGroup: true } g ? CurrentGroupOf(g) : a.Target;
         if (aim is not null && _index.TryGetValue(aim, out var item))
             (a.EndZoom, a.EndCenter) = FitView(item.Bounds);
@@ -203,10 +196,6 @@ public sealed partial class TreemapControl
         else RequestFrame();
     }
 
-    /// <summary>
-    /// Moves the center so the camera appears to zoom toward (or away from) one fixed point,
-    /// which looks natural instead of sliding sideways while zooming.
-    /// </summary>
     private static Point InterpolateCenter(CameraAnimation a, double zoom, double eased)
     {
         double z0 = a.StartZoom, z1 = a.EndZoom;
@@ -220,7 +209,6 @@ public sealed partial class TreemapControl
 
     private static double Lerp(double a, double b, double t) => a + (b - a) * t;
 
-    /// <summary>Immediate zoom around a screen point (wheel).</summary>
     private void ZoomAt(double newZoom, Point anchor)
     {
         newZoom = Math.Clamp(newZoom, 1, MaxZoom);

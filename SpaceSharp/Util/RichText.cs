@@ -5,12 +5,7 @@ using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Sentences built from a resource format string where some slots are emphasized: "48% of Users, the largest
-/// of its 6 folders" with the 48% in amber. A <see cref="Part"/> is a run of text with a theme brush key
-/// ("Text", "TextDim", "Accent") or a fixed brush; <see cref="Format"/> fills the {n} slots of a resource
-/// string and <see cref="Fill"/> renders parts into a TextBlock. The same as the WPF app's (2.2).
-/// </summary>
+/// <summary>Builds TextBlock runs from resource format strings with emphasized slots.</summary>
 public static class RichText
 {
     public sealed record Part(string Text, string BrushKey, IBrush? Brush = null, bool Bold = false);
@@ -18,7 +13,7 @@ public static class RichText
     private static readonly Regex Slot = new(@"\{(\d+)\}", RegexOptions.Compiled);
     public const string Separator = "  ·  ";
 
-    public static Part Accent(string text) => new(text, "Link", null, true);   // amber as text: the Link brush, which is a deeper amber on light surfaces
+    public static Part Accent(string text) => new(text, "Link", null, true);
     public static Part Plain(string text) => new(text, "Text");
     public static Part Dim(string text) => new(text, "TextDim");
     public static Part Colored(string text, IBrush brush) => new(text, string.Empty, brush, true);
@@ -51,7 +46,7 @@ public static class RichText
 
     public static string ToPlainText(IEnumerable<Part> parts) => string.Concat(parts.Select(p => p.Text));
 
-    /// <param name="host">Where the theme brushes come from (the window), for the keyed parts.</param>
+    /// <param name="host">Source of theme brushes for keyed parts.</param>
     public static void Fill(TextBlock block, IEnumerable<Part> parts, IResourceHost host)
     {
         block.Inlines!.Clear();

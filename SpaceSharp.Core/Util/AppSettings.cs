@@ -13,27 +13,23 @@ internal sealed class AppSettings
     /// <summary>The one shared instance, loaded on first use.</summary>
     public static AppSettings Current => _current ??= Load();
 
-    public string? Palette { get; set; }                            // the last palette chosen (kept for older settings files)
-    public string? PaletteDark { get; set; }                        // the palette for each theme; the map switches with the theme
+    public string? Palette { get; set; }                            // legacy; last palette chosen
+    public string? PaletteDark { get; set; }
     public string? PaletteLight { get; set; }
 
-    /// <summary>
-    /// The palette name chosen for the theme, or null when none was chosen for it: the caller then takes the
-    /// theme's default. The last palette chosen at all (<see cref="Palette"/>) is not a fallback here, because a
-    /// dark palette picked under the dark theme must not follow the app into the light theme.
-    /// </summary>
+    /// <summary>The palette chosen for the theme, or null for the theme default.</summary>
     public string? PaletteFor(bool dark) => dark ? PaletteDark : PaletteLight;
 
-    /// <summary>Remembers the palette for the theme it was picked under.</summary>
+    /// <summary>Stores the palette for the given theme.</summary>
     public void SetPalette(bool dark, string name)
     {
         if (dark) PaletteDark = name; else PaletteLight = name;
         Palette = name;
     }
     public string? ColorMode { get; set; } = "ByDepth";
-    public int DialogDim { get; set; } = 45;                        // how much the map darkens behind Settings, Inspect and the like, 0 to 90 percent
-    public string LookDark { get; set; } = "Graphite";               // the app chrome's colors in the dark theme (UiLooks)
-    public string LookLight { get; set; } = "Paper";                // and in the light theme
+    public int DialogDim { get; set; } = 45;                        // 0 to 90 percent
+    public string LookDark { get; set; } = "Graphite";               // UiLooks name
+    public string LookLight { get; set; } = "Paper";
     public string? Theme { get; set; }
     public bool SizeOnDisk { get; set; }
     public bool ShowFreeSpace { get; set; }
@@ -43,55 +39,55 @@ internal sealed class AppSettings
     public bool AnimateZoom { get; set; } = true;
     public bool IncludeHidden { get; set; } = true;
     public bool DetectHardLinks { get; set; }
-    public bool FastNtfsScan { get; set; } = true;   // read the MFT for whole-drive scans (needs administrator)
-    public string ExcludePatterns { get; set; } = string.Empty;   // one wildcard per line, matched against names
-    public string? LastScanRoot { get; set; }                       // what to reopen on startup
+    public bool FastNtfsScan { get; set; } = true;   // MFT scan; needs administrator
+    public string ExcludePatterns { get; set; } = string.Empty;   // one wildcard per line
+    public string? LastScanRoot { get; set; }
     public bool ReopenLastScan { get; set; } = true;
-    public int KeepScansDays { get; set; } = 90;                    // automatic saves older than this are deleted at startup; 0 keeps them all
+    public int KeepScansDays { get; set; } = 90;                    // 0 keeps all
     public string? Language { get; set; }
     public bool ExplorerMenu { get; set; }
-    public string? KeyboardLayout { get; set; }                     // the Shortcuts window's keyboard; null = detect
+    public string? KeyboardLayout { get; set; }                     // null = detect
     // Treemap options
-    public string Density { get; set; } = "Dense";                  // Sparse, Normal, Dense, Maximum, Everything (no grouping)
-    public string? DensityBeforeEverything { get; set; }            // what G returns to
-    public double Bias { get; set; }                                // -1 horizontal … 0 equal … 1 vertical
-    public int Padding { get; set; } = 2;                           // extra pixels around boxes, 0 to 6; the gap shows the map background, which is what separates boxes by default
-    // Shading (Settings › Treemap › Shading)
-    public bool CushionEnabled { get; set; } = false;               // the light-to-dark shading on files; off is flat color
-    public int Brightness { get; set; } = 55;                       // 0 to 100, 50 = the palette as designed
-    public int CushionShading { get; set; } = 30;                   // 0 flat … 100 strong
-    public int CushionHeight { get; set; } = 35;                    // where the lit side gives way to shadow
-    public int ShadingScale { get; set; } = 60;                     // how much shading nested levels keep
-    public double LightX { get; set; } = -0.5;                      // light direction, -1 to 1 (top-left by default)
+    public string Density { get; set; } = "Dense";                  // Sparse, Normal, Dense, Maximum, Everything
+    public string? DensityBeforeEverything { get; set; }
+    public double Bias { get; set; }                                // -1 horizontal, 1 vertical
+    public int Padding { get; set; } = 2;                           // 0 to 6 px
+    // Shading
+    public bool CushionEnabled { get; set; } = false;
+    public int Brightness { get; set; } = 55;                       // 0 to 100, 50 = unchanged
+    public int CushionShading { get; set; } = 30;                   // 0 to 100
+    public int CushionHeight { get; set; } = 35;
+    public int ShadingScale { get; set; } = 60;
+    public double LightX { get; set; } = -0.5;                      // -1 to 1
     public double LightY { get; set; } = -0.5;
-    public bool ShowGrid { get; set; } = false;                     // a line between every box
-    public int BorderThickness { get; set; } = 1;                   // grid line width, 1 to 3
+    public bool ShowGrid { get; set; } = false;
+    public int BorderThickness { get; set; } = 1;                   // 1 to 3
     public string GridColor { get; set; } = "#101014";
-    public string HighlightColor { get; set; } = "#F5B82E";         // the frame around selected boxes
+    public string HighlightColor { get; set; } = "#F5B82E";
     // Text and title bars
-    public int TitlePadding { get; set; } = 1;                      // px above and below a folder name, 0 to 8
-    public int TitleBarTint { get; set; } = 0;                      // how far the bar is shaded from the folder color, 0 to 40
-    public string FolderTextColor { get; set; } = "#000000";        // "#RRGGBB", or empty for automatic dark/light
+    public int TitlePadding { get; set; } = 1;                      // 0 to 8 px
+    public int TitleBarTint { get; set; } = 0;                      // 0 to 40
+    public string FolderTextColor { get; set; } = "#000000";        // empty = automatic
     public string FileTextColor { get; set; } = "#000000";
     public string MapFont { get; set; } = "Segoe UI Variable Text";
     public bool FileCenterNames { get; set; } = true;
     public bool FileShowSizes { get; set; } = true;
     public bool FolderCenterNames { get; set; }
     public bool FolderShowSizes { get; set; } = true;
-    public bool FolderShowCounts { get; set; } = true;                   // "Scan with SpaceSharp" in Explorer's right-click menu                          // culture name such as "nb"; null means same as Windows   // the startup notice about administrator rights was dismissed
+    public bool FolderShowCounts { get; set; } = true;
     public bool ConfirmDelete { get; set; } = true;
     public bool CheckForUpdates { get; set; } = true;
 
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     public bool ShowSidePanel { get; set; } = true;
-    public string FilterLayout { get; set; } = "Drawer";            // Drawer (a sheet over the map, the default) or Rail (under the path)
+    public string FilterLayout { get; set; } = "Drawer";            // Drawer or Rail
     public bool ShowFilterRail { get; set; } = true;
-    public bool InsightsView { get; set; }                           // the Insights view in the map's place (false: the map)
+    public bool InsightsView { get; set; }
     public bool ShowTooltips { get; set; } = true;
-    public double InspectWidth { get; set; }                        // last size of the Inspect window; 0 means the default
+    public double InspectWidth { get; set; }                        // 0 = default
     public double InspectHeight { get; set; }
-    public double SidePanelWidth { get; set; } = 300;                // the Drives / Largest items panel
-    public double DriveListHeight { get; set; } = 320;               // the Drives list inside it; the splitter below it sets this
+    public double SidePanelWidth { get; set; } = 300;
+    public double DriveListHeight { get; set; } = 320;
 
     public void ResetToDefaults()
     {
@@ -124,7 +120,7 @@ internal sealed class AppSettings
         ShowTooltips = d.ShowTooltips;
     }
 
-    /// <summary>Puts the shading settings back the way they ship (the "Reset shading" button).</summary>
+    /// <summary>Restores the default shading settings.</summary>
     public void ResetShading()
     {
         var d = new AppSettings();
@@ -142,12 +138,12 @@ internal sealed class AppSettings
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {
-            // Unreadable settings: fall back to defaults.
+            // fall back to defaults
         }
         return new AppSettings();
     }
 
-    /// <summary>True while posing screenshot scenes, so a theme or palette the scene flips is never written to disk.</summary>
+    /// <summary>True while screenshot scenes are posed; blocks saving.</summary>
     public static bool Frozen { get; set; }
 
     public void Save()
@@ -160,7 +156,7 @@ internal sealed class AppSettings
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Not being able to save preferences shouldn't interrupt anything.
+            // ignore
         }
     }
 }

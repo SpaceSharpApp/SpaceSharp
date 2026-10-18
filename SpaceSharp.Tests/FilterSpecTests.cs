@@ -62,9 +62,9 @@ public class FilterSpecTests
     [InlineData("larger than 2 GB", 2 * GB)]
     [InlineData("at least 100MB", 100 * MB)]
     [InlineData(">= 10 kb", 10 * KB)]
-    [InlineData("bigger than 200", 200 * MB)]     // a bare number means megabytes
+    [InlineData("bigger than 200", 200 * MB)]     // bare number is MB
     [InlineData("over 1.5 GB", 1536 * MB)]
-    [InlineData("over 1,5 GB", 1536 * MB)]        // comma decimal, as typed on a Norwegian keyboard
+    [InlineData("over 1,5 GB", 1536 * MB)]        // comma decimal
     public void ParsesMinimumSizes(string text, long expected)
     {
         Assert.Equal(expected, FilterSpec.Parse(text).MinBytes);

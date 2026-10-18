@@ -2,34 +2,21 @@ using System.IO;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// What SpaceSharp was started with. Understood forms:
-///   SpaceSharp.exe                       start normally (reopen the last scan if that setting is on)
-///   SpaceSharp.exe D:\                   scan that drive or folder right away
-///   SpaceSharp.exe D:\Games              same, for a folder
-///   SpaceSharp.exe scan.sscan            open a saved scan
-///   SpaceSharp.exe --open scan.sscan     same, explicit
-///   SpaceSharp.exe --compare old.sscan D:\   scan D:\ and compare it with a saved scan
-///   SpaceSharp.exe --scan D:\            same as the bare path (kept for scripts that prefer a flag)
-///   SpaceSharp.exe --help                print this and exit
-///   SpaceSharp.exe --mock                a pretend PC with sample data, for trying the app (not in the help text)
-///   SpaceSharp.exe --scene start         the pretend PC posed as one of the README screenshots (see MainWindow.Showcase.cs)
-///   SpaceSharp.exe --scene start --shot docs/shot-start.png --size 1600x900   the same, written to a PNG, then exit
-/// Anything not understood is ignored rather than refused, so a stray argument never stops the app.
-/// </summary>
+/// <summary>Parsed command-line arguments; unknown arguments are ignored.</summary>
+/// <remarks>See <see cref="HelpText"/>; hidden flags are --mock, --scene, --shot and --size.</remarks>
 public sealed class CommandLine
 {
     public string? ScanPath { get; private set; }
     public string? OpenFile { get; private set; }
     public string? CompareFile { get; private set; }
     public bool ShowHelp { get; private set; }
-    /// <summary>Start on the pretend PC (<see cref="Services.MockSystem"/>) instead of the real drives.</summary>
+    /// <summary>Start on <see cref="Services.MockSystem"/>.</summary>
     public bool Mock { get; private set; }
-    /// <summary>A screenshot scene to pose (implies <see cref="Mock"/>): none, drawer, insights, compare, inspect, settings, menu, start, about, update, light.</summary>
+    /// <summary>A screenshot scene to pose; implies <see cref="Mock"/>.</summary>
     public string? Scene { get; private set; }
     /// <summary>With a scene: write the window to this PNG and exit.</summary>
     public string? Shot { get; private set; }
-    /// <summary>With a scene: the window's client size, "1600x900".</summary>
+    /// <summary>With a scene: the window's client size, e.g. "1600x900".</summary>
     public (int Width, int Height)? Size { get; private set; }
 
     public static CommandLine Parse(string[] args)

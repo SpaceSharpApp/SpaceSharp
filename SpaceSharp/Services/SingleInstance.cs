@@ -4,12 +4,8 @@ using System.Text.Json;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// Only one SpaceSharp per user session. The first instance holds a lock and listens on a named pipe; a second
-/// instance hands its command line over the pipe and exits, so "SpaceSharp D:\" from Explorer, the Finder or a
-/// shortcut lands in the window that is already open instead of opening another. The lock is a named mutex on
-/// Windows and a lock file elsewhere (named mutexes do not exist there); the pipe works the same on every platform.
-/// </summary>
+/// <summary>Enforces one instance per user session; later instances hand their arguments over a named pipe.</summary>
+/// <remarks>The lock is a named mutex on Windows and a lock file elsewhere.</remarks>
 public sealed class SingleInstance : IDisposable
 {
     private const string MutexName = @"Local\SpaceSharp.SingleInstance";
@@ -19,10 +15,10 @@ public sealed class SingleInstance : IDisposable
     private FileStream? _lockFile;
     private CancellationTokenSource? _cts;
 
-    /// <summary>Raised on a thread-pool thread with the other instance's arguments; marshal to the UI thread.</summary>
+    /// <summary>Raised on a thread-pool thread with another instance's arguments.</summary>
     public event Action<string[]>? ArgumentsReceived;
 
-    /// <summary>True when this process is the first; false when another instance already runs.</summary>
+    /// <summary>Returns true when this process is the first instance.</summary>
     public bool TryClaim()
     {
         if (OperatingSystem.IsWindows())
@@ -41,10 +37,10 @@ public sealed class SingleInstance : IDisposable
             return true;
         }
         catch (IOException) { return false; }
-        catch (UnauthorizedAccessException) { return true; } // cannot lock at all: better two windows than none
+        catch (UnauthorizedAccessException) { return true; } // cannot lock; allow the instance
     }
 
-    /// <summary>Starts accepting arguments from later instances. Call once, after the window exists.</summary>
+    /// <summary>Starts accepting arguments from later instances.</summary>
     public void Listen()
     {
         _cts = new CancellationTokenSource();
@@ -71,7 +67,7 @@ public sealed class SingleInstance : IDisposable
         }, token);
     }
 
-    /// <summary>From a second instance: sends the arguments to the first. Returns false if it could not be reached.</summary>
+    /// <summary>Sends arguments to the first instance; returns false if it could not be reached.</summary>
     public static bool SendArguments(string[] args)
     {
         try
@@ -89,7 +85,7 @@ public sealed class SingleInstance : IDisposable
         }
     }
 
-    /// <summary>Gives the instance up, for a planned restart (elevation, language switch) so the new process can claim it.</summary>
+    /// <summary>Releases the instance lock before a planned restart.</summary>
     public void Release()
     {
         _cts?.Cancel();

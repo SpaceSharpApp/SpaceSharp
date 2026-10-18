@@ -8,10 +8,7 @@ using SpaceSharp.Scanning;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// The <see cref="IPlatformFiles"/> for the machine this runs on: Win32 on Windows (the same calls as the
-/// WPF app's NativeFileInfo), the plain fallback everywhere else until there is a native answer for it.
-/// </summary>
+/// <summary>The <see cref="IPlatformFiles"/> for the current platform.</summary>
 internal static class PlatformFiles
 {
     public static IPlatformFiles Current { get; } = OperatingSystem.IsWindows() ? new WindowsFiles() : IPlatformFiles.Plain;
@@ -56,7 +53,7 @@ internal static class PlatformFiles
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetFileInformationByHandle(SafeFileHandle file, out BY_HANDLE_FILE_INFORMATION info);
 
-        // One "seen" set per scan, keyed by the token the walker hands out for that scan.
+        // seen hard links per scan token
         private readonly ConditionalWeakTable<object, ConcurrentDictionary<(uint, uint, uint), byte>> _seen = new();
 
         public long ClusterSize(string path)

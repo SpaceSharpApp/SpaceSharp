@@ -16,12 +16,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// "A new version is available": the update prompt, drawn in the app's own style. One narrow column: the mark on
-/// its tile, "SpaceSharp 2.0.0 is ready", the version you have under it, a short paragraph led by the release's section
-/// headings, then Install and restart, Remind me later, and a What's new link that opens the release notes window.
-/// The same as the WPF app's (2.2).
-/// </summary>
+/// <summary>The update prompt and the What's new window.</summary>
 public static class UpdateWindow
 {
     private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
@@ -35,11 +30,7 @@ public static class UpdateWindow
         await Show(owner, version, current, SpansReleases(current, version) ? LoadNotesSinceAsync(current, version) : LoadNotesAsync(version), updater.InstallAndRestartAsync);
     }
 
-    /// <summary>
-    /// The prompt with nothing behind it, for trying the window out and for the screenshots: this build's version as
-    /// the one on offer and the release before it (PreviousVersion in the csproj) as the one you have, canned release
-    /// notes, and an Install that only plays the download. Ctrl+Shift+Alt+U in the main window.
-    /// </summary>
+    /// <summary>Shows the update prompt with canned data and a fake install (Ctrl+Shift+Alt+U).</summary>
     public static Task ShowPreview(Window owner)
     {
         string version = AppInfo.Version;
@@ -54,7 +45,7 @@ public static class UpdateWindow
         return Show(owner, version, current, Task.FromResult<string?>(PreviewMarkdown(version)), Install);
     }
 
-    /// <summary>The version the preview pretends is out; the What's new window reads canned notes for it instead of GitHub.</summary>
+    /// <summary>The version the preview offers; its notes are canned.</summary>
     private static string? PreviewNotes;
 
     private static string PreviewMarkdown(string version) =>
@@ -65,7 +56,7 @@ public static class UpdateWindow
         var window = CreateWindow(Strings.Get("Update_Title"), 420);
         var body = new StackPanel { Margin = new Thickness(32, 30, 32, 24) };
 
-        // ---- the mark on its rounded tile, as the app icon
+        // ---- icon tile
         var tile = new Border { Width = 84, Height = 84, CornerRadius = new CornerRadius(18), HorizontalAlignment = HorizontalAlignment.Center };
         tile.Bind(Border.BackgroundProperty, window.GetResourceObservable("Panel"));
         tile.Child = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 64, Height = 64 };
@@ -79,11 +70,11 @@ public static class UpdateWindow
         var progress = new ProgressBar { Height = 4, Minimum = 0, Maximum = 100, Margin = new Thickness(0, 14, 0, 0), IsVisible = false };
         body.Children.Add(progress);
 
-        // ---- one short paragraph: the release's headings, then what installing does
+        // ---- blurb
         var blurb = new TextBlock { Text = Strings.Get("Update_Hint"), TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 19, Margin = new Thickness(0, 16, 0, 0), Classes = { "dim" } };
         body.Children.Add(blurb);
 
-        // ---- the buttons, stacked
+        // ---- buttons
         var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Classes = { "primary" }, Height = 38, FontSize = 13.5, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 22, 0, 0), IsDefault = true };
         var later = new Button { Content = Strings.Get("Update_RemindLater"), Classes = { "tool" }, Height = 34, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 8, 0, 0), IsCancel = true, BorderThickness = new Thickness(1) };
         later.Bind(TemplatedControl.BorderBrushProperty, window.GetResourceObservable("Stroke"));
@@ -113,7 +104,6 @@ public static class UpdateWindow
         body.Children.Add(install); body.Children.Add(later); body.Children.Add(whatsNew);
         window.Content = body;
 
-        // The release's section headings lead the paragraph once the notes have loaded.
         window.Opened += async (_, _) =>
         {
             var highlights = Highlights(await load, 3);
@@ -129,17 +119,14 @@ public static class UpdateWindow
         return window;
     }
 
-    /// <summary>"2.0" for 2.0.0, "2.0.1" for a patch: the version as people say it.</summary>
+    /// <summary>Formats a version as "2.0" or "2.0.1".</summary>
     internal static string ShortVersion(string version)
     {
         if (!TryVersion(version, out var v)) return version;
         return v.Build > 0 ? $"{v.Major}.{v.Minor}.{v.Build}" : $"{v.Major}.{v.Minor}";
     }
 
-    /// <summary>
-    /// The release's "### " headings, newest release first, at most four: the lines under the big version in the
-    /// prompt. "Fixes", "Under the hood" and the like are skipped; a release without headings gives nothing.
-    /// </summary>
+    /// <summary>The release notes' "###" headings, skipping generic ones.</summary>
     internal static IReadOnlyList<string> Highlights(string? markdown, int max = 4)
     {
         var result = new List<string>();
@@ -159,8 +146,7 @@ public static class UpdateWindow
     // ------------------------------------------------------------------ what's new
 
     /// <param name="version">The version whose notes to show.</param>
-    /// <param name="sinceVersion">The installed version, when this is an update prompt: every release after it up to
-    /// <paramref name="version"/> is shown, so someone two releases behind sees what the release in between did.</param>
+    /// <param name="sinceVersion">The installed version; when set, every release after it is included.</param>
     public static async Task ShowWhatsNew(Window owner, string version, string? sinceVersion = null)
     {
         bool span = SpansReleases(sinceVersion, version);
@@ -187,8 +173,7 @@ public static class UpdateWindow
         await window.ShowModal(owner);
     }
 
-    /// <summary>True when an update prompt should show more than one release: the installed version is known and at
-    /// least two releases behind, judged by whether the changelog would hold a section between them.</summary>
+    /// <summary>True when the installed version is at least two releases behind the target.</summary>
     internal static bool SpansReleases(string? since, string target)
     {
         if (!TryVersion(since, out var a) || !TryVersion(target, out var b)) return false;
@@ -207,11 +192,7 @@ public static class UpdateWindow
         return Version.TryParse(core, out version!);
     }
 
-    /// <summary>
-    /// Release notes for every version after <paramref name="since"/> up to and including <paramref name="through"/>,
-    /// read from CHANGELOG.md at the target release's tag so the text matches what shipped. Falls back to the
-    /// single-version notes when the changelog cannot be fetched.
-    /// </summary>
+    /// <summary>Loads the changelog sections after <paramref name="since"/> through <paramref name="through"/>, falling back to the single-version notes.</summary>
     private static async Task<string?> LoadNotesSinceAsync(string since, string through)
     {
         try
@@ -228,10 +209,7 @@ public static class UpdateWindow
         return await LoadNotesAsync(through);
     }
 
-    /// <summary>
-    /// The "## x.y.z" sections of a changelog with since &lt; x.y.z &lt;= through, newest first, each kept under its
-    /// version heading. Sections whose heading is not a version (Unreleased, notes) are skipped.
-    /// </summary>
+    /// <summary>The "## x.y.z" changelog sections with since &lt; x.y.z &lt;= through, newest first.</summary>
     internal static string? SectionsBetween(string changelog, string since, string through)
     {
         if (!TryVersion(since, out var lo) || !TryVersion(through, out var hi)) return null;
@@ -259,13 +237,11 @@ public static class UpdateWindow
         return keep.Count == 0 ? null : string.Join("\n\n", keep);
     }
 
-    /// <summary>Release notes for the version: from the Velopack package first (vpk --releaseNotes), then the GitHub release.</summary>
+    /// <summary>Loads release notes from the Velopack package, the embedded changelog, or the GitHub release.</summary>
     private static async Task<string?> LoadNotesAsync(string version)
     {
         var release = Updater.Instance.Available?.TargetFullRelease;
         if (release is not null && !string.IsNullOrWhiteSpace(release.NotesMarkdown)) return release.NotesMarkdown;
-        // The running version's own notes are in the changelog built into the app: no network, and they exist
-        // before the release does (an "(unreleased)" heading still matches).
         if (string.Equals(version, AppInfo.Version, StringComparison.OrdinalIgnoreCase) && EmbeddedSection(version) is { } own) return own;
         try
         {
@@ -282,7 +258,7 @@ public static class UpdateWindow
         }
     }
 
-    /// <summary>The "## version" section of the CHANGELOG.md embedded in the app, without its heading; null when the file or the section is missing.</summary>
+    /// <summary>The version's section of the embedded CHANGELOG.md, or null.</summary>
     private static string? EmbeddedSection(string version)
     {
         try
@@ -309,10 +285,7 @@ public static class UpdateWindow
         catch (IOException) { return null; }
     }
 
-    /// <summary>
-    /// Plain text from the release markdown, cut to what fits a dialog: headings become labels, bullets
-    /// stay bullets, tables and links are dropped, and the Downloads section and everything after it goes.
-    /// </summary>
+    /// <summary>Converts release markdown to plain text, truncated to <paramref name="maxLines"/>.</summary>
     internal static string? Abridge(string? markdown, int maxLines = 14)
     {
         if (string.IsNullOrWhiteSpace(markdown)) return null;
@@ -324,7 +297,7 @@ public static class UpdateWindow
             if (line.StartsWith('|') || line.StartsWith("---", StringComparison.Ordinal) || line.Length == 0) { if (lines.Count > 0 && lines[^1].Length > 0 && line.Length == 0) lines.Add(string.Empty); continue; }
             bool heading = line.StartsWith('#');
             line = Regex.Replace(line, @"^#{1,6}\s*", string.Empty);
-            line = Regex.Replace(line, @"\[([^\]]+)\]\([^)]+\)", "$1");   // links -> their text
+            line = Regex.Replace(line, @"\[([^\]]+)\]\([^)]+\)", "$1");   // link text only
             line = line.Replace("**", string.Empty).Replace("`", string.Empty);
             if (Regex.IsMatch(line, @"^[-*]\s+")) line = "•  " + line[2..].TrimStart();
             lines.Add(heading ? line.ToUpperInvariant() : line);

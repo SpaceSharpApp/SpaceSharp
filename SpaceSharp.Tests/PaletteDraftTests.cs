@@ -73,7 +73,7 @@ public class PaletteDraftTests
     {
         var graphite = Palette.Schemes.First(s => s.Name == "Graphite");
         var draft = PaletteDraft.FromScheme(graphite);
-        Assert.Null(draft.Files);                 // Graphite's files are its folders lifted by one amount
+        Assert.Null(draft.Files);                 // derived from folders
         Assert.Equal(0.42, draft.FileTint, 2);
         Assert.Equal(12, draft.Folders.Count);
         Assert.Equal(graphite.Theme, draft.Theme);

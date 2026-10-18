@@ -2,11 +2,8 @@ using System.Runtime.InteropServices;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Which keyboard layout the user has, so the Shortcuts window draws the right keys. Windows tells us through the
-/// active input language; on a Mac and on Linux the input source is not read yet, so those get QWERTY until the
-/// user picks another in the window (the pick is kept in the settings).
-/// </summary>
+/// <summary>Detects the active keyboard layout.</summary>
+/// <remarks>Only implemented on Windows; other platforms return the default layout.</remarks>
 public static class KeyboardLayoutDetect
 {
     public static string Detect()
@@ -15,7 +12,7 @@ public static class KeyboardLayoutDetect
         {
             try
             {
-                var buffer = new char[9];   // KL_NAMELENGTH: eight hex digits and the terminator
+                var buffer = new char[9];   // KL_NAMELENGTH
                 if (GetKeyboardLayoutName(buffer)) return KeyboardLayouts.FromWindowsKlid(new string(buffer, 0, Array.IndexOf(buffer, '\0') is var end && end >= 0 ? end : buffer.Length));
             }
             catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException) { }

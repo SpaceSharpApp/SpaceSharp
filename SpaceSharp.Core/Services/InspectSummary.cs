@@ -3,17 +3,13 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// What the Inspect window shows about one item or a selection, computed without any UI so it can be
-/// tested: the headline numbers, the shares, where the space is, the type and age breakdowns, and a
-/// plain-language callout when there is something worth saying.
-/// </summary>
+/// <summary>The numbers and breakdowns the Inspect window shows for one item or a selection.</summary>
 public sealed class InspectSummary
 {
-    /// <summary>A folder is skipped in "Where the space is" when one child holds at least this much of it; the child stands for it.</summary>
+    /// <summary>A folder whose one child holds at least this share is skipped in favor of the child.</summary>
     public const double ThinWrapper = 0.90;
 
-    /// <summary>One item gets its own callout when it holds at least this share of the whole.</summary>
+    /// <summary>Share of the whole at which one item gets a callout.</summary>
     public const double DominantShare = 0.40;
 
     public sealed record Row(string Name, FsNode Node, long Bytes, double Share);
@@ -32,26 +28,26 @@ public sealed class InspectSummary
     public int Files { get; }
     public int Folders { get; }
 
-    /// <summary>Newest write anywhere inside, or <see cref="DateTime.MinValue"/> when unknown.</summary>
+    /// <summary>Newest write inside, or <see cref="DateTime.MinValue"/> when unknown.</summary>
     public DateTime NewestUtc { get; }
     public DateTime OldestUtc { get; }
 
-    /// <summary>Share of the parent folder (single item only) and of the scan root; null when not applicable.</summary>
+    /// <summary>Share of the parent folder (single item only) and of the scan root.</summary>
     public (string Name, double Share)? OfParent { get; }
     public (string Name, double Share)? OfRoot { get; }
 
-    /// <summary>Change since the compared scan, in bytes, or null when no comparison is loaded or the item is new.</summary>
+    /// <summary>Change since the compared scan in bytes, or null when not applicable.</summary>
     public long? Change { get; }
     public bool IsNew { get; }
 
-    /// <summary>Position by size among the parent's folders (for a folder) or files (for a file), 1 = largest, and how many there are. Null for a selection.</summary>
+    /// <summary>Size rank among same-kind siblings, 1 = largest; null for a selection.</summary>
     public (int Position, int Count)? Rank { get; }
 
-    /// <summary>Median file size inside, or 0 when there are no files.</summary>
+    /// <summary>Median file size inside, or 0 with no files.</summary>
     public long MedianFileBytes { get; }
 
     public IReadOnlyList<Row> Largest { get; }
-    /// <summary>What <see cref="Largest"/> leaves out: the rest of the bytes and files.</summary>
+    /// <summary>Bytes and files not covered by <see cref="Largest"/>.</summary>
     public long RemainderBytes { get; }
     public int RemainderFiles { get; }
 
@@ -100,7 +96,7 @@ public sealed class InspectSummary
         }
 
         var files = Nodes.SelectMany(n => n.DescendantFiles()).Where(f => !f.IsHardLinkDuplicate).ToList();
-        // Files stamped with the Unix epoch or earlier have no real date; they land in "Older" but never set the oldest change.
+        // pre-1980 stamps are not real dates
         var dated = files.Where(f => f.LastWriteUtc.Year >= 1980).ToList();
         OldestUtc = dated.Count == 0 ? DateTime.MinValue : dated.Min(f => f.LastWriteUtc);
         MedianFileBytes = Median(files.Select(f => f.SizeFor(measure)));
@@ -116,18 +112,13 @@ public sealed class InspectSummary
 
     // ---------------------------------------------------------------- where the space is
 
-    /// <summary>
-    /// The largest things anywhere inside, never two that contain each other. A folder whose one child holds
-    /// almost all of it is skipped in favor of that child, so "Google\Chrome\User Data" shows instead of
-    /// "Google"; the row's name is the path relative to the inspected folder.
-    /// </summary>
+    /// <summary>The largest non-nested items inside, named relative to the inspected folder.</summary>
     private List<Row> FindLargest(int count)
     {
         if (Size <= 0 || count <= 0) return new List<Row>();
 
         if (Single is not { IsDirectory: true } folder)
         {
-            // A selection: the items themselves. A single file has nothing inside.
             return Nodes.Count <= 1 ? new List<Row>()
                 : Nodes.Where(n => n.SizeFor(Measure) > 0).OrderByDescending(n => n.SizeFor(Measure)).Take(count)
                     .Select(n => new Row(n.Name + (n.IsDirectory ? "\\" : string.Empty), n, n.SizeFor(Measure), Fraction(n.SizeFor(Measure), Size))).ToList();
@@ -189,7 +180,7 @@ public sealed class InspectSummary
             var c = FileCategories.Categorize(f.Extension);
             sums[c] = sums.GetValueOrDefault(c) + f.SizeFor(Measure);
         }
-        // Largest first, "Other" always last so the legend reads the same way every time.
+        // "Other" always last
         return sums.Where(kv => kv.Value > 0)
             .OrderBy(kv => kv.Key == FileCategory.Other ? 1 : 0).ThenByDescending(kv => kv.Value)
             .Select(kv => new Slice(Strings.Category(kv.Key), kv.Key, kv.Value, Fraction(kv.Value, Size))).ToList();
@@ -204,7 +195,7 @@ public sealed class InspectSummary
             if (f.LastWriteUtc <= DateTime.MinValue) continue;
             sums[(int)BucketFor(f.LastWriteUtc, now)] += f.SizeFor(Measure);
         }
-        // shares are of the dated bytes, so the four bands add up to 100% even when some files carry no date
+        // shares are of dated bytes only
         long dated = sums.Sum();
         var bands = Enum.GetValues<AgeBucket>().Select(b => new AgeBand(b, sums[(int)b], Fraction(sums[(int)b], dated))).ToList();
         return (bands, sums[2] + sums[3]);
@@ -221,10 +212,7 @@ public sealed class InspectSummary
 
     // ---------------------------------------------------------------- callouts
 
-    /// <summary>
-    /// One short sentence when a single thing holds most of a folder; empty otherwise. Change and age are
-    /// stated in the header's context lines, so they are not repeated here.
-    /// </summary>
+    /// <summary>A callout when one item holds most of a folder; otherwise empty.</summary>
     private List<string> BuildCallouts(DateTime now)
     {
         var list = new List<string>();
@@ -246,7 +234,7 @@ public sealed class InspectSummary
 
     public static double Fraction(long part, long whole) => whole <= 0 ? 0 : Math.Clamp((double)part / whole, 0, 1);
 
-    /// <summary>"46%" above ten percent, "8.9%" below, "0.1%" at the bottom; never "0%" for something that exists.</summary>
+    /// <summary>Formats a share as a percentage with one decimal below 10%.</summary>
     public static string Percent(double share)
     {
         double p = share * 100;

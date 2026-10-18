@@ -7,21 +7,17 @@ namespace SpaceSharp.Util;
 /// <summary>How the generator spreads twelve hues from one base color.</summary>
 public enum PaletteSpread
 {
-    /// <summary>Hues evenly around the wheel, in the order that keeps neighbors apart.</summary>
+    /// <summary>Hues evenly around the wheel.</summary>
     Rainbow,
-    /// <summary>Hues within a quarter turn of the base: one family.</summary>
+    /// <summary>Hues within a quarter turn of the base.</summary>
     Neighbors,
-    /// <summary>The base and its complement, alternating, each in three steps of lightness.</summary>
+    /// <summary>The base and its complement, alternating.</summary>
     TwoTone,
-    /// <summary>One hue in twelve steps of lightness and saturation.</summary>
+    /// <summary>One hue in steps of lightness and saturation.</summary>
     OneHue
 }
 
-/// <summary>
-/// A palette while it is being made or edited: what the palette editor shows and what a custom palette file holds.
-/// Pure data plus the arithmetic the editor needs (deriving the colors a palette leaves out, generating a set
-/// from a base, the checks), so it can be tested without a window.
-/// </summary>
+/// <summary>An editable palette, as the palette editor shows it and a custom palette file holds it.</summary>
 public sealed class PaletteDraft
 {
     public const int FolderCount = 12;
@@ -30,21 +26,20 @@ public sealed class PaletteDraft
     public PaletteTheme Theme { get; set; } = PaletteTheme.Dark;
     public List<Color> Folders { get; set; } = new();
 
-    /// <summary>How far files are lifted toward white from their folder's hue, 0 to 0.9. Ignored when <see cref="Files"/> is set.</summary>
+    /// <summary>How far files are lifted toward white, 0 to 0.9; ignored when <see cref="Files"/> is set.</summary>
     public double FileTint { get; set; } = 0.45;
 
-    /// <summary>Explicit file colors, or null to derive them from the folders and <see cref="FileTint"/>.</summary>
+    /// <summary>Explicit file colors, or null to derive from <see cref="FileTint"/>.</summary>
     public List<Color>? Files { get; set; }
 
-    /// <summary>One entry per <see cref="FileCategory"/>; null means derived from the folders.</summary>
+    /// <summary>One entry per <see cref="FileCategory"/>; null means derived.</summary>
     public Color?[] Categories { get; set; } = new Color?[Enum.GetValues<FileCategory>().Length];
 
-    /// <summary>The file this draft was opened from, when editing a custom palette; Save overwrites it.</summary>
+    /// <summary>The file this draft was opened from, if any.</summary>
     public string? SourceFile { get; set; }
 
     // ------------------------------------------------------------------ from a palette
 
-    /// <summary>A draft with a built-in or custom palette's colors, as the starting point for a new one.</summary>
     public static PaletteDraft FromScheme(ColorScheme scheme, string? name = null)
     {
         var draft = new PaletteDraft
@@ -54,7 +49,6 @@ public sealed class PaletteDraft
             Folders = scheme.FolderColors.Take(FolderCount).ToList(),
             SourceFile = scheme.SourceFile
         };
-        // The scheme only knows the file colors it ended up with; if they are the folders lifted by one amount, keep that as a tint.
         var files = scheme.FileColors.Take(FolderCount).ToList();
         double? tint = TintBetween(draft.Folders, files);
         if (tint is { } t) draft.FileTint = t; else draft.Files = files;
@@ -64,7 +58,7 @@ public sealed class PaletteDraft
         return draft;
     }
 
-    /// <summary>The one lift that turns every folder color into its file color, or null when there is none.</summary>
+    /// <summary>The single tint that maps every folder color to its file color, or null.</summary>
     private static double? TintBetween(IReadOnlyList<Color> folders, IReadOnlyList<Color> files)
     {
         if (folders.Count == 0 || folders.Count != files.Count) return null;
@@ -85,13 +79,13 @@ public sealed class PaletteDraft
         return tint;
     }
 
-    // ------------------------------------------------------------------ the colors the palette resolves to
+    // ------------------------------------------------------------------ resolved colors
 
     public Color Folder(int i) => Folders.Count == 0 ? Colors.Gray : Folders[i % Folders.Count];
 
     public Color File(int i) => Files is { Count: > 0 } ? Files[i % Files.Count] : Palette.Mix(Folder(i), Colors.White, FileTint);
 
-    /// <summary>What a category gets when the palette does not name a color: a folder hue lifted a little, steel for System, warm grey for Other.</summary>
+    /// <summary>The default color for a category the palette does not name.</summary>
     public Color DerivedCategory(int i)
     {
         if (i == (int)FileCategory.System) return Color.FromRgb(0x8F, 0xA3, 0xB8);
@@ -101,7 +95,6 @@ public sealed class PaletteDraft
 
     public Color Category(int i) => Categories[i] ?? DerivedCategory(i);
 
-    /// <summary>A scheme the preview map can draw, with the draft's current colors.</summary>
     public ColorScheme ToScheme()
     {
         var folders = Folders.Count > 0 ? Folders.ToArray() : new[] { Colors.Gray };
@@ -116,7 +109,7 @@ public sealed class PaletteDraft
 
     // ------------------------------------------------------------------ generating
 
-    /// <summary>Twelve folder colors from one base color and a spread.</summary>
+    /// <summary>Generates twelve folder colors from a base color and a spread.</summary>
     public static List<Color> Generate(Color baseColor, PaletteSpread spread)
     {
         var (h, s, l) = Palette.ToHsl(baseColor);
@@ -125,11 +118,10 @@ public sealed class PaletteDraft
         switch (spread)
         {
             case PaletteSpread.Rainbow:
-                // Step by 150 degrees so each next color sits far from the last; twelve steps cover the wheel. Hues that end up
-                // 30 degrees apart get different lightness and saturation so they still read as two colors.
+                // step by 150 degrees; twelve steps cover the wheel
                 for (int i = 0; i < FolderCount; i++)
                 {
-                    int k = i * 5 % FolderCount;   // the color's position around the wheel
+                    int k = i * 5 % FolderCount;
                     result.Add(Palette.FromHsl(h + k * 30, Math.Clamp(s + (k % 3 - 1) * 0.08, 0.1, 1), l + (k % 2 == 0 ? -0.08 : 0.08)));
                 }
                 break;
@@ -152,7 +144,6 @@ public sealed class PaletteDraft
         return result;
     }
 
-    /// <summary>A base color and a spread picked at random, in the range that makes a usable map palette, for the Random button.</summary>
     public static (Color Base, PaletteSpread Spread) RandomStart(Random random)
     {
         var spread = (PaletteSpread)random.Next(Enum.GetValues<PaletteSpread>().Length);
@@ -162,24 +153,24 @@ public sealed class PaletteDraft
 
     // ------------------------------------------------------------------ checks
 
-    /// <summary>The map's label color on a fill and its contrast ratio; under 4.5 the label is hard to read.</summary>
+    /// <summary>The label color on a fill and its contrast ratio.</summary>
     public static (Color Label, double Contrast) LabelCheck(Color fill)
     {
         var label = Palette.LabelColorFor(fill);
         return (label, Palette.Contrast(label, fill));
     }
 
-    /// <summary>Pairs of folder colors too alike to tell apart on the map, as 1-based indexes.</summary>
+    /// <summary>Pairs of folder colors too alike to tell apart, as 1-based indexes.</summary>
     public List<(int A, int B)> ClosePairs()
     {
         var pairs = new List<(int, int)>();
         for (int i = 0; i < Folders.Count; i++)
             for (int j = i + 1; j < Folders.Count; j++)
-                if (Distance(Folders[i], Folders[j]) < 7) pairs.Add((i + 1, j + 1));   // the built-in palettes sit between 7 and 22
+                if (Distance(Folders[i], Folders[j]) < 7) pairs.Add((i + 1, j + 1));   // built-in palettes range 7..22
         return pairs;
     }
 
-    /// <summary>A perceptual-ish distance: red-mean weighted RGB, 0 for equal colors, about 440 for black to white.</summary>
+    /// <summary>Red-mean weighted RGB distance; 0 for equal colors, about 440 for black to white.</summary>
     public static double Distance(Color a, Color b)
     {
         double rm = (a.R + b.R) / 2.0, dr = a.R - b.R, dg = a.G - b.G, db = a.B - b.B;
@@ -188,7 +179,7 @@ public sealed class PaletteDraft
 
     // ------------------------------------------------------------------ hex
 
-    /// <summary>Parses "#RRGGBB", "RRGGBB", "#RGB" or "0xRRGGBB", spaces around allowed; false for anything else.</summary>
+    /// <summary>Parses "#RRGGBB", "RRGGBB", "#RGB" or "0xRRGGBB".</summary>
     public static bool TryParseHex(string? text, out Color color)
     {
         color = default;
@@ -205,9 +196,8 @@ public sealed class PaletteDraft
 
     public static string ToHex(Color c) => $"#{c.R:X2}{c.G:X2}{c.B:X2}";
 
-    // ------------------------------------------------------------------ the file
+    // ------------------------------------------------------------------ file
 
-    /// <summary>The palette as the JSON a custom palette file holds (the format README.txt in the palettes folder describes).</summary>
     public string ToJson()
     {
         var sb = new StringBuilder();
@@ -228,7 +218,7 @@ public sealed class PaletteDraft
 
     private static string Quote(string s) => "\"" + s.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"";
 
-    /// <summary>The file name a palette of this name is saved under (the name with anything a file name cannot hold replaced).</summary>
+    /// <summary>The file name for this palette, with invalid characters replaced.</summary>
     public string FileName()
     {
         var invalid = Path.GetInvalidFileNameChars();

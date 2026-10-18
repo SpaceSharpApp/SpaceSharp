@@ -15,11 +15,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// All settings in one place. Every change is applied to the main window immediately and saved,
-/// so there is no OK/Cancel: the Close button just closes. The Windows section (the Explorer menu) shows on
-/// Windows only.
-/// </summary>
+/// <summary>The Settings window; every change applies and saves immediately.</summary>
 public partial class SettingsWindow : Window
 {
     private static readonly string[] LabelSizes = { "Smallest", "Smaller", "Normal", "Large", "Larger" };
@@ -31,7 +27,7 @@ public partial class SettingsWindow : Window
     private string _tab = "General";
     private static readonly string[] Tabs = { "General", "Appearance", "Treemap", "Map", "Scanning" };
 
-    // The XAML previewer wants a parameterless constructor; the app always passes the main window.
+    // XAML previewer only
     public SettingsWindow() : this(null) { }
 
     public SettingsWindow(MainWindow? main)
@@ -43,7 +39,7 @@ public partial class SettingsWindow : Window
         CloseButton.Content = Strings.Get("SettingsWin_Close");
         ResetButton.Content = Strings.Get("SettingsWin_ResetToDefaults");
         Build();
-        // The palette list is per theme, so the page is rebuilt when the theme flips.
+        // palette list is per theme
         if (Application.Current is { } app)
         {
             EventHandler onTheme = (_, _) => Dispatcher.UIThread.Post(Build);
@@ -52,7 +48,7 @@ public partial class SettingsWindow : Window
         }
     }
 
-    /// <summary>Opens a tab and scrolls so the section with this heading sits near the top (for the screenshot scenes).</summary>
+    /// <summary>Opens a tab and scrolls to the section with this heading.</summary>
     internal void ShowSection(string tab, string sectionTitle)
     {
         _tab = tab;
@@ -255,11 +251,10 @@ public partial class SettingsWindow : Window
         Body.Children.Add(new Border { Classes = { "card" }, Child = _card });
     }
 
-    /// <summary>A line of small text in the card under the last row, in the accent color: a caveat about the row above.</summary>
     private void Note(string text) =>
         _card!.Children.Add(new TextBlock { Text = text, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(16, 0, 16, 12), Classes = { "accent" } });
 
-    /// <summary>Rows that depend on a switch are grayed out and inert while it is off.</summary>
+    /// <summary>Disables dependent rows while a switch is off.</summary>
     private static void SetEnabled(IEnumerable<Control> rows, bool enabled)
     {
         foreach (var row in rows) { row.IsEnabled = enabled; row.Opacity = enabled ? 1 : 0.45; }
@@ -293,11 +288,8 @@ public partial class SettingsWindow : Window
         return toggle;
     }
 
-    /// <summary>
-    /// The language dropdown, grouped like the WPF app's (2.2): "Translations" holds Same as the system, English and
-    /// the translations a native speaker has read through; "Machine translations" the rest. Avalonia's ComboBox has
-    /// no group headers, so the headings are disabled items in the same list.
-    /// </summary>
+    /// <summary>The language dropdown.</summary>
+    /// <remarks>Avalonia's ComboBox has no group headers, so the headings are disabled items.</remarks>
     private ComboBox LanguageCombo()
     {
         var combo = new ComboBox { Width = 230, MaxDropDownHeight = 560 };
@@ -350,10 +342,6 @@ public partial class SettingsWindow : Window
         return note;
     }
 
-    /// <summary>
-    /// The ways into custom palettes: New and Edit (or Start from the current one) as the two real actions on one row,
-    /// and Open folder and Reload as small links under them, since those are housekeeping.
-    /// </summary>
     private Panel PaletteButtons()
     {
         var panel = new StackPanel { Spacing = 8, HorizontalAlignment = HorizontalAlignment.Right };
@@ -375,7 +363,7 @@ public partial class SettingsWindow : Window
         {
             Palette.Reload();
             _main?.ApplySettings();
-            Build(); // redraw the page so the palette list and the note update
+            Build();
         };
         bool dark = App.IsDark;
         var current = Palette.Find(_settings.PaletteFor(dark), dark);
@@ -405,10 +393,9 @@ public partial class SettingsWindow : Window
     {
         var editor = new PaletteEditorWindow(_main, draft);
         await editor.ShowDialog(this);
-        if (editor.Saved) Build();   // the palette list and the Edit button follow the new palette
+        if (editor.Saved) Build();
     }
 
-    /// <summary>The looks for one theme, each item a row of three swatches (window, panel, control) and the name.</summary>
     private ComboBox LookCombo(bool dark)
     {
         var looks = UiLooks.For(dark);
@@ -432,7 +419,7 @@ public partial class SettingsWindow : Window
             if (combo.SelectedIndex < 0) return;
             string name = looks[combo.SelectedIndex].Name;
             if (dark) _settings.LookDark = name; else _settings.LookLight = name;
-            App.SetLook(dark, name);   // saves and recolors the open windows
+            App.SetLook(dark, name);
         };
         return combo;
     }
@@ -450,7 +437,6 @@ public partial class SettingsWindow : Window
 
     private static readonly string[] ExclusionSuggestions = { "node_modules", "$Recycle.Bin", "*.tmp", ".git", "System Volume Information", ".Trash" };
 
-    /// <summary>The "Leave out" list: each pattern a chip with a remove button, a box to add one, and common ones as one-click suggestions.</summary>
     private Control ExclusionsEditor()
     {
         var panel = new StackPanel { Width = 320 };
@@ -509,7 +495,7 @@ public partial class SettingsWindow : Window
         return panel;
     }
 
-    private static readonly int[] KeepSteps = { 7, 30, 90, 180, 365, 0 };   // 0 = forever, last so the slider reads short to long
+    private static readonly int[] KeepSteps = { 7, 30, 90, 180, 365, 0 };   // 0 = forever
 
     private Control KeepScansSlider()
     {
@@ -535,7 +521,6 @@ public partial class SettingsWindow : Window
         return panel;
     }
 
-    /// <summary>Horizontal … Equal … Vertical, snapping to the middle so "equal" is easy to hit.</summary>
     private Control BiasSlider()
     {
         var panel = new StackPanel { Width = 220 };
@@ -551,7 +536,6 @@ public partial class SettingsWindow : Window
         return panel;
     }
 
-    /// <summary>Several on/off choices in one row: a label and a switch, one per line.</summary>
     private Control Checks(params (string Label, bool Value, Action<bool> OnChanged)[] items)
     {
         var grid = new Grid { Width = 220, ColumnDefinitions = new ColumnDefinitions("*,Auto") };
@@ -588,12 +572,11 @@ public partial class SettingsWindow : Window
         RefreshPreview();
     }
 
-    // ------------------------------------------------------------ Treemap › the preview
+    // ------------------------------------------------------------ Treemap preview
 
     private TreemapControl? _preview;
     private FsNode? _previewSelected;
 
-    /// <summary>A small map of made-up data at the top of the Treemap page, drawn by the same control as the main window.</summary>
     private Control PreviewMap()
     {
         _preview = new TreemapControl { Height = 168, IsHitTestVisible = false, Focusable = false, Root = SampleTree(out _previewSelected) };
@@ -612,11 +595,11 @@ public partial class SettingsWindow : Window
     {
         if (_preview is null) return;
         MainWindow.ApplyLook(_preview, _settings, App.IsDark);
-        if (_preview.ColorMode == ColorMode.ByChange) _preview.ColorMode = ColorMode.ByBranch;   // the sample has no earlier scan
+        if (_preview.ColorMode == ColorMode.ByChange) _preview.ColorMode = ColorMode.ByBranch;   // sample has no baseline
         _preview.SelectedNode = _previewSelected;
     }
 
-    /// <summary>A pretend drive: five folders, one nested, with the kind of files the real map shows. Sizes in GB.</summary>
+    /// <summary>A sample tree for previews; sizes in GB.</summary>
     internal static FsNode SampleTree(out FsNode selected)
     {
         var root = new FsNode(Strings.Get("Settings_PreviewDrive"), NodeKind.Directory, null);
@@ -665,7 +648,7 @@ public partial class SettingsWindow : Window
 
     private static readonly string[] TextColors = { "#14141C", "#F2F2F6", "#000000", "#FFFFFF", "#F5B82E", "#2E4A6B", "#5A1E3A", "#1F4D3A" };
 
-    /// <summary>"Auto" (dark or light text per box) or a fixed color from the swatches or the box. An empty value is auto.</summary>
+    /// <summary>The label color picker; an empty value means auto.</summary>
     private Control TextColorChoice(string current, Action<string> onChanged)
     {
         var panel = new StackPanel { Width = 220 };
@@ -686,7 +669,7 @@ public partial class SettingsWindow : Window
         return panel;
     }
 
-    // The eight light directions, as (x, y) in the light's -1 … 1 space, plus straight ahead in the middle.
+    // light directions as (x, y) in -1..1 space; center is straight ahead
     private static readonly (string Glyph, string Name, double X, double Y)[] Compass =
     {
         ("↖", "Light_TopLeft", -0.5, -0.5),   ("↑", "Light_Top", 0, -0.7),    ("↗", "Light_TopRight", 0.5, -0.5),
@@ -694,7 +677,6 @@ public partial class SettingsWindow : Window
         ("↙", "Light_BottomLeft", -0.5, 0.5), ("↓", "Light_Bottom", 0, 0.7),  ("↘", "Light_BottomRight", 0.5, 0.5)
     };
 
-    /// <summary>Where the light comes from: nine flat tiles in a square with only the current one lit, a dot in the middle for straight ahead, and the name of the direction beside them.</summary>
     private Control LightCompass()
     {
         int current = 0; double best = double.MaxValue;
@@ -738,7 +720,6 @@ public partial class SettingsWindow : Window
         ("Preset_Soft", 30, 35, 55, 60), ("Preset_Classic", 55, 45, 50, 70), ("Preset_Deep", 85, 60, 45, 85)
     };
 
-    /// <summary>Three starting points for the four sliders; the one that matches the current values is lit.</summary>
     private Control PresetChips()
     {
         var panel = new WrapPanel { Width = 220, HorizontalAlignment = HorizontalAlignment.Right };
@@ -766,7 +747,6 @@ public partial class SettingsWindow : Window
     private static readonly string[] GridColors = { "#101014", "#000000", "#30363D", "#5A5F6A", "#8B949E", "#C9CDD3", "#FFFFFF", "#F5B82E" };
     private static readonly string[] HighlightColors = { "#F5B82E", "#FFFFFF", "#000000", "#3FB950", "#58A6FF", "#F778BA", "#FF5D5D", "#39D2C0" };
 
-    /// <summary>A row of color swatches with the chosen one outlined, and a box for any other "#RRGGBB" value.</summary>
     private Control ColorChoice(string current, string[] presets, Action<string> onChanged, Action<TextBox>? boxMade = null)
     {
         var panel = new StackPanel { Width = 220 };

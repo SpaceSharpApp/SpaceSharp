@@ -2,19 +2,15 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Services;
 
-/// <summary>
-/// A pretend PC for trying the app without scanning anything and for posing the README screenshots: a sample drive
-/// with generic names, sizes, dates and "since last scan" changes, the same every time, so the pictures stay stable. Started with <c>--mock</c>, or Ctrl+Shift+Alt+M in the main window. Nothing in it
-/// touches the disk: the tree is built in memory, the drives are a fixed list, and a rescan rebuilds the tree.
-/// </summary>
+/// <summary>A deterministic in-memory sample PC for demos and screenshots (<c>--mock</c>).</summary>
 public static class MockSystem
 {
     private const long KB = 1024, MB = KB * 1024, GB = MB * 1024, TB = GB * 1024;
 
-    /// <summary>A drive of the pretend PC, the way the Drives list wants it.</summary>
+    /// <summary>A mock drive.</summary>
     public sealed record Drive(string Root, string Label, long Used, long Total, string Kind, string Format);
 
-    /// <summary>The five drives the mockup shows. Kind is a DriveKind name (Nvme, Hdd, Ssd, Usb).</summary>
+    /// <summary>The mock drives; Kind is a DriveKind name.</summary>
     public static IReadOnlyList<Drive> Drives { get; } = new[]
     {
         new Drive(@"C:\", "Local Disk", (long)(271.37 * GB), 1 * TB, "Nvme", "NTFS"),
@@ -24,13 +20,10 @@ public static class MockSystem
         new Drive(@"G:\", "USB Drive", (long)(12.4 * GB), (long)(57.6 * GB), "Usb", "FAT32")
     };
 
-    /// <summary>A saved scan the start screen lists on the pretend PC.</summary>
+    /// <summary>A mock saved scan for the start screen.</summary>
     public sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total);
 
-    /// <summary>
-    /// The start screen's saved scans: the system drive from earlier today, the backup drive from a few days ago, the
-    /// nearly full games drive from last week, and a folder scan. Newest first, as the start screen wants them.
-    /// </summary>
+    /// <summary>The mock saved scans, newest first.</summary>
     public static IReadOnlyList<RecentScan> RecentScans()
     {
         var now = DateTime.UtcNow;
@@ -44,7 +37,7 @@ public static class MockSystem
         };
     }
 
-    /// <summary>The scanned "C:\" with its free space, every node marked against a pretend scan from yesterday.</summary>
+    /// <summary>Builds the mock tree with free space and a baseline from yesterday.</summary>
     public static (FsNode Root, ScanFileInfo Info, ScanFileInfo Baseline) Build(string rootPath = @"C:\")
     {
         var now = DateTime.UtcNow;
@@ -69,7 +62,7 @@ public static class MockSystem
 
         public Builder(DateTime now) => _now = now;
 
-        // The mockup's generator: a Lehmer sequence, so the sizes come out the same every time.
+        // Lehmer sequence
         private double Rnd() => (_seed = _seed * 16807 % 2147483647) / 2147483647.0;
 
         private FsNode F(FsNode parent, string name, double bytes)
@@ -174,7 +167,7 @@ public static class MockSystem
             dir.FinishDirectory();
         }
 
-        /// <summary>A pretend "last changed" per file, stable, spread over four years and weighted toward recent months (the mockup's rule).</summary>
+        /// <summary>A stable per-path age in months, 0 to 47, weighted toward recent.</summary>
         private static int MonthsAgo(string path)
         {
             int h = 7;
@@ -184,12 +177,9 @@ public static class MockSystem
         }
     }
 
-    // ------------------------------------------------------------------ the pretend earlier scan
+    // ------------------------------------------------------------------ baseline
 
-    /// <summary>
-    /// Marks every file against a scan from yesterday the mockup's way: by a hash of the name, 12% of files are new,
-    /// 28% grew, 22% shrank and the rest are unchanged. Folders carry the sum of their files' earlier sizes.
-    /// </summary>
+    /// <summary>Assigns a stable baseline to every node: 12% new, 28% grew, 22% shrank, rest unchanged.</summary>
     private static long MarkBaseline(FsNode node)
     {
         node.HasBaseline = true;
@@ -213,9 +203,9 @@ public static class MockSystem
         int h = 0;
         foreach (char c in file.Name) h = unchecked(h * 31 + c);
         double r = ((uint)h % 100) / 100.0;
-        if (r < 0.12) return null;                                              // new since yesterday
-        if (r < 0.40) return file.Size - (long)Math.Round(file.Size * (r - 0.1));   // grew
-        if (r < 0.62) return file.Size + (long)Math.Round(file.Size * (r - 0.4) * 0.6); // shrank
+        if (r < 0.12) return null;
+        if (r < 0.40) return file.Size - (long)Math.Round(file.Size * (r - 0.1));
+        if (r < 0.62) return file.Size + (long)Math.Round(file.Size * (r - 0.4) * 0.6);
         return file.Size;
     }
 }

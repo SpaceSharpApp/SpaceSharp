@@ -6,7 +6,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
-/// <summary>Writes lists of files and folders as CSV (UTF-8 with BOM, so Excel opens it correctly).</summary>
+/// <summary>Writes nodes as CSV, UTF-8 with BOM for Excel.</summary>
 public static class CsvExport
 {
     public static void Write(string path, IEnumerable<FsNode> nodes, SizeMeasure measure)

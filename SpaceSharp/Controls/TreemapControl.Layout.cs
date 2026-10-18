@@ -7,23 +7,17 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>Part of <see cref="TreemapControl"/>. TreemapControl.cs has the overview.</summary>
+/// <summary>Layout part of <see cref="TreemapControl"/>.</summary>
 public sealed partial class TreemapControl
 {
-    /// <summary>
-    /// Each folder's child layout, in coordinates relative to its content rectangle (0..1). Title bars and
-    /// insets are a fixed number of pixels, so a folder's content area changes shape slightly as you zoom;
-    /// re-running squarify on the new shape can flip a row from horizontal to vertical and make boxes
-    /// jump around. Keeping the first layout and only stretching it makes zoom continuous. The cache is
-    /// dropped whenever something other than the camera changes (tree, measure, style, window size).
-    /// </summary>
+    /// <summary>Each folder's child layout, normalized to its content rectangle (0..1).</summary>
+    /// <remarks>Re-running squarify at every zoom would make boxes jump; the cache is only stretched. Cleared on any non-camera change.</remarks>
     private readonly Dictionary<FsNode, CachedChildLayout> _layoutCache = new();
 
     private sealed record CachedChildLayout(int Cutoff, IReadOnlyList<FsNode> Children, Rect[] Normalized, FsNode? Group, bool GroupMatched);
 
     // ================================================================ layout
 
-    /// <summary>Invalidate for changes that alter the layout itself, not only the camera.</summary>
     private void InvalidateLayout()
     {
         _layoutCache.Clear();
@@ -45,10 +39,7 @@ public sealed partial class TreemapControl
         if (_rebuildPending) Rebuild();
     }
 
-    /// <summary>
-    /// Lays the visible part of the map out and asks both layers to redraw. The drawing itself happens in the
-    /// layers' Render calls (<see cref="DrawMap"/> and <see cref="DrawOverlayLayer"/>), from the item list this builds.
-    /// </summary>
+    /// <summary>Lays out the visible part of the map and invalidates both layers.</summary>
     private void Rebuild()
     {
         _rebuildPending = false;
@@ -86,15 +77,13 @@ public sealed partial class TreemapControl
             DrawItem(dc, item);
     }
 
-    /// <summary>Containers whose children were laid out this pass (so a group's own label is not drawn under its members).</summary>
     private readonly HashSet<FsNode> _subdivided = new();
 
     private void LayoutNode(FsNode node, Rect bounds, int depth, int branch, bool sole = false, bool flushRight = true, bool flushBottom = true)
     {
         if (!bounds.IntersectsWith(_viewport)) return;
 
-        // A folder whose only content is one folder (Users > Alex > AppData > ...) is drawn as ONE
-        // box with a combined title, instead of a stack of nested frames and title bars.
+        // collapse single-subfolder chains into one box
         FsNode? chainTop = null;
         var shown = node;
         while (_mergeChains && SingleSubfolder(shown) is { } only)
@@ -109,7 +98,6 @@ public sealed partial class TreemapControl
         var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom);
         _items.Add(item);
 
-        // Every folder of the chain maps to the same box, so focus/selection/zoom still work for each.
         for (var n = shown; n is not null; n = n.Parent)
         {
             _index[n] = item;
@@ -140,22 +128,16 @@ public sealed partial class TreemapControl
                 content.Y + n.Y * content.Height,
                 n.Width * content.Width,
                 n.Height * content.Height);
-            // Children of the root define the branches; everything below inherits its branch.
             int childBranch = depth == 0 ? i : branch;
             if (rect.Width >= MinChildSize && rect.Height >= MinChildSize)
                 LayoutNode(layout.Children[i], rect, depth + 1, childBranch, soleChild, n.X + n.Width >= 0.999, n.Y + n.Height >= 0.999);
         }
     }
 
-    /// <summary>A folder's children, or the members a group pseudo node stands for.</summary>
     private static IReadOnlyList<FsNode> ChildrenOf(FsNode node) => node.GroupMembers ?? node.Children;
 
-    /// <summary>
-    /// The container's child layout, from the cache after the first time. Which children are grouped is
-    /// decided from the data alone (their share of the whole scan), never from the current zoom; folders whose
-    /// every child is small by that standard are cut by the pixels they actually have. See the Windows control
-    /// for the full reasoning; the code is the same.
-    /// </summary>
+    /// <summary>Returns the container's cached child layout, computing it on first use.</summary>
+    /// <remarks>Grouping is decided from each child's share of the whole scan, independent of zoom.</remarks>
     private CachedChildLayout ChildLayout(FsNode folder, Rect content)
     {
         var all = ChildrenOf(folder);
@@ -191,7 +173,6 @@ public sealed partial class TreemapControl
             if (grouped is not null) children = grouped;
         }
 
-        // Lay out in the content's shape, then normalize so the same layout can be stretched to any zoom.
         var normalized = new Rect[children.Count];
         int index = 0;
         Squarify.Layout(children, new LayoutRect(0, 0, content.Width, content.Height), _measure, (_, rect) =>
@@ -206,7 +187,7 @@ public sealed partial class TreemapControl
         return cached;
     }
 
-    /// <summary>The whole map's area at a reference size; grouping is judged against it, not the live window or zoom.</summary>
+    /// <summary>Reference map area that grouping is judged against.</summary>
     private const double ReferenceArea = 1200.0 * 760.0;
 
     private int GroupCutoff(IReadOnlyList<FsNode> children)
@@ -216,10 +197,7 @@ public sealed partial class TreemapControl
         return Grouping.Cutoff(children, _measure, ReferenceArea / whole, GroupBelowArea);
     }
 
-    /// <summary>
-    /// Children that would get less than <see cref="GroupBelowArea"/> pixels are replaced by one
-    /// "312 files" box. Zooming in gives them more pixels, so they appear individually again.
-    /// </summary>
+    /// <summary>Replaces children from <paramref name="cutoff"/> on with one group node.</summary>
     private IReadOnlyList<FsNode>? GroupSmallChildren(FsNode folder, IReadOnlyList<FsNode> children, int cutoff, out FsNode? group, out bool groupMatched)
     {
         group = null;
@@ -268,11 +246,11 @@ public sealed partial class TreemapControl
         return list;
     }
 
-    /// <summary>The folder's dominant child, if it is a folder holding at least 97% of the size.</summary>
+    /// <summary>The folder's dominant subfolder, if it holds at least 97% of the size.</summary>
     private FsNode? SingleSubfolder(FsNode node)
     {
         if (!node.IsDirectory || node.Children.Count == 0) return null;
-        var first = node.Children[0]; // sorted by size, largest first
+        var first = node.Children[0]; // largest first
         long total = node.SizeFor(_measure);
         if (!first.IsDirectory || total <= 0) return null;
         return first.SizeFor(_measure) * 100 >= total * 97 ? first : null;
@@ -288,7 +266,7 @@ public sealed partial class TreemapControl
         }
         else if (_root is not null)
         {
-            // Deepest folder under the window center that covers at least half the window.
+            // deepest folder under the center covering at least half the window
             var center = new Point(_viewport.Width / 2, _viewport.Height / 2);
             double viewArea = _viewport.Width * _viewport.Height;
             foreach (var item in _items)

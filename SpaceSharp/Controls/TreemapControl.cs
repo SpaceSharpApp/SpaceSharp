@@ -8,41 +8,26 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
-// TreemapControl is split into partial files by concern, the same way as the WPF app's (2.2):
-//   TreemapControl.cs         constants, fields, constructor, public properties and events
-//   TreemapControl.Camera.cs  zoom, pan, focus animation, viewport math
-//   TreemapControl.Layout.cs  rebuild, squarified layout cache, grouping, folder-chain merging
-//   TreemapControl.Render.cs  drawing of boxes, title bars, cushions, labels, hover and selection
-//   TreemapControl.Input.cs   pointer and keyboard handling
-//   MapEnums.cs               ColorMode, MapDensity, TreemapItem and the Rect helpers
-//
-// What differs from the WPF control: there are no retained DrawingVisuals, so the map and the overlay are two
-// child layers that each redraw in their Render override when invalidated; text is Avalonia's FormattedText
-// (no pixels-per-dip argument); the camera animation runs on the top level's animation frames; and the pointer
-// events replace the mouse ones. The layout and drawing code is otherwise the same, line for line where it could be.
+// Partial files:
+//   TreemapControl.cs         constants, fields, properties, events
+//   TreemapControl.Camera.cs  zoom, pan, animation
+//   TreemapControl.Layout.cs  layout cache, grouping, chain merging
+//   TreemapControl.Render.cs  drawing
+//   TreemapControl.Input.cs   pointer handling
+//   MapEnums.cs               ColorMode, MapDensity, TreemapItem, Rect helpers
 
-/// <summary>
-/// SpaceMonger-style nested treemap with a zoomable camera.
-///
-/// The whole scan is always one map. Zooming lays the map out on a larger virtual canvas
-/// (window size × zoom) shifted by a pan offset, so small items get real pixels and crisp
-/// labels as you zoom in. Only items intersecting the window are laid out and drawn.
-///
-/// "Focusing" a folder animates the camera so that folder fills the window. The focused
-/// folder is the one shown in the breadcrumb; wheel/pan changes it to whatever folder
-/// covers most of the window.
-/// </summary>
+/// <summary>Nested treemap with a zoomable camera.</summary>
+/// <remarks>Zooming lays the map out on a virtual canvas of window size times zoom; only items intersecting the window are laid out.</remarks>
 public sealed partial class TreemapControl : Panel
 {
     public const double MaxZoom = 1_000_000;
 
-    private const double MinHeaderWidth = 30;        // the title bar stays down to this width (the name goes first)
-    private const double MinHeaderBody = 24;         // a title bar needs at least this much content under it
-    private const double BaseMinChildSize = 4;       // smaller children are not drawn (the parent's color shows)
-    private const double MinFolderContent = 12;      // don't subdivide folders with less room than this
-    private const double BaseGroupBelowArea = 30 * 22;  // children smaller than this many pixels are grouped
+    private const double MinHeaderWidth = 30;
+    private const double MinHeaderBody = 24;
+    private const double BaseMinChildSize = 4;
+    private const double MinFolderContent = 12;
+    private const double BaseGroupBelowArea = 30 * 22;
 
-    // Density scales the two thresholds above.
     private double MinChildSize => _density switch { MapDensity.Sparse => BaseMinChildSize * 2, MapDensity.Dense => 2, MapDensity.Maximum or MapDensity.Everything => 1, _ => BaseMinChildSize };
     private double GroupBelowArea => _density switch { MapDensity.Sparse => BaseGroupBelowArea * 2.5, MapDensity.Dense => BaseGroupBelowArea * 0.4, MapDensity.Maximum => BaseGroupBelowArea * 0.12, _ => BaseGroupBelowArea };
 
@@ -61,12 +46,12 @@ public sealed partial class TreemapControl : Panel
 
     private FsNode? _root;
     private FsNode? _focus;
-    private FsNode? _pinnedFocus;   // folder explicitly focused via FocusOn, until the user wheels/pans
+    private FsNode? _pinnedFocus;   // set by FocusOn, cleared by wheel/pan
     private FsNode? _hoveredNode;
-    private FsNode? _selectedNode;                       // anchor of the selection (last clicked)
+    private FsNode? _selectedNode;
     private readonly HashSet<FsNode> _selection = new();
-    private HashSet<FsNode>? _filterMatches;             // null = no filter active
-    private readonly HashSet<FsNode> _matchedGroups = new(); // transient group boxes that contain a match (rebuilt each layout)
+    private HashSet<FsNode>? _filterMatches;             // null = no filter
+    private readonly HashSet<FsNode> _matchedGroups = new(); // groups containing a match
     private double _labelScale = 1.0;
     private bool _labelHalo;
     private ColorMode _colorMode = ColorMode.ByBranch;
@@ -77,26 +62,25 @@ public sealed partial class TreemapControl : Panel
 
     public TreemapControl()
     {
-        FlowDirection = FlowDirection.LeftToRight;   // the map is drawn in its own coordinates; a mirrored UI does not mirror it
+        FlowDirection = FlowDirection.LeftToRight;
         _mapLayer = new Layer(DrawMap);
         _overlayLayer = new Layer(DrawOverlayLayer);
         Children.Add(_mapLayer);
         Children.Add(_overlayLayer);
-        // Boxes are snapped to whole pixels before they are drawn, so antialiasing costs nothing on their edges and
-        // keeps the labels smooth. (Aliased mode in Avalonia turns antialiasing off for text too, which WPF's did not.)
+        // Aliased edge mode would also disable text antialiasing in Avalonia
         foreach (var layer in new[] { _mapLayer, _overlayLayer })
         {
             RenderOptions.SetEdgeMode(layer, EdgeMode.Antialias);
             TextOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
         }
-        Background = Brushes.Transparent;   // so the panel itself is hit-testable everywhere
+        Background = Brushes.Transparent;
         ClipToBounds = true;
         Focusable = true;
         RebuildPens();
         RebuildCushions();
     }
 
-    /// <summary>A child that draws whatever the owner hands it; the map and the overlay are two of these.</summary>
+    /// <summary>A child control that renders via a delegate.</summary>
     private sealed class Layer : Control
     {
         private readonly Action<DrawingContext> _draw;
@@ -121,11 +105,10 @@ public sealed partial class TreemapControl : Panel
         return finalSize;
     }
 
-    // Declared here, above the property that uses it as a default: static initializers of a partial class run in
-    // an unspecified order across its files, so a field in another file could still be null at that point.
+    // must precede MapBackgroundProperty: static initializer order across partial files is unspecified
     private static readonly IBrush BackgroundBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17));
 
-    /// <summary>Color shown behind and between the boxes (follows the light/dark theme).</summary>
+    /// <summary>Color behind and between the boxes.</summary>
     public static readonly StyledProperty<IBrush?> MapBackgroundProperty =
         AvaloniaProperty.Register<TreemapControl, IBrush?>(nameof(MapBackground), BackgroundBrush);
 
@@ -148,14 +131,13 @@ public sealed partial class TreemapControl : Panel
 
     public event EventHandler<FsNode?>? HoveredNodeChanged;
 
-    /// <summary>The item under the pointer, if any.</summary>
     public FsNode? HoveredNode => _hoveredNode;
     public event EventHandler<FsNode?>? SelectionChanged;
     public event EventHandler<FsNode>? NodeActivated;
     public event EventHandler? FocusChanged;
     public event EventHandler? ZoomChanged;
 
-    /// <summary>The scanned tree. Setting it shows the whole map.</summary>
+    /// <summary>The scanned tree; setting it resets the camera.</summary>
     public FsNode? Root
     {
         get => _root;
@@ -173,17 +155,16 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>The folder the camera is on (shown in the breadcrumb).</summary>
     public FsNode? FocusedFolder => _focus;
 
-    /// <summary>Where a node is drawn right now, in the control's coordinates, or null when it is not on screen (or merged into a cluster).</summary>
+    /// <summary>The node's current bounds in control coordinates, or null when not drawn.</summary>
     public Rect? BoundsOf(FsNode node)
     {
         EnsureLayout();
         return _index.TryGetValue(node, out var item) ? item.Bounds : null;
     }
 
-    /// <summary>The last clicked item. Setting it replaces the whole selection with that one item.</summary>
+    /// <summary>The selection anchor; setting it replaces the whole selection.</summary>
     public FsNode? SelectedNode
     {
         get => _selectedNode;
@@ -198,7 +179,6 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>Every selected item (Ctrl+click and Shift+click add to it).</summary>
     public IReadOnlyCollection<FsNode> SelectedNodes => _selection;
 
     public void ToggleSelected(FsNode node)
@@ -209,7 +189,7 @@ public sealed partial class TreemapControl : Panel
         SelectionChanged?.Invoke(this, _selectedNode);
     }
 
-    /// <summary>Selects a range of siblings between the anchor and the node, like Shift+click in a file manager.</summary>
+    /// <summary>Selects the siblings between the anchor and the node.</summary>
     public void SelectRangeTo(FsNode node)
     {
         var anchor = _selectedNode;
@@ -233,7 +213,6 @@ public sealed partial class TreemapControl : Panel
         SelectionChanged?.Invoke(this, _selectedNode);
     }
 
-    /// <summary>Replaces the selection with the given items.</summary>
     public void SelectMany(IEnumerable<FsNode> nodes)
     {
         _selection.Clear();
@@ -245,10 +224,7 @@ public sealed partial class TreemapControl : Panel
 
     public void ClearSelection() => SelectedNode = null;
 
-    /// <summary>
-    /// Items that match the current filter (files and the folders containing them). Everything else is
-    /// drawn dimmed. Null turns the filter off.
-    /// </summary>
+    /// <summary>Sets the filter matches; everything else is drawn dimmed. Null turns the filter off.</summary>
     public void SetFilterMatches(HashSet<FsNode>? matches)
     {
         _filterMatches = matches;
@@ -257,7 +233,6 @@ public sealed partial class TreemapControl : Panel
 
     public bool HasFilter => _filterMatches is not null;
 
-    /// <summary>The color palette used to fill boxes.</summary>
     public ColorScheme Scheme
     {
         get => _scheme;
@@ -270,7 +245,6 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>Which size the boxes represent. Re-sorts the tree when changed.</summary>
     public SizeMeasure SizeMode
     {
         get => _measure;
@@ -283,7 +257,7 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>Text size multiplier for all labels (1 = 11 px). Title bars grow with it.</summary>
+    /// <summary>Label text size multiplier (1 = 11 px).</summary>
     public double LabelScale
     {
         get => _labelScale;
@@ -296,7 +270,6 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>Draw a contrasting outline around every label so text stays readable on any color.</summary>
     public bool LabelHalo
     {
         get => _labelHalo;
@@ -308,8 +281,7 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    // Geometry. The gap is taken off each box before drawing; the inset is the space folders keep around
-    // their children; the header height is the room reserved for the folder title.
+    // ---- geometry
     private double HeaderHeight => Math.Round(TitleLineHeight * _labelScale + 2 * _titlePadding);
     private const double TitleLineHeight = 15;
 
@@ -317,23 +289,21 @@ public sealed partial class TreemapControl : Panel
 
     private double Gap => _padding;
 
-    // ---- treemap options (Settings › Treemap › Layout)
+    // ---- layout options
     private MapDensity _density = MapDensity.Normal;
-    private double _bias;            // -1 horizontal … 0 equal … +1 vertical
-    private double _padding;         // extra pixels around every box
+    private double _bias;            // -1 horizontal .. +1 vertical
+    private double _padding;
     private string _fontFamily = "Segoe UI";
     private bool _fileCenterNames = true, _fileShowSizes = true, _folderCenterNames, _folderShowSizes = true, _folderShowCounts;
 
     private bool GroupSmall => _density != MapDensity.Everything;
     public MapDensity Density { get => _density; set { if (_density == value) return; _density = value; InvalidateLayout(); } }
 
-    /// <summary>-1 favors wide boxes, +1 tall boxes, 0 is the plain squarified layout.</summary>
+    /// <summary>Orientation bias: -1 favors wide boxes, +1 tall, 0 plain squarified.</summary>
     public double Bias { get => _bias; set { value = Math.Clamp(value, -1, 1); if (_bias == value) return; _bias = value; InvalidateLayout(); } }
 
-    /// <summary>Extra space around every box, 0 to 6 px.</summary>
     public double Padding { get => _padding; set { value = Math.Clamp(value, 0, 6); if (_padding == value) return; _padding = value; InvalidateLayout(); } }
 
-    /// <summary>Font family for every label on the map.</summary>
     public string FontFamilyName { get => _fontFamily; set { if (string.IsNullOrWhiteSpace(value) || _fontFamily == value) return; _fontFamily = value; RebuildTypefaces(); InvalidateLayout(); } }
 
     public bool FileCenterNames { get => _fileCenterNames; set { if (_fileCenterNames == value) return; _fileCenterNames = value; Invalidate(); } }
@@ -344,7 +314,7 @@ public sealed partial class TreemapControl : Panel
 
     private double OrientationBias => Math.Pow(3, _bias);
 
-    // ---- shading (Settings › Treemap › Shading). All 0 to 100 except the light, which is -1 to 1 on each axis.
+    // ---- shading (0..100; light is -1..1 per axis)
     private bool _cushionEnabled = true;
     private int _brightness = DefaultBrightness;
     private int _cushion = DefaultCushion;
@@ -367,7 +337,7 @@ public sealed partial class TreemapControl : Panel
     public int CushionHeight { get => _cushionHeight; set { value = Math.Clamp(value, 0, 100); if (_cushionHeight == value) return; _cushionHeight = value; RebuildCushions(); Invalidate(); } }
     public int ShadingScale { get => _shadingScale; set { value = Math.Clamp(value, 0, 100); if (_shadingScale == value) return; _shadingScale = value; RebuildCushions(); Invalidate(); } }
 
-    /// <summary>Where the light comes from, as a point in the unit square: (-1, -1) is top-left, (0, 0) straight ahead.</summary>
+    /// <summary>Sets the light direction; (-1, -1) is top-left, (0, 0) straight ahead.</summary>
     public void SetLight(double x, double y)
     {
         x = Math.Clamp(x, -1, 1); y = Math.Clamp(y, -1, 1);
@@ -395,19 +365,18 @@ public sealed partial class TreemapControl : Panel
     public double TitlePadding { get => _titlePadding; set { value = Math.Clamp(value, 0, 8); if (_titlePadding == value) return; _titlePadding = value; InvalidateLayout(); } }
     public int TitleBarTint { get => _titleBarTint; set { value = Math.Clamp(value, 0, 40); if (_titleBarTint == value) return; _titleBarTint = value; _headerFills.Clear(); Invalidate(); } }
 
-    /// <summary>Color of folder names, or null to pick dark or light per bar.</summary>
+    /// <summary>Folder name color, or null for automatic contrast.</summary>
     public Color? FolderTextColor { set { _folderText = value is null ? null : new SolidColorBrush(value.Value); Invalidate(); } }
 
-    /// <summary>Color of file names and sizes, or null to pick dark or light per box.</summary>
+    /// <summary>File label color, or null for automatic contrast.</summary>
     public Color? FileTextColor { set { _fileText = value is null ? null : new SolidColorBrush(value.Value); Invalidate(); } }
 
-    /// <summary>Color of the frame around selected boxes.</summary>
     public Color HighlightColor { get => _highlightColor; set { if (_highlightColor == value) return; _highlightColor = value; RebuildPens(); DrawOverlay(); } }
 
-    /// <summary>Fly to folders instead of jumping (FocusOn with animate: true).</summary>
+    /// <summary>Whether <see cref="FocusOn"/> animates the camera.</summary>
     public bool AnimateZoom { get; set; } = true;
 
-    /// <summary>Draw folders that only contain one folder as a single box with a combined title.</summary>
+    /// <summary>Draws single-subfolder chains as one box with a combined title.</summary>
     public bool MergeSingleFolderChains
     {
         get => _mergeChains;
@@ -430,7 +399,7 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    /// <summary>1 = the whole map fits the window.</summary>
+    /// <summary>Current zoom; 1 fits the whole map.</summary>
     public double Zoom => _zoom;
 
     /// <summary>Moves the camera so the folder (or a file's folder) fills the window.</summary>
@@ -441,9 +410,7 @@ public sealed partial class TreemapControl : Panel
         _pinnedFocus = folder;
         EnsureLayout();
 
-        // A merged cluster ("171 items") is a stand-in the layout rebuilds at every zoom: its members leave it as they
-        // get pixels, so the box moves and shrinks on the way in. Aim at the folder's current cluster on every frame
-        // and stop when it is gone, rather than converging on the folder around it (which is already in view).
+        // a group is rebuilt at every zoom, so aim at its current replacement each frame
         if (node.IsGroup)
         {
             if (!_index.TryGetValue(node, out var box)) { FocusOn(folder, animate); return; }
@@ -472,7 +439,6 @@ public sealed partial class TreemapControl : Panel
         UpdateFocus();
     }
 
-    /// <summary>Smoothly zooms around the window center.</summary>
     public void ZoomBy(double factor)
     {
         if (_root is null) return;
@@ -481,13 +447,12 @@ public sealed partial class TreemapControl : Panel
         StartAnimation(zoom, ClampCenter(CurrentCenter(), zoom), null);
     }
 
-    /// <summary>Shows the whole map.</summary>
     public void ShowAll()
     {
         if (_root is not null) FocusOn(_root);
     }
 
-    /// <summary>Re-layouts and redraws (call after the tree was modified).</summary>
+    /// <summary>Re-lays out and redraws after the tree was modified.</summary>
     public void Refresh() => InvalidateLayout();
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)

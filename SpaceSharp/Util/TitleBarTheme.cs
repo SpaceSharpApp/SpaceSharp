@@ -5,12 +5,8 @@ using Avalonia.Media;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Makes the window's title bar part of the app on Windows, as the WPF app (2.2) does: on Windows 11 the caption is
-/// painted in the theme's background color with the theme's text color, so there is no seam between the title bar
-/// and the toolbar below it; on Windows 10, which cannot color captions, it falls back to the dark or light system
-/// caption. Other platforms draw their own title bars and are left alone.
-/// </summary>
+/// <summary>Colors the Windows title bar to match the theme.</summary>
+/// <remarks>Windows 11 gets the theme's caption and text colors; Windows 10 only gets the dark or light system caption.</remarks>
 internal static class TitleBarTheme
 {
     private const int DWMWA_USE_IMMERSIVE_DARK_MODE_OLD = 19; // Windows 10 before 20H1
@@ -22,10 +18,9 @@ internal static class TitleBarTheme
     [DllImport("dwmapi.dll")]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
 
-    /// <summary>Applies the theme once the window has a handle, and again whenever the theme changes.</summary>
+    /// <summary>Applies the theme when the window opens and whenever the theme changes.</summary>
     public static void Attach(Window window)
     {
-        // every window comes through here, so the mirroring for right-to-left languages lives here too
         if (AppLanguages.IsRightToLeft) window.FlowDirection = FlowDirection.RightToLeft;
         if (!OperatingSystem.IsWindows()) return;
         window.Opened += (_, _) => Apply(window);
@@ -38,12 +33,11 @@ internal static class TitleBarTheme
         var hwnd = window.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         if (hwnd == IntPtr.Zero) return;
 
-        // The dark flag first: it picks the caption button glyphs (light on dark) and is all Windows 10 can do.
         int value = App.IsDark ? 1 : 0;
         if (DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref value, sizeof(int)) != 0)
             _ = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE_OLD, ref value, sizeof(int));
 
-        // Windows 11: paint the caption in the app's own colors. Fails harmlessly on Windows 10.
+        // Windows 11 only; fails harmlessly on Windows 10
         if (ThemeColor(window, "WindowBg") is { } bg && ThemeColor(window, "TextColor") is { } text)
         {
             int caption = ColorRef(bg), textColor = ColorRef(text), border = ColorRef(ThemeColor(window, "StrokeColor") ?? bg);
@@ -58,6 +52,6 @@ internal static class TitleBarTheme
     private static Color? ThemeColor(Window window, string key) =>
         window.TryFindResource(key, window.ActualThemeVariant, out var value) ? value switch { Color c => c, ISolidColorBrush b => b.Color, _ => null } : null;
 
-    /// <summary>DWM wants a COLORREF: 0x00BBGGRR.</summary>
+    /// <summary>Converts to a COLORREF (0x00BBGGRR).</summary>
     private static int ColorRef(Color c) => c.R | (c.G << 8) | (c.B << 16);
 }

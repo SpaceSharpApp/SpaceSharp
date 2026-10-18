@@ -5,7 +5,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Tests;
 
-/// <summary>Guards for the resource-based text: every key the code or XAML asks for exists, and the culture switch works.</summary>
+/// <summary>Checks that every string key used in code or XAML exists.</summary>
 public class LocalizationTests
 {
     private static string RepoRoot()
@@ -36,14 +36,14 @@ public class LocalizationTests
         foreach (string file in Directory.EnumerateFiles(app, "*.*", SearchOption.AllDirectories))
         {
             if (!file.EndsWith(".cs") && !file.EndsWith(".xaml")) continue;
-            if (file.EndsWith("Strings.cs")) continue; // the helper's own doc comment shows the call with a placeholder key
+            if (file.EndsWith("Strings.cs")) continue;
             if (file.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) || file.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar)) continue;
             string text = File.ReadAllText(file);
             foreach (var p in patterns)
                 foreach (Match m in p.Matches(text))
                 {
                     string key = m.Groups[1].Value;
-                    if (key.EndsWith('_')) continue; // a prefix completed at runtime ("Density_" + name); covered by DynamicKeysExistForEveryEnumValue
+                    if (key.EndsWith('_')) continue; // runtime prefix; see DynamicKeysExistForEveryEnumValue
                     used.TryAdd(key, Path.GetFileName(file));
                 }
         }

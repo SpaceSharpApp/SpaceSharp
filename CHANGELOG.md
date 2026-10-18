@@ -2,7 +2,7 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.4.1 (unreleased)
+## 2.4.1
 
 ### Windows over the map
 - While Settings, Inspect, About or the update prompt is open, the window behind it darkens, so the open window stands out. Settings › Appearance › Dim behind windows sets how much (45% to start; 0 turns it off), and the change shows at once.
@@ -36,6 +36,7 @@ The NTFS scanner (`Services/MftScanner.cs`, the fast path for whole drives) was 
 - The sample drive in Settings and the palette editor had English folder names in every language; Photos, Videos, Programs, Documents and Music are translated.
 - Deleting to the Recycle Bin no longer gives up with an untranslated "The operation was cancelled.": the report says which items were skipped and why, in your language.
 - Message dialogs got a cleaner layout with an icon, a readable message and a separate details block; plain messages now close with a neutral button instead of a red one.
+- `--scene` posed every picture on the Insights view when the app had last been closed there; a pose now sets the view itself (Insights only for the insights scene).
 - Closing the app on the Insights view and opening it again showed an empty Insights page instead of the start screen, until you switched to the map. With nothing scanned the start screen shows whichever view was last used; the remembered view takes over as soon as a scan starts or a saved one is opened.
 - The hover card over the map could flicker between two places on some files (#8): it sat in the map's own layout, so a card that did not fit beside the pointer was squeezed, measured again at full size, moved, squeezed again, and so on. It is on a layer of its own now, measured against its own width, and kept inside the map's edges.
 - Switching themes kept the other theme's palette: going from dark to light left the map on Graphite instead of Pastel, and back again. Each theme now opens with its own last pick, or its default when there is none.

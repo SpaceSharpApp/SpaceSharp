@@ -6,14 +6,11 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
-/// <summary>What a saved scan knows about itself, readable without loading the tree.</summary>
+/// <summary>A saved scan's header, readable without loading the tree.</summary>
 public sealed record ScanFileInfo(string RootPath, DateTime ScannedUtc, string Method, long FreeBytes, int FileCount, long Bytes, string Path);
 
-/// <summary>
-/// Saves and loads a scanned tree as a compact file (.sscan): a gzip stream of the tree in preorder,
-/// one record per item. Loading a million-file drive takes well under a second, which is what makes
-/// "open the last map instantly" and "compare with last time" possible.
-/// </summary>
+/// <summary>Saves and loads a scanned tree as a .sscan file.</summary>
+/// <remarks>Format: gzip stream of a header followed by the tree in preorder, one record per item.</remarks>
 public static class ScanFile
 {
     public const string Extension = ".sscan";
@@ -33,7 +30,7 @@ public static class ScanFile
         }
     }
 
-    /// <summary>The automatic save for a scan root: "C.sscan" for a drive, a hash-named file for a folder.</summary>
+    /// <summary>The automatic save path for a scan root: drive letter for a drive, a hash for a folder.</summary>
     public static string AutoPathFor(string rootPath)
     {
         string trimmed = rootPath.TrimEnd('\\');
@@ -43,10 +40,10 @@ public static class ScanFile
         return Path.Combine(Folder, name + Extension);
     }
 
-    /// <summary>The copy kept of the previous automatic save, used as the comparison baseline.</summary>
+    /// <summary>The path of the previous automatic save, used as the comparison baseline.</summary>
     public static string PreviousPathFor(string rootPath) => Path.ChangeExtension(AutoPathFor(rootPath), ".prev" + Extension);
 
-    /// <summary>The automatic saves, newest first, without the ".prev" copies kept for comparison.</summary>
+    /// <summary>The automatic saves, newest first, excluding ".prev" copies.</summary>
     public static List<ScanFileInfo> RecentAutoSaves(int max = 5)
     {
         var list = new List<ScanFileInfo>();
@@ -62,10 +59,7 @@ public static class ScanFile
         return list.OrderByDescending(i => i.ScannedUtc).Take(max).ToList();
     }
 
-    /// <summary>
-    /// Deletes automatic saves (and their .prev copies) whose scan is older than the given number of days.
-    /// 0 keeps everything. Returns how many files went. Files the user saved elsewhere are never touched.
-    /// </summary>
+    /// <summary>Deletes automatic saves older than the given days (0 keeps all) and returns the count removed.</summary>
     public static int Prune(int olderThanDays)
     {
         if (olderThanDays <= 0) return 0;
@@ -85,7 +79,7 @@ public static class ScanFile
         return removed;
     }
 
-    /// <summary>Deletes every automatic save. Returns how many files went.</summary>
+    /// <summary>Deletes every automatic save and returns the count removed.</summary>
     public static int DeleteAll()
     {
         int removed = 0;
@@ -111,7 +105,7 @@ public static class ScanFile
         File.Move(temp, path, overwrite: true);
     }
 
-    /// <summary>Writes the tree to any stream in the scan-file format (gzip inside). Used for files and for the elevated helper's pipe.</summary>
+    /// <summary>Writes the tree to a stream in the scan-file format.</summary>
     public static void Write(FsNode root, Stream stream, DateTime scannedUtc, string method)
     {
         using (var gzip = new GZipStream(stream, CompressionLevel.Fastest, leaveOpen: true))
@@ -126,7 +120,7 @@ public static class ScanFile
             w.Write(root.FileCount);
             w.Write(root.Size - (root.FreeSpaceVisible ? root.FreeBytes : 0));
             foreach (var child in root.Children) WriteNode(w, child);
-            w.Write(byte.MaxValue); // end of root's children
+            w.Write(byte.MaxValue); // end marker
         }
     }
 

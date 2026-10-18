@@ -5,11 +5,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Tests;
 
-/// <summary>
-/// Builds a small NTFS volume image in memory: real FILE records with update sequence arrays, resident and
-/// nonresident attributes, data runs and attribute lists, laid out over the extents a test asks for. Only what
-/// the scanner reads is produced; nothing here is a complete file system.
-/// </summary>
+/// <summary>Builds a minimal in-memory NTFS volume image with real FILE records.</summary>
 internal sealed class MftImage
 {
     public const int Sector = 512;
@@ -23,9 +19,9 @@ internal sealed class MftImage
     public int BytesPerCluster { get; }
     public int RecordCount { get; }
     public long TotalClusters { get; }
-    public int SeqMft { get; } = 1;   // record 0's sequence number
+    public int SeqMft { get; } = 1;
 
-    /// <summary>At most this many bytes per read call, to exercise short reads; 0 means whole requests.</summary>
+    /// <summary>Maximum bytes per read call; 0 means unlimited.</summary>
     public int MaxRead { get; set; }
 
     public MftImage(int recordCount = 64, int bytesPerRecord = 1024, int bytesPerCluster = 4096, long totalClusters = 0)
@@ -37,7 +33,7 @@ internal sealed class MftImage
         TotalClusters = totalClusters > 0 ? totalClusters : mftClusters + 1024;
     }
 
-    /// <summary>The MFT occupies these cluster runs, in VCN order. Default: one run at LCN 8.</summary>
+    /// <summary>Sets the MFT's cluster runs in VCN order; default is one run at LCN 8.</summary>
     public MftImage Extents(params (long Clusters, long Lcn)[] extents)
     {
         _extents.Clear();
@@ -51,7 +47,7 @@ internal sealed class MftImage
 
     public void Put(int index, byte[] record) => _records[index] = record;
 
-    /// <summary>Record 0 with the given $DATA pieces; one piece means a plain $DATA attribute, more means an attribute list.</summary>
+    /// <summary>Writes record 0; more than one piece produces an attribute list.</summary>
     public void PutMft(params (int Record, ushort Seq)[] pieceRecords)
     {
         if (_extents.Count == 0) _extents.Add((MftClusters, 8));
@@ -68,7 +64,6 @@ internal sealed class MftImage
             Put(0, Record(0, (ushort)SeqMft, flags: 1, baseRef: 0, attrs.ToArray()));
             return;
         }
-        // An attribute list: the first piece stays in record 0, the others go to the extension records named.
         var list = new List<byte[]> { ListEntry(0x10, 0, Ref(0, (ushort)SeqMft)), ListEntry(0x30, 0, Ref(0, (ushort)SeqMft)) };
         long vcn = 0;
         for (int i = 0; i < pieces.Count; i++)
@@ -92,7 +87,7 @@ internal sealed class MftImage
         }
     }
 
-    /// <summary>The extents split into as many VCN-ordered pieces, run boundaries kept.</summary>
+    /// <summary>Splits the extents into VCN-ordered pieces on run boundaries.</summary>
     private List<List<(long Clusters, long Lcn)>> SplitPieces(int count)
     {
         count = Math.Max(1, count);
@@ -118,7 +113,7 @@ internal sealed class MftImage
 
     public static ulong Ref(int record, ushort seq) => (uint)record | ((ulong)seq << 48);
 
-    /// <summary>A FILE record: header, update sequence array at 0x30 (NTFS 3.1 layout), attributes from 0x38, end marker.</summary>
+    /// <summary>A FILE record in NTFS 3.1 layout: update sequence array at 0x30, attributes from 0x38.</summary>
     public byte[] Record(int index, ushort seq, ushort flags, ulong baseRef, params byte[][] attrs)
     {
         var r = new byte[BytesPerRecord];
@@ -150,11 +145,7 @@ internal sealed class MftImage
         return r;
     }
 
-    /// <summary>
-    /// Writes the update sequence: a number at the array start, the protected words saved, the number in their place.
-    /// Safe to call again on a record that already carries one (a test that edits a built record): the saved words
-    /// are put back first and a new number is used.
-    /// </summary>
+    /// <summary>Applies the update sequence; safe to call again on an already fixed-up record.</summary>
     public static void Fixup(byte[] r)
     {
         int usaOffset = BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(4));
@@ -164,7 +155,7 @@ internal sealed class MftImage
             for (int i = 1; i < usaCount; i++)
             {
                 int end = i * Sector - 2;
-                if (BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(end)) != old) continue;   // a test tore this word on purpose
+                if (BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(end)) != old) continue;   // deliberately torn
                 r[end] = r[usaOffset + i * 2];
                 r[end + 1] = r[usaOffset + i * 2 + 1];
             }
@@ -220,7 +211,7 @@ internal sealed class MftImage
 
     public static byte[] ResidentData(byte[] value) => Resident(0x80, value);
 
-    /// <summary>Unnamed nonresident $DATA. With compressedSize set the header is the long form (runs at 0x48).</summary>
+    /// <summary>Unnamed nonresident $DATA; compressedSize selects the long header with runs at 0x48.</summary>
     public static byte[] NonResidentData(long lowVcn, long highVcn, byte[] runs, long allocated, long size, ushort flags = 0, ushort compressionUnit = 0, long? compressedSize = null)
     {
         int header = compressedSize.HasValue ? 0x48 : 0x40;
@@ -256,7 +247,7 @@ internal sealed class MftImage
         return e;
     }
 
-    /// <summary>Mapping pairs for the given (clusters, LCN) runs; a run with LCN -1 is sparse.</summary>
+    /// <summary>Mapping pairs for the runs; LCN -1 is sparse.</summary>
     public static byte[] Runs(IEnumerable<(long Clusters, long Lcn)> runs)
     {
         var bytes = new List<byte>();
@@ -295,9 +286,9 @@ internal sealed class MftImage
         return all[..n];
     }
 
-    // ------------------------------------------------------------------ the volume
+    // ------------------------------------------------------------------ volume
 
-    /// <summary>The logical MFT as one byte array (unused slots zero).</summary>
+    /// <summary>The logical MFT as one byte array.</summary>
     public byte[] Logical()
     {
         var mft = new byte[(long)RecordCount * BytesPerRecord];

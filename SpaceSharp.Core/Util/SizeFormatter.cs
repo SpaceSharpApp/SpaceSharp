@@ -17,7 +17,7 @@ public static class SizeFormatter
         return unit == 0 ? $"{bytes} B" : $"{value:0.##} {Units[unit]}";
     }
 
-    /// <summary>The short form for tight spaces: "444 MB", "22.1 GB", "1.07 KB". One decimal under 10, none above 100.</summary>
+    /// <summary>A short form with fewer decimals as the number grows.</summary>
     public static string Compact(long bytes)
     {
         double value = bytes;

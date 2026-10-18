@@ -8,11 +8,8 @@ using Avalonia.Reactive;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>
-/// A row of ticks with a label under each, for the filter drawer's size and age choices: click a tick to pick it.
-/// The picked tick is drawn as a thick accent marker and the line from it to one end lights up, so "larger than 1 GB"
-/// reads as a span rather than a value. <see cref="Selected"/> is -1 when the filter holds a value that is not a tick.
-/// </summary>
+/// <summary>A clickable row of labeled ticks.</summary>
+/// <remarks><see cref="Selected"/> is -1 when the current value is not a tick.</remarks>
 public sealed class TickScale : Control
 {
     public static readonly StyledProperty<IReadOnlyList<string>> LabelsProperty =
@@ -21,7 +18,7 @@ public sealed class TickScale : Control
     public static readonly StyledProperty<int> SelectedProperty =
         AvaloniaProperty.Register<TickScale, int>(nameof(Selected), 0);
 
-    /// <summary>True lights the line from the picked tick to the right end (larger than, older than); false from the left end to it (smaller than).</summary>
+    /// <summary>True lights the line from the picked tick to the right end; false from the left end to it.</summary>
     public static readonly StyledProperty<bool> SpanToEndProperty =
         AvaloniaProperty.Register<TickScale, bool>(nameof(SpanToEnd), true);
 
@@ -29,7 +26,7 @@ public sealed class TickScale : Control
     public int Selected { get => GetValue(SelectedProperty); set => SetValue(SelectedProperty, value); }
     public bool SpanToEnd { get => GetValue(SpanToEndProperty); set => SetValue(SpanToEndProperty, value); }
 
-    /// <summary>Raised with the index of the tick the user clicked.</summary>
+    /// <summary>Raised with the index of the clicked tick.</summary>
     public event Action<int>? Picked;
 
     private const double LineY = 10, TickTop = 5, TickBottom = 16, LabelY = 22, SidePad = 18;
@@ -45,7 +42,7 @@ public sealed class TickScale : Control
         Height = 40;
         Cursor = new Cursor(StandardCursorType.Hand);
         ClipToBounds = false;
-        // the brushes are looked up at render time; redraw when the theme swaps them
+        // redraw on theme change
         foreach (var key in new[] { "Accent", "Stroke", "TextDim", "Text" })
             this.GetResourceObservable(key).Subscribe(new AnonymousObserver<object?>(_ => InvalidateVisual()));
     }
@@ -99,7 +96,7 @@ public sealed class TickScale : Control
         double left = TickX(0), right = TickX(n - 1);
         context.DrawLine(new Pen(stroke, 2), new Point(left, LineY), new Point(right, LineY));
 
-        // the first tick is "any": picked, it is marked but nothing lights up, since no condition is set
+        // tick 0 is "any": nothing lights up
         int sel = Selected;
         bool set = sel > 0 && sel < n;
         if (set)

@@ -9,7 +9,6 @@ public class StringsTests
 {
     private static string ResourcesDir()
     {
-        // bin/<config>/<tfm>/ -> repo root -> SpaceSharp/Resources
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln"))) dir = dir.Parent;
         Assert.NotNull(dir);
@@ -24,7 +23,7 @@ public class StringsTests
     public void NeutralStringsLoad()
     {
         Assert.Equal("Language", Strings.Get("Settings_Language"));
-        Assert.StartsWith("[", Strings.Get("No_Such_Key")); // a missing key is visible, never an exception
+        Assert.StartsWith("[", Strings.Get("No_Such_Key"));
     }
 
     [Fact]
@@ -62,10 +61,9 @@ public class StringsTests
     public void ReviewedTranslationsComeBeforeMachineMadeOnes()
     {
         var list = AppLanguages.Available();
-        Assert.False(AppLanguages.IsMachineTranslated(list[0]));                 // English
+        Assert.False(AppLanguages.IsMachineTranslated(list[0]));
         Assert.False(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("nb")));
         Assert.True(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("de")));
-        // once the first machine-made language appears, every later one is machine-made too
         int firstMachine = list.ToList().FindIndex(AppLanguages.IsMachineTranslated);
         Assert.True(firstMachine > 1, "Norwegian should come before the machine-made languages");
         Assert.All(list.Skip(firstMachine), c => Assert.True(AppLanguages.IsMachineTranslated(c), c.Name));

@@ -96,8 +96,8 @@ public class ScanFileTests
 
         var rows = TopLists.Build(now, TopListKind.Changes, SizeMeasure.FileSize, Palette.Schemes[0]);
         var top = new[] { rows[0].Name, rows[1].Name };
-        Assert.Contains("Videos", top);   // +700 as a folder
-        Assert.Contains("a.mp4", top);    // +700
+        Assert.Contains("Videos", top);
+        Assert.Contains("a.mp4", top);
         Assert.Contains(rows, r => r.Name == "notes.txt" && r.SizeText.StartsWith("−"));
     }
 
@@ -116,7 +116,7 @@ public class ScanFileTests
         Assert.Null(videos.Parent);
         Assert.Equal(1560 - 500 + 900, root.Size);
         Assert.Equal(5 - 2 + 1, root.FileCount);
-        Assert.Same(root.FreeSpaceNode, root.Children[0]); // still sorted, free space (1000) first
+        Assert.Same(root.FreeSpaceNode, root.Children[0]); // still sorted
         Assert.Same(fresh, root.Children[1]);
     }
 }

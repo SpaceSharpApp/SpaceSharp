@@ -2,17 +2,12 @@ using SpaceSharp.Models;
 
 namespace SpaceSharp.Layout;
 
-/// <summary>
-/// Squarified treemap layout (Bruls, Huizing, van Wijk 2000).
-/// Produces rectangles with aspect ratios close to 1.
-/// </summary>
+/// <summary>Squarified treemap layout.</summary>
+/// <remarks>Bruls, Huizing, van Wijk, "Squarified Treemaps" (2000).</remarks>
 public static class Squarify
 {
-    /// <param name="nodes">Nodes sorted by the measure, largest first. Zero-sized nodes are ignored.</param>
-    /// <param name="orientationBias">
-    /// How strongly the layout leans to one direction. 1 is the plain algorithm. Above 1 favors vertical strips
-    /// (tall boxes), below 1 favors horizontal strips (wide boxes); the layout stays squarified either way.
-    /// </param>
+    /// <param name="nodes">Sorted largest first; zero-sized nodes are ignored.</param>
+    /// <param name="orientationBias">1 is the plain algorithm; above 1 favors vertical strips, below 1 horizontal.</param>
     public static void Layout(IReadOnlyList<FsNode> nodes, LayoutRect bounds, SizeMeasure measure, Action<FsNode, LayoutRect> emit, double orientationBias = 1)
     {
         int count = 0;
@@ -52,7 +47,6 @@ public static class Squarify
 
             if (w * orientationBias >= h)
             {
-                // Row becomes a vertical strip on the left.
                 double thickness = rowSum / h;
                 double cy = y;
                 for (int k = i; k < j; k++)
@@ -66,7 +60,6 @@ public static class Squarify
             }
             else
             {
-                // Row becomes a horizontal strip on top.
                 double thickness = rowSum / w;
                 double cx = x;
                 for (int k = i; k < j; k++)

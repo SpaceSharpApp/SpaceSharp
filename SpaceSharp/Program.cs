@@ -6,15 +6,14 @@ namespace SpaceSharp;
 
 internal static class Program
 {
-    // Avalonia configuration, don't use any Avalonia, third-party APIs or any SynchronizationContext-reliant
-    // code before AppMain is called: things aren't initialized yet and stuff might break.
+    // No Avalonia or SynchronizationContext-reliant code before AppMain runs.
     [STAThread]
     public static int Main(string[] args)
     {
-        // Velopack first: it handles the install and update hooks (shortcuts, first run, uninstall) and may exit.
+        // Velopack install/update hooks may exit the process.
         VelopackApp.Build().Run();
 
-        // Elevated helper for the fast NTFS scan: no window, no single-instance handshake, just do the job and leave.
+        // Elevated NTFS scan helper: no window, no single-instance handshake.
         if (OperatingSystem.IsWindows() && Array.IndexOf(args, ElevatedScan.HelperFlag) >= 0)
             return ElevatedScan.RunHelper(args);
 

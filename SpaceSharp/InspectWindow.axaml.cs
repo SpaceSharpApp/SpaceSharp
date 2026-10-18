@@ -16,10 +16,7 @@ using static SpaceSharp.Util.RichText;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// Everything about one item or a selection: size, share and rank, what it is made of, its age, two donuts and
-/// the largest things inside it. A port of the WPF app's (2.2) window over the same InspectSummary from Core.
-/// </summary>
+/// <summary>The Inspect window for one item or a selection.</summary>
 public partial class InspectWindow : Window
 {
     private readonly InspectSummary _summary;
@@ -28,10 +25,10 @@ public partial class InspectWindow : Window
     private readonly StringBuilder _copy = new();
     private readonly AppSettings _settings = AppSettings.Current;
 
-    // For the XAML previewer only; the app always passes the selection.
+    // XAML previewer only
     public InspectWindow() : this(new[] { new FsNode("", NodeKind.Directory, null) }, null, SizeMeasure.FileSize, Palette.Default) { }
 
-    /// <param name="navigate">Called with a breadcrumb's folder when one is clicked; the window closes first.</param>
+    /// <param name="navigate">Called with the clicked breadcrumb's folder after the window closes.</param>
     public InspectWindow(IReadOnlyList<FsNode> nodes, FsNode? root, SizeMeasure measure, ColorScheme scheme, Action<FsNode>? navigate = null)
     {
         InitializeComponent();
@@ -39,7 +36,6 @@ public partial class InspectWindow : Window
         _summary = new InspectSummary(nodes, root, measure);
         _scheme = scheme;
         _navigate = navigate;
-        // nothing real to show (a merged group or the free-space box was passed): close as soon as the window opens
         if (_summary.Nodes.Count == 0) Opened += (_, _) => Close();
 
         Title = Strings.Get("InspectWin_Inspect");
@@ -58,19 +54,14 @@ public partial class InspectWindow : Window
         Opened += (_, _) => Dispatcher.UIThread.Post(FitHeightToContent, DispatcherPriority.Loaded);
     }
 
-    /// <summary>
-    /// The window is as tall as what it shows: a folder with four rows under "Where the space is" gets a short window,
-    /// a selection with a long list a tall one, up to what the screen allows, after which the body scrolls. The width
-    /// is the one from last time; the height is never remembered, since it follows the content.
-    /// </summary>
+    /// <summary>Sizes the window height to its content, up to the screen's working area.</summary>
     private void FitHeightToContent()
     {
         if (WindowState != WindowState.Normal) return;
         Scroll.UpdateLayout();
-        // the scroll viewer stretches short content to its viewport, so its extent says nothing; the body's own
-        // desired height is what the content really needs
+        // the ScrollViewer stretches short content to its viewport, so measure the body directly
         Body.Measure(new Size(Scroll.Viewport.Width, double.PositiveInfinity));
-        double chrome = Bounds.Height - Scroll.Viewport.Height;          // header, footer, borders: everything but the scrolling part
+        double chrome = Bounds.Height - Scroll.Viewport.Height;
         double wanted = Math.Ceiling(Body.DesiredSize.Height + chrome + 2);
         double limit = Screens.ScreenFromWindow(this) is { } screen ? screen.WorkingArea.Height / RenderScaling - 48 : 1000;
         double height = Math.Clamp(wanted, MinHeight, Math.Max(MinHeight, limit));
@@ -206,29 +197,24 @@ public partial class InspectWindow : Window
         if (Math.Abs(e.NewSize.Width - _crumbsWidth) > 1 && _chain is not null) LayoutCrumbs();
     }
 
-    /// <summary>
-    /// The path on one line, never wrapping: the root and the last folders are always shown, and as many of the
-    /// folders between them as fit; the rest fold into a "…" button whose flyout lists them, so the window keeps
-    /// its size however deep the path is.
-    /// </summary>
+    /// <summary>Lays out the breadcrumbs on one line, folding the middle folders into a "..." button.</summary>
     private void LayoutCrumbs()
     {
         Crumbs.Children.Clear();
         if (_chain is null || _chain.Count <= 1) { Crumbs.IsVisible = false; return; }
         Crumbs.IsVisible = true;
         _crumbsWidth = Header.Bounds.Width > 0 ? Header.Bounds.Width : Width - 48;
-        double available = _crumbsWidth + 6;   // the panel starts 6 px into the padding
+        double available = _crumbsWidth + 6;   // panel starts 6 px into the padding
 
         var typeface = new Typeface(FontFamily);
         double TextWidth(string text) => new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, 11, null).Width;
-        double CrumbWidth(FsNode n) => TextWidth(n.Name) + 12;   // the crumb's padding
+        double CrumbWidth(FsNode n) => TextWidth(n.Name) + 12;   // crumb padding
         const double sep = 14, ellipsis = 26;
 
         int n = _chain.Count;
         var widths = _chain.Select(CrumbWidth).ToList();
         double total = widths.Sum() + sep * (n - 1);
-        // fold from the second folder onward, leaving at least the root and the last one, until the line fits
-        int foldTo = 1;   // the folded range is [1, foldTo)
+        int foldTo = 1;   // folded range is [1, foldTo)
         while (total > available && foldTo < n - 1)
         {
             if (foldTo == 1) total += ellipsis + sep;
@@ -262,7 +248,7 @@ public partial class InspectWindow : Window
         return button;
     }
 
-    /// <summary>The "…" for the folded folders: its flyout lists them, each one a crumb that zooms the map there.</summary>
+    /// <summary>The "..." button whose flyout lists the folded folders.</summary>
     private Control FoldButton(List<FsNode> folded)
     {
         var button = new Button { Content = "…", Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22, Padding = new Thickness(7, 0) };
@@ -326,13 +312,11 @@ public partial class InspectWindow : Window
             AgePanel.IsVisible = false;
             return;
         }
-        // The bands run amber (this month) to gray (older). The window is not attached yet, so a resource lookup for the
-        // accent would come back empty; the accent is the same amber in every look, and the look's Control color is at hand.
+        // The window is not attached yet, so resource lookups return nothing; use the palette directly.
         var accent = TreemapControl.ColorOf(Palette.NewBrush);
         var dim = Color.Parse(App.Look.Control);
         var ageBrushes = new[] { Palette.Freeze(accent), Palette.Freeze(Palette.Mix(accent, dim, 0.3)), Palette.Freeze(Palette.Mix(accent, dim, 0.58)), Palette.UnchangedBrush };
         var ageSlices = s.ByAge.Select((a, i) => new DonutChart.Slice(Strings.Get("Inspect_Age_" + a.Bucket), SizeFormatter.Compact(a.Bytes), a.Bytes, ageBrushes[i])).ToList();
-        // at rest the center shows the biggest band, as the type donut shows its biggest type
         var topAge = s.ByAge.MaxBy(a => a.Bytes)!;
         Donut(AgeDonut, AgeLegend, ageSlices, s.ByAge.Select(a => a.Share).ToList(), SizeFormatter.Compact(topAge.Bytes), Strings.Get("Inspect_Age_" + topAge.Bucket), Strings.Get("Inspect_ByAge"));
         if (s.OldestUtc > DateTime.MinValue)
@@ -419,7 +403,6 @@ public partial class InspectWindow : Window
         else RemainderText.IsVisible = false;
     }
 
-    /// <summary>A thin rounded bar: the fraction of its width in the accent, the rest in the control color.</summary>
     private Grid Bar(double fraction, double height)
     {
         fraction = Math.Clamp(fraction, 0, 1);

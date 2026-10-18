@@ -10,13 +10,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// Part of <see cref="MainWindow"/>: the README screenshots, posed by the app itself on the pretend PC
-/// (<see cref="MockSystem"/>). <c>--scene &lt;name&gt;</c> opens the app in that pose; with <c>--shot file.png</c> it
-/// also writes the window to the file and exits, which is what tools/screenshots.ps1 runs for every scene. The
-/// scenes are the ones the HTML mockup had: none (the map), drawer, insights, compare, inspect, settings, menu,
-/// start, about, update and light. Nothing a scene changes is saved: the settings are frozen for the run.
-/// </summary>
+/// <summary>Posed screenshot scenes on the <see cref="MockSystem"/>, driven by <c>--scene</c> and <c>--shot</c>.</summary>
 public partial class MainWindow
 {
     public static readonly string[] Scenes = { "none", "drawer", "insights", "compare", "inspect", "settings", "menu", "start", "about", "update", "light" };
@@ -28,6 +22,7 @@ public partial class MainWindow
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
         EnterMock();
+        ShowView(insights: scene == "insights");   // the remembered view must not leak into a pose
         if (scene != "start") LoadMock(MockSystem.Drives[0].Root);
         await Settle();
 
@@ -40,10 +35,9 @@ public partial class MainWindow
                 ShowFilterFace();
                 break;
             case "insights":
-                ShowView(insights: true);
                 break;
             case "compare":
-                ColorCombo.SelectedIndex = 3;   // Change, since the pretend PC was "scanned yesterday" too
+                ColorCombo.SelectedIndex = 3;   // Change
                 break;
             case "light":
                 _settings.Theme = "Light";
@@ -59,8 +53,7 @@ public partial class MainWindow
             case "menu":
                 if (_root is not null)
                 {
-                    // the largest file whose box leaves room for the menu to open inside the window, right-clicked for real
-                    // on Windows (the cursor is moved there and the button pressed), so the menu lands where a user's would
+                    // largest file with room for the menu inside the window
                     var mapSize = Treemap.Bounds.Size;
                     var target = _root.DescendantFiles().OrderByDescending(f => f.Size)
                         .FirstOrDefault(f => Treemap.BoundsOf(f) is { Width: > 120, Height: > 60 } b && b.Center.X + 320 < mapSize.Width && b.Center.Y + 560 < mapSize.Height);
@@ -123,7 +116,7 @@ public partial class MainWindow
 
     private Window? LastOwned() => OwnedWindows.Count > 0 ? OwnedWindows[^1] : null;
 
-    /// <summary>Lets layout, the zoom animation and the dialogs' first paint finish before the next step.</summary>
+    /// <summary>Waits for layout and animations to finish.</summary>
     private static async Task Settle(int milliseconds = 400)
     {
         await Task.Delay(milliseconds);
@@ -132,11 +125,8 @@ public partial class MainWindow
 
     // ------------------------------------------------------------------ capture
 
-    /// <summary>
-    /// Writes the window to a PNG. On Windows the pixels come off the screen, so the title bar, a dialog on top of the
-    /// window and an open menu are all in the picture, exactly as a user sees them; elsewhere the window's own
-    /// visual tree is rendered, which leaves out separate windows and popups.
-    /// </summary>
+    /// <summary>Writes the window to a PNG.</summary>
+    /// <remarks>On Windows the screen is captured, including dialogs and menus; elsewhere only the visual tree is rendered.</remarks>
     private async Task CaptureAsync(string file, Window? dialog)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(file)) ?? ".");
@@ -159,12 +149,12 @@ public partial class MainWindow
 
     private static void SavePng(Bitmap bitmap, string file)
     {
-#pragma warning disable CS0618 // the plain Save writes a PNG, which is all the screenshots need; the options overload is not needed here
+#pragma warning disable CS0618 // plain Save writes a PNG
         bitmap.Save(file);
 #pragma warning restore CS0618
     }
 
-    /// <summary>GDI screen capture of a window's frame, for the posed screenshots on Windows.</summary>
+    /// <summary>GDI screen capture of a window frame.</summary>
     [SupportedOSPlatform("windows")]
     private static class ScreenCapture
     {
@@ -201,7 +191,7 @@ public partial class MainWindow
 
         private const uint InputMouse = 0, RightDown = 0x0008, RightUp = 0x0010;
 
-        /// <summary>Moves the cursor to a screen point and presses the right mouse button there, as a user would.</summary>
+        /// <summary>Moves the cursor to a screen point and right-clicks.</summary>
         public static void RightClick(int x, int y)
         {
             SetCursorPos(x, y);
@@ -213,7 +203,7 @@ public partial class MainWindow
             _ = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
         }
 
-        /// <summary>The window's visible frame in screen pixels: what DWM draws, without the invisible resize border.</summary>
+        /// <summary>The window's visible frame in screen pixels, without the invisible resize border.</summary>
         public static RECT FrameOf(IntPtr hwnd)
         {
             if (DwmGetWindowAttribute(hwnd, DwmaExtendedFrameBounds, out var rect, Marshal.SizeOf<RECT>()) != 0) GetWindowRect(hwnd, out rect);

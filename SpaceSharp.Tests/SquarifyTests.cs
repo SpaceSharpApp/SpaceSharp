@@ -100,11 +100,9 @@ public class SquarifyTests
     [Fact]
     public void FirstRowGoesAlongTheShorterSide()
     {
-        // Wide bounds: the first row is a vertical strip that spans the full height.
         var wide = Run(new LayoutRect(0, 0, 400, 100), 50, 50);
         Assert.Equal(100, wide[0].Rect.Height, 6);
 
-        // Tall bounds: the first row is a horizontal strip that spans the full width.
         var tall = Run(new LayoutRect(0, 0, 100, 400), 50, 50);
         Assert.Equal(100, tall[0].Rect.Width, 6);
     }
@@ -112,8 +110,6 @@ public class SquarifyTests
     [Fact]
     public void BiasChangesTheFirstRowsDirection()
     {
-        // A square: with no bias the row goes into a vertical strip (w >= h), so its two items stack and each spans the
-        // full width; a horizontal bias puts the row in a horizontal strip, so they sit side by side at full height.
         var root = TestTree.Dir(@"C:\");
         TestTree.File(root, "a", 50); TestTree.File(root, "b", 50);
         root.FinishDirectory();
@@ -121,13 +117,12 @@ public class SquarifyTests
 
         var plain = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => plain.Add((n, r)));
-        Assert.Equal(200, plain[0].Item2.Width, 6);    // stacked: full width, half height
+        Assert.Equal(200, plain[0].Item2.Width, 6);    // stacked
 
         var wide = new List<(FsNode, LayoutRect)>();
         Squarify.Layout(root.Children, bounds, SizeMeasure.FileSize, (n, r) => wide.Add((n, r)), orientationBias: 1 / 3.0);
-        Assert.Equal(200, wide[0].Item2.Height, 6);    // side by side: full height, half width
+        Assert.Equal(200, wide[0].Item2.Height, 6);    // side by side
 
-        // Areas are unchanged either way.
         Assert.Equal(20000, plain[0].Item2.Width * plain[0].Item2.Height, 4);
         Assert.Equal(20000, wide[0].Item2.Width * wide[0].Item2.Height, 4);
     }

@@ -11,11 +11,7 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>
-/// The Credits window: a colophon. The mark and a thank-you at the top, then three short paragraphs (the map, the
-/// software, the languages) with the names as links into the text, and the full license texts behind a link in the
-/// footer. Opened from About.
-/// </summary>
+/// <summary>The Credits window, opened from About.</summary>
 public sealed class CreditsWindow : Window
 {
     private const string Licenses = "https://github.com/SpaceSharpApp/SpaceSharp/blob/main/THIRD-PARTY.md";
@@ -30,7 +26,7 @@ public sealed class CreditsWindow : Window
 
         var root = new Grid { RowDefinitions = new RowDefinitions("Auto,*,Auto") };
 
-        // ---- top: the mark, the heading and the thank-you, centered on the panel tone
+        // ---- header
         var head = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(40, 30, 40, 22) };
         head.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
         head.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
@@ -43,7 +39,7 @@ public sealed class CreditsWindow : Window
         head.Child = headStack;
         root.Children.Add(head);
 
-        // ---- the three paragraphs
+        // ---- body
         var body = new StackPanel { Margin = new Thickness(40, 22, 40, 24), Spacing = 16 };
         body.Children.Add(Section(Strings.Get("Credits_MapHeading"), Strings.Get("Credits_MapText")));
         body.Children.Add(Section(Strings.Get("Credits_SoftwareHeading"), Strings.Get("Credits_SoftwareText")));
@@ -51,7 +47,7 @@ public sealed class CreditsWindow : Window
         Grid.SetRow(body, 1);
         root.Children.Add(body);
 
-        // ---- footer: the license texts on the left, Close on the right
+        // ---- footer
         var foot = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12) };
         foot.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
         var footGrid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
@@ -68,7 +64,6 @@ public sealed class CreditsWindow : Window
         Content = root;
     }
 
-    /// <summary>A bold heading over a dim paragraph whose links open in the browser.</summary>
     private StackPanel Section(string heading, string markup)
     {
         var section = new StackPanel { Spacing = 3 };

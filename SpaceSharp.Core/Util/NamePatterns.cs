@@ -2,10 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// A list of wildcard patterns matched against file and folder names, for the scan exclusions
-/// (node_modules, $Recycle.Bin, *.tmp). Empty lines and lines starting with # are ignored.
-/// </summary>
+/// <summary>A wildcard pattern list matched against names; blank lines and # lines are ignored.</summary>
 public sealed class NamePatterns
 {
     public static readonly NamePatterns Empty = new(Array.Empty<string>());

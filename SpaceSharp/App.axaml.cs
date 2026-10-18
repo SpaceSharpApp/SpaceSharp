@@ -12,10 +12,10 @@ namespace SpaceSharp;
 
 public partial class App : Application
 {
-    /// <summary>Everything the app was started with; see <see cref="CommandLine"/>.</summary>
+    /// <summary>The parsed command line.</summary>
     public static CommandLine Args { get; private set; } = new();
 
-    /// <summary>The one-instance guard; <see cref="MainWindow"/> listens on it and releases it before a planned restart.</summary>
+    /// <summary>The single-instance guard.</summary>
     public static SingleInstance Instance { get; } = new();
 
     /// <summary>Set by Program.Main before the framework starts.</summary>
@@ -29,8 +29,7 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Second instance: hand the arguments to the one already running and leave. If it cannot be reached
-            // (it is shutting down, say), carry on and become the instance.
+            // Second instance: forward the arguments and exit; fall through if the first cannot be reached.
             if (!Instance.TryClaim() && SingleInstance.SendArguments(StartupArgs))
             {
                 desktop.Shutdown();
@@ -39,7 +38,7 @@ public partial class App : Application
         }
 
         HookErrors();
-        AppLanguages.Apply(AppSettings.Current.Language);   // before any window, so every string and format follows it
+        AppLanguages.Apply(AppSettings.Current.Language);   // before any window is created
         ApplyTheme();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
@@ -54,7 +53,7 @@ public partial class App : Application
 
     // ------------------------------------------------------------------ theme and look
 
-    /// <summary>The theme from the settings: light, dark, or the system's (the WPF app's "Match Windows"), with the chosen look laid over it.</summary>
+    /// <summary>Applies the theme variant and looks from the settings.</summary>
     public static void ApplyTheme()
     {
         if (Current is null) return;
@@ -68,10 +67,10 @@ public partial class App : Application
         };
     }
 
-    /// <summary>The look of the theme that is showing.</summary>
+    /// <summary>The look of the active theme.</summary>
     public static UiLook Look => UiLooks.Find(IsDark ? AppSettings.Current.LookDark : AppSettings.Current.LookLight, IsDark);
 
-    /// <summary>Picks a look for the dark or the light theme, saves it, and recolors the open windows.</summary>
+    /// <summary>Sets and saves the look for the dark or light theme.</summary>
     public static void SetLook(bool dark, string name)
     {
         if (dark) AppSettings.Current.LookDark = name; else AppSettings.Current.LookLight = name;
@@ -79,10 +78,7 @@ public partial class App : Application
         ApplyLook(dark ? ThemeVariant.Dark : ThemeVariant.Light, UiLooks.Find(name, dark));
     }
 
-    /// <summary>
-    /// Writes the look's surfaces into the theme dictionary of App.axaml, as colors and as the brushes the styles
-    /// use. The accent and Danger stay the dictionary's own. DynamicResource lookups follow the change.
-    /// </summary>
+    /// <summary>Writes the look's colors and brushes into the theme dictionary.</summary>
     private static void ApplyLook(ThemeVariant variant, UiLook look)
     {
         if (Current?.Resources.ThemeDictionaries.TryGetValue(variant, out var provider) != true || provider is not ResourceDictionary dict) return;
@@ -93,7 +89,7 @@ public partial class App : Application
             dict[key + "Color"] = color;
             dict[key] = new SolidColorBrush(color);
         }
-        // the app's keys: the color under the name the XAML uses and the brush under the plain name
+        // app keys
         dict["WindowBg"] = colors["Bg"]; dict["Window"] = new SolidColorBrush(colors["Bg"]);
         dict["PanelBg"] = colors["Panel"]; dict["Panel"] = new SolidColorBrush(colors["Panel"]);
         dict["ControlBg"] = colors["Control"]; dict["Control"] = new SolidColorBrush(colors["Control"]);
@@ -105,7 +101,7 @@ public partial class App : Application
         Set("TextDim", "TextDim");
         dict["MapBgColor"] = colors["MapBg"]; dict["MapBackground"] = new SolidColorBrush(colors["MapBg"]);
         Set("Scrim", "Scrim");
-        // the Fluent parts that borrow a surface
+        // Fluent keys
         foreach (var key in new[] { "SliderTrackFill", "SliderTrackFillPointerOver", "SliderTrackFillPressed" }) dict[key] = new SolidColorBrush(colors["ControlHover"]);
         dict["CheckBoxCheckBackgroundStrokeUnchecked"] = new SolidColorBrush(colors["TextDim"]);
         dict["ComboBoxDropDownBackground"] = new SolidColorBrush(colors["MenuBg"]);
@@ -123,12 +119,12 @@ public partial class App : Application
         dict["CheckBoxCheckBackgroundFillUnchecked"] = new SolidColorBrush(colors["Control"]);
     }
 
-    /// <summary>True while the dark theme is on; the palettes and the map background follow it.</summary>
+    /// <summary>True while the dark theme is active.</summary>
     public static bool IsDark => Current?.ActualThemeVariant != ThemeVariant.Light;
 
     // ------------------------------------------------------------------ errors
 
-    /// <summary>Errors on the UI thread are reported with a dialog; on other threads they are logged, then shown through the UI thread when there still is one.</summary>
+    /// <summary>Installs the unhandled exception handlers.</summary>
     private static void HookErrors()
     {
         Dispatcher.UIThread.UnhandledException += (_, e) =>
@@ -147,10 +143,7 @@ public partial class App : Application
         };
     }
 
-    /// <summary>
-    /// Writes the crash log, then shows the message chain with the log's location and a button that opens a bug
-    /// report on GitHub with the version, the system and the error filled in.
-    /// </summary>
+    /// <summary>Writes the crash log and offers to open a bug report.</summary>
     private static async void Report(Exception exception, string source)
     {
         string? log = CrashLog.Write(exception, source);
@@ -160,7 +153,7 @@ public partial class App : Application
         if (owner is null) return;
         bool report;
         try { report = await Dialog.Confirm(owner, Strings.Get("Crash_Title"), message, Strings.Get("Crash_Report"), Strings.Get("Crash_Close")); }
-        catch (Exception) { return; }   // the dialog needs the resources that may have just failed
+        catch (Exception) { return; }   // the dialog itself may fail after a resource error
         if (!report) return;
         try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(CrashLog.IssueUrl(exception, log)) { UseShellExecute = true }); }
         catch (Exception) { }

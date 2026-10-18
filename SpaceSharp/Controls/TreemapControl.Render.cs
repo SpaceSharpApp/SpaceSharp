@@ -7,16 +7,13 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
-/// <summary>Part of <see cref="TreemapControl"/>. TreemapControl.cs has the overview.</summary>
+/// <summary>Rendering part of <see cref="TreemapControl"/>.</summary>
 public sealed partial class TreemapControl
 {
     private Typeface NormalFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.Normal);
     private Typeface HeaderFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.SemiBold);
 
-    /// <summary>
-    /// The map's font. The Windows default, Segoe UI Variable, exists only there; elsewhere the name falls through
-    /// to the platform's default face (Inter is bundled), so a settings file carried over from Windows still draws.
-    /// </summary>
+    /// <summary>Resolves the map font, falling back to the platform default for Segoe names off Windows.</summary>
     private static FontFamily MapFont(string name)
     {
         if (OperatingSystem.IsWindows() || !name.StartsWith("Segoe", StringComparison.OrdinalIgnoreCase))
@@ -31,7 +28,7 @@ public sealed partial class TreemapControl
         HeaderFace = new Typeface(family, FontStyle.Normal, FontWeight.SemiBold);
     }
 
-    // ---- the grid color and the selection frame follow the shading settings
+    // ---- pens
     private IBrush GridBrush = new ImmutableSolidColorBrush(DefaultGridColor);
     private IPen SelectionPen = new ImmutablePen(new ImmutableSolidColorBrush(DefaultHighlightColor), 3);
 
@@ -43,8 +40,7 @@ public sealed partial class TreemapControl
 
     private static readonly IBrush GroupShade = new ImmutableSolidColorBrush(Color.FromArgb(0x24, 0x00, 0x00, 0x00));
 
-    // The title bar is a shade of the folder's own color, not a black overlay: light fills get a bar tinted
-    // toward black, dark fills toward white, so the bar belongs to its palette and each level keeps its own tint.
+    // title bar fill per folder fill; light fills tint toward black, dark fills toward white
     private readonly Dictionary<IBrush, IBrush> _headerFills = new();
 
     private IBrush HeaderFill(IBrush fill)
@@ -62,14 +58,13 @@ public sealed partial class TreemapControl
         return bar;
     }
 
-    /// <summary>The color of a solid brush, whichever of Avalonia's solid brush types it is.</summary>
     internal static Color ColorOf(IBrush? brush) => brush is ISolidColorBrush solid ? solid.Color : Colors.Gray;
 
-    private const double MinHeaderTextWidth = 18;   // below this the title bar stays blank
+    private const double MinHeaderTextWidth = 18;
     private static readonly IBrush TextBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x14, 0x14, 0x18));
     private static readonly IBrush HoverFill = new ImmutableSolidColorBrush(Color.FromArgb(0x40, 0xFF, 0xFF, 0xFF));
     private static readonly IPen HoverPen = new ImmutablePen(Brushes.White, 2);
-    private static readonly IPen HoverOutlinePen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)), 4); // keeps the hover frame visible on light fills
+    private static readonly IPen HoverOutlinePen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0x99, 0, 0, 0)), 4);
     private static readonly IBrush FreeSpaceBrush = new ImmutableSolidColorBrush(Color.FromRgb(0x4E, 0x4E, 0x5A));
 
     private readonly Dictionary<IBrush, IBrush> _dimmed = new();
@@ -77,10 +72,7 @@ public sealed partial class TreemapControl
     private static readonly IPen LightHaloPen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0xB8, 0xFF, 0xFF, 0xFF)), 3, lineJoin: PenLineJoin.Round);
     private static readonly IPen DarkHaloPen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0xB8, 0x00, 0x00, 0x00)), 3, lineJoin: PenLineJoin.Round);
 
-    // ---- cushions
-    //
-    // One relative-coordinate gradient per depth level, stretched to each box, so every file at the same depth
-    // shares a brush. The gradient runs from the lit side to the shadow side along the light direction.
+    // ---- cushions (one relative gradient per depth level)
     private const int CushionLevels = 16;
     private readonly IBrush?[] _cushions = new IBrush?[CushionLevels];
     private readonly IBrush?[] _cushionsSmall = new IBrush?[CushionLevels];
@@ -98,7 +90,7 @@ public sealed partial class TreemapControl
 
     private IBrush? MakeCushion(double strength)
     {
-        double b = (_brightness - 50) / 50.0;                       // -1 … 1
+        double b = (_brightness - 50) / 50.0;                       // -1..1
         if (strength <= 0.002 && Math.Abs(b) < 0.005) return null;
         double hiA = Math.Clamp(0.55 * strength * (1 + 0.8 * b), 0, 1);
         double loA = Math.Clamp(0.60 * strength * (1 - 0.8 * b), 0, 1);
@@ -115,7 +107,7 @@ public sealed partial class TreemapControl
         double len = Math.Sqrt(_lightX * _lightX + _lightY * _lightY);
         if (len < 0.12)
         {
-            // Light from straight ahead: an even cushion, bright in the middle, dark all around.
+            // light from straight ahead
             return new RadialGradientBrush
             {
                 GradientStops = stops,
@@ -125,7 +117,6 @@ public sealed partial class TreemapControl
                 RadiusY = new RelativeScalar(0.75, RelativeUnit.Relative)
             };
         }
-        // Start on the lit side, end on the shadow side, through the center of the box.
         double dx = _lightX / len, dy = _lightY / len;
         return new LinearGradientBrush
         {
@@ -137,7 +128,6 @@ public sealed partial class TreemapControl
 
     private static byte A(double alpha) => (byte)Math.Round(255 * Math.Clamp(alpha, 0, 1));
 
-    /// <summary>The flat wash laid under a gradient stop: the stop's color over the wash, as one color.</summary>
     private static Color Blend(Color over, Color under)
     {
         double ao = over.A / 255.0, au = under.A / 255.0;
@@ -159,11 +149,10 @@ public sealed partial class TreemapControl
             if (full.Width <= gap || full.Height <= gap) return;
             full = new Rect(full.X + gap / 2, full.Y + gap / 2, full.Width - gap, full.Height - gap);
         }
-        // Whole pixels, so neighbors agree on where the seam between them is.
         full = Snap(full);
         if (full.IsBlank()) return;
 
-        // The grid is a strip the box leaves on its right and bottom, so two neighbors share exactly one line.
+        // grid line is a strip on the box's right and bottom edges
         double t = _showGrid ? Math.Min(_gridThickness, Math.Floor(Math.Min(full.Width, full.Height) / 2)) : 0;
         double stripRight = item.FlushRight ? 0 : t, stripBottom = item.FlushBottom ? 0 : t;
         var inner = new Rect(full.X, full.Y, full.Width - stripRight, full.Height - stripBottom);
@@ -203,7 +192,7 @@ public sealed partial class TreemapControl
             if (!strip.IsBlank()) dc.DrawRectangle(GridBrush, null, strip);
         }
 
-        // ---- folder title (a group that has room for its members gets one too)
+        // ---- folder title
         if (node.IsDirectory || (node.IsGroup && item.HasHeader))
         {
             if (!item.HasHeader) return;
@@ -224,7 +213,7 @@ public sealed partial class TreemapControl
             return;
         }
 
-        // ---- file label (a group without a bar is labeled like a file, until its members are drawn on top of it)
+        // ---- file label
         if (node.IsGroup && _subdivided.Contains(node)) return;
         double line = 15 * _labelScale;
         if (box.Width < 44 * _labelScale || box.Height < line + 1) return;
@@ -242,17 +231,13 @@ public sealed partial class TreemapControl
         }
     }
 
-    /// <summary>The rectangle on whole device pixels; blank when rounding closes it.</summary>
     private static Rect Snap(Rect r)
     {
         double left = Math.Round(r.X), top = Math.Round(r.Y), right = Math.Round(r.Right), bottom = Math.Round(r.Bottom);
         return right <= left || bottom <= top ? Rects.Empty : new Rect(left, top, right - left, bottom - top);
     }
 
-    /// <summary>
-    /// "Users › Alex › AppData  12 GB" for a collapsed chain. When that doesn't fit, leading folders
-    /// are dropped ("… › AppData — 12 GB") so the deepest name, the one that matters, stays readable.
-    /// </summary>
+    /// <summary>Builds the title bar text, dropping leading chain folders until it fits.</summary>
     private string HeaderText(TreemapItem item, double maxWidth, string separator = "  —  ")
     {
         var node = item.Node;
@@ -306,7 +291,6 @@ public sealed partial class TreemapControl
 
         if (_labelHalo)
         {
-            // Outline in the opposite tone of the text, so it reads on any fill.
             var c = ColorOf(brush);
             bool darkText = 0.299 * c.R + 0.587 * c.G + 0.114 * c.B < 128;
             var geometry = formatted.BuildGeometry(origin);
@@ -317,7 +301,6 @@ public sealed partial class TreemapControl
 
     private static readonly IBrush DimText = new ImmutableSolidColorBrush(Color.FromArgb(0x70, 0x80, 0x80, 0x88));
 
-    /// <summary>A washed-out version of a fill, blended toward the map background, for non-matching items.</summary>
     private IBrush Dim(IBrush fill)
     {
         if (_dimmed.TryGetValue(fill, out var dim)) return dim;
@@ -334,7 +317,6 @@ public sealed partial class TreemapControl
         return dim;
     }
 
-    /// <summary>Asks the overlay layer (hover and selection frames) to redraw.</summary>
     private void DrawOverlay() => _overlayLayer.InvalidateVisual();
 
     private void DrawOverlayLayer(DrawingContext dc)
@@ -358,10 +340,7 @@ public sealed partial class TreemapControl
         }
     }
 
-    /// <summary>
-    /// Where a hover or selection frame goes: the box as drawn (minus the padding gap), pulled in by half the
-    /// pen so the stroke stays inside the box instead of covering the neighbors' labels.
-    /// </summary>
+    /// <summary>Returns the frame rectangle for a box, inset so the stroke stays inside it.</summary>
     private Rect FrameRect(Rect bounds, double inset)
     {
         var r = bounds;
@@ -376,7 +355,7 @@ public sealed partial class TreemapControl
         return Rects.Intersect(r, _drawClip);
     }
 
-    /// <summary>Median shorter side of each folder's laid-out children, so neighbors get the same gap.</summary>
+    /// <summary>Median shorter side of each folder's laid-out children.</summary>
     private readonly Dictionary<FsNode, double> _siblingSide = new();
 
     private double GapFor(TreemapItem item)
@@ -401,7 +380,7 @@ public sealed partial class TreemapControl
         return GapFor(typical);
     }
 
-    /// <summary>The padding gap scaled down for small boxes, so a folder of tiny files does not turn into dots.</summary>
+    /// <summary>The padding gap, scaled down for small boxes.</summary>
     private double GapFor(double side)
     {
         double gap = Gap;

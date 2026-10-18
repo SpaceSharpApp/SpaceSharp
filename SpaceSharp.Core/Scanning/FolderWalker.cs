@@ -3,37 +3,33 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Scanning;
 
-/// <summary>Live numbers from a running walk, read by the UI a few times a second.</summary>
+/// <summary>Progress counters of a running walk.</summary>
 public readonly record struct WalkProgress(long Files, long Directories, long Bytes, long DeniedFolders, string CurrentPath);
 
 public sealed class WalkOptions
 {
-    /// <summary>Open every file to read its link count so hard-linked data is counted once. Slower.</summary>
+    /// <summary>Count hard-linked data once; slower.</summary>
     public bool DetectHardLinks { get; init; }
 
-    /// <summary>Include files and folders with the Hidden or System attribute (on by default).</summary>
+    /// <summary>Include Hidden and System items.</summary>
     public bool IncludeHidden { get; init; } = true;
 
-    /// <summary>Names to leave out entirely, with their contents (node_modules, *.tmp). Matched against the name.</summary>
+    /// <summary>Name patterns to skip with their contents.</summary>
     public NamePatterns Exclude { get; init; } = NamePatterns.Empty;
 
-    /// <summary>Add a free-space box to the root when the path is a volume root.</summary>
+    /// <summary>Add a free-space node when the path is a volume root.</summary>
     public bool AddFreeSpace { get; init; } = true;
 }
 
-/// <summary>
-/// Walks a folder tree with System.IO on background threads, the top few levels in parallel. This is the scan
-/// every platform has; the Windows app adds the NTFS file table as a fast path in front of it. The code is the
-/// folder-walk half of the Windows app's DiskScanner, with the Win32 calls behind <see cref="IPlatformFiles"/>.
-/// </summary>
+/// <summary>Walks a folder tree with System.IO, the top levels in parallel.</summary>
 public sealed class FolderWalker
 {
     private const int ParallelDepth = 3;
 
-    // Files whose allocated size can differ from their length; only these need the platform call.
+    // attributes whose allocated size can differ from the length
     private const FileAttributes SpecialSize = FileAttributes.Compressed | FileAttributes.SparseFile |
                                                FileAttributes.Offline | FileAttributes.ReparsePoint |
-                                               (FileAttributes)0x00400000 /* RECALL_ON_DATA_ACCESS (cloud placeholder) */;
+                                               (FileAttributes)0x00400000 /* RECALL_ON_DATA_ACCESS */;
 
     private readonly IPlatformFiles _platform;
     private EnumerationOptions _enumeration = MakeEnumerationOptions(includeHidden: true);
@@ -116,7 +112,7 @@ public sealed class FolderWalker
                 }
                 else if (info is DirectoryInfo sub && (sub.Attributes & FileAttributes.ReparsePoint) == 0)
                 {
-                    // Skipping junctions and symlinks avoids loops and double counting.
+                    // reparse points are skipped to avoid loops
                     subdirectories.Add(sub);
                 }
             }
@@ -168,7 +164,7 @@ public sealed class FolderWalker
         };
     }
 
-    /// <summary>Space the file takes on the volume: the compressed size when there is one, rounded up to whole clusters.</summary>
+    /// <summary>The compressed size when applicable, rounded up to whole clusters.</summary>
     private long AllocatedSize(string path, long length, FileAttributes attributes)
     {
         if (length <= 0) return 0;

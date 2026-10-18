@@ -3,7 +3,7 @@ using System.Runtime.Versioning;
 
 namespace SpaceSharp.Services;
 
-/// <summary>Opens the Windows Properties dialog for a file, folder or drive, the same one Explorer shows.</summary>
+/// <summary>Opens the Windows Properties dialog for a path.</summary>
 [SupportedOSPlatform("windows")]
 public static class ShellProperties
 {
@@ -13,7 +13,7 @@ public static class ShellProperties
         return ViaShellAutomation(path) || ViaShellExecute(path);
     }
 
-    /// <summary>Shell.Application → FolderItem.InvokeVerb("properties"). Works for files, folders and drive roots.</summary>
+    /// <summary>Invokes the "properties" verb through Shell.Application.</summary>
     private static bool ViaShellAutomation(string path)
     {
         try
@@ -44,7 +44,7 @@ public static class ShellProperties
         }
     }
 
-    // ---- fallback: ShellExecuteEx with the "properties" verb ---------------------------------
+    // ---- fallback: ShellExecuteEx
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     private struct ShellExecuteInfo

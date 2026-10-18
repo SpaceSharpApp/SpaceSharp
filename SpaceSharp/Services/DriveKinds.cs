@@ -8,20 +8,16 @@ namespace SpaceSharp.Services;
 public enum DriveKind
 {
     Unknown,
-    Hdd,        // spinning disk
-    Ssd,        // SATA or other solid state
-    Nvme,       // solid state on the NVMe bus
-    Usb,        // a fixed disk on the USB bus (external drive) or a removable stick
+    Hdd,
+    Ssd,
+    Nvme,
+    Usb,        // USB bus or removable
     Network,
     Optical
 }
 
-/// <summary>
-/// Tells what kind of disk a volume lives on, for the icon and the line under the drive's name. Two questions to
-/// the storage stack through DeviceIoControl, which Windows answers for a volume opened with no access rights, so
-/// no elevation is needed: does the disk incur a seek penalty (spinning) and which bus is it on (NVMe, USB, ...).
-/// Anything that fails answers Unknown, and the caller shows the file system name alone as before.
-/// </summary>
+/// <summary>Detects what kind of disk a volume lives on.</summary>
+/// <remarks>Uses IOCTL_STORAGE_QUERY_PROPERTY (seek penalty and bus type); works unelevated. Failures return Unknown.</remarks>
 public static class DriveKinds
 {
     private static readonly Dictionary<string, DriveKind> Cache = new(StringComparer.OrdinalIgnoreCase);
@@ -38,7 +34,7 @@ public static class DriveKinds
         }
     }
 
-    /// <summary>For a path: the kind of the volume it is on. Only meaningful for local fixed disks.</summary>
+    /// <summary>The kind of the volume a path is on.</summary>
     public static DriveKind Detect(string path)
     {
         string? root;
@@ -54,7 +50,7 @@ public static class DriveKinds
         }
     }
 
-    /// <summary>The icon name in Themes/Icons.xaml for a kind.</summary>
+    /// <summary>The icon name for a kind.</summary>
     public static string IconName(DriveKind kind) => kind switch
     {
         DriveKind.Hdd => "Drive",
@@ -65,7 +61,7 @@ public static class DriveKinds
         _ => "Drive"
     };
 
-    /// <summary>What to call it, or null when nothing is known beyond the file system.</summary>
+    /// <summary>The localized label for a kind, or null for Unknown.</summary>
     public static string? Label(DriveKind kind) => kind switch
     {
         DriveKind.Hdd => Strings.Get("Drive_Hdd"),
@@ -77,7 +73,7 @@ public static class DriveKinds
         _ => null
     };
 
-    // ---- the storage stack
+    // ---- storage stack
 
     private const uint IoctlStorageQueryProperty = 0x002D1400;
     private const int StorageDeviceProperty = 0;
@@ -87,7 +83,7 @@ public static class DriveKinds
     [SupportedOSPlatform("windows")]
     private static DriveKind Query(string root)
     {
-        // "\\.\C:" opens the volume; zero access is enough for property queries and needs no elevation.
+        // zero access is enough for property queries
         using var handle = CreateFile(@"\\.\" + root.TrimEnd('\\'), 0, 3, IntPtr.Zero, 3, 0, IntPtr.Zero);
         if (handle.IsInvalid) return DriveKind.Unknown;
 
@@ -96,7 +92,7 @@ public static class DriveKinds
         if (Query(handle, StorageDeviceProperty, device)) bus = BitConverter.ToInt32(device, 28); // STORAGE_DEVICE_DESCRIPTOR.BusType
         if (bus is BusTypeUsb or BusTypeSd) return DriveKind.Usb;
 
-        var seek = new byte[12]; // DEVICE_SEEK_PENALTY_DESCRIPTOR: Version, Size, IncursSeekPenalty
+        var seek = new byte[12]; // DEVICE_SEEK_PENALTY_DESCRIPTOR
         if (!Query(handle, StorageDeviceSeekPenaltyProperty, seek)) return DriveKind.Unknown;
         if (seek[8] != 0) return DriveKind.Hdd;
         return bus == BusTypeNvme ? DriveKind.Nvme : DriveKind.Ssd;
@@ -105,7 +101,7 @@ public static class DriveKinds
     [SupportedOSPlatform("windows")]
     private static bool Query(SafeFileHandle handle, int property, byte[] output)
     {
-        var query = new byte[12]; // STORAGE_PROPERTY_QUERY: PropertyId, QueryType (0 = standard), AdditionalParameters[1]
+        var query = new byte[12]; // STORAGE_PROPERTY_QUERY
         BitConverter.GetBytes(property).CopyTo(query, 0);
         return DeviceIoControl(handle, IoctlStorageQueryProperty, query, query.Length, output, output.Length, out _, IntPtr.Zero);
     }

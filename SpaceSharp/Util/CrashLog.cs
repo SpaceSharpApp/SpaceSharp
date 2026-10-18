@@ -4,11 +4,7 @@ using SpaceSharp.Services;
 
 namespace SpaceSharp.Util;
 
-/// <summary>
-/// Writes an unexpected error to a file under the local app data folder (SpaceSharp/logs) and builds the link that opens a
-/// bug report on GitHub with the version, the system and the error already filled in. The file holds the whole
-/// exception chain with stack traces, which is what a report needs and what a dialog should not show.
-/// </summary>
+/// <summary>Writes crash logs and builds prefilled GitHub bug report links.</summary>
 public static class CrashLog
 {
     private const int Keep = 20;
@@ -24,11 +20,11 @@ public static class CrashLog
         }
     }
 
-    /// <summary>One line on the version, the runtime and the system, as the About window shows them.</summary>
+    /// <summary>One line with the version, runtime and OS.</summary>
     public static string SystemLine() =>
         $"SpaceSharp {AppInfo.Version} · {RuntimeInformation.FrameworkDescription} · {RuntimeInformation.OSDescription} ({RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant()})";
 
-    /// <summary>The whole chain as "message, caused by message", for the dialog.</summary>
+    /// <summary>The exception chain's messages, joined with "caused by".</summary>
     public static string MessageChain(Exception exception)
     {
         var text = new StringBuilder();
@@ -40,7 +36,7 @@ public static class CrashLog
         return text.ToString().TrimEnd();
     }
 
-    /// <summary>Writes the log and returns its path, or null when even that failed (a full or locked disk).</summary>
+    /// <summary>Writes the log and returns its path, or null on failure.</summary>
     public static string? Write(Exception exception, string source)
     {
         try
@@ -53,7 +49,7 @@ public static class CrashLog
             text.AppendLine($"Where: {source}");
             text.AppendLine($"Install: {InstallKind()}");
             text.AppendLine();
-            text.AppendLine(exception.ToString());   // the chain with every stack trace
+            text.AppendLine(exception.ToString());
             File.WriteAllText(path, text.ToString(), Encoding.UTF8);
             Prune(folder);
             return path;
@@ -64,7 +60,7 @@ public static class CrashLog
         }
     }
 
-    /// <summary>The bug form on GitHub with the fields a crash can fill in: version, system, how it was installed, and what happened.</summary>
+    /// <summary>Builds the prefilled GitHub bug report URL.</summary>
     public static string IssueUrl(Exception exception, string? logPath)
     {
         var what = new StringBuilder();
@@ -72,7 +68,6 @@ public static class CrashLog
         what.AppendLine();
         what.AppendLine(MessageChain(exception));
         what.AppendLine();
-        // the first frames of the innermost exception say where it broke; the whole trace is in the log
         var inner = exception; while (inner.InnerException is not null) inner = inner.InnerException;
         string trace = inner.StackTrace ?? string.Empty;
         var frames = trace.Split('\n').Select(l => l.Trim()).Where(l => l.Length > 0).Take(6);
@@ -86,7 +81,7 @@ public static class CrashLog
         what.AppendLine("What I was doing when it happened:");
 
         string body = what.ToString();
-        if (body.Length > 1800) body = body[..1800] + "\n…";   // browsers cap the URL; the log has the rest
+        if (body.Length > 1800) body = body[..1800] + "\n…";   // URL length cap
         return $"{Repository}/issues/new?template=bug_report.yml" +
                $"&title={Uri.EscapeDataString("[Bug] Unexpected error: " + Shorten(inner.Message, 60))}" +
                $"&version={Uri.EscapeDataString(AppInfo.Version)}" +
