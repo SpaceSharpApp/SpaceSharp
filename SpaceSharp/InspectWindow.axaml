@@ -4,7 +4,7 @@
         x:Class="SpaceSharp.InspectWindow"
         Width="660" Height="880" MinWidth="520" MinHeight="480"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-        Icon="avares://SpaceSharp/Assets/SpaceSharp-256.png"
+        Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
 
   <DockPanel>

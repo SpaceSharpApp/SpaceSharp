@@ -76,7 +76,7 @@ public sealed class PaletteEditorWindow : Window
         Title = Strings.Get("PaletteEd_Title");
         Width = 1240; Height = 800; MinWidth = 1040; MinHeight = 640;
         WindowStartupLocation = WindowStartupLocation.CenterOwner; ShowInTaskbar = false;
-        Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png")));
+        Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp.ico")));
         TitleBarTheme.Attach(this);
         _main = main;
         _draft = draft;

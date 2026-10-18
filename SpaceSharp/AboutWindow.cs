@@ -27,7 +27,7 @@ public sealed class AboutWindow : Window
         Title = Strings.Get("About_AboutSpaceSharp");
         Width = 520; SizeToContent = SizeToContent.Height; CanResize = false;
         WindowStartupLocation = WindowStartupLocation.CenterOwner; ShowInTaskbar = false;
-        Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png")));
+        Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp.ico")));
         TitleBarTheme.Attach(this);
         bool installed = Updater.Instance.IsInstalled;
 

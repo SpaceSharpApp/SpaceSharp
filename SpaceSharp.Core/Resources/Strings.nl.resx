@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … en nog {0:N0}</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Verwijderen</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Niet alles kon worden verwijderd.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} is gewijzigd sinds de scan en is niet aangeraakt. Scan opnieuw om het te verwijderen.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Niet alles kon worden verwijderd.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>{0} naar de Prullenbak verplaatsen?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows heeft het overgeslagen (in gebruik, of te groot voor de Prullenbak)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>het pad is te lang voor de Prullenbak</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>toegang geweigerd</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>in gebruik door een ander programma</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>het bestaat niet meer</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows meldde foutcode {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} bestaat nog na de bewerking.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} van {1} items bestaan nog na de bewerking.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>en nog {0}</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Leeg de prullenbak vanuit de bestandsbeheerder van het systeem.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} is niet gestart.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} is gestopt met code {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>het bestand "{0}" ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>de map "{0}" ({1:N0} bestanden, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} items ({1:N0} bestanden, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Hoe bestanden worden belicht. De kaart bovenaan is voorbeeldgegevens en volgt elke wijziging.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Voorbeeldgegevens</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Voorbeeldstation</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Foto's</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Video's</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programma's</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Documenten</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Muziek</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Licht vanuit</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Van welke kant het licht komt. Het midden is recht van voren.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Schaduw herstellen</value></data>
@@ -827,7 +843,7 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Pakketcaches</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} caches (npm, pnpm, NuGet, pip, Cargo, Gradle en dergelijke), {1:N0} bestanden. Ze worden opnieuw gedownload wanneer nodig.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Browsercaches</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cachemappen, {1:N0} bestanden. Pagina's laden daarna de eerste keer iets trager.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cachemappen, {1:N0} bestanden. Alleen paginacaches: wachtwoorden, aanmeldingen, geschiedenis en open tabbladen blijven staan. Sluit eerst de browser; pagina's laden daarna de eerste keer iets langzamer.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shadercaches</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} mappen, {1:N0} bestanden. Games en stuurprogramma's bouwen ze bij de volgende start opnieuw op.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update-downloads</value></data>

@@ -59,9 +59,12 @@ public partial class MainWindow
     private void ApplyView()
     {
         bool insights = InsightsShowing;
-        InsightsView.IsVisible = insights;
-        Treemap.IsVisible = !insights;
-        if (_root is null && _scanCts is null) EmptyHint.IsVisible = !insights;
+        // Nothing scanned and nothing scanning: the start screen, whichever view is remembered. The remembered
+        // view takes over as soon as a scan starts or a saved one is opened.
+        bool idle = _root is null && _scanCts is null;
+        InsightsView.IsVisible = insights && !idle;
+        Treemap.IsVisible = !insights || idle;
+        EmptyHint.IsVisible = idle;
         MapViewButton.Classes.Set("primary", !insights); MapViewButton.Classes.Set("tool", insights);
         InsightsButton.Classes.Set("primary", insights); InsightsButton.Classes.Set("tool", !insights);
         foreach (var b in new[] { ZoomInButton, ZoomOutButton, HomeButton, UpButton }) b.IsEnabled = !insights && _root is not null;

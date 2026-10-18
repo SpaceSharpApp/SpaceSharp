@@ -118,13 +118,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … og {0:N0} til</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Slett</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Ikke alt kunne slettes.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} er endret siden skanningen og ble ikke rørt. Skann på nytt for å slette den.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Ikke alt kunne slettes.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Vil du flytte {0} til papirkurven?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Flytt til papirkurven</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows hoppet over den (i bruk, eller for stor for papirkurven)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>stien er for lang for papirkurven</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>ingen tilgang</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>i bruk av et annet program</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>den finnes ikke lenger</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows meldte feilkode {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} finnes fortsatt etter operasjonen.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} av {1} elementer finnes fortsatt etter operasjonen.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>og {0} til</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Tøm papirkurven fra systemets filbehandler.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} startet ikke.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} avsluttet med kode {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>filen «{0}» ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>mappen «{0}» ({1:N0} filer, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} elementer ({1:N0} filer, {2})</value></data>
@@ -724,6 +735,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Hvordan filene lyssettes. Kartet øverst er eksempeldata og følger hver endring.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Eksempeldata</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Eksempelstasjon</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Bilder</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Videoer</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programmer</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Dokumenter</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Musikk</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Lys fra</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Hvilken side lyset kommer fra. Midten er rett forfra.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Tilbakestill skyggelegging</value></data>
@@ -828,7 +844,7 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Pakkebuffere</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} buffere (npm, pnpm, NuGet, pip, Cargo, Gradle og lignende), {1:N0} filer. De lastes ned igjen ved behov.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Nettleserbuffere</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} buffermapper, {1:N0} filer. Sider laster litt tregere første gang etterpå.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} hurtigbuffermapper, {1:N0} filer. Bare sidebuffer: passord, innlogginger, historikk og åpne faner røres ikke. Lukk nettleseren først; sider lastes litt saktere første gang etterpå.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shader-buffere</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} mapper, {1:N0} filer. Spill og drivere bygger dem opp igjen ved neste start.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update-nedlastinger</value></data>

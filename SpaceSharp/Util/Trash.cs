@@ -25,7 +25,7 @@ internal static class Trash
         }
         var remaining = paths.Where(p => File.Exists(p) || Directory.Exists(p)).ToList();
         if (failures.Count == 0 && remaining.Count == 0) { error = null; return true; }
-        error = failures.Count > 0 ? string.Join("\n", failures.Take(5)) : $"{remaining.Count} of {paths.Count} items still exist after the operation.";
+        error = failures.Count > 0 ? string.Join("\n", failures.Take(5)) : Strings.Format("Trash_StillExistMany", remaining.Count, paths.Count);
         return false;
     }
 
@@ -46,10 +46,10 @@ internal static class Trash
             var info = new ProcessStartInfo(file) { UseShellExecute = false, RedirectStandardError = true, CreateNoWindow = true };
             foreach (var a in args) info.ArgumentList.Add(a);
             using var p = Process.Start(info);
-            if (p is null) return $"{file} did not start.";
+            if (p is null) return Strings.Format("Trash_DidNotStart", file);
             string err = p.StandardError.ReadToEnd();
             p.WaitForExit();
-            return p.ExitCode == 0 ? null : (string.IsNullOrWhiteSpace(err) ? $"{file} exited with {p.ExitCode}." : err.Trim());
+            return p.ExitCode == 0 ? null : (string.IsNullOrWhiteSpace(err) ? Strings.Format("Trash_Exited", file, p.ExitCode) : err.Trim());
         }
         catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
         {
@@ -61,7 +61,7 @@ internal static class Trash
     public static bool TryEmpty(string? driveRoot, out string? error)
     {
         if (OperatingSystem.IsWindows()) return Windows.TryEmpty(driveRoot, out error);
-        error = "Empty the trash from the system's file manager.";
+        error = Strings.Get("Trash_EmptyElsewhere");
         return false;
     }
 
@@ -88,6 +88,7 @@ internal static class Trash
         private const int FOF_NOCONFIRMATION = 0x0010;
         private const int FOF_ALLOWUNDO = 0x0040;
         private const int FOF_WANTNUKEWARNING = 0x4000;
+        private const int FOF_NORECURSEREPARSE = 0x8000;   // a junction or symlink is the item, never what it points at
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         private struct SHFILEOPSTRUCT
@@ -112,30 +113,91 @@ internal static class Trash
         {
             int result = SHEmptyRecycleBin(IntPtr.Zero, driveRoot, 0);
             if (result == 0 || result == unchecked((int)0x8000FFFF)) { error = null; return true; } // E_UNEXPECTED: already empty
-            error = $"Windows reported error code 0x{result:X}.";
+            error = Strings.Format("Trash_Code", $"0x{result:X}");
             return false;
         }
 
+        private const int MaxPath = 259;
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern uint GetShortPathName(string longPath, [Out] char[] shortPath, uint bufferLength);
+
+        /// <summary>
+        /// Sends the paths to the Recycle Bin. The shell call takes the whole list at once and gives up on all of it when
+        /// one path is bad (0x7C, DE_INVALIDFILES: longer than MAX_PATH, or gone), which is what happens with browser
+        /// caches: files come and go while the browser runs, and some sit in very deep folders. So: paths that have
+        /// vanished since the scan are left out, over-long paths go in their short (8.3) form when the volume has one,
+        /// and when the batch still fails each item is tried on its own so the message names what stayed and why.
+        /// </summary>
         public static bool TrySend(IReadOnlyCollection<string> paths, out string? error)
+        {
+            var present = paths.Where(p => File.Exists(p) || Directory.Exists(p)).ToList();
+            if (present.Count == 0) { error = null; return true; }   // already gone: nothing to do, nothing wrong
+
+            var sendable = present.Select(ShellPath).ToList();
+            int result = Send(sendable, out bool aborted);
+            if (result == 0 && !aborted) { error = Remaining(present, paths.Count); return error is null; }
+
+            // one at a time, so one bad path does not stop the rest, and the message can say which it was
+            var failed = new List<(string Path, int Code)>();
+            foreach (var (original, shell) in present.Zip(sendable))
+            {
+                if (!File.Exists(original) && !Directory.Exists(original)) continue;
+                int one = Send(new[] { shell }, out bool oneAborted);
+                if (one != 0) failed.Add((original, one));
+                else if (oneAborted && (File.Exists(original) || Directory.Exists(original))) failed.Add((original, Skipped));   // the shell gave up on it without saying why
+            }
+            if (failed.Count == 0) { error = Remaining(present, paths.Count); return error is null; }
+
+            var lines = failed.Take(4).Select(f => $"{Shorten(f.Path)}: {Describe(f.Code)}").ToList();
+            if (failed.Count > 4) lines.Add(Strings.Format("Trash_AndMore", failed.Count - 4));
+            error = string.Join("\n", lines);
+            return false;
+        }
+
+        private static int Send(IReadOnlyCollection<string> shellPaths, out bool aborted)
         {
             var op = new SHFILEOPSTRUCT
             {
                 hwnd = IntPtr.Zero,
                 wFunc = FO_DELETE,
-                pFrom = string.Join("\0", paths) + "\0\0",
-                fFlags = (ushort)(FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING)
+                pFrom = string.Join("\0", shellPaths) + "\0\0",
+                fFlags = (ushort)(FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING | FOF_NORECURSEREPARSE)
             };
             int result = SHFileOperation(ref op);
-            if (result != 0) { error = $"Windows reported error code 0x{result:X}."; return false; }
-            if (op.fAnyOperationsAborted) { error = "The operation was cancelled."; return false; }
-            var remaining = paths.Where(p => File.Exists(p) || Directory.Exists(p)).ToList();
-            if (remaining.Count > 0)
-            {
-                error = remaining.Count == 1 ? $"{remaining[0]} still exists after the delete operation." : $"{remaining.Count} of {paths.Count} items still exist after the delete operation.";
-                return false;
-            }
-            error = null;
-            return true;
+            aborted = op.fAnyOperationsAborted;
+            return result;
         }
+
+        /// <summary>The path as the shell will take it: itself when it fits, its 8.3 form when it is longer than MAX_PATH and the volume keeps one.</summary>
+        private static string ShellPath(string path)
+        {
+            if (path.Length <= MaxPath) return path;
+            var buffer = new char[1024];
+            uint n = GetShortPathName(path, buffer, (uint)buffer.Length);
+            return n > 0 && n < buffer.Length && n <= MaxPath ? new string(buffer, 0, (int)n) : path;
+        }
+
+        private static string? Remaining(IReadOnlyList<string> present, int asked)
+        {
+            var left = present.Where(p => File.Exists(p) || Directory.Exists(p)).ToList();
+            if (left.Count == 0) return null;
+            return left.Count == 1 ? Strings.Format("Trash_StillExists", Shorten(left[0])) : Strings.Format("Trash_StillExistMany", left.Count, asked);
+        }
+
+        private static string Shorten(string path) => path.Length <= 70 ? path : path[..30] + "…" + path[^38..];
+
+        /// <summary>The shell's and Win32's error codes in words, for the ones a Recycle Bin move actually hits.</summary>
+        private const int Skipped = -1;
+
+        private static string Describe(int code) => code switch
+        {
+            Skipped => Strings.Get("Trash_Skipped"),
+            0x7C => Strings.Get("Trash_TooLong"),
+            0x78 or 0x5 => Strings.Get("Trash_AccessDenied"),
+            0x20 => Strings.Get("Trash_InUse"),
+            0x2 or 0x3 or 0x402 => Strings.Get("Trash_Gone"),
+            _ => Strings.Format("Trash_Code", $"0x{code:X}")
+        };
     }
 }

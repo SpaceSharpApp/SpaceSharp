@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … et {0:N0} de plus</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Supprimer</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Tout n'a pas pu être supprimé.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} a changé depuis l'analyse et n'a pas été touché. Relancez l'analyse pour le supprimer.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Tout n'a pas pu être supprimé.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Déplacer {0} vers la Corbeille ?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Déplacer vers la Corbeille</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows l'a ignoré (en cours d'utilisation, ou trop gros pour la Corbeille)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>le chemin est trop long pour la Corbeille</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>accès refusé</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>utilisé par un autre programme</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>il n'existe plus</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows a signalé le code d'erreur {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} existe encore après l'opération.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} éléments sur {1} existent encore après l'opération.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>et {0} de plus</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Videz la corbeille depuis le gestionnaire de fichiers du système.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} n'a pas démarré.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} s'est terminé avec le code {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>le fichier « {0} » ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>le dossier « {0} » ({1:N0} fichiers, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} éléments ({1:N0} fichiers, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Comment les fichiers sont éclairés. La carte en haut est constituée de données d'exemple et suit chaque changement.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Données d'exemple</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Lecteur d'exemple</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Photos</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Vidéos</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programmes</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Documents</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Musique</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Lumière depuis</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>De quel côté vient la lumière. Le centre correspond à une lumière de face.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Réinitialiser l'ombrage</value></data>
@@ -827,7 +843,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Caches de paquets</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} caches (npm, pnpm, NuGet, pip, Cargo, Gradle et similaires), {1:N0} fichiers. Ils sont retéléchargés au besoin.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Caches de navigateurs</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} dossiers de cache, {1:N0} fichiers. Les pages se chargent un peu plus lentement la première fois ensuite.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} dossiers de cache, {1:N0} fichiers. Seulement les caches de pages : mots de passe, connexions, historique et onglets ouverts ne sont pas touchés. Fermez d'abord le navigateur ; les pages se chargent un peu plus lentement la première fois ensuite.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Caches de shaders</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} dossiers, {1:N0} fichiers. Les jeux et les pilotes les reconstruisent au prochain lancement.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Téléchargements de Windows Update</value></data>

@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … ほか {0:N0} 件</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>削除</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>一部を削除できませんでした。
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} はスキャン後に変更されたため、そのままにしました。削除するには再スキャンしてください。</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>一部を削除できませんでした。</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>{0}をごみ箱に移動しますか？
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>ごみ箱に移動</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows がスキップしました (使用中、またはごみ箱には大きすぎます)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>パスがごみ箱には長すぎます</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>アクセスが拒否されました</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>他のプログラムが使用中です</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>もう存在しません</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows がエラー コード {0} を返しました</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>操作後も {0} が残っています。</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>操作後も {1} 項目中 {0} 項目が残っています。</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>ほか {0} 件</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>システムのファイル マネージャーからごみ箱を空にしてください。</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} が起動しませんでした。</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} はコード {1} で終了しました。</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>ファイル "{0}"（{1}）</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>フォルダー "{0}"（{1:N0} ファイル、{2}）</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} 個の項目（{1:N0} ファイル、{2}）</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>ファイルの光の当て方。上のマップはサンプルデータで、すべての変更を反映します。</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>サンプルデータ</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>サンプルドライブ</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>写真</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>ビデオ</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>プログラム</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>ドキュメント</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>ミュージック</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>光源の方向</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>光がどちらの側から当たるか。中央は正面からです。</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>シェーディングをリセット</value></data>
@@ -827,7 +843,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>パッケージキャッシュ</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} 個のキャッシュ（npm、pnpm、NuGet、pip、Cargo、Gradle など）、{1:N0} ファイル。必要になれば再ダウンロードされます。</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>ブラウザーのキャッシュ</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} 個のキャッシュフォルダー、{1:N0} ファイル。削除後、初回のページ読み込みが少し遅くなります。</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>キャッシュ フォルダー {0:N0} 個、ファイル {1:N0} 個。ページのキャッシュのみで、パスワード、ログイン、履歴、開いているタブには触れません。先にブラウザーを閉じてください。その後、最初の読み込みだけ少し遅くなります。</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>シェーダーキャッシュ</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} 個のフォルダー、{1:N0} ファイル。ゲームとドライバーが次回の起動時に再構築します。</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update のダウンロード</value></data>

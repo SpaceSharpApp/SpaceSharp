@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … i jeszcze {0:N0}</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Usuwanie</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Nie wszystko udało się usunąć.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} zmienił się od czasu skanowania i został pozostawiony. Przeskanuj ponownie, aby go usunąć.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Nie wszystko udało się usunąć.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Przenieść {0} do Kosza?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Przenieś do Kosza</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows go pominął (w użyciu lub za duży dla Kosza)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>ścieżka jest za długa dla Kosza</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>odmowa dostępu</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>używany przez inny program</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>już nie istnieje</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows zgłosił kod błędu {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} nadal istnieje po operacji.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} z {1} elementów nadal istnieje po operacji.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>i {0} więcej</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Opróżnij kosz z menedżera plików systemu.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} nie uruchomił się.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} zakończył się kodem {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>plik „{0}” ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>folder „{0}” ({1:N0} plików, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} elementów ({1:N0} plików, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Jak pliki są oświetlone. Mapa u góry to przykładowe dane i odzwierciedla każdą zmianę.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Przykładowe dane</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Przykładowy dysk</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Zdjęcia</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Wideo</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programy</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Dokumenty</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Muzyka</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Światło z</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Z której strony pada światło. Środek oznacza wprost.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Resetuj cieniowanie</value></data>
@@ -827,7 +843,7 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Pamięci podręczne pakietów</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} pamięci podręcznych (npm, pnpm, NuGet, pip, Cargo, Gradle i podobne), {1:N0} plików. W razie potrzeby zostaną pobrane ponownie.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Pamięci podręczne przeglądarek</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} folderów pamięci podręcznej, {1:N0} plików. Strony ładują się potem nieco wolniej za pierwszym razem.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} folderów pamięci podręcznej, {1:N0} plików. Tylko pamięć podręczna stron: hasła, logowania, historia i otwarte karty pozostają nietknięte. Najpierw zamknij przeglądarkę; strony wczytają się potem za pierwszym razem nieco wolniej.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Pamięci podręczne shaderów</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} folderów, {1:N0} plików. Gry i sterowniki odbudują je przy następnym uruchomieniu.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Pobrane pliki Windows Update</value></data>

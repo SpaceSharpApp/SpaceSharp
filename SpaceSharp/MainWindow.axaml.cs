@@ -504,8 +504,8 @@ public partial class MainWindow : Window
         }
         catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException) { }
 
-        EmptyHint.IsVisible = false;
         ScanCard.IsVisible = true;
+        ApplyView();   // off the start screen; the remembered view shows the scan as it comes
         if (InsightsShowing) RefreshInsights();
         ScanTitle.Text = Strings.Format("Scan_Title", DisplayName(path));
         bool mft = OperatingSystem.IsWindows() && _settings.FastNtfsScan && _scanExpectedBytes is not null && FileTableSupported(path);
@@ -575,12 +575,10 @@ public partial class MainWindow : Window
         catch (OperationCanceledException)
         {
             StatusText.Text = Strings.Get("Status_ScanCancelled");
-            if (_root is null) EmptyHint.IsVisible = true;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             StatusText.Text = ex.Message;
-            if (_root is null) EmptyHint.IsVisible = true;
         }
         finally
         {
@@ -589,6 +587,7 @@ public partial class MainWindow : Window
             _scanCts.Dispose();
             _scanCts = null;
             UpdateNavigation();
+            ApplyView();   // back to the start screen when a first scan was cancelled or failed
         }
     }
 
@@ -931,7 +930,20 @@ public partial class MainWindow : Window
             if (!await Dialog.Confirm(this, Strings.Get("Delete_Title"), Strings.Format("Delete_Question", what, list), Strings.Get("Delete_Title"), danger: true)) return;
         }
 
-        bool ok = Trash.TrySend(items.Select(n => n.FullPath).ToList(), out var error);
+        // The map is a snapshot. A file that is not what the scan saw (another size or write time, so edited or
+        // replaced since, or a different file now at that path) is left alone and named, instead of being sent on the
+        // strength of a path alone. Folders are sent as they are: their contents were never a single snapshot.
+        var changed = items.Where(n => !n.IsDirectory && !MatchesScan(n)).ToList();
+        var toSend = items.Except(changed).ToList();
+        string? error = null;
+        bool ok = toSend.Count == 0 || Trash.TrySend(toSend.Select(n => n.FullPath).ToList(), out error);
+        if (changed.Count > 0)
+        {
+            string names = string.Join("\n", changed.Take(4).Select(n => Strings.Format("Delete_Changed", n.FullPath)));
+            if (changed.Count > 4) names += Strings.Format("Delete_AndMore", changed.Count - 4);
+            error = error is null ? names : error + "\n" + names;
+            ok = false;
+        }
 
         long freed = 0;
         int removed = 0;
@@ -954,8 +966,31 @@ public partial class MainWindow : Window
         RefreshInsights();
         if (_root is not null) StatusRight.Text = $"{_root.FileCount:N0} {Strings.Get("Main_Files").ToLowerInvariant()} · {SizeFormatter.Format(_root.Size)}";
 
-        if (!ok) await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Format("Delete_Partial", error ?? string.Empty));
+        if (!ok) await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
         StatusText.Text = removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size);
+    }
+
+    /// <summary>
+    /// True when the file on disk still has the size and last-write time the scan recorded. Not a guarantee (the
+    /// file can change between this check and the shell call, which Windows gives no way to close), but it
+    /// catches a stale scan and a path that now names something else.
+    /// </summary>
+    private static bool MatchesScan(FsNode node)
+    {
+        try
+        {
+            var info = new FileInfo(node.FullPath);
+            if (!info.Exists) return true;   // nothing there to delete; TrySend treats it as already gone
+            long size = node.IsHardLinkDuplicate ? node.LinkedSize : node.Size;
+            if (info.Length != size) return false;
+            // Write times are compared only when the scan had one; a tick of tolerance absorbs FAT-style rounding on
+            // scans loaded from older files.
+            return node.LastWriteUtc == DateTime.MinValue || Math.Abs((info.LastWriteTimeUtc - node.LastWriteUtc).Ticks) <= TimeSpan.TicksPerSecond * 2;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            return true;   // let the shell report what is wrong with it
+        }
     }
 
     // ------------------------------------------------------------------ filter
@@ -1037,9 +1072,13 @@ public partial class MainWindow : Window
             var legend = new UniformGrid { Columns = Math.Min(3, legendKeys.Count), Margin = new Thickness(8, 0, 8, 10) };
             foreach (var (key, brush) in legendKeys)
             {
-                var item = new StackPanel { Orientation = Avalonia.Layout.Orientation.Horizontal, Spacing = 6, Margin = new Thickness(0, 0, 10, 3) };
+                // a grid, not a stack panel: the label gets the cell's remaining width and trims inside it instead of running under the next cell
+                var item = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 6, Margin = new Thickness(0, 0, 10, 3) };
+                var label = new TextBlock { Text = Strings.Get(key), Classes = { "dim" }, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+                Grid.SetColumn(label, 1);
                 item.Children.Add(new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(2), Background = brush, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
-                item.Children.Add(new TextBlock { Text = Strings.Get(key), Classes = { "dim" }, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
+                item.Children.Add(label);
+                ToolTip.SetTip(item, Strings.Get(key));
                 legend.Children.Add(item);
             }
             TopList.Children.Add(legend);

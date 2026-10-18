@@ -1,4 +1,5 @@
 using System.Buffers.Binary;
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,16 +11,51 @@ using SpaceSharp.Util;
 namespace SpaceSharp.Services;
 
 /// <summary>
-/// Scans a whole NTFS volume by reading its Master File Table directly, the way WizTree does, instead
-/// of walking folders. Every file and folder on the volume is one record in the MFT, so a drive with two
-/// million files is read in a few seconds. Needs administrator rights to open the volume; the caller
-/// falls back to the folder walk (FolderWalker in Core) when this isn't possible.
+/// Scans a whole NTFS volume by reading its Master File Table directly instead of walking folders. Every file
+/// and folder on the volume has a base record in the MFT (a heavily fragmented or many-named file has extension
+/// records too), so the whole drive is one sequential read of the table (about 1 KB per file) instead of a
+/// directory query per folder. Needs administrator rights to open the
+/// volume; the caller falls back to the folder walk (FolderWalker in Core) when the volume cannot be opened or
+/// when this scanner finds a layout it cannot read completely. Partial results are never returned: anything
+/// that would leave records unread throws <see cref="MftException"/>, which the callers treat like any other
+/// I/O failure of the fast path.
+///
+/// Layout facts this file relies on (NTFS 3.x, "FILE" record segments):
+/// - The volume reports the record size and the MFT's start and valid length through FSCTL_GET_NTFS_VOLUME_DATA.
+///   Nothing here assumes 1024-byte records.
+/// - Every record is protected by an update sequence array with a fixed 512-byte stride: the last two bytes of
+///   each 512-byte block hold the sequence number and the real bytes live in the array. This stride is part of
+///   the on-disk format and is unrelated to the physical sector size.
+/// - Record N is at logical byte N * recordSize of the $MFT file. The $MFT file's own extents come from record 0,
+///   possibly split over several $DATA pieces listed in its $ATTRIBUTE_LIST.
+/// - A file reference is 48 bits of record number plus 16 bits of sequence number; a reference is only valid
+///   while the sequence number matches the record's current one, which is how reused records are detected.
+///
+/// Live volumes change while they are read; the result is a snapshot that is best effort, like any directory
+/// walk. Memory: one <see cref="Entry"/> (56 bytes) plus two ints of child links are kept per MFT slot, used or
+/// not, so a table with 50 million slots needs about 3.2 GB before names. This matches the table's own size
+/// class (such a table is 50 GB on disk) and is why the scanner is only used for whole volumes.
 /// </summary>
 [SupportedOSPlatform("windows")]
 internal sealed class MftScanner
 {
     /// <summary>Counters the scanner reports into while it works; the same ones the folder walk uses.</summary>
     public delegate void Progress(long files, long directories, long bytes, string currentPath);
+
+    /// <summary>Reads volume bytes at an absolute byte offset; returns the count read (0 at the end).</summary>
+    internal delegate int VolumeRead(long offset, Span<byte> buffer);
+
+    /// <summary>
+    /// The file table is damaged, laid out in a way this scanner does not read, or ended early. An IOException so
+    /// the existing callers fall back to the folder walk.
+    /// </summary>
+    internal sealed class MftException : IOException
+    {
+        public MftException(string message) : base(message) { }
+    }
+
+    /// <summary>What FSCTL_GET_NTFS_VOLUME_DATA reports, reduced to what the scanner needs.</summary>
+    internal readonly record struct Geometry(int BytesPerSector, int BytesPerCluster, int BytesPerRecord, long TotalClusters, long MftStartLcn, long MftValidLength);
 
     /// <summary>The "current path" reported once the records are read and the tree is being linked together.</summary>
     public static readonly string BuildingMarker = Strings.Get("Mft_Building");
@@ -28,20 +64,33 @@ internal sealed class MftScanner
     private const uint FileShareReadWrite = 0x1 | 0x2;
     private const uint OpenExisting = 3;
     private const uint FsctlGetNtfsVolumeData = 0x00090064;
+    private const int ErrorAccessDenied = 5;
 
     private const int RootRecord = 5;
-    private const int FirstUserRecord = 24;   // 0..23 are NTFS metafiles
+    private const int FirstUserRecord = 24;   // 0..23 are reserved for NTFS metafiles
     private const ushort RecordInUse = 0x0001;
     private const ushort RecordIsDirectory = 0x0002;
+    private const int FixupStride = 512;      // the update sequence protects 512-byte blocks, by format definition
+    private const ulong RecordMask = 0xFFFFFFFFFFFF;   // low 48 bits of a file reference
 
     private const uint AttrStandardInformation = 0x10;
+    private const uint AttrAttributeList = 0x20;
     private const uint AttrFileName = 0x30;
     private const uint AttrData = 0x80;
     private const uint AttrEnd = 0xFFFFFFFF;
 
+    private const int ResidentHeader = 0x18;     // smallest attribute header: resident, no name
+    private const int NonResidentHeader = 0x40;  // nonresident header without the compressed-size field
+    private const int NonResidentHeaderCompressed = 0x48;
+
+    private const ushort AttrFlagCompressed = 0x0001;
+    private const ushort AttrFlagSparse = 0x8000;
+
     private const uint FileAttributeHidden = 0x2;
     private const uint FileAttributeSystem = 0x4;
     private const uint FileAttributeReparsePoint = 0x400;
+
+    private static readonly long MaxFileTime = DateTime.MaxValue.ToFileTimeUtc();
 
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     private static extern SafeFileHandle CreateFile(string name, uint access, uint share, IntPtr security,
@@ -51,32 +100,58 @@ internal sealed class MftScanner
     private static extern bool DeviceIoControl(SafeFileHandle handle, uint code, IntPtr inBuffer, int inSize,
         IntPtr outBuffer, int outSize, out int returned, IntPtr overlapped);
 
-    /// <summary>One MFT record, reduced to what the map needs.</summary>
+    /// <summary>One MFT record, reduced to what the map needs. Kept small: there is one per slot of the table.</summary>
     private struct Entry
     {
         public string? Name;
-        public int Parent;          // record number of the parent folder
-        public ushort ParentSeq;    // the parent's sequence number when this name was written
-        public ushort Sequence;     // this record's sequence number
+        public List<(int Parent, ushort ParentSeq, string Name)>? ExtraLinks;   // other hard-link names
         public long Size;
         public long Allocated;
         public long ModifiedFileTime;
         public uint Attributes;
-        public bool InUse;
-        public bool IsDirectory;
-        public bool HasData;        // the unnamed $DATA fragment with the sizes was found
-        public List<(int Parent, ushort ParentSeq, string Name)>? ExtraLinks;   // other hard-link names
+        public int Parent;          // record number of the parent folder of the first name
+        public ushort ParentSeq;    // the parent's sequence number when that name was written
+        public ushort Sequence;     // this record's sequence number
+        private byte _flags;
+
+        private const byte FlagInUse = 1, FlagDirectory = 2, FlagHasData = 4, FlagListNonResident = 8, FlagPlaced = 16;
+        private readonly bool Flag(byte bit) => (_flags & bit) != 0;
+        private void Flag(byte bit, bool on) => _flags = (byte)(on ? _flags | bit : _flags & ~bit);
+
+        public bool InUse { readonly get => Flag(FlagInUse); set => Flag(FlagInUse, value); }
+        public bool IsDirectory { readonly get => Flag(FlagDirectory); set => Flag(FlagDirectory, value); }
+        /// <summary>The unnamed $DATA piece that carries the sizes was seen.</summary>
+        public bool HasData { readonly get => Flag(FlagHasData); set => Flag(FlagHasData, value); }
+        /// <summary>The base record's $ATTRIBUTE_LIST lives outside the record, so it was not read.</summary>
+        public bool ListNonResident { readonly get => Flag(FlagListNonResident); set => Flag(FlagListNonResident, value); }
+        /// <summary>One name of this file is in the tree and owns its size.</summary>
+        public bool Placed { readonly get => Flag(FlagPlaced); set => Flag(FlagPlaced, value); }
     }
+
+    /// <summary>The fields of a record header that the parser uses, after the fixups were applied.</summary>
+    private readonly record struct RecordHeader(ushort Sequence, ushort Flags, int AttributesOffset, int UsedSize, ulong BaseReference, long RecordNumber);
+
+    private enum RecordStatus { Unused, Damaged, Ok }
 
     private readonly string _rootPath;
     private readonly string _volume;
     private readonly bool _includeHidden;
     private readonly Util.NamePatterns _exclude;
     private readonly Progress _progress;
+    private readonly Geometry? _testGeometry;
+    private readonly VolumeRead? _testRead;
 
     private Entry[] _entries = Array.Empty<Entry>();
-    private readonly Dictionary<int, FsNode> _folderNodes = new();   // record number → folder node, for hard links
-    private long _files, _directories, _bytes;
+    private readonly List<(int Base, ushort BaseSequence, byte[] Record, int Index)> _extensions = new();
+    private readonly Dictionary<int, List<ulong>> _attributeLists = new();   // base record → extension references it lists
+    private readonly Dictionary<int, FsNode> _folderNodes = new();          // record number → folder node, for hard links
+    private long _files, _directories, _bytes;   // while reading: every in-use record seen; after the build: what the tree holds
+
+    /// <summary>Records with a "FILE" signature whose update sequence did not check out (torn writes on a live volume).</summary>
+    public int DamagedRecords { get; private set; }
+
+    /// <summary>Extension records that pointed at a base record with another sequence number, or that the base did not list.</summary>
+    public int StaleExtensions { get; private set; }
 
     public MftScanner(string rootPath, bool includeHidden, Util.NamePatterns exclude, Progress progress)
     {
@@ -87,7 +162,18 @@ internal sealed class MftScanner
         _progress = progress;
     }
 
-    /// <summary>True when the path is the root of an NTFS drive and the volume can be opened (administrator).</summary>
+    /// <summary>For tests: scans an in-memory volume image instead of a device.</summary>
+    internal MftScanner(string rootPath, bool includeHidden, Util.NamePatterns exclude, Progress progress, Geometry geometry, VolumeRead read)
+    {
+        _exclude = exclude;
+        _rootPath = rootPath;
+        _volume = rootPath;
+        _includeHidden = includeHidden;
+        _progress = progress;
+        _testGeometry = geometry;
+        _testRead = read;
+    }
+
     /// <summary>True for a drive root formatted NTFS, whether or not this process may open it.</summary>
     public static bool IsNtfsDrive(string rootPath)
     {
@@ -96,6 +182,7 @@ internal sealed class MftScanner
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return false; }
     }
 
+    /// <summary>True when the path is the root of an NTFS drive and this process can open the volume.</summary>
     public static bool IsSupported(string rootPath, out string reason)
     {
         reason = string.Empty;
@@ -108,45 +195,91 @@ internal sealed class MftScanner
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { reason = ex.Message; return false; }
 
         using var handle = CreateFile(@"\\.\" + Path.GetFullPath(rootPath).TrimEnd('\\'), GenericRead, FileShareReadWrite, IntPtr.Zero, OpenExisting, 0, IntPtr.Zero);
-        if (handle.IsInvalid) { reason = "needs administrator rights"; return false; }
+        if (handle.IsInvalid)
+        {
+            int code = Marshal.GetLastWin32Error();
+            reason = code == ErrorAccessDenied ? "needs administrator rights" : new Win32Exception(code).Message;
+            return false;
+        }
         return true;
     }
 
     public FsNode Scan(CancellationToken ct)
     {
-        using var handle = CreateFile(_volume, GenericRead, FileShareReadWrite, IntPtr.Zero, OpenExisting, 0, IntPtr.Zero);
-        if (handle.IsInvalid) throw new UnauthorizedAccessException(Strings.Format("Mft_CannotOpen", _volume));
+        SafeFileHandle? handle = null;
+        try
+        {
+            Geometry geometry;
+            VolumeRead read;
+            if (_testRead is not null && _testGeometry is { } g)
+            {
+                geometry = g;
+                read = _testRead;
+            }
+            else
+            {
+                handle = CreateFile(_volume, GenericRead, FileShareReadWrite, IntPtr.Zero, OpenExisting, 0, IntPtr.Zero);
+                if (handle.IsInvalid)
+                {
+                    int code = Marshal.GetLastWin32Error();
+                    if (code == ErrorAccessDenied) throw new UnauthorizedAccessException(Strings.Format("Mft_CannotOpen", _volume));
+                    throw new IOException($"Cannot open volume {_volume}: {new Win32Exception(code).Message}", Marshal.GetHRForLastWin32Error());
+                }
+                geometry = VolumeData(handle);
+                SafeFileHandle h = handle;
+                read = (offset, buffer) => RandomAccess.Read(h, buffer, offset);
+            }
+            Validate(geometry);
 
-        var (bytesPerRecord, bytesPerCluster, mftStartLcn, mftValidLength) = VolumeData(handle);
-        int recordCount = (int)(mftValidLength / bytesPerRecord);
-        _entries = new Entry[recordCount];
+            long slots = geometry.MftValidLength / geometry.BytesPerRecord;
+            if (slots > int.MaxValue - 64) throw new MftException($"The file table has {slots:N0} records, more than this scanner holds.");
+            int recordCount = (int)slots;
+            try { _entries = new Entry[recordCount]; }
+            catch (OutOfMemoryException) { throw new MftException($"Not enough memory for a file table of {recordCount:N0} records."); }
 
-        // Record 0 describes $MFT itself; its data runs say where the rest of the table lives.
-        var first = new byte[bytesPerRecord];
-        RandomAccess.Read(handle, first, mftStartLcn * bytesPerCluster);
-        var runs = MftRuns(first, bytesPerCluster);
+            // Record 0 describes $MFT itself; its data runs (and those of any extension records its attribute list
+            // names) say where the rest of the table lives.
+            var first = new byte[geometry.BytesPerRecord];
+            if (!ReadExact(read, geometry.MftStartLcn * geometry.BytesPerCluster, first)) throw new MftException("The first MFT record could not be read.");
+            var runs = MftExtents(read, first, geometry);
 
-        ReadAllRecords(handle, runs, bytesPerRecord, bytesPerCluster, recordCount, ct);
-        return BuildTree(ct);
+            ReadAllRecords(read, runs, geometry, recordCount, ct);
+            MergeExtensions(ct);
+            return BuildTree(ct);
+        }
+        finally
+        {
+            handle?.Dispose();
+            // The per-slot table is the big allocation; let it go as soon as the tree stands on its own.
+            _entries = Array.Empty<Entry>();
+            _extensions.Clear();
+            _attributeLists.Clear();
+            _folderNodes.Clear();
+        }
     }
 
-    // ------------------------------------------------------------------ reading
+    // ------------------------------------------------------------------ volume
 
-    private static (int BytesPerRecord, int BytesPerCluster, long MftStartLcn, long MftValidLength) VolumeData(SafeFileHandle handle)
+    private static Geometry VolumeData(SafeFileHandle handle)
     {
+        // NTFS_VOLUME_DATA_BUFFER: serial(8) sectors(8) totalClusters(8) freeClusters(8) reserved(8) bytesPerSector(4)
+        // bytesPerCluster(4) bytesPerRecord(4) clustersPerRecord(4) mftValidLength(8) mftStartLcn(8) mft2StartLcn(8) zoneStart(8) zoneEnd(8)
         const int size = 96;
         var buffer = Marshal.AllocHGlobal(size);
         try
         {
-            if (!DeviceIoControl(handle, FsctlGetNtfsVolumeData, IntPtr.Zero, 0, buffer, size, out _, IntPtr.Zero))
-                throw new IOException("FSCTL_GET_NTFS_VOLUME_DATA failed", Marshal.GetLastWin32Error());
+            if (!DeviceIoControl(handle, FsctlGetNtfsVolumeData, IntPtr.Zero, 0, buffer, size, out int returned, IntPtr.Zero))
+                throw new IOException("FSCTL_GET_NTFS_VOLUME_DATA failed: " + new Win32Exception(Marshal.GetLastWin32Error()).Message, Marshal.GetHRForLastWin32Error());
+            if (returned < size) throw new MftException($"FSCTL_GET_NTFS_VOLUME_DATA returned {returned} bytes, expected {size}.");
             var span = new byte[size];
             Marshal.Copy(buffer, span, 0, size);
-            int bytesPerCluster = BinaryPrimitives.ReadInt32LittleEndian(span.AsSpan(44));
-            int bytesPerRecord = BinaryPrimitives.ReadInt32LittleEndian(span.AsSpan(48));
-            long mftValidLength = BinaryPrimitives.ReadInt64LittleEndian(span.AsSpan(56));
-            long mftStartLcn = BinaryPrimitives.ReadInt64LittleEndian(span.AsSpan(64));
-            return (bytesPerRecord, bytesPerCluster, mftStartLcn, mftValidLength);
+            return new Geometry(
+                BytesPerSector: BinaryPrimitives.ReadInt32LittleEndian(span.AsSpan(40)),
+                BytesPerCluster: BinaryPrimitives.ReadInt32LittleEndian(span.AsSpan(44)),
+                BytesPerRecord: BinaryPrimitives.ReadInt32LittleEndian(span.AsSpan(48)),
+                TotalClusters: BinaryPrimitives.ReadInt64LittleEndian(span.AsSpan(16)),
+                MftValidLength: BinaryPrimitives.ReadInt64LittleEndian(span.AsSpan(56)),
+                MftStartLcn: BinaryPrimitives.ReadInt64LittleEndian(span.AsSpan(64)));
         }
         finally
         {
@@ -154,70 +287,278 @@ internal sealed class MftScanner
         }
     }
 
-    /// <summary>The $MFT file's own extents: (byte offset on the volume, byte length).</summary>
-    private static List<(long Offset, long Length)> MftRuns(byte[] record, int bytesPerCluster)
+    private static void Validate(Geometry g)
     {
-        ApplyFixups(record);
-        int offset = BinaryPrimitives.ReadUInt16LittleEndian(record.AsSpan(0x14));
-        while (offset + 8 <= record.Length)
-        {
-            uint type = BinaryPrimitives.ReadUInt32LittleEndian(record.AsSpan(offset));
-            if (type == AttrEnd) break;
-            int length = BinaryPrimitives.ReadInt32LittleEndian(record.AsSpan(offset + 4));
-            if (length <= 0) break;
-            if (type == AttrData && record[offset + 8] == 1 && record[offset + 9] == 0)
-            {
-                int runsOffset = BinaryPrimitives.ReadUInt16LittleEndian(record.AsSpan(offset + 0x20));
-                return DataRuns(record, offset + runsOffset, bytesPerCluster);
-            }
-            offset += length;
-        }
-        throw new IOException("The $MFT record has no data runs.");
+        static bool PowerOfTwo(long v) => v > 0 && (v & (v - 1)) == 0;
+        if (!PowerOfTwo(g.BytesPerSector) || g.BytesPerSector < 512 || g.BytesPerSector > 0x10000) throw new MftException($"Unexpected sector size {g.BytesPerSector}.");
+        if (!PowerOfTwo(g.BytesPerCluster) || g.BytesPerCluster < g.BytesPerSector || g.BytesPerCluster > 0x4000000) throw new MftException($"Unexpected cluster size {g.BytesPerCluster}.");
+        if (!PowerOfTwo(g.BytesPerRecord) || g.BytesPerRecord < FixupStride || g.BytesPerRecord > 0x10000) throw new MftException($"Unexpected file record size {g.BytesPerRecord}.");
+        if (g.TotalClusters <= 0 || g.MftStartLcn < 0 || g.MftStartLcn >= g.TotalClusters) throw new MftException("The volume reports an MFT start outside the volume.");
+        if (g.MftValidLength < g.BytesPerRecord * (long)FirstUserRecord) throw new MftException($"The file table is only {g.MftValidLength} bytes.");
     }
 
-    private static List<(long, long)> DataRuns(byte[] buffer, int pos, int bytesPerCluster)
+    /// <summary>Reads exactly the buffer's length, in as many calls as the source needs; false when the source ends first.</summary>
+    private static bool ReadExact(VolumeRead read, long offset, Span<byte> buffer)
     {
-        var runs = new List<(long, long)>();
-        long lcn = 0;
-        while (pos < buffer.Length)
+        int done = 0;
+        while (done < buffer.Length)
         {
-            byte header = buffer[pos++];
-            if (header == 0) break;
-            int lengthSize = header & 0x0F, offsetSize = header >> 4;
-            long length = 0;
-            for (int i = 0; i < lengthSize; i++) length |= (long)buffer[pos + i] << (8 * i);
-            pos += lengthSize;
-            long delta = 0;
-            for (int i = 0; i < offsetSize; i++) delta |= (long)buffer[pos + i] << (8 * i);
-            if (offsetSize > 0 && (buffer[pos + offsetSize - 1] & 0x80) != 0) delta -= 1L << (8 * offsetSize); // negative
-            pos += offsetSize;
-            if (offsetSize == 0) continue; // sparse run, not expected in $MFT
-            lcn += delta;
-            runs.Add((lcn * bytesPerCluster, length * bytesPerCluster));
+            int n = read(offset + done, buffer[done..]);
+            if (n <= 0) return false;
+            done += n;
+        }
+        return true;
+    }
+
+    // ------------------------------------------------------------------ the $MFT extents
+
+    /// <summary>
+    /// The $MFT file's own extents as (byte offset on the volume, byte length), in VCN order and gap-free from VCN 0
+    /// to at least the valid length. Record 0 holds the unnamed $DATA attribute; a fragmented table has the runs split
+    /// over several $DATA pieces whose records the $ATTRIBUTE_LIST names. Those extension records are themselves in
+    /// the table, so they must fall inside the extents found so far, otherwise the layout is reported as unsupported.
+    /// </summary>
+    private static List<(long Offset, long Length)> MftExtents(VolumeRead read, byte[] record0, Geometry g)
+    {
+        if (ApplyFixups(record0) != RecordStatus.Ok) throw new MftException("The first MFT record is damaged.");
+        if (!ReadHeader(record0, out var header)) throw new MftException("The first MFT record has an invalid header.");
+        if ((header.Flags & RecordInUse) == 0 || header.BaseReference != 0 || (header.RecordNumber >= 0 && header.RecordNumber != 0))
+            throw new MftException("The first MFT record does not describe $MFT.");
+
+        var pieces = new List<(long LowestVcn, long HighestVcn, List<(long Offset, long Length)> Runs)>();
+        byte[]? attributeList = null;
+        bool listNonResident = false;
+        List<(long Offset, long Length)>? listRuns = null;
+        long listSize = 0;
+
+        int at0 = header.AttributesOffset;
+        while (NextAttribute(record0, header.UsedSize, ref at0, out int start0, out int length0))
+        {
+            ReadOnlySpan<byte> attr = record0.AsSpan(start0, length0);
+            uint type = BinaryPrimitives.ReadUInt32LittleEndian(attr);
+            bool nonResident = attr[8] == 1;
+            int nameLength = attr[9];
+            if (type == AttrData && nameLength == 0)
+            {
+                if (!nonResident) throw new MftException("$MFT has a resident data attribute.");
+                pieces.Add(DataPiece(attr, g, "$MFT"));
+            }
+            else if (type == AttrAttributeList)
+            {
+                if (!nonResident) attributeList = ResidentValue(attr).ToArray();
+                else
+                {
+                    listNonResident = true;
+                    var piece = DataPiece(attr, g, "$MFT's attribute list");
+                    listRuns = piece.Runs;
+                    listSize = BinaryPrimitives.ReadInt64LittleEndian(attr[0x30..]);
+                }
+            }
+        }
+        if (pieces.Count == 0 && attributeList is null && !listNonResident) throw new MftException("The $MFT record has no data runs.");
+
+        if (listNonResident)
+        {
+            // Rare: the attribute list itself overflowed the record. Its clusters are addressed directly, so read them.
+            var runsOfList = listRuns!;
+            long allocated = runsOfList.Sum(r => r.Length);
+            if (listSize <= 0 || listSize > allocated || listSize > 0x1000000) throw new MftException("$MFT's attribute list has an invalid size.");
+            attributeList = new byte[allocated];
+            long at = 0;
+            foreach (var (offset, length) in runsOfList)
+            {
+                if (!ReadExact(read, offset, attributeList.AsSpan((int)at, (int)length))) throw new MftException("$MFT's attribute list could not be read.");
+                at += length;
+            }
+            Array.Resize(ref attributeList, (int)listSize);
+        }
+
+        if (attributeList is not null)
+        {
+            var seen = new HashSet<ulong>();
+            foreach (ulong reference in ListedRecords(attributeList, AttrData, "$MFT"))
+            {
+                long number = (long)(reference & RecordMask);
+                if (number == 0 || !seen.Add(reference)) continue;   // record 0's own pieces were read above
+                var extension = new byte[g.BytesPerRecord];
+                long logical = checked(number * g.BytesPerRecord);
+                if (!ReadLogical(read, Flatten(pieces, g), logical, extension))
+                    throw new MftException($"$MFT extension record {number} lies outside the extents found so far; this layout is not supported.");
+                if (ApplyFixups(extension) != RecordStatus.Ok || !ReadHeader(extension, out var eh)) throw new MftException($"$MFT extension record {number} is damaged.");
+                if ((eh.Flags & RecordInUse) == 0 || (eh.BaseReference & RecordMask) != 0 || (ushort)(eh.BaseReference >> 48) != header.Sequence
+                    || (eh.RecordNumber >= 0 && eh.RecordNumber != number) || eh.Sequence != (ushort)(reference >> 48))
+                    throw new MftException($"$MFT extension record {number} does not belong to $MFT.");
+                int atE = eh.AttributesOffset;
+                while (NextAttribute(extension, eh.UsedSize, ref atE, out int startE, out int lengthE))
+                {
+                    ReadOnlySpan<byte> attr = extension.AsSpan(startE, lengthE);
+                    if (BinaryPrimitives.ReadUInt32LittleEndian(attr) != AttrData || attr[9] != 0) continue;
+                    if (attr[8] != 1) throw new MftException("$MFT has a resident data attribute.");
+                    pieces.Add(DataPiece(attr, g, "$MFT"));
+                }
+            }
+        }
+
+        // Gap-free and in order: piece N starts where piece N-1 ended.
+        pieces.Sort((a, b) => a.LowestVcn.CompareTo(b.LowestVcn));
+        long nextVcn = 0;
+        var all = new List<(long Offset, long Length)>();
+        foreach (var (lowest, highest, runs) in pieces)
+        {
+            if (lowest != nextVcn) throw new MftException($"$MFT's extents have a gap or overlap at VCN {lowest}.");
+            long clusters = runs.Sum(r => r.Length) / g.BytesPerCluster;
+            if (highest - lowest + 1 != clusters) throw new MftException("$MFT's data runs do not match their VCN range.");
+            all.AddRange(runs);
+            nextVcn = checked(lowest + clusters);
+        }
+        if (checked(nextVcn * g.BytesPerCluster) < g.MftValidLength) throw new MftException("$MFT's extents do not cover its valid length.");
+        return all;
+    }
+
+    /// <summary>One nonresident $DATA piece: its VCN range and decoded runs, validated against the attribute and the volume.</summary>
+    private static (long LowestVcn, long HighestVcn, List<(long Offset, long Length)> Runs) DataPiece(ReadOnlySpan<byte> attr, Geometry g, string what)
+    {
+        long lowest = BinaryPrimitives.ReadInt64LittleEndian(attr[0x10..]);
+        long highest = BinaryPrimitives.ReadInt64LittleEndian(attr[0x18..]);
+        int runsOffset = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x20..]);
+        if (lowest < 0 || highest < lowest) throw new MftException($"{what} has an invalid VCN range.");
+        var runs = DataRuns(attr[runsOffset..], g, allowSparse: false, what);
+        return (lowest, highest, runs);
+    }
+
+    private static List<(long Offset, long Length)> Flatten(List<(long LowestVcn, long HighestVcn, List<(long Offset, long Length)> Runs)> pieces, Geometry g)
+    {
+        // Only the contiguous prefix from VCN 0 can be addressed; anything after a gap is unknown territory.
+        var ordered = pieces.OrderBy(p => p.LowestVcn).ToList();
+        var runs = new List<(long, long)>();
+        long next = 0;
+        foreach (var (lowest, _, pieceRuns) in ordered)
+        {
+            if (lowest != next) break;
+            runs.AddRange(pieceRuns);
+            next += pieceRuns.Sum(r => r.Length) / g.BytesPerCluster;
         }
         return runs;
     }
 
-    private void ReadAllRecords(SafeFileHandle handle, List<(long Offset, long Length)> runs, int bytesPerRecord, int bytesPerCluster, int recordCount, CancellationToken ct)
+    /// <summary>Reads a buffer at a logical offset of a file given its extents; false when the extents do not cover it.</summary>
+    private static bool ReadLogical(VolumeRead read, List<(long Offset, long Length)> runs, long logical, Span<byte> buffer)
     {
-        int chunkRecords = Math.Max(1, (8 << 20) / bytesPerRecord);          // 8 MB per read
-        var buffer = new byte[chunkRecords * bytesPerRecord];
+        // Pieces across extent boundaries are allowed (a 1 KB record on 512-byte clusters can straddle one).
+        long start = 0;
+        int filled = 0;
+        foreach (var (offset, length) in runs)
+        {
+            long end = start + length;
+            if (logical + filled < end)
+            {
+                long inRun = logical + filled - start;
+                int take = (int)Math.Min(buffer.Length - filled, length - inRun);
+                if (!ReadExact(read, offset + inRun, buffer.Slice(filled, take))) return false;
+                filled += take;
+                if (filled == buffer.Length) return true;
+            }
+            start = end;
+        }
+        return false;
+    }
+
+    /// <summary>The file references of every entry of the given attribute type in an $ATTRIBUTE_LIST value.</summary>
+    private static IEnumerable<ulong> ListedRecords(byte[] list, uint wantedType, string what)
+    {
+        // Entry: type(4) length(2) nameLength(1) nameOffset(1) lowestVcn(8) reference(8) instance(2) name
+        int pos = 0;
+        while (pos + 0x1A <= list.Length)
+        {
+            uint type = BinaryPrimitives.ReadUInt32LittleEndian(list.AsSpan(pos));
+            int length = BinaryPrimitives.ReadUInt16LittleEndian(list.AsSpan(pos + 4));
+            if (type == 0 && length == 0) yield break;   // zero padding at the end
+            if (length < 0x1A || pos + length > list.Length) throw new MftException($"{what} has a malformed attribute list.");
+            int nameLength = list[pos + 6];
+            if (type == wantedType && nameLength == 0) yield return BinaryPrimitives.ReadUInt64LittleEndian(list.AsSpan(pos + 0x10));
+            pos += length;
+        }
+    }
+
+    /// <summary>
+    /// Decodes a mapping-pairs array into (byte offset, byte length) extents. Every field is bounds-checked against the
+    /// containing attribute and every LCN against the volume; arithmetic is checked. Sparse runs (no offset) are only
+    /// accepted where the caller allows them.
+    /// </summary>
+    private static List<(long Offset, long Length)> DataRuns(ReadOnlySpan<byte> runs, Geometry g, bool allowSparse, string what)
+    {
+        var result = new List<(long, long)>();
+        long lcn = 0;
+        int pos = 0;
+        bool terminated = false;
+        while (pos < runs.Length)
+        {
+            byte header = runs[pos++];
+            if (header == 0) { terminated = true; break; }
+            int lengthSize = header & 0x0F, offsetSize = header >> 4;
+            if (lengthSize == 0 || lengthSize > 8 || offsetSize > 8 || pos + lengthSize + offsetSize > runs.Length)
+                throw new MftException($"{what} has a malformed data run.");
+            ulong length = 0;
+            for (int i = 0; i < lengthSize; i++) length |= (ulong)runs[pos + i] << (8 * i);
+            pos += lengthSize;
+            if (length == 0 || length > (ulong)(long.MaxValue / g.BytesPerCluster)) throw new MftException($"{what} has a data run of invalid length.");
+            if (offsetSize == 0)
+            {
+                if (!allowSparse) throw new MftException($"{what} has a sparse run, which is not supported here.");
+                continue;
+            }
+            long delta = 0;
+            for (int i = 0; i < offsetSize; i++) delta |= (long)runs[pos + i] << (8 * i);
+            if (offsetSize < 8 && (runs[pos + offsetSize - 1] & 0x80) != 0) delta -= 1L << (8 * offsetSize);   // sign-extend; 8 bytes are already a signed long
+            pos += offsetSize;
+            checked
+            {
+                lcn += delta;
+                if (lcn < 0 || lcn + (long)length > g.TotalClusters) throw new MftException($"{what} has a data run outside the volume.");
+                result.Add((lcn * g.BytesPerCluster, (long)length * g.BytesPerCluster));
+            }
+        }
+        if (!terminated) throw new MftException($"{what} has an unterminated data run list.");
+        return result;
+    }
+
+    // ------------------------------------------------------------------ reading
+
+    /// <summary>
+    /// Reads the table as one logical stream over its extents. Reads are whole clusters (a volume handle requires
+    /// sector alignment) and a record that is cut by the end of a read or of an extent is carried over to the next,
+    /// so record N is always the bytes at logical offset N * recordSize, never "whatever came after the last full one".
+    /// </summary>
+    private void ReadAllRecords(VolumeRead read, List<(long Offset, long Length)> runs, Geometry g, int recordCount, CancellationToken ct)
+    {
+        int bytesPerRecord = g.BytesPerRecord, bytesPerCluster = g.BytesPerCluster;
+        long wanted = (long)recordCount * bytesPerRecord;   // logical bytes to consume
+        int chunk = Math.Max(bytesPerCluster, (8 << 20) / bytesPerCluster * bytesPerCluster);   // 8 MB of whole clusters
+        var buffer = new byte[chunk + bytesPerRecord];     // plus room for a carried partial record
+        int pending = 0;         // bytes of a partial record at the start of the buffer
+        long consumed = 0;       // logical bytes handed to the parser or carried
         int recordIndex = 0;
-        int nextReport = 0;   // progress every 16k records, counted from wherever a read ends: run boundaries do not land on round numbers
+        int nextReport = 0;      // progress every 16k records, counted from wherever a read ends
+
         foreach (var (runOffset, runLength) in runs)
         {
             long done = 0;
-            while (done < runLength && recordIndex < recordCount)
+            while (done < runLength && consumed < wanted)
             {
                 ct.ThrowIfCancellationRequested();
-                int toRead = (int)Math.Min(buffer.Length, runLength - done);
-                toRead -= toRead % bytesPerCluster;
-                if (toRead <= 0) break;
-                int read = RandomAccess.Read(handle, buffer.AsSpan(0, toRead), runOffset + done);
-                if (read <= 0) break;
-                for (int off = 0; off + bytesPerRecord <= read && recordIndex < recordCount; off += bytesPerRecord, recordIndex++)
+                long remainingLogical = wanted - consumed;
+                long clustersNeeded = (remainingLogical + bytesPerCluster - 1) / bytesPerCluster * bytesPerCluster;
+                int toRead = (int)Math.Min(chunk, Math.Min(runLength - done, clustersNeeded));
+                if (!ReadExact(read, runOffset + done, buffer.AsSpan(pending, toRead)))
+                    throw new MftException($"The file table ended early at record {recordIndex:N0} of {recordCount:N0}.");
+                int available = pending + toRead;
+                int off = 0;
+                for (; off + bytesPerRecord <= available && recordIndex < recordCount; off += bytesPerRecord, recordIndex++)
                     ParseRecord(buffer.AsSpan(off, bytesPerRecord), recordIndex);
-                done += read;
+                pending = recordIndex < recordCount ? available - off : 0;
+                if (pending > 0) buffer.AsSpan(off, pending).CopyTo(buffer);
+                consumed += toRead;
+                done += toRead;
                 if (recordIndex >= nextReport)
                 {
                     nextReport = recordIndex + 0x4000;
@@ -225,61 +566,159 @@ internal sealed class MftScanner
                 }
             }
         }
+        if (recordIndex < recordCount) throw new MftException($"The file table's extents end at record {recordIndex:N0} of {recordCount:N0}.");
         _progress(_files, _directories, _bytes, BuildingMarker);
     }
 
     // ------------------------------------------------------------------ parsing
 
-    private static bool ApplyFixups(Span<byte> record)
+    /// <summary>
+    /// Checks the signature and the update sequence array and writes the protected words back into place. Unused
+    /// means the slot holds no record (zeroed, or "BAAD" for a record NTFS gave up on); Damaged means a record that
+    /// claims to be one but whose array is inconsistent or whose sequence words disagree (a torn write).
+    /// Nothing is modified unless the whole array checks out.
+    /// </summary>
+    private static RecordStatus ApplyFixups(Span<byte> record)
     {
-        if (record.Length < 0x30 || record[0] != (byte)'F' || record[1] != (byte)'I' || record[2] != (byte)'L' || record[3] != (byte)'E') return false;
+        if (record.Length < 0x30) return RecordStatus.Damaged;
+        if (record[0] != (byte)'F' || record[1] != (byte)'I' || record[2] != (byte)'L' || record[3] != (byte)'E') return RecordStatus.Unused;
         int usaOffset = BinaryPrimitives.ReadUInt16LittleEndian(record[4..]);
         int usaCount = BinaryPrimitives.ReadUInt16LittleEndian(record[6..]);
-        if (usaCount < 2 || usaOffset + usaCount * 2 > record.Length) return false;
+        // One sequence number plus one saved word per 512-byte block, and the array must sit inside the fixed header area.
+        if (usaCount != record.Length / FixupStride + 1 || usaOffset < 0x2A || usaOffset + usaCount * 2 > record.Length) return RecordStatus.Damaged;
         ushort usn = BinaryPrimitives.ReadUInt16LittleEndian(record[usaOffset..]);
         for (int i = 1; i < usaCount; i++)
+            if (BinaryPrimitives.ReadUInt16LittleEndian(record[(i * FixupStride - 2)..]) != usn) return RecordStatus.Damaged;
+        for (int i = 1; i < usaCount; i++)
         {
-            int sectorEnd = i * 512 - 2;
-            if (sectorEnd + 2 > record.Length) break;
-            if (BinaryPrimitives.ReadUInt16LittleEndian(record[sectorEnd..]) != usn) return false; // torn write
-            record[sectorEnd] = record[usaOffset + i * 2];
-            record[sectorEnd + 1] = record[usaOffset + i * 2 + 1];
+            int blockEnd = i * FixupStride - 2;
+            record[blockEnd] = record[usaOffset + i * 2];
+            record[blockEnd + 1] = record[usaOffset + i * 2 + 1];
         }
+        return RecordStatus.Ok;
+    }
+
+    /// <summary>The header fields after fixups; false when they do not describe this record's own bytes.</summary>
+    private static bool ReadHeader(ReadOnlySpan<byte> record, out RecordHeader header)
+    {
+        header = default;
+        int usaOffset = BinaryPrimitives.ReadUInt16LittleEndian(record[4..]);
+        int usaCount = BinaryPrimitives.ReadUInt16LittleEndian(record[6..]);
+        ushort sequence = BinaryPrimitives.ReadUInt16LittleEndian(record[0x10..]);
+        int attributesOffset = BinaryPrimitives.ReadUInt16LittleEndian(record[0x14..]);
+        ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(record[0x16..]);
+        uint usedSize = BinaryPrimitives.ReadUInt32LittleEndian(record[0x18..]);
+        uint allocatedSize = BinaryPrimitives.ReadUInt32LittleEndian(record[0x1C..]);
+        ulong baseReference = BinaryPrimitives.ReadUInt64LittleEndian(record[0x20..]);
+        // NTFS 3.1 (XP and later) stores the record's own number at 0x2C, behind a longer fixed header.
+        long recordNumber = usaOffset >= 0x30 ? BinaryPrimitives.ReadUInt32LittleEndian(record[0x2C..]) : -1;
+        if (allocatedSize != (uint)record.Length) return false;
+        if (usedSize > record.Length || usedSize < (uint)attributesOffset + 8) return false;
+        if (attributesOffset < usaOffset + usaCount * 2 || (attributesOffset & 7) != 0) return false;
+        header = new RecordHeader(sequence, flags, attributesOffset, (int)usedSize, baseReference, recordNumber);
         return true;
+    }
+
+    /// <summary>
+    /// Steps to the next attribute of a record: false at the end marker, otherwise the attribute's start and length.
+    /// Every length is checked against the record's used size and the form (resident or not) against the header size
+    /// it implies, so readers of an attribute need not re-check its fixed fields. An inconsistent chain throws
+    /// <see cref="MftException"/>, which the record-level callers turn into "this record is damaged".
+    /// </summary>
+    private static bool NextAttribute(ReadOnlySpan<byte> record, int used, ref int offset, out int start, out int length)
+    {
+        start = offset;
+        length = 0;
+        if (offset + 8 > used) throw new MftException("A record's attributes run past its used size.");
+        uint type = BinaryPrimitives.ReadUInt32LittleEndian(record[offset..]);
+        if (type == AttrEnd) return false;
+        length = BinaryPrimitives.ReadInt32LittleEndian(record[(offset + 4)..]);
+        if (length < ResidentHeader || (length & 7) != 0 || offset + length > used) throw new MftException("A record holds an attribute with an invalid length.");
+        byte form = record[offset + 8];
+        if (form > 1) throw new MftException("A record holds an attribute of unknown form.");
+        if (form == 1)
+        {
+            if (length < NonResidentHeader) throw new MftException("A nonresident attribute is shorter than its header.");
+            int runsOffset = BinaryPrimitives.ReadUInt16LittleEndian(record[(offset + 0x20)..]);
+            if (runsOffset < NonResidentHeader || runsOffset > length) throw new MftException("A nonresident attribute points its runs outside itself.");
+        }
+        else
+        {
+            int valueLength = BinaryPrimitives.ReadInt32LittleEndian(record[(offset + 0x10)..]);
+            int valueOffset = BinaryPrimitives.ReadUInt16LittleEndian(record[(offset + 0x14)..]);
+            if (valueLength < 0 || valueOffset < ResidentHeader || valueOffset + valueLength > length) throw new MftException("A resident attribute's value lies outside it.");
+        }
+        offset += length;
+        return true;
+    }
+
+    private static ReadOnlySpan<byte> ResidentValue(ReadOnlySpan<byte> attr)
+    {
+        // Bounds already checked by NextAttribute().
+        int valueLength = BinaryPrimitives.ReadInt32LittleEndian(attr[0x10..]);
+        int valueOffset = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x14..]);
+        return attr.Slice(valueOffset, valueLength);
     }
 
     private void ParseRecord(Span<byte> record, int index)
     {
-        if (!ApplyFixups(record)) return;
-        ushort flags = BinaryPrimitives.ReadUInt16LittleEndian(record[0x16..]);
-        if ((flags & RecordInUse) == 0) return;
-
-        ulong baseRef = BinaryPrimitives.ReadUInt64LittleEndian(record[0x20..]);
-        int baseRecord = baseRef == 0 ? index : (int)(baseRef & 0xFFFFFFFFFFFF);
-        if (baseRecord < 0 || baseRecord >= _entries.Length) return;
-        ref var entry = ref _entries[baseRecord];
-
-        if (baseRef == 0)
+        switch (ApplyFixups(record))
         {
-            entry.InUse = true;
-            entry.Sequence = BinaryPrimitives.ReadUInt16LittleEndian(record[0x10..]);
-            entry.IsDirectory = (flags & RecordIsDirectory) != 0;
+            case RecordStatus.Unused: return;
+            case RecordStatus.Damaged: DamagedRecords++; return;
+        }
+        if (!ReadHeader(record, out var header)) { DamagedRecords++; return; }
+        // A record that says it is another record means the bytes are not where the table says they are. That is not
+        // something to skip past: nothing read after this point could be trusted either.
+        if (header.RecordNumber >= 0 && header.RecordNumber != index)
+            throw new MftException($"Record {index:N0} identifies itself as record {header.RecordNumber:N0}; the table could not be followed.");
+        if ((header.Flags & RecordInUse) == 0) return;
+
+        if (header.BaseReference != 0)
+        {
+            // An extension record: its attributes belong to the base record it names. Kept until the whole table is
+            // read, so the base record is known (it may come later in the table) and its sequence can be checked.
+            ulong number = header.BaseReference & RecordMask;
+            if (number >= (ulong)_entries.Length) { DamagedRecords++; return; }
+            _extensions.Add(((int)number, (ushort)(header.BaseReference >> 48), record.ToArray(), index));
+            return;
         }
 
-        int offset = BinaryPrimitives.ReadUInt16LittleEndian(record[0x14..]);
-        while (offset + 0x18 <= record.Length)
+        ref var entry = ref _entries[index];
+        entry.InUse = true;
+        entry.Sequence = header.Sequence;
+        entry.IsDirectory = (header.Flags & RecordIsDirectory) != 0;
+        try
         {
-            uint type = BinaryPrimitives.ReadUInt32LittleEndian(record[offset..]);
-            if (type == AttrEnd) break;
-            int length = BinaryPrimitives.ReadInt32LittleEndian(record[(offset + 4)..]);
-            if (length <= 0 || offset + length > record.Length) break;
-            var attr = record.Slice(offset, length);
+            ParseAttributes(record, header, ref entry, index, isBase: true);
+        }
+        catch (MftException)
+        {
+            // Damaged attribute chain: the record is dropped rather than half-read, and the file it stood for is missing
+            // from the map the way an unreadable folder is missing from a folder walk.
+            entry = default;
+            DamagedRecords++;
+            return;
+        }
+        // Provisional counters for the progress card: every in-use record, before hidden, excluded and unreachable
+        // ones are left out of the tree. BuildTree resets them to what the tree really holds.
+        if (entry.IsDirectory) _directories++;
+        else { _files++; _bytes += entry.Size; }
+    }
+
+    private void ParseAttributes(ReadOnlySpan<byte> record, RecordHeader header, ref Entry entry, int index, bool isBase)
+    {
+        int at = header.AttributesOffset;
+        while (NextAttribute(record, header.UsedSize, ref at, out int start, out int length))
+        {
+            var attr = record.Slice(start, length);
+            uint type = BinaryPrimitives.ReadUInt32LittleEndian(attr);
             bool nonResident = attr[8] == 1;
             int nameLength = attr[9];
 
             switch (type)
             {
-                case AttrStandardInformation when !nonResident && baseRef == 0:
+                case AttrStandardInformation when !nonResident && isBase:
                 {
                     var value = ResidentValue(attr);
                     if (value.Length >= 0x24)
@@ -289,45 +728,58 @@ internal sealed class MftScanner
                     }
                     break;
                 }
+                case AttrAttributeList when isBase:
+                {
+                    // Which extension records may contribute to this file. A nonresident list would need its own
+                    // read; extensions are then accepted on the base reference and sequence number alone.
+                    if (nonResident) { entry.ListNonResident = true; break; }
+                    var refs = new List<ulong>();
+                    byte[] list = ResidentValue(attr).ToArray();
+                    foreach (ulong reference in ListedRecords(list, AttrData, "A file"))
+                        if ((reference & RecordMask) != (ulong)index) refs.Add(reference);
+                    foreach (ulong reference in ListedRecords(list, AttrFileName, "A file"))
+                        if ((reference & RecordMask) != (ulong)index) refs.Add(reference);
+                    _attributeLists[index] = refs;
+                    break;
+                }
                 case AttrFileName when !nonResident:
                 {
                     var value = ResidentValue(attr);
-                    if (value.Length >= 0x42)
-                    {
-                        byte nameSpace = value[0x41];
-                        if (nameSpace != 2) // skip DOS-only 8.3 names
-                        {
-                            int nameLen = value[0x40];
-                            if (0x42 + nameLen * 2 <= value.Length)
-                            {
-                                ulong parentRef = BinaryPrimitives.ReadUInt64LittleEndian(value);
-                                int parent = (int)(parentRef & 0xFFFFFFFFFFFF);
-                                ushort parentSeq = (ushort)(parentRef >> 48);
-                                string name = Encoding.Unicode.GetString(value.Slice(0x42, nameLen * 2));
-                                if (entry.Name is null) { entry.Name = name; entry.Parent = parent; entry.ParentSeq = parentSeq; }
-                                else if (!(entry.Parent == parent && string.Equals(entry.Name, name, StringComparison.Ordinal)))
-                                    (entry.ExtraLinks ??= new()).Add((parent, parentSeq, name));
-                            }
-                        }
-                    }
+                    if (value.Length < 0x42) break;
+                    byte nameSpace = value[0x41];
+                    if (nameSpace == 2) break;   // DOS-only 8.3 alias of a name recorded separately
+                    int nameLen = value[0x40];
+                    if (0x42 + nameLen * 2 > value.Length) break;
+                    ulong parentRef = BinaryPrimitives.ReadUInt64LittleEndian(value);
+                    ulong parentNumber = parentRef & RecordMask;
+                    if (parentNumber >= (ulong)_entries.Length) break;   // cannot be a parent on this table
+                    int parent = (int)parentNumber;
+                    ushort parentSeq = (ushort)(parentRef >> 48);
+                    string name = Encoding.Unicode.GetString(value.Slice(0x42, nameLen * 2));
+                    AddName(ref entry, parent, parentSeq, name);
                     break;
                 }
                 case AttrData when nameLength == 0 && !entry.HasData:
                 {
                     if (!nonResident)
                     {
-                        entry.Size = BinaryPrimitives.ReadUInt32LittleEndian(attr[0x10..]);
-                        entry.Allocated = 0; // lives inside the MFT record
+                        entry.Size = BinaryPrimitives.ReadInt32LittleEndian(attr[0x10..]);
+                        entry.Allocated = 0;   // the bytes live inside this record, which the table's own size accounts for
                         entry.HasData = true;
                     }
-                    else if (BinaryPrimitives.ReadUInt64LittleEndian(attr[0x10..]) == 0) // first fragment carries the sizes
+                    else if (BinaryPrimitives.ReadInt64LittleEndian(attr[0x10..]) == 0)   // only the piece at VCN 0 carries the sizes
                     {
                         ushort attrFlags = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x0C..]);
-                        ushort compressionUnit = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x22..]);
+                        int runsOffset = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x20..]);
                         long allocated = BinaryPrimitives.ReadInt64LittleEndian(attr[0x28..]);
                         long size = BinaryPrimitives.ReadInt64LittleEndian(attr[0x30..]);
-                        if ((attrFlags & 0x8001) != 0 && compressionUnit != 0 && length >= 0x48)
-                            allocated = BinaryPrimitives.ReadInt64LittleEndian(attr[0x40..]); // compressed or sparse: real usage
+                        // For compressed and sparse streams "allocated" is the logical allocation including holes; the
+                        // bytes really on disk are in the extra field at 0x40, present whenever the header is long
+                        // enough to hold it (the runs start at or after 0x48). Sparse-only streams have a compression
+                        // unit of 0, so that field is no test for the presence of the size.
+                        if ((attrFlags & (AttrFlagCompressed | AttrFlagSparse)) != 0 && runsOffset >= NonResidentHeaderCompressed)
+                            allocated = BinaryPrimitives.ReadInt64LittleEndian(attr[0x40..]);
+                        if (size < 0 || allocated < 0) break;
                         entry.Size = size;
                         entry.Allocated = allocated;
                         entry.HasData = true;
@@ -335,22 +787,42 @@ internal sealed class MftScanner
                     break;
                 }
             }
-            offset += length;
-        }
-
-        if (baseRef == 0)
-        {
-            if (entry.IsDirectory) _directories++;
-            else { _files++; _bytes += entry.Size; }
         }
     }
 
-    private static Span<byte> ResidentValue(Span<byte> attr)
+    /// <summary>Records a name of an entry once: the first one is the primary link, the rest are other hard links.</summary>
+    private static void AddName(ref Entry entry, int parent, ushort parentSeq, string name)
     {
-        int valueLength = BinaryPrimitives.ReadInt32LittleEndian(attr[0x10..]);
-        int valueOffset = BinaryPrimitives.ReadUInt16LittleEndian(attr[0x14..]);
-        if (valueLength < 0 || valueOffset + valueLength > attr.Length) return Span<byte>.Empty;
-        return attr.Slice(valueOffset, valueLength);
+        if (entry.Name is null) { entry.Name = name; entry.Parent = parent; entry.ParentSeq = parentSeq; return; }
+        if (entry.Parent == parent && string.Equals(entry.Name, name, StringComparison.Ordinal)) return;   // the same name in two namespaces
+        var extras = entry.ExtraLinks ??= new();
+        foreach (var (p, _, n) in extras)
+            if (p == parent && string.Equals(n, name, StringComparison.Ordinal)) return;
+        extras.Add((parent, parentSeq, name));
+    }
+
+    /// <summary>
+    /// Applies the extension records collected while reading. An extension counts only when its base record is in
+    /// use with the sequence number the extension names, and when the base's attribute list names the extension
+    /// (or the list could not be read). Anything else is a leftover of a deleted file and is dropped.
+    /// </summary>
+    private void MergeExtensions(CancellationToken ct)
+    {
+        int steps = 0;
+        foreach (var (baseIndex, baseSequence, record, index) in _extensions)
+        {
+            if ((++steps & 0xFFF) == 0) ct.ThrowIfCancellationRequested();
+            ref var entry = ref _entries[baseIndex];
+            if (!entry.InUse || entry.Sequence != baseSequence) { StaleExtensions++; continue; }
+            if (!ReadHeader(record, out var header)) { DamagedRecords++; continue; }
+            ulong self = (uint)index | ((ulong)header.Sequence << 48);
+            if (_attributeLists.TryGetValue(baseIndex, out var listed)) { if (!listed.Contains(self)) { StaleExtensions++; continue; } }
+            else if (!entry.ListNonResident) { StaleExtensions++; continue; }
+            try { ParseAttributes(record, header, ref entry, baseIndex, isBase: false); }
+            catch (MftException) { DamagedRecords++; }
+        }
+        _extensions.Clear();
+        _attributeLists.Clear();
     }
 
     // ------------------------------------------------------------------ tree
@@ -366,16 +838,11 @@ internal sealed class MftScanner
         Array.Fill(firstChild, -1);
         Array.Fill(nextSibling, -1);
 
-        bool Visible(ref Entry e) => _includeHidden || (e.Attributes & (FileAttributeHidden | FileAttributeSystem)) == 0;
-        bool Linked(int parent, ushort parentSeq) =>
-            parent >= 0 && parent < count && entries[parent].InUse && entries[parent].IsDirectory && entries[parent].Sequence == parentSeq;
-
         for (int i = count - 1; i >= 0; i--)
         {
+            if ((i & 0xFFFF) == 0) ct.ThrowIfCancellationRequested();
             ref var e = ref entries[i];
-            if (!e.InUse || e.Name is null || i == RootRecord) continue;
-            if (i < FirstUserRecord && i != 0 && i != 2) continue;   // metafiles, except $MFT and $LogFile which are large
-            if (!Visible(ref e) || !Linked(e.Parent, e.ParentSeq)) continue;
+            if (!Candidate(ref e, i) || !Linked(e.Parent, e.ParentSeq)) continue;
             if (!_exclude.IsEmpty && _exclude.Matches(e.Name!)) continue;
             nextSibling[i] = firstChild[e.Parent];
             firstChild[e.Parent] = i;
@@ -384,75 +851,122 @@ internal sealed class MftScanner
         _files = 0; _directories = 0; _bytes = 0;
         _folderNodes.Clear();
         var root = new FsNode(_rootPath, NodeKind.Directory, null);
-        AddChildren(root, RootRecord, firstChild, nextSibling, 0, ct);
+        AddChildren(root, firstChild, nextSibling, ct);
         AddExtraLinks(ct);
         _folderNodes.Clear();
-        FinishAll(root);
+        FinishAll(root, ct);
         _progress(_files, _directories, _bytes, _rootPath);
         return root;
     }
 
-    private void AddChildren(FsNode folder, int record, int[] firstChild, int[] nextSibling, int depth, CancellationToken ct)
+    /// <summary>An in-use, named, visible entry that the map shows at all (metafiles other than $MFT and $LogFile are left out).</summary>
+    private bool Candidate(ref Entry e, int index)
     {
-        if ((depth & 0x3F) == 0) ct.ThrowIfCancellationRequested();
-        _directories++;
-        _folderNodes[record] = folder;
-        for (int i = firstChild[record]; i >= 0; i = nextSibling[i])
+        if (!e.InUse || e.Name is null || index == RootRecord) return false;
+        if (index < FirstUserRecord && index != 0 && index != 2) return false;
+        return _includeHidden || (e.Attributes & (FileAttributeHidden | FileAttributeSystem)) == 0;
+    }
+
+    /// <summary>True when the reference points at a folder that exists now, with the sequence number the name was written against.</summary>
+    private bool Linked(int parent, ushort parentSeq)
+    {
+        var entries = _entries;
+        return parent >= 0 && parent < entries.Length && entries[parent].InUse && entries[parent].IsDirectory && entries[parent].Sequence == parentSeq;
+    }
+
+    /// <summary>Builds the folder nodes from the root down, iteratively: a deep tree costs list entries, not stack frames.</summary>
+    private void AddChildren(FsNode root, int[] firstChild, int[] nextSibling, CancellationToken ct)
+    {
+        var pending = new Stack<(FsNode Folder, int Record)>();
+        pending.Push((root, RootRecord));
+        int steps = 0;
+        while (pending.Count > 0)
         {
-            ref var e = ref _entries[i];
-            if (e.IsDirectory)
+            var (folder, record) = pending.Pop();
+            _directories++;
+            _folderNodes[record] = folder;
+            for (int i = firstChild[record]; i >= 0; i = nextSibling[i])
             {
-                if ((e.Attributes & FileAttributeReparsePoint) != 0) continue; // junctions and symlinks, like the folder walk
-                var sub = new FsNode(e.Name!, NodeKind.Directory, folder) { LastWriteUtc = ToUtc(e.ModifiedFileTime) };
-                folder.Children.Add(sub);
-                if (depth < 4000) AddChildren(sub, i, firstChild, nextSibling, depth + 1, ct);
-            }
-            else
-            {
-                folder.Children.Add(new FsNode(e.Name!, NodeKind.File, folder)
+                if ((++steps & 0xFFF) == 0) ct.ThrowIfCancellationRequested();
+                ref var e = ref _entries[i];
+                if (e.IsDirectory)
                 {
-                    Size = e.Size,
-                    Allocated = e.Allocated,
-                    FileCount = 1,
-                    LastWriteUtc = ToUtc(e.ModifiedFileTime)
-                });
-                _files++;
-                _bytes += e.Size;
+                    if ((e.Attributes & FileAttributeReparsePoint) != 0) continue;   // junctions and symlinks, like the folder walk
+                    var sub = new FsNode(e.Name!, NodeKind.Directory, folder) { LastWriteUtc = ToUtc(e.ModifiedFileTime) };
+                    folder.Children.Add(sub);
+                    pending.Push((sub, i));
+                }
+                else
+                {
+                    folder.Children.Add(new FsNode(e.Name!, NodeKind.File, folder)
+                    {
+                        Size = e.Size,
+                        Allocated = e.Allocated,
+                        FileCount = 1,
+                        LastWriteUtc = ToUtc(e.ModifiedFileTime)
+                    });
+                    e.Placed = true;
+                    _files++;
+                    _bytes += e.Size;
+                }
             }
         }
     }
 
-    /// <summary>Other names of hard-linked files become zero-size duplicates, as the folder walk does with link detection on.</summary>
+    /// <summary>
+    /// The other names of hard-linked files. The file's size is counted once, under the first name that made it into
+    /// the tree: normally the primary name, otherwise the first other name whose folder is in the tree and whose name
+    /// is not excluded. Names after that become zero-size duplicates, as the folder walk does with link detection on.
+    /// </summary>
     private void AddExtraLinks(CancellationToken ct)
     {
         for (int i = 0; i < _entries.Length; i++)
         {
-            ref var e = ref _entries[i];
-            if (e.ExtraLinks is null || !e.InUse || e.IsDirectory) continue;
-            if (!_includeHidden && (e.Attributes & (FileAttributeHidden | FileAttributeSystem)) != 0) continue;
             if ((i & 0xFFF) == 0) ct.ThrowIfCancellationRequested();
-            foreach (var (parent, parentSeq, name) in e.ExtraLinks)
+            ref var e = ref _entries[i];
+            if (e.ExtraLinks is not { } links || e.IsDirectory || !Candidate(ref e, i)) continue;
+            foreach (var (parent, parentSeq, name) in links)
             {
                 if (!_folderNodes.TryGetValue(parent, out var folder) || _entries[parent].Sequence != parentSeq) continue;
-                folder.Children.Add(new FsNode(name, NodeKind.File, folder)
+                if (!_exclude.IsEmpty && _exclude.Matches(name)) continue;
+                var node = new FsNode(name, NodeKind.File, folder) { FileCount = 1, LastWriteUtc = ToUtc(e.ModifiedFileTime) };
+                if (!e.Placed)
                 {
-                    FileCount = 1,
-                    LastWriteUtc = ToUtc(e.ModifiedFileTime),
-                    IsHardLinkDuplicate = true,
-                    LinkedSize = e.Size
-                });
+                    node.Size = e.Size;
+                    node.Allocated = e.Allocated;
+                    e.Placed = true;
+                    _bytes += e.Size;
+                }
+                else
+                {
+                    node.IsHardLinkDuplicate = true;
+                    node.LinkedSize = e.Size;
+                }
+                folder.Children.Add(node);
                 _files++;
             }
+            e.ExtraLinks = null;
         }
     }
 
-    private static void FinishAll(FsNode folder)
+    /// <summary>Sums every folder bottom-up without recursion: folders are listed top-down, then finished in reverse.</summary>
+    private static void FinishAll(FsNode root, CancellationToken ct)
     {
-        foreach (var child in folder.Children)
-            if (child.IsDirectory) FinishAll(child);
-        folder.FinishDirectory();
+        var order = new List<FsNode> { root };
+        for (int i = 0; i < order.Count; i++)
+        {
+            if ((i & 0xFFF) == 0) ct.ThrowIfCancellationRequested();
+            foreach (var child in order[i].Children)
+                if (child.IsDirectory) order.Add(child);
+        }
+        for (int i = order.Count - 1; i >= 0; i--)
+        {
+            if ((i & 0xFFF) == 0) ct.ThrowIfCancellationRequested();
+            order[i].FinishDirectory();
+        }
     }
 
+    /// <summary>A FILETIME as UTC; zero, negative and out-of-range values (seen on damaged records) become "unknown".</summary>
     private static DateTime ToUtc(long fileTime) =>
-        fileTime > 0 ? DateTime.FromFileTimeUtc(fileTime) : DateTime.MinValue;
+        fileTime > 0 && fileTime <= MaxFileTime ? DateTime.FromFileTimeUtc(fileTime) : DateTime.MinValue;
 }

@@ -115,15 +115,23 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Beside the pointer, flipped to the other side when it would leave the map.</summary>
+    /// <summary>
+    /// Beside the pointer, on the other side when it would leave the map, and never past the map's edges. The card
+    /// is measured against its own maximum width, never the room left beside the pointer, so its size (and so the
+    /// side it lands on) does not depend on where it was last placed.
+    /// </summary>
     private void PlaceTooltip()
     {
-        HoverTip.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        HoverTip.Measure(new Size(HoverTip.MaxWidth, double.PositiveInfinity));
         var size = HoverTip.DesiredSize;
+        double width = TipLayer.Bounds.Width, height = TipLayer.Bounds.Height;
         double x = _pointerPosition.X + 16, y = _pointerPosition.Y + 20;
-        if (x + size.Width > MapHost.Bounds.Width) x = Math.Max(0, _pointerPosition.X - size.Width - 12);
-        if (y + size.Height > MapHost.Bounds.Height) y = Math.Max(0, _pointerPosition.Y - size.Height - 12);
-        HoverTip.Margin = new Thickness(x, y, 0, 0);
+        if (x + size.Width > width) x = _pointerPosition.X - size.Width - 12;
+        if (y + size.Height > height) y = _pointerPosition.Y - size.Height - 12;
+        x = Math.Clamp(x, 0, Math.Max(0, width - size.Width));
+        y = Math.Clamp(y, 0, Math.Max(0, height - size.Height));
+        Canvas.SetLeft(HoverTip, Math.Round(x));
+        Canvas.SetTop(HoverTip, Math.Round(y));
     }
 
     private static string Capitalize(string text) => text.Length > 0 ? char.ToUpper(text[0]) + text[1..] : text;

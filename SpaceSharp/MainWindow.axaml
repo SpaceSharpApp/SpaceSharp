@@ -5,7 +5,7 @@
         Title="SpaceSharp"
         Width="1400" Height="880" MinWidth="1040" MinHeight="460"
         WindowStartupLocation="CenterScreen"
-        Icon="avares://SpaceSharp/Assets/SpaceSharp-256.png"
+        Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
 
   <!-- The main window, laid out as the WPF app's (2.2): top bar, path row, the filter rail under it, the side
@@ -150,18 +150,22 @@
         </ScrollViewer>
       </Grid>
 
-      <!-- the hover tooltip: placed beside the pointer by code -->
-      <Border x:Name="HoverTip" IsVisible="False" IsHitTestVisible="False" HorizontalAlignment="Left" VerticalAlignment="Top"
-              Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="8" Padding="12,8"
-              MinWidth="200" MaxWidth="360" BoxShadow="0 3 14 0 #73000000">
-        <StackPanel>
-          <DockPanel>
-            <TextBlock x:Name="TipSize" DockPanel.Dock="Right" FontSize="14" FontWeight="SemiBold" Margin="12,0,0,0" VerticalAlignment="Center" />
-            <TextBlock x:Name="TipName" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-          </DockPanel>
-          <StackPanel x:Name="TipLines" Margin="0,2,0,0" />
-        </StackPanel>
-      </Border>
+      <!-- the hover tooltip: placed beside the pointer by code. It lives on a canvas so its position never takes part
+           in the map's layout: a canvas asks nothing of its parent and measures its child without a constraint, so a
+           card near the right edge cannot change the map's size or its own width and flicker between two places. -->
+      <Canvas x:Name="TipLayer" IsHitTestVisible="False" ClipToBounds="True">
+        <Border x:Name="HoverTip" IsVisible="False" IsHitTestVisible="False"
+                Background="{DynamicResource MenuBg}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="8" Padding="12,8"
+                MinWidth="200" MaxWidth="360" BoxShadow="0 3 14 0 #73000000">
+          <StackPanel>
+            <DockPanel>
+              <TextBlock x:Name="TipSize" DockPanel.Dock="Right" FontSize="14" FontWeight="SemiBold" Margin="12,0,0,0" VerticalAlignment="Center" />
+              <TextBlock x:Name="TipName" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+            </DockPanel>
+            <StackPanel x:Name="TipLines" Margin="0,2,0,0" />
+          </StackPanel>
+        </Border>
+      </Canvas>
 
       <!-- the filter drawer (the default filter layout): a sheet over the right of the map -->
       <Border x:Name="FilterDrawer" HorizontalAlignment="Right" Width="380" IsVisible="False" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1,0,0,0" BoxShadow="0 0 24 0 #80000000">

@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … и ещё {0:N0}</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Удаление</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Удалось удалить не всё.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} изменился после сканирования и не был тронут. Отсканируйте снова, чтобы удалить его.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Удалось удалить не всё.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Переместить {0} в корзину?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Переместить в корзину</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows пропустил его (используется или слишком велик для корзины)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>путь слишком длинный для корзины</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>доступ запрещён</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>используется другой программой</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>больше не существует</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows сообщил код ошибки {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} всё ещё существует после операции.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} из {1} элементов всё ещё существуют после операции.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>и ещё {0}</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Очистите корзину в файловом менеджере системы.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} не запустился.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} завершился с кодом {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>файл «{0}» ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>папку «{0}» (файлов: {1:N0}, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>элементов: {0:N0} (файлов: {1:N0}, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Как освещены файлы. Карта вверху — образец данных, она следует за каждым изменением.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Образец данных</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Образец диска</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Фото</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Видео</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Программы</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Документы</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Музыка</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Свет от</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>С какой стороны падает свет. Середина — прямо спереди.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Сбросить затенение</value></data>
@@ -827,7 +843,7 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Кэши пакетов</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>Кэшей: {0:N0} (npm, pnpm, NuGet, pip, Cargo, Gradle и подобные), файлов: {1:N0}. Они загружаются заново при необходимости.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Кэши браузеров</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>Папок кэша: {0:N0}, файлов: {1:N0}. После очистки страницы в первый раз загрузятся чуть медленнее.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>Папок кэша: {0:N0}, файлов: {1:N0}. Только кэш страниц: пароли, входы, история и открытые вкладки не затрагиваются. Сначала закройте браузер; после этого страницы в первый раз загрузятся чуть медленнее.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Кэши шейдеров</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>Папок: {0:N0}, файлов: {1:N0}. Игры и драйверы пересоздадут их при следующем запуске.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Загрузки Центра обновления Windows</value></data>

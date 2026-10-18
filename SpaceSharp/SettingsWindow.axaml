@@ -3,7 +3,7 @@
         x:Class="SpaceSharp.SettingsWindow"
         Width="680" Height="780" MinWidth="540" MinHeight="420"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
-        Icon="avares://SpaceSharp/Assets/SpaceSharp-256.png"
+        Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
 
   <!-- The Settings window: a row of tabs, a page of cards, the live map preview on the Treemap

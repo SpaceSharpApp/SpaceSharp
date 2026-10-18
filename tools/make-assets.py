@@ -12,7 +12,7 @@ nine-cell icon used, so it reads as an app icon next to other apps' tiles.
 One definition here produces every brand file in the repository:
 
   SpaceSharp/Assets/SpaceSharp.svg        master mark (deep carve)
-  SpaceSharp/Assets/SpaceSharp.ico        Windows icon on the tile: 16, 20, 24, 32, 48, 64, 128, 256
+  SpaceSharp/Assets/SpaceSharp.ico        Windows icon on the tile: 16, 20, 24, 32, 40, 48, 64, 96, 128, 256 (40 and 96 are what the taskbar asks for at 125% and 150% scaling)
   SpaceSharp/Assets/SpaceSharp-256.png    the mark the app shows in its own UI
   docs/icon.png, docs/icon-512.png        landing page favicon and store icon (the bare mark)
   docs/app-icon-256.png, -512.png         the Windows icon on its tile, as PNG, for listings that want the app icon
@@ -196,7 +196,7 @@ def make_pngs():
     write("docs/app-icon-256.png", png_bytes(tile_image(256)))   # the Windows icon on its tile, for store listings
     write("docs/app-icon-512.png", png_bytes(tile_image(512)))
 
-def make_ico(rel: str, sizes=(16, 20, 24, 32, 48, 64, 128, 256)):
+def make_ico(rel: str, sizes=(16, 20, 24, 32, 40, 48, 64, 96, 128, 256)):
     frames = [tile_image(px) for px in sizes]
     buf = io.BytesIO()
     frames[-1].save(buf, "ICO", sizes=[(s, s) for s in sizes], append_images=frames[:-1])

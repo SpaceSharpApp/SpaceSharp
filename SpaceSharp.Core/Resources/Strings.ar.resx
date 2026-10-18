@@ -119,13 +119,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … و{0:N0} أخرى</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>حذف</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>تعذر حذف كل شيء.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} تغيّر منذ الفحص وتُرك كما هو. أعد الفحص لحذفه.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>تعذر حذف كل شيء.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>هل تريد نقل {0} إلى سلة المحذوفات؟
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>نقل إلى سلة المحذوفات</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>تخطّاه Windows (قيد الاستخدام أو أكبر من أن تستوعبه سلة المحذوفات)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>المسار أطول مما تسمح به سلة المحذوفات</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>الوصول مرفوض</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>قيد الاستخدام من برنامج آخر</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>لم يعد موجودًا</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>أبلغ Windows عن رمز الخطأ {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} ما زال موجودًا بعد العملية.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} من {1} عنصرًا ما زالت موجودة بعد العملية.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>و{0} أخرى</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>أفرغ سلة المهملات من مدير ملفات النظام.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} لم يبدأ.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} انتهى بالرمز {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>الملف "{0}" ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>المجلد "{0}" ({1:N0} ملف، {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} عنصر ({1:N0} ملف، {2})</value></data>
@@ -725,6 +736,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>كيف تُضاء الملفات. الخريطة في الأعلى بيانات تجريبية وتتبع كل تغيير.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>بيانات تجريبية</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>قرص تجريبي</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>الصور</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>مقاطع الفيديو</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>البرامج</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>المستندات</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>الموسيقى</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>الضوء من</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>من أي جهة يأتي الضوء. المنتصف يعني من الأمام مباشرة.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>إعادة تعيين التظليل</value></data>
@@ -829,7 +845,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>ذاكرات تخزين الحزم</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} ذاكرة تخزين (npm وpnpm وNuGet وpip وCargo وGradle وأمثالها)، {1:N0} ملف. يُعاد تنزيلها عند الحاجة.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>ذاكرات تخزين المتصفحات</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} من مجلدات التخزين المؤقت، {1:N0} ملف. تُحمَّل الصفحات أبطأ قليلًا في المرة الأولى بعدها.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} مجلدات ذاكرة مؤقتة، {1:N0} ملفات. ذاكرة الصفحات فقط: لا تُمسّ كلمات المرور وجلسات الدخول والسجل وعلامات التبويب المفتوحة. أغلق المتصفح أولاً؛ تُحمَّل الصفحات أبطأ قليلاً في المرة الأولى بعدها.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>ذاكرات تخزين المظللات</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} مجلد، {1:N0} ملف. تعيد الألعاب وبرامج التشغيل بناءها عند التشغيل التالي.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>تنزيلات Windows Update</value></data>

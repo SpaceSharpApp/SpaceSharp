@@ -119,13 +119,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … and {0:N0} more</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Delete</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Not everything could be deleted.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} has changed since the scan and was left alone. Scan again to delete it.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Not everything could be deleted.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Move {0} to the Recycle Bin?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Move to Recycle Bin</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows skipped it (in use, or too large for the Recycle Bin)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>the path is too long for the Recycle Bin</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>access denied</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>in use by another program</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>it no longer exists</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows reported error code {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} still exists after the operation.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} of {1} items still exist after the operation.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>and {0} more</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Empty the trash from the system's file manager.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} did not start.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} exited with code {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>the file "{0}" ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>the folder "{0}" ({1:N0} files, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} items ({1:N0} files, {2})</value></data>
@@ -726,6 +737,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>How files are lit. The map at the top is sample data and follows every change.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Sample data</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Sample drive</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Photos</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Videos</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programs</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Documents</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Music</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Light from</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Which side the light comes from. The middle is straight ahead.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Reset shading</value></data>
@@ -830,7 +846,7 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Package caches</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} caches (npm, pnpm, NuGet, pip, Cargo, Gradle and the like), {1:N0} files. They are re-downloaded when needed.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Browser caches</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cache folders, {1:N0} files. Pages load a little slower the first time after.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cache folders, {1:N0} files. Only page caches: passwords, logins, history and open tabs are not touched. Close the browser first; pages load a little slower the first time after.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shader caches</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} folders, {1:N0} files. Games and drivers rebuild them on the next launch.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update downloads</value></data>

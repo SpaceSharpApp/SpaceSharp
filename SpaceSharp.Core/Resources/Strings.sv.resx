@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … och {0:N0} till</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Ta bort</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Allt kunde inte tas bort.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} har ändrats sedan skanningen och lämnades orörd. Skanna igen för att ta bort den.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Allt kunde inte tas bort.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>Vill du flytta {0} till Papperskorgen?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Flytta till Papperskorgen</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows hoppade över den (används, eller för stor för papperskorgen)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>sökvägen är för lång för papperskorgen</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>åtkomst nekad</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>används av ett annat program</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>den finns inte längre</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows rapporterade felkod {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} finns kvar efter åtgärden.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{0} av {1} objekt finns kvar efter åtgärden.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>och {0} till</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Töm papperskorgen från systemets filhanterare.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} startade inte.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} avslutades med kod {1}.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>filen "{0}" ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>mappen "{0}" ({1:N0} filer, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} objekt ({1:N0} filer, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Hur filer belyses. Kartan högst upp är exempeldata och följer varje ändring.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Exempeldata</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Exempelenhet</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Bilder</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Videor</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Program</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Dokument</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Musik</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Ljus från</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Vilken sida ljuset kommer från. Mitten är rakt framifrån.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Återställ skuggning</value></data>
@@ -827,7 +843,7 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Paketcacher</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} cacher (npm, pnpm, NuGet, pip, Cargo, Gradle och liknande), {1:N0} filer. De hämtas igen vid behov.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Webbläsarcacher</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cachemappar, {1:N0} filer. Sidor läses in lite långsammare första gången efteråt.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} cachemappar, {1:N0} filer. Bara sidcache: lösenord, inloggningar, historik och öppna flikar rörs inte. Stäng webbläsaren först; sidor laddas lite långsammare första gången efteråt.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Shader-cacher</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} mappar, {1:N0} filer. Spel och drivrutiner bygger upp dem igen vid nästa start.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update-hämtningar</value></data>

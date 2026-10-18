@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … ve {0:N0} öğe daha</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>Sil</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>Her şey silinemedi.
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} taramadan bu yana değişti ve dokunulmadı. Silmek için yeniden tarayın.</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>Her şey silinemedi.</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>{0} Geri Dönüşüm Kutusu'na taşınsın mı?
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows bunu atladı (kullanımda ya da Geri Dönüşüm Kutusu için çok büyük)</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>yol Geri Dönüşüm Kutusu için çok uzun</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>erişim reddedildi</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>başka bir program kullanıyor</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>artık yok</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows {0} hata kodunu bildirdi</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>{0} işlemden sonra hâlâ var.</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>{1} öğeden {0} tanesi işlemden sonra hâlâ var.</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>ve {0} tane daha</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>Çöpü sistemin dosya yöneticisinden boşaltın.</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} başlamadı.</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0}, {1} koduyla sonlandı.</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>"{0}" dosyası ({1})</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>"{0}" klasörü ({1:N0} dosya, {2})</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} öğe ({1:N0} dosya, {2})</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>Dosyaların nasıl aydınlatıldığı. Üstteki harita örnek verilerdir ve her değişikliği izler.</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>Örnek veriler</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>Örnek sürücü</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>Fotoğraflar</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>Videolar</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>Programlar</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>Belgeler</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>Müzik</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>Işık yönü</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>Işığın hangi taraftan geldiği. Orta, tam karşıdan demektir.</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>Gölgelendirmeyi sıfırla</value></data>
@@ -827,7 +843,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>Paket önbellekleri</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} önbellek (npm, pnpm, NuGet, pip, Cargo, Gradle ve benzerleri), {1:N0} dosya. Gerektiğinde yeniden indirilirler.</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>Tarayıcı önbellekleri</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} önbellek klasörü, {1:N0} dosya. Sonrasında sayfalar ilk açılışta biraz daha yavaş yüklenir.</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} önbellek klasörü, {1:N0} dosya. Yalnızca sayfa önbellekleri: parolalar, oturumlar, geçmiş ve açık sekmelere dokunulmaz. Önce tarayıcıyı kapatın; sayfalar sonrasında ilk seferde biraz daha yavaş yüklenir.</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>Gölgelendirici önbellekleri</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} klasör, {1:N0} dosya. Oyunlar ve sürücüler bir sonraki başlatmada yeniden oluşturur.</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows Update indirmeleri</value></data>

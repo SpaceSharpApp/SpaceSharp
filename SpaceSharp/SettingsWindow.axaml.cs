@@ -626,17 +626,17 @@ public partial class SettingsWindow : Window
             long size = (long)(gb * 1024 * 1024 * 1024);
             parent.Children.Add(new FsNode(name, NodeKind.File, parent) { Size = size, Allocated = size, FileCount = 1, LastWriteUtc = DateTime.UtcNow });
         }
-        var photos = Dir(root, "Photos");
+        var photos = Dir(root, Strings.Get("Sample_Photos"));
         foreach (var (n, g) in new[] { ("DSC_0412.NEF", 11.0), ("DSC_0388.NEF", 8.0), ("Summer.jpg", 5.0), ("Family.jpg", 4.0), ("Beach.jpg", 3.0), ("Trip.jpg", 3.0) }) File(photos, n, g);
-        var videos = Dir(root, "Videos");
+        var videos = Dir(root, Strings.Get("Sample_Videos"));
         foreach (var (n, g) in new[] { ("Holiday 2024.mp4", 14.0), ("Birthday.mov", 8.0), ("Clip.mp4", 4.0) }) File(videos, n, g);
-        var programs = Dir(root, "Programs");
+        var programs = Dir(root, Strings.Get("Sample_Programs"));
         var steam = Dir(programs, "Steam");
         foreach (var (n, g) in new[] { ("game.pak", 5.0), ("textures.bin", 4.0), ("audio.bank", 2.0), ("steam.exe", 1.0) }) File(steam, n, g);
         File(programs, "setup.msi", 4.0); File(programs, "tools.zip", 2.0);
-        var docs = Dir(root, "Documents");
+        var docs = Dir(root, Strings.Get("Sample_Documents"));
         foreach (var (n, g) in new[] { ("Thesis.pdf", 3.0), ("Budget.xlsx", 2.0), ("Notes.docx", 2.0), ("a.txt", 1.0), ("b.txt", 1.0), ("c.txt", 1.0), ("d.txt", 1.0), ("e.txt", 1.0) }) File(docs, n, g);
-        var music = Dir(root, "Music");
+        var music = Dir(root, Strings.Get("Sample_Music"));
         foreach (var (n, g) in new[] { ("Album.flac", 3.0), ("Live.flac", 2.0), ("Mix.mp3", 2.0), ("Demo.wav", 2.0), ("Intro.mp3", 1.0) }) File(music, n, g);
         foreach (var d in new[] { steam, photos, videos, programs, docs, music }) d.FinishDirectory();
         root.FinishDirectory();

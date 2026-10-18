@@ -117,13 +117,24 @@
   <data name="Delete_AndMore" xml:space="preserve"><value>
 … 以及另外 {0:N0} 项</value></data>
   <data name="Delete_ErrorTitle" xml:space="preserve"><value>删除</value></data>
-  <data name="Delete_Partial" xml:space="preserve"><value>部分项目无法删除。
-
-{0}</value></data>
+  <data name="Delete_Changed" xml:space="preserve"><value>{0} 自扫描以来已更改，未作处理。请重新扫描后再删除。</value></data>
+  <data name="Delete_Partial" xml:space="preserve"><value>部分项目无法删除。</value></data>
   <data name="Delete_Question" xml:space="preserve"><value>将{0}移至回收站？
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>移至回收站</value></data>
+  <data name="Trash_Skipped" xml:space="preserve"><value>Windows 跳过了它（正在使用，或对回收站来说太大）</value></data>
+  <data name="Trash_TooLong" xml:space="preserve"><value>路径对回收站来说太长</value></data>
+  <data name="Trash_AccessDenied" xml:space="preserve"><value>访问被拒绝</value></data>
+  <data name="Trash_InUse" xml:space="preserve"><value>正被另一个程序使用</value></data>
+  <data name="Trash_Gone" xml:space="preserve"><value>它已不存在</value></data>
+  <data name="Trash_Code" xml:space="preserve"><value>Windows 报告错误代码 {0}</value></data>
+  <data name="Trash_StillExists" xml:space="preserve"><value>操作后 {0} 仍然存在。</value></data>
+  <data name="Trash_StillExistMany" xml:space="preserve"><value>操作后 {1} 项中仍有 {0} 项存在。</value></data>
+  <data name="Trash_AndMore" xml:space="preserve"><value>及另外 {0} 项</value></data>
+  <data name="Trash_EmptyElsewhere" xml:space="preserve"><value>请在系统的文件管理器中清空回收站。</value></data>
+  <data name="Trash_DidNotStart" xml:space="preserve"><value>{0} 未能启动。</value></data>
+  <data name="Trash_Exited" xml:space="preserve"><value>{0} 以代码 {1} 退出。</value></data>
   <data name="Delete_WhatFile" xml:space="preserve"><value>文件“{0}”（{1}）</value></data>
   <data name="Delete_WhatFolder" xml:space="preserve"><value>文件夹“{0}”（{1:N0} 个文件，{2}）</value></data>
   <data name="Delete_WhatMany" xml:space="preserve"><value>{0:N0} 个项目（{1:N0} 个文件，{2}）</value></data>
@@ -723,6 +734,11 @@
   <data name="Settings_Shading_Desc" xml:space="preserve"><value>文件的光照方式。顶部的地图为示例数据，会随每次更改而变化。</value></data>
   <data name="Settings_PreviewSample" xml:space="preserve"><value>示例数据</value></data>
   <data name="Settings_PreviewDrive" xml:space="preserve"><value>示例驱动器</value></data>
+  <data name="Sample_Photos" xml:space="preserve"><value>照片</value></data>
+  <data name="Sample_Videos" xml:space="preserve"><value>视频</value></data>
+  <data name="Sample_Programs" xml:space="preserve"><value>程序</value></data>
+  <data name="Sample_Documents" xml:space="preserve"><value>文档</value></data>
+  <data name="Sample_Music" xml:space="preserve"><value>音乐</value></data>
   <data name="Shading_Light" xml:space="preserve"><value>光源方向</value></data>
   <data name="Shading_Light_Desc" xml:space="preserve"><value>光从哪一侧照来。中间表示正前方。</value></data>
   <data name="Shading_Reset" xml:space="preserve"><value>重置阴影</value></data>
@@ -827,7 +843,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Cleanup_PackageCaches" xml:space="preserve"><value>包缓存</value></data>
   <data name="Cleanup_PackageCaches_Note" xml:space="preserve"><value>{0:N0} 个缓存（npm、pnpm、NuGet、pip、Cargo、Gradle 等），{1:N0} 个文件。需要时会重新下载。</value></data>
   <data name="Cleanup_BrowserCaches" xml:space="preserve"><value>浏览器缓存</value></data>
-  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} 个缓存文件夹，{1:N0} 个文件。清理后首次加载网页会稍慢一些。</value></data>
+  <data name="Cleanup_BrowserCaches_Note" xml:space="preserve"><value>{0:N0} 个缓存文件夹，{1:N0} 个文件。仅限页面缓存：密码、登录状态、历史记录和打开的标签页不受影响。请先关闭浏览器；之后首次加载页面会稍慢。</value></data>
   <data name="Cleanup_ShaderCaches" xml:space="preserve"><value>着色器缓存</value></data>
   <data name="Cleanup_ShaderCaches_Note" xml:space="preserve"><value>{0:N0} 个文件夹，{1:N0} 个文件。游戏和驱动程序会在下次启动时重新生成。</value></data>
   <data name="Cleanup_WindowsUpdate" xml:space="preserve"><value>Windows 更新下载</value></data>
