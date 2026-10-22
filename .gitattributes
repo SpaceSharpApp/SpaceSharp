@@ -66,3 +66,6 @@ SpaceSharp/Themes/Icons.xaml linguist-generated
 # Keep CI and contributor files out of "Download ZIP" and release archives of the source
 .github/ export-ignore
 .gitattributes export-ignore
+
+# Brand sources: large binaries that change rarely, kept in LFS so clones stay light
+.github/branding/*.ai filter=lfs diff=lfs merge=lfs -text
