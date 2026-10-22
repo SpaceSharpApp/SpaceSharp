@@ -47,8 +47,8 @@ On Windows the scanner, the Recycle Bin, the title bar colors and the drive dete
 
 ## Used for the website, the screenshots and the brand files, not shipped
 
-- **Bricolage Grotesque** by Mathieu Triay, https://github.com/ateliertriay/bricolage, SIL Open Font License 1.1. The landing page loads it from Google Fonts; `tools/make-assets.py` downloads the TTF to draw the wordmark into the header, the installer bitmaps and the social preview. The font is not inside the app or the installers.
-- **Pillow** (MIT-CMU / HPND license) and **CairoSVG** (LGPL 3.0, used as a library, unmodified): `tools/make-assets.py`, `make-social.py` and `make-mobile-shots.py` render the icon, the images and the WebP screenshots.
+- **Bricolage Grotesque** by Mathieu Triay, https://github.com/ateliertriay/bricolage, SIL Open Font License 1.1. The landing page loads it from Google Fonts; the header, social preview and installer bitmaps are drawn by hand with it. The font is not inside the app or the installers.
+- **Pillow** (MIT-CMU / HPND license): `tools/make-mobile-shots.py` renders the WebP screenshots for the landing page.
 - **Shields.io** badges in the README are images fetched from https://shields.io (CC0 for the service's output).
 - The landing page is plain HTML, CSS and JavaScript with no frameworks; it loads nothing but the Google Fonts stylesheet above.
 

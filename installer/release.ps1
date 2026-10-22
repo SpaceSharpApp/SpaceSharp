@@ -172,7 +172,6 @@ if ($doPack) {
             --packTitle SpaceSharp `
             --packAuthors ClearanceClarence `
             --icon .\SpaceSharp\Assets\SpaceSharp.ico `
-            --splashImage .\installer\splash.gif `
             --msi `
             --instLocation Either `
             --instWelcome .\installer\welcome.txt `
