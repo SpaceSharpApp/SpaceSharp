@@ -186,7 +186,6 @@ Only one SpaceSharp runs at a time; starting it again hands the request to the o
 | K | Next color mode |
 | B | Map, Insights, Changes |
 | L | Side panel |
-| G | Density: Everything (no grouping) and back |
 | Ctrl+, | Settings |
 | Esc | Cancel a scan, close the filter |
 | F1 | About and shortcuts |

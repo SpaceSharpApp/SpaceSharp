@@ -144,6 +144,9 @@ public partial class MainWindow
     }
 
     /// <summary>The palette's twelve folder colors as one rounded strip: a hard-stop gradient, so no cell can round past the edge at any scaling.</summary>
+    /// <summary>The strip of a palette's twelve folder colors, as the picker and the wiki's palette sheet draw it.</summary>
+    private static Border PaletteStrip(ColorScheme scheme, double width, double height) => Strip(scheme, width, height);
+
     private static Border Strip(ColorScheme scheme, double width, double height)
     {
         var colors = scheme.FolderColors;

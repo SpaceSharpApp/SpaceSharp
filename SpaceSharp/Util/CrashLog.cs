@@ -90,7 +90,8 @@ public static class CrashLog
                $"&what-happened={Uri.EscapeDataString(body)}";
     }
 
-    private static string InstallKind() => (Updater.Instance.IsInstalled ? "Installed (Velopack)" : "Portable") + " · Avalonia";
+    /// <summary>One of the bug form's "How it was installed" options, so the prefill selects it.</summary>
+    private static string InstallKind() => Updater.Instance.IsInstalled ? "Installer (Setup.exe or MSI)" : "Portable exe";
 
     private static string Shorten(string s, int max) { s = s.Trim().Replace('\n', ' ').Replace('\r', ' '); return s.Length <= max ? s : s[..max].TrimEnd() + "…"; }
 

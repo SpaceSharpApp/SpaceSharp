@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -14,6 +15,14 @@ namespace SpaceSharp;
 public partial class MainWindow
 {
     public static readonly string[] Scenes = { "none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light" };
+
+    /// <summary>The wiki's pictures (tools/screenshots_wiki.ps1): one screen or state each, on top of the README scenes.</summary>
+    public static readonly string[] WikiScenes =
+    {
+        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
+        "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-sidepanel-changes", "wiki-palettes", "wiki-palette-editor",
+        "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning"
+    };
 
     private async Task PoseAsync(string scene)
     {
@@ -97,6 +106,71 @@ public partial class MainWindow
                 await Settle();
                 dialog = LastOwned();
                 break;
+            // ---- the wiki's scenes
+            case "wiki-colorby-top":
+                ColorCombo.SelectedIndex = 0;
+                break;
+            case "wiki-colorby-type":
+                ColorCombo.SelectedIndex = 2;
+                break;
+            case "wiki-shading":
+                _settings.CushionEnabled = true;
+                _settings.CushionShading = 85; _settings.CushionHeight = 60; _settings.Brightness = 45; _settings.ShadingScale = 85;   // the Deep preset
+                ApplySettings();
+                break;
+            case "wiki-zoomed":
+                // three levels down, so the path row has crumbs to show and the boxes are big
+                if (_root?.FindDescendant(System.IO.Path.Combine(_root.FullPath, "Games Library", "common", "Game Three", "Data")) is { } data) Treemap.FocusOn(data, animate: false);
+                break;
+            case "wiki-rail":
+                _settings.FilterLayout = "Rail";
+                ApplyFilterLayout();
+                FilterBox.Text = "videos over 500MB";
+                break;
+            case "wiki-filtered":
+                FilterBox.Text = "older than 2 years is:file";
+                FilterDrawer.IsVisible = false;
+                break;
+            case "wiki-palette-picker":
+                PaletteButton.Flyout?.ShowAt(PaletteButton);
+                break;
+            case "wiki-shortcuts":
+                dialog = new ShortcutsWindow();
+                _ = dialog.ShowDialog(this);
+                break;
+            case "wiki-changes-everything":
+                // unlike the README's scene: every row, unchanged ones included, sorted by size now, two folders open
+                ShowView(MainView.Changes);
+                await Settle();
+                _changesOnly = false; _changeSort = ChangeSort.Now; _changeSortDescending = true;
+                RefreshChanges();
+                foreach (var open in _changeRows.Where(r => r.CanOpen).Take(2).ToList()) ToggleChangeRow(open);
+                break;
+            case "wiki-inspect-selection":
+                if (_root?.FindDescendant(System.IO.Path.Combine(_root.FullPath, "Users", "User", "Videos", "Recordings")) is { } recordings)
+                {
+                    Treemap.FocusOn(recordings, animate: false);
+                    await Settle();
+                    Treemap.SelectMany(recordings.Children.Where(c => c.IsReal && !c.IsDirectory).Take(4));
+                    ShowInspect(); dialog = LastOwned();
+                }
+                break;
+            case "wiki-sidepanel-changes":
+                _listKind = TopListKind.Changes; MarkListKind(); RefreshTopList();
+                break;
+            case "wiki-palettes":
+                await RenderPaletteSheetAsync();
+                return;
+            case "wiki-palette-editor":
+                dialog = new PaletteEditorWindow(this, new PaletteDraft { Name = "Harbor", Theme = PaletteTheme.Dark, Folders = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), PaletteSpread.Rainbow) });
+                _ = dialog.ShowDialog(this);
+                break;
+            case "wiki-settings-general": dialog = OpenSettings("General", Strings.Get("Settings_Language")); break;
+            case "wiki-settings-behavior": dialog = OpenSettings("Behavior", Strings.Get("Settings_Startup")); break;
+            case "wiki-settings-appearance": dialog = OpenSettings("Appearance", Strings.Get("Settings_Appearance")); break;
+            case "wiki-settings-text": dialog = OpenSettings("Treemap", Strings.Get("Settings_Text")); break;
+            case "wiki-settings-map": dialog = OpenSettings("Map", Strings.Get("Settings_Map")); break;
+            case "wiki-settings-scanning": dialog = OpenSettings("Scanning", Strings.Get("Settings_Scanning")); break;
             case "start":
             case "none":
             default:
@@ -118,6 +192,61 @@ public partial class MainWindow
     }
 
     private Window? LastOwned() => OwnedWindows.Count > 0 ? OwnedWindows[^1] : null;
+
+    private SettingsWindow OpenSettings(string tab, string section)
+    {
+        var settings = new SettingsWindow(this);
+        settings.ShowSection(tab, section);
+        _ = settings.ShowModal(this);
+        return settings;
+    }
+
+    /// <summary>The wiki's palette sheet: every built-in palette as its strip, name and line, in two columns, written straight to the PNG.</summary>
+    private async Task RenderPaletteSheetAsync()
+    {
+        if (App.Args.Shot is not { } file) return;
+        var sheet = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), ColumnSpacing = 40, Margin = new Thickness(28, 22) };
+        sheet.Bind(Panel.BackgroundProperty, this.GetResourceObservable("Window"));
+        void Column(int column, bool dark)
+        {
+            var stack = new StackPanel { Spacing = 10 };
+            stack.Children.Add(new TextBlock { Text = Strings.Get(dark ? "Palette_GroupDark" : "Palette_GroupLight"), FontSize = 15, FontWeight = Avalonia.Media.FontWeight.Bold, Margin = new Thickness(0, 0, 0, 4) });
+            foreach (var scheme in Palette.Schemes.Where(s => !s.IsCustom && s.Suits(dark) && (s.Theme != PaletteTheme.Any || dark)))
+            {
+                var row = new Grid { ColumnDefinitions = new ColumnDefinitions("168,*"), ColumnSpacing = 14 };
+                row.Children.Add(PaletteStrip(scheme, 168, 18));
+                var text = new TextBlock { TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+                text.Inlines!.Add(new Avalonia.Controls.Documents.Run(scheme.Name) { FontWeight = Avalonia.Media.FontWeight.SemiBold });
+                var about = new Avalonia.Controls.Documents.Run("  " + scheme.About);
+                about.Bind(Avalonia.Controls.Documents.TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
+                text.Inlines.Add(about);
+                Grid.SetColumn(text, 1);
+                row.Children.Add(text);
+                stack.Children.Add(row);
+            }
+            Grid.SetColumn(stack, column);
+            sheet.Children.Add(stack);
+        }
+        Column(0, dark: true);
+        Column(1, dark: false);
+
+        // laid out inside the window so the theme brushes resolve, then rendered on its own
+        MapHost.Children.Add(sheet);
+        await Settle();
+        double scale = 2;
+        var size = new Size(1100, Math.Ceiling(sheet.DesiredSize.Height));
+        sheet.Measure(size); sheet.Arrange(new Rect(size));
+        var pixels = new PixelSize((int)(size.Width * scale), (int)(size.Height * scale));
+        using (var target = new RenderTargetBitmap(pixels, new Vector(96 * scale, 96 * scale)))
+        {
+            target.Render(sheet);
+            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(file)) ?? ".");
+            SavePng(target, file);
+        }
+        MapHost.Children.Remove(sheet);
+        Console.WriteLine($"  {file}");
+        (Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+    }
 
     /// <summary>Waits for layout and animations to finish.</summary>
     private static async Task Settle(int milliseconds = 400)
