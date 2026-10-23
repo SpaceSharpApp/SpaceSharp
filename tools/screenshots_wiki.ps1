@@ -32,6 +32,7 @@ $files = [ordered]@{
     "wiki-palettes" = "palettes.png"; "wiki-palette-editor" = "palette-editor.png"
     "wiki-settings-general" = "settings-general.png"; "wiki-settings-behavior" = "settings-behavior.png"; "wiki-settings-appearance" = "settings-appearance.png"
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"
+    "wiki-rtl" = "rtl.png"
 }
 if ($Scenes.Count -eq 0) { $Scenes = @($files.Keys) }
 

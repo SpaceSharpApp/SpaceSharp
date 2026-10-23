@@ -2,6 +2,16 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.5.1 (unreleased)
+
+A small release: labels that a long translation cut off, found by a new layout check that runs the app through every language.
+
+### Fixes
+- A pass over all eighteen languages at two window sizes, in both reading directions, found six labels that a long translation cut off; none is cut now. In Settings, the "Delete all saved scans" button, the file-count switch label and the "Horizontal" slider label take the room they need, and the Color by and filter layout dropdowns are sized for their widest entry (in every language, so they never change size with the selection). In Insights, the four age chips go two by two when the card is narrow instead of squeezing the sizes, and the "oldest largest" rows give a long date its room.
+
+### Under the hood
+- `tools\layout-audit.ps1` runs the app in mock mode through 25 screens, two window sizes and both reading directions for every language, and writes one report per language listing any text wider than its box (`-Resume` skips languages already done). The same check is behind Ctrl+Shift+Alt+L in a debug build, with Ctrl+Shift+Alt+R mirroring the window for right-to-left. The check measures text the way the TextBlock draws it, so symbols and monospace runs are not misreported.
+
 ## 2.5.0
 
 Ten more palettes and a new picker, a map that draws itself while a scan runs, a Changes view in place of the change color mode, a Behavior tab, a scanning card that stays out of the way, meters in the status bar, a way to close a scan, a keyboard map that is right for ISO layouts, and a new mark.

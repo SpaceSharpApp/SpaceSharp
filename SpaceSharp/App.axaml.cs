@@ -38,7 +38,8 @@ public partial class App : Application
         }
 
         HookErrors();
-        AppLanguages.Apply(AppSettings.Current.Language);   // before any window is created
+        AppLanguages.Apply(Args.Language ?? AppSettings.Current.Language);   // before any window is created
+        if (Args.RightToLeft) AppLanguages.IsRightToLeft = true;
         ApplyTheme();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)

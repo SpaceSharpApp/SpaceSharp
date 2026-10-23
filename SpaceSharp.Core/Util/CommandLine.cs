@@ -3,7 +3,7 @@ using System.IO;
 namespace SpaceSharp.Util;
 
 /// <summary>Parsed command-line arguments; unknown arguments are ignored.</summary>
-/// <remarks>See <see cref="HelpText"/>; hidden flags are --mock, --scene, --shot and --size.</remarks>
+/// <remarks>See <see cref="HelpText"/>; hidden flags are --mock, --rtl, --lang, --audit, --scene, --shot and --size.</remarks>
 public sealed class CommandLine
 {
     public string? ScanPath { get; private set; }
@@ -12,6 +12,12 @@ public sealed class CommandLine
     public bool ShowHelp { get; private set; }
     /// <summary>Start on <see cref="Services.MockSystem"/>.</summary>
     public bool Mock { get; private set; }
+    /// <summary>Mirror every window as a right-to-left language would, whatever the language; for testing the layout.</summary>
+    public bool RightToLeft { get; private set; }
+    /// <summary>Run the layout audit over every scene, both directions and two window sizes, write the report here, and exit.</summary>
+    public string? Audit { get; private set; }
+    /// <summary>A culture code to run in, instead of the settings' language.</summary>
+    public string? Language { get; private set; }
     /// <summary>A screenshot scene to pose; implies <see cref="Mock"/>.</summary>
     public string? Scene { get; private set; }
     /// <summary>With a scene: write the window to this PNG and exit.</summary>
@@ -32,6 +38,16 @@ public sealed class CommandLine
                     break;
                 case "--mock":
                     c.Mock = true;
+                    break;
+                case "--rtl":
+                    c.RightToLeft = true;
+                    break;
+                case "--audit":
+                    c.Audit = i + 1 < args.Length && !args[i + 1].StartsWith('-') ? Full(args[++i]) : string.Empty;
+                    c.Mock = true;
+                    break;
+                case "--lang" when i + 1 < args.Length:
+                    c.Language = args[++i];
                     break;
                 case "--scene" when i + 1 < args.Length:
                     c.Scene = args[++i].ToLowerInvariant();

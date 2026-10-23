@@ -67,8 +67,8 @@ public static class AppLanguages
         IsRightToLeft = culture.TextInfo.IsRightToLeft;
     }
 
-    /// <summary>True when the chosen language reads right to left.</summary>
-    public static bool IsRightToLeft { get; private set; }
+    /// <summary>True when the chosen language reads right to left, or the right-to-left preview is on (<c>--rtl</c>, Ctrl+Shift+Alt+R).</summary>
+    public static bool IsRightToLeft { get; set; }
 
     /// <summary>The culture's native name with the first letter capitalized.</summary>
     public static string DisplayName(CultureInfo culture)

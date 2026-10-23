@@ -659,12 +659,11 @@ public partial class MainWindow
         }
         body.Children.Add(axis);
 
-        var bands = new UniformGrid { Columns = 4 };
+        var bands = new UniformGrid();
         var bandNames = new[] { "Age_ThisMonth", "Age_ThisYear", "Age_OneToThree", "Age_Older" };
         for (int b = 0; b < 4; b++)
         {
-            var chip = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Margin = new Thickness(0, 0, b < 3 ? 8 : 0, 0), Classes = { "chip" } };
-            chip.Margin = new Thickness(0, 0, b < 3 ? 8 : 0, 0);
+            var chip = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Classes = { "chip" } };
             ToolTip.SetTip(chip, Strings.Format("Panel_BandTip", Strings.Get(bandNames[b])));
             var lines = new StackPanel();
             var nameRow = new StackPanel { Orientation = Orientation.Horizontal };
@@ -678,6 +677,7 @@ public partial class MainWindow
             Clickable(chip, () => FilterAndShowMap(filter));
             bands.Children.Add(chip);
         }
+        Fit.Columns(bands, 4, 2, 8);   // two by two in a narrow card, so the sizes stay whole
         body.Children.Add(bands);
 
         var old = DriveInsights.OldestLargest(_root!, measure, now, 5);
@@ -687,14 +687,14 @@ public partial class MainWindow
             body.Children.Add(heading);
             foreach (var f in old)
             {
-                var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,70,84") };
+                var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,70,Auto") };
                 var name = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 0, 8, 0) };
                 name.Inlines!.Add(new Run(f.Name));
                 var where = new Run("  " + (f.Parent?.FullPath ?? string.Empty)) { FontSize = 11 };
                 where.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
                 name.Inlines.Add(where);
                 var size = new TextBlock { Text = SizeFormatter.Format(f.SizeFor(measure)), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-                var age = new TextBlock { Text = Ago(f.LastWriteUtc), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Classes = { "dim" } };
+                var age = new TextBlock { Text = Ago(f.LastWriteUtc), FontSize = 12, MinWidth = 84, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Classes = { "dim" } };   // a long date widens the column
                 Grid.SetColumn(size, 1); Grid.SetColumn(age, 2);
                 row.Children.Add(name); row.Children.Add(size); row.Children.Add(age);
                 var line = Hairline(row, 25); ToolTip.SetTip(line, f.FullPath);
@@ -798,19 +798,20 @@ public partial class MainWindow
         open.Click += (_, _) => ShowView(MainView.Changes);
         var card = Card(Strings.Get("Insights_SinceLast"), $"{when} · {(net >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(net))}".Trim(' ', '·'), out var body, open);
 
-        var strip = new UniformGrid { Columns = 3, Margin = new Thickness(0, 0, 0, 6) };
-        void Stat(string label, string value, IBrush color, int i)
+        var strip = new UniformGrid { Margin = new Thickness(0, 0, 0, 6) };
+        void Stat(string label, string value, IBrush color)
         {
-            var box = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Margin = new Thickness(i == 0 ? 0 : 8, 0, 0, 0), Classes = { "frame" } };
+            var box = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Classes = { "frame" } };
             var lines = new StackPanel();
             lines.Children.Add(Small(label));
             lines.Children.Add(new TextBlock { Text = value, FontSize = 14, FontWeight = FontWeight.Bold, Foreground = color, Margin = new Thickness(0, 1, 0, 0) });
             box.Child = lines;
             strip.Children.Add(box);
         }
-        Stat(Strings.Get("Insights_Grew"), "+" + SizeFormatter.Format(totals.Grew), Palette.GrewBrush, 0);
-        Stat(Strings.Get("Insights_Shrank"), "−" + SizeFormatter.Format(totals.Shrank), Palette.ShrankBrush, 1);
-        Stat(Strings.Get("Insights_New"), Strings.Format("Panel_TypeFiles", totals.NewFiles), Palette.NewBrush, 2);
+        Stat(Strings.Get("Insights_Grew"), "+" + SizeFormatter.Format(totals.Grew), Palette.GrewBrush);
+        Stat(Strings.Get("Insights_Shrank"), "−" + SizeFormatter.Format(totals.Shrank), Palette.ShrankBrush);
+        Stat(Strings.Get("Insights_New"), Strings.Format("Panel_TypeFiles", totals.NewFiles), Palette.NewBrush);
+        Fit.Columns(strip, 3, 1, 8);
         body.Children.Add(strip);
 
         foreach (var r in TopLists.Build(root, TopListKind.Changes, measure, Treemap.Scheme).Take(6))

@@ -70,6 +70,7 @@ public partial class MainWindow : Window
         Opened += async (_, _) =>
         {
             _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
+            if (App.Args.Audit is { } auditFile) { await RunAuditAsync(auditFile); return; }
             if (App.Args.Scene is { } scene) { await PoseAsync(scene); return; }
             if (App.Args.Mock) LoadMock(MockSystem.Drives[0].Root);
             else if (App.Args.OpenFile is { } openFile) await OpenScanFileAsync(openFile);
@@ -1207,6 +1208,8 @@ public partial class MainWindow : Window
             // hidden debug shortcuts
             case Key.U when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): _ = UpdateWindow.ShowPreview(this); e.Handled = true; break;
             case Key.M when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): LoadMock(MockSystem.Drives[0].Root); e.Handled = true; break;
+            case Key.R when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): ToggleRightToLeft(); e.Handled = true; break;
+            case Key.L when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt): _ = AuditLayoutAsync(); e.Handled = true; break;
             case Key.I when e.KeyModifiers.HasFlag(KeyModifiers.Control): ShowInspect(); e.Handled = true; break;
             case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = SaveScanAsAsync(); e.Handled = true; break;
             case Key.O when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = OpenScanAsync(); e.Handled = true; break;

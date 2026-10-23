@@ -37,3 +37,4 @@ SpaceSharp/Resources/Strings.resx.project.json
 # Website assets generated on demand (the site itself lives outside this repository)
 docs/m/
 tools/.fonts/BricolageGrotesque.ttf
+audit/

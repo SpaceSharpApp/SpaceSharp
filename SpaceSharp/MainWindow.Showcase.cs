@@ -21,7 +21,7 @@ public partial class MainWindow
     {
         "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-sidepanel-changes", "wiki-palettes", "wiki-palette-editor",
-        "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning"
+        "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl"
     };
 
     private async Task PoseAsync(string scene)
@@ -29,7 +29,28 @@ public partial class MainWindow
         AppSettings.Frozen = true;
         if (App.Args.Size is { } size) { Width = size.Width; Height = size.Height; }
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        if (scene == "wiki-rtl") { AppLanguages.IsRightToLeft = true; FlowDirection = FlowDirection.RightToLeft; }   // the mirrored window, as Arabic has it
 
+        var dialog = await PoseSceneAsync(scene);
+        if (dialog is null && scene == "wiki-palettes") return;   // wrote its own file and is shutting down
+
+        if (App.Args.Shot is not { } file) return;
+        await Settle(900);
+        try
+        {
+            await CaptureAsync(file, dialog);
+            Console.WriteLine($"  {file}");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Screenshot failed: {ex.Message}");
+        }
+        (Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+    }
+
+    /// <summary>Puts the window in a scene's state on the pretend PC and returns the dialog it opened, if any.</summary>
+    private async Task<Window?> PoseSceneAsync(string scene)
+    {
         EnterMock();
         ShowView(insights: scene == "insights");   // the remembered view must not leak into a pose
         if (scene != "start") LoadMock(MockSystem.Drives[0].Root);
@@ -160,7 +181,7 @@ public partial class MainWindow
                 break;
             case "wiki-palettes":
                 await RenderPaletteSheetAsync();
-                return;
+                return null;
             case "wiki-palette-editor":
                 dialog = new PaletteEditorWindow(this, new PaletteDraft { Name = "Harbor", Theme = PaletteTheme.Dark, Folders = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), PaletteSpread.Rainbow) });
                 _ = dialog.ShowDialog(this);
@@ -176,19 +197,27 @@ public partial class MainWindow
             default:
                 break;
         }
+        return dialog;
+    }
 
-        if (App.Args.Shot is not { } file) return;
-        await Settle(900);
-        try
-        {
-            await CaptureAsync(file, dialog);
-            Console.WriteLine($"  {file}");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Screenshot failed: {ex.Message}");
-        }
-        (Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+    /// <summary>Undoes what a scene did, so the next one starts clean: dialogs, flyouts, the filter, the view, the theme.</summary>
+    private async Task UnposeSceneAsync(Window? dialog)
+    {
+        dialog?.Close();
+        foreach (var owned in OwnedWindows.ToList()) owned.Close();
+        PaletteButton.Flyout?.Hide();
+        Treemap.ContextMenu?.Close();
+        FilterBox.Text = string.Empty;
+        FilterDrawer.IsVisible = false;
+        _settings.FilterLayout = "Drawer"; ApplyFilterLayout();
+        if (_settings.Theme != "Dark") { _settings.Theme = "Dark"; _settings.SetPalette(dark: true, "Graphite"); App.ApplyTheme(); }
+        _settings.ColorMode = "ByDepth";
+        _settings.CushionEnabled = false;
+        _listKind = TopListKind.Files; MarkListKind();
+        ApplySettings();
+        ShowView(MainView.Map);
+        Treemap.ClearSelection();
+        await Settle(150);
     }
 
     private Window? LastOwned() => OwnedWindows.Count > 0 ? OwnedWindows[^1] : null;

@@ -506,7 +506,9 @@ public partial class SettingsWindow : Window
 
     private Control KeepScansSlider()
     {
-        var panel = new StackPanel { Width = 220 };
+        // The slider keeps the column's 220 px; the delete button below it may be wider in a long translation.
+        var panel = new StackPanel { MinWidth = 220, HorizontalAlignment = HorizontalAlignment.Left };
+        var sliderPanel = new StackPanel { Width = 220, HorizontalAlignment = HorizontalAlignment.Left };
         var label = new TextBlock { FontSize = 12.5, Margin = new Thickness(0, 0, 0, 2) };
         int index = Array.IndexOf(KeepSteps, _settings.KeepScansDays); if (index < 0) index = 2;
         var slider = new Slider { Minimum = 0, Maximum = KeepSteps.Length - 1, Value = index, TickFrequency = 1, IsSnapToTickEnabled = true, SmallChange = 1, LargeChange = 1 };
@@ -524,7 +526,8 @@ public partial class SettingsWindow : Window
                 await Dialog.Info(this, Strings.Get("KeepScans_DeleteAll"), Strings.Format("KeepScans_Deleted", removed));
             }
         };
-        panel.Children.Add(label); panel.Children.Add(slider); panel.Children.Add(clear);
+        sliderPanel.Children.Add(label); sliderPanel.Children.Add(slider);
+        panel.Children.Add(sliderPanel); panel.Children.Add(clear);
         return panel;
     }
 
@@ -532,7 +535,7 @@ public partial class SettingsWindow : Window
     {
         var panel = new StackPanel { Width = 220 };
         var slider = new Slider { Minimum = -1, Maximum = 1, Value = _settings.Bias, TickFrequency = 0.25, IsSnapToTickEnabled = true, SmallChange = 0.25, LargeChange = 0.5 };
-        var labels = new Grid { Margin = new Thickness(0, 2, 0, 0), ColumnDefinitions = new ColumnDefinitions("*,*,*") };
+        var labels = new Grid { Margin = new Thickness(0, 2, 0, 0), ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto") };   // the end labels take what they need
         var l = new TextBlock { Text = Strings.Get("Treemap_Horizontal"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Left, Classes = { "dim" } };
         var m = new TextBlock { Text = Strings.Get("Treemap_Equal"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
         var r = new TextBlock { Text = Strings.Get("Treemap_Vertical"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
@@ -545,7 +548,7 @@ public partial class SettingsWindow : Window
 
     private Control Checks(params (string Label, bool Value, Action<bool> OnChanged)[] items)
     {
-        var grid = new Grid { Width = 220, ColumnDefinitions = new ColumnDefinitions("*,Auto") };
+        var grid = new Grid { MinWidth = 220, ColumnDefinitions = new ColumnDefinitions("*,Auto") };   // grows for a long label
         int row = 0;
         foreach (var (label, value, onChanged) in items)
         {
@@ -563,7 +566,8 @@ public partial class SettingsWindow : Window
 
     private ComboBox Combo(string[] items, int selectedIndex, Action<int> onChanged)
     {
-        var combo = new ComboBox { Width = 190, ItemsSource = items, SelectedIndex = Math.Max(0, selectedIndex) };
+        var combo = new ComboBox { ItemsSource = items, SelectedIndex = Math.Max(0, selectedIndex) };
+        Fit.Combo(combo, items, 190);
         combo.SelectionChanged += (_, _) =>
         {
             if (combo.SelectedIndex >= 0) Change(() => onChanged(combo.SelectedIndex));

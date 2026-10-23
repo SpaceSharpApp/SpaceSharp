@@ -96,7 +96,9 @@ public partial class MainWindow
     private void UpdateCompareUi()
     {
         _building = true;
-        ColorCombo.ItemsSource = new List<string> { Strings.Get("Main_TopFolder"), Strings.Get("Main_Depth"), Strings.Get("Main_FileType") };
+        var modes = new List<string> { Strings.Get("Main_TopFolder"), Strings.Get("Main_Depth"), Strings.Get("Main_FileType") };
+        ColorCombo.ItemsSource = modes;
+        Fit.Combo(ColorCombo, modes, 130);
         ColorCombo.SelectedIndex = _settings.ColorMode switch { "ByDepth" => 1, "ByFileType" => 2, _ => 0 };
         _building = false;
         Treemap.ColorMode = _settings.ColorMode switch { "ByDepth" => ColorMode.ByDepth, "ByFileType" => ColorMode.ByFileType, _ => ColorMode.ByBranch };
