@@ -2,7 +2,7 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.5.1 (unreleased)
+## 2.5.1
 
 A small release: labels that a long translation cut off, found by a new layout check that runs the app through every language.
 
