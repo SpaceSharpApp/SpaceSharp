@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>нова папка</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>зменшився</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>папка зменшилася</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>Зміни з останнього сканування</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>Глибина папки</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>Тип файлу</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Папка верхнього рівня</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>зміни з останнього сканування</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>глибина</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>тип файлу</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>папка верхнього рівня</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>Панель найбільших файлів, папок і типів</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Властивості Windows для вибраного елемента</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Сканувати повторно</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>Закрити сканування й повернутися на початковий екран</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>Зберегти сканування у файл</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>Вибрати всі файли, що відповідають фільтру</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>Вибрати діапазон</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>Скасувати</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Зміни</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Зміни</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Зміни з останнього сканування</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Очистити</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Очистити фільтр (Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>Клацніть диск ліворуч або виберіть папку для сканування.</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>Експортувати до CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Тип файлу</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Файли</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{0} з {1}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} від сканування</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>Пам'ять, яку SpaceSharp займає зараз, як її рахує Диспетчер завдань. Сканування тримає кожен файл у пам'яті; більшому диску потрібно більше.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Фільтр</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Відповідають фільтру</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Параметри фільтра</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>Властивості</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>Сканувати повторно (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>Повторно сканувати цю папку</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>Закрити сканування</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Перезапустити від імені адміністратора</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Зберегти сканування як…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>Файл сканування</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>Читання таблиці файлів</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>Побудова дерева</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>Малювання карти</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>Для цього сканування немає живого малювання</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>У скануванні за таблицею файлів немає дерева, доки не прочитано всю таблицю. Карта з'явиться, коли дерево надійде, зазвичай за секунди.</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>Поки що файлів: {0:N0} у папках: {1:N0}</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>знайдено поки що</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>знайдено з {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Шукає нову версію на GitHub через кілька секунд після запуску SpaceSharp і пропонує її інсталювати.</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Доступно лише коли SpaceSharp інстальовано за допомогою програми встановлення. Портативний exe не оновлюється самостійно.</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>Колір за</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Папка верхнього рівня: один відтінок на папку верхнього рівня, світліший з кожним рівнем усередині. Глибина папки: інший колір на кожному рівні. Тип файлу: файли забарвлено за типом. Зміни: що збільшилося чи зменшилося з попереднього сканування того самого місця.</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Папка верхнього рівня: один відтінок на папку верхнього рівня, світліший з кожним рівнем усередині. Глибина папки: інший колір на кожному рівні. Тип файлу: файли забарвлено за типом.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Підтверджувати переміщення до Кошика</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Запитувати перед видаленням. Видалені елементи завжди можна відновити з Кошика.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Власні палітри</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Використовувати будь-яку палітру в обох темах</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Вимкнено: вибір палітри для іншої теми перемикає на ту тему, тож світла палітра приносить світлу тему. Увімкнено: палітра використовується як є, світлі палітри в темній темі й темні у світлій.</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Швидке сканування NTFS</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Читає таблицю файлів диска напряму, тож карта всього диска будується за секунди замість хвилин. Windows запитує дозвіл адміністратора один раз на сканування; сама програма залишається як є. Відмовтеся — і запуститься звичайне сканування, а запит не повториться до перезапуску SpaceSharp. Інші файлові системи й окремі папки завжди скануються звичайним способом.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Рахувати жорсткі посилання один раз</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>Палітра</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (власна)</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>Кольори блоків на карті.</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>Відкривати останнє сканування під час запуску</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Показує вчорашню карту одразу після відкриття програми, порівняну з попереднім скануванням. Кожне сканування диска зберігається в %LocalAppData%\SpaceSharp\scans; F5 сканує повторно.</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>Скинути всі параметри до стандартних значень?</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>Скинути параметри</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>Безпека</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} переміщено до Кошика</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: файлів {2:N0} · {3}. F5 сканує повторно.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Відкрито сканування від</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Відкриття останнього сканування…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Попереднє сканування зроблено іншим способом ({0} і {1}), тому воно не порівнюється. Наступне сканування того самого типу буде порівняно.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Повторне сканування скасовано</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>Повторно проскановано {0}: файлів {1:N0} · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>Деревоподібна карта</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>Карта</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>Сканування</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>Поведінка</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>Запуск</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>Під час сканування</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>Малювати карту під час сканування</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>Під час обходу тек карта заповнюється справжніми теками в міру їх розміщення, і намальоване стає готовою картою. У скануванні за таблицею файлів дерева немає, доки таблицю не прочитано, тож воно не малюється наживо; про це каже примітка над картою. Вимкнено: попередня карта лишається, доки нова не буде готова.</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>Побачте, куди поділося місце на диску.</value></data>
   <data name="About_Check" xml:space="preserve"><value>Перевірити</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>Інстальовано. Перевірте наявність новішої версії.</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>Спочатку нові</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>Зайнято {0}% · вільно {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлів: {0}</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>Від часу цього сканування диск заповнився на {0}. Проскануйте знову, щоб побачити, куди поділося місце.</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>На диску на {0} більше вільного місця, ніж під час цього сканування. Проскануйте знову, щоб побачити його теперішній стан.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Зберігати сканування протягом</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Автоматичні збереження, старіші за цей термін, видаляються під час запуску SpaceSharp. Сканування, які ви зберегли у файли самостійно, не чіпаються.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} дн.</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>Для темної теми</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>Для світлої теми</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>Будь-яка тема</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>Темна тема</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>Світла тема</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>Нова палітра…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>Власних палітр ще немає. «Нова палітра…» створює її в редакторі; тека палітр приймає й JSON-файли (Налаштування › Вигляд).</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>Вибір однієї з них перемикає на {0} тему</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>З вашої теки палітр · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>Приглушені кольори на сірому; типова</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>Сині та бірюзові</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>Від червоного через золото до сливового</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>Зелень, мох і кора</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>Яскрава, усі відтінки, без неону</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>Малина, слива й вино</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>Запилені самоцвітні тони, мало відблисків</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>Індиго, фіолетовий і трохи рожевого</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>Мідь, латунь, олива та іржа</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>Спектр на повну силу</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Сірі, бурштин як акцент</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Окабе-Іто й Тол; розрізнювані для всіх</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>М'які відтінки всіх кольорів; типова у світлій темі</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>Вицвілі тони на папері</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>Солодка та яскрава</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Кольори Nord: іній і сяйво</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>Земля, пісок і шавлія</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>Весняна зелень, солома й бліде небо</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>Персик, троянда, лаванда й м'ята</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>Вибілені синьо-зелені, близькі за тоном</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Глина, пісок і троянда; тепліша за Earth</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Фіолетові та пудрово-блакитні</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>Сім насичених основних кольорів</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Той самий безпечний набір, освітлений для світлих поверхонь</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Палітра для теми «{0}». Кожна тема пам'ятає свою; карта перемикається разом із темою.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · створено для теми «{1}»</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Перемкнутися між картою та поданням «Огляд»</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Перемикання між картою, Оглядом і Змінами</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>За типом</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Можна безпечно очистити</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Коли змінено</value></data>
@@ -887,7 +927,7 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>Панель над картою</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Ім'я або шаблон, напр. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Карта</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>Карта сканування (B перемикає між двома поданнями)</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>Карта сканування (B перемикає вигляди)</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Огляд</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Підсумок сканування: за типом, що можна очистити, коли змінено, найбільші елементи (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Огляд</value></data>
@@ -916,6 +956,10 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Insights_Checked" xml:space="preserve"><value>позначено {0} · {1} · залишиться вільно {2}</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>Включити до «До Кошика позначене»</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>До Кошика позначене</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>Зараз</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>Після</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>{0} зайнято · {1} вільно</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>Бурштинова частина верхньої смуги показує, скільки зараз займають позначені місця; нижня смуга показує диск без них.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} без змін понад рік · клацніть місяць або смугу, щоб відфільтрувати</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Найбільші, без змін рік або довше</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>Найбільші папки</value></data>
@@ -925,6 +969,37 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Insights_Grew" xml:space="preserve"><value>Збільшилося</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Зменшилося</value></data>
   <data name="Insights_New" xml:space="preserve"><value>Нове</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>Зміни</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>Що змінилося від порівнюваного сканування, тека за текою: було, стало й різниця (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0} порівняно з {1}</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>З яким скануванням порівнюється це</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>Попереднє сканування цього диска ({0})</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} зменшилося · {1:N0} зникло</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} зросло · {1:N0} нових</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>Змінені</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>Лише теки й файли, розмір яких змінився, плюс нове та зникле</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>Усе</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>Усі теки й файли, змінені чи ні</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>Будь-який розмір</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>Понад {0}</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>Сховати зміни, менші за цю</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>Показати на карті</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>Тека</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>Було</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>Стало</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>Різниця</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>Натисніть, щоб сортувати за цим стовпцем; натисніть ще раз, щоб обернути порядок</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>Зник</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>був у порівнюваному скануванні, а в цьому його немає</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>ще {0:N0}…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} змінено · {1:N0} незмінених приховано</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} елементів · {1:N0} змінено</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>Двічі клацніть рядок, щоб побачити його на карті · Enter відкриває теку</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>Між двома скануваннями нічого не змінилося.</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>Нічого не змінилося більше ніж на {0}.</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>Поки немає з чим порівнювати</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>Відкрити Зміни</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>Найбільші розширення</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>і де переважно міститься кожне</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

@@ -25,7 +25,7 @@ public partial class SettingsWindow : Window
     private StackPanel? _card;
 
     private string _tab = "General";
-    private static readonly string[] Tabs = { "General", "Appearance", "Treemap", "Map", "Scanning" };
+    private static readonly string[] Tabs = { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" };
 
     // XAML previewer only
     public SettingsWindow() : this(null) { }
@@ -79,16 +79,6 @@ public partial class SettingsWindow : Window
                 if (AppLanguages.IsMachineTranslated(AppLanguages.Current))
                     Note(Strings.Format("Settings_Language_MachineNote", AppLanguages.DisplayName(AppLanguages.Current)));
 
-                Section(Strings.Get("Settings_Updates"));
-                Row(Strings.Get("Settings_CheckUpdates"), Updater.Instance.IsInstalled
-                        ? Strings.Get("Settings_CheckUpdates_Desc")
-                        : Strings.Get("Settings_CheckUpdates_Portable"),
-                    Switch(_settings.CheckForUpdates, v => _settings.CheckForUpdates = v));
-
-                Section(Strings.Get("Settings_Safety"));
-                Row(Strings.Get("Settings_ConfirmDelete"), Strings.Get("Settings_ConfirmDelete_Desc"),
-                    Switch(_settings.ConfirmDelete, v => _settings.ConfirmDelete = v));
-
                 if (OperatingSystem.IsWindows())
                 {
                     Section(Strings.Get("Settings_Windows"));
@@ -114,6 +104,26 @@ public partial class SettingsWindow : Window
                     FontFamily = Mono, FontSize = 12, Margin = new Thickness(16, 8, 16, 12), TextWrapping = TextWrapping.NoWrap
                 });
                 break;
+            case "Behavior":
+                Section(Strings.Get("Settings_Startup"));
+                Row(Strings.Get("Settings_CheckUpdates"), Updater.Instance.IsInstalled
+                        ? Strings.Get("Settings_CheckUpdates_Desc")
+                        : Strings.Get("Settings_CheckUpdates_Portable"),
+                    Switch(_settings.CheckForUpdates, v => _settings.CheckForUpdates = v));
+
+                Section(Strings.Get("Settings_WhileScanning"));
+                Row(Strings.Get("Settings_LiveMap"), Strings.Get("Settings_LiveMap_Desc"),
+                    Switch(_settings.LiveMap, v => _settings.LiveMap = v));
+                Row(Strings.Get("Settings_KeepScans"), Strings.Get("Settings_KeepScans_Desc"), KeepScansSlider());
+
+                Section(Strings.Get("Settings_Map"));
+                Row(Strings.Get("Settings_AnimateZoom"), Strings.Get("Settings_AnimateZoom_Desc"),
+                    Switch(_settings.AnimateZoom, v => _settings.AnimateZoom = v));
+
+                Section(Strings.Get("Settings_Safety"));
+                Row(Strings.Get("Settings_ConfirmDelete"), Strings.Get("Settings_ConfirmDelete_Desc"),
+                    Switch(_settings.ConfirmDelete, v => _settings.ConfirmDelete = v));
+                break;
             case "Appearance":
                 Section(Strings.Get("Settings_Appearance"));
                 Row(Strings.Get("Settings_Theme"), Strings.Get("Settings_Theme_Desc"),
@@ -131,8 +141,10 @@ public partial class SettingsWindow : Window
                     PaletteCombo());
                 Row(Strings.Get("Settings_ColorBy"), Strings.Get("Settings_ColorBy_Desc"),
                     Combo(new[] { Strings.Get("ColorModeName_TopFolder"), Strings.Get("ColorModeName_Depth"), Strings.Get("ColorModeName_FileType") },
-                        Enum.TryParse<ColorMode>(_settings.ColorMode, out var colorMode) && colorMode != ColorMode.ByChange ? (int)colorMode : 0,
+                        Enum.TryParse<ColorMode>(_settings.ColorMode, out var colorMode) ? (int)colorMode : 0,
                         i => _settings.ColorMode = ((ColorMode)i).ToString()));
+                Row(Strings.Get("Settings_PaletteAnyTheme"), Strings.Get("Settings_PaletteAnyTheme_Desc"),
+                    Switch(_settings.PaletteAnyTheme, v => _settings.PaletteAnyTheme = v));
                 Row(Strings.Get("Settings_CustomPalettes"), PaletteNote(), PaletteButtons());
 
                 Section(Strings.Get("Settings_Shading"), Strings.Get("Settings_Shading_Desc"));
@@ -207,15 +219,10 @@ public partial class SettingsWindow : Window
                         i => { _settings.FilterLayout = i == 1 ? "Rail" : "Drawer"; _settings.ShowFilterRail = true; }));
                 Row(Strings.Get("Settings_SidePanel"), Strings.Get("Settings_SidePanel_Desc"),
                     Switch(_settings.ShowSidePanel, v => _settings.ShowSidePanel = v));
-                Row(Strings.Get("Settings_AnimateZoom"), Strings.Get("Settings_AnimateZoom_Desc"),
-                    Switch(_settings.AnimateZoom, v => _settings.AnimateZoom = v));
                 break;
             case "Scanning":
                 Section(Strings.Get("Settings_Scanning"), Strings.Get("Settings_Scanning_Desc"));
                 Row(Strings.Get("Settings_LeaveOut"), Strings.Get("Settings_LeaveOut_Desc"), ExclusionsEditor());
-                Row(Strings.Get("Settings_Reopen"), Strings.Get("Settings_Reopen_Desc"),
-                    Switch(_settings.ReopenLastScan, v => _settings.ReopenLastScan = v));
-                Row(Strings.Get("Settings_KeepScans"), Strings.Get("Settings_KeepScans_Desc"), KeepScansSlider());
                 Row(Strings.Get("Settings_IncludeHidden"), Strings.Get("Settings_IncludeHidden_Desc"),
                     Switch(_settings.IncludeHidden, v => _settings.IncludeHidden = v));
                 Row(Strings.Get("Settings_HardLinks"), Strings.Get("Settings_HardLinks_Desc"),
@@ -595,7 +602,6 @@ public partial class SettingsWindow : Window
     {
         if (_preview is null) return;
         MainWindow.ApplyLook(_preview, _settings, App.IsDark);
-        if (_preview.ColorMode == ColorMode.ByChange) _preview.ColorMode = ColorMode.ByBranch;   // sample has no baseline
         _preview.SelectedNode = _previewSelected;
     }
 

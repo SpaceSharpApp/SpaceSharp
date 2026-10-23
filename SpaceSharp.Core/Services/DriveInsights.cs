@@ -31,7 +31,24 @@ public sealed record CleanupSuggestion(string Key, long Bytes, IReadOnlyList<FsN
 public sealed record ExtensionHome(string Extension, long Bytes, int Files, FsNode? Folder, double Share);
 
 /// <summary>Change totals since the compared scan.</summary>
-public sealed record ChangeTotals(long Grew, long Shrank, int NewFiles);
+/// <summary>Bytes grew and shrank (gone files count as shrank), files new and files gone, since the compared scan.</summary>
+public sealed record ChangeTotals(long Grew, long Shrank, int NewFiles, int GoneFiles)
+{
+    public long Net => Grew - Shrank;
+}
+
+/// <summary>A drive's fill now and after freeing <see cref="Freed"/> bytes.</summary>
+public sealed record FreeProjection(long Total, long FreeNow, long Freed)
+{
+    public long UsedNow => Math.Max(0, Total - FreeNow);
+    public long FreeAfter => Math.Clamp(FreeNow + Math.Max(0, Freed), 0, Math.Max(Total, FreeNow));
+    public long UsedAfter => Math.Max(0, Total - FreeAfter);
+    public double UsedNowShare => Share(UsedNow);
+    public double UsedAfterShare => Share(UsedAfter);
+    /// <summary>The part of the drive the freed bytes take up now.</summary>
+    public double FreedShare => Share(UsedNow - UsedAfter);
+    private double Share(long bytes) => Total > 0 ? Math.Clamp((double)bytes / Total, 0, 1) : 0;
+}
 
 /// <summary>Whole-scan summaries for the Insights view.</summary>
 public static class DriveInsights
@@ -262,17 +279,29 @@ public static class DriveInsights
             .OrderByDescending(f => f.SizeFor(measure)).Take(count).ToList();
     }
 
+    /// <summary>Smallest change in a drive's free space worth a word on the start screen: 1% of the drive, never under 500 MB.</summary>
+    public static long NotableDrift(long total) => Math.Max(500L << 20, total / 100);
+
+    /// <summary>Bytes a drive filled since a scan (negative when it emptied) and whether that is notable; unknown drives are never notable.</summary>
+    public static (long FilledSince, bool Notable) DriftSince(long freeAtScan, long freeNow, long total)
+    {
+        if (total <= 0 || freeAtScan <= 0) return (0, false);
+        long filled = freeAtScan - freeNow;
+        return (filled, Math.Abs(filled) >= NotableDrift(total));
+    }
+
     /// <summary>Totals of the change since the compared scan.</summary>
-    public static ChangeTotals Changes(FsNode root, SizeMeasure measure)
+    public static ChangeTotals Changes(FsNode root, SizeMeasure measure, ScanComparison? comparison = null)
     {
         long grew = 0, shrank = 0; int fresh = 0;
-        if (!root.HasBaseline) return new ChangeTotals(0, 0, 0);
+        if (!root.HasBaseline) return new ChangeTotals(0, 0, 0, 0);
         foreach (var f in root.DescendantFiles())
         {
             long c = f.ChangeFor(measure);
             if (f.BaselineSize is null) fresh++;
             if (c > 0) grew += c; else shrank -= c;
         }
-        return new ChangeTotals(grew, shrank, fresh);
+        if (comparison is not null) shrank += measure == SizeMeasure.SizeOnDisk ? comparison.GoneAllocated : comparison.GoneBytes;
+        return new ChangeTotals(grew, shrank, fresh, comparison?.GoneFiles ?? 0);
     }
 }

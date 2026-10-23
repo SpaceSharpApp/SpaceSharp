@@ -10,9 +10,7 @@ public enum ColorMode
     /// <summary>One color per nesting level.</summary>
     ByDepth,
     /// <summary>Files by type, folders neutral.</summary>
-    ByFileType,
-    /// <summary>Change since the previous scan: grew warm, shrank cool, unchanged gray, new outlined.</summary>
-    ByChange
+    ByFileType
 }
 
 /// <summary>How many small items the map draws before grouping or hiding them.</summary>

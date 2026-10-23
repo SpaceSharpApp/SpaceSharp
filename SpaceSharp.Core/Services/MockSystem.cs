@@ -27,30 +27,33 @@ public static class MockSystem
     public static IReadOnlyList<RecentScan> RecentScans()
     {
         var now = DateTime.UtcNow;
-        RecentScan Of(Drive d, TimeSpan ago, int files) => new(new ScanFileInfo(d.Root, now - ago, "mock", d.Total - d.Used, files, d.Used, string.Empty), true, d.Label, d.Total - d.Used, d.Total);
+        // filledSince is how much the drive filled after the scan, so the start screen's nudge has something to say
+        RecentScan Of(Drive d, TimeSpan ago, int files, long filledSince = 0) => new(new ScanFileInfo(d.Root, now - ago, "mock", d.Total - d.Used + filledSince, files, d.Used - filledSince, string.Empty), true, d.Label, d.Total - d.Used, d.Total);
         return new[]
         {
-            Of(Drives[0], TimeSpan.FromHours(13), 2_133),
+            Of(Drives[0], TimeSpan.FromHours(13), 2_133, (long)(14.2 * GB)),
             Of(Drives[3], TimeSpan.FromDays(3), 48_211),
-            Of(Drives[2], TimeSpan.FromDays(7), 612_904),
+            Of(Drives[2], TimeSpan.FromDays(7), 612_904, (long)(61.5 * GB)),
             new RecentScan(new ScanFileInfo(@"C:\Users\User\Projects", now - TimeSpan.FromDays(14), "mock", 0, 184_302, (long)(38.2 * GB), string.Empty), false, null, 0, 0)
         };
     }
 
-    /// <summary>Builds the mock tree with free space and a baseline from yesterday.</summary>
-    public static (FsNode Root, ScanFileInfo Info, ScanFileInfo Baseline) Build(string rootPath = @"C:\")
+    /// <summary>Builds the mock tree with free space, a baseline from yesterday and the items gone since.</summary>
+    public static (FsNode Root, ScanFileInfo Info, ScanFileInfo Baseline, ScanComparison Comparison) Build(string rootPath = @"C:\")
     {
         var now = DateTime.UtcNow;
         var builder = new Builder(now);
         var root = builder.Tree(rootPath);
         root.SortBy(SizeMeasure.FileSize);
-        MarkBaseline(root);
+        var comparison = new ScanComparison();
+        MarkBaseline(root, comparison);
+        comparison.Sort();
         var drive = Drives.FirstOrDefault(d => string.Equals(d.Root, rootPath, StringComparison.OrdinalIgnoreCase)) ?? Drives[0];
         long free = Math.Max(0, drive.Total - root.Size);
         root.AddFreeSpace(free);
-        var info = new ScanFileInfo(rootPath, now.AddHours(-13), "mock", free, root.FileCount, root.Size - free, string.Empty);
+        var info = new ScanFileInfo(rootPath, now.AddHours(-13), "MFT, links once", free, root.FileCount, root.Size - free, string.Empty);
         var baseline = info with { ScannedUtc = now.AddDays(-1) };
-        return (root, info, baseline);
+        return (root, info, baseline, comparison);
     }
 
     // ------------------------------------------------------------------ the tree
@@ -179,8 +182,8 @@ public static class MockSystem
 
     // ------------------------------------------------------------------ baseline
 
-    /// <summary>Assigns a stable baseline to every node: 12% new, 28% grew, 22% shrank, rest unchanged.</summary>
-    private static long MarkBaseline(FsNode node)
+    /// <summary>Assigns a stable baseline to every node: 12% new, 28% grew, 22% shrank, rest unchanged; a few folders also lost files.</summary>
+    private static long MarkBaseline(FsNode node, ScanComparison comparison)
     {
         node.HasBaseline = true;
         if (!node.IsDirectory)
@@ -192,10 +195,34 @@ public static class MockSystem
         }
 
         long sum = 0;
-        foreach (var child in node.Children) if (child.IsReal) sum += MarkBaseline(child);
+        foreach (var child in node.Children) if (child.IsReal) sum += MarkBaseline(child, comparison);
+        foreach (var gone in GoneFrom(node)) { comparison.Add(node, gone); sum += gone.Size; }
         node.BaselineSize = sum;
         node.BaselineAllocated = sum;
         return sum;
+    }
+
+    /// <summary>The items that were in a folder yesterday and are gone today.</summary>
+    private static IEnumerable<GoneEntry> GoneFrom(FsNode folder)
+    {
+        static GoneEntry GoneFile(string name, double bytes) => new(name, false, (long)bytes, ((long)bytes + 4095) / 4096 * 4096, 1);
+        static GoneEntry GoneDir(string name, double bytes, int files) => new(name, true, (long)bytes, ((long)bytes + 4095) / 4096 * 4096, files);
+        switch (folder.Name)
+        {
+            case "Downloads":
+                yield return GoneFile("old_installer.iso", 4.1 * GB); yield return GoneFile("archive_old.zip", 310 * MB); break;
+            case "Download" when folder.Parent?.Name == "SoftwareDistribution":
+                for (int i = 1; i <= 9; i++) yield return GoneFile($"update_old_{i:00}.cab", (120 + i * 95) * MB);
+                break;
+            case "Recordings":
+                yield return GoneFile("recording_00.mp4", 2.4 * GB); break;
+            case "content" when folder.Parent?.Name == "Game One":
+                yield return GoneFile("content_15.pak", 3.3 * GB); break;
+            case "Temp":
+                yield return GoneDir("installer_cache", 860 * MB, 212); break;
+            case "Shader Cache":
+                yield return GoneDir("old_driver", 1.2 * GB, 48); break;
+        }
     }
 
     private static long? BaselineOf(FsNode file)

@@ -126,4 +126,73 @@ public class DriveInsightsTests
         Assert.True(DriveInsights.EndsWith(downloads, @"Users\*\Downloads"));
         Assert.False(DriveInsights.EndsWith(root, @"C:\"));
     }
+
+    // ---------------------------------------------------------------- after clearing
+
+    [Fact]
+    public void ProjectionMovesTheFreedBytesFromUsedToFree()
+    {
+        var p = new FreeProjection(Total: 1000 * GB, FreeNow: 150 * GB, Freed: 50 * GB);
+        Assert.Equal(850 * GB, p.UsedNow);
+        Assert.Equal(200 * GB, p.FreeAfter);
+        Assert.Equal(800 * GB, p.UsedAfter);
+        Assert.Equal(0.85, p.UsedNowShare, 6);
+        Assert.Equal(0.80, p.UsedAfterShare, 6);
+        Assert.Equal(0.05, p.FreedShare, 6);
+    }
+
+    [Fact]
+    public void ProjectionNeverFreesMoreThanTheDriveHolds()
+    {
+        var p = new FreeProjection(Total: 100 * GB, FreeNow: 90 * GB, Freed: 40 * GB);
+        Assert.Equal(100 * GB, p.FreeAfter);
+        Assert.Equal(0, p.UsedAfter);
+        Assert.Equal(0.1, p.FreedShare, 6);
+    }
+
+    [Fact]
+    public void ProjectionWithNothingCheckedIsTheDriveAsItIs()
+    {
+        var p = new FreeProjection(Total: 100 * GB, FreeNow: 30 * GB, Freed: 0);
+        Assert.Equal(p.UsedNow, p.UsedAfter);
+        Assert.Equal(p.FreeNow, p.FreeAfter);
+        Assert.Equal(0, p.FreedShare);
+    }
+
+    [Fact]
+    public void ProjectionOnAnUnknownDriveHasNoShares()
+    {
+        var p = new FreeProjection(Total: 0, FreeNow: 0, Freed: 5 * GB);
+        Assert.Equal(0, p.UsedNowShare);
+        Assert.Equal(0, p.UsedAfterShare);
+        Assert.Equal(0, p.FreedShare);
+    }
+
+    // ---------------------------------------------------------------- drive changed since the scan
+
+    [Fact]
+    public void DriftIsNotableFromOnePercentOfTheDrive()
+    {
+        long total = 1000 * GB;
+        Assert.Equal(10 * GB, DriveInsights.NotableDrift(total));
+        Assert.Equal((12 * GB, true), DriveInsights.DriftSince(freeAtScan: 100 * GB, freeNow: 88 * GB, total));
+        Assert.Equal((-12 * GB, true), DriveInsights.DriftSince(freeAtScan: 88 * GB, freeNow: 100 * GB, total));
+        Assert.Equal((8 * GB, false), DriveInsights.DriftSince(freeAtScan: 100 * GB, freeNow: 92 * GB, total));
+    }
+
+    [Fact]
+    public void DriftOnASmallDriveNeedsHalfAGigabyte()
+    {
+        long total = 16 * GB;
+        Assert.Equal(500L << 20, DriveInsights.NotableDrift(total));
+        Assert.False(DriveInsights.DriftSince(freeAtScan: 4 * GB, freeNow: 4 * GB - (400L << 20), total).Notable);
+        Assert.True(DriveInsights.DriftSince(freeAtScan: 4 * GB, freeNow: 4 * GB - (600L << 20), total).Notable);
+    }
+
+    [Fact]
+    public void DriftIsUnknownWithoutTheNumbers()
+    {
+        Assert.Equal((0L, false), DriveInsights.DriftSince(freeAtScan: 0, freeNow: 50 * GB, total: 100 * GB));   // old scan files have no free space
+        Assert.Equal((0L, false), DriveInsights.DriftSince(freeAtScan: 50 * GB, freeNow: 0, total: 0));          // drive not present
+    }
 }

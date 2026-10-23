@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>ny mappe</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>skrumpede</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>mappe skrumpede</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>Ændring siden sidste scanning</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>Mappedybde</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>Filtype</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Øverste mappe</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>ændring siden sidste scanning</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>dybde</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>filtype</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>øverste mappe</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>Panel med største filer, mapper og typer</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-egenskaber for det valgte element</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Scan igen</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>Luk scanningen og gå tilbage til startskærmen</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>Gem scanningen i en fil</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>Vælg alle filer, der matcher filteret</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>Vælg et område</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>Annuller</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Ændring</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Ændringer</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Ændringer siden sidste scanning</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Ryd</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Ryd filter (Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>Klik på et drev til venstre, eller vælg en mappe, der skal scannes.</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>Eksportér til CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Filtype</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Filer</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{0} af {1}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} af scanningen</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>Hukommelsen SpaceSharp bruger lige nu, som Jobliste tæller den. En scanning holder hver fil i hukommelsen; et større drev kræver mere.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Filtermatch</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Filterindstillinger</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>Egenskaber</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>Scan igen (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>Scan denne mappe igen</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>Luk scanningen</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Genstart som administrator</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Gem scanning som…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>Scanningsfil</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>Læs filtabellen</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>Byg træet</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>Tegn kortet</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>Ingen livetegning for denne scanning</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>En scanning af filtabellen har intet træ at tegne, før hele tabellen er læst. Kortet vises, når træet kommer, som regel inden for sekunder.</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>{0:N0} filer i {1:N0} mapper indtil videre</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>fundet indtil videre</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>fundet af {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Leder efter en ny version på GitHub nogle få sekunder efter, at SpaceSharp er startet, og tilbyder at installere den.</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Kun tilgængelig, når SpaceSharp er installeret med installationsprogrammet. Den portable exe-fil opdaterer ikke sig selv.</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>Farvelæg efter</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Øverste mappe: én farvetone pr. mappe på øverste niveau, lysere for hvert niveau indeni. Mappedybde: en anden farve pr. niveau. Filtype: filer farvelagt efter type. Ændring: det, der voksede eller skrumpede siden den forrige scanning af samme sted.</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Øverste mappe: én farvetone pr. mappe på øverste niveau, lysere for hvert niveau indeni. Mappedybde: en anden farve pr. niveau. Filtype: filer farvelagt efter type.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bekræft, før der flyttes til Papirkurven</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Spørg før sletning. Slettede elementer kan altid gendannes fra Papirkurven.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Brugerdefinerede paletter</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Brug enhver palet i begge temaer</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Fra: vælger du en palet lavet til det andet tema, skiftes der til det tema, så en lys palet tager det lyse tema med sig. Til: paletten bruges, som den er, lyse paletter i mørkt tema og mørke paletter i lyst.</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Hurtig NTFS-scanning</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Læser drevets filtabel direkte, så et helt drev kortlægges på sekunder i stedet for minutter. Windows beder om administratortilladelse én gang pr. scanning; selve appen forbliver, som den er. Siger du nej, kører den normale scanning, og du bliver ikke spurgt igen, før SpaceSharp genstarter. Andre filsystemer og enkelte mapper bruger altid den normale scanning.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Tæl hardlinks én gang</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>Palet</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (brugerdefineret)</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>De farver, der bruges til boksene på kortet.</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>Åbn den seneste scanning igen ved start</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Viser gårsdagens kort, så snart appen åbner, sammenlignet med scanningen før den. Alle drevscanninger gemmes i %LocalAppData%\SpaceSharp\scans; F5 scanner igen.</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>Vil du nulstille alle indstillinger til standardværdien?</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>Nulstil indstillinger</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>Sikkerhed</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>Flyttede {0} til Papirkurven</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} filer · {3}. F5 scanner igen.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Åbnede scanningen fra</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Åbner den seneste scanning…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Den forrige scanning blev lavet på en anden måde ({0} mod {1}), så den sammenlignes ikke. Det bliver den næste scanning af samme slags.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Ny scanning annulleret</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>Scannede {0} igen: {1:N0} filer · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>Treemap</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>Kort</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>Scanning</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>Adfærd</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>Opstart</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>Under scanning</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>Tegn kortet, mens scanningen kører</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>Under en mappegennemgang udfyldes kortet med de rigtige mapper, efterhånden som de placeres, og det tegnede bliver det færdige kort. En scanning af filtabellen har intet træ, før tabellen er læst, så den tegnes ikke live; en note over kortet siger det. Fra beholder det forrige kort, indtil det nye er klar.</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>Se, hvor din diskplads blev af.</value></data>
   <data name="About_Check" xml:space="preserve"><value>Søg</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>Installeret. Søg efter en nyere version.</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>Nyeste først</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % brugt · {1} ledig</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Mappe · {0} filer</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>Drevet er fyldt {0} mere siden denne scanning. Scan igen for at se, hvor det blev af.</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>Drevet har {0} mere ledig plads end ved denne scanning. Scan igen for at se det, som det er nu.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behold gemte scanninger i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisk gemte scanninger, der er ældre end dette, slettes, når SpaceSharp starter. Scanninger, du selv har gemt som filer, røres aldrig.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dage</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>Til det mørke tema</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>Til det lyse tema</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>Alle temaer</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>Mørkt tema</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>Lyst tema</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>Ny palet…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>Ingen egne paletter endnu. Ny palet… laver en i editoren; paletmappen tager også JSON-filer (Indstillinger › Udseende).</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>Vælger du en af disse, skiftes der til {0} tema</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>Fra din paletmappe · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>Dæmpede farver på gråt; standarden</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>Blåt og blågrønt</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>Rødt over guld til blomme</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>Grønt, mos og bark</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>Klare farver i alle nuancer, ingen neon</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>Hindbær, blomme og vin</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>Støvede ædelstensfarver, lavt genskin</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>Indigo, violet og lidt lyserødt</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>Kobber, messing, oliven og rust</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>Hele spektret i fuld styrke</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Gråtoner, rav som accent</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito og Tol; kan skelnes af alle</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Bløde toner i alle nuancer; standarden i lyst tema</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>Falmede toner på papir</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>Sødt og klart</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Nord-farverne, frost og nordlys</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>Jord, sand og salvie</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>Forårsgrønt, strå og bleg himmel</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>Fersken, rosa, lavendel og mynte</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>Udvaskede blågrønne toner, tæt på hinanden</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Ler, sand og rosa; varmere end Earth</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Violet og pudderblåt</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>Syv kraftige grundfarver</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Det samme sikre sæt, lysnet til lyse flader</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Paletten til det {0} tema. Hvert tema husker sin egen; kortet skifter med temaet.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · lavet til det {1} tema</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Skift mellem kortet og visningen Indsigt</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Skift mellem kortet, Indsigt og Ændringer</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Efter type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Sikkert at rydde</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Hvornår ændret</value></data>
@@ -887,7 +927,7 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>Skuffe over kortet</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Navn eller mønster, f.eks. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Kort</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>Kortet over scanningen (B skifter mellem de to visninger)</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>Kortet over scanningen (B skifter mellem visningerne)</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Indsigt</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Scanningen opsummeret: efter type, sikkert at rydde, hvornår ændret, største elementer (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Indsigt</value></data>
@@ -916,6 +956,10 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Insights_Checked" xml:space="preserve"><value>{0} markeret · {1} · ville give {2} ledig</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>Medtag i Flyt markerede til Papirkurv</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>Flyt markerede til Papirkurv</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>Nu</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>Efter</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>{0} fuld · {1} ledig</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>Den ravfarvede del af den øverste bjælke er det, de afkrydsede steder fylder nu; den nederste bjælke er drevet uden dem.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} urørt i over et år · klik på en måned eller et bånd for at filtrere</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Største, urørt i et år eller mere</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>Største mapper</value></data>
@@ -925,6 +969,37 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Insights_Grew" xml:space="preserve"><value>Voksede</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Skrumpede</value></data>
   <data name="Insights_New" xml:space="preserve"><value>Nye</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>Ændringer</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>Hvad der ændrede sig siden den sammenlignede scanning, mappe for mappe: før, nu og forskellen (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0} sammenlignet med {1}</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>Hvilken scanning denne sammenlignes med</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>Den forrige scanning af dette drev ({0})</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} skrumpede · {1:N0} væk</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} voksede · {1:N0} nye</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>Ændret</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>Kun mapper og filer, hvis størrelse ændrede sig, plus det, der er nyt eller væk</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>Alt</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>Alle mapper og filer, ændrede eller ej</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>Alle størrelser</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>Over {0}</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>Skjul ændringer mindre end dette</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>Vis på kortet</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>Mappe</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>Før</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>Nu</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>Forskel</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>Klik for at sortere efter denne kolonne; klik igen for at vende rækkefølgen</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>Væk</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>var i den sammenlignede scanning og er ikke i denne</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} flere…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} ændret · {1:N0} uændrede skjult</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} elementer · {1:N0} ændret</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>Dobbeltklik på en række for at se den på kortet · Enter åbner en mappe</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>Intet ændrede sig mellem de to scanninger.</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>Intet ændrede sig med mere end {0}.</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>Intet at sammenligne med endnu</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>Åbn Ændringer</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>Største filtypenavne</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>og hvor det meste af hver findes</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

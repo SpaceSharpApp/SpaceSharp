@@ -160,10 +160,7 @@ public sealed partial class TreemapControl
         if (box.IsBlank()) return;
 
         // ---- fill
-        IBrush fill;
-        if (node.IsFreeSpace) fill = FreeSpaceBrush;
-        else if (_colorMode == ColorMode.ByChange) fill = Palette.ChangeFill(node, _measure);
-        else fill = _scheme.Fill(node, item.Depth, item.Branch, _colorMode);
+        IBrush fill = node.IsFreeSpace ? FreeSpaceBrush : _scheme.Fill(node, item.Depth, item.Branch, _colorMode);
 
         bool dimmed = _filterMatches is not null && !_filterMatches.Contains(node) && !_matchedGroups.Contains(node);
         if (dimmed) fill = Dim(fill);

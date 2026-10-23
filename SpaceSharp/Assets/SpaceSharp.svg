@@ -1,1 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1" viewBox="0 0 100 100"><defs><style>.st0{fill:#f5b82e}.st3{fill:#c98e22}.st5{fill:#ffd166}</style></defs><path d="M13.6 31 50 52l36.4-21L50 10z" class="st5"/><path d="M50 94V52L13.6 31v42z" class="st0"/><path d="M50 94V52l36.4-21v42z" class="st3"/><path d="M26.4 65.6 50 52V24.7L26.4 38.3z" style="fill:#30363d"/><path d="M73.6 65.7 50 52 26.4 65.6 50 79.3z" style="fill:#21262d"/><path d="M73.6 65.7 50 52V24.7l23.6 13.7z" style="fill:#161b22"/><path d="M38 45.1 50 52l12-6.9-12-7z" class="st5"/><path d="M50 65.9V52l-12-6.9v13.8z" class="st0"/><path d="M50 65.9V52l12-6.9v13.8z" class="st3"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100">
+  <!-- Generator: Adobe Illustrator 30.8.2, SVG Export Plug-In . SVG Version: 2.1.4 Build 7)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #f5b82e;
+      }
+
+      .st1 {
+        fill: #30363d;
+      }
+
+      .st2 {
+        fill: #161b22;
+      }
+
+      .st3 {
+        fill: #c98e22;
+      }
+
+      .st4 {
+        fill: #21262d;
+      }
+
+      .st5 {
+        fill: #ffd166;
+      }
+    </style>
+  </defs>
+  <g>
+    <polygon class="st5" points="13.6 31 50 52 86.4 31 50 10 13.6 31"/>
+    <polygon class="st0" points="50 94 50 52 13.6 31 13.6 73 50 94"/>
+    <polygon class="st3" points="50 94 50 52 86.4 31 86.4 73 50 94"/>
+  </g>
+  <g>
+    <polygon class="st1" points="26.4 65.7 50 52 50 24.7 26.4 38.4 26.4 65.7"/>
+    <polygon class="st4" points="73.6 65.7 50 52 26.4 65.7 50 79.3 73.6 65.7"/>
+    <polygon class="st2" points="73.6 65.7 50 52 50 24.7 73.6 38.4 73.6 65.7"/>
+  </g>
+  <g>
+    <polygon class="st5" points="38 45.1 50 52 62 45.1 50 38.1 38 45.1"/>
+    <polygon class="st0" points="50 65.9 50 52 38 45.1 38 58.9 50 65.9"/>
+    <polygon class="st3" points="50 65.9 50 52 62 45.1 62 58.9 50 65.9"/>
+  </g>
+</svg>

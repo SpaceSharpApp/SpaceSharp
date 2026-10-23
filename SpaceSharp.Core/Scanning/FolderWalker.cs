@@ -19,6 +19,9 @@ public sealed class WalkOptions
 
     /// <summary>Add a free-space node when the path is a volume root.</summary>
     public bool AddFreeSpace { get; init; } = true;
+
+    /// <summary>Keep a <see cref="LiveTree"/> of what is placed, for drawing the map while the walk runs.</summary>
+    public bool Live { get; init; }
 }
 
 /// <summary>Walks a folder tree with System.IO, the top levels in parallel.</summary>
@@ -38,6 +41,10 @@ public sealed class FolderWalker
     private string _currentPath = string.Empty;
     private object? _linkToken;
     private NamePatterns _exclude = NamePatterns.Empty;
+    private string _rootPath = string.Empty;
+
+    /// <summary>What the running walk has placed so far; null unless the walk was started with <see cref="WalkOptions.Live"/>.</summary>
+    public LiveTree? Live { get; private set; }
 
     public FolderWalker(IPlatformFiles? platform = null) => _platform = platform ?? IPlatformFiles.Plain;
 
@@ -67,6 +74,8 @@ public sealed class FolderWalker
         _linkToken = options.DetectHardLinks ? new object() : null;
         _enumeration = MakeEnumerationOptions(options.IncludeHidden);
         _exclude = options.Exclude;
+        _rootPath = rootPath;
+        Live = options.Live ? new LiveTree(rootPath, Path.DirectorySeparatorChar) : null;
 
         return Task.Run(() =>
         {
@@ -123,6 +132,9 @@ public sealed class FolderWalker
             Interlocked.Increment(ref _denied);
         }
 
+        // the direct files are all in and will not change; the folder itself follows when it finishes
+        if (Live is { } live && depth <= LiveTree.MaxDepth) live.RecordFiles(Relative(dir.FullName), depth, node.Children);
+
         var subNodes = new FsNode[subdirectories.Count];
         if (depth < ParallelDepth && subdirectories.Count > 1)
         {
@@ -137,8 +149,13 @@ public sealed class FolderWalker
 
         node.Children.AddRange(subNodes);
         node.FinishDirectory();
+        if (Live is { } done && depth <= LiveTree.MaxDepth) done.RecordFinished(Relative(dir.FullName), depth, node);
         return node;
     }
+
+    /// <summary>The path under the scan root, empty for the root itself.</summary>
+    private string Relative(string fullPath) =>
+        fullPath.Length <= _rootPath.Length ? string.Empty : fullPath[_rootPath.Length..].TrimStart('\\', '/');
 
     private FsNode CreateFileNode(FileInfo file, FsNode parent)
     {

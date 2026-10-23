@@ -9,35 +9,38 @@
         Background="{DynamicResource Window}">
 
   <!-- The main window, laid out as the WPF app's (2.2): top bar, path row, the filter rail under it, the side
-       panel with drives and largest items, the map (or the start screen, the Insights view, the scan card), and
-       the status bar. The text is set in Build() from the same Strings.resx. -->
+       panel with drives and largest items, the map (or the start screen, the Insights view, the Changes view, the
+       scan card), and the status bar. The text is set in Build() from the same Strings.resx. -->
 
   <Grid>
   <DockPanel>
     <!-- ============================================================ top bar -->
-    <Border DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="10,8">
+    <Border x:Name="TopBar" DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="10,8" SizeChanged="TopBar_SizeChanged">
       <DockPanel>
-        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <!-- when the two groups do not fit side by side, FitToolbar drops the labels, then the view buttons' text, then the palette's name -->
+        <StackPanel x:Name="ToolbarRight" DockPanel.Dock="Right" Orientation="Horizontal">
           <TextBlock x:Name="ColorLabel" Classes="dim" VerticalAlignment="Center" Margin="0,0,8,0" />
           <ComboBox x:Name="ColorCombo" Width="130" SelectionChanged="ColorMode_Changed" />
           <TextBlock x:Name="PaletteLabel" Classes="dim" VerticalAlignment="Center" Margin="14,0,8,0" />
-          <ComboBox x:Name="PaletteCombo" Width="250" MaxDropDownHeight="640" SelectionChanged="Palette_Changed" />
+          <Button x:Name="PaletteButton" Classes="combo" Width="250" />
           <Border Classes="divider" />
           <Button x:Name="SettingsButton" Classes="tool" Margin="0,0,6,0" Click="Settings_Click"><controls:Icon Glyph="{StaticResource Icon.Settings}" Width="15" Height="15" /></Button>
           <Button x:Name="ThemeButton" Classes="tool" Margin="0,0,6,0" Click="Theme_Click"><controls:Icon x:Name="ThemeIcon" Glyph="{StaticResource Icon.Moon}" Width="15" Height="15" /></Button>
           <Button x:Name="AboutButton" Classes="tool" Click="About_Click"><controls:Icon Glyph="{StaticResource Icon.Info}" Width="15" Height="15" /></Button>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel x:Name="ToolbarLeft" Orientation="Horizontal" ClipToBounds="True">
           <Button x:Name="ScanFolderButton" Classes="primary" Click="ScanFolder_Click" />
           <Button x:Name="RescanButton" Classes="tool" Margin="6,0,6,0" Click="Rescan_Click"><controls:Icon Glyph="{StaticResource Icon.Refresh}" Width="15" Height="15" /></Button>
+          <Button x:Name="CloseScanButton" Classes="tool" Margin="0,0,6,0" Click="CloseScan_Click"><controls:Icon Glyph="{StaticResource Icon.Close}" Width="15" Height="15" /></Button>
           <Border Classes="divider" />
           <Button x:Name="UpButton" Classes="tool" Margin="0,0,6,0" Click="Up_Click"><controls:Icon Glyph="{StaticResource Icon.Up}" Width="15" Height="15" /></Button>
           <Button x:Name="HomeButton" Classes="tool" Margin="0,0,6,0" Click="Fit_Click"><controls:Icon Glyph="{StaticResource Icon.Home}" Width="15" Height="15" /></Button>
           <Button x:Name="PanelButton" Classes="tool" Margin="0,0,6,0" Click="Panel_Click"><controls:Icon Glyph="{StaticResource Icon.SidePanel}" Width="15" Height="15" /></Button>
           <Border Classes="divider" />
           <Button x:Name="MapViewButton" Classes="primary" Margin="0,0,2,0" Padding="10,0" Click="MapView_Click" />
-          <Button x:Name="InsightsButton" Classes="tool" Margin="0,0,6,0" Padding="10,0" Click="InsightsView_Click" />
+          <Button x:Name="InsightsButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="InsightsView_Click" />
+          <Button x:Name="ChangesButton" Classes="tool" Margin="0,0,6,0" Padding="10,0" Click="ChangesView_Click" />
           <Border Classes="divider" />
           <Button x:Name="ZoomOutButton" Classes="tool" Margin="0,0,6,0" Click="ZoomOut_Click"><controls:Icon Glyph="{StaticResource Icon.ZoomOut}" Width="15" Height="15" /></Button>
           <TextBlock x:Name="ZoomLabel" Width="64" TextAlignment="Center" VerticalAlignment="Center" Classes="dim" Text="—" Margin="0,0,6,0" />
@@ -74,7 +77,7 @@
     <!-- ============================================================ status bar -->
     <Border DockPanel.Dock="Bottom" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="12,6">
       <DockPanel>
-        <TextBlock x:Name="StatusRight" DockPanel.Dock="Right" Classes="dim" Margin="16,0,0,0" />
+        <StackPanel x:Name="StatusMeters" DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" />
         <TextBlock x:Name="StatusText" TextTrimming="CharacterEllipsis" />
       </DockPanel>
     </Border>
@@ -115,6 +118,9 @@
       <ScrollViewer x:Name="InsightsView" IsVisible="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{DynamicResource Window}" SizeChanged="InsightsView_SizeChanged">
         <StackPanel x:Name="InsightsHost" Margin="18,16,22,18" />
       </ScrollViewer>
+
+      <!-- the Changes view, in the map's place: built by BuildChangesView -->
+      <Grid x:Name="ChangesView" IsVisible="False" Background="{DynamicResource Window}" />
 
       <!-- start screen: pick a drive, or pick up where you left off -->
       <Grid x:Name="EmptyHint">
@@ -186,77 +192,80 @@
         </DockPanel>
       </Border>
 
-      <!-- while scanning: the card over a scrim -->
-      <Grid x:Name="ScanCard" IsVisible="False" Background="{DynamicResource Scrim}">
-        <Border Width="800" Padding="30,24,30,22" CornerRadius="14" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
-                HorizontalAlignment="Center" VerticalAlignment="Center" BoxShadow="0 8 28 0 #80000000">
-          <StackPanel>
+      <!-- while scanning: a card in the map's corner; the last map stays in view behind it (centered when there is none) -->
+      <Grid x:Name="ScanCard" IsVisible="False" Background="Transparent">
+        <!-- over the map during a file-table scan: says why there is no live drawing -->
+        <Border x:Name="SampleBanner" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="18,18,18,0" MaxWidth="720"
+                Padding="16,11" CornerRadius="8" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="1" BoxShadow="0 8 28 0 #80000000">
+          <DockPanel>
+            <controls:Icon DockPanel.Dock="Left" Glyph="{StaticResource Icon.Info}" Width="18" Height="18" StrokeWidth="2.2" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,1,12,0" />
+            <TextBlock FontSize="13.5" TextWrapping="Wrap" LineHeight="19"><Run x:Name="SampleTitle" FontWeight="Bold" /><Run Text="  " /><Run x:Name="SampleText" Foreground="{DynamicResource TextDim}" /></TextBlock>
+          </DockPanel>
+        </Border>
+        <Border x:Name="ScanPanel" Width="372" Padding="18,16,18,14" CornerRadius="12" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="18" BoxShadow="0 12 40 0 #99000000">
+          <StackPanel Spacing="12">
+            <!-- title row: spinner, drive, what is in use, percent, Cancel -->
             <DockPanel>
-              <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="16,0,0,0" />
-              <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
-                <TextBlock x:Name="ScanTitle" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" />
-                <TextBlock x:Name="ScanSubtitle" Grid.Column="1" Classes="dim" FontSize="13" VerticalAlignment="Center" Margin="12,0,0,0" TextTrimming="CharacterEllipsis" />
-              </Grid>
+              <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Width="28" Height="28" MinWidth="28" Padding="0" Margin="8,0,0,0" Click="Cancel_Click">
+                <controls:Icon Glyph="{StaticResource Icon.Close}" Width="13" Height="13" />
+              </Button>
+              <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="8,0,0,0" />
+              <controls:Icon x:Name="ScanSpinner" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="16" Height="16" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
+              <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="ScanTitle" FontSize="15" FontWeight="Bold" /><Run Text="  " /><Run x:Name="ScanSubtitle" FontSize="12.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
             </DockPanel>
 
-            <!-- the three stages: each a bar with its name under it -->
-            <Grid Margin="0,20,0,0" ColumnDefinitions="1.3*,6,2.2*,6,*">
-              <StackPanel Grid.Column="0">
-                <Grid x:Name="StageFindBar" Height="6" ClipToBounds="True">
-                  <Border Background="{DynamicResource Control}" CornerRadius="3" />
-                  <Border x:Name="StageFindFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="6" />
-                </Grid>
-                <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageFindIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0" />
-                  <TextBlock VerticalAlignment="Top" Height="36" TextWrapping="Wrap"><Run x:Name="StageFindText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageFindDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
-                </DockPanel>
-              </StackPanel>
-              <StackPanel Grid.Column="2">
-                <Grid x:Name="StageBuildBar" Height="6" ClipToBounds="True">
-                  <Border Background="{DynamicResource Control}" CornerRadius="3" />
-                  <Border x:Name="StageBuildFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0" />
-                </Grid>
-                <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageBuildIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
-                  <TextBlock VerticalAlignment="Top" Height="36" TextWrapping="Wrap"><Run x:Name="StageBuildText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageBuildDetail" FontSize="11.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
-                </DockPanel>
-              </StackPanel>
-              <StackPanel Grid.Column="4">
-                <Grid x:Name="StageDrawBar" Height="6" ClipToBounds="True">
-                  <Border Background="{DynamicResource Control}" CornerRadius="3" />
-                  <Border x:Name="StageDrawFill" Background="{DynamicResource Accent}" CornerRadius="3" HorizontalAlignment="Left" Width="0" />
-                </Grid>
-                <DockPanel Margin="0,8,0,0">
-                  <controls:Icon x:Name="StageDrawIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="14" Height="14" StrokeWidth="2.4" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
-                  <TextBlock x:Name="StageDrawText" FontWeight="SemiBold" Classes="dim" VerticalAlignment="Top" Height="36" TextWrapping="Wrap" />
-                </DockPanel>
-              </StackPanel>
+            <!-- one thin bar, a segment per stage -->
+            <Grid ColumnDefinitions="1.3*,2,2.2*,2,*" Height="4">
+              <Grid x:Name="StageFindBar" Grid.Column="0" ClipToBounds="True">
+                <Border Background="{DynamicResource Control}" CornerRadius="2" />
+                <Border x:Name="StageFindFill" Background="{DynamicResource Accent}" CornerRadius="2" HorizontalAlignment="Left" Width="4" />
+              </Grid>
+              <Grid x:Name="StageBuildBar" Grid.Column="2" ClipToBounds="True">
+                <Border Background="{DynamicResource Control}" CornerRadius="2" />
+                <Border x:Name="StageBuildFill" Background="{DynamicResource Accent}" CornerRadius="2" HorizontalAlignment="Left" Width="0" />
+              </Grid>
+              <Grid x:Name="StageDrawBar" Grid.Column="4" ClipToBounds="True">
+                <Border Background="{DynamicResource Control}" CornerRadius="2" />
+                <Border x:Name="StageDrawFill" Background="{DynamicResource Accent}" CornerRadius="2" HorizontalAlignment="Left" Width="0" />
+              </Grid>
             </Grid>
 
-            <!-- the numbers, big, in one row; Cancel on the right -->
-            <DockPanel Margin="0,22,0,0">
-              <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
-                <TextBlock x:Name="CancelHint" Classes="dim" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0" />
-                <Button x:Name="CancelButton" Classes="tool" Click="Cancel_Click" />
-              </StackPanel>
-              <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="0,0,36,0">
-                  <TextBlock x:Name="ScanSize" Text="0 B" FontSize="30" FontWeight="Bold" />
-                  <TextBlock x:Name="ScanSizeLabel" Classes="dim" FontSize="11.5" />
-                </StackPanel>
-                <StackPanel Margin="0,0,36,0">
-                  <TextBlock x:Name="ScanRate" Text="0" FontSize="30" FontWeight="Bold" />
-                  <TextBlock x:Name="ScanRateLabel" Classes="dim" FontSize="11.5" />
-                </StackPanel>
-                <StackPanel>
-                  <TextBlock x:Name="ScanElapsed" Text="0:00" FontSize="30" FontWeight="Bold" />
-                  <TextBlock x:Name="ScanElapsedLabel" Classes="dim" FontSize="11.5" />
-                </StackPanel>
-              </StackPanel>
-            </DockPanel>
+            <!-- the three stages as a list; a stage's detail wraps under its name rather than being cut -->
+            <StackPanel Spacing="6">
+              <DockPanel>
+                <controls:Icon x:Name="StageFindIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="13" Height="13" StrokeWidth="2.6" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                <TextBlock FontSize="12.5" TextWrapping="Wrap" LineHeight="17"><Run x:Name="StageFindText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageFindDetail" Foreground="{DynamicResource TextDim}" /></TextBlock>
+              </DockPanel>
+              <DockPanel>
+                <controls:Icon x:Name="StageBuildIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="13" Height="13" StrokeWidth="2.6" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                <TextBlock FontSize="12.5" TextWrapping="Wrap" LineHeight="17"><Run x:Name="StageBuildText" FontWeight="SemiBold" /><Run Text=" " /><Run x:Name="StageBuildDetail" Foreground="{DynamicResource TextDim}" /></TextBlock>
+              </DockPanel>
+              <DockPanel>
+                <controls:Icon x:Name="StageDrawIcon" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Circle}" Width="13" Height="13" StrokeWidth="2.6" Foreground="{DynamicResource TextDim}" VerticalAlignment="Top" Margin="0,2,8,0" />
+                <TextBlock x:Name="StageDrawText" FontSize="12.5" FontWeight="SemiBold" Classes="dim" TextWrapping="Wrap" LineHeight="17" />
+              </DockPanel>
+            </StackPanel>
 
-            <Border BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Margin="0,16,0,0" Padding="0,10,0,0">
-              <TextBlock x:Name="ScanPath" Classes="dim" FontSize="12" FontFamily="Cascadia Mono, Consolas, Menlo, monospace" TextTrimming="CharacterEllipsis" />
+            <!-- the numbers, under a rule -->
+            <Border BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+              <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="14">
+                  <StackPanel Grid.Column="0">
+                    <TextBlock x:Name="ScanSize" Text="0 B" FontSize="17" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="ScanSizeLabel" Classes="dim" FontSize="11.5" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="1">
+                    <TextBlock x:Name="ScanRate" Text="0" FontSize="17" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="ScanRateLabel" Classes="dim" FontSize="11.5" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                  <StackPanel Grid.Column="2" MinWidth="52">
+                    <TextBlock x:Name="ScanElapsed" Text="0:00" FontSize="17" FontWeight="Bold" />
+                    <TextBlock x:Name="ScanElapsedLabel" Classes="dim" FontSize="11.5" />
+                  </StackPanel>
+                </Grid>
+                <TextBlock x:Name="ScanPath" Classes="dim" FontSize="11" FontFamily="Cascadia Mono, Consolas, Menlo, monospace" TextTrimming="CharacterEllipsis" />
+              </StackPanel>
             </Border>
           </StackPanel>
         </Border>

@@ -37,12 +37,12 @@ internal sealed class AppSettings
     public bool LabelHalo { get; set; }
     public bool MergeChains { get; set; } = true;
     public bool AnimateZoom { get; set; } = true;
+    public bool LiveMap { get; set; } = true;        // draw the map while a folder walk runs
+    public bool PaletteAnyTheme { get; set; }        // a palette made for the other theme is used as is instead of switching the theme
     public bool IncludeHidden { get; set; } = true;
     public bool DetectHardLinks { get; set; }
     public bool FastNtfsScan { get; set; } = true;   // MFT scan; needs administrator
     public string ExcludePatterns { get; set; } = string.Empty;   // one wildcard per line
-    public string? LastScanRoot { get; set; }
-    public bool ReopenLastScan { get; set; } = true;
     public int KeepScansDays { get; set; } = 90;                    // 0 keeps all
     public string? Language { get; set; }
     public bool ExplorerMenu { get; set; }
@@ -101,11 +101,11 @@ internal sealed class AppSettings
         LabelHalo = d.LabelHalo;
         MergeChains = d.MergeChains;
         AnimateZoom = d.AnimateZoom;
+        LiveMap = d.LiveMap;
+        PaletteAnyTheme = d.PaletteAnyTheme;
         IncludeHidden = d.IncludeHidden;
         FastNtfsScan = d.FastNtfsScan;
         ExcludePatterns = d.ExcludePatterns;
-        LastScanRoot = d.LastScanRoot;
-        ReopenLastScan = d.ReopenLastScan;
         KeepScansDays = d.KeepScansDays;
         Language = d.Language;
         ExplorerMenu = d.ExplorerMenu;
@@ -134,7 +134,11 @@ internal sealed class AppSettings
         try
         {
             if (File.Exists(FilePath))
-                return JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath)) ?? new AppSettings();
+            {
+                var loaded = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath)) ?? new AppSettings();
+                if (loaded.ColorMode == "ByChange") loaded.ColorMode = "ByBranch";   // the change color mode became the Changes view in 2.5
+                return loaded;
+            }
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {

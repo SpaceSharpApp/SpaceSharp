@@ -30,6 +30,9 @@ Thumbs.db
 Desktop.ini
 .DS_Store
 
+# Resx tooling scratch files
+SpaceSharp/Resources/Strings.nb.tracking.json
+SpaceSharp/Resources/Strings.resx.project.json
 
 # Website assets generated on demand (the site itself lives outside this repository)
 docs/m/

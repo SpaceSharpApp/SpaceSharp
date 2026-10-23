@@ -13,7 +13,7 @@ namespace SpaceSharp;
 /// <summary>Posed screenshot scenes on the <see cref="MockSystem"/>, driven by <c>--scene</c> and <c>--shot</c>.</summary>
 public partial class MainWindow
 {
-    public static readonly string[] Scenes = { "none", "drawer", "insights", "compare", "inspect", "settings", "menu", "start", "about", "update", "light" };
+    public static readonly string[] Scenes = { "none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light" };
 
     private async Task PoseAsync(string scene)
     {
@@ -36,8 +36,11 @@ public partial class MainWindow
                 break;
             case "insights":
                 break;
-            case "compare":
-                ColorCombo.SelectedIndex = 3;   // Change
+            case "changes":
+                ShowView(MainView.Changes);
+                await Settle();
+                // the biggest mover open, so the table shows a folder's inside too
+                if (_changeRows.FirstOrDefault(r => r.CanOpen) is { } first) ToggleChangeRow(first);
                 break;
             case "light":
                 _settings.Theme = "Light";

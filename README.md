@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.4.1-F5B82E" alt="Version 2.4.1"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.5.0-F5B82E" alt="Version 2.5.0"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -20,7 +20,7 @@
 <p align="center">
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
   <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.4-21262D?style=for-the-badge" alt="What's new in 2.4"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.5-21262D?style=for-the-badge" alt="What's new in 2.5"></a>
 </p>
 
 <p align="center">
@@ -41,10 +41,10 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 
 ## Why people keep it installed
 
-- **It is fast where it counts.** A drive with a million files is on screen before you have finished reading this sentence. Scans are saved, so the next launch opens yesterday's map instantly and shows what grew.
+- **It is fast where it counts.** A drive with a million files is on screen before you have finished reading this sentence, and a folder scan draws the map while it runs. Scans are saved, so yesterday's map is one click away on the start screen and the next scan shows what grew.
 - **It speaks your language.** The filter understands `photos`, `over 500 MB`, `not modified in 2 years`, in any combination, and the drawer writes the same filter from checkboxes and scales. The interface itself comes in 18 languages.
 - **It tells you what is safe to clear.** Insights lists the usual suspects (Windows.old, caches, the Recycle Bin, stale Downloads) with the space they hold and one button each.
-- **It looks the way you want.** Thirteen palettes, twelve looks for the window, cushion shading with its own light direction, and a palette editor for your own colors, all with a live preview.
+- **It looks the way you want.** Twenty-four palettes, twelve looks for the window, cushion shading with its own light direction, and a palette editor for your own colors, all with a live preview.
 - **It never surprises you.** Deleting always goes through the Recycle Bin, the map updates without a rescan, and the only network traffic is the update check, which the portable exe does not even make.
 
 ## A tour
@@ -56,7 +56,7 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
   </tr>
   <tr>
     <td align="center"><a href="docs/shot-filter.png"><img src="docs/shot-filter.png" alt="The filter drawer"></a><br><sub><b>Filter.</b> Pick types, set size and age on a scale, and the map dims to the matches.</sub></td>
-    <td align="center"><a href="docs/shot-change.png"><img src="docs/shot-change.png" alt="Color by change"></a><br><sub><b>What changed.</b> Grew warm, shrank cool, new in amber.</sub></td>
+    <td align="center"><a href="docs/shot-changes.png"><img src="docs/shot-changes.png" alt="The Changes view"></a><br><sub><b>Changes.</b> Then, now and the difference, folder by folder; new and gone marked.</sub></td>
   </tr>
   <tr>
     <td align="center"><a href="docs/shot-inspect.png"><img src="docs/shot-inspect.png" alt="The Inspect window"></a><br><sub><b>Inspect.</b> Where the space is, by type and by age.</sub></td>
@@ -76,15 +76,15 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 | **One map, shaded your way** | Folders are frames, files are cushioned boxes. Shading depth, spread, tone, fade and light direction, title bars, text colors and grid are controls in Settings with a live preview. |
 | **Filter in plain words** | `videos over 500MB older than 1 year` dims everything else and keeps the layout, so you see where the matches are. A drawer with type tiles, size and age scales and quick filters writes the same filter for you. |
 | **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty with one Recycle button; when files were last changed; the largest folders and files; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
-| **Remembers every scan** | Opens with yesterday's map on screen. Color by change shows what grew, shrank or appeared since last time. The side panel's Largest items has a Changes tab for the same. |
+| **Remembers every scan** | Every scan is saved and compared with the one before. The Changes view lays the two out as a folder table: then, now, a bar from a center line (shrank left in blue, grew right in orange), new and gone files marked, folders that open in place, a size threshold to quiet the noise, and a double-click back to the map. The side panel's Largest items has a Changes tab with the biggest movers. |
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
-| **Thirteen palettes, twelve looks, and your own** | Seven palettes for the dark theme, six for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
+| **Twenty-four palettes, twelve looks, and your own** | Twelve palettes for the dark theme, twelve for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
 | **Knows your keyboard** | The shortcuts window draws your keyboard (QWERTY, Nordic, QWERTZ, AZERTY or Dvorak, Mac keys on a Mac) with the keys SpaceSharp uses lit up. |
 
-### New in 2.4
+### New in 2.5
 
-A redesigned start screen, filter drawer, drive list, largest-items table, palette editor and shortcuts window; a keyboard map that follows your layout; clusters that zoom properly; and a long list of fixes. The whole story is in the [changelog](CHANGELOG.md).
+Ten more palettes (twelve per theme) and a tabbed picker with a line about each; a map that draws itself while a folder scan runs, easing into the finished map; a scanning card in the corner instead of over the window; a Behavior tab in Settings; the drive and SpaceSharp's memory as meters in the status bar; Close the scan (Ctrl+W); Insights showing the drive before and after clearing what you tick; the start screen saying when a drive moved on since its scan; a keyboard map that is right for ISO layouts; and a new mark. The whole story is in the [changelog](CHANGELOG.md).
 
 ## Download
 
@@ -134,13 +134,14 @@ Terms combine. **Select matches** (Ctrl+A) selects all of them; Del sends them t
 
 Everything applies at once and is saved. The pages:
 
-- **General**: language, update check, confirm before the Recycle Bin, "Scan with SpaceSharp" in Explorer's right-click menu, and the command-line options.
+- **General**: language, "Scan with SpaceSharp" in Explorer's right-click menu, and the command-line options.
+- **Behavior**: the update check, drawing the map as a scan goes, how long saved scans are kept, animated zoom, and confirm before the Recycle Bin.
 - **Appearance**: theme (match the system, light, dark) and the look: six for each theme, the GitHub Dark and GitHub Light ones drawn in GitHub's own grays.
-- **Treemap**: a preview map of sample data pinned at the top, then Colors (palette per theme, Color by, custom palettes), Shading (cushion on or off, presets, Depth, Spread, Tone, Fade, Light from), Text and title bars, Grid and highlight, and Layout (density, bias, padding).
-- **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel, animated zoom.
-- **Scanning**: fast NTFS scan, names to leave out, reopen the last scan, how long saved scans are kept, hidden and system files, hard links counted once.
+- **Treemap**: a preview map of sample data pinned at the top, then Colors (palette per theme, Color by, any palette on either theme, custom palettes), Shading (cushion on or off, presets, Depth, Spread, Tone, Fade, Light from), Text and title bars, Grid and highlight, and Layout (density, bias, padding).
+- **Map**: size measure (file size or size on disk), free space, merge single-folder chains, hover details, filter layout, side panel.
+- **Scanning**: fast NTFS scan, names to leave out, hidden and system files, hard links counted once.
 
-**Color by** is Top folder, Depth (like SpaceMonger), File type (with a legend), or Change (since the last scan). **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Retro, Color-blind safe (light). Your own come from Settings › Treemap › Custom palettes: twelve folder colors, the file tint and the type colors, typed as hex or picked with sliders, with a sample map beside them. They are JSON files in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too:
+**Color by** is Top folder, Depth (like SpaceMonger), or File type (with a legend); what changed since the last scan has a view of its own, Changes, next to Map and Insights. **Palettes**, dark: Graphite, Ocean, Sunset, Forest, Aurora, Berry, Mineral, Twilight, Copper, Prism, Monochrome, Color-blind safe; light: Pastel, Paper, Candy, Nordic, Earth, Meadow, Sorbet, Sea glass, Terracotta, Lilac, Retro, Color-blind safe (light). The toolbar's palette control opens a tabbed picker (Dark theme, Light theme, Custom) with a strip of each palette's twelve colors and a line about it; picking one made for the other theme switches to that theme unless Settings › Treemap says to use any palette on either theme. Your own come from Settings › Treemap › Custom palettes: twelve folder colors, the file tint and the type colors, typed as hex or picked with sliders, with a sample map beside them. They are JSON files in `%LocalAppData%\SpaceSharp\palettes`, where hand-written ones go too:
 
 ```json
 { "name": "Mine", "theme": "dark", "folders": ["#5B8DEF", "#49B86B", "#E8C547", "#E8864A"] }
@@ -179,10 +180,11 @@ Only one SpaceSharp runs at a time; starting it again hands the request to the o
 | Ctrl+I | Inspect |
 | Ctrl+C | Copy the selected paths |
 | Ctrl+S, Ctrl+O | Save or open a scan file |
+| Ctrl+W | Close the scan and go back to the start screen |
 | Alt+Enter | Windows Properties |
 | Ctrl+click, Shift+click | Select several |
 | K | Next color mode |
-| B | Map or Insights |
+| B | Map, Insights, Changes |
 | L | Side panel |
 | G | Density: Everything (no grouping) and back |
 | Ctrl+, | Settings |

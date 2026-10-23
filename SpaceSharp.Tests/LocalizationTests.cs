@@ -61,7 +61,7 @@ public class LocalizationTests
         foreach (var k in SpaceSharp.Services.DriveInsights.SuggestionKeys) { Assert.Contains("Cleanup_" + k, keys); Assert.Contains("Cleanup_" + k + "_Note", keys); }
         foreach (var a in new[] { "ThisMonth", "ThisYear", "OneToThree", "Older" }) Assert.Contains("Age_" + a, keys);
         foreach (var d in Enum.GetNames<SpaceSharp.Controls.MapDensity>()) Assert.Contains("Density_" + d, keys);
-        foreach (var t in new[] { "General", "Appearance", "Treemap", "Map", "Scanning" }) Assert.Contains("SettingsTab_" + t, keys);
+        foreach (var t in new[] { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" }) Assert.Contains("SettingsTab_" + t, keys);
         foreach (var l in new[] { "Smallest", "Smaller", "Normal", "Large", "Larger" }) Assert.Contains("LabelSize_" + l, keys);
         foreach (var p in new[] { "Day", "Days", "Week", "Weeks", "Month", "Months", "Year", "Years" }) Assert.Contains("Period_" + p, keys);
     }

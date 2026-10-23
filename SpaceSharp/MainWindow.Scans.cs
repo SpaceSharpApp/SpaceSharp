@@ -39,9 +39,9 @@ public partial class MainWindow
         _scanTimeUtc = when;
         try
         {
-            var (baseline, skipped) = await Task.Run(() =>
+            var (baseline, skipped, comparison) = await Task.Run(() =>
             {
-                ScanFileInfo? b = null; string? why = null;
+                ScanFileInfo? b = null; string? why = null; ScanComparison? found = null;
                 if (File.Exists(auto))
                 {
                     var oldInfo = ScanFile.Peek(auto);
@@ -49,16 +49,17 @@ public partial class MainWindow
                         why = Strings.Format("Status_PreviousScanDifferent", oldInfo.Method, method);
                     else
                     {
-                        try { var (old, info) = ScanFile.Load(auto, addFreeSpace: false); ScanCompare.Apply(root, old); b = info; }
+                        try { var (old, info) = ScanFile.Load(auto, addFreeSpace: false); found = ScanCompare.Apply(root, old); b = info; }
                         catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException) { }
                     }
                     File.Copy(auto, prev, overwrite: true);
                 }
                 ScanFile.Save(root, auto, when, method);
-                return (b, why);
+                return (b, why, found);
             });
             if (!ReferenceEquals(_root, root)) return;
             _baselineInfo = baseline;
+            _comparison = baseline is null ? null : comparison;
             UpdateCompareUi();
             if (baseline is not null)
             {
@@ -67,6 +68,8 @@ public partial class MainWindow
                 RefreshTopList();
                 InvalidateInsights();
                 RefreshInsights();
+                InvalidateChanges();
+                RefreshChanges();
             }
             else if (skipped is not null) StatusText.Text += "  ·  " + skipped;
             BuildRecentScans();
@@ -77,57 +80,29 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Reopens the last autosaved scan with its baseline.</summary>
-    private async Task ReopenLastScanAsync(string rootPath)
-    {
-        string file = ScanFile.AutoPathFor(rootPath);
-        if (!File.Exists(file) || _scanCts is not null) return;
-        try
-        {
-            StatusText.Text = Strings.Get("Status_OpeningLastScan");
-            var (root, info, baseline) = await Task.Run(() =>
-            {
-                var (r, i) = ScanFile.Load(file);
-                ScanFileInfo? b = null;
-                string prev = ScanFile.PreviousPathFor(rootPath);
-                if (File.Exists(prev) && ScanFile.Peek(prev) is { } prevInfo && Comparable(prevInfo.Method, i.Method))
-                {
-                    try { var (old, oldInfo) = ScanFile.Load(prev, addFreeSpace: false); ScanCompare.Apply(r, old); b = oldInfo; }
-                    catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException) { }
-                }
-                return (r, i, b);
-            });
-            ShowLoadedScan(root, info, baseline, Strings.Get("Status_OpenedVerb"));
-        }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
-        {
-            StatusText.Text = string.Empty;
-        }
-    }
-
-    private void ShowLoadedScan(FsNode root, ScanFileInfo info, ScanFileInfo? baseline, string verb)
+    private void ShowLoadedScan(FsNode root, ScanFileInfo info, ScanFileInfo? baseline, ScanComparison? comparison, string verb)
     {
         _scanRoot = info.RootPath;
         _scanTimeUtc = info.ScannedUtc;
         _baselineInfo = baseline;
+        _comparison = baseline is null ? null : comparison;
         ShowTree(root);
         UpdateCompareUi();
         StatusText.Text = Strings.Format("Status_OpenedScan", verb, Ago(info.ScannedUtc), root.FileCount, SizeFormatter.Format(info.Bytes)) +
                           (baseline is not null ? Strings.Format("Status_ComparedWith", Ago(baseline.ScannedUtc)) : string.Empty);
     }
 
+    /// <summary>Shows or hides what only makes sense while a scan is compared: the Changes tab of the side panel, the Changes view.</summary>
     private void UpdateCompareUi()
     {
         _building = true;
-        var items = new List<string> { Strings.Get("Main_TopFolder"), Strings.Get("Main_Depth"), Strings.Get("Main_FileType") };
-        if (HasBaseline) items.Add(Strings.Get("Main_Change"));
-        ColorCombo.ItemsSource = items;
-        ColorCombo.SelectedIndex = _settings.ColorMode switch { "ByDepth" => 1, "ByFileType" => 2, "ByChange" when HasBaseline => 3, _ => 0 };
+        ColorCombo.ItemsSource = new List<string> { Strings.Get("Main_TopFolder"), Strings.Get("Main_Depth"), Strings.Get("Main_FileType") };
+        ColorCombo.SelectedIndex = _settings.ColorMode switch { "ByDepth" => 1, "ByFileType" => 2, _ => 0 };
         _building = false;
-        if (!HasBaseline && _settings.ColorMode == "ByChange") { _settings.ColorMode = "ByBranch"; _settings.Save(); }
-        Treemap.ColorMode = _settings.ColorMode switch { "ByDepth" => ColorMode.ByDepth, "ByFileType" => ColorMode.ByFileType, "ByChange" when HasBaseline => ColorMode.ByChange, _ => ColorMode.ByBranch };
+        Treemap.ColorMode = _settings.ColorMode switch { "ByDepth" => ColorMode.ByDepth, "ByFileType" => ColorMode.ByFileType, _ => ColorMode.ByBranch };
         ListChangesButton.IsVisible = HasBaseline;
         if (!HasBaseline && _listKind == TopListKind.Changes) { _listKind = TopListKind.Files; MarkListKind(); }
+        if (!HasBaseline && _changesShowing && _root is not null) { _changesShowing = false; ApplyView(); }
     }
 
     // ---------------------------------------------------------------- open, save as, compare
@@ -153,7 +128,7 @@ public partial class MainWindow
         try
         {
             var (root, info) = await Task.Run(() => ScanFile.Load(file));
-            ShowLoadedScan(root, info, null, Strings.Get("Status_OpenedVerb"));
+            ShowLoadedScan(root, info, null, null, Strings.Get("Status_OpenedVerb"));
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
         {
@@ -198,26 +173,28 @@ public partial class MainWindow
         await CompareWithFileAsync(file);
     }
 
-    /// <summary>Sets a saved scan as the current baseline.</summary>
+    /// <summary>Sets a saved scan as the current baseline and opens the Changes view.</summary>
     private async Task CompareWithFileAsync(string file)
     {
         if (_root is null || _scanCts is not null) return;
         var root = _root;
         try
         {
-            var oldInfo = await Task.Run(() =>
+            var (oldInfo, comparison) = await Task.Run(() =>
             {
                 var (old, info) = ScanFile.Load(file, addFreeSpace: false);
-                ScanCompare.Apply(root, old);
-                return info;
+                return (info, ScanCompare.Apply(root, old));
             });
+            if (!ReferenceEquals(_root, root)) return;
             _baselineInfo = oldInfo;
-            _settings.ColorMode = "ByChange"; _settings.Save();
+            _comparison = comparison;
             UpdateCompareUi();
             Treemap.Refresh();
             RefreshTopList();
             InvalidateInsights();
             RefreshInsights();
+            InvalidateChanges();
+            ShowView(MainView.Changes);
             StatusText.Text = string.Equals(Path.GetFullPath(oldInfo.RootPath), Path.GetFullPath(root.FullPath), StringComparison.OrdinalIgnoreCase)
                 ? Strings.Format("Status_Comparing", Ago(oldInfo.ScannedUtc))
                 : Strings.Format("Status_ComparingOtherRoot", oldInfo.RootPath);
@@ -233,6 +210,8 @@ public partial class MainWindow
         if (_root is null) return;
         ScanCompare.Clear(_root);
         _baselineInfo = null;
+        _comparison = null;
+        InvalidateChanges();
         UpdateCompareUi();
         Treemap.Refresh();
         RefreshTopList();
@@ -248,7 +227,22 @@ public partial class MainWindow
     {
         public double Fraction => IsDrive && Total > 0 ? 1 - (double)Free / Total : double.NaN;
         public bool NearlyFull => IsDrive && !double.IsNaN(Fraction) && Fraction >= 0.85;
+        /// <summary>Bytes the drive filled since the scan (negative when it emptied), when that is worth a word.</summary>
+        public long? DriftSince
+        {
+            get
+            {
+                if (!IsDrive) return null;
+                var (filled, notable) = DriveInsights.DriftSince(Info.FreeBytes, Free, Total);
+                return notable ? filled : null;
+            }
+        }
     }
+
+    /// <summary>The sentence for a drive that changed since its scan.</summary>
+    private static string DriftText(long filled) => filled >= 0
+        ? Strings.Format("Start_FilledSince", SizeFormatter.Format(filled))
+        : Strings.Format("Start_FreedSince", SizeFormatter.Format(-filled));
 
     private void BuildRecentScans()
     {
@@ -339,6 +333,18 @@ public partial class MainWindow
         name.Margin = new Thickness(0, 4, 0, 0);
         text.Children.Add(name);
         text.Children.Add(new TextBlock { Text = Strings.Format("Start_ScannedSize", SizeFormatter.Format(scan.Info.Bytes)) + " · " + Usage(scan), FontSize = 13.5, Margin = new Thickness(0, 4, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis, Classes = { scan.NearlyFull ? "danger" : "dim" } });
+        if (scan.DriftSince is { } drift)
+        {
+            // the drive moved on since the scan: say by how much, next to the button that scans it again
+            var line = new DockPanel { Margin = new Thickness(0, 8, 0, 0) };
+            var icon = Icons.Make(drift >= 0 ? "Warning" : "Info", 15, drift >= 0 ? "Warn" : "TextDim");
+            icon.VerticalAlignment = VerticalAlignment.Top; icon.Margin = new Thickness(0, 1, 7, 0);
+            line.Children.Add(icon);
+            var words = new TextBlock { Text = DriftText(drift), FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+            words.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable(drift >= 0 ? "Warn" : "TextDim"));
+            line.Children.Add(words);
+            text.Children.Add(line);
+        }
 
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 16, 0, 0) };
         var open = new Button { Content = Icons.WithText("Treemap", Strings.Get("Start_OpenTheMap")), Classes = { "primary" }, Height = 36, Padding = new Thickness(16, 0) };
@@ -368,8 +374,23 @@ public partial class MainWindow
         Grid.SetColumn(ago, 3);
         grid.Children.Add(ago);
         var use = new TextBlock { Text = Usage(scan), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { scan.NearlyFull ? "danger" : "dim" } };
-        Grid.SetColumn(use, 4);
-        grid.Children.Add(use);
+        if (scan.DriftSince is { } drift)
+        {
+            // a mark for a drive that moved on since the scan; the sentence is in the tooltip
+            var marked = new DockPanel();
+            var icon = Icons.Make(drift >= 0 ? "Warning" : "Info", 14, drift >= 0 ? "Warn" : "TextDim");
+            icon.VerticalAlignment = VerticalAlignment.Center; icon.Margin = new Thickness(0, 0, 6, 0);
+            ToolTip.SetTip(icon, DriftText(drift));
+            marked.Children.Add(icon);
+            marked.Children.Add(use);
+            Grid.SetColumn(marked, 4);
+            grid.Children.Add(marked);
+        }
+        else
+        {
+            Grid.SetColumn(use, 4);
+            grid.Children.Add(use);
+        }
         var chevron = Icons.Make("ChevronRight", 16, "TextDim");
         Grid.SetColumn(chevron, 5);
         grid.Children.Add(chevron);
@@ -386,7 +407,7 @@ public partial class MainWindow
         try
         {
             var (root, loaded) = await Task.Run(() => ScanFile.Load(info.Path));
-            ShowLoadedScan(root, loaded, null, Strings.Get("Status_OpenedVerb"));
+            ShowLoadedScan(root, loaded, null, null, Strings.Get("Status_OpenedVerb"));
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
         {

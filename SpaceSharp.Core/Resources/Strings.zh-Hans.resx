@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>新增文件夹</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>缩小</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>缩小的文件夹</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>自上次扫描以来的变化</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>文件夹深度</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>文件类型</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>顶层文件夹</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>自上次扫描以来的变化</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>深度</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>文件类型</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>顶层文件夹</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>最大文件、文件夹和类型面板</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>所选项目的 Windows 属性</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>重新扫描</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>关闭扫描并返回开始屏幕</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>将扫描保存到文件</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>选择所有符合筛选条件的文件</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>选择一个范围</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>取消</value></data>
   <data name="Main_Change" xml:space="preserve"><value>变化</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>变化</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>自上次扫描以来的变化</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>清除</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>清除筛选 (Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>单击左侧的驱动器，或选择要扫描的文件夹。</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>导出为 CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>文件类型</value></data>
   <data name="Main_Files" xml:space="preserve"><value>文件</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{1} 中的 {0}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>占本次扫描的 {0}</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>SpaceSharp 当前占用的内存，按任务管理器的计法。扫描会把每个文件保存在内存中；驱动器越大，需要的内存越多。</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>筛选</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>筛选匹配项</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>筛选选项</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>属性</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>重新扫描 (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>重新扫描此文件夹</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>关闭扫描</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>以管理员身份重启</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>扫描另存为…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>扫描文件</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>读取文件表</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>构建目录树</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>绘制地图</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>本次扫描不进行实时绘制</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>文件表扫描在读完整个文件表之前没有可绘制的树。树到达后地图即会显示，通常只需几秒。</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>目前已找到 {1:N0} 个文件夹中的 {0:N0} 个文件</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>目前已找到</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>已找到，共 {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>SpaceSharp 启动几秒后在 GitHub 上查找新版本，并提示安装。</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>仅当 SpaceSharp 通过安装程序安装时可用。便携版 exe 不会自行更新。</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>着色依据</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>顶层文件夹：每个顶层文件夹一种色相，每深入一层颜色更浅。文件夹深度：每一层使用不同颜色。文件类型：按类型为文件着色。变化：与上次扫描同一位置相比增大或缩小的部分。</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>顶层文件夹：每个顶层文件夹一种色相，每深入一层颜色更浅。文件夹深度：每一层使用不同颜色。文件类型：按类型为文件着色。</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>移至回收站前确认</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>删除前询问。已删除的项目始终可以从回收站还原。</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>自定义配色</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>在两种主题中使用任意调色板</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>关闭：选择为另一主题制作的调色板会切换到该主题，因此浅色调色板会带来浅色主题。开启：调色板按原样使用，深色主题可用浅色调色板，浅色主题可用深色调色板。</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>快速 NTFS 扫描</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>直接读取驱动器的文件表，几秒内即可绘制整个驱动器，而不必等上几分钟。Windows 每次扫描会请求一次管理员权限；应用本身保持不变。拒绝后将运行常规扫描，并且在 SpaceSharp 重启前不再询问。其他文件系统和单个文件夹始终使用常规扫描。</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>硬链接只计一次</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>配色</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  （自定义）</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>地图中方块所用的颜色。</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>启动时重新打开上次扫描</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>应用一打开就显示昨天的地图，并与之前的扫描进行比较。每次驱动器扫描都保存在 %LocalAppData%\SpaceSharp\scans；按 F5 重新扫描。</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>将所有设置恢复为默认值？</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>重置设置</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>安全</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>已将 {0} 移至回收站</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}：{2:N0} 个文件 · {3}。按 F5 重新扫描。</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>已打开扫描，来自</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>正在打开上次扫描…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>上次扫描的方式不同（{0} 与 {1}），因此不进行比较。下次同类扫描将会比较。</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>已取消重新扫描</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>已重新扫描 {0}：{1:N0} 个文件 · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>树状图</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>地图</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>扫描</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>行为</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>启动</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>扫描期间</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>随着扫描进行绘制地图</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>遍历文件夹时，地图会随着真实文件夹的放置逐步填充，所画的内容就是最终的地图。文件表扫描在读完文件表之前没有树，因此不会实时绘制；地图上方的提示会说明这一点。关闭后将保留上一张地图，直到新地图就绪。</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>看看磁盘空间都去哪了。</value></data>
   <data name="About_Check" xml:space="preserve"><value>检查</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>已安装。检查是否有新版本。</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>最新在前</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>已用 {0}% · 可用 {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>文件夹 · {0} 个文件</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>自此次扫描以来，驱动器又占用了 {0}。重新扫描以查看空间去了哪里。</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>驱动器的可用空间比此次扫描时多了 {0}。重新扫描以查看当前状态。</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存的扫描保留</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>SpaceSharp 启动时会删除早于此时限的自动保存。您自己保存为文件的扫描不受影响。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 天</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>适用于深色主题</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>适用于浅色主题</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>任意主题</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>深色主题</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>浅色主题</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>新建调色板…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>还没有自定义调色板。“新建调色板…”可在编辑器中创建；调色板文件夹也接受 JSON 文件（设置 › 外观）。</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>选择其中一个会切换到{0}主题</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>来自你的调色板文件夹 · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>灰底上的柔和色调；默认</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>蓝色与青色</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>从红到金再到梅紫</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>绿色、苔藓与树皮</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>明亮，涵盖所有色相，无霓虹</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>树莓、梅紫与酒红</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>灰调宝石色，低眩光</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>靛蓝、紫罗兰与一点粉</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>铜、黄铜、橄榄与锈</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>全强度光谱</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>灰色，琥珀色点缀</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito 与 Tol；人人可辨</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>各色相的柔和浅色；浅色默认</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>纸上的褪色调</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>甜美明亮</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Nord 配色，霜与极光</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>泥土、沙与鼠尾草</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>春绿、稻草与淡天蓝</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>蜜桃、玫瑰、薰衣草与薄荷</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>水洗蓝绿，色调相近</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>陶土、沙与玫瑰；比 Earth 更暖</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>紫罗兰与粉蓝</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>七种浓烈原色</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>同一安全配色，为浅色表面提亮</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}主题的配色。每个主题各自记住自己的配色；地图随主题切换。</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · 为{1}主题设计</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图和“洞察”视图之间切换</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图、洞察和变更之间切换</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>按类型</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>可安全清理</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>更改时间</value></data>
@@ -887,7 +927,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>地图上的抽屉</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>名称或模式，例如 *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>地图</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>扫描的地图（按 B 在两个视图之间切换）</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>扫描的地图（B 切换视图）</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>洞察</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>扫描汇总：按类型、可安全清理、更改时间、最大的项目 (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>洞察</value></data>
@@ -916,6 +956,10 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_Checked" xml:space="preserve"><value>已勾选 {0} 项 · {1} · 清理后可用空间将达到 {2}</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>包含在“移至回收站”中</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>将勾选项移至回收站</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>现在</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>清理后</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>已用 {0} · 可用 {1}</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>上方进度条的琥珀色部分是勾选位置目前占用的空间；下方进度条是清理后的驱动器。</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} 已超过一年未改动 · 单击某个月份或区段可筛选</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>最大且一年以上未改动</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>最大的文件夹</value></data>
@@ -925,6 +969,37 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_Grew" xml:space="preserve"><value>增大</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>缩小</value></data>
   <data name="Insights_New" xml:space="preserve"><value>新增</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>变更</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>自所比较的扫描以来逐个文件夹的变化：之前、现在和差异 (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0} 与 {1} 比较</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>此次扫描与哪次扫描比较</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>此驱动器的上一次扫描（{0}）</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} 缩小 · {1:N0} 个消失</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} 增长 · {1:N0} 个新增</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>已变更</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>仅显示大小发生变化的文件夹和文件，以及新增或消失的项目</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>全部</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>所有文件夹和文件，无论是否变更</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>任何大小</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>超过 {0}</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>隐藏小于此值的变更</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>在地图上显示</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>文件夹</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>之前</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>现在</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>差异</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>点击按此列排序；再次点击反转顺序</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>已消失</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>存在于所比较的扫描中，但不在本次扫描中</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>还有 {0:N0} 项…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} 项变更 · 已隐藏 {1:N0} 项未变更</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} 项 · {1:N0} 项变更</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>双击一行在地图上查看 · 按 Enter 打开文件夹</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>两次扫描之间没有任何变化。</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>没有超过 {0} 的变化。</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>还没有可比较的扫描</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>打开变更</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>最大的扩展名</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>以及每种扩展名主要位于何处</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

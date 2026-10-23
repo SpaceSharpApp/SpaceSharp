@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>carpeta nueva</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>se redujo</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>carpeta que se redujo</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>Cambio desde el último análisis</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>Profundidad de carpeta</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>Tipo de archivo</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Carpeta superior</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>cambio desde el último análisis</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>profundidad</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>tipo de archivo</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>carpeta superior</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>Panel de archivos, carpetas y tipos más grandes</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Propiedades de Windows del elemento seleccionado</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Volver a analizar</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>Cerrar el análisis y volver a la pantalla de inicio</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>Guardar el análisis en un archivo</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>Seleccionar todos los archivos que coinciden con el filtro</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>Seleccionar un rango</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>Cancelar</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Cambio</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Cambios</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Cambios desde el último análisis</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Borrar</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Borrar filtro (Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>Haga clic en una unidad a la izquierda o elija una carpeta para analizar.</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>Exportar a CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Tipo de archivo</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Archivos</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{0} de {1}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} del análisis</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>La memoria que SpaceSharp usa ahora mismo, tal como la cuenta el Administrador de tareas. Un análisis mantiene cada archivo en memoria; una unidad mayor necesita más.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filtro</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Coincidencias del filtro</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Opciones de filtro</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>Propiedades</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>Volver a analizar (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>Volver a analizar esta carpeta</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>Cerrar el análisis</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Reiniciar como administrador</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Guardar análisis como…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>Archivo de análisis</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>Leer la tabla de archivos</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>Construir el árbol</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>Dibujar el mapa</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>Sin dibujo en directo en este análisis</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>Un análisis de la tabla de archivos no tiene árbol que dibujar hasta leer toda la tabla. El mapa aparece cuando llega el árbol, normalmente en segundos.</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>{0:N0} archivos en {1:N0} carpetas hasta ahora</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>encontrados hasta ahora</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>encontrados de {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Busca una nueva versión en GitHub unos segundos después de que SpaceSharp se inicie y ofrece instalarla.</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Solo disponible cuando SpaceSharp se instaló con el programa de instalación. El ejecutable portable no se actualiza solo.</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colorear por</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Carpeta superior: un tono por carpeta de nivel superior, más claro con cada nivel interior. Profundidad de carpeta: un color distinto por nivel. Tipo de archivo: archivos coloreados por tipo. Cambio: lo que creció o se redujo desde el análisis anterior del mismo lugar.</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Carpeta superior: un tono por carpeta de nivel superior, más claro con cada nivel interior. Profundidad de carpeta: un color distinto por nivel. Tipo de archivo: archivos coloreados por tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmar antes de mover a la Papelera de reciclaje</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Preguntar antes de eliminar. Los elementos eliminados siempre se pueden restaurar desde la Papelera de reciclaje.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usar cualquier paleta en ambos temas</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Desactivado: elegir una paleta hecha para el otro tema cambia a ese tema, así que una paleta clara trae consigo el tema claro. Activado: la paleta se usa tal cual, paletas claras en el tema oscuro y oscuras en el claro.</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Análisis rápido NTFS</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Lee la tabla de archivos de la unidad directamente, así que una unidad entera se mapea en segundos en lugar de minutos. Windows pide permiso de administrador una vez por análisis; la aplicación en sí no cambia. Si dice que no, se ejecuta el análisis normal y no se vuelve a preguntar hasta que SpaceSharp se reinicie. Otros sistemas de archivos y las carpetas individuales siempre usan el análisis normal.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Contar los vínculos físicos una sola vez</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>Paleta</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (personalizada)</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>Los colores usados para los cuadros del mapa.</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>Volver a abrir el último análisis al iniciar</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Muestra el mapa de ayer en cuanto se abre la aplicación, comparado con el análisis anterior. Todos los análisis de unidades se guardan en %LocalAppData%\SpaceSharp\scans; F5 vuelve a analizar.</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>¿Restablecer todos los ajustes a su valor predeterminado?</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>Restablecer configuración</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>Seguridad</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>Se movió {0} a la Papelera de reciclaje</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} archivos · {3}. F5 vuelve a analizar.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Se abrió el análisis del</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Abriendo el último análisis…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>El análisis anterior se hizo de otra forma ({0} frente a {1}), así que no se compara. El próximo análisis del mismo tipo sí se comparará.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Nuevo análisis cancelado</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>Se volvió a analizar {0}: {1:N0} archivos · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>Treemap</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>Mapa</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>Análisis</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>Comportamiento</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>Inicio</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>Durante el análisis</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>Dibujar el mapa mientras avanza el análisis</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>En un recorrido de carpetas el mapa se rellena con las carpetas reales según se colocan, y lo dibujado se convierte en el mapa final. Un análisis de la tabla de archivos no tiene árbol hasta leer la tabla, así que no se dibuja en directo; una nota sobre el mapa lo indica. Desactivado, se conserva el mapa anterior hasta que el nuevo esté listo.</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>Vea adónde se fue su espacio en disco.</value></data>
   <data name="About_Check" xml:space="preserve"><value>Comprobar</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>Instalado. Comprobar si hay una versión más reciente.</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>Más recientes primero</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % usado · {1} libres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Carpeta · {0} archivos</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>La unidad se ha llenado {0} desde este análisis. Analiza de nuevo para ver adónde fue.</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>La unidad tiene {0} más de espacio libre que en este análisis. Analiza de nuevo para verla como está ahora.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Conservar los análisis guardados durante</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Los guardados automáticos más antiguos que esto se eliminan cuando SpaceSharp se inicia. Los análisis que guardó usted mismo como archivos nunca se tocan.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} días</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>Para el tema oscuro</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>Para el tema claro</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>Cualquier tema</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>Tema oscuro</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>Tema claro</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>Nueva paleta…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>Aún no hay paletas propias. Nueva paleta… crea una en el editor; la carpeta de paletas también admite archivos JSON (Ajustes › Apariencia).</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>Elegir una de estas cambia al tema {0}</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>De tu carpeta de paletas · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>Tonos apagados sobre gris; la predeterminada</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>Azules y verdes azulados</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>Del rojo al ciruela pasando por el oro</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>Verdes, musgo y corteza</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>Vivo, todos los tonos, sin neón</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>Frambuesa, ciruela y vino</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>Tonos de gema empolvados, poco deslumbramiento</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>Índigo, violeta y un poco de rosa</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>Cobre, latón, oliva y óxido</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>El espectro a plena fuerza</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Grises, ámbar como acento</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito y Tol; distinguibles para todos</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Tintes suaves de todos los colores; la predeterminada en claro</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>Tonos desvaídos sobre papel</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>Dulce y brillante</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Los colores Nord, escarcha y aurora</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>Tierra, arena y salvia</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>Verdes de primavera, paja y cielo pálido</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>Melocotón, rosa, lavanda y menta</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>Azul verdosos lavados, cercanos en tono</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Arcilla, arena y rosa; más cálida que Earth</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Violetas y azules empolvados</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>Siete primarios intensos</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>El mismo conjunto seguro, aclarado para superficies claras</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>La paleta para el tema {0}. Cada tema recuerda la suya; el mapa cambia con el tema.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · hecha para el tema {1}</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Cambiar entre el mapa y la vista Resumen</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Cambiar entre el mapa, Resumen y Cambios</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Por tipo</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Seguro de limpiar</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Cuándo cambió</value></data>
@@ -887,7 +927,7 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>Panel sobre el mapa</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Nombre o patrón, p. ej. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Mapa</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>El mapa del análisis (B cambia entre las dos vistas)</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>El mapa del análisis (B cambia entre las vistas)</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Resumen</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>El análisis resumido: por tipo, seguro de limpiar, cuándo cambió, elementos más grandes (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Resumen</value></data>
@@ -916,6 +956,10 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Insights_Checked" xml:space="preserve"><value>{0} marcados · {1} · dejaría {2} libres</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>Incluir en Reciclar marcados</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>Reciclar marcados</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>Ahora</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>Después</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>{0} lleno · {1} libres</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>La parte ámbar de la barra superior es lo que ocupan ahora los lugares marcados; la barra inferior es la unidad sin ellos.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} sin tocar desde hace más de un año · haga clic en un mes o una banda para filtrar</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Más grandes, sin tocar durante un año o más</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>Carpetas más grandes</value></data>
@@ -925,6 +969,37 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Insights_Grew" xml:space="preserve"><value>Creció</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Se redujo</value></data>
   <data name="Insights_New" xml:space="preserve"><value>Nuevo</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>Cambios</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>Qué cambió desde el análisis comparado, carpeta por carpeta: antes, ahora y la diferencia (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0} comparado con {1}</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>Con qué análisis se compara este</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>El análisis anterior de esta unidad ({0})</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} se redujo · {1:N0} desaparecidos</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} creció · {1:N0} nuevos</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>Cambiados</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>Solo carpetas y archivos cuyo tamaño cambió, más lo nuevo o desaparecido</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>Todo</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>Todas las carpetas y archivos, cambiados o no</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>Cualquier tamaño</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>Más de {0}</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>Ocultar los cambios menores que esto</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>Ver en el mapa</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>Carpeta</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>Antes</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>Ahora</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>Diferencia</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>Clic para ordenar por esta columna; otro clic invierte el orden</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>Desaparecido</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>estaba en el análisis comparado y no está en este</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} más…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} cambiados · {1:N0} sin cambios ocultos</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} elementos · {1:N0} cambiados</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>Doble clic en una fila para verla en el mapa · Intro abre una carpeta</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>Nada cambió entre los dos análisis.</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>Nada cambió más de {0}.</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>Aún no hay con qué comparar</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>Abrir Cambios</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>Extensiones más grandes</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>y dónde está la mayor parte de cada una</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

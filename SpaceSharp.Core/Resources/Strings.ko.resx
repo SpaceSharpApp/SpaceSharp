@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>새 폴더</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>감소</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>감소한 폴더</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>마지막 검사 이후 변경</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>폴더 깊이</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>파일 형식</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>최상위 폴더</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>마지막 검사 이후 변경</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>깊이</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>파일 형식</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>최상위 폴더</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>가장 큰 파일, 폴더, 형식 패널</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>선택한 항목의 Windows 속성</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>다시 검사</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>검사를 닫고 시작 화면으로 돌아가기</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>검사를 파일로 저장</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>필터와 일치하는 모든 파일 선택</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>범위 선택</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>취소</value></data>
   <data name="Main_Change" xml:space="preserve"><value>변경</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>변경 사항</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>마지막 검사 이후 변경 사항</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>지우기</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>필터 지우기(Esc)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>왼쪽에서 드라이브를 클릭하거나 검사할 폴더를 선택하세요.</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>CSV로 내보내기</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>파일 형식</value></data>
   <data name="Main_Files" xml:space="preserve"><value>파일</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{1} 중 {0}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>검사의 {0}</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>작업 관리자가 세는 방식으로 본, SpaceSharp가 지금 사용 중인 메모리입니다. 검사는 모든 파일을 메모리에 유지하므로 드라이브가 클수록 더 필요합니다.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>필터</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>필터 일치 항목</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>필터 옵션</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>속성</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>다시 검사(F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>이 폴더 다시 검사</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>검사 닫기</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>관리자 권한으로 다시 시작</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>다른 이름으로 검사 저장…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>검사 파일</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>파일 테이블 읽기</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>트리 만들기</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>맵 그리기</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>이 검사에서는 실시간 그리기를 하지 않습니다</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>파일 테이블 검사는 테이블 전체를 읽기 전까지 그릴 트리가 없습니다. 트리가 도착하면 지도가 나타나며, 보통 몇 초 안입니다.</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>지금까지 폴더 {1:N0}개에서 파일 {0:N0}개</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>지금까지 찾음</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>찾음 / 전체 {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>SpaceSharp이(가) 시작되고 몇 초 후 GitHub에서 새 버전을 찾아 설치를 제안합니다.</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>설치 프로그램으로 SpaceSharp을(를) 설치한 경우에만 사용할 수 있습니다. 포터블 exe는 스스로 업데이트하지 않습니다.</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>색상 기준</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>최상위 폴더: 최상위 폴더마다 하나의 색조, 안쪽 단계마다 더 밝아집니다. 폴더 깊이: 단계마다 다른 색상입니다. 파일 형식: 파일을 형식별로 색칠합니다. 변경: 같은 위치의 이전 검사 이후 증가하거나 감소한 항목입니다.</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>최상위 폴더: 최상위 폴더마다 하나의 색조, 안쪽 단계마다 더 밝아집니다. 폴더 깊이: 단계마다 다른 색상입니다. 파일 형식: 파일을 형식별로 색칠합니다.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>휴지통으로 이동하기 전에 확인</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>삭제하기 전에 묻습니다. 삭제한 항목은 언제든지 휴지통에서 복원할 수 있습니다.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>사용자 지정 팔레트</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>두 테마 모두에서 아무 팔레트나 사용</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>끔: 다른 테마용 팔레트를 고르면 그 테마로 전환되어 밝은 팔레트는 밝은 테마를 함께 가져옵니다. 켬: 팔레트를 그대로 사용하여 어두운 테마에 밝은 팔레트를, 밝은 테마에 어두운 팔레트를 쓸 수 있습니다.</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>빠른 NTFS 검사</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>드라이브의 파일 테이블을 직접 읽어 드라이브 전체를 몇 분이 아닌 몇 초 만에 맵으로 만듭니다. Windows가 검사마다 한 번 관리자 권한을 요청하며, 앱 자체는 그대로 유지됩니다. 거부하면 일반 검사가 실행되고 SpaceSharp을(를) 다시 시작할 때까지 다시 묻지 않습니다. 다른 파일 시스템과 단일 폴더는 항상 일반 검사를 사용합니다.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>하드 링크를 한 번만 계산</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>팔레트</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (사용자 지정)</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>맵의 상자에 사용하는 색상입니다.</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>시작할 때 마지막 검사 다시 열기</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>앱을 열자마자 어제의 맵을 그 이전 검사와 비교하여 표시합니다. 모든 드라이브 검사는 %LocalAppData%\SpaceSharp\scans에 보관되며 F5로 다시 검사합니다.</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>모든 설정을 기본값으로 다시 설정하시겠습니까?</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>설정 다시 설정</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>안전</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0}을(를) 휴지통으로 이동했습니다</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: 파일 {2:N0}개 · {3}. F5로 다시 검사합니다.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>검사를 열었습니다:</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>마지막 검사를 여는 중…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>이전 검사는 방식이 달라({0}과(와) {1}) 비교하지 않습니다. 같은 방식의 다음 검사부터 비교합니다.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>다시 검사가 취소되었습니다</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} 다시 검사 완료: 파일 {1:N0}개 · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>트리맵</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>맵</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>검사</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>동작</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>시작</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>검사 중</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>검사가 진행되는 대로 지도 그리기</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>폴더 탐색 중에는 폴더가 배치되는 대로 실제 폴더로 지도가 채워지고, 그려진 것이 그대로 완성된 지도가 됩니다. 파일 테이블 검사는 테이블을 다 읽기 전까지 트리가 없으므로 실시간으로 그리지 않으며, 지도 위의 안내가 이를 알립니다. 끄면 새 지도가 준비될 때까지 이전 지도를 유지합니다.</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>디스크 공간이 어디에 쓰였는지 확인하세요.</value></data>
   <data name="About_Check" xml:space="preserve"><value>확인</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>설치됨. 최신 버전을 확인합니다.</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>최신순</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% 사용 중 · {1} 남음</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>폴더 · 파일 {0}개</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>이 검사 이후 드라이브 사용량이 {0} 늘었습니다. 다시 검사하여 어디에 쓰였는지 확인하세요.</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>이 검사 때보다 여유 공간이 {0} 늘었습니다. 다시 검사하여 현재 상태를 확인하세요.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>저장된 검사 보관 기간</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>이보다 오래된 자동 저장본은 SpaceSharp이(가) 시작될 때 삭제됩니다. 직접 파일로 저장한 검사는 건드리지 않습니다.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0}일</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>어두운 테마용</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>밝은 테마용</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>모든 테마</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>어두운 테마</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>밝은 테마</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>새 팔레트…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>아직 사용자 팔레트가 없습니다. 새 팔레트…로 편집기에서 만들 수 있고, 팔레트 폴더에 JSON 파일을 넣어도 됩니다(설정 › 모양).</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>여기서 고르면 {0} 테마로 전환됩니다</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>팔레트 폴더에서 · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>회색 위의 차분한 색. 기본값</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>파랑과 청록</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>빨강에서 금색을 거쳐 자두색으로</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>초록, 이끼, 나무껍질</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>선명한 모든 색상, 네온 없음</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>라즈베리, 자두, 와인</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>먼지 낀 보석색, 눈부심 적음</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>인디고, 보라, 약간의 분홍</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>구리, 황동, 올리브, 녹</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>스펙트럼을 최대 강도로</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>회색에 호박색 강조</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito와 Tol. 누구나 구분 가능</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>모든 색상의 연한 색조. 밝은 테마 기본값</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>종이 위의 바랜 색조</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>달콤하고 밝음</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Nord 색상, 서리와 오로라</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>흙, 모래, 세이지</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>봄 초록, 짚, 옅은 하늘</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>복숭아, 장미, 라벤더, 민트</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>바랜 청록, 가까운 색조</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>점토, 모래, 장미. Earth보다 따뜻함</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>보라와 파우더 블루</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>강한 7가지 원색</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>같은 안전한 세트를 밝은 면에 맞게 밝힘</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0} 테마의 팔레트입니다. 테마마다 팔레트를 따로 기억하며, 맵은 테마와 함께 전환됩니다.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1} 테마용</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>맵과 인사이트 보기 전환</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>지도, 인사이트, 변경 사항 사이를 전환</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>형식별</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>정리해도 안전</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>변경 시기</value></data>
@@ -887,7 +927,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>맵 위 서랍</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>이름 또는 패턴, 예: *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>맵</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>검사 결과의 맵(B로 두 보기를 전환)</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>검사의 지도 (B로 보기 전환)</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>인사이트</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>검사 요약: 형식별, 정리해도 안전, 변경 시기, 가장 큰 항목(B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>인사이트</value></data>
@@ -916,6 +956,10 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Insights_Checked" xml:space="preserve"><value>{0} 선택됨 · {1} · 정리 후 여유 공간 {2}</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>선택 항목 휴지통으로에 포함</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>선택 항목 휴지통으로</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>현재</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>정리 후</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>{0} 사용 중 · {1} 여유</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>위쪽 막대의 호박색 부분은 선택한 항목이 지금 차지하는 공간이고, 아래쪽 막대는 그것들을 없앤 뒤의 드라이브입니다.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0}이(가) 1년 넘게 변경 없음 · 월 또는 구간을 클릭하면 필터링됩니다</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>1년 이상 변경 없는 가장 큰 항목</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>가장 큰 폴더</value></data>
@@ -925,6 +969,37 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Insights_Grew" xml:space="preserve"><value>증가</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>감소</value></data>
   <data name="Insights_New" xml:space="preserve"><value>새로 생김</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>변경 사항</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>비교한 검사 이후 폴더별로 무엇이 바뀌었는지: 이전, 현재, 차이 (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0}, {1}와 비교</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>이 검사의 비교 대상</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>이 드라이브의 이전 검사({0})</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} 줄어듦 · {1:N0}개 사라짐</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} 늘어남 · {1:N0}개 새로 생김</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>변경됨</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>크기가 바뀐 폴더와 파일, 그리고 새로 생기거나 사라진 것만</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>전체</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>변경 여부와 관계없이 모든 폴더와 파일</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>모든 크기</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>{0} 초과</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>이보다 작은 변경은 숨김</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>지도에서 보기</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>폴더</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>이전</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>현재</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>차이</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>클릭하면 이 열로 정렬하고, 다시 클릭하면 순서를 뒤집습니다</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>사라짐</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>비교한 검사에는 있었지만 이번 검사에는 없습니다</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0}개 더…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0}개 변경 · 변경 없는 {1:N0}개 숨김</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0}개 항목 · {1:N0}개 변경</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>행을 더블 클릭하면 지도에서 보고 · Enter로 폴더를 엽니다</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>두 검사 사이에 바뀐 것이 없습니다.</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>{0}보다 크게 바뀐 것이 없습니다.</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>아직 비교할 대상이 없습니다</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>변경 사항 열기</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>가장 큰 확장명</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>및 각 확장명이 주로 있는 위치</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

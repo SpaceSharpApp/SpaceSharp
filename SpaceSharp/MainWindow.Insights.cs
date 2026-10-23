@@ -30,39 +30,65 @@ public partial class MainWindow
     private int[]? _bandFiles;
     private readonly HashSet<string> _checkedCleanup = new();
 
-    private bool InsightsShowing => _settings.InsightsView;
+    /// <summary>What fills the map's place: the map, Insights, or the Changes table.</summary>
+    private enum MainView { Map, Insights, Changes }
+
+    private bool _changesShowing;   // the Changes view is open; not remembered between runs, a comparison is not either
+
+    private MainView CurrentView => _changesShowing ? MainView.Changes : _settings.InsightsView ? MainView.Insights : MainView.Map;
+    private bool InsightsShowing => CurrentView == MainView.Insights;
 
     private void FilterAndShowMap(string text)
     {
         FilterBox.Text = text;
-        ShowView(insights: false);
+        ShowView(MainView.Map);
     }
 
-    private void MapView_Click(object? sender, RoutedEventArgs e) => ShowView(insights: false);
-    private void InsightsView_Click(object? sender, RoutedEventArgs e) => ShowView(insights: true);
+    private void MapView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Map);
+    private void InsightsView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Insights);
 
-    private void ShowView(bool insights)
+    private void ShowView(bool insights) => ShowView(insights ? MainView.Insights : MainView.Map);
+
+    private void ShowView(MainView view)
     {
-        if (_settings.InsightsView != insights)
+        _changesShowing = view == MainView.Changes;
+        if (view != MainView.Changes && _settings.InsightsView != (view == MainView.Insights))
         {
-            _settings.InsightsView = insights;
+            _settings.InsightsView = view == MainView.Insights;
             _settings.Save();
         }
         ApplyView();
         RefreshInsights();
+        RefreshChanges();
+    }
+
+    /// <summary>B cycles the views: the map, Insights, and Changes while a scan is compared.</summary>
+    private void NextView()
+    {
+        var next = CurrentView switch
+        {
+            MainView.Map => MainView.Insights,
+            MainView.Insights when HasBaseline => MainView.Changes,
+            _ => MainView.Map
+        };
+        ShowView(next);
     }
 
     private void ApplyView()
     {
-        bool insights = InsightsShowing;
+        var view = CurrentView;
         bool idle = _root is null && _scanCts is null;
-        InsightsView.IsVisible = insights && !idle;
-        Treemap.IsVisible = !insights || idle;
+        bool insights = view == MainView.Insights && !idle, changes = view == MainView.Changes && !idle;
+        InsightsView.IsVisible = insights;
+        ChangesView.IsVisible = changes;
+        Treemap.IsVisible = !insights && !changes;
         EmptyHint.IsVisible = idle;
-        MapViewButton.Classes.Set("primary", !insights); MapViewButton.Classes.Set("tool", insights);
-        InsightsButton.Classes.Set("primary", insights); InsightsButton.Classes.Set("tool", !insights);
-        foreach (var b in new[] { ZoomInButton, ZoomOutButton, HomeButton, UpButton }) b.IsEnabled = !insights && _root is not null;
-        ZoomLabel.Opacity = insights ? 0.4 : 1;
+        MapViewButton.Classes.Set("primary", view == MainView.Map); MapViewButton.Classes.Set("tool", view != MainView.Map);
+        InsightsButton.Classes.Set("primary", view == MainView.Insights); InsightsButton.Classes.Set("tool", view != MainView.Insights);
+        ChangesButton.Classes.Set("primary", view == MainView.Changes); ChangesButton.Classes.Set("tool", view != MainView.Changes);
+        ChangesButton.IsEnabled = _root is not null && _scanCts is null;
+        foreach (var b in new[] { ZoomInButton, ZoomOutButton, HomeButton, UpButton }) b.IsEnabled = view == MainView.Map && _root is not null;
+        ZoomLabel.Opacity = view == MainView.Map ? 1 : 0.4;
     }
 
     private void InvalidateInsights()
@@ -260,21 +286,13 @@ public partial class MainWindow
             Strings.Format("Insights_ScannedDetail", root.FileCount, folders, _scanMethod == "MFT" ? Strings.Get("Insights_FromFileTable") : Strings.Get("Insights_FromWalk"))));
 
         string drivePath = System.IO.Path.GetPathRoot(root.FullPath) ?? root.FullPath;
-        try
+        if (DriveSpace(root.FullPath) is { } space)
         {
-            var drive = new DriveInfo(drivePath);
-            if (drive.IsReady && drive.TotalSize > 0)
-            {
-                double used = (double)(drive.TotalSize - drive.AvailableFreeSpace) / drive.TotalSize;
-                grid.Children.Add(Tile(Strings.Format("Insights_FreeOn", OperatingSystem.IsWindows() ? drivePath.TrimEnd('\\') : drivePath), Strings.Format("Insights_FreeOf", SizeFormatter.Format(drive.AvailableFreeSpace), SizeFormatter.Format(drive.TotalSize)), used, "GoodBar",
-                    Strings.Format("Insights_FreeDetail", InspectSummary.Percent(used), drive.DriveFormat)));
-            }
-            else grid.Children.Add(Tile(Strings.Get("Insights_Free"), SizeFormatter.Format(root.FreeBytes), 0, "GoodBar", drivePath));
+            double used = (double)(space.Total - space.Free) / space.Total;
+            grid.Children.Add(Tile(Strings.Format("Insights_FreeOn", OperatingSystem.IsWindows() || _mock ? drivePath.TrimEnd('\\') : drivePath), Strings.Format("Insights_FreeOf", SizeFormatter.Format(space.Free), SizeFormatter.Format(space.Total)), used, "GoodBar",
+                Strings.Format("Insights_FreeDetail", InspectSummary.Percent(used), space.Format)));
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
-        {
-            grid.Children.Add(Tile(Strings.Get("Insights_Free"), SizeFormatter.Format(root.FreeBytes), 0, "GoodBar", drivePath));
-        }
+        else grid.Children.Add(Tile(Strings.Get("Insights_Free"), SizeFormatter.Format(root.FreeBytes), 0, "GoodBar", drivePath));
 
         var clearable = _cleanup!.Where(s => s.Action != CleanupAction.Explain).ToList();
         long clearBytes = clearable.Sum(s => s.Bytes);
@@ -299,13 +317,33 @@ public partial class MainWindow
 
         if (HasBaseline)
         {
-            var totals = DriveInsights.Changes(root, measure);
+            var totals = DriveInsights.Changes(root, measure, _comparison);
             long net = totals.Grew - totals.Shrank;
             grid.Children.Add(Tile(Strings.Get("Insights_SinceLast"), (net >= 0 ? "+" : "−") + SizeFormatter.Format(Math.Abs(net)), total > 0 ? (double)Math.Abs(net) / total : 0, net >= 0 ? "GrewBar" : "ShrankBar",
                 Strings.Format("Insights_SinceLastDetail", _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc), totals.NewFiles)));
         }
         else grid.Children.Add(Tile(Strings.Get("Insights_SinceLast"), Strings.Get("Insights_NoBaseline"), 0, "Accent", Strings.Get("Insights_NoBaselineHint")));
         return grid;
+    }
+
+    /// <summary>The drive holding <paramref name="path"/>: total, free and file system; null when it cannot be read. The pretend PC answers in mock mode.</summary>
+    private (long Total, long Free, string Format)? DriveSpace(string path)
+    {
+        string drivePath = System.IO.Path.GetPathRoot(path) ?? path;
+        if (_mock)
+        {
+            var d = MockSystem.Drives.FirstOrDefault(d => string.Equals(d.Root, drivePath, StringComparison.OrdinalIgnoreCase));
+            return d is null ? null : (d.Total, d.Total - d.Used, d.Format);
+        }
+        try
+        {
+            var drive = new DriveInfo(drivePath);
+            return drive.IsReady && drive.TotalSize > 0 ? (drive.TotalSize, drive.AvailableFreeSpace, drive.DriveFormat) : null;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            return null;
+        }
     }
 
     private Border Tile(string label, string value, double fraction, string barKey, string detail)
@@ -395,15 +433,28 @@ public partial class MainWindow
             return card;
         }
 
-        TextBlock? footerText = null;
+        TextBlock? footerText = null, nowText = null, afterText = null;
+        Border? nowBar = null, afterBar = null;
         Button? recycle = null;
+        var space = DriveSpace(_root!.FullPath);
+        var dim = this.FindResource("TextDim") as IBrush ?? Brushes.Gray;
+        var accent = TileBrush("Accent");
         void UpdateFooter()
         {
             var picked = clearable.Where(s => _checkedCleanup.Contains(s.Key)).ToList();
             long bytes = picked.Sum(s => s.Bytes);
-            long free = _root!.FreeBytes + bytes;
+            long free = (space?.Free ?? _root!.FreeBytes) + bytes;
             footerText!.Text = picked.Count == 0 ? Strings.Get("Insights_NoneChecked") : Strings.Format("Insights_Checked", picked.Count, SizeFormatter.Format(bytes), SizeFormatter.Format(free));
             recycle!.IsEnabled = picked.Count > 0;
+            if (space is null) return;
+            // the drive before and after: the amber slice is what the ticked places take up now
+            var p = new FreeProjection(space.Value.Total, space.Value.Free, bytes);
+            nowText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(p.UsedNowShare), SizeFormatter.Format(p.FreeNow));
+            // nothing ticked: the After row repeats Now, dimmed, so the rows keep their width
+            afterText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(p.UsedAfterShare), SizeFormatter.Format(p.FreeAfter));
+            afterText.Classes.Set("dim", picked.Count == 0);
+            nowBar!.Child = SplitBar(p.UsedAfterShare, p.FreedShare, dim, accent, 6);
+            afterBar!.Child = SplitBar(p.UsedAfterShare, 0, dim, accent, 6);
         }
 
         foreach (var s in suggestions)
@@ -440,7 +491,7 @@ public partial class MainWindow
         }
 
         var footer = new DockPanel { Margin = new Thickness(0, 10, 0, 0) };
-        recycle = new Button { Classes = { "primary" }, Content = Strings.Get("Insights_RecycleChecked"), Height = 30, Padding = new Thickness(12, 0) };
+        recycle = new Button { Classes = { "primary" }, Content = Strings.Get("Insights_RecycleChecked"), Height = 30, Padding = new Thickness(12, 0), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(16, 0, 0, 0) };
         recycle.Click += (_, _) =>
         {
             var items = clearable.Where(s => _checkedCleanup.Contains(s.Key)).SelectMany(s => s.Items).Distinct().ToList();
@@ -448,11 +499,59 @@ public partial class MainWindow
         };
         DockPanel.SetDock(recycle, Dock.Right);
         footer.Children.Add(recycle);
-        footerText = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
-        footer.Children.Add(footerText);
+        var left = new StackPanel { VerticalAlignment = VerticalAlignment.Center, ClipToBounds = true };
+        footerText = new TextBlock { FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+        left.Children.Add(footerText);
+        if (space is not null)
+        {
+            // what the drive looks like now and after clearing the ticked places
+            var rows = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), RowDefinitions = new RowDefinitions("Auto,Auto"), ColumnSpacing = 10, RowSpacing = 5, Margin = new Thickness(0, 8, 0, 0) };
+            var nowLabel = Small(Strings.Get("Insights_Now")); nowLabel.MinWidth = 40; nowLabel.VerticalAlignment = VerticalAlignment.Center;
+            var afterLabel = Small(Strings.Get("Insights_After")); afterLabel.MinWidth = 40; afterLabel.VerticalAlignment = VerticalAlignment.Center;
+            // the bar takes what is left; the text has a fixed width so a long value can never push the grid past the card
+            nowBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
+            afterBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
+            nowText = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Width = 165, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+            afterText = new TextBlock { FontSize = 12, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Width = 165, TextTrimming = TextTrimming.CharacterEllipsis };
+            Grid.SetColumn(nowBar, 1); Grid.SetColumn(nowText, 2);
+            Grid.SetRow(afterLabel, 1); Grid.SetRow(afterBar, 1); Grid.SetRow(afterText, 1);
+            Grid.SetColumn(afterBar, 1); Grid.SetColumn(afterText, 2);
+            rows.Children.Add(nowLabel); rows.Children.Add(nowBar); rows.Children.Add(nowText);
+            rows.Children.Add(afterLabel); rows.Children.Add(afterBar); rows.Children.Add(afterText);
+            ToolTip.SetTip(rows, Strings.Get("Insights_AfterTip"));
+            left.Children.Add(rows);
+        }
+        footer.Children.Add(left);
         body.Children.Add(footer);
         UpdateFooter();
         return card;
+    }
+
+    /// <summary>A bar with two segments: <paramref name="first"/> of the width in <paramref name="fillFirst"/>, then <paramref name="second"/> in <paramref name="fillSecond"/>.</summary>
+    private Border SplitBar(double first, double second, IBrush fillFirst, IBrush fillSecond, double height)
+    {
+        first = Math.Clamp(first, 0, 1); second = Math.Clamp(second, 0, 1 - first);
+        double rest = Math.Max(0, 1 - first - second);
+        var grid = new Grid { Height = height, VerticalAlignment = VerticalAlignment.Center };
+        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(first, 0.001), GridUnitType.Star));
+        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(second, 0.001), GridUnitType.Star));
+        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(rest, 0.001), GridUnitType.Star));
+        var track = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
+        Grid.SetColumnSpan(track, 3);
+        grid.Children.Add(track);
+        double r = height / 2;
+        if (first > 0)
+        {
+            var a = new Border { Height = height, Background = fillFirst, MinWidth = 2, CornerRadius = second > 0 ? new CornerRadius(r, 0, 0, r) : new CornerRadius(r) };
+            grid.Children.Add(a);
+        }
+        if (second > 0)
+        {
+            var b = new Border { Height = height, Background = fillSecond, MinWidth = 2, CornerRadius = first > 0 ? new CornerRadius(0, r, r, 0) : new CornerRadius(r) };
+            Grid.SetColumn(b, 1);
+            grid.Children.Add(b);
+        }
+        return new Border { Child = grid, VerticalAlignment = VerticalAlignment.Center };
     }
 
     private void ShowSuggestion(CleanupSuggestion s)
@@ -692,10 +791,12 @@ public partial class MainWindow
             emptyBody.Children.Add(new TextBlock { Text = Strings.Get("Insights_NoBaselineLong"), FontSize = 12, TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
             return empty;
         }
-        var totals = DriveInsights.Changes(root, measure);
+        var totals = DriveInsights.Changes(root, measure, _comparison);
         string when = _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc);
-        long net = totals.Grew - totals.Shrank;
-        var card = Card(Strings.Get("Insights_SinceLast"), $"{when} · {(net >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(net))}".Trim(' ', '·'), out var body);
+        long net = totals.Net;
+        var open = new Button { Content = Strings.Get("Changes_OpenView"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12, Margin = new Thickness(8, 0, 0, 0) };
+        open.Click += (_, _) => ShowView(MainView.Changes);
+        var card = Card(Strings.Get("Insights_SinceLast"), $"{when} · {(net >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(net))}".Trim(' ', '·'), out var body, open);
 
         var strip = new UniformGrid { Columns = 3, Margin = new Thickness(0, 0, 0, 6) };
         void Stat(string label, string value, IBrush color, int i)

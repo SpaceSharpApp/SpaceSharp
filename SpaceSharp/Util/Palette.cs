@@ -76,6 +76,17 @@ public sealed class ColorScheme
     /// <summary>Representative colors for the palette picker.</summary>
     public IReadOnlyList<IBrush> Swatches { get; }
 
+    /// <summary>The folder color of a top-level branch (what Color by top folder paints it).</summary>
+    public IBrush FolderBrush(int branch) => _folders[Math.Max(0, branch) % DepthCycle];
+
+    /// <summary>The string key of a built-in palette's one-line description: its name, letters only.</summary>
+    public static string AboutKey(string name) => "PaletteAbout_" + new string(name.Where(char.IsLetter).ToArray());
+
+    /// <summary>One line on the palette for the picker; custom palettes name their file.</summary>
+    public string About => IsCustom
+        ? Strings.Format("Palette_CustomAbout", SourceFile is null ? string.Empty : System.IO.Path.GetFileName(SourceFile))
+        : Strings.Get(AboutKey(Name));
+
     public IEnumerable<(FileCategory Category, IBrush Brush)> Categories =>
         _categories.Select(kv => (kv.Key, kv.Value));
 
@@ -188,6 +199,21 @@ public static class Palette
                 new[] { "#4FB3D9", "#E26A8A", "#5BC08E", "#E8B04B", "#9A7BD9", "#44B8B0", "#E27A55", "#86B64C", "#5A8FE0", "#D96AC0", "#D9A03F", "#4FAE8F" }, 0.42,
                 Hex("#5BC08E", "#E27A55", "#9A7BD9", "#E8B04B", "#4FB3D9", "#A9B8CC", "#44B8B0", "#8A93A3")),
 
+            FromList("Berry",
+                new[] { "#B04A7A", "#7A4FA8", "#C25B5B", "#8E4FB8", "#A8386E", "#6B5CC4", "#C4568A", "#9C4A9C", "#B3604F", "#7E58B4", "#C44A6C", "#5F6CC9" }, 0.42),
+
+            FromList("Mineral",
+                new[] { "#3E7F86", "#6C7FA6", "#6E8F5A", "#B38B3C", "#8A6E9E", "#B06A4A", "#4F8AA0", "#8C9A4E", "#A6607A", "#5C8E7E", "#9E8653", "#7A6BB0" }, 0.42),
+
+            FromList("Twilight",
+                new[] { "#5A62C9", "#7A52B8", "#3F7FC4", "#9C4FB0", "#4F8FD9", "#B45CA0", "#6C6CD9", "#5B4FC0", "#3A95B8", "#8E5CC9", "#D05C8E", "#4A7BD0" }, 0.42),
+
+            FromList("Copper",
+                new[] { "#B5703E", "#C48A47", "#9A7A42", "#A65E3B", "#C39A55", "#8E6B3E", "#B8804C", "#7E7C3C", "#C06F3A", "#A8873F", "#96643A", "#B9955A" }, 0.42),
+
+            FromList("Prism",
+                new[] { "#D94848", "#E07A2E", "#D4A41E", "#78B22E", "#2FA862", "#2AA8A8", "#3B8FE0", "#5B62E0", "#9C4FD9", "#D44FB0", "#E0567A", "#8FA81E" }, 0.42),
+
             new("Monochrome",
                 d => FromHsl(230, 0.06, 0.36 + (d % 6) * 0.06),
                 d => FromHsl(230, 0.05, 0.72 + (d % 4) * 0.05),
@@ -217,6 +243,21 @@ public static class Palette
 
             FromList("Earth",
                 new[] { "#A47551", "#C2A878", "#8B9A6B", "#6E8B8B", "#B5856B", "#9C8A5A", "#7E9A7E", "#C9A86A", "#8A7A6A", "#A89A7A", "#6F8F7F", "#B39468" }, 0.5),
+
+            FromList("Meadow",
+                new[] { "#9ED5A4", "#CFE39A", "#F3E08E", "#A9D9E6", "#BFD7A3", "#8FCFC2", "#E6D79A", "#B7E3B0", "#C8E4F0", "#D9E8A2", "#A6D6D0", "#F1E4A8" }, 0.4),
+
+            FromList("Sorbet",
+                new[] { "#FFC2A8", "#F7B2C4", "#D7BFF0", "#B8EBD8", "#FFD9A8", "#F5C3DA", "#C7D3F5", "#FFE1B3", "#E6C4F0", "#C2EFC8", "#FFC9B8", "#D3E0FA" }, 0.4),
+
+            FromList("Sea glass",
+                new[] { "#A6D8D3", "#9FC9DD", "#BDE1D0", "#B3D4E6", "#CFE6D8", "#8FC4C8", "#A9D2C0", "#C4DDEB", "#9DCBCB", "#B9E0DD", "#AFCEDF", "#C9E8E2" }, 0.4),
+
+            FromList("Terracotta",
+                new[] { "#E8A58A", "#E6C293", "#D9A8A0", "#C9B48B", "#EDB79B", "#D7A080", "#E4BBA3", "#C4A58A", "#F0C3A6", "#D4AD98", "#E9B88E", "#CBA891" }, 0.4),
+
+            FromList("Lilac",
+                new[] { "#C9BFF0", "#B6CCF2", "#DCC3EE", "#A8D4EE", "#D0C9F5", "#BFD6F0", "#E3C8F0", "#B9C6F0", "#C6D9F5", "#D7CCEE", "#AFCDEC", "#E0D2F5" }, 0.4),
 
             FromList("Retro",
                 new[] { "#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A" }, 0.45),
@@ -257,32 +298,11 @@ public static class Palette
 
     // ------------------------------------------------------------ helpers
 
-    // ---- change mode
+    // ---- the colors of change: the Changes view, the tooltip, the side panel's Changes tab and Insights
     public static readonly IBrush GrewBrush = Freeze(Color.FromRgb(0xE8, 0x7A, 0x4F));
     public static readonly IBrush ShrankBrush = Freeze(Color.FromRgb(0x5D, 0xA9, 0xC9));
-    public static readonly IBrush UnchangedBrush = Freeze(Color.FromRgb(0x6A, 0x6A, 0x74));
     public static readonly IBrush NewBrush = Freeze(Color.FromRgb(0xF5, 0xB8, 0x2E));
-    private static readonly IBrush[] GrewRamp = Ramp(Color.FromRgb(0x8C, 0x7A, 0x6E), Color.FromRgb(0xE8, 0x7A, 0x4F), 6);
-    private static readonly IBrush[] ShrankRamp = Ramp(Color.FromRgb(0x6E, 0x80, 0x8C), Color.FromRgb(0x5D, 0xA9, 0xC9), 6);
-    private static readonly IBrush UnchangedFolder = Freeze(Color.FromRgb(0x55, 0x55, 0x60));
-    private static readonly IBrush NoBaseline = Freeze(Color.FromRgb(0x62, 0x62, 0x6C));
-
-    /// <summary>The change mode fill; intensity follows the change's share of the item's size.</summary>
-    public static IBrush ChangeFill(FsNode node, SizeMeasure measure)
-    {
-        if (!node.HasBaseline) return NoBaseline;
-        long now = node.SizeFor(measure);
-        long? then = measure == SizeMeasure.SizeOnDisk ? node.BaselineAllocated : node.BaselineSize;
-        if (then is null) return NewBrush;
-        long delta = now - then.Value;
-        if (delta == 0) return node.IsDirectory ? UnchangedFolder : UnchangedBrush;
-        double share = Math.Min(1.0, Math.Abs(delta) / (double)Math.Max(Math.Max(now, then.Value), 1));
-        int step = Math.Min(5, (int)(share * 6));
-        return delta > 0 ? GrewRamp[step] : ShrankRamp[step];
-    }
-
-    private static IBrush[] Ramp(Color from, Color to, int steps) =>
-        Enumerable.Range(0, steps).Select(i => Freeze(Mix(from, to, i / (double)(steps - 1)))).ToArray();
+    public static readonly IBrush UnchangedBrush = Freeze(Color.FromRgb(0x6A, 0x6A, 0x74));
 
     internal static IBrush Freeze(Color color) => new ImmutableSolidColorBrush(color);
 

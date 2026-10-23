@@ -96,11 +96,9 @@
   <data name="Changes_NewFolder" xml:space="preserve"><value>nouveau dossier</value></data>
   <data name="Changes_Shrank" xml:space="preserve"><value>a rétréci</value></data>
   <data name="Changes_ShrankFolder" xml:space="preserve"><value>dossier qui a rétréci</value></data>
-  <data name="ColorModeName_Change" xml:space="preserve"><value>Changement depuis la dernière analyse</value></data>
   <data name="ColorModeName_Depth" xml:space="preserve"><value>Profondeur de dossier</value></data>
   <data name="ColorModeName_FileType" xml:space="preserve"><value>Type de fichier</value></data>
   <data name="ColorModeName_TopFolder" xml:space="preserve"><value>Dossier de premier niveau</value></data>
-  <data name="ColorMode_Change" xml:space="preserve"><value>changement depuis la dernière analyse</value></data>
   <data name="ColorMode_Depth" xml:space="preserve"><value>profondeur</value></data>
   <data name="ColorMode_FileType" xml:space="preserve"><value>type de fichier</value></data>
   <data name="ColorMode_TopFolder" xml:space="preserve"><value>dossier de premier niveau</value></data>
@@ -225,6 +223,7 @@
   <data name="Key_Panel" xml:space="preserve"><value>Panneau des plus gros fichiers, dossiers et types</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Propriétés Windows de l'élément sélectionné</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Analyser à nouveau</value></data>
+  <data name="Key_CloseScan" xml:space="preserve"><value>Fermer l'analyse et revenir à l'écran d'accueil</value></data>
   <data name="Key_SaveScan" xml:space="preserve"><value>Enregistrer l'analyse dans un fichier</value></data>
   <data name="Key_SelectMatches" xml:space="preserve"><value>Sélectionner tous les fichiers correspondant au filtre</value></data>
   <data name="Key_SelectRange" xml:space="preserve"><value>Sélectionner une plage</value></data>
@@ -257,7 +256,6 @@
   <data name="Main_Cancel" xml:space="preserve"><value>Annuler</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Changement</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Changements</value></data>
-  <data name="Main_ChangesSinceLastScan" xml:space="preserve"><value>Changements depuis la dernière analyse</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Effacer</value></data>
   <data name="Main_ClearFilterEsc" xml:space="preserve"><value>Effacer le filtre (Échap)</value></data>
   <data name="Main_ClickADriveOn" xml:space="preserve"><value>Cliquez sur un lecteur à gauche, ou choisissez un dossier à analyser.</value></data>
@@ -284,6 +282,9 @@
   <data name="Main_ExportToCSV" xml:space="preserve"><value>Exporter au format CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Type de fichier</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Fichiers</value></data>
+  <data name="Status_UsedOf" xml:space="preserve"><value>{0} sur {1}</value></data>
+  <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} de l'analyse</value></data>
+  <data name="Status_MemoryTip" xml:space="preserve"><value>La mémoire que SpaceSharp utilise en ce moment, telle que le Gestionnaire des tâches la compte. Une analyse garde chaque fichier en mémoire ; un disque plus gros en demande plus.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filtre</value></data>
   <data name="Main_FilterMatches" xml:space="preserve"><value>Correspondances du filtre</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Options du filtre</value></data>
@@ -303,6 +304,7 @@
   <data name="Main_Properties" xml:space="preserve"><value>Propriétés</value></data>
   <data name="Main_RescanF5" xml:space="preserve"><value>Analyser à nouveau (F5)</value></data>
   <data name="Main_RescanThisFolder" xml:space="preserve"><value>Analyser à nouveau ce dossier</value></data>
+  <data name="Main_CloseScan" xml:space="preserve"><value>Fermer l'analyse</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Redémarrer en tant qu'administrateur</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Enregistrer l'analyse sous…</value></data>
   <data name="Main_ScanFile" xml:space="preserve"><value>Fichier d'analyse</value></data>
@@ -459,6 +461,8 @@
   <data name="Scan_StageRead" xml:space="preserve"><value>Lecture de la table de fichiers</value></data>
   <data name="Scan_StageBuild" xml:space="preserve"><value>Construction de l'arborescence</value></data>
   <data name="Scan_StageDraw" xml:space="preserve"><value>Dessin de la carte</value></data>
+  <data name="Scan_NoLiveTitle" xml:space="preserve"><value>Pas de dessin en direct pour cette analyse</value></data>
+  <data name="Scan_NoLiveText" xml:space="preserve"><value>Une analyse de la table des fichiers n'a pas d'arborescence à dessiner tant que toute la table n'est pas lue. La carte apparaît dès que l'arborescence arrive, en général en quelques secondes.</value></data>
   <data name="Scan_SoFar" xml:space="preserve"><value>{0:N0} fichiers dans {1:N0} dossiers pour l'instant</value></data>
   <data name="Scan_FoundSoFar" xml:space="preserve"><value>trouvés pour l'instant</value></data>
   <data name="Scan_FoundOf" xml:space="preserve"><value>trouvés sur {0}</value></data>
@@ -478,10 +482,12 @@
   <data name="Settings_CheckUpdates_Desc" xml:space="preserve"><value>Recherche une nouvelle version sur GitHub quelques secondes après le démarrage de SpaceSharp, et propose de l'installer.</value></data>
   <data name="Settings_CheckUpdates_Portable" xml:space="preserve"><value>Disponible uniquement si SpaceSharp a été installé avec le programme d'installation. L'exécutable portable ne se met pas à jour lui-même.</value></data>
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colorer par</value></data>
-  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Dossier de premier niveau : une teinte par dossier de premier niveau, plus claire à chaque niveau inférieur. Profondeur de dossier : une couleur différente par niveau. Type de fichier : fichiers colorés selon leur type. Changement : ce qui a grossi ou rétréci depuis l'analyse précédente du même emplacement.</value></data>
+  <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Dossier de premier niveau : une teinte par dossier de premier niveau, plus claire à chaque niveau inférieur. Profondeur de dossier : une couleur différente par niveau. Type de fichier : fichiers colorés selon leur type.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmer avant de déplacer vers la Corbeille</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Demander avant de supprimer. Les éléments supprimés peuvent toujours être restaurés depuis la Corbeille.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Palettes personnalisées</value></data>
+  <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Utiliser n'importe quelle palette dans les deux thèmes</value></data>
+  <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Désactivé : choisir une palette faite pour l'autre thème passe à ce thème, une palette claire amène donc le thème clair. Activé : la palette est utilisée telle quelle, palettes claires sur le thème sombre et palettes sombres sur le clair.</value></data>
   <data name="Settings_FastScan" xml:space="preserve"><value>Analyse NTFS rapide</value></data>
   <data name="Settings_FastScan_Desc" xml:space="preserve"><value>Lit directement la table de fichiers du lecteur : un lecteur entier est cartographié en quelques secondes au lieu de quelques minutes. Windows demande l'autorisation d'administrateur une fois par analyse ; l'application elle-même reste telle quelle. Refusez et l'analyse normale s'exécute, sans nouvelle demande jusqu'au redémarrage de SpaceSharp. Les autres systèmes de fichiers et les dossiers isolés utilisent toujours l'analyse normale.</value></data>
   <data name="Settings_HardLinks" xml:space="preserve"><value>Compter les liens physiques une seule fois</value></data>
@@ -502,8 +508,6 @@
   <data name="Settings_Palette" xml:space="preserve"><value>Palette</value></data>
   <data name="Settings_PaletteCustomSuffix" xml:space="preserve"><value>{0}  (personnalisée)</value></data>
   <data name="Settings_Palette_Desc" xml:space="preserve"><value>Les couleurs utilisées pour les boîtes de la carte.</value></data>
-  <data name="Settings_Reopen" xml:space="preserve"><value>Rouvrir la dernière analyse au démarrage</value></data>
-  <data name="Settings_Reopen_Desc" xml:space="preserve"><value>Affiche la carte de la veille dès l'ouverture de l'application, comparée à l'analyse précédente. Chaque analyse de lecteur est conservée dans %LocalAppData%\SpaceSharp\scans ; F5 relance l'analyse.</value></data>
   <data name="Settings_ResetQuestion" xml:space="preserve"><value>Rétablir la valeur par défaut de tous les paramètres ?</value></data>
   <data name="Settings_ResetTitle" xml:space="preserve"><value>Réinitialiser les paramètres</value></data>
   <data name="Settings_Safety" xml:space="preserve"><value>Sécurité</value></data>
@@ -533,7 +537,6 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} déplacé vers la Corbeille</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1} : {2:N0} fichiers · {3}. F5 relance l'analyse.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Analyse ouverte du</value></data>
-  <data name="Status_OpeningLastScan" xml:space="preserve"><value>Ouverture de la dernière analyse…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>L'analyse précédente a été faite autrement ({0} contre {1}), elle n'est donc pas comparée. La prochaine analyse du même type le sera.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Nouvelle analyse annulée</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} analysé à nouveau : {1:N0} fichiers · {2}</value></data>
@@ -642,6 +645,11 @@
   <data name="SettingsTab_Treemap" xml:space="preserve"><value>Treemap</value></data>
   <data name="SettingsTab_Map" xml:space="preserve"><value>Carte</value></data>
   <data name="SettingsTab_Scanning" xml:space="preserve"><value>Analyse</value></data>
+  <data name="SettingsTab_Behavior" xml:space="preserve"><value>Comportement</value></data>
+  <data name="Settings_Startup" xml:space="preserve"><value>Démarrage</value></data>
+  <data name="Settings_WhileScanning" xml:space="preserve"><value>Pendant l'analyse</value></data>
+  <data name="Settings_LiveMap" xml:space="preserve"><value>Dessiner la carte au fil de l'analyse</value></data>
+  <data name="Settings_LiveMap_Desc" xml:space="preserve"><value>Lors d'un parcours des dossiers, la carte se remplit avec les vrais dossiers à mesure qu'ils sont placés, et ce qui est dessiné devient la carte finale. Une analyse de la table des fichiers n'a pas d'arborescence tant que la table n'est pas lue ; elle n'est donc pas dessinée en direct, et une note au-dessus de la carte l'indique. Désactivé, la carte précédente reste jusqu'à ce que la nouvelle soit prête.</value></data>
   <data name="About_Tagline" xml:space="preserve"><value>Voyez où est passé votre espace disque.</value></data>
   <data name="About_Check" xml:space="preserve"><value>Vérifier</value></data>
   <data name="About_InstalledCheck" xml:space="preserve"><value>Installé. Rechercher une version plus récente.</value></data>
@@ -680,6 +688,8 @@
   <data name="Start_NewestFirst" xml:space="preserve"><value>Plus récentes en premier</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % utilisés · {1} libres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Dossier · {0} fichiers</value></data>
+  <data name="Start_FilledSince" xml:space="preserve"><value>Le disque s'est rempli de {0} depuis cette analyse. Relancez l'analyse pour voir où c'est parti.</value></data>
+  <data name="Start_FreedSince" xml:space="preserve"><value>Le disque a {0} d'espace libre de plus qu'à cette analyse. Relancez l'analyse pour le voir tel qu'il est maintenant.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Conserver les analyses enregistrées pendant</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Les enregistrements automatiques plus anciens sont supprimés au démarrage de SpaceSharp. Les analyses que vous avez vous-même enregistrées dans des fichiers ne sont jamais touchées.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} jours</value></data>
@@ -802,9 +812,39 @@
   <data name="Palette_GroupDark" xml:space="preserve"><value>Pour le thème sombre</value></data>
   <data name="Palette_GroupLight" xml:space="preserve"><value>Pour le thème clair</value></data>
   <data name="Palette_GroupAny" xml:space="preserve"><value>Tout thème</value></data>
+  <data name="Palette_TabDark" xml:space="preserve"><value>Thème sombre</value></data>
+  <data name="Palette_TabLight" xml:space="preserve"><value>Thème clair</value></data>
+  <data name="Palette_NewLink" xml:space="preserve"><value>Nouvelle palette…</value></data>
+  <data name="Palette_NoCustom" xml:space="preserve"><value>Pas encore de palette personnelle. Nouvelle palette… en crée une dans l'éditeur ; le dossier des palettes accepte aussi des fichiers JSON (Paramètres › Apparence).</value></data>
+  <data name="Palette_SwitchesTheme" xml:space="preserve"><value>En choisir une passe au thème {0}</value></data>
+  <data name="Palette_CustomAbout" xml:space="preserve"><value>Depuis votre dossier de palettes · {0}</value></data>
+  <data name="PaletteAbout_Graphite" xml:space="preserve"><value>Teintes sourdes sur gris ; la palette par défaut</value></data>
+  <data name="PaletteAbout_Ocean" xml:space="preserve"><value>Bleus et sarcelles</value></data>
+  <data name="PaletteAbout_Sunset" xml:space="preserve"><value>Du rouge à la prune en passant par l'or</value></data>
+  <data name="PaletteAbout_Forest" xml:space="preserve"><value>Verts, mousse et écorce</value></data>
+  <data name="PaletteAbout_Aurora" xml:space="preserve"><value>Vif, toutes les teintes, sans néon</value></data>
+  <data name="PaletteAbout_Berry" xml:space="preserve"><value>Framboise, prune et vin</value></data>
+  <data name="PaletteAbout_Mineral" xml:space="preserve"><value>Tons de pierres fines poussiéreux, peu d'éblouissement</value></data>
+  <data name="PaletteAbout_Twilight" xml:space="preserve"><value>Indigo, violet et un peu de rose</value></data>
+  <data name="PaletteAbout_Copper" xml:space="preserve"><value>Cuivre, laiton, olive et rouille</value></data>
+  <data name="PaletteAbout_Prism" xml:space="preserve"><value>Le spectre à pleine force</value></data>
+  <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Gris, ambre pour l'accent</value></data>
+  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito et Tol ; distinguables par tous</value></data>
+  <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Teintes douces de toutes les couleurs ; la palette par défaut en clair</value></data>
+  <data name="PaletteAbout_Paper" xml:space="preserve"><value>Tons passés sur papier</value></data>
+  <data name="PaletteAbout_Candy" xml:space="preserve"><value>Sucré et vif</value></data>
+  <data name="PaletteAbout_Nordic" xml:space="preserve"><value>Les couleurs Nord, givre et aurore</value></data>
+  <data name="PaletteAbout_Earth" xml:space="preserve"><value>Terre, sable et sauge</value></data>
+  <data name="PaletteAbout_Meadow" xml:space="preserve"><value>Verts de printemps, paille et ciel pâle</value></data>
+  <data name="PaletteAbout_Sorbet" xml:space="preserve"><value>Pêche, rose, lavande et menthe</value></data>
+  <data name="PaletteAbout_Seaglass" xml:space="preserve"><value>Bleu-verts délavés, proches en ton</value></data>
+  <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Argile, sable et rose ; plus chaud qu'Earth</value></data>
+  <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Violets et bleus poudrés</value></data>
+  <data name="PaletteAbout_Retro" xml:space="preserve"><value>Sept primaires franches</value></data>
+  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Le même jeu sûr, éclairci pour les surfaces claires</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>La palette du thème {0}. Chaque thème mémorise la sienne ; la carte change avec le thème.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · conçue pour le thème {1}</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Basculer entre la carte et la vue Aperçu</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Passer de la carte à Aperçu et à Changements</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Par type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Sans risque à vider</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Date de modification</value></data>
@@ -887,7 +927,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="FilterLayout_Drawer" xml:space="preserve"><value>Volet sur la carte</value></data>
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Nom ou modèle, par ex. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Carte</value></data>
-  <data name="Main_ViewMapTip" xml:space="preserve"><value>La carte de l'analyse (B bascule entre les deux vues)</value></data>
+  <data name="Main_ViewMapTip" xml:space="preserve"><value>La carte de l'analyse (B passe d'une vue à l'autre)</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Aperçu</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>L'analyse résumée : par type, sans risque à vider, date de modification, plus gros éléments (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Aperçu</value></data>
@@ -916,6 +956,10 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Insights_Checked" xml:space="preserve"><value>{0} cochés · {1} · laisserait {2} libres</value></data>
   <data name="Insights_CheckTip" xml:space="preserve"><value>Inclure dans Mettre les éléments cochés à la Corbeille</value></data>
   <data name="Insights_RecycleChecked" xml:space="preserve"><value>Mettre les éléments cochés à la Corbeille</value></data>
+  <data name="Insights_Now" xml:space="preserve"><value>Maintenant</value></data>
+  <data name="Insights_After" xml:space="preserve"><value>Après</value></data>
+  <data name="Insights_Fill" xml:space="preserve"><value>{0} plein · {1} libres</value></data>
+  <data name="Insights_AfterTip" xml:space="preserve"><value>La partie ambre de la barre du haut est ce qu'occupent aujourd'hui les emplacements cochés ; la barre du bas est le disque sans eux.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} non modifiés depuis plus d'un an · cliquez sur un mois ou une bande pour filtrer</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Les plus gros, non modifiés depuis un an ou plus</value></data>
   <data name="Insights_LargestFolders" xml:space="preserve"><value>Plus gros dossiers</value></data>
@@ -925,6 +969,37 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Insights_Grew" xml:space="preserve"><value>A grossi</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>A rétréci</value></data>
   <data name="Insights_New" xml:space="preserve"><value>Nouveau</value></data>
+  <data name="Main_ViewChanges" xml:space="preserve"><value>Changements</value></data>
+  <data name="Main_ViewChangesTip" xml:space="preserve"><value>Ce qui a changé depuis l'analyse comparée, dossier par dossier : avant, maintenant et la différence (B)</value></data>
+  <data name="Changes_Title" xml:space="preserve"><value>{0} comparé à {1}</value></data>
+  <data name="Changes_PickerTip" xml:space="preserve"><value>L'analyse à laquelle celle-ci est comparée</value></data>
+  <data name="Changes_PickPrevious" xml:space="preserve"><value>L'analyse précédente de ce disque ({0})</value></data>
+  <data name="Changes_ThenNow" xml:space="preserve"><value>{0} → {1}</value></data>
+  <data name="Changes_ShrankTotal" xml:space="preserve"><value>−{0} réduits · {1:N0} disparus</value></data>
+  <data name="Changes_GrewTotal" xml:space="preserve"><value>+{0} grossis · {1:N0} nouveaux</value></data>
+  <data name="Changes_FilterChanged" xml:space="preserve"><value>Modifiés</value></data>
+  <data name="Changes_FilterChangedTip" xml:space="preserve"><value>Seulement les dossiers et fichiers dont la taille a changé, plus ce qui est nouveau ou disparu</value></data>
+  <data name="Changes_FilterAll" xml:space="preserve"><value>Tout</value></data>
+  <data name="Changes_FilterAllTip" xml:space="preserve"><value>Chaque dossier et fichier, modifié ou non</value></data>
+  <data name="Changes_AnySize" xml:space="preserve"><value>Toute taille</value></data>
+  <data name="Changes_Over" xml:space="preserve"><value>Plus de {0}</value></data>
+  <data name="Changes_ThresholdTip" xml:space="preserve"><value>Masquer les changements plus petits que ceci</value></data>
+  <data name="Changes_ShowOnMap" xml:space="preserve"><value>Voir sur la carte</value></data>
+  <data name="Changes_ColFolder" xml:space="preserve"><value>Dossier</value></data>
+  <data name="Changes_ColThen" xml:space="preserve"><value>Avant</value></data>
+  <data name="Changes_ColNow" xml:space="preserve"><value>Maintenant</value></data>
+  <data name="Changes_ColDifference" xml:space="preserve"><value>Différence</value></data>
+  <data name="Changes_SortTip" xml:space="preserve"><value>Cliquer trie selon cette colonne ; cliquer encore inverse l'ordre</value></data>
+  <data name="Changes_Gone" xml:space="preserve"><value>Disparu</value></data>
+  <data name="Changes_GoneTip" xml:space="preserve"><value>était dans l'analyse comparée et n'est plus dans celle-ci</value></data>
+  <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} de plus…</value></data>
+  <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} modifiés · {1:N0} inchangés masqués</value></data>
+  <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} éléments · {1:N0} modifiés</value></data>
+  <data name="Changes_FooterHint" xml:space="preserve"><value>Double-cliquez sur une ligne pour la voir sur la carte · Entrée ouvre un dossier</value></data>
+  <data name="Changes_None" xml:space="preserve"><value>Rien n'a changé entre les deux analyses.</value></data>
+  <data name="Changes_NoneOver" xml:space="preserve"><value>Rien n'a changé de plus de {0}.</value></data>
+  <data name="Changes_NoCompare" xml:space="preserve"><value>Rien à comparer pour l'instant</value></data>
+  <data name="Changes_OpenView" xml:space="preserve"><value>Ouvrir Changements</value></data>
   <data name="Insights_Extensions" xml:space="preserve"><value>Plus grosses extensions</value></data>
   <data name="Insights_ExtensionsSub" xml:space="preserve"><value>et où se trouve l'essentiel de chacune</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>

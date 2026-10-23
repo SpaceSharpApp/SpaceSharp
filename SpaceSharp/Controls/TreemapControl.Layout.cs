@@ -44,6 +44,7 @@ public sealed partial class TreemapControl
     {
         _rebuildPending = false;
         _items.Clear();
+        _liveKeys = null;
         _index.Clear();
         _matchedGroups.Clear();
         _subdivided.Clear();
@@ -73,8 +74,9 @@ public sealed partial class TreemapControl
     private void DrawMap(DrawingContext dc)
     {
         dc.DrawRectangle(MapBackground ?? BackgroundBrush, null, _viewport);
-        foreach (var item in _items)
-            DrawItem(dc, item);
+        DrawLiveLeaving(dc);
+        for (int i = 0; i < _items.Count; i++)
+            DrawLiveItem(dc, i);
     }
 
     private readonly HashSet<FsNode> _subdivided = new();

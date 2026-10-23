@@ -25,7 +25,7 @@ public sealed class ShortcutsWindow : Window
     private static readonly Dictionary<string, (string What, bool WithCtrl)> Uses = new(StringComparer.Ordinal)
     {
         ["A"] = (Strings.Get("Key_SelectMatches"), true), ["I"] = (Strings.Get("Key_Inspect"), true), ["C"] = (Strings.Get("Key_Copy"), true),
-        ["F"] = (Strings.Get("Key_Filter"), true), ["S"] = (Strings.Get("Key_SaveScan"), true), ["O"] = (Strings.Get("Key_OpenScan"), true), [","] = (Strings.Get("Key_Settings"), true),
+        ["F"] = (Strings.Get("Key_Filter"), true), ["S"] = (Strings.Get("Key_SaveScan"), true), ["O"] = (Strings.Get("Key_OpenScan"), true), ["W"] = (Strings.Get("Key_CloseScan"), true), [","] = (Strings.Get("Key_Settings"), true),
         ["K"] = (Strings.Get("Key_NextColor"), false), ["B"] = (Strings.Get("Key_BottomPanel"), false), ["L"] = (Strings.Get("Key_Panel"), false),
         ["F5"] = (Strings.Get("Key_Rescan"), false), ["Esc"] = (Strings.Get("Key_CancelScan"), false), ["esc"] = (Strings.Get("Key_CancelScan"), false),
         ["Backspace"] = (Strings.Get("Key_Up"), false), ["delete"] = (Strings.Get("Key_Up"), false), ["Home"] = (Strings.Get("Key_WholeMap"), false), ["Del"] = (Strings.Get("Key_Delete"), false)
@@ -123,7 +123,7 @@ public sealed class ShortcutsWindow : Window
         {
             (Strings.Get("Keys_Navigate"), new[]
             {
-                (Mac ? "⌫" : "Backspace", Strings.Get("Key_Up")), (Mac ? "fn+←" : "Home", Strings.Get("Key_WholeMap")), ("F5", Strings.Get("Key_Rescan")), (Mac ? "esc" : "Esc", Strings.Get("Key_CancelScan"))
+                (Mac ? "⌫" : "Backspace", Strings.Get("Key_Up")), (Mac ? "fn+←" : "Home", Strings.Get("Key_WholeMap")), ("F5", Strings.Get("Key_Rescan")), (c("W"), Strings.Get("Key_CloseScan")), (Mac ? "esc" : "Esc", Strings.Get("Key_CancelScan"))
             }),
             (Strings.Get("Keys_Select"), new[]
             {
@@ -154,23 +154,27 @@ public sealed class ShortcutsWindow : Window
         _note.Text = Strings.Format("Keys_LayoutNote", layout.Name);
         _keyboard.Children.Clear();
         var f = Keys(new[] { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12" });
-        var digits = Keys(new[] { "`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=" });
+        var digits = Keys(layout.Digits);
+        // An ISO keyboard has a tall Enter split over two rows, one more key beside it on the home row, and one between the left Shift and Z.
+        bool iso = layout.Iso;
+        var isoLeft = iso ? new[] { K(layout.IsoLeft) } : Array.Empty<(string? Label, double Units)>();
+        var extra = iso ? new[] { K(layout.Extra) } : Array.Empty<(string? Label, double Units)>();
         if (Mac)
         {
             Row(new[] { K("esc"), K(null, 0.4) }, f);
             Row(digits, new[] { K("delete", 1.6) });
-            Row(new[] { K("tab", 1.6) }, Keys(layout.Top), new[] { K("\\") });
-            Row(new[] { K("caps lock", 1.9) }, Keys(layout.Middle), new[] { K("return", 1.9) });
-            Row(new[] { K("shift", 2.4) }, Keys(layout.Bottom), new[] { K("shift", 2.4) });
+            Row(new[] { K("tab", 1.6) }, Keys(layout.Top), new[] { iso ? K("return", 1.4) : K("\\") });
+            Row(new[] { K("caps lock", 1.9) }, Keys(layout.Middle), extra, new[] { iso ? K("", 1.1) : K("return", 1.9) });
+            Row(new[] { K("shift", iso ? 1.4 : 2.4) }, isoLeft, Keys(layout.Bottom), new[] { K("shift", 2.4) });
             Row(new[] { K("fn"), K("⌃ control", 1.6), K("⌥ option", 1.5), K("⌘ command", 1.8), K("", 4.6), K("⌘ command", 1.8), K("⌥ option", 1.5) });
         }
         else
         {
             Row(new[] { K("Esc"), K(null) }, f, new[] { K(null, 0.5), K("Home"), K("Del") });
             Row(digits, new[] { K("Backspace", 2) });
-            Row(new[] { K("Tab", 1.5) }, Keys(layout.Top), new[] { K("\\", 1.5) });
-            Row(new[] { K("Caps", 1.8) }, Keys(layout.Middle), new[] { K("Enter", 2.2) });
-            Row(new[] { K("Shift", 2.3) }, Keys(layout.Bottom), new[] { K("Shift", 2.7) });
+            Row(new[] { K("Tab", 1.5) }, Keys(layout.Top), new[] { iso ? K("Enter", 1.5) : K("\\", 1.5) });
+            Row(new[] { K("Caps", 1.8) }, Keys(layout.Middle), extra, new[] { iso ? K("", 1.2) : K("Enter", 2.2) });
+            Row(new[] { K("Shift", iso ? 1.3 : 2.3) }, isoLeft, Keys(layout.Bottom), new[] { K("Shift", 2.7) });
             Row(new[] { K("Ctrl", 1.5), K("Win", 1.2), K("Alt", 1.2), K("", 6.2), K("Alt", 1.2), K("Win", 1.2), K("Ctrl", 1.5) });
         }
     }

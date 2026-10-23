@@ -87,7 +87,7 @@ public sealed class PaletteEditorWindow : Window
                 if (files.Count > PaletteDraft.FolderCount) files.RemoveRange(PaletteDraft.FolderCount, files.Count - PaletteDraft.FolderCount);
             }
         }
-        _mode = Enum.TryParse<ColorMode>(_settings.ColorMode, out var mode) && mode != ColorMode.ByChange ? mode : ColorMode.ByDepth;
+        _mode = Enum.TryParse<ColorMode>(_settings.ColorMode, out var mode) ? mode : ColorMode.ByDepth;
 
         var sample = SettingsWindow.SampleTree(out _);
         _sampleFolders = sample.Children.Where(c => c.IsDirectory).Select(c => $"{c.Name} · {SizeFormatter.Format(c.Size)}").ToArray();

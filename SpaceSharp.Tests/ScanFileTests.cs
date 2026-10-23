@@ -85,6 +85,34 @@ public class ScanFileTests
     }
 
     [Fact]
+    public void CompareRecordsWhatIsGone()
+    {
+        var then = SampleDrive();
+        var now = SampleDrive();
+        var videos = now.FindDescendant(@"C:\Videos")!;
+        var b = videos.Children.Single(c => c.Name == "b.mkv");
+        long bSize = b.Size;
+        videos.Children.Remove(b);
+        TestTree.Finish(now);
+
+        var comparison = ScanCompare.Apply(now, then);
+
+        var gone = Assert.Single(comparison.GoneIn(videos));
+        Assert.Equal("b.mkv", gone.Name);
+        Assert.False(gone.IsDirectory);
+        Assert.Equal(bSize, gone.Size);
+        Assert.Equal(1, comparison.GoneFiles);
+        Assert.Equal(bSize, comparison.GoneBytes);
+        Assert.Empty(comparison.GoneIn(now));
+        // the folder shrank by the file, and the totals say so too
+        Assert.Equal(-bSize, videos.ChangeFor(SizeMeasure.FileSize));
+        var totals = DriveInsights.Changes(now, SizeMeasure.FileSize, comparison);
+        Assert.Equal(bSize, totals.Shrank);
+        Assert.Equal(1, totals.GoneFiles);
+        Assert.Equal(-bSize, totals.Net);
+    }
+
+    [Fact]
     public void ChangesListRanksByAbsoluteChange()
     {
         var then = SampleDrive();

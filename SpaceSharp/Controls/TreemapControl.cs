@@ -144,6 +144,7 @@ public sealed partial class TreemapControl : Panel
         set
         {
             StopAnimation();
+            StopLive();
             _root = value;
             _root?.SortBy(_measure);
             _hoveredNode = null;

@@ -32,6 +32,7 @@ public partial class MainWindow : Window
     private WalkProgress _mftProgress;   // MFT scan progress
     private bool _building;   // suppresses combo change handlers
     private readonly DispatcherTimer _filterTimer = new() { Interval = TimeSpan.FromMilliseconds(250) };
+    private readonly DispatcherTimer _memoryTimer = new() { Interval = TimeSpan.FromSeconds(2) };
     private FileFilter? _filter;
     private FilterResult? _filterResult;
     private TopListKind _listKind = TopListKind.Files;
@@ -40,6 +41,8 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         TitleBarTheme.Attach(this);
+        BuildStatusRight();   // before Build and ApplyLook, which refresh it
+        BuildChangesView();
         Build();
         BuildDrives();
         ApplyLook();
@@ -52,8 +55,9 @@ public partial class MainWindow : Window
         Treemap.NodeActivated += (_, node) => Treemap.FocusOn(node);
         _progressTimer.Tick += (_, _) => UpdateProgress();
         _filterTimer.Tick += (_, _) => { _filterTimer.Stop(); ApplyFilter(); };
+        _memoryTimer.Tick += (_, _) => UpdateMemory();
+        _memoryTimer.Start();
         Treemap.ContextMenu = BuildMenu();
-        PaletteCombo.ContainerPrepared += PaletteCombo_ContainerPrepared;
         ApplyView();
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
 
@@ -74,7 +78,6 @@ public partial class MainWindow : Window
                 await ScanAsync(startPath);
                 if (App.Args.CompareFile is { } compareFile && _root is not null) await CompareWithFileAsync(compareFile);
             }
-            else if (_settings.ReopenLastScan && _settings.LastScanRoot is { } last) await ReopenLastScanAsync(last);
             await CheckForUpdatesAsync();
         };
 
@@ -159,7 +162,9 @@ public partial class MainWindow : Window
         ScanFolderButton.Content = Icons.WithText("ScanFolder", Strings.Get("Main_ScanFolder"));
         MapViewButton.Content = Icons.WithText("Treemap", Strings.Get("Main_ViewMap"));
         InsightsButton.Content = Icons.WithText("Info", Strings.Get("Main_ViewInsights"));
+        ChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_ViewChanges"));
         ToolTip.SetTip(RescanButton, Strings.Get("Main_RescanThisFolder"));
+        ToolTip.SetTip(CloseScanButton, Strings.Get("Main_CloseScan") + " (Ctrl+W)");
         ToolTip.SetTip(UpButton, Strings.Get("Main_UpOneFolderBackspace"));
         ToolTip.SetTip(HomeButton, Strings.Get("Main_ShowWholeMapHome"));
         ToolTip.SetTip(PanelButton, Strings.Get("Main_DrivesAndLargestItems"));
@@ -177,8 +182,7 @@ public partial class MainWindow : Window
         ScanSizeLabel.Text = Strings.Get("Scan_FoundSoFar");
         ScanRateLabel.Text = Strings.Get("Scan_FilesPerSecond");
         ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
-        CancelHint.Text = Strings.Get("Main_EscAlsoCancels");
-        CancelButton.Content = Icons.WithText("Close", Strings.Get("Main_Cancel"));
+        ToolTip.SetTip(CancelButton, Strings.Get("Main_Cancel") + " · " + Strings.Get("Main_EscAlsoCancels"));
         StageFindText.Text = Strings.Get("Scan_StageFind");
         StageBuildText.Text = Strings.Get("Scan_StageBuild");
         StageDrawText.Text = Strings.Get("Scan_StageDraw");
@@ -199,59 +203,48 @@ public partial class MainWindow : Window
         MarkListKind();
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
+        ToolTip.SetTip(ChangesButton, Strings.Get("Main_ViewChangesTip"));
 
         ListChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_Changes"), 14);
         FillPalettes();
         _building = false;
+        FitToolbar();
         UpdateCompareUi();
         BuildRecentScans();
     }
 
-    private readonly List<ColorScheme?> _paletteItems = new();   // null for a group heading
+    // ------------------------------------------------------------------ the toolbar's room
 
-    private sealed record PaletteRow(ColorScheme? Scheme, string Text);
+    private int _toolbarStage;
+    private TextBlock? _paletteName;
 
-    private void FillPalettes()
+    private void TopBar_SizeChanged(object? sender, SizeChangedEventArgs e) => FitToolbar();
+
+    /// <summary>Makes the toolbar's two groups fit side by side: drops the labels, then the view buttons' text, then the palette's name.</summary>
+    private void FitToolbar()
     {
-        bool dark = App.IsDark;
-        var rows = new List<PaletteRow>();
-        _paletteItems.Clear();
-        string? lastGroup = null;
-        var current = Palette.Find(_settings.PaletteFor(dark), dark);
-        int selected = 0;
-        foreach (var scheme in Palette.OrderedFor(dark))
+        double width = TopBar.Bounds.Width - TopBar.Padding.Left - TopBar.Padding.Right;
+        if (width <= 0) return;
+        for (int stage = 0; stage <= 3; stage++)
         {
-            if (scheme.Group != lastGroup)
-            {
-                lastGroup = scheme.Group;
-                rows.Add(new PaletteRow(null, scheme.Group));
-                _paletteItems.Add(null);
-            }
-            rows.Add(new PaletteRow(scheme, scheme.Name));
-            _paletteItems.Add(scheme);
-            if (ReferenceEquals(scheme, current)) selected = rows.Count - 1;
+            ApplyToolbarStage(stage);
+            ToolbarLeft.Measure(Size.Infinity);
+            ToolbarRight.Measure(Size.Infinity);
+            if (ToolbarLeft.DesiredSize.Width + ToolbarRight.DesiredSize.Width + 16 <= width) return;
         }
-        PaletteCombo.ItemTemplate ??= new Avalonia.Controls.Templates.FuncDataTemplate<PaletteRow>((row, _) =>
-        {
-            if (row?.Scheme is null) return new TextBlock { Text = row?.Text ?? string.Empty, VerticalAlignment = VerticalAlignment.Center };
-            var line = new StackPanel { Orientation = Orientation.Horizontal };
-            var strip = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
-            foreach (var brush in row.Scheme.Swatches) strip.Children.Add(new Border { Width = 9, Height = 14, Margin = new Thickness(0, 0, 1, 0), CornerRadius = new CornerRadius(2), Background = brush });
-            line.Children.Add(strip);
-            line.Children.Add(new TextBlock { Text = row.Text, Margin = new Thickness(9, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center });
-            return line;
-        });
-        PaletteCombo.ItemsSource = rows;
-        PaletteCombo.SelectedIndex = selected;
-        Treemap.Scheme = current;
     }
 
-    private void PaletteCombo_ContainerPrepared(object? sender, ContainerPreparedEventArgs e)
+    private void ApplyToolbarStage(int stage)
     {
-        if (e.Container is not ComboBoxItem item) return;
-        bool heading = e.Index >= 0 && e.Index < _paletteItems.Count && _paletteItems[e.Index] is null;
-        item.IsEnabled = !heading;
-        item.Classes.Set("heading", heading);
+        _toolbarStage = stage;
+        ColorLabel.IsVisible = PaletteLabel.IsVisible = stage < 1;
+        PaletteButton.Margin = stage < 1 ? default : new Thickness(10, 0, 0, 0);   // the label carried the gap
+        bool text = stage < 2;
+        MapViewButton.Content = text ? Icons.WithText("Treemap", Strings.Get("Main_ViewMap")) : Icons.Make("Treemap", 15);
+        InsightsButton.Content = text ? Icons.WithText("Info", Strings.Get("Main_ViewInsights")) : Icons.Make("Info", 15);
+        ChangesButton.Content = text ? Icons.WithText("Sync", Strings.Get("Main_ViewChanges")) : Icons.Make("Sync", 15);
+        if (_paletteName is not null) _paletteName.IsVisible = stage < 3;
+        PaletteButton.Width = stage < 3 ? 250 : 150;
     }
 
     // ------------------------------------------------------------------ look
@@ -271,12 +264,14 @@ public partial class MainWindow : Window
         _building = true;
         FillPalettes();
         _building = false;
+        FitToolbar();
         UpdateCompareUi();
         ApplyLook();
         _root?.SetFreeSpaceVisible(_settings.ShowFreeSpace, Treemap.SizeMode);
         Treemap.Refresh();
         RefreshTopList();
         RefreshInsights();
+        RefreshChanges();
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
         if (_dimDepth > 0) { DimOverlay.Opacity = Math.Clamp(_settings.DialogDim, 0, 90) / 100.0; DimOverlay.IsVisible = DimOverlay.Opacity > 0; }
     }
@@ -325,7 +320,7 @@ public partial class MainWindow : Window
     internal static void ApplyLook(TreemapControl map, AppSettings s, bool dark)
     {
         map.Scheme = Palette.Find(s.PaletteFor(dark), dark);
-        map.ColorMode = s.ColorMode switch { "ByDepth" => ColorMode.ByDepth, "ByFileType" => ColorMode.ByFileType, "ByChange" => ColorMode.ByChange, _ => ColorMode.ByBranch };
+        map.ColorMode = s.ColorMode switch { "ByDepth" => ColorMode.ByDepth, "ByFileType" => ColorMode.ByFileType, _ => ColorMode.ByBranch };
         map.SizeMode = s.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize;
         map.LabelScale = s.LabelSize switch { "Smallest" => 0.8, "Smaller" => 0.9, "Large" => 1.15, "Larger" => 1.3, _ => 1.0 };
         map.LabelHalo = s.LabelHalo;
@@ -435,8 +430,8 @@ public partial class MainWindow : Window
     {
         if (_scanCts is not null) return;
         EnterMock();
-        var (root, info, baseline) = MockSystem.Build(rootPath);
-        ShowLoadedScan(root, info, baseline, Strings.Get("Status_OpenedVerb"));
+        var (root, info, baseline, comparison) = MockSystem.Build(rootPath);
+        ShowLoadedScan(root, info, baseline, comparison, Strings.Get("Status_OpenedVerb"));
     }
 
     /// <summary>Switches the drives and recent scans to the mock system.</summary>
@@ -473,6 +468,7 @@ public partial class MainWindow : Window
         _scanRoot = path;
         _scanExpectedBytes = null;
         UpdateNavigation();
+        if (_changesShowing) { _changesShowing = false; ApplyView(); }   // the table would be of the scan being replaced
         try
         {
             var drive = new DriveInfo(path);
@@ -490,6 +486,10 @@ public partial class MainWindow : Window
         if (elevate) mft = true;
         _scanMethod = mft ? "MFT" : "folder walk";
         _mftProgress = new WalkProgress(0, 0, 0, 0, path);
+        // the card sits in the map's corner with the last map (or the map being drawn) behind it; with nothing behind, it is centered
+        bool hasMap = _root is not null || (_settings.LiveMap && !mft);
+        ScanPanel.HorizontalAlignment = hasMap ? HorizontalAlignment.Right : HorizontalAlignment.Center;
+        ScanPanel.VerticalAlignment = hasMap ? VerticalAlignment.Bottom : VerticalAlignment.Center;
         ScanSubtitle.Text = (_scanExpectedBytes is { } bytes ? Strings.Format("Scan_Used", SizeFormatter.Format(bytes)) + " · " : string.Empty) + Strings.Get(mft ? "Scan_MethodMft" : "Scan_MethodWalk");
         ScanSizeLabel.Text = _scanExpectedBytes is { } b2 ? Strings.Format("Scan_FoundOf", SizeFormatter.Format(b2)) : Strings.Get("Scan_FoundSoFar");
         ScanPercent.Text = string.Empty;
@@ -511,8 +511,14 @@ public partial class MainWindow : Window
             {
                 IncludeHidden = _settings.IncludeHidden,
                 DetectHardLinks = _settings.DetectHardLinks,
-                Exclude = NamePatterns.Parse(_settings.ExcludePatterns)
+                Exclude = NamePatterns.Parse(_settings.ExcludePatterns),
+                Live = _settings.LiveMap
             };
+            _liveShown = false;
+            // a file-table scan has nothing to draw live; say so where the live map would be
+            SampleBanner.IsVisible = mft && _settings.LiveMap;
+            SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
+            SampleText.Text = Strings.Get("Scan_NoLiveText");
             FsNode root;
             if (mft && OperatingSystem.IsWindows())
             {
@@ -524,6 +530,7 @@ public partial class MainWindow : Window
                 {
                     _declinedElevation = true;
                     _scanMethod = "folder walk";
+                    SampleBanner.IsVisible = false;
                     ScanSubtitle.Text = (_scanExpectedBytes is { } b4 ? Strings.Format("Scan_Used", SizeFormatter.Format(b4)) + " · " : string.Empty) + Strings.Get("Scan_MethodWalk");
                     StageFindText.Text = Strings.Get("Scan_StageFind");
                     root = await _scanner.ScanAsync(path, options, _scanCts.Token);
@@ -531,6 +538,7 @@ public partial class MainWindow : Window
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
                 {
                     _scanMethod = "folder walk";
+                    SampleBanner.IsVisible = false;
                     ScanSubtitle.Text = (_scanExpectedBytes is { } b3 ? Strings.Format("Scan_Used", SizeFormatter.Format(b3)) + " · " : string.Empty) + Strings.Get("Scan_MethodWalk") + " · " + ex.Message;
                     root = await _scanner.ScanAsync(path, options, _scanCts.Token);
                 }
@@ -539,9 +547,8 @@ public partial class MainWindow : Window
             SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
             SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: false, done: true);
             SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: true);
-            _baselineInfo = null;
+            _baselineInfo = null; _comparison = null;
             ShowTree(root);
-            _settings.LastScanRoot = path;
             _settings.Save();
             StatusText.Text = Strings.Format("Status_Rescanned", DisplayName(path), root.FileCount, SizeFormatter.Format(root.Size));
             if (_scanMethod != "MFT") ShowAccessBar(_scanner.GetProgress().DeniedFolders);
@@ -550,10 +557,12 @@ public partial class MainWindow : Window
         catch (OperationCanceledException)
         {
             StatusText.Text = Strings.Get("Status_ScanCancelled");
+            if (_liveShown) Treemap.Root = _root;   // back to the last finished map
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             StatusText.Text = ex.Message;
+            if (_liveShown) Treemap.Root = _root;
         }
         finally
         {
@@ -601,8 +610,33 @@ public partial class MainWindow : Window
         return name.Length > 0 ? name : trimmed;
     }
 
+    private bool _liveShown;                 // the map shows a live snapshot of the running walk
+    private bool _liveBusy;                  // a snapshot is being built off the UI thread
+    private TimeSpan _lastLiveDraw;
+
+    /// <summary>Puts the walk's latest snapshot on the map, a few times a second at most; the snapshot is built off the UI thread.</summary>
+    private void DrawLiveMap()
+    {
+        if (_liveBusy || _scanMethod == "MFT" || _scanner.Live is not { } live || !live.Changed) return;
+        if (_liveShown && _scanClock.Elapsed - _lastLiveDraw < TimeSpan.FromMilliseconds(600)) return;
+        _liveBusy = true;
+        _lastLiveDraw = _scanClock.Elapsed;
+        var cts = _scanCts;
+        // the snapshot shares the walk's finished folders, so it is sorted on the UI thread (in ShowLive), never here
+        _ = Task.Run(() => live.Snapshot()).ContinueWith(task => Dispatcher.UIThread.Post(() =>
+        {
+            _liveBusy = false;
+            // the scan it belongs to must still be running
+            if (task.Status != TaskStatus.RanToCompletion || task.Result is not { } snapshot || !ReferenceEquals(cts, _scanCts) || _scanCts is null) return;
+            Treemap.ShowLive(snapshot);   // eases the boxes from where they are; Root would reset the map
+            if (!_liveShown) SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: true, done: false);
+            _liveShown = true;
+        }));
+    }
+
     private void UpdateProgress()
     {
+        DrawLiveMap();
         var p = _scanMethod == "MFT" ? _mftProgress : _scanner.GetProgress();
         double seconds = Math.Max(0.001, _scanClock.Elapsed.TotalSeconds);
         ScanSize.Text = SizeFormatter.Format(p.Bytes);
@@ -633,7 +667,7 @@ public partial class MainWindow : Window
         if (_scanExpectedBytes is { } expected && expected > 0)
         {
             double fraction = Math.Clamp((double)p.Bytes / expected, 0, 1);
-            StageFindFill.Width = Math.Max(6, StageFindBar.Bounds.Width * fraction);
+            StageFindFill.Width = Math.Max(4, StageFindBar.Bounds.Width * fraction);
             ScanPercent.Text = $"{fraction * 100:0}%";
         }
         else
@@ -641,7 +675,7 @@ public partial class MainWindow : Window
             // indeterminate: sweep
             double w = StageFindBar.Bounds.Width;
             double t = _scanClock.Elapsed.TotalSeconds % 1.6 / 1.6;
-            StageFindFill.Width = Math.Max(6, w * 0.3);
+            StageFindFill.Width = Math.Max(4, w * 0.3);
             StageFindFill.Margin = new Thickness(Math.Max(0, (w - w * 0.3) * t), 0, 0, 0);
         }
     }
@@ -656,23 +690,27 @@ public partial class MainWindow : Window
         icon.Glyph = Icons.Get(done ? "Check" : running ? "Loader" : "Circle");
         icon.Bind(Controls.Icon.ForegroundProperty, this.GetResourceObservable(running || done ? "Accent" : "TextDim"));
         fill.Margin = new Thickness(0);
-        fill.Width = done ? bar.Bounds.Width : running ? 6 : 0;
+        fill.Width = done ? bar.Bounds.Width : running ? 4 : 0;
     }
 
     private void ShowTree(FsNode root)
     {
         _root = root;
         root.SetFreeSpaceVisible(_settings.ShowFreeSpace, _settings.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize);
-        Treemap.Root = root;
+        // a scan that was drawn live eases into its finished tree instead of snapping to it
+        if (_liveShown) { root.SortBy(Treemap.SizeMode); Treemap.ShowLive(root, finishing: true); } else Treemap.Root = root;
+        _liveShown = false;
         EmptyHint.IsVisible = false;
-        StatusRight.Text = $"{root.FileCount:N0} {Strings.Get("Main_Files").ToLowerInvariant()} · {SizeFormatter.Format(root.Size)}";
+        UpdateScanStatus();
         UpdateNavigation();
         UpdateCompareUi();
         InvalidateInsights();
+        InvalidateChanges();
         ApplyFilter();
         RefreshTopList();
         ApplyView();
         RefreshInsights();
+        RefreshChanges();
     }
 
     // ------------------------------------------------------------------ path row and status
@@ -682,6 +720,7 @@ public partial class MainWindow : Window
         bool scanning = _scanCts is not null;
         UpButton.IsEnabled = !scanning && Treemap.FocusedFolder?.Parent is not null;
         RescanButton.IsEnabled = !scanning && _scanRoot is not null;
+        CloseScanButton.IsEnabled = !scanning && _root is not null;
         BuildCrumbs();
         UpdateZoomControls();
     }
@@ -721,18 +760,9 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ShowStatus(FsNode? node)
-    {
-        if (node is null) { StatusText.Text = string.Empty; return; }
-        string size = SizeFormatter.Format(node.SizeFor(Treemap.SizeMode));
-        StatusText.Text = node.IsDirectory
-            ? $"{node.FullPath} · {size} · {node.FileCount:N0} {Strings.Get("Main_Files").ToLowerInvariant()}"
-            : $"{node.FullPath} · {size}";
-    }
-
     // ------------------------------------------------------------------ right-click menu
 
-    private MenuItem _menuExportMatches = null!, _menuCompare = null!, _menuStopCompare = null!, _menuInspect = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuUp = null!, _menuFit = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuRescan = null!, _menuDelete = null!;
+    private MenuItem _menuExportMatches = null!, _menuCompare = null!, _menuStopCompare = null!, _menuInspect = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuUp = null!, _menuFit = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuRescan = null!, _menuClose = null!, _menuDelete = null!;
 
     private TextBlock _menuInspectTitle = null!, _menuInspectSub = null!;
 
@@ -784,6 +814,8 @@ public partial class MainWindow : Window
         menu.Items.Add(_menuFilterType);
         menu.Items.Add(_menuSelectFolder);
         menu.Items.Add(_menuRescan);
+        _menuClose = Item("Main_CloseScan", "Ctrl+W", CloseScan, "Close");
+        menu.Items.Add(_menuClose);
         menu.Items.Add(new Separator());
         var scanMenu = new MenuItem { Header = Strings.Get("Main_ScanFile"), Icon = Icons.Make("Open", 14, "TextDim") };
         scanMenu.Items.Add(Item("Main_SaveScanAs", "Ctrl+S", () => _ = SaveScanAsAsync()));
@@ -831,6 +863,7 @@ public partial class MainWindow : Window
             _menuFilterType.IsEnabled = node is { IsDirectory: false, Extension.Length: > 0 };
             _menuSelectFolder.IsEnabled = node is not null;
             _menuRescan.IsEnabled = _scanRoot is not null && _scanCts is null;
+            _menuClose.IsEnabled = _root is not null && _scanCts is null;
             _menuDelete.IsEnabled = Treemap.SelectedNodes.Any(n => n.IsReal && n.Parent is not null) && _scanCts is null;
         };
         return menu;
@@ -925,7 +958,7 @@ public partial class MainWindow : Window
         BuildDrives();
         InvalidateInsights();
         RefreshInsights();
-        if (_root is not null) StatusRight.Text = $"{_root.FileCount:N0} {Strings.Get("Main_Files").ToLowerInvariant()} · {SizeFormatter.Format(_root.Size)}";
+        UpdateScanStatus();
 
         if (!ok) await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
         StatusText.Text = removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size);
@@ -1122,20 +1155,9 @@ public partial class MainWindow : Window
     private void ColorMode_Changed(object? sender, SelectionChangedEventArgs e)
     {
         if (_building) return;
-        _settings.ColorMode = ColorCombo.SelectedIndex switch { 1 => "ByDepth", 2 => "ByFileType", 3 => "ByChange", _ => "ByBranch" };
+        _settings.ColorMode = ColorCombo.SelectedIndex switch { 1 => "ByDepth", 2 => "ByFileType", _ => "ByBranch" };
         _settings.Save();
         ApplyLook();
-    }
-
-    private void Palette_Changed(object? sender, SelectionChangedEventArgs e)
-    {
-        if (_building) return;
-        int i = PaletteCombo.SelectedIndex;
-        if (i < 0 || i >= _paletteItems.Count || _paletteItems[i] is not { } scheme) return;
-        bool dark = App.IsDark;
-        _settings.SetPalette(dark, scheme.Name);
-        _settings.Save();
-        Treemap.Scheme = scheme;
     }
 
     private void Settings_Click(object? sender, RoutedEventArgs e) => _ = new SettingsWindow(this).ShowModal(this);
@@ -1173,12 +1195,12 @@ public partial class MainWindow : Window
             case Key.Escape when _scanCts is not null: _scanCts.Cancel(); e.Handled = true; break;
             case Key.Escape when FilterDrawer.IsVisible && !FilterHasFocus && string.IsNullOrEmpty(FilterBox.Text): FilterDrawer.IsVisible = false; e.Handled = true; break;
             case Key.Escape when !string.IsNullOrEmpty(FilterBox.Text) && !FilterHasFocus: FilterBox.Text = string.Empty; e.Handled = true; break;
-            case Key.Delete when !FilterHasFocus: _ = DeleteNodes(Treemap.SelectedNodes.ToList()); e.Handled = true; break;
-            case Key.Enter when e.KeyModifiers.HasFlag(KeyModifiers.Alt) && !FilterHasFocus: ShowProperties(); e.Handled = true; break;
-            case Key.Enter when !FilterHasFocus: OpenSelected(); e.Handled = true; break;
+            case Key.Delete when !FilterHasFocus && !ChangesShowing: _ = DeleteNodes(Treemap.SelectedNodes.ToList()); e.Handled = true; break;
+            case Key.Enter when e.KeyModifiers.HasFlag(KeyModifiers.Alt) && !FilterHasFocus && !ChangesShowing: ShowProperties(); e.Handled = true; break;
+            case Key.Enter when !FilterHasFocus && !ChangesShowing: OpenSelected(); e.Handled = true; break;
             case Key.C when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus: CopyToClipboard(Treemap.SelectedNode?.FullPath); e.Handled = true; break;
-            case Key.Back when !FilterHasFocus: Up_Click(null, new RoutedEventArgs()); e.Handled = true; break;
-            case Key.Home when !FilterHasFocus: Treemap.ShowAll(); e.Handled = true; break;
+            case Key.Back when !FilterHasFocus && !ChangesShowing: Up_Click(null, new RoutedEventArgs()); e.Handled = true; break;
+            case Key.Home when !FilterHasFocus && !ChangesShowing: Treemap.ShowAll(); e.Handled = true; break;
             case Key.Add or Key.OemPlus when !FilterHasFocus: Treemap.ZoomBy(1.25); e.Handled = true; break;
             case Key.Subtract or Key.OemMinus when !FilterHasFocus: Treemap.ZoomBy(1 / 1.25); e.Handled = true; break;
             case Key.F5: Rescan_Click(null, new RoutedEventArgs()); e.Handled = true; break;
@@ -1188,12 +1210,13 @@ public partial class MainWindow : Window
             case Key.I when e.KeyModifiers.HasFlag(KeyModifiers.Control): ShowInspect(); e.Handled = true; break;
             case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = SaveScanAsAsync(); e.Handled = true; break;
             case Key.O when e.KeyModifiers.HasFlag(KeyModifiers.Control): _ = OpenScanAsync(); e.Handled = true; break;
+            case Key.W when e.KeyModifiers.HasFlag(KeyModifiers.Control): CloseScan(); e.Handled = true; break;
             case Key.K when !FilterHasFocus: ColorCombo.SelectedIndex = (ColorCombo.SelectedIndex + 1) % ColorCombo.ItemCount; e.Handled = true; break;
             case Key.L when !FilterHasFocus: Panel_Click(null, new RoutedEventArgs()); e.Handled = true; break;
             case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Control): FocusFilter(); e.Handled = true; break;
             case Key.A when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus: SelectMatches_Click(null, new RoutedEventArgs()); e.Handled = true; break;
             case Key.F1: About_Click(null, new RoutedEventArgs()); e.Handled = true; break;
-            case Key.B when !FilterHasFocus: ShowView(!InsightsShowing); e.Handled = true; break;
+            case Key.B when !FilterHasFocus: NextView(); e.Handled = true; break;
             case Key.OemComma when e.KeyModifiers.HasFlag(KeyModifiers.Control): Settings_Click(null, new RoutedEventArgs()); e.Handled = true; break;
         }
     }
