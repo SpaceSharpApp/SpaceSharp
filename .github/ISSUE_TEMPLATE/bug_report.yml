@@ -1,20 +1,21 @@
 name: Bug report
-description: Something doesn't work the way it should.
+description: Something does not work the way it should.
 title: "[Bug] "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report this. The more of the fields below you can fill in, the faster it can be fixed.
-        Tip: the About window (F1) has a **Copy version info** button that fills in the version and system fields for you.
+        Thanks for reporting this. A few precise details get a bug fixed far faster than a long description, so the form asks for the ones that matter.
+
+        **Two shortcuts:** the About window (F1) has **Copy version info**, which fills in the version and system fields below in one paste, and if SpaceSharp showed an "Unexpected error" dialog, its **Report on GitHub** button opens this form already filled in. Crash logs are in About › Crash logs.
 
   - type: textarea
     id: what-happened
     attributes:
-      label: What happened?
-      description: What did you do, and what went wrong?
-      placeholder: I scanned D:, then double-clicked the Games folder, and the map went blank.
+      label: What happened
+      description: What you did, and what went wrong. If an error was shown, paste its text.
+      placeholder: "I scanned D:, double-clicked the Games folder, and the map went blank."
     validations:
       required: true
 
@@ -22,6 +23,7 @@ body:
     id: steps
     attributes:
       label: Steps to reproduce
+      description: Numbered, from a fresh start of the app if you can.
       placeholder: |
         1. Scan drive D:
         2. Double-click "Games"
@@ -32,25 +34,24 @@ body:
   - type: textarea
     id: expected
     attributes:
-      label: What did you expect instead?
+      label: What you expected instead
 
   - type: input
     id: version
     attributes:
       label: SpaceSharp version
-      description: Shown in the About window (F1).
-      placeholder: "1.2.0"
+      description: Shown at the top of the About window (F1).
+      placeholder: "2.5.0"
     validations:
       required: true
 
   - type: dropdown
     id: install
     attributes:
-      label: How did you install it?
+      label: How it was installed
       options:
-        - MSI installer
-        - Setup.exe (one-click)
-        - Portable SpaceSharp.exe
+        - Installer (Setup.exe or MSI)
+        - Portable exe
         - Built from source
     validations:
       required: true
@@ -59,37 +60,50 @@ body:
     id: windows
     attributes:
       label: Windows version
-      description: From the About window's "Copy version info", or Settings → System → About in Windows.
+      description: From Copy version info, or Settings › System › About in Windows.
       placeholder: "Windows 11 24H2 (26100), x64"
 
   - type: dropdown
     id: scan-target
     attributes:
-      label: What were you scanning?
+      label: What was being scanned
       options:
         - A whole drive (C:, D:, …)
         - A folder
-        - A network drive or share
         - An external or removable drive
-        - Not scanning / doesn't apply
+        - A network drive or share
+        - Not scanning, or does not apply
+
+  - type: dropdown
+    id: scan-method
+    attributes:
+      label: Scan method
+      description: The status bar and the scanning card say which one ran. The file table needs administrator rights and an NTFS drive.
+      options:
+        - File table (fast scan, as administrator)
+        - Folder walk
+        - A saved scan opened from the start screen
+        - Not sure
 
   - type: textarea
     id: settings
     attributes:
       label: Relevant settings
-      description: Map style, size measure, hard-link detection, theme, or anything else that might matter.
-      placeholder: Style Tiles, size on disk, dark theme
+      description: "Anything that might matter: Color by, palette, size measure, hard-link detection, exclusions, theme, language."
+      placeholder: Color by Depth, Graphite palette, size on disk, dark theme, English
 
   - type: textarea
-    id: screenshots
+    id: evidence
     attributes:
-      label: Screenshots or error text
-      description: Paste images here, or the text from the "Unexpected error" dialog if one appeared.
+      label: Screenshots, error text or crash log
+      description: Drag images or the crash-*.log file from About › Crash logs into this field.
 
   - type: checkboxes
     id: checks
     attributes:
-      label: Checks
+      label: Before sending
       options:
-        - label: I'm on the latest release (see the Releases page)
-        - label: I searched existing issues and didn't find this one
+        - label: I am on the latest release, or the issue says which older version
+          required: true
+        - label: I searched the open and closed issues for this
+          required: true

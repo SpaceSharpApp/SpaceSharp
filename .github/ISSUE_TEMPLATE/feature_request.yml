@@ -6,55 +6,63 @@ body:
   - type: markdown
     attributes:
       value: |
-        Ideas are welcome. Describing the problem you're trying to solve helps more than a specific solution, since there may be a simpler way to get there.
+        Ideas are welcome. The problem you are trying to solve is worth more than a specific solution: there is often a simpler way to get there, and knowing the goal makes it possible to find it.
 
   - type: textarea
     id: problem
     attributes:
-      label: What are you trying to do?
-      description: The situation or task where SpaceSharp falls short today.
-      placeholder: I want to find installers I downloaded more than a year ago and never ran, but there's no way to see when a file was last opened.
+      label: What you are trying to do
+      description: The situation where SpaceSharp falls short today, in a sentence or two.
+      placeholder: I want to find installers I downloaded more than a year ago and never ran, but there is no way to see when a file was last opened.
     validations:
       required: true
 
   - type: textarea
     id: proposal
     attributes:
-      label: What would you like SpaceSharp to do?
-      description: Your idea for how it could work. Rough is fine.
+      label: What SpaceSharp could do
+      description: Your idea for how it would work. Rough is fine; a sentence is enough.
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: How do you handle it today?
-      description: Workarounds, other tools, or "I don't".
+      label: How you handle it today
+      description: A workaround, another tool, or "I don't".
 
   - type: dropdown
     id: area
     attributes:
-      label: Which part of the app is this about?
+      label: Part of the app
       options:
-        - Scanning and accuracy
-        - The map (layout, styles, colors, labels)
+        - Scanning (speed, accuracy, what is counted)
+        - The map (layout, shading, colors, labels)
         - Zoom and navigation
-        - Filter and search
+        - Filter
+        - Insights and Safe to clear
+        - Changes (comparing scans)
+        - Start screen and saved scans
         - Side panel (drives, largest items)
+        - Inspect
         - Deleting and cleanup
-        - Settings and appearance
-        - Installer and updates
+        - Palettes, themes and looks
+        - Settings
+        - Shortcuts and keyboard
+        - Languages and translations
+        - Installer, updates and the command line
         - Something else
 
   - type: textarea
     id: mockup
     attributes:
       label: Sketches or examples
-      description: A drawing, a screenshot from another tool, or a mockup, if you have one.
+      description: A drawing, a screenshot from another tool, or a mockup, if you have one. Drag images into this field.
 
   - type: checkboxes
     id: checks
     attributes:
-      label: Checks
+      label: Before sending
       options:
-        - label: I searched existing issues and discussions for this idea
+        - label: I searched the open and closed issues for this idea
+          required: true
