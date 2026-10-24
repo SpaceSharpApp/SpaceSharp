@@ -146,7 +146,7 @@ public class LocalizationTests
     }
 
     /// <summary>Sizes, percentages and resources follow the user's culture: a French Windows sees a decimal comma and French text.</summary>
-    /// <remarks>The rest of the suite runs under the invariant culture (see <see cref="TestCulture"/>); this is the one test that asserts the other way.</remarks>
+    /// <remarks>The rest of the suite runs under the invariant culture (see <see cref="TestCulture"/>); this and <see cref="FormattingFollowsTheCurrentCulture"/> assert the other way.</remarks>
     [Fact]
     public void FrenchCultureFormatsWithADecimalComma()
     {
@@ -158,6 +158,55 @@ public class LocalizationTests
             Assert.Equal("1,07 KB", SizeFormatter.Compact(1100));
             Assert.Equal("8,9%", InspectSummary.Percent(0.089));
             Assert.Equal("Langue", Strings.Get("Settings_Language"));
+        }
+        finally { (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture) = before; }
+    }
+
+    /// <summary>The suite runs under the invariant culture whatever the machine is set to, so expected English text and decimal points hold everywhere.</summary>
+    /// <remarks>Fails if <see cref="TestCulture"/> is removed or stops running before the tests.</remarks>
+    [Fact]
+    public void SuiteRunsUnderTheInvariantCulture()
+    {
+        Assert.Equal(CultureInfo.InvariantCulture, CultureInfo.CurrentCulture);
+        Assert.Equal(CultureInfo.InvariantCulture, CultureInfo.CurrentUICulture);
+        Assert.Equal("1.5 KB", SizeFormatter.Format(1536));
+        Assert.Equal("Language", Strings.Get("Settings_Language"));
+    }
+
+    /// <summary>Numbers follow the current culture's separators and text follows its translation, or English where there is none.</summary>
+    /// <remarks>
+    /// Covers a decimal comma (de-DE, fr-FR, ru-RU, tr-TR), a decimal point in a non-English culture (de-CH, ja-JP),
+    /// a space as the thousands separator (nb-NO, fr-FR), a culture with a translation and one without (de-CH falls back to German, ja-JP has its own).
+    /// </remarks>
+    /// <param name="cultureName">The culture to run the assertions under.</param>
+    [Theory]
+    [InlineData("en-US")]
+    [InlineData("fr-FR")]
+    [InlineData("de-DE")]
+    [InlineData("de-CH")]
+    [InlineData("nb-NO")]
+    [InlineData("ru-RU")]
+    [InlineData("tr-TR")]
+    [InlineData("ja-JP")]
+    public void FormattingFollowsTheCurrentCulture(string cultureName)
+    {
+        CultureInfo culture = CultureInfo.GetCultureInfo(cultureName);
+        (CultureInfo CurrentCulture, CultureInfo CurrentUICulture) before = (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture);
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = culture;
+
+            // The same numbers formatted with the culture by hand are what the app must produce.
+            Assert.Equal(string.Format(culture, "{0:0.##} KB", 1.5), SizeFormatter.Format(1536));
+            Assert.Equal(string.Format(culture, "{0:0.##} KB", 1100 / 1024.0), SizeFormatter.Compact(1100));
+            Assert.Equal(string.Format(culture, "{0:0.#}%", 8.9), InspectSummary.Percent(0.089));
+            Assert.Contains(1234.ToString("N0", culture), Strings.Format("Inspect_ItemsSelected", 1234));
+
+            // Text comes from the culture's resources, or the nearest parent, or English; never a bare key.
+            string? expected = Strings.Manager.GetString("Settings_Language", culture);
+            Assert.NotNull(expected);
+            Assert.Equal(expected, Strings.Get("Settings_Language"));
+            Assert.DoesNotContain("[", Strings.Get("Settings_Language"));
         }
         finally { (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture) = before; }
     }
