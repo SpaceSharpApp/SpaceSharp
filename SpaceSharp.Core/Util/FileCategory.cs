@@ -34,18 +34,25 @@ public static class FileCategories
     private static readonly Dictionary<string, FileCategory> Extensions = BuildExtensionMap();
 
     /// <summary>The category for an extension with its dot, or Other.</summary>
+    /// <param name="extension">The extension including its leading dot, such as ".jpg", compared ignoring case; an empty string gives Other.</param>
+    /// <returns>The matching category, or <see cref="FileCategory.Other"/> for unknown and missing extensions.</returns>
     public static FileCategory Categorize(string extension) =>
-        Extensions.TryGetValue(extension, out var category) ? category : FileCategory.Other;
+        Extensions.TryGetValue(extension, out FileCategory category) ? category : FileCategory.Other;
 
     /// <summary>Every known extension.</summary>
     public static IReadOnlyCollection<string> Known => Extensions.Keys;
 
+    /// <summary>The extension table; the one place to add a file type.</summary>
+    /// <returns>A case-insensitive map from dotted extension to category, where a later line wins if an extension is listed twice.</returns>
     private static Dictionary<string, FileCategory> BuildExtensionMap()
     {
         var map = new Dictionary<string, FileCategory>(StringComparer.OrdinalIgnoreCase);
         void Add(FileCategory category, params string[] extensions)
         {
-            foreach (var ext in extensions) map[ext] = category;
+            foreach (string extension in extensions)
+            {
+                map[extension] = category;
+            }
         }
 
         Add(FileCategory.Images, ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".psd",

@@ -11,7 +11,10 @@ public class LocalizationTests
     private static string RepoRoot()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln"))) dir = dir.Parent;
+        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln")))
+        {
+            dir = dir.Parent;
+        }
         Assert.NotNull(dir);
         return dir!.FullName;
     }
@@ -25,27 +28,41 @@ public class LocalizationTests
     [Fact]
     public void EveryKeyUsedInCodeOrXamlExists()
     {
-        var keys = NeutralKeys();
+        HashSet<string> keys = NeutralKeys();
         string app = Path.Combine(RepoRoot(), "SpaceSharp");
         var used = new Dictionary<string, string>();
-        var patterns = new[]
+        Regex[] patterns = new[]
         {
             new Regex(@"Strings\.(?:Get|Format)\(""([A-Za-z0-9_]+)""", RegexOptions.Compiled),
             new Regex(@"\{u:T ([A-Za-z0-9_]+)\}", RegexOptions.Compiled)
         };
         foreach (string file in Directory.EnumerateFiles(app, "*.*", SearchOption.AllDirectories))
         {
-            if (!file.EndsWith(".cs") && !file.EndsWith(".xaml")) continue;
-            if (file.EndsWith("Strings.cs")) continue;
-            if (file.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) || file.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar)) continue;
+            if (!file.EndsWith(".cs") && !file.EndsWith(".xaml"))
+            {
+                continue;
+            }
+            if (file.EndsWith("Strings.cs"))
+            {
+                continue;
+            }
+            if (file.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar) || file.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar))
+            {
+                continue;
+            }
             string text = File.ReadAllText(file);
-            foreach (var p in patterns)
+            foreach (Regex? p in patterns)
+            {
                 foreach (Match m in p.Matches(text))
                 {
                     string key = m.Groups[1].Value;
-                    if (key.EndsWith('_')) continue; // runtime prefix; see DynamicKeysExistForEveryEnumValue
+                    if (key.EndsWith('_'))
+                    {
+                        continue; // runtime prefix; see DynamicKeysExistForEveryEnumValue
+                    }
                     used.TryAdd(key, Path.GetFileName(file));
                 }
+            }
         }
         Assert.True(used.Count > 300, $"expected hundreds of keys in use, found {used.Count}");
         var missing = used.Where(kv => !keys.Contains(kv.Key)).Select(kv => $"{kv.Key} ({kv.Value})").OrderBy(x => x).ToList();
@@ -55,24 +72,49 @@ public class LocalizationTests
     [Fact]
     public void DynamicKeysExistForEveryEnumValue()
     {
-        var keys = NeutralKeys();
-        foreach (var c in Enum.GetNames<FileCategory>()) Assert.Contains("Category_" + c, keys);
-        foreach (var p in new[] { "Soft", "Classic", "Deep" }) Assert.Contains("Preset_" + p, keys);
-        foreach (var k in SpaceSharp.Services.DriveInsights.SuggestionKeys) { Assert.Contains("Cleanup_" + k, keys); Assert.Contains("Cleanup_" + k + "_Note", keys); }
-        foreach (var a in new[] { "ThisMonth", "ThisYear", "OneToThree", "Older" }) Assert.Contains("Age_" + a, keys);
-        foreach (var d in Enum.GetNames<SpaceSharp.Controls.MapDensity>()) Assert.Contains("Density_" + d, keys);
-        foreach (var t in new[] { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" }) Assert.Contains("SettingsTab_" + t, keys);
-        foreach (var l in new[] { "Smallest", "Smaller", "Normal", "Large", "Larger" }) Assert.Contains("LabelSize_" + l, keys);
-        foreach (var p in new[] { "Day", "Days", "Week", "Weeks", "Month", "Months", "Year", "Years" }) Assert.Contains("Period_" + p, keys);
+        HashSet<string> keys = NeutralKeys();
+        foreach (string c in Enum.GetNames<FileCategory>())
+        {
+            Assert.Contains("Category_" + c, keys);
+        }
+        foreach (string? p in new[] { "Soft", "Classic", "Deep" })
+        {
+            Assert.Contains("Preset_" + p, keys);
+        }
+        foreach (string k in SpaceSharp.Services.DriveInsights.SuggestionKeys)
+        {
+            Assert.Contains("Cleanup_" + k, keys);
+            Assert.Contains("Cleanup_" + k + "_Note", keys);
+        }
+        foreach (string? a in new[] { "ThisMonth", "ThisYear", "OneToThree", "Older" })
+        {
+            Assert.Contains("Age_" + a, keys);
+        }
+        foreach (string d in Enum.GetNames<SpaceSharp.Controls.MapDensity>())
+        {
+            Assert.Contains("Density_" + d, keys);
+        }
+        foreach (string? t in new[] { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" })
+        {
+            Assert.Contains("SettingsTab_" + t, keys);
+        }
+        foreach (string? l in new[] { "Smallest", "Smaller", "Normal", "Large", "Larger" })
+        {
+            Assert.Contains("LabelSize_" + l, keys);
+        }
+        foreach (string? p in new[] { "Day", "Days", "Week", "Weeks", "Month", "Months", "Year", "Years" })
+        {
+            Assert.Contains("Period_" + p, keys);
+        }
     }
 
     [Fact]
     public void NorwegianIsAvailableAndTranslates()
     {
-        var available = AppLanguages.Available();
+        IReadOnlyList<CultureInfo> available = AppLanguages.Available();
         Assert.Contains(available, c => c.Name == "nb");
 
-        var before = CultureInfo.CurrentUICulture;
+        CultureInfo before = CultureInfo.CurrentUICulture;
         try
         {
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("nb");
@@ -93,7 +135,7 @@ public class LocalizationTests
     [Fact]
     public void FormatUsesTheCurrentCultureForNumbers()
     {
-        var before = (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture);
+        (CultureInfo CurrentCulture, CultureInfo CurrentUICulture) before = (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture);
         try
         {
             CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("nb");

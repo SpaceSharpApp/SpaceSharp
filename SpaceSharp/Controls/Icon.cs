@@ -13,20 +13,29 @@ namespace SpaceSharp.Controls;
 /// <remarks>Geometry is on a 24 x 24 grid, stroked 2 units wide with round caps and joins (Lucide style).</remarks>
 public sealed class Icon : Viewbox
 {
+    /// <summary>The path geometry drawn; null draws nothing.</summary>
     public static readonly StyledProperty<Geometry?> GlyphProperty = AvaloniaProperty.Register<Icon, Geometry?>(nameof(Glyph));
+    /// <summary>The stroke brush, shared with TextElement.Foreground so the icon inherits its parent's text color.</summary>
     public static readonly StyledProperty<IBrush?> ForegroundProperty = TextElement.ForegroundProperty.AddOwner<Icon>();
+    /// <summary>Stroke width in 24-unit grid units; 2 is the Lucide default.</summary>
     public static readonly StyledProperty<double> StrokeWidthProperty = AvaloniaProperty.Register<Icon, double>(nameof(StrokeWidth), 2.0);
 
     private readonly Path _path;
 
+    /// <summary>A 14 x 14 icon with no glyph; set <see cref="Glyph"/> and the size afterwards. Not hit-testable, so clicks fall through to
+    /// the parent.</summary>
     public Icon()
     {
         FlowDirection = FlowDirection.LeftToRight;
-        Width = 14; Height = 14;
+        Width = 14;
+        Height = 14;
         _path = new Path
         {
-            Width = 24, Height = 24, StrokeThickness = 2,
-            StrokeLineCap = PenLineCap.Round, StrokeJoin = PenLineJoin.Round,
+            Width = 24,
+            Height = 24,
+            StrokeThickness = 2,
+            StrokeLineCap = PenLineCap.Round,
+            StrokeJoin = PenLineJoin.Round,
             Stretch = Stretch.None
         };
         _path.Bind(Shape.StrokeProperty, this.GetObservable(ForegroundProperty));
@@ -37,28 +46,53 @@ public sealed class Icon : Viewbox
     }
 
     /// <summary>The geometry to draw.</summary>
-    public Geometry? Glyph { get => GetValue(GlyphProperty); set => SetValue(GlyphProperty, value); }
+    public Geometry? Glyph
+    {
+        get => GetValue(GlyphProperty); set => SetValue(GlyphProperty, value);
+    }
 
-    public IBrush? Foreground { get => GetValue(ForegroundProperty); set => SetValue(ForegroundProperty, value); }
+    /// <summary>The stroke brush; null (the default) inherits the surrounding text color.</summary>
+    public IBrush? Foreground
+    {
+        get => GetValue(ForegroundProperty); set => SetValue(ForegroundProperty, value);
+    }
 
-    /// <summary>Stroke width on the 24-unit grid.</summary>
-    public double StrokeWidth { get => GetValue(StrokeWidthProperty); set => SetValue(StrokeWidthProperty, value); }
+    /// <summary>Stroke width on the 24-unit grid; it scales with the icon, so 2 stays visually the same at any size.</summary>
+    public double StrokeWidth
+    {
+        get => GetValue(StrokeWidthProperty); set => SetValue(StrokeWidthProperty, value);
+    }
 }
 
 /// <summary>Looks up icon geometry by resource name.</summary>
 public static class Icons
 {
+    /// <summary>Looks up an icon's geometry in the application resources.</summary>
+    /// <param name="name">The icon name without the "Icon." prefix, as listed in Themes/Icons.axaml (for example "Folder").</param>
+    /// <returns>The shared geometry, or null when no application is running or no icon has that name.</returns>
     public static Geometry? Get(string name) => Application.Current?.FindResource("Icon." + name) as Geometry;
 
-    /// <summary>Creates an icon element.</summary>
+    /// <summary>Creates an icon element, vertically centered in its slot.</summary>
+    /// <param name="name">The icon name without the "Icon." prefix; an unknown name gives an empty icon of the requested size.</param>
+    /// <param name="size">Width and height in device-independent pixels.</param>
+    /// <param name="foregroundKey">A theme brush resource key ("Text", "TextDim", "Accent") the stroke follows across theme changes, or
+    /// null to inherit the parent's text color.</param>
+    /// <returns>A new <see cref="Icon"/>; never null.</returns>
     public static Icon Make(string name, double size = 14, string? foregroundKey = null)
     {
         var icon = new Icon { Glyph = Get(name), Width = size, Height = size, VerticalAlignment = VerticalAlignment.Center };
-        if (foregroundKey is not null && Application.Current is { } app) icon.Bind(Icon.ForegroundProperty, app.GetResourceObservable(foregroundKey));
+        if (foregroundKey is not null && Application.Current is { } app)
+        {
+            icon.Bind(Icon.ForegroundProperty, app.GetResourceObservable(foregroundKey));
+        }
         return icon;
     }
 
-    /// <summary>Creates an icon followed by text.</summary>
+    /// <summary>Creates an icon followed by text, for menu items and buttons.</summary>
+    /// <param name="name">The icon name without the "Icon." prefix.</param>
+    /// <param name="text">The label shown to the right of the icon, already localized.</param>
+    /// <param name="size">Icon width and height in device-independent pixels; the text keeps the inherited font size.</param>
+    /// <returns>A horizontal panel with the icon, an 8 px gap and the text; the icon inherits the panel's text color.</returns>
     public static StackPanel WithText(string name, string text, double size = 15)
     {
         var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };

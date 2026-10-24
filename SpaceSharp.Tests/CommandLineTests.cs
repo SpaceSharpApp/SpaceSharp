@@ -15,7 +15,10 @@ public class CommandLineTests
     public void NoArgumentsMeansNothing()
     {
         var c = CommandLine.Parse(Array.Empty<string>());
-        Assert.Null(c.ScanPath); Assert.Null(c.OpenFile); Assert.Null(c.CompareFile); Assert.False(c.ShowHelp);
+        Assert.Null(c.ScanPath);
+        Assert.Null(c.OpenFile);
+        Assert.Null(c.CompareFile);
+        Assert.False(c.ShowHelp);
     }
 
     [Fact]
@@ -41,7 +44,9 @@ public class CommandLineTests
     public void UnknownThingsAreIgnored()
     {
         var c = CommandLine.Parse(new[] { "--nonsense", @"Z:\does\not\exist", "--scan" });
-        Assert.Null(c.ScanPath); Assert.Null(c.OpenFile); Assert.False(c.ShowHelp);
+        Assert.Null(c.ScanPath);
+        Assert.Null(c.OpenFile);
+        Assert.False(c.ShowHelp);
         Assert.True(CommandLine.Parse(new[] { "/?" }).ShowHelp);
         Assert.True(CommandLine.Parse(new[] { "--HELP" }).ShowHelp);
     }

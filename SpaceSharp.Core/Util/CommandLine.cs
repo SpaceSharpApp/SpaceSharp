@@ -6,88 +6,162 @@ namespace SpaceSharp.Util;
 /// <remarks>See <see cref="HelpText"/>; hidden flags are --mock, --rtl, --lang, --audit, --scene, --shot and --size.</remarks>
 public sealed class CommandLine
 {
-    public string? ScanPath { get; private set; }
-    public string? OpenFile { get; private set; }
-    public string? CompareFile { get; private set; }
-    public bool ShowHelp { get; private set; }
-    /// <summary>Start on <see cref="Services.MockSystem"/>.</summary>
-    public bool Mock { get; private set; }
-    /// <summary>Mirror every window as a right-to-left language would, whatever the language; for testing the layout.</summary>
-    public bool RightToLeft { get; private set; }
-    /// <summary>Run the layout audit over every scene, both directions and two window sizes, write the report here, and exit.</summary>
-    public string? Audit { get; private set; }
-    /// <summary>A culture code to run in, instead of the settings' language.</summary>
-    public string? Language { get; private set; }
-    /// <summary>A screenshot scene to pose; implies <see cref="Mock"/>.</summary>
-    public string? Scene { get; private set; }
-    /// <summary>With a scene: write the window to this PNG and exit.</summary>
-    public string? Shot { get; private set; }
-    /// <summary>With a scene: the window's client size, e.g. "1600x900".</summary>
-    public (int Width, int Height)? Size { get; private set; }
+    /// <summary>The folder or drive root to scan at startup (--scan or a bare existing folder), as a full path; null to start on the start screen.</summary>
+    public string? ScanPath
+    {
+        get; private set;
+    }
 
+    /// <summary>The saved scan to open at startup (--open or a bare existing .sscan file), as a full path; null for none.</summary>
+    public string? OpenFile
+    {
+        get; private set;
+    }
+
+    /// <summary>The saved scan to compare the startup scan against (--compare), as a full path; null for none.</summary>
+    public string? CompareFile
+    {
+        get; private set;
+    }
+
+    /// <summary>True for --help, -h or /?: print <see cref="HelpText"/> and exit.</summary>
+    public bool ShowHelp
+    {
+        get; private set;
+    }
+    /// <summary>Start on <see cref="Services.MockSystem"/>.</summary>
+    public bool Mock
+    {
+        get; private set;
+    }
+    /// <summary>Mirror every window as a right-to-left language would, whatever the language; for testing the layout.</summary>
+    public bool RightToLeft
+    {
+        get; private set;
+    }
+    /// <summary>Run the layout audit over every scene, both directions and two window sizes, write the report here, and exit.</summary>
+    public string? Audit
+    {
+        get; private set;
+    }
+    /// <summary>A culture code to run in, instead of the settings' language.</summary>
+    public string? Language
+    {
+        get; private set;
+    }
+    /// <summary>A screenshot scene to pose; implies <see cref="Mock"/>.</summary>
+    public string? Scene
+    {
+        get; private set;
+    }
+    /// <summary>With a scene: write the window to this PNG and exit.</summary>
+    public string? Shot
+    {
+        get; private set;
+    }
+    /// <summary>With a scene: the window's client size, e.g. "1600x900".</summary>
+    public (int Width, int Height)? Size
+    {
+        get; private set;
+    }
+
+    /// <summary>Reads the process arguments; flags are case-insensitive, a flag that needs a value and has none is ignored, and the first bare path of each kind wins.</summary>
+    /// <param name="args">The arguments as given to Main, without the program name.</param>
+    /// <returns>The parsed options; never null, with every unset option null or false.</returns>
     public static CommandLine Parse(string[] args)
     {
-        var c = new CommandLine();
+        var parsed = new CommandLine();
         for (int i = 0; i < args.Length; i++)
         {
-            string a = args[i];
-            switch (a.ToLowerInvariant())
+            string argument = args[i];
+            switch (argument.ToLowerInvariant())
             {
                 case "--help" or "-h" or "/?":
-                    c.ShowHelp = true;
+                    parsed.ShowHelp = true;
                     break;
                 case "--mock":
-                    c.Mock = true;
+                    parsed.Mock = true;
                     break;
                 case "--rtl":
-                    c.RightToLeft = true;
+                    parsed.RightToLeft = true;
                     break;
                 case "--audit":
-                    c.Audit = i + 1 < args.Length && !args[i + 1].StartsWith('-') ? Full(args[++i]) : string.Empty;
-                    c.Mock = true;
+                    // The report path is optional; a following flag means none was given.
+                    bool hasReportPath = i + 1 < args.Length && !args[i + 1].StartsWith('-');
+                    parsed.Audit = hasReportPath ? Full(args[++i]) : string.Empty;
+                    parsed.Mock = true;
                     break;
                 case "--lang" when i + 1 < args.Length:
-                    c.Language = args[++i];
+                    parsed.Language = args[++i];
                     break;
                 case "--scene" when i + 1 < args.Length:
-                    c.Scene = args[++i].ToLowerInvariant();
-                    c.Mock = true;
+                    parsed.Scene = args[++i].ToLowerInvariant();
+                    parsed.Mock = true;
                     break;
                 case "--shot" when i + 1 < args.Length:
-                    c.Shot = Full(args[++i]);
+                    parsed.Shot = Full(args[++i]);
                     break;
                 case "--size" when i + 1 < args.Length:
-                    var parts = args[++i].ToLowerInvariant().Split('x');
-                    if (parts.Length == 2 && int.TryParse(parts[0], out int w) && int.TryParse(parts[1], out int h) && w > 200 && h > 200) c.Size = (w, h);
+                    string[] dimensions = args[++i].ToLowerInvariant().Split('x');
+                    if (dimensions.Length == 2
+                        && int.TryParse(dimensions[0], out int width)
+                        && int.TryParse(dimensions[1], out int height)
+                        && width > 200 && height > 200)
+                    {
+                        parsed.Size = (width, height);
+                    }
                     break;
                 case "--scan" when i + 1 < args.Length:
-                    c.ScanPath = Full(args[++i]);
+                    parsed.ScanPath = Full(args[++i]);
                     break;
                 case "--open" when i + 1 < args.Length:
-                    c.OpenFile = Full(args[++i]);
+                    parsed.OpenFile = Full(args[++i]);
                     break;
                 case "--compare" when i + 1 < args.Length:
-                    c.CompareFile = Full(args[++i]);
+                    parsed.CompareFile = Full(args[++i]);
                     break;
                 default:
-                    if (a.StartsWith('-')) break;
-                    string full = Full(a);
-                    if (full.EndsWith(ScanFileExtension, StringComparison.OrdinalIgnoreCase) && File.Exists(full)) c.OpenFile ??= full;
-                    else if (Directory.Exists(full)) c.ScanPath ??= full;
+                    if (argument.StartsWith('-'))
+                    {
+                        break;
+                    }
+
+                    // A bare argument is a saved scan or a folder, whichever exists; the first of each wins.
+                    string fullPath = Full(argument);
+                    if (fullPath.EndsWith(ScanFileExtension, StringComparison.OrdinalIgnoreCase) && File.Exists(fullPath))
+                    {
+                        parsed.OpenFile ??= fullPath;
+                    }
+                    else if (Directory.Exists(fullPath))
+                    {
+                        parsed.ScanPath ??= fullPath;
+                    }
                     break;
             }
         }
-        return c;
+
+        return parsed;
     }
 
     private const string ScanFileExtension = ".sscan";
 
+    /// <summary>Resolves a path argument against the working directory, dropping surrounding quotes.</summary>
+    /// <param name="path">A path as typed on the command line, possibly relative or quoted.</param>
+    /// <returns>The absolute path, or the trimmed input unchanged when the runtime cannot resolve it.</returns>
     private static string Full(string path)
     {
-        try { return Path.GetFullPath(path.Trim('"')); }
-        catch (Exception ex) when (ex is ArgumentException or PathTooLongException or NotSupportedException) { return path; }
+        try
+        {
+            return Path.GetFullPath(path.Trim('"'));
+        }
+        catch (Exception ex) when (ex is ArgumentException or PathTooLongException or NotSupportedException)
+        {
+            // A path the runtime cannot resolve is passed through as typed.
+            return path;
+        }
     }
 
+    /// <summary>The usage text for --help, listing the public options only.</summary>
     public static string HelpText =>
         "SpaceSharp: see where your disk space went.\n\n" +
         "  SpaceSharp.exe                        start normally\n" +

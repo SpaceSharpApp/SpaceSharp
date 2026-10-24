@@ -8,14 +8,15 @@ public class ScanFileTests
 {
     private static FsNode SampleDrive()
     {
-        var root = TestTree.Dir(@"C:\");
-        var videos = TestTree.Dir("Videos", root);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode videos = TestTree.Dir("Videos", root);
         TestTree.File(videos, "a.mp4", 300, modified: new DateTime(2025, 1, 2, 3, 4, 5, DateTimeKind.Utc));
         TestTree.File(videos, "b.mkv", 200, allocated: 256);
-        var docs = TestTree.Dir("Docs", root);
+        FsNode docs = TestTree.Dir("Docs", root);
         TestTree.File(docs, "notes.txt", 50);
-        var link = TestTree.File(docs, "link.txt", 0);
-        link.IsHardLinkDuplicate = true; link.LinkedSize = 77;
+        FsNode link = TestTree.File(docs, "link.txt", 0);
+        link.IsHardLinkDuplicate = true;
+        link.LinkedSize = 77;
         TestTree.File(root, "readme.md", 10);
         TestTree.Finish(root);
         root.AddFreeSpace(1000);
@@ -25,13 +26,13 @@ public class ScanFileTests
     [Fact]
     public void RoundTripsTheTree()
     {
-        var root = SampleDrive();
+        FsNode root = SampleDrive();
         string path = Path.Combine(Path.GetTempPath(), $"spacesharp-{Guid.NewGuid():N}.sscan");
         try
         {
             ScanFile.Save(root, path, new DateTime(2026, 9, 28, 10, 0, 0, DateTimeKind.Utc), "MFT");
 
-            var info = ScanFile.Peek(path);
+            ScanFileInfo? info = ScanFile.Peek(path);
             Assert.NotNull(info);
             Assert.Equal(@"C:\", info!.RootPath);
             Assert.Equal("MFT", info.Method);
@@ -39,17 +40,17 @@ public class ScanFileTests
             Assert.Equal(5, info.FileCount);
             Assert.Equal(560, info.Bytes);
 
-            var (loaded, _) = ScanFile.Load(path);
+            (FsNode? loaded, ScanFileInfo _) = ScanFile.Load(path);
             Assert.Equal(root.Size, loaded.Size);
             Assert.Equal(root.FileCount, loaded.FileCount);
             Assert.Equal(1000, loaded.FreeBytes);
-            var videos = loaded.FindDescendant(@"C:\Videos");
+            FsNode? videos = loaded.FindDescendant(@"C:\Videos");
             Assert.NotNull(videos);
             Assert.Equal(500, videos!.Size);
             Assert.Equal(556, videos.Allocated);
-            var a = videos.Children.Single(c => c.Name == "a.mp4");
+            FsNode a = videos.Children.Single(c => c.Name == "a.mp4");
             Assert.Equal(new DateTime(2025, 1, 2, 3, 4, 5, DateTimeKind.Utc), a.LastWriteUtc);
-            var link = loaded.FindDescendant(@"C:\Docs")!.Children.Single(c => c.Name == "link.txt");
+            FsNode link = loaded.FindDescendant(@"C:\Docs")!.Children.Single(c => c.Name == "link.txt");
             Assert.True(link.IsHardLinkDuplicate);
             Assert.Equal(77, link.LinkedSize);
             Assert.Equal(0, link.Size);
@@ -60,10 +61,10 @@ public class ScanFileTests
     [Fact]
     public void CompareMarksGrownShrunkAndNew()
     {
-        var then = SampleDrive();
-        var now = SampleDrive();
-        var videos = now.FindDescendant(@"C:\Videos")!;
-        var a = videos.Children.Single(c => c.Name == "a.mp4");
+        FsNode then = SampleDrive();
+        FsNode now = SampleDrive();
+        FsNode videos = now.FindDescendant(@"C:\Videos")!;
+        FsNode a = videos.Children.Single(c => c.Name == "a.mp4");
         a.Size = 400; // grew by 100
         TestTree.File(videos, "c.avi", 60); // new
         now.FindDescendant(@"C:\Docs")!.Children.Single(c => c.Name == "notes.txt").Size = 20; // shrank
@@ -87,17 +88,17 @@ public class ScanFileTests
     [Fact]
     public void CompareRecordsWhatIsGone()
     {
-        var then = SampleDrive();
-        var now = SampleDrive();
-        var videos = now.FindDescendant(@"C:\Videos")!;
-        var b = videos.Children.Single(c => c.Name == "b.mkv");
+        FsNode then = SampleDrive();
+        FsNode now = SampleDrive();
+        FsNode videos = now.FindDescendant(@"C:\Videos")!;
+        FsNode b = videos.Children.Single(c => c.Name == "b.mkv");
         long bSize = b.Size;
         videos.Children.Remove(b);
         TestTree.Finish(now);
 
-        var comparison = ScanCompare.Apply(now, then);
+        ScanComparison comparison = ScanCompare.Apply(now, then);
 
-        var gone = Assert.Single(comparison.GoneIn(videos));
+        GoneEntry gone = Assert.Single(comparison.GoneIn(videos));
         Assert.Equal("b.mkv", gone.Name);
         Assert.False(gone.IsDirectory);
         Assert.Equal(bSize, gone.Size);
@@ -106,7 +107,7 @@ public class ScanFileTests
         Assert.Empty(comparison.GoneIn(now));
         // the folder shrank by the file, and the totals say so too
         Assert.Equal(-bSize, videos.ChangeFor(SizeMeasure.FileSize));
-        var totals = DriveInsights.Changes(now, SizeMeasure.FileSize, comparison);
+        ChangeTotals totals = DriveInsights.Changes(now, SizeMeasure.FileSize, comparison);
         Assert.Equal(bSize, totals.Shrank);
         Assert.Equal(1, totals.GoneFiles);
         Assert.Equal(-bSize, totals.Net);
@@ -115,15 +116,15 @@ public class ScanFileTests
     [Fact]
     public void ChangesListRanksByAbsoluteChange()
     {
-        var then = SampleDrive();
-        var now = SampleDrive();
+        FsNode then = SampleDrive();
+        FsNode now = SampleDrive();
         now.FindDescendant(@"C:\Videos")!.Children.Single(c => c.Name == "a.mp4").Size = 1000;
         now.FindDescendant(@"C:\Docs")!.Children.Single(c => c.Name == "notes.txt").Size = 1;
         TestTree.Finish(now);
         ScanCompare.Apply(now, then);
 
-        var rows = TopLists.Build(now, TopListKind.Changes, SizeMeasure.FileSize, Palette.Schemes[0]);
-        var top = new[] { rows[0].Name, rows[1].Name };
+        List<TopRow> rows = TopLists.Build(now, TopListKind.Changes, SizeMeasure.FileSize, Palette.Schemes[0]);
+        string[] top = new[] { rows[0].Name, rows[1].Name };
         Assert.Contains("Videos", top);
         Assert.Contains("a.mp4", top);
         Assert.Contains(rows, r => r.Name == "notes.txt" && r.SizeText.StartsWith("−"));
@@ -132,9 +133,9 @@ public class ScanFileTests
     [Fact]
     public void ReplaceChildKeepsAncestorTotals()
     {
-        var root = SampleDrive();
-        var videos = root.FindDescendant(@"C:\Videos")!;
-        var fresh = TestTree.Dir("Videos", TestTree.Dir(@"C:\"));
+        FsNode root = SampleDrive();
+        FsNode videos = root.FindDescendant(@"C:\Videos")!;
+        FsNode fresh = TestTree.Dir("Videos", TestTree.Dir(@"C:\"));
         TestTree.File(fresh, "a.mp4", 900);
         TestTree.Finish(fresh);
 

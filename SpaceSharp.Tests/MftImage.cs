@@ -15,14 +15,29 @@ internal sealed class MftImage
     private readonly Dictionary<int, byte[]> _records = new();
     private readonly List<(long Clusters, long Lcn)> _extents = new();
 
-    public int BytesPerRecord { get; }
-    public int BytesPerCluster { get; }
-    public int RecordCount { get; }
-    public long TotalClusters { get; }
+    public int BytesPerRecord
+    {
+        get;
+    }
+    public int BytesPerCluster
+    {
+        get;
+    }
+    public int RecordCount
+    {
+        get;
+    }
+    public long TotalClusters
+    {
+        get;
+    }
     public int SeqMft { get; } = 1;
 
     /// <summary>Maximum bytes per read call; 0 means unlimited.</summary>
-    public int MaxRead { get; set; }
+    public int MaxRead
+    {
+        get; set;
+    }
 
     public MftImage(int recordCount = 64, int bytesPerRecord = 1024, int bytesPerCluster = 4096, long totalClusters = 0)
     {
@@ -50,8 +65,11 @@ internal sealed class MftImage
     /// <summary>Writes record 0; more than one piece produces an attribute list.</summary>
     public void PutMft(params (int Record, ushort Seq)[] pieceRecords)
     {
-        if (_extents.Count == 0) _extents.Add((MftClusters, 8));
-        var pieces = SplitPieces(pieceRecords.Length);
+        if (_extents.Count == 0)
+        {
+            _extents.Add((MftClusters, 8));
+        }
+        List<List<(long Clusters, long Lcn)>> pieces = SplitPieces(pieceRecords.Length);
         var attrs = new List<byte[]>
         {
             StandardInformation(AttrHidden | AttrSystem),
@@ -68,7 +86,7 @@ internal sealed class MftImage
         long vcn = 0;
         for (int i = 0; i < pieces.Count; i++)
         {
-            var (record, seq) = i == 0 ? (0, (ushort)SeqMft) : pieceRecords[i];
+            (int record, ushort seq) = i == 0 ? (0, (ushort)SeqMft) : pieceRecords[i];
             list.Add(ListEntry(0x80, vcn, Ref(record, seq)));
             vcn += pieces[i].Sum(p => p.Clusters);
         }
@@ -80,7 +98,7 @@ internal sealed class MftImage
         for (int i = 1; i < pieces.Count; i++)
         {
             long clusters = pieces[i].Sum(p => p.Clusters);
-            var (record, seq) = pieceRecords[i];
+            (int record, ushort seq) = pieceRecords[i];
             Put(record, Record(record, seq, flags: 1, baseRef: Ref(0, (ushort)SeqMft),
                 NonResidentData(vcn, vcn + clusters - 1, Runs(pieces[i]), 0, 0)));
             vcn += clusters;
@@ -92,9 +110,18 @@ internal sealed class MftImage
     {
         count = Math.Max(1, count);
         var pieces = new List<List<(long, long)>>();
-        for (int i = 0; i < count; i++) pieces.Add(new List<(long, long)>());
-        for (int i = 0; i < _extents.Count; i++) pieces[Math.Min(i, count - 1)].Add(_extents[i]);
-        if (pieces.Any(p => p.Count == 0)) throw new InvalidOperationException("More pieces than extents.");
+        for (int i = 0; i < count; i++)
+        {
+            pieces.Add(new List<(long, long)>());
+        }
+        for (int i = 0; i < _extents.Count; i++)
+        {
+            pieces[Math.Min(i, count - 1)].Add(_extents[i]);
+        }
+        if (pieces.Any(p => p.Count == 0))
+        {
+            throw new InvalidOperationException("More pieces than extents.");
+        }
         return pieces;
     }
 
@@ -116,7 +143,7 @@ internal sealed class MftImage
     /// <summary>A FILE record in NTFS 3.1 layout: update sequence array at 0x30, attributes from 0x38.</summary>
     public byte[] Record(int index, ushort seq, ushort flags, ulong baseRef, params byte[][] attrs)
     {
-        var r = new byte[BytesPerRecord];
+        byte[] r = new byte[BytesPerRecord];
         Encoding.ASCII.GetBytes("FILE").CopyTo(r, 0);
         int usaCount = BytesPerRecord / Sector + 1;
         BinaryPrimitives.WriteUInt16LittleEndian(r.AsSpan(4), 0x30);
@@ -131,9 +158,12 @@ internal sealed class MftImage
         BinaryPrimitives.WriteUInt32LittleEndian(r.AsSpan(0x2C), (uint)index);
         int pos = attrOffset;
         ushort id = 0;
-        foreach (var attr in attrs)
+        foreach (byte[] attr in attrs)
         {
-            if (pos + attr.Length + 8 > BytesPerRecord) throw new InvalidOperationException("Record overflow");
+            if (pos + attr.Length + 8 > BytesPerRecord)
+            {
+                throw new InvalidOperationException("Record overflow");
+            }
             attr.CopyTo(r, pos);
             BinaryPrimitives.WriteUInt16LittleEndian(r.AsSpan(pos + 0x0E), id++);
             pos += attr.Length;
@@ -152,15 +182,23 @@ internal sealed class MftImage
         int usaCount = BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(6));
         ushort old = BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(usaOffset));
         if (old != 0)
+        {
             for (int i = 1; i < usaCount; i++)
             {
                 int end = i * Sector - 2;
-                if (BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(end)) != old) continue;   // deliberately torn
+                if (BinaryPrimitives.ReadUInt16LittleEndian(r.AsSpan(end)) != old)
+                {
+                    continue;   // deliberately torn
+                }
                 r[end] = r[usaOffset + i * 2];
                 r[end + 1] = r[usaOffset + i * 2 + 1];
             }
+        }
         ushort usn = (ushort)(old + 0x1111);
-        if (usn == 0) usn = 1;
+        if (usn == 0)
+        {
+            usn = 1;
+        }
         BinaryPrimitives.WriteUInt16LittleEndian(r.AsSpan(usaOffset), usn);
         for (int i = 1; i < usaCount; i++)
         {
@@ -176,7 +214,7 @@ internal sealed class MftImage
     public static byte[] Resident(uint type, byte[] value, byte nameLength = 0, ushort flags = 0)
     {
         int length = (0x18 + value.Length + 7) & ~7;
-        var a = new byte[length];
+        byte[] a = new byte[length];
         BinaryPrimitives.WriteUInt32LittleEndian(a, type);
         BinaryPrimitives.WriteInt32LittleEndian(a.AsSpan(4), length);
         a[8] = 0;
@@ -191,7 +229,7 @@ internal sealed class MftImage
 
     public static byte[] StandardInformation(uint attributes, long modified = 0)
     {
-        var v = new byte[0x48];
+        byte[] v = new byte[0x48];
         BinaryPrimitives.WriteInt64LittleEndian(v.AsSpan(0x08), modified);
         BinaryPrimitives.WriteUInt32LittleEndian(v.AsSpan(0x20), attributes);
         return Resident(0x10, v);
@@ -200,8 +238,8 @@ internal sealed class MftImage
     /// <summary>$FILE_NAME; namespace 1 is Win32, 2 DOS, 3 both, 0 POSIX.</summary>
     public static byte[] FileName(int parent, ushort parentSeq, string name, byte nameSpace = 3)
     {
-        var bytes = Encoding.Unicode.GetBytes(name);
-        var v = new byte[0x42 + bytes.Length];
+        byte[] bytes = Encoding.Unicode.GetBytes(name);
+        byte[] v = new byte[0x42 + bytes.Length];
         BinaryPrimitives.WriteUInt64LittleEndian(v, Ref(parent, parentSeq));
         v[0x40] = (byte)name.Length;
         v[0x41] = nameSpace;
@@ -216,7 +254,7 @@ internal sealed class MftImage
     {
         int header = compressedSize.HasValue ? 0x48 : 0x40;
         int length = (header + runs.Length + 7) & ~7;
-        var a = new byte[length];
+        byte[] a = new byte[length];
         BinaryPrimitives.WriteUInt32LittleEndian(a, 0x80);
         BinaryPrimitives.WriteInt32LittleEndian(a.AsSpan(4), length);
         a[8] = 1;
@@ -230,7 +268,10 @@ internal sealed class MftImage
         BinaryPrimitives.WriteInt64LittleEndian(a.AsSpan(0x28), allocated);
         BinaryPrimitives.WriteInt64LittleEndian(a.AsSpan(0x30), size);
         BinaryPrimitives.WriteInt64LittleEndian(a.AsSpan(0x38), size);
-        if (compressedSize.HasValue) BinaryPrimitives.WriteInt64LittleEndian(a.AsSpan(0x40), compressedSize.Value);
+        if (compressedSize.HasValue)
+        {
+            BinaryPrimitives.WriteInt64LittleEndian(a.AsSpan(0x40), compressedSize.Value);
+        }
         runs.CopyTo(a, header);
         return a;
     }
@@ -238,7 +279,7 @@ internal sealed class MftImage
     /// <summary>One $ATTRIBUTE_LIST entry (0x20 bytes, unnamed).</summary>
     public static byte[] ListEntry(uint type, long lowVcn, ulong reference)
     {
-        var e = new byte[0x20];
+        byte[] e = new byte[0x20];
         BinaryPrimitives.WriteUInt32LittleEndian(e, type);
         BinaryPrimitives.WriteUInt16LittleEndian(e.AsSpan(4), 0x20);
         e[7] = 0x1A;
@@ -252,9 +293,9 @@ internal sealed class MftImage
     {
         var bytes = new List<byte>();
         long lcn = 0;
-        foreach (var (clusters, at) in runs)
+        foreach ((long clusters, long at) in runs)
         {
-            var len = Little(clusters, minimum: 1);
+            byte[] len = Little(clusters, minimum: 1);
             if (at < 0)
             {
                 bytes.Add((byte)len.Length);
@@ -262,7 +303,7 @@ internal sealed class MftImage
                 continue;
             }
             long delta = at - lcn;
-            var off = Little(delta, minimum: 1, signed: true);
+            byte[] off = Little(delta, minimum: 1, signed: true);
             bytes.Add((byte)((off.Length << 4) | len.Length));
             bytes.AddRange(len);
             bytes.AddRange(off);
@@ -274,14 +315,23 @@ internal sealed class MftImage
 
     private static byte[] Little(long value, int minimum, bool signed = false)
     {
-        var all = new byte[8];
+        byte[] all = new byte[8];
         BinaryPrimitives.WriteInt64LittleEndian(all, value);
         int n = 8;
-        if (!signed) { while (n > minimum && all[n - 1] == 0) n--; }
+        if (!signed)
+        {
+            while (n > minimum && all[n - 1] == 0)
+            {
+                n--;
+            }
+        }
         else
         {
             // shortest two's complement that keeps the sign bit
-            while (n > minimum && ((all[n - 1] == 0 && (all[n - 2] & 0x80) == 0) || (all[n - 1] == 0xFF && (all[n - 2] & 0x80) != 0))) n--;
+            while (n > minimum && ((all[n - 1] == 0 && (all[n - 2] & 0x80) == 0) || (all[n - 1] == 0xFF && (all[n - 2] & 0x80) != 0)))
+            {
+                n--;
+            }
         }
         return all[..n];
     }
@@ -291,22 +341,31 @@ internal sealed class MftImage
     /// <summary>The logical MFT as one byte array.</summary>
     public byte[] Logical()
     {
-        var mft = new byte[(long)RecordCount * BytesPerRecord];
-        foreach (var (index, record) in _records) record.CopyTo(mft, (long)index * BytesPerRecord);
+        byte[] mft = new byte[(long)RecordCount * BytesPerRecord];
+        foreach ((int index, byte[]? record) in _records)
+        {
+            record.CopyTo(mft, (long)index * BytesPerRecord);
+        }
         return mft;
     }
 
     public byte[] Volume()
     {
-        if (_extents.Count == 0) _extents.Add((MftClusters, 8));
-        var volume = new byte[TotalClusters * BytesPerCluster];
-        var mft = Logical();
+        if (_extents.Count == 0)
+        {
+            _extents.Add((MftClusters, 8));
+        }
+        byte[] volume = new byte[TotalClusters * BytesPerCluster];
+        byte[] mft = Logical();
         long logical = 0;
-        foreach (var (clusters, lcn) in _extents)
+        foreach ((long clusters, long lcn) in _extents)
         {
             long bytes = clusters * BytesPerCluster;
             long take = Math.Min(bytes, mft.Length - logical);
-            if (take > 0) Array.Copy(mft, logical, volume, lcn * BytesPerCluster, take);
+            if (take > 0)
+            {
+                Array.Copy(mft, logical, volume, lcn * BytesPerCluster, take);
+            }
             logical += bytes;
         }
         return volume;
@@ -314,18 +373,27 @@ internal sealed class MftImage
 
     public MftScanner.Geometry Geometry(long? validLength = null)
     {
-        if (_extents.Count == 0) _extents.Add((MftClusters, 8));
+        if (_extents.Count == 0)
+        {
+            _extents.Add((MftClusters, 8));
+        }
         return new MftScanner.Geometry(Sector, BytesPerCluster, BytesPerRecord, TotalClusters, _extents[0].Lcn, validLength ?? (long)RecordCount * BytesPerRecord);
     }
 
     public MftScanner.VolumeRead Reader()
     {
-        var volume = Volume();
+        byte[] volume = Volume();
         return (offset, buffer) =>
         {
-            if (offset >= volume.Length) return 0;
+            if (offset >= volume.Length)
+            {
+                return 0;
+            }
             int n = (int)Math.Min(buffer.Length, volume.Length - offset);
-            if (MaxRead > 0) n = Math.Min(n, MaxRead);
+            if (MaxRead > 0)
+            {
+                n = Math.Min(n, MaxRead);
+            }
             volume.AsSpan((int)offset, n).CopyTo(buffer);
             return n;
         };

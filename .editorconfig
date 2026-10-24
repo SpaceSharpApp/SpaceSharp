@@ -11,7 +11,7 @@ indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-# Windows reads these with CRLF (PowerShell, the solution, WiX license text); .gitattributes keeps them that way too.
+# Windows files use CRLF; .gitattributes keeps them that way too.
 [*.{sln,ps1,cmd,bat}]
 end_of_line = crlf
 
@@ -43,14 +43,15 @@ dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
 csharp_using_directive_placement = outside_namespace:warning
 csharp_style_namespace_declarations = file_scoped:suggestion
-csharp_prefer_braces = when_multiline:suggestion
+csharp_prefer_braces = true:warning
 
-# Braces on their own line (Allman), as the code is written
+# Braces on their own line (Allman)
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
 csharp_new_line_before_finally = true
 csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
 csharp_new_line_between_query_expression_clauses = true
 
 # Indentation and spacing
@@ -63,15 +64,28 @@ csharp_space_between_method_call_parameter_list_parentheses = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_before_colon_in_inheritance_clause = true
 csharp_space_after_colon_in_inheritance_clause = true
-csharp_preserve_single_line_statements = true
-csharp_preserve_single_line_blocks = true
 
-# var: for built-in types and when the type is obvious, so declarations stay short
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = true:silent
+# Expand compact statements and blocks when formatting.
+csharp_preserve_single_line_statements = false
+csharp_preserve_single_line_blocks = false
 
-# Modern C# that the code already uses
+# Use var when the type is apparent from the assignment.
+# Write built-in types such as int, double and string explicitly.
+# Use explicit types everywhere else.
+csharp_style_var_for_built_in_types = false:warning
+csharp_style_var_when_type_is_apparent = true:warning
+csharp_style_var_elsewhere = false:warning
+
+# Use var where the type is apparent.
+dotnet_diagnostic.IDE0007.severity = warning
+
+# Use explicit types where required by the preferences above.
+dotnet_diagnostic.IDE0008.severity = warning
+
+# Require braces even for single-statement bodies.
+dotnet_diagnostic.IDE0011.severity = warning
+
+# Modern C#
 csharp_style_expression_bodied_methods = when_on_single_line:silent
 csharp_style_expression_bodied_properties = true:suggestion
 csharp_style_expression_bodied_accessors = true:suggestion
@@ -105,7 +119,8 @@ dotnet_code_quality_unused_parameters = non_public:suggestion
 dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:silent
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
 
-# Naming: PascalCase types and members, _camelCase private fields, camelCase locals and parameters
+# Naming: PascalCase types and members, _camelCase private fields,
+# camelCase locals and parameters.
 dotnet_naming_style.pascal_case.capitalization = pascal_case
 dotnet_naming_style.camel_case.capitalization = camel_case
 dotnet_naming_style.underscore_camel_case.capitalization = camel_case
@@ -142,33 +157,71 @@ dotnet_naming_rule.locals_camel.symbols = locals_and_parameters
 dotnet_naming_rule.locals_camel.style = camel_case
 dotnet_naming_rule.locals_camel.severity = suggestion
 
-# Diagnostics worth seeing in the editor
-dotnet_diagnostic.IDE0005.severity = suggestion   # unnecessary using
-dotnet_diagnostic.IDE0051.severity = warning      # unused private member
-dotnet_diagnostic.IDE0052.severity = warning      # private member written, never read
-dotnet_diagnostic.IDE0060.severity = suggestion   # unused parameter
-dotnet_diagnostic.CA1416.severity = none          # platform compatibility: this is a Windows-only app
-dotnet_diagnostic.CA2007.severity = none          # ConfigureAwait: WPF code wants the UI context back
+# ------------------------------------------------------------------ diagnostics
 
-# Analyzer rules turned off on purpose (AnalysisLevel is latest-recommended, which enables these by default)
-dotnet_diagnostic.CA1305.severity = none          # IFormatProvider on every ToString: the UI formats for the user's culture on purpose; file formats pass InvariantCulture by hand
-dotnet_diagnostic.CA1304.severity = none          # same, for ToUpper/ToLower on display text
-dotnet_diagnostic.CA1310.severity = none          # StartsWith without StringComparison: the few uses are on markdown and paths and already say Ordinal where it matters
-dotnet_diagnostic.CA1859.severity = none          # "return the concrete type": the builder methods return FrameworkElement so callers stay free to change the control
-dotnet_diagnostic.CA1861.severity = none          # "cache constant arrays": the palette tables and category lists are built once at startup
-dotnet_diagnostic.CA1870.severity = none          # SearchValues for IndexOfAny: the filter parser runs on one line of text
-dotnet_diagnostic.CA1822.severity = suggestion    # "could be static": helpful, not worth a warning
-dotnet_diagnostic.CA1805.severity = none          # "initialized to its default": settings list every default explicitly so the file reads as documentation
-dotnet_diagnostic.CA1720.severity = none          # identifier contains a type name: InspectSummary.Single is the right word
-dotnet_diagnostic.CA1725.severity = none          # parameter names matching the base: "dc" for DrawingContext is the WPF convention
-dotnet_diagnostic.CA1001.severity = none          # MainWindow owns a CancellationTokenSource; the window lives as long as the process
-dotnet_diagnostic.CA5350.severity = none          # SHA1 names saved-scan files from a path; it is not used for security
+# Unnecessary using
+dotnet_diagnostic.IDE0005.severity = suggestion
 
-# Generated code: leave it alone
+# Unused private member
+dotnet_diagnostic.IDE0051.severity = warning
+
+# Private member written but never read
+dotnet_diagnostic.IDE0052.severity = warning
+
+# Unused parameter
+dotnet_diagnostic.IDE0060.severity = suggestion
+
+# Platform compatibility: this is a Windows-only app.
+dotnet_diagnostic.CA1416.severity = none
+
+# ConfigureAwait: UI code may need to resume on the UI context.
+dotnet_diagnostic.CA2007.severity = none
+
+# ------------------------------------------------------------------ intentional analyzer exceptions
+
+# Display text uses the user's culture.
+# File formats pass InvariantCulture explicitly.
+dotnet_diagnostic.CA1305.severity = none
+
+# Culture-sensitive casing is intentional for display text.
+dotnet_diagnostic.CA1304.severity = none
+
+# String comparisons specify Ordinal where required.
+dotnet_diagnostic.CA1310.severity = none
+
+# Builder methods may return a base type to allow different controls.
+dotnet_diagnostic.CA1859.severity = none
+
+# Palette tables and category lists are built once at startup.
+dotnet_diagnostic.CA1861.severity = none
+
+# The filter parser processes one line of text.
+dotnet_diagnostic.CA1870.severity = none
+
+# Suggest static members without producing build warnings.
+dotnet_diagnostic.CA1822.severity = suggestion
+
+# Settings list default values explicitly for readability.
+dotnet_diagnostic.CA1805.severity = none
+
+# InspectSummary.Single is an intentional identifier.
+dotnet_diagnostic.CA1720.severity = none
+
+# Override parameter names may follow local conventions.
+dotnet_diagnostic.CA1725.severity = none
+
+# MainWindow owns a CancellationTokenSource and lives for the process lifetime.
+dotnet_diagnostic.CA1001.severity = none
+
+# SHA1 generates saved-scan filenames from paths, not security-sensitive hashes.
+dotnet_diagnostic.CA5350.severity = none
+
+# ------------------------------------------------------------------ generated code
 [*.{g.cs,g.i.cs,Designer.cs}]
 generated_code = true
 dotnet_analyzer_diagnostic.severity = none
 
-# Tests may use underscores in method names (Scenario_Expectation)
+# ------------------------------------------------------------------ tests
+# Tests may use underscores in method names (Scenario_Expectation).
 [SpaceSharp.Tests/**.cs]
 dotnet_naming_rule.types_and_members_pascal.severity = none

@@ -10,7 +10,10 @@ public class StringsTests
     private static string ResourcesDir()
     {
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
-        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln"))) dir = dir.Parent;
+        while (dir is not null && !File.Exists(Path.Combine(dir.FullName, "SpaceSharp.sln")))
+        {
+            dir = dir.Parent;
+        }
         Assert.NotNull(dir);
         return Path.Combine(dir!.FullName, "SpaceSharp.Core", "Resources");
     }
@@ -30,17 +33,17 @@ public class StringsTests
     public void EveryTranslationHasTheSameKeysAndPlaceholders()
     {
         string dir = ResourcesDir();
-        var neutral = Read(Path.Combine(dir, "Strings.resx"));
+        Dictionary<string, string> neutral = Read(Path.Combine(dir, "Strings.resx"));
         var placeholders = new Regex(@"\{\d+\}");
         foreach (string file in Directory.EnumerateFiles(dir, "Strings.*.resx"))
         {
-            var translated = Read(file);
+            Dictionary<string, string> translated = Read(file);
             string name = Path.GetFileName(file);
             var missing = neutral.Keys.Except(translated.Keys).ToList();
             var extra = translated.Keys.Except(neutral.Keys).ToList();
             Assert.True(missing.Count == 0, $"{name} is missing: {string.Join(", ", missing)}");
             Assert.True(extra.Count == 0, $"{name} has keys the neutral file lacks: {string.Join(", ", extra)}");
-            foreach (var (key, value) in neutral)
+            foreach ((string? key, string? value) in neutral)
             {
                 var want = placeholders.Matches(value).Select(m => m.Value).OrderBy(x => x).ToList();
                 var got = placeholders.Matches(translated[key]).Select(m => m.Value).OrderBy(x => x).ToList();
@@ -52,7 +55,7 @@ public class StringsTests
     [Fact]
     public void AvailableLanguagesStartWithEnglish()
     {
-        var list = AppLanguages.Available();
+        IReadOnlyList<CultureInfo> list = AppLanguages.Available();
         Assert.Equal("en", list[0].Name);
         Assert.Equal(list.Count, list.Select(c => c.Name).Distinct().Count());
     }
@@ -60,7 +63,7 @@ public class StringsTests
     [Fact]
     public void ReviewedTranslationsComeBeforeMachineMadeOnes()
     {
-        var list = AppLanguages.Available();
+        IReadOnlyList<CultureInfo> list = AppLanguages.Available();
         Assert.False(AppLanguages.IsMachineTranslated(list[0]));
         Assert.False(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("nb")));
         Assert.True(AppLanguages.IsMachineTranslated(CultureInfo.GetCultureInfo("de")));

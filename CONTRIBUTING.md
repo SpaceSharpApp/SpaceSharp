@@ -24,7 +24,7 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 ## Pull requests
 
 - Branch from `main`, one change per pull request.
-- Keep the existing style: file-scoped namespaces, `var` where the type is obvious, XML doc comments on public members, and the formatting in `.editorconfig`.
+- Keep the existing style: file-scoped namespaces, `var` where the type is obvious, XML doc comments on public members, and the formatting in `.editorconfig`. [CODING_STANDARDS.md](CODING_STANDARDS.md) has the rest, with examples of what to do and what not to do.
 - Use American English in code, comments and UI text.
 - Every UI string a user can see should follow the tone of the rest of the app: short, plain, no jargon.
 - New settings go in `AppSettings`, `SettingsWindow` and `MainWindow.ApplySettings()`, and a mention on the README's Settings list if they are user-facing.

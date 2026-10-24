@@ -13,11 +13,11 @@ public class FsNodeTests
         //   Docs\          (50)
         //     notes.txt 50
         //   readme.md 10
-        var root = TestTree.Dir(@"C:\");
-        var videos = TestTree.Dir("Videos", root);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode videos = TestTree.Dir("Videos", root);
         TestTree.File(videos, "a.mp4", 300);
         TestTree.File(videos, "b.mkv", 200);
-        var docs = TestTree.Dir("Docs", root);
+        FsNode docs = TestTree.Dir("Docs", root);
         TestTree.File(docs, "notes.txt", 50);
         TestTree.File(root, "readme.md", 10);
         return TestTree.Finish(root);
@@ -26,15 +26,15 @@ public class FsNodeTests
     [Fact]
     public void FullPathIsBuiltFromTheNamesUpTheTree()
     {
-        var root = SampleTree();
-        var videos = root.Children.Single(c => c.Name == "Videos");
+        FsNode root = SampleTree();
+        FsNode videos = root.Children.Single(c => c.Name == "Videos");
         Assert.Equal(@"C:\", root.FullPath);
         Assert.Equal(@"C:\Videos", videos.FullPath);
         Assert.Equal(@"C:\Videos\a.mp4", videos.Children[0].FullPath);
         Assert.Equal(@"C:\readme.md", root.Children.Single(c => c.Name == "readme.md").FullPath);
 
-        var sub = TestTree.Dir(@"D:\Work\Project");
-        var deep = TestTree.Dir("src", sub);
+        FsNode sub = TestTree.Dir(@"D:\Work\Project");
+        FsNode deep = TestTree.Dir("src", sub);
         Assert.Equal(@"D:\Work\Project\src", deep.FullPath);
         Assert.Equal(@"D:\Work\Project\src", new FsNode("3 files", NodeKind.Group, deep).FullPath);
     }
@@ -42,9 +42,9 @@ public class FsNodeTests
     [Fact]
     public void RescannedFolderTakesItsPlaceInThePath()
     {
-        var root = SampleTree();
-        var old = root.Children.Single(c => c.Name == "Videos");
-        var fresh = TestTree.Dir(@"C:\Videos");
+        FsNode root = SampleTree();
+        FsNode old = root.Children.Single(c => c.Name == "Videos");
+        FsNode fresh = TestTree.Dir(@"C:\Videos");
         TestTree.File(fresh, "c.avi", 700);
         TestTree.Finish(fresh);
         root.ReplaceChild(old, fresh, SizeMeasure.FileSize);
@@ -55,7 +55,7 @@ public class FsNodeTests
     [Fact]
     public void FinishDirectorySumsSizesCountsAndNewestDate()
     {
-        var root = TestTree.Dir(@"C:\");
+        FsNode root = TestTree.Dir(@"C:\");
         TestTree.File(root, "old", 10, modified: new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc));
         TestTree.File(root, "new", 20, allocated: 24, modified: new DateTime(2025, 6, 1, 0, 0, 0, DateTimeKind.Utc));
         root.FinishDirectory();
@@ -69,7 +69,7 @@ public class FsNodeTests
     [Fact]
     public void FinishDirectorySortsChildrenLargestFirst()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         Assert.Equal(new[] { "Videos", "Docs", "readme.md" }, root.Children.Select(c => c.Name));
         Assert.Equal(560, root.Size);
         Assert.Equal(4, root.FileCount);
@@ -78,9 +78,9 @@ public class FsNodeTests
     [Fact]
     public void RemoveFromTreeSubtractsFromEveryAncestorAndResorts()
     {
-        var root = SampleTree();
-        var videos = root.Children[0];
-        var a = videos.Children.Single(c => c.Name == "a.mp4");
+        FsNode root = SampleTree();
+        FsNode videos = root.Children[0];
+        FsNode a = videos.Children.Single(c => c.Name == "a.mp4");
 
         a.RemoveFromTree(SizeMeasure.FileSize);
 
@@ -98,14 +98,14 @@ public class FsNodeTests
     [Fact]
     public void RemovingTheRootThrows()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         Assert.Throws<InvalidOperationException>(() => root.RemoveFromTree(SizeMeasure.FileSize));
     }
 
     [Fact]
     public void FreeSpaceIsAddedToTheRootTotals()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         root.AddFreeSpace(1000);
 
         Assert.NotNull(root.FreeSpaceNode);
@@ -118,7 +118,7 @@ public class FsNodeTests
     [Fact]
     public void HidingFreeSpaceKeepsTotalsConsistent()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         root.AddFreeSpace(1000);
 
         root.SetFreeSpaceVisible(false, SizeMeasure.FileSize);
@@ -134,7 +134,7 @@ public class FsNodeTests
     [Fact]
     public void DeletedBytesBecomeFreeSpace()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         root.AddFreeSpace(1000);
 
         root.Children.First(c => c.Name == "Videos").Children[0].RemoveFromTree(SizeMeasure.FileSize);
@@ -148,7 +148,7 @@ public class FsNodeTests
     [Fact]
     public void RegisterFreedSpaceDoesNothingWithoutAFreeSpaceNode()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         root.RegisterFreedSpace(300, SizeMeasure.FileSize);
         Assert.Equal(0, root.FreeBytes);
         Assert.Equal(560, root.Size);
@@ -157,8 +157,8 @@ public class FsNodeTests
     [Fact]
     public void FindDescendantIsCaseInsensitiveAndReturnsNullWhenMissing()
     {
-        var root = SampleTree();
-        var found = root.FindDescendant(@"c:\videos");
+        FsNode root = SampleTree();
+        FsNode? found = root.FindDescendant(@"c:\videos");
         Assert.NotNull(found);
         Assert.Equal("Videos", found!.Name);
         Assert.Same(root, root.FindDescendant(@"C:\"));
@@ -169,26 +169,26 @@ public class FsNodeTests
     [Fact]
     public void DescendantFilesSkipsPseudoNodes()
     {
-        var root = SampleTree();
+        FsNode root = SampleTree();
         root.AddFreeSpace(1000);
-        var names = root.DescendantFiles().Select(f => f.Name).OrderBy(n => n).ToArray();
+        string[] names = root.DescendantFiles().Select(f => f.Name).OrderBy(n => n).ToArray();
         Assert.Equal(new[] { "a.mp4", "b.mkv", "notes.txt", "readme.md" }, names);
     }
 
     [Fact]
     public void DescendantDirectoriesIncludesSelf()
     {
-        var root = SampleTree();
-        var names = root.DescendantDirectories().Select(d => d.Name).OrderBy(n => n).ToArray();
+        FsNode root = SampleTree();
+        string[] names = root.DescendantDirectories().Select(d => d.Name).OrderBy(n => n).ToArray();
         Assert.Equal(new[] { @"C:\", "Docs", "Videos" }, names);
     }
 
     [Fact]
     public void IsAncestorOfWalksUpTheTree()
     {
-        var root = SampleTree();
-        var videos = root.Children.First(c => c.Name == "Videos");
-        var a = videos.Children[0];
+        FsNode root = SampleTree();
+        FsNode videos = root.Children.First(c => c.Name == "Videos");
+        FsNode a = videos.Children[0];
 
         Assert.True(root.IsAncestorOf(a));
         Assert.True(videos.IsAncestorOf(a));
@@ -199,7 +199,7 @@ public class FsNodeTests
     [Fact]
     public void ExtensionIsLowercaseAndEmptyForFolders()
     {
-        var root = TestTree.Dir(@"C:\");
+        FsNode root = TestTree.Dir(@"C:\");
         Assert.Equal(".iso", TestTree.File(root, "Win11.ISO", 1).Extension);
         Assert.Equal(string.Empty, TestTree.File(root, "noext", 1).Extension);
         Assert.Equal(string.Empty, TestTree.Dir("a.folder", root).Extension);
@@ -208,8 +208,8 @@ public class FsNodeTests
     [Fact]
     public void SortByResortsTheWholeSubtree()
     {
-        var root = TestTree.Dir(@"C:\");
-        var sub = TestTree.Dir("sub", root);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode sub = TestTree.Dir("sub", root);
         TestTree.File(sub, "logical", size: 100, allocated: 1);
         TestTree.File(sub, "on-disk", size: 1, allocated: 100);
         TestTree.File(root, "small", size: 5, allocated: 5);

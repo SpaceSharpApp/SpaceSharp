@@ -18,6 +18,7 @@ namespace SpaceSharp;
 /// <summary>The Insights view.</summary>
 public partial class MainWindow
 {
+    /// <summary>How many months the timeline covers, the current one included.</summary>
     private const int TimelineMonths = 36;
 
     private List<TypeShare>? _typeShares;
@@ -31,13 +32,20 @@ public partial class MainWindow
     private readonly HashSet<string> _checkedCleanup = new();
 
     /// <summary>What fills the map's place: the map, Insights, or the Changes table.</summary>
-    private enum MainView { Map, Insights, Changes }
+    private enum MainView
+    {
+        Map, Insights, Changes
+    }
 
     private bool _changesShowing;   // the Changes view is open; not remembered between runs, a comparison is not either
 
+    /// <summary>The view in the map's place: Changes while it is open, otherwise the one remembered in Settings.</summary>
     private MainView CurrentView => _changesShowing ? MainView.Changes : _settings.InsightsView ? MainView.Insights : MainView.Map;
+    /// <summary>True when the Insights view is the current one.</summary>
     private bool InsightsShowing => CurrentView == MainView.Insights;
 
+    /// <summary>Puts a filter in the box and switches to the map so the matches show.</summary>
+    /// <param name="text">Filter syntax, as <see cref="FilterSpec.ToText"/> writes it or a type/pattern term such as "type:video" or "*.iso".</param>
     private void FilterAndShowMap(string text)
     {
         FilterBox.Text = text;
@@ -47,8 +55,12 @@ public partial class MainWindow
     private void MapView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Map);
     private void InsightsView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Insights);
 
+    /// <summary>Switches between the map and Insights.</summary>
+    /// <param name="insights">True for Insights, false for the map; both close the Changes view.</param>
     private void ShowView(bool insights) => ShowView(insights ? MainView.Insights : MainView.Map);
 
+    /// <summary>Switches the main view and refreshes whichever one came up.</summary>
+    /// <param name="view">The view to show; Map and Insights are remembered in Settings, Changes is not.</param>
     private void ShowView(MainView view)
     {
         _changesShowing = view == MainView.Changes;
@@ -65,7 +77,7 @@ public partial class MainWindow
     /// <summary>B cycles the views: the map, Insights, and Changes while a scan is compared.</summary>
     private void NextView()
     {
-        var next = CurrentView switch
+        MainView next = CurrentView switch
         {
             MainView.Map => MainView.Insights,
             MainView.Insights when HasBaseline => MainView.Changes,
@@ -74,35 +86,55 @@ public partial class MainWindow
         ShowView(next);
     }
 
+    /// <summary>Shows the current view's panel and dims the toolbar for it; before any scan, the empty hint shows instead.</summary>
     private void ApplyView()
     {
-        var view = CurrentView;
-        bool idle = _root is null && _scanCts is null;
-        bool insights = view == MainView.Insights && !idle, changes = view == MainView.Changes && !idle;
-        InsightsView.IsVisible = insights;
-        ChangesView.IsVisible = changes;
-        Treemap.IsVisible = !insights && !changes;
-        EmptyHint.IsVisible = idle;
-        MapViewButton.Classes.Set("primary", view == MainView.Map); MapViewButton.Classes.Set("tool", view != MainView.Map);
-        InsightsButton.Classes.Set("primary", view == MainView.Insights); InsightsButton.Classes.Set("tool", view != MainView.Insights);
-        ChangesButton.Classes.Set("primary", view == MainView.Changes); ChangesButton.Classes.Set("tool", view != MainView.Changes);
+        MainView view = CurrentView;
+        bool isIdle = _root is null && _scanCts is null;
+        bool showsInsights = view == MainView.Insights && !isIdle;
+        bool showsChanges = view == MainView.Changes && !isIdle;
+        InsightsView.IsVisible = showsInsights;
+        ChangesView.IsVisible = showsChanges;
+        Treemap.IsVisible = !showsInsights && !showsChanges;
+        EmptyHint.IsVisible = isIdle;
+
+        MapViewButton.Classes.Set("primary", view == MainView.Map);
+        MapViewButton.Classes.Set("tool", view != MainView.Map);
+        InsightsButton.Classes.Set("primary", view == MainView.Insights);
+        InsightsButton.Classes.Set("tool", view != MainView.Insights);
+        ChangesButton.Classes.Set("primary", view == MainView.Changes);
+        ChangesButton.Classes.Set("tool", view != MainView.Changes);
         ChangesButton.IsEnabled = _root is not null && _scanCts is null;
-        foreach (var b in new[] { ZoomInButton, ZoomOutButton, HomeButton, UpButton }) b.IsEnabled = view == MainView.Map && _root is not null;
+
+        foreach (Button? navigationButton in new[] { ZoomInButton, ZoomOutButton, HomeButton, UpButton })
+        {
+            navigationButton.IsEnabled = view == MainView.Map && _root is not null;
+        }
         ZoomLabel.Opacity = view == MainView.Map ? 1 : 0.4;
     }
 
+    /// <summary>Drops every cached Insights computation; the next refresh recomputes from the tree.</summary>
     private void InvalidateInsights()
     {
-        _typeShares = null; _monthBuckets = null; _cleanup = null; _bandSums = null; _bandFiles = null;
+        _typeShares = null;
+        _monthBuckets = null;
+        _cleanup = null;
+        _bandSums = null;
+        _bandFiles = null;
         _insightsRoot = null;
     }
 
     /// <summary>Invalidates the cache when the scan or size measure changed.</summary>
     private void SyncInsightsSource()
     {
-        if (ReferenceEquals(_insightsRoot, _root) && _insightsMeasure == Treemap.SizeMode) return;
+        if (ReferenceEquals(_insightsRoot, _root) && _insightsMeasure == Treemap.SizeMode)
+        {
+            return;
+        }
         InvalidateInsights();
-        _insightsRoot = _root; _insightsMeasure = Treemap.SizeMode; _insightsNow = DateTime.UtcNow;
+        _insightsRoot = _root;
+        _insightsMeasure = Treemap.SizeMode;
+        _insightsNow = DateTime.UtcNow;
     }
 
     /// <summary>The per-type totals of the current scan, or null without a finished scan.</summary>
@@ -110,36 +142,38 @@ public partial class MainWindow
     {
         get
         {
-            if (_root is null || _scanCts is not null) return null;
+            if (_root is null || _scanCts is not null)
+            {
+                return null;
+            }
             SyncInsightsSource();
             return _typeShares ??= DriveInsights.ByType(_root, Treemap.SizeMode);
         }
     }
 
+    /// <summary>Rebuilds the Insights view from the cache, computing what is missing; a no-op while the view is hidden.</summary>
     private void RefreshInsights()
     {
-        if (!InsightsShowing) return;
+        if (!InsightsShowing)
+        {
+            return;
+        }
         SyncInsightsSource();
 
         InsightsHost.Children.Clear();
         if (_root is null || _scanCts is not null)
         {
-            var empty = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 120, 0, 0), MaxWidth = 420 };
-            empty.Children.Add(new TextBlock { Text = Strings.Get("Insights_Title"), FontSize = 18, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center });
-            empty.Children.Add(new TextBlock { Text = Strings.Get(_scanCts is not null ? "Insights_Scanning" : "Panel_NoScan"), FontSize = 12.5, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap, TextAlignment = TextAlignment.Center, Classes = { "dim" } });
-            InsightsHost.Children.Add(empty);
+            InsightsHost.Children.Add(BuildInsightsEmptyState());
             return;
         }
 
-        var measure = Treemap.SizeMode;
+        SizeMeasure measure = Treemap.SizeMode;
         _typeShares ??= DriveInsights.ByType(_root, measure);
         _cleanup ??= DriveInsights.Cleanup(_root, measure, _insightsNow);
         _monthBuckets ??= DriveInsights.ByMonth(_root, measure, _insightsNow, TimelineMonths);
         if (_bandSums is null)
         {
-            _bandSums = new long[4]; _bandFiles = new int[4];
-            foreach (var f in _root.DescendantFiles())
-                if (f.LastWriteUtc > DateTime.MinValue) { int b = (int)InspectSummary.BucketFor(f.LastWriteUtc, _insightsNow); _bandSums[b] += f.SizeFor(measure); _bandFiles[b]++; }
+            ComputeAgeBands(_root, measure);
         }
 
         _tiles = BuildTiles();
@@ -152,8 +186,54 @@ public partial class MainWindow
         ArrangeInsights();
     }
 
+    /// <summary>What the view shows without a finished scan: the title and why there is nothing yet.</summary>
+    /// <returns>A centered panel saying a scan is running or that none is loaded.</returns>
+    private StackPanel BuildInsightsEmptyState()
+    {
+        var empty = new StackPanel
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 120, 0, 0),
+            MaxWidth = 420
+        };
+        empty.Children.Add(new TextBlock { Text = Strings.Get("Insights_Title"), FontSize = 18, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center });
+        empty.Children.Add(new TextBlock
+        {
+            Text = Strings.Get(_scanCts is not null ? "Insights_Scanning" : "Panel_NoScan"),
+            FontSize = 12.5,
+            Margin = new Thickness(0, 6, 0, 0),
+            TextWrapping = TextWrapping.Wrap,
+            TextAlignment = TextAlignment.Center,
+            Classes = { "dim" }
+        });
+
+        return empty;
+    }
+
+    /// <summary>Sums the files of the scan into the four age bands (this month, this year, one to three years, older).</summary>
+    /// <param name="root">The scan root; every descendant file with a known write time is counted.</param>
+    /// <param name="measure">File size or size on disk, for the byte sums.</param>
+    private void ComputeAgeBands(FsNode root, SizeMeasure measure)
+    {
+        _bandSums = new long[4];
+        _bandFiles = new int[4];
+        foreach (FsNode file in root.DescendantFiles())
+        {
+            // Files without a known write time belong to no band.
+            if (file.LastWriteUtc > DateTime.MinValue)
+            {
+                int band = (int)InspectSummary.BucketFor(file.LastWriteUtc, _insightsNow);
+                _bandSums[band] += file.SizeFor(measure);
+                _bandFiles[band]++;
+            }
+        }
+    }
+
     private UniformGrid? _tiles;
+    /// <summary>The seven cards with their index into the span tables of <see cref="ArrangeInsights"/>.</summary>
     private List<(Control Card, int Index)>? _cards;
+    /// <summary>The column count the cards were last laid out for; 0 forces a re-layout.</summary>
     private int _insightsColumns;
 
     private void InsightsView_SizeChanged(object? sender, SizeChangedEventArgs e) => ArrangeInsights();
@@ -161,11 +241,20 @@ public partial class MainWindow
     /// <summary>Lays the cards out on a twelve-unit grid for the available width.</summary>
     private void ArrangeInsights()
     {
-        if (_cards is null || _tiles is null || !InsightsShowing) return;
+        if (_cards is null || _tiles is null || !InsightsShowing)
+        {
+            return;
+        }
         double width = Math.Max(0, InsightsView.Viewport.Width - InsightsHost.Margin.Left - InsightsHost.Margin.Right);
-        if (width <= 0) width = Math.Max(0, InsightsView.Bounds.Width - 40);
+        if (width <= 0)
+        {
+            width = Math.Max(0, InsightsView.Bounds.Width - 40);
+        }
         int columns = width >= 1380 ? 4 : width >= 980 ? 3 : width >= 620 ? 2 : 1;
-        if (columns == _insightsColumns) return;
+        if (columns == _insightsColumns)
+        {
+            return;
+        }
         _insightsColumns = columns;
 
         _tiles.Columns = width >= 1100 ? 6 : width >= 560 ? 3 : 2;
@@ -178,91 +267,182 @@ public partial class MainWindow
             _ => new[] { 12, 12, 12, 12, 12, 12, 12 }
         };
 
+        // The cards are reused across layouts, so each one leaves its old parent first.
         InsightsHost.Children.Clear();
-        foreach (var (card, _) in _cards) if (card.Parent is Panel old) old.Children.Remove(card);
-        if (_tiles.Parent is Panel tileParent) tileParent.Children.Remove(_tiles);
+        foreach ((Control? card, int _) in _cards)
+        {
+            if (card.Parent is Panel oldParent)
+            {
+                oldParent.Children.Remove(card);
+            }
+        }
+        if (_tiles.Parent is Panel tileParent)
+        {
+            tileParent.Children.Remove(_tiles);
+        }
         InsightsHost.Children.Add(_tiles);
 
         var grid = new Grid { Margin = new Thickness(0, 12, 0, 0) };
-        for (int i = 0; i < 12; i++) grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-        int row = 0, used = 0;
+        for (int i = 0; i < 12; i++)
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+        }
+
+        int row = 0;
+        int unitsUsed = 0;
         grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-        foreach (var (card, index) in _cards)
+        foreach ((Control? card, int index) in _cards)
         {
             int span = spans[index];
-            if (used + span > 12) { row++; used = 0; grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto)); }
-            card.Margin = new Thickness(used == 0 ? 0 : 12, row == 0 ? 0 : 12, 0, 0);
+            if (unitsUsed + span > 12)
+            {
+                row++;
+                unitsUsed = 0;
+                grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+            }
+
+            card.Margin = new Thickness(unitsUsed == 0 ? 0 : 12, row == 0 ? 0 : 12, 0, 0);
             card.VerticalAlignment = VerticalAlignment.Stretch;
-            Grid.SetColumn(card, used); Grid.SetColumnSpan(card, span); Grid.SetRow(card, row);
+            Grid.SetColumn(card, unitsUsed);
+            Grid.SetColumnSpan(card, span);
+            Grid.SetRow(card, row);
             grid.Children.Add(card);
-            used += span;
+            unitsUsed += span;
         }
         InsightsHost.Children.Add(grid);
     }
 
     // ---------------------------------------------------------------- building blocks
 
+    /// <summary>A card with a title line and an empty body to fill.</summary>
+    /// <param name="title">The bold heading.</param>
+    /// <param name="subtitle">Dim text after the heading; empty for none.</param>
+    /// <param name="body">The panel under the heading the caller fills with rows.</param>
+    /// <param name="headerRight">A control docked at the right of the heading, such as a button; null for none. It must not already have a parent.</param>
+    /// <returns>The card border.</returns>
     private Border Card(string title, string subtitle, out StackPanel body, Control? headerRight = null)
     {
         var card = new Border { CornerRadius = new CornerRadius(10), BorderThickness = new Thickness(1), Padding = new Thickness(16, 13, 16, 14), Classes = { "card", "flat" } };
+
         var head = new DockPanel { Margin = new Thickness(0, 0, 0, 8), LastChildFill = true };
-        if (headerRight is not null) { DockPanel.SetDock(headerRight, Dock.Right); head.Children.Add(headerRight); }
+        if (headerRight is not null)
+        {
+            DockPanel.SetDock(headerRight, Dock.Right);
+            head.Children.Add(headerRight);
+        }
         var titles = new TextBlock { TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
         titles.Inlines!.Add(new Run(title) { FontSize = 15, FontWeight = FontWeight.Bold });
         if (subtitle.Length > 0)
         {
-            var sub = new Run("   " + subtitle) { FontSize = 12 };
-            sub.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
-            titles.Inlines.Add(sub);
+            var subtitleRun = new Run("   " + subtitle) { FontSize = 12 };
+            subtitleRun.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
+            titles.Inlines.Add(subtitleRun);
         }
         head.Children.Add(titles);
+
         body = new StackPanel();
         var stack = new StackPanel();
         stack.Children.Add(head);
         stack.Children.Add(body);
         card.Child = stack;
+
         return card;
     }
 
+    /// <summary>A fixed-height row with a hairline under it.</summary>
+    /// <param name="content">The row's content; it must not already have a parent.</param>
+    /// <param name="height">Row height in device-independent pixels.</param>
+    /// <returns>The row, transparent so it can be made clickable.</returns>
     private Border Hairline(Control content, double height) =>
-        new() { Height = height, BorderThickness = new Thickness(0, 0, 0, 1), Child = content, Background = Brushes.Transparent, Classes = { "frame" } };
+        new()
+        {
+            Height = height,
+            BorderThickness = new Thickness(0, 0, 0, 1),
+            Child = content,
+            Background = Brushes.Transparent,
+            Classes = { "frame" }
+        };
 
+    /// <summary>Small dim text that trims with an ellipsis.</summary>
+    /// <param name="text">The text to show.</param>
+    /// <returns>An 11-point text block.</returns>
     private static TextBlock Small(string text) => new() { Text = text, FontSize = 11, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
 
-    private static Border Swatch(IBrush fill, int size = 10) => new() { Width = size, Height = size, CornerRadius = new CornerRadius(2), Background = fill, VerticalAlignment = VerticalAlignment.Center };
+    /// <summary>A small rounded color square.</summary>
+    /// <param name="fill">The color to show.</param>
+    /// <param name="size">Side length in device-independent pixels.</param>
+    /// <returns>The vertically centered square.</returns>
+    private static Border Swatch(IBrush fill, int size = 10) => new()
+    {
+        Width = size,
+        Height = size,
+        CornerRadius = new CornerRadius(2),
+        Background = fill,
+        VerticalAlignment = VerticalAlignment.Center
+    };
 
+    /// <summary>A rounded track with a fill of the given fraction; star columns keep the fill proportional at any width.</summary>
+    /// <param name="fraction">The filled share, 0..1; values outside are clamped.</param>
+    /// <param name="fill">The fill color.</param>
+    /// <param name="height">Bar height in device-independent pixels; the corners are fully rounded.</param>
+    /// <returns>The bar in a vertically centered border.</returns>
     private Border Bar(double fraction, IBrush fill, double height = 6)
     {
         fraction = Math.Clamp(fraction, 0, 1);
         var grid = new Grid { Height = height, VerticalAlignment = VerticalAlignment.Center };
         var track = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
         Grid.SetColumnSpan(track, 2);
+
+        // Star values of 0 are not allowed, so an empty side still gets a hair of width.
         grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(fraction, 0.001), GridUnitType.Star));
         grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(1 - fraction, 0.001), GridUnitType.Star));
         var fillBar = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Background = fill, MinWidth = fraction > 0 ? 2 : 0 };
-        grid.Children.Add(track); grid.Children.Add(fillBar);
+        grid.Children.Add(track);
+        grid.Children.Add(fillBar);
+
         return new Border { Child = grid, VerticalAlignment = VerticalAlignment.Center };
     }
 
+    /// <summary>Makes a control act as a button: hand cursor, dims on hover, and runs an action on a left press.</summary>
+    /// <param name="row">The control; its Opacity is changed on hover.</param>
+    /// <param name="onClick">Runs on the UI thread on a left button press.</param>
     private static void Clickable(Control row, Action onClick)
     {
         row.Cursor = new Cursor(StandardCursorType.Hand);
         row.PointerEntered += (_, _) => row.Opacity = 0.75;
         row.PointerExited += (_, _) => row.Opacity = 1;
-        row.PointerPressed += (_, e) => { if (e.GetCurrentPoint(row).Properties.IsLeftButtonPressed) onClick(); };
+        row.PointerPressed += (_, e) =>
+        {
+            if (e.GetCurrentPoint(row).Properties.IsLeftButtonPressed)
+            {
+                onClick();
+            }
+        };
     }
 
+    /// <summary>Switches to the map and shows a node: a folder becomes the view, a file is selected inside its parent.</summary>
+    /// <param name="node">Any node of the current scan.</param>
     private void ShowOnMap(FsNode node)
     {
         ShowView(insights: false);
         Treemap.ClearSelection();
-        if (node.IsDirectory) Treemap.FocusOn(node);
-        else { Treemap.FocusOn(node.Parent ?? _root!); Treemap.SelectMany(new[] { node }); }
+        if (node.IsDirectory)
+        {
+            Treemap.FocusOn(node);
+        }
+        else
+        {
+            Treemap.FocusOn(node.Parent ?? _root!);
+            Treemap.SelectMany(new[] { node });
+        }
     }
 
+    /// <summary>How long ago a time was, in words.</summary>
+    /// <param name="utc">A UTC time, not in the future.</param>
+    /// <returns>"just now", minutes, hours, "yesterday" or days up to a month; beyond that the local date.</returns>
     private static string Ago(DateTime utc)
     {
-        var age = DateTime.UtcNow - utc;
+        TimeSpan age = DateTime.UtcNow - utc;
         return age.TotalMinutes < 2 ? Strings.Get("Ago_JustNow")
              : age.TotalHours < 1 ? Strings.Format("Ago_Minutes", (int)age.TotalMinutes)
              : age.TotalHours < 2 ? Strings.Get("Ago_OneHour")
@@ -274,67 +454,150 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- headline strip
 
+    /// <summary>The headline strip: scanned, free space, clearable, untouched, biggest folder (when any) and since last scan.</summary>
+    /// <returns>A six-column grid; <see cref="ArrangeInsights"/> changes the column count for the width.</returns>
     private UniformGrid BuildTiles()
     {
-        var measure = Treemap.SizeMode;
-        var root = _root!;
-        long total = root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0);
-        int folders = root.DescendantDirectories().Count() - 1;
+        SizeMeasure measure = Treemap.SizeMode;
+        FsNode root = _root!;
+        long scannedBytes = root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0);
         var grid = new UniformGrid { Columns = 6, Margin = new Thickness(-5) };
 
-        grid.Children.Add(Tile(Strings.Get("Insights_Scanned"), SizeFormatter.Format(total), 1, "Accent",
-            Strings.Format("Insights_ScannedDetail", root.FileCount, folders, _scanMethod == "MFT" ? Strings.Get("Insights_FromFileTable") : Strings.Get("Insights_FromWalk"))));
+        grid.Children.Add(ScannedTile(root, scannedBytes));
+        grid.Children.Add(FreeSpaceTile(root));
+        grid.Children.Add(ClearableTile(scannedBytes));
+        grid.Children.Add(UntouchedTile(scannedBytes));
 
-        string drivePath = System.IO.Path.GetPathRoot(root.FullPath) ?? root.FullPath;
-        if (DriveSpace(root.FullPath) is { } space)
+        Border? biggestFolderTile = BiggestFolderTile(root, measure, scannedBytes);
+        if (biggestFolderTile is not null)
         {
-            double used = (double)(space.Total - space.Free) / space.Total;
-            grid.Children.Add(Tile(Strings.Format("Insights_FreeOn", OperatingSystem.IsWindows() || _mock ? drivePath.TrimEnd('\\') : drivePath), Strings.Format("Insights_FreeOf", SizeFormatter.Format(space.Free), SizeFormatter.Format(space.Total)), used, "GoodBar",
-                Strings.Format("Insights_FreeDetail", InspectSummary.Percent(used), space.Format)));
-        }
-        else grid.Children.Add(Tile(Strings.Get("Insights_Free"), SizeFormatter.Format(root.FreeBytes), 0, "GoodBar", drivePath));
-
-        var clearable = _cleanup!.Where(s => s.Action != CleanupAction.Explain).ToList();
-        long clearBytes = clearable.Sum(s => s.Bytes);
-        long checkedBytes = clearable.Where(s => _checkedCleanup.Contains(s.Key)).Sum(s => s.Bytes);
-        grid.Children.Add(Tile(Strings.Get("Panel_TabCleanup"), SizeFormatter.Format(clearBytes), total > 0 ? (double)clearBytes / total : 0, "Accent",
-            Strings.Format("Insights_ClearDetail", clearable.Count, SizeFormatter.Format(checkedBytes))));
-
-        long old = _bandSums![2] + _bandSums[3];
-        grid.Children.Add(Tile(Strings.Get("Insights_Untouched"), SizeFormatter.Format(old), total > 0 ? (double)old / total : 0, "OldBar",
-            Strings.Format("Insights_UntouchedDetail", InspectSummary.Percent(total > 0 ? (double)old / total : 0), _bandFiles![2] + _bandFiles[3])));
-
-        var biggest = root.DescendantDirectories().Where(d => !ReferenceEquals(d, root)).OrderByDescending(d => d.SizeFor(measure)).FirstOrDefault();
-        if (biggest is not null)
-        {
-            double share = total > 0 ? (double)biggest.SizeFor(measure) / total : 0;
-            var tile = Tile(Strings.Get("Insights_BiggestFolder"), biggest.Name, share, "FolderBar",
-                Strings.Format("Insights_BiggestFolderDetail", SizeFormatter.Format(biggest.SizeFor(measure)), InspectSummary.Percent(share), biggest.FileCount));
-            ToolTip.SetTip(tile, biggest.FullPath);
-            Clickable(tile, () => ShowOnMap(biggest));
-            grid.Children.Add(tile);
+            grid.Children.Add(biggestFolderTile);
         }
 
-        if (HasBaseline)
-        {
-            var totals = DriveInsights.Changes(root, measure, _comparison);
-            long net = totals.Grew - totals.Shrank;
-            grid.Children.Add(Tile(Strings.Get("Insights_SinceLast"), (net >= 0 ? "+" : "−") + SizeFormatter.Format(Math.Abs(net)), total > 0 ? (double)Math.Abs(net) / total : 0, net >= 0 ? "GrewBar" : "ShrankBar",
-                Strings.Format("Insights_SinceLastDetail", _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc), totals.NewFiles)));
-        }
-        else grid.Children.Add(Tile(Strings.Get("Insights_SinceLast"), Strings.Get("Insights_NoBaseline"), 0, "Accent", Strings.Get("Insights_NoBaselineHint")));
+        grid.Children.Add(SinceLastTile(root, measure, scannedBytes));
+
         return grid;
     }
 
+    /// <summary>The scanned total with the file and folder counts and how the scan was made.</summary>
+    /// <param name="root">The scan root; the folder count leaves it out.</param>
+    /// <param name="scannedBytes">The root's bytes without the free-space box.</param>
+    /// <returns>A tile with a full bar.</returns>
+    private Border ScannedTile(FsNode root, long scannedBytes)
+    {
+        int folderCount = root.DescendantDirectories().Count() - 1;
+        string source = _scanMethod == "MFT" ? Strings.Get("Insights_FromFileTable") : Strings.Get("Insights_FromWalk");
+        string detail = Strings.Format("Insights_ScannedDetail", root.FileCount, folderCount, source);
+
+        return Tile(Strings.Get("Insights_Scanned"), SizeFormatter.Format(scannedBytes), 1, "Accent", detail);
+    }
+
+    /// <summary>Free space on the scanned drive, or the free bytes the scan recorded when the drive cannot be read.</summary>
+    /// <param name="root">The scan root; its drive is read, or its recorded FreeBytes used.</param>
+    /// <returns>A tile whose bar is the used share of the drive, or empty when the drive could not be read.</returns>
+    private Border FreeSpaceTile(FsNode root)
+    {
+        string drivePath = System.IO.Path.GetPathRoot(root.FullPath) ?? root.FullPath;
+        if (DriveSpace(root.FullPath) is not { } space)
+        {
+            return Tile(Strings.Get("Insights_Free"), SizeFormatter.Format(root.FreeBytes), 0, "GoodBar", drivePath);
+        }
+
+        double usedShare = (double)(space.Total - space.Free) / space.Total;
+        string driveLabel = OperatingSystem.IsWindows() || _mock ? drivePath.TrimEnd('\\') : drivePath;
+        string value = Strings.Format("Insights_FreeOf", SizeFormatter.Format(space.Free), SizeFormatter.Format(space.Total));
+        string detail = Strings.Format("Insights_FreeDetail", InspectSummary.Percent(usedShare), space.Format);
+
+        return Tile(Strings.Format("Insights_FreeOn", driveLabel), value, usedShare, "GoodBar", detail);
+    }
+
+    /// <summary>The bytes the cleanup suggestions could free, and how much of that is ticked.</summary>
+    /// <param name="scannedBytes">The scanned total the bar is relative to; 0 gives an empty bar.</param>
+    /// <returns>A tile counting every suggestion except the explain-only ones.</returns>
+    private Border ClearableTile(long scannedBytes)
+    {
+        var clearable = _cleanup!.Where(suggestion => suggestion.Action != CleanupAction.Explain).ToList();
+        long clearableBytes = clearable.Sum(suggestion => suggestion.Bytes);
+        long checkedBytes = clearable.Where(suggestion => _checkedCleanup.Contains(suggestion.Key)).Sum(suggestion => suggestion.Bytes);
+        double share = scannedBytes > 0 ? (double)clearableBytes / scannedBytes : 0;
+        string detail = Strings.Format("Insights_ClearDetail", clearable.Count, SizeFormatter.Format(checkedBytes));
+
+        return Tile(Strings.Get("Panel_TabCleanup"), SizeFormatter.Format(clearableBytes), share, "Accent", detail);
+    }
+
+    /// <summary>The two oldest age bands together: untouched for a year or more.</summary>
+    /// <param name="scannedBytes">The scanned total the bar is relative to; 0 gives an empty bar.</param>
+    /// <returns>A tile; <see cref="ComputeAgeBands"/> must have run.</returns>
+    private Border UntouchedTile(long scannedBytes)
+    {
+        long untouchedBytes = _bandSums![2] + _bandSums[3];
+        int untouchedFiles = _bandFiles![2] + _bandFiles[3];
+        double share = scannedBytes > 0 ? (double)untouchedBytes / scannedBytes : 0;
+        string detail = Strings.Format("Insights_UntouchedDetail", InspectSummary.Percent(share), untouchedFiles);
+
+        return Tile(Strings.Get("Insights_Untouched"), SizeFormatter.Format(untouchedBytes), share, "OldBar", detail);
+    }
+
+    /// <summary>The largest folder below the root, or null when the scan has none.</summary>
+    /// <param name="root">The scan root, excluded from the search.</param>
+    /// <param name="measure">File size or size on disk.</param>
+    /// <param name="scannedBytes">The scanned total the bar is relative to; 0 gives an empty bar.</param>
+    /// <returns>A clickable tile that shows the folder on the map, or null for a scan without subfolders.</returns>
+    private Border? BiggestFolderTile(FsNode root, SizeMeasure measure, long scannedBytes)
+    {
+        FsNode? biggestFolder = root.DescendantDirectories()
+            .Where(directory => !ReferenceEquals(directory, root))
+            .OrderByDescending(directory => directory.SizeFor(measure))
+            .FirstOrDefault();
+        if (biggestFolder is null)
+        {
+            return null;
+        }
+
+        long folderBytes = biggestFolder.SizeFor(measure);
+        double share = scannedBytes > 0 ? (double)folderBytes / scannedBytes : 0;
+        string detail = Strings.Format("Insights_BiggestFolderDetail", SizeFormatter.Format(folderBytes), InspectSummary.Percent(share), biggestFolder.FileCount);
+        Border tile = Tile(Strings.Get("Insights_BiggestFolder"), biggestFolder.Name, share, "FolderBar", detail);
+        ToolTip.SetTip(tile, biggestFolder.FullPath);
+        Clickable(tile, () => ShowOnMap(biggestFolder));
+
+        return tile;
+    }
+
+    /// <summary>The net change since the compared scan, or a hint when there is none to compare against.</summary>
+    /// <param name="root">The scan root the change totals are taken over.</param>
+    /// <param name="measure">File size or size on disk.</param>
+    /// <param name="scannedBytes">The scanned total the bar is relative to; 0 gives an empty bar.</param>
+    /// <returns>A tile colored grew or shrank by the sign of the net change.</returns>
+    private Border SinceLastTile(FsNode root, SizeMeasure measure, long scannedBytes)
+    {
+        if (!HasBaseline)
+        {
+            return Tile(Strings.Get("Insights_SinceLast"), Strings.Get("Insights_NoBaseline"), 0, "Accent", Strings.Get("Insights_NoBaselineHint"));
+        }
+
+        ChangeTotals totals = DriveInsights.Changes(root, measure, _comparison);
+        long netBytes = totals.Grew - totals.Shrank;
+        string value = (netBytes >= 0 ? "+" : "−") + SizeFormatter.Format(Math.Abs(netBytes));
+        double share = scannedBytes > 0 ? (double)Math.Abs(netBytes) / scannedBytes : 0;
+        string comparedAgainst = _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc);
+        string detail = Strings.Format("Insights_SinceLastDetail", comparedAgainst, totals.NewFiles);
+
+        return Tile(Strings.Get("Insights_SinceLast"), value, share, netBytes >= 0 ? "GrewBar" : "ShrankBar", detail);
+    }
+
     /// <summary>The drive holding <paramref name="path"/>: total, free and file system; null when it cannot be read. The pretend PC answers in mock mode.</summary>
+    /// <param name="path">Any path; only its root is used.</param>
+    /// <returns>Total and free bytes with the file system name, or null for a drive that is not ready, reports no size, or is unknown to the mock.</returns>
     private (long Total, long Free, string Format)? DriveSpace(string path)
     {
         string drivePath = System.IO.Path.GetPathRoot(path) ?? path;
         if (_mock)
         {
-            var d = MockSystem.Drives.FirstOrDefault(d => string.Equals(d.Root, drivePath, StringComparison.OrdinalIgnoreCase));
-            return d is null ? null : (d.Total, d.Total - d.Used, d.Format);
+            MockSystem.Drive? mockDrive = MockSystem.Drives.FirstOrDefault(drive => string.Equals(drive.Root, drivePath, StringComparison.OrdinalIgnoreCase));
+            return mockDrive is null ? null : (mockDrive.Total, mockDrive.Total - mockDrive.Used, mockDrive.Format);
         }
+
         try
         {
             var drive = new DriveInfo(drivePath);
@@ -342,22 +605,41 @@ public partial class MainWindow
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
         {
+            // An unreadable or unmounted drive just leaves the free-space figures out.
             return null;
         }
     }
 
+    /// <summary>One headline tile: a small label, a big value, a thin bar and a detail line.</summary>
+    /// <param name="label">The label, upper-cased here.</param>
+    /// <param name="value">The headline figure.</param>
+    /// <param name="fraction">The bar's fill, 0..1.</param>
+    /// <param name="barKey">A key for <see cref="TileBrush"/>: GoodBar, OldBar, FolderBar, GrewBar, ShrankBar or anything else for the accent.</param>
+    /// <param name="detail">The dim line under the bar.</param>
+    /// <returns>The tile card.</returns>
     private Border Tile(string label, string value, double fraction, string barKey, string detail)
     {
-        var card = new Border { CornerRadius = new CornerRadius(10), BorderThickness = new Thickness(1), Padding = new Thickness(14, 11, 14, 11), Margin = new Thickness(5), Classes = { "card", "flat" } };
+        var card = new Border
+        {
+            CornerRadius = new CornerRadius(10),
+            BorderThickness = new Thickness(1),
+            Padding = new Thickness(14, 11, 14, 11),
+            Margin = new Thickness(5),
+            Classes = { "card", "flat" }
+        };
         var stack = new StackPanel();
         stack.Children.Add(Small(label.ToUpperInvariant()));
         stack.Children.Add(new TextBlock { Text = value, FontSize = 21, FontWeight = FontWeight.Bold, Margin = new Thickness(0, 2, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
         stack.Children.Add(new Border { Child = Bar(fraction, TileBrush(barKey), 4), Margin = new Thickness(0, 6, 0, 4) });
         stack.Children.Add(Small(detail));
         card.Child = stack;
+
         return card;
     }
 
+    /// <summary>The bar color for a tile.</summary>
+    /// <param name="key">GoodBar (green), OldBar (dim amber), FolderBar (blue), GrewBar, ShrankBar; any other key gives the theme accent.</param>
+    /// <returns>The brush.</returns>
     private IBrush TileBrush(string key) => key switch
     {
         "GoodBar" => new ImmutableSolidColorBrush(Color.FromRgb(0x7F, 0xBF, 0x8E)),
@@ -370,168 +652,379 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- by type
 
+    /// <summary>The by-type card: a donut of every type with a sentence about the biggest, then one clickable row per type.</summary>
+    /// <returns>The card; only its heading when the scan has no bytes.</returns>
     private Border BuildTypeCard()
     {
-        var measure = Treemap.SizeMode;
-        var shares = _typeShares!;
-        long total = shares.Sum(s => s.Bytes);
-        var scheme = Treemap.Scheme;
-        var card = Card(Strings.Get("Panel_TabType"), Strings.Format("Insights_TypesSub", shares.Count), out var body);
-        if (total <= 0) return card;
+        SizeMeasure measure = Treemap.SizeMode;
+        List<TypeShare> shares = _typeShares!;
+        long totalBytes = shares.Sum(share => share.Bytes);
+        ColorScheme scheme = Treemap.Scheme;
+        Border card = Card(Strings.Get("Panel_TabType"), Strings.Format("Insights_TypesSub", shares.Count), out StackPanel? body);
+        if (totalBytes <= 0)
+        {
+            return card;
+        }
 
-        var top = shares[0];
+        // The head: a donut of every type, and a sentence about the biggest one or two.
+        TypeShare topShare = shares[0];
         var head = new DockPanel { Margin = new Thickness(0, 2, 0, 8) };
         var donut = new DonutChart { Width = 104, Height = 104, Thickness = 16, Margin = new Thickness(0, 0, 14, 0), VerticalAlignment = VerticalAlignment.Center };
         donut.Bind(DonutChart.TextBrushProperty, this.GetResourceObservable("Text"));
         donut.Bind(DonutChart.DimBrushProperty, this.GetResourceObservable("TextDim"));
         donut.Bind(DonutChart.TrackBrushProperty, this.GetResourceObservable("Control"));
-        donut.CenterValue = SizeFormatter.Compact(total);
+        donut.CenterValue = SizeFormatter.Compact(totalBytes);
         donut.CenterLabel = Strings.Format("Panel_TypeFiles", _root!.FileCount);
-        donut.SetSlices(shares.Select(sh => new DonutChart.Slice(Strings.Category(sh.Category), SizeFormatter.Compact(sh.Bytes), sh.Bytes, scheme.Categories.First(c => c.Category == sh.Category).Brush)));
+        donut.SetSlices(shares.Select(share => new DonutChart.Slice(
+            Strings.Category(share.Category),
+            SizeFormatter.Compact(share.Bytes),
+            share.Bytes,
+            scheme.Categories.First(categoryColor => categoryColor.Category == share.Category).Brush)));
         DockPanel.SetDock(donut, Dock.Left);
         head.Children.Add(donut);
-        string reading = Strings.Format("Insights_TypesReading", Strings.Category(top.Category), InspectSummary.Percent((double)top.Bytes / total),
-            PathWithin(top.Largest?.Parent),
-            shares.Count > 1 ? Strings.Category(shares[1].Category).ToLowerInvariant() : string.Empty, shares.Count > 1 ? InspectSummary.Percent((double)shares[1].Bytes / total) : string.Empty);
+
+        bool hasRunnerUp = shares.Count > 1;
+        string reading = Strings.Format("Insights_TypesReading",
+            Strings.Category(topShare.Category),
+            InspectSummary.Percent((double)topShare.Bytes / totalBytes),
+            PathWithin(topShare.Largest?.Parent),
+            hasRunnerUp ? Strings.Category(shares[1].Category).ToLowerInvariant() : string.Empty,
+            hasRunnerUp ? InspectSummary.Percent((double)shares[1].Bytes / totalBytes) : string.Empty);
         head.Children.Add(new TextBlock { Text = reading, FontSize = 12, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center, LineHeight = 18, Classes = { "dim" } });
         body.Children.Add(head);
 
-        for (int i = 0; i < shares.Count; i++)
+        // One row per type; the bars are relative to the biggest type, not to the total.
+        double topFraction = (double)shares[0].Bytes / totalBytes;
+        foreach (TypeShare share in shares)
         {
-            var share = shares[i];
-            double fraction = (double)share.Bytes / total;
-            var fill = scheme.Categories.First(c => c.Category == share.Category).Brush;
-            var row = new Grid { ColumnDefinitions = new ColumnDefinitions("16,118,*,66,42") };
-            var sw = Swatch(fill); sw.HorizontalAlignment = HorizontalAlignment.Left;
-            var name = new TextBlock { Text = Strings.Category(share.Category), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 0, 8, 0) };
-            var bar = Bar(fraction / ((double)shares[0].Bytes / total), fill, 7); bar.Margin = new Thickness(0, 0, 10, 0);
-            var size = new TextBlock { Text = SizeFormatter.Format(share.Bytes), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-            var pct = new TextBlock { Text = InspectSummary.Percent(fraction), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Classes = { "dim" } };
-            Grid.SetColumn(name, 1); Grid.SetColumn(bar, 2); Grid.SetColumn(size, 3); Grid.SetColumn(pct, 4);
-            row.Children.Add(sw); row.Children.Add(name); row.Children.Add(bar); row.Children.Add(size); row.Children.Add(pct);
-            string tip = Strings.Format("Panel_TypeDetail", Strings.Category(share.Category), SizeFormatter.Format(share.Bytes), share.Files)
-                         + (share.Extensions.Count > 0 ? "\n" + string.Join("  ", share.Extensions.Select(e => $"{e.Extension} {SizeFormatter.Format(e.Bytes)}")) : string.Empty)
-                         + (share.Largest is null ? string.Empty : "\n" + Strings.Format("Panel_TypeLargest", share.Largest.Name, SizeFormatter.Format(share.Largest.SizeFor(measure))).TrimStart(' ', '·'));
-            var line = Hairline(row, 25); ToolTip.SetTip(line, tip);
-            var captured = share;
-            Clickable(line, () => FilterAndShowMap("type:" + captured.Category.ToString().ToLowerInvariant()));
+            double fraction = (double)share.Bytes / totalBytes;
+            IBrush fill = scheme.Categories.First(categoryColor => categoryColor.Category == share.Category).Brush;
+            Border line = Hairline(TypeShareRow(share, fraction, fraction / topFraction, fill), 25);
+            ToolTip.SetTip(line, TypeShareTip(share, measure));
+            TypeShare capturedShare = share;
+            Clickable(line, () => FilterAndShowMap("type:" + capturedShare.Category.ToString().ToLowerInvariant()));
             body.Children.Add(line);
         }
+
         return card;
+    }
+
+    /// <summary>A type row: swatch, name, bar, size and share of the total.</summary>
+    /// <param name="share">The type's totals.</param>
+    /// <param name="fraction">The type's share of the scan, 0..1, shown as a percentage.</param>
+    /// <param name="barFraction">The bar's fill, 0..1, relative to the biggest type so the top row is full.</param>
+    /// <param name="fill">The type's color.</param>
+    /// <returns>The five-column row.</returns>
+    private Grid TypeShareRow(TypeShare share, double fraction, double barFraction, IBrush fill)
+    {
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("16,118,*,66,42") };
+
+        Border swatch = Swatch(fill);
+        swatch.HorizontalAlignment = HorizontalAlignment.Left;
+        var nameText = new TextBlock
+        {
+            Text = Strings.Category(share.Category),
+            FontSize = 12.5,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+        Border bar = Bar(barFraction, fill, 7);
+        bar.Margin = new Thickness(0, 0, 10, 0);
+        var sizeText = new TextBlock { Text = SizeFormatter.Format(share.Bytes), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
+        var percentText = new TextBlock
+        {
+            Text = InspectSummary.Percent(fraction),
+            FontSize = 12,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextAlignment = TextAlignment.Right,
+            Classes = { "dim" }
+        };
+
+        Grid.SetColumn(nameText, 1);
+        Grid.SetColumn(bar, 2);
+        Grid.SetColumn(sizeText, 3);
+        Grid.SetColumn(percentText, 4);
+        row.Children.Add(swatch);
+        row.Children.Add(nameText);
+        row.Children.Add(bar);
+        row.Children.Add(sizeText);
+        row.Children.Add(percentText);
+
+        return row;
+    }
+
+    /// <summary>The row's tooltip: the type's totals, its extensions, and its largest file.</summary>
+    /// <param name="share">The type's totals; its extension list and largest file may be empty or null.</param>
+    /// <param name="measure">File size or size on disk, for the largest file's size.</param>
+    /// <returns>One to three lines.</returns>
+    private static string TypeShareTip(TypeShare share, SizeMeasure measure)
+    {
+        string tip = Strings.Format("Panel_TypeDetail", Strings.Category(share.Category), SizeFormatter.Format(share.Bytes), share.Files);
+        if (share.Extensions.Count > 0)
+        {
+            tip += "\n" + string.Join("  ", share.Extensions.Select(extension => $"{extension.Extension} {SizeFormatter.Format(extension.Bytes)}"));
+        }
+        if (share.Largest is not null)
+        {
+            tip += "\n" + Strings.Format("Panel_TypeLargest", share.Largest.Name, SizeFormatter.Format(share.Largest.SizeFor(measure))).TrimStart(' ', '·');
+        }
+
+        return tip;
     }
 
     // ---------------------------------------------------------------- safe to clear
 
+    /// <summary>The safe-to-clear card: one row per suggestion, and a footer with what is ticked and the drive before and after.</summary>
+    /// <returns>The card; a hint only when there are no suggestions.</returns>
     private Border BuildCleanupCard()
     {
-        var suggestions = _cleanup!;
-        var clearable = suggestions.Where(s => s.Action == CleanupAction.Recycle).ToList();
-        var card = Card(Strings.Get("Panel_TabCleanup"), suggestions.Count == 0 ? Strings.Get("Panel_CleanupNone") : Strings.Format("Insights_ClearSub", SizeFormatter.Format(suggestions.Where(s => s.Action != CleanupAction.Explain).Sum(s => s.Bytes))), out var body);
+        List<CleanupSuggestion> suggestions = _cleanup!;
+        var clearable = suggestions.Where(suggestion => suggestion.Action == CleanupAction.Recycle).ToList();
+        string subtitle = suggestions.Count == 0
+            ? Strings.Get("Panel_CleanupNone")
+            : Strings.Format("Insights_ClearSub", SizeFormatter.Format(suggestions.Where(suggestion => suggestion.Action != CleanupAction.Explain).Sum(suggestion => suggestion.Bytes)));
+        Border card = Card(Strings.Get("Panel_TabCleanup"), subtitle, out StackPanel? body);
         if (suggestions.Count == 0)
         {
             body.Children.Add(new TextBlock { Text = Strings.Get("Panel_CleanupNoneHint"), FontSize = 12, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
             return card;
         }
 
-        TextBlock? footerText = null, nowText = null, afterText = null;
-        Border? nowBar = null, afterBar = null;
-        Button? recycle = null;
-        var space = DriveSpace(_root!.FullPath);
-        var dim = this.FindResource("TextDim") as IBrush ?? Brushes.Gray;
-        var accent = TileBrush("Accent");
+        // The footer's controls are built after the rows but the rows' checkboxes update them, so they are declared first.
+        TextBlock? footerText = null;
+        TextBlock? nowText = null;
+        TextBlock? afterText = null;
+        Border? nowBar = null;
+        Border? afterBar = null;
+        Button? recycleButton = null;
+        (long Total, long Free, string Format)? space = DriveSpace(_root!.FullPath);
+        IBrush dimBrush = this.FindResource("TextDim") as IBrush ?? Brushes.Gray;
+        IBrush accentBrush = TileBrush("Accent");
         void UpdateFooter()
         {
-            var picked = clearable.Where(s => _checkedCleanup.Contains(s.Key)).ToList();
-            long bytes = picked.Sum(s => s.Bytes);
-            long free = (space?.Free ?? _root!.FreeBytes) + bytes;
-            footerText!.Text = picked.Count == 0 ? Strings.Get("Insights_NoneChecked") : Strings.Format("Insights_Checked", picked.Count, SizeFormatter.Format(bytes), SizeFormatter.Format(free));
-            recycle!.IsEnabled = picked.Count > 0;
-            if (space is null) return;
-            // the drive before and after: the amber slice is what the ticked places take up now
-            var p = new FreeProjection(space.Value.Total, space.Value.Free, bytes);
-            nowText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(p.UsedNowShare), SizeFormatter.Format(p.FreeNow));
-            // nothing ticked: the After row repeats Now, dimmed, so the rows keep their width
-            afterText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(p.UsedAfterShare), SizeFormatter.Format(p.FreeAfter));
+            var picked = clearable.Where(suggestion => _checkedCleanup.Contains(suggestion.Key)).ToList();
+            long pickedBytes = picked.Sum(suggestion => suggestion.Bytes);
+            long freeAfter = (space?.Free ?? _root!.FreeBytes) + pickedBytes;
+            footerText!.Text = picked.Count == 0
+                ? Strings.Get("Insights_NoneChecked")
+                : Strings.Format("Insights_Checked", picked.Count, SizeFormatter.Format(pickedBytes), SizeFormatter.Format(freeAfter));
+            recycleButton!.IsEnabled = picked.Count > 0;
+            if (space is null)
+            {
+                return;
+            }
+
+            // The drive before and after: the amber slice is what the ticked places take up now.
+            var projection = new FreeProjection(space.Value.Total, space.Value.Free, pickedBytes);
+            nowText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(projection.UsedNowShare), SizeFormatter.Format(projection.FreeNow));
+            // Nothing ticked: the After row repeats Now, dimmed, so the rows keep their width.
+            afterText!.Text = Strings.Format("Insights_Fill", InspectSummary.Percent(projection.UsedAfterShare), SizeFormatter.Format(projection.FreeAfter));
             afterText.Classes.Set("dim", picked.Count == 0);
-            nowBar!.Child = SplitBar(p.UsedAfterShare, p.FreedShare, dim, accent, 6);
-            afterBar!.Child = SplitBar(p.UsedAfterShare, 0, dim, accent, 6);
+            nowBar!.Child = SplitBar(projection.UsedAfterShare, projection.FreedShare, dimBrush, accentBrush, 6);
+            afterBar!.Child = SplitBar(projection.UsedAfterShare, 0, dimBrush, accentBrush, 6);
         }
 
-        foreach (var s in suggestions)
+        foreach (CleanupSuggestion suggestion in suggestions)
         {
-            string note = Strings.Format("Cleanup_" + s.Key + "_Note", s.Items.Count, s.Items.Sum(i => i.FileCount));
-            var row = new Grid { ColumnDefinitions = new ColumnDefinitions("24,*,Auto,Auto,Auto") };
-            if (s.Action == CleanupAction.Recycle)
-            {
-                var box = new CheckBox { IsChecked = _checkedCleanup.Contains(s.Key), VerticalAlignment = VerticalAlignment.Center, MinWidth = 0, Padding = new Thickness(0) };
-                ToolTip.SetTip(box, Strings.Get("Insights_CheckTip"));
-                var key = s.Key;
-                box.IsCheckedChanged += (_, _) => { if (box.IsChecked == true) _checkedCleanup.Add(key); else _checkedCleanup.Remove(key); UpdateFooter(); };
-                row.Children.Add(box);
-            }
-            var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0) };
-            text.Children.Add(new TextBlock { Text = Strings.Get("Cleanup_" + s.Key), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
-            text.Children.Add(Small(note));
-            var size = new TextBlock { Text = SizeFormatter.Format(s.Bytes), FontWeight = FontWeight.SemiBold, FontSize = 12.5, Margin = new Thickness(0, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, MinWidth = 64, Classes = { "accent" } };
-            var captured = s;
-            var show = new Button { Classes = { "tool" }, Content = Strings.Get("Cleanup_Show"), Height = 24, FontSize = 12, Padding = new Thickness(8, 0), Margin = new Thickness(0, 0, 4, 0) };
-            show.Click += (_, _) => ShowSuggestion(captured);
-            string actionText = s.Action switch
-            {
-                CleanupAction.EmptyRecycleBin => Strings.Get("Cleanup_Empty"),
-                CleanupAction.Review => Strings.Get("Cleanup_Review"),
-                CleanupAction.Explain => Strings.Get("Cleanup_HowTo"),
-                _ => Strings.Get("Cleanup_Recycle")
-            };
-            var act = new Button { Classes = { "tool", "outline-accent" }, Content = actionText, Height = 24, MinHeight = 24, FontSize = 12, Padding = new Thickness(8, 0), MinWidth = 70 };
-            act.Click += (_, _) => _ = RunSuggestion(captured);
-            Grid.SetColumn(text, 1); Grid.SetColumn(size, 2); Grid.SetColumn(show, 3); Grid.SetColumn(act, 4);
-            row.Children.Add(text); row.Children.Add(size); row.Children.Add(show); row.Children.Add(act);
-            body.Children.Add(Hairline(row, 42));
+            body.Children.Add(Hairline(CleanupRow(suggestion, UpdateFooter), 42));
         }
 
         var footer = new DockPanel { Margin = new Thickness(0, 10, 0, 0) };
-        recycle = new Button { Classes = { "primary" }, Content = Strings.Get("Insights_RecycleChecked"), Height = 30, Padding = new Thickness(12, 0), VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(16, 0, 0, 0) };
-        recycle.Click += (_, _) =>
+        recycleButton = new Button
         {
-            var items = clearable.Where(s => _checkedCleanup.Contains(s.Key)).SelectMany(s => s.Items).Distinct().ToList();
-            if (items.Count > 0) _ = DeleteNodes(items);
+            Classes = { "primary" },
+            Content = Strings.Get("Insights_RecycleChecked"),
+            Height = 30,
+            Padding = new Thickness(12, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(16, 0, 0, 0)
         };
-        DockPanel.SetDock(recycle, Dock.Right);
-        footer.Children.Add(recycle);
+        recycleButton.Click += (_, _) =>
+        {
+            var pickedItems = clearable
+                .Where(suggestion => _checkedCleanup.Contains(suggestion.Key))
+                .SelectMany(suggestion => suggestion.Items)
+                .Distinct()
+                .ToList();
+            if (pickedItems.Count > 0)
+            {
+                _ = DeleteNodes(pickedItems);
+            }
+        };
+        DockPanel.SetDock(recycleButton, Dock.Right);
+        footer.Children.Add(recycleButton);
+
         var left = new StackPanel { VerticalAlignment = VerticalAlignment.Center, ClipToBounds = true };
         footerText = new TextBlock { FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
         left.Children.Add(footerText);
         if (space is not null)
         {
-            // what the drive looks like now and after clearing the ticked places
-            var rows = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), RowDefinitions = new RowDefinitions("Auto,Auto"), ColumnSpacing = 10, RowSpacing = 5, Margin = new Thickness(0, 8, 0, 0) };
-            var nowLabel = Small(Strings.Get("Insights_Now")); nowLabel.MinWidth = 40; nowLabel.VerticalAlignment = VerticalAlignment.Center;
-            var afterLabel = Small(Strings.Get("Insights_After")); afterLabel.MinWidth = 40; afterLabel.VerticalAlignment = VerticalAlignment.Center;
-            // the bar takes what is left; the text has a fixed width so a long value can never push the grid past the card
-            nowBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
-            afterBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
-            nowText = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Width = 165, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
-            afterText = new TextBlock { FontSize = 12, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Width = 165, TextTrimming = TextTrimming.CharacterEllipsis };
-            Grid.SetColumn(nowBar, 1); Grid.SetColumn(nowText, 2);
-            Grid.SetRow(afterLabel, 1); Grid.SetRow(afterBar, 1); Grid.SetRow(afterText, 1);
-            Grid.SetColumn(afterBar, 1); Grid.SetColumn(afterText, 2);
-            rows.Children.Add(nowLabel); rows.Children.Add(nowBar); rows.Children.Add(nowText);
-            rows.Children.Add(afterLabel); rows.Children.Add(afterBar); rows.Children.Add(afterText);
-            ToolTip.SetTip(rows, Strings.Get("Insights_AfterTip"));
-            left.Children.Add(rows);
+            left.Children.Add(BuildCleanupProjectionRows(out nowBar, out afterBar, out nowText, out afterText));
         }
         footer.Children.Add(left);
         body.Children.Add(footer);
+
         UpdateFooter();
         return card;
     }
 
+    /// <summary>One suggestion: a checkbox for the ones that can be recycled, the name and note, the size, Show, and the action.</summary>
+    /// <param name="suggestion">The suggestion; its Key picks the strings and is what the tick is remembered by.</param>
+    /// <param name="onCheckedChanged">Runs on the UI thread after the tick was added to or removed from <c>_checkedCleanup</c>.</param>
+    /// <returns>The five-column row.</returns>
+    private Grid CleanupRow(CleanupSuggestion suggestion, Action onCheckedChanged)
+    {
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("24,*,Auto,Auto,Auto") };
+
+        if (suggestion.Action == CleanupAction.Recycle)
+        {
+            var checkBox = new CheckBox { IsChecked = _checkedCleanup.Contains(suggestion.Key), VerticalAlignment = VerticalAlignment.Center, MinWidth = 0, Padding = new Thickness(0) };
+            ToolTip.SetTip(checkBox, Strings.Get("Insights_CheckTip"));
+            string suggestionKey = suggestion.Key;
+            checkBox.IsCheckedChanged += (_, _) =>
+            {
+                if (checkBox.IsChecked == true)
+                {
+                    _checkedCleanup.Add(suggestionKey);
+                }
+                else
+                {
+                    _checkedCleanup.Remove(suggestionKey);
+                }
+                onCheckedChanged();
+            };
+            row.Children.Add(checkBox);
+        }
+
+        string note = Strings.Format("Cleanup_" + suggestion.Key + "_Note", suggestion.Items.Count, suggestion.Items.Sum(item => item.FileCount));
+        var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0) };
+        text.Children.Add(new TextBlock { Text = Strings.Get("Cleanup_" + suggestion.Key), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
+        text.Children.Add(Small(note));
+
+        var sizeText = new TextBlock
+        {
+            Text = SizeFormatter.Format(suggestion.Bytes),
+            FontWeight = FontWeight.SemiBold,
+            FontSize = 12.5,
+            Margin = new Thickness(0, 0, 10, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            TextAlignment = TextAlignment.Right,
+            MinWidth = 64,
+            Classes = { "accent" }
+        };
+
+        CleanupSuggestion capturedSuggestion = suggestion;
+        var showButton = new Button { Classes = { "tool" }, Content = Strings.Get("Cleanup_Show"), Height = 24, FontSize = 12, Padding = new Thickness(8, 0), Margin = new Thickness(0, 0, 4, 0) };
+        showButton.Click += (_, _) => ShowSuggestion(capturedSuggestion);
+
+        string actionText = suggestion.Action switch
+        {
+            CleanupAction.EmptyRecycleBin => Strings.Get("Cleanup_Empty"),
+            CleanupAction.Review => Strings.Get("Cleanup_Review"),
+            CleanupAction.Explain => Strings.Get("Cleanup_HowTo"),
+            _ => Strings.Get("Cleanup_Recycle")
+        };
+        var actionButton = new Button
+        {
+            Classes = { "tool", "outline-accent" },
+            Content = actionText,
+            Height = 24,
+            MinHeight = 24,
+            FontSize = 12,
+            Padding = new Thickness(8, 0),
+            MinWidth = 70
+        };
+        actionButton.Click += (_, _) => _ = RunSuggestion(capturedSuggestion);
+
+        Grid.SetColumn(text, 1);
+        Grid.SetColumn(sizeText, 2);
+        Grid.SetColumn(showButton, 3);
+        Grid.SetColumn(actionButton, 4);
+        row.Children.Add(text);
+        row.Children.Add(sizeText);
+        row.Children.Add(showButton);
+        row.Children.Add(actionButton);
+
+        return row;
+    }
+
+    /// <summary>The Now and After rows under the footer text: a label, a split bar and the fill readout; the footer fills them in.</summary>
+    /// <param name="nowBar">The empty holder for the Now bar.</param>
+    /// <param name="afterBar">The empty holder for the After bar.</param>
+    /// <param name="nowText">The Now readout, dim.</param>
+    /// <param name="afterText">The After readout, semibold.</param>
+    /// <returns>The two-row grid.</returns>
+    private static Grid BuildCleanupProjectionRows(out Border nowBar, out Border afterBar, out TextBlock nowText, out TextBlock afterText)
+    {
+        var rows = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"),
+            RowDefinitions = new RowDefinitions("Auto,Auto"),
+            ColumnSpacing = 10,
+            RowSpacing = 5,
+            Margin = new Thickness(0, 8, 0, 0)
+        };
+        TextBlock nowLabel = Small(Strings.Get("Insights_Now"));
+        nowLabel.MinWidth = 40;
+        nowLabel.VerticalAlignment = VerticalAlignment.Center;
+        TextBlock afterLabel = Small(Strings.Get("Insights_After"));
+        afterLabel.MinWidth = 40;
+        afterLabel.VerticalAlignment = VerticalAlignment.Center;
+
+        // The bar takes what is left; the text has a fixed width so a long value can never push the grid past the card.
+        nowBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
+        afterBar = new Border { VerticalAlignment = VerticalAlignment.Center, MinWidth = 48 };
+        nowText = new TextBlock
+        {
+            FontSize = 12,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextAlignment = TextAlignment.Right,
+            Width = 165,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Classes = { "dim" }
+        };
+        afterText = new TextBlock
+        {
+            FontSize = 12,
+            FontWeight = FontWeight.SemiBold,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextAlignment = TextAlignment.Right,
+            Width = 165,
+            TextTrimming = TextTrimming.CharacterEllipsis
+        };
+
+        Grid.SetColumn(nowBar, 1);
+        Grid.SetColumn(nowText, 2);
+        Grid.SetRow(afterLabel, 1);
+        Grid.SetRow(afterBar, 1);
+        Grid.SetRow(afterText, 1);
+        Grid.SetColumn(afterBar, 1);
+        Grid.SetColumn(afterText, 2);
+        rows.Children.Add(nowLabel);
+        rows.Children.Add(nowBar);
+        rows.Children.Add(nowText);
+        rows.Children.Add(afterLabel);
+        rows.Children.Add(afterBar);
+        rows.Children.Add(afterText);
+        ToolTip.SetTip(rows, Strings.Get("Insights_AfterTip"));
+
+        return rows;
+    }
+
     /// <summary>A bar with two segments: <paramref name="first"/> of the width in <paramref name="fillFirst"/>, then <paramref name="second"/> in <paramref name="fillSecond"/>.</summary>
+    /// <param name="first">The left segment's share, 0..1.</param>
+    /// <param name="second">The right segment's share, 0..1; clamped so both fit.</param>
+    /// <param name="fillFirst">The left segment's color.</param>
+    /// <param name="fillSecond">The right segment's color.</param>
+    /// <param name="height">Bar height in device-independent pixels.</param>
+    /// <returns>The bar in a vertically centered border; a segment of 0 is not drawn.</returns>
     private Border SplitBar(double first, double second, IBrush fillFirst, IBrush fillSecond, double height)
     {
-        first = Math.Clamp(first, 0, 1); second = Math.Clamp(second, 0, 1 - first);
+        first = Math.Clamp(first, 0, 1);
+        second = Math.Clamp(second, 0, 1 - first);
         double rest = Math.Max(0, 1 - first - second);
+
         var grid = new Grid { Height = height, VerticalAlignment = VerticalAlignment.Center };
         grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(first, 0.001), GridUnitType.Star));
         grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(second, 0.001), GridUnitType.Star));
@@ -539,70 +1032,78 @@ public partial class MainWindow
         var track = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
         Grid.SetColumnSpan(track, 3);
         grid.Children.Add(track);
-        double r = height / 2;
+
+        // Only the outer ends are rounded where the two segments meet.
+        double radius = height / 2;
         if (first > 0)
         {
-            var a = new Border { Height = height, Background = fillFirst, MinWidth = 2, CornerRadius = second > 0 ? new CornerRadius(r, 0, 0, r) : new CornerRadius(r) };
-            grid.Children.Add(a);
+            var firstSegment = new Border
+            {
+                Height = height,
+                Background = fillFirst,
+                MinWidth = 2,
+                CornerRadius = second > 0 ? new CornerRadius(radius, 0, 0, radius) : new CornerRadius(radius)
+            };
+            grid.Children.Add(firstSegment);
         }
         if (second > 0)
         {
-            var b = new Border { Height = height, Background = fillSecond, MinWidth = 2, CornerRadius = first > 0 ? new CornerRadius(0, r, r, 0) : new CornerRadius(r) };
-            Grid.SetColumn(b, 1);
-            grid.Children.Add(b);
+            var secondSegment = new Border
+            {
+                Height = height,
+                Background = fillSecond,
+                MinWidth = 2,
+                CornerRadius = first > 0 ? new CornerRadius(0, radius, radius, 0) : new CornerRadius(radius)
+            };
+            Grid.SetColumn(secondSegment, 1);
+            grid.Children.Add(secondSegment);
         }
+
         return new Border { Child = grid, VerticalAlignment = VerticalAlignment.Center };
     }
 
-    private void ShowSuggestion(CleanupSuggestion s)
+    /// <summary>Shows a suggestion's items on the map, focused on the deepest folder that holds them all.</summary>
+    /// <param name="suggestion">The suggestion; one with no items does nothing.</param>
+    private void ShowSuggestion(CleanupSuggestion suggestion)
     {
-        if (s.Items.Count == 0) return;
+        if (suggestion.Items.Count == 0)
+        {
+            return;
+        }
+
         ShowView(insights: false);
-        Treemap.SelectMany(s.Items);
-        if (s.Items.Count == 1 && s.Items[0].IsDirectory) { Treemap.FocusOn(s.Items[0]); return; }
-        FsNode? common = s.Items[0].Parent;
-        foreach (var item in s.Items.Skip(1))
-            while (common is not null && !common.IsAncestorOf(item)) common = common.Parent;
-        Treemap.FocusOn(common ?? _root!);
+        Treemap.SelectMany(suggestion.Items);
+        if (suggestion.Items.Count == 1 && suggestion.Items[0].IsDirectory)
+        {
+            Treemap.FocusOn(suggestion.Items[0]);
+            return;
+        }
+
+        FsNode? commonAncestor = suggestion.Items[0].Parent;
+        foreach (FsNode? item in suggestion.Items.Skip(1))
+        {
+            while (commonAncestor is not null && !commonAncestor.IsAncestorOf(item))
+            {
+                commonAncestor = commonAncestor.Parent;
+            }
+        }
+        Treemap.FocusOn(commonAncestor ?? _root!);
     }
 
-    private async Task RunSuggestion(CleanupSuggestion s)
+    /// <summary>Carries out a suggestion's action: recycle its items, empty the bin, show and filter for review, or explain.</summary>
+    /// <param name="suggestion">The suggestion whose Action decides what happens.</param>
+    private async Task RunSuggestion(CleanupSuggestion suggestion)
     {
-        switch (s.Action)
+        switch (suggestion.Action)
         {
             case CleanupAction.Recycle:
-                await DeleteNodes(s.Items);
+                await DeleteNodes(suggestion.Items);
                 break;
             case CleanupAction.EmptyRecycleBin:
-            {
-                string drive = System.IO.Path.GetPathRoot(_root!.FullPath) ?? _root.FullPath;
-                if (!Trash.TryEmpty(drive, out var error))
-                {
-                    await Dialog.Error(this, Strings.Get("Cleanup_RecycleBin"), error ?? string.Empty);
-                    break;
-                }
-                var measure = Treemap.SizeMode;
-                long freed = 0;
-                foreach (var bin in s.Items)
-                    foreach (var child in bin.Children.ToList())
-                    {
-                        if (!child.IsReal) continue;
-                        freed += child.Allocated;
-                        child.RemoveFromTree(measure);
-                    }
-                _root!.RegisterFreedSpace(freed, measure);
-                Treemap.ClearSelection();
-                Treemap.Refresh();
-                if (_filter is not null && !_filter.IsEmpty) ApplyFilter();
-                RefreshTopList();
-                BuildDrives();
-                InvalidateInsights();
-                RefreshInsights();
-                StatusText.Text = Strings.Format("Cleanup_Emptied", SizeFormatter.Format(freed));
+                await EmptyRecycleBinAsync(suggestion);
                 break;
-            }
             case CleanupAction.Review:
-                ShowSuggestion(s);
+                ShowSuggestion(suggestion);
                 FilterBox.Text = "older than 1 year is:file";
                 break;
             default:
@@ -611,195 +1112,383 @@ public partial class MainWindow
         }
     }
 
+    /// <summary>Empties the drive's recycle bin and takes its contents out of the tree without a rescan.</summary>
+    /// <param name="suggestion">The recycle-bin suggestion; its items are the bin folders whose children leave the tree.</param>
+    private async Task EmptyRecycleBinAsync(CleanupSuggestion suggestion)
+    {
+        string drive = System.IO.Path.GetPathRoot(_root!.FullPath) ?? _root.FullPath;
+        if (!Trash.TryEmpty(drive, out string? error))
+        {
+            await Dialog.Error(this, Strings.Get("Cleanup_RecycleBin"), error ?? string.Empty);
+            return;
+        }
+
+        SizeMeasure measure = Treemap.SizeMode;
+        long freedBytes = 0;
+        foreach (FsNode bin in suggestion.Items)
+        {
+            foreach (FsNode? child in bin.Children.ToList())
+            {
+                if (!child.IsReal)
+                {
+                    continue;
+                }
+                freedBytes += child.Allocated;
+                child.RemoveFromTree(measure);
+            }
+        }
+        _root!.RegisterFreedSpace(freedBytes, measure);
+
+        Treemap.ClearSelection();
+        Treemap.Refresh();
+        if (_filter is not null && !_filter.IsEmpty)
+        {
+            ApplyFilter();
+        }
+        RefreshTopList();
+        BuildDrives();
+        InvalidateInsights();
+        RefreshInsights();
+        StatusText.Text = Strings.Format("Cleanup_Emptied", SizeFormatter.Format(freedBytes));
+    }
+
     // ---------------------------------------------------------------- when changed
 
+    /// <summary>The when-changed card: a bar per month, an axis, the four age-band chips and the oldest large files.</summary>
+    /// <returns>The card.</returns>
     private Border BuildTimelineCard()
     {
-        var measure = Treemap.SizeMode;
-        var buckets = _monthBuckets!;
-        long max = Math.Max(1, buckets.Max(b => b.Bytes));
-        var now = _insightsNow;
-        var sums = _bandSums!;
-        var card = Card(Strings.Get("Panel_TabTimeline"), Strings.Format("Insights_TimelineSub", SizeFormatter.Format(sums[2] + sums[3])), out var body);
+        SizeMeasure measure = Treemap.SizeMode;
+        List<MonthBucket> buckets = _monthBuckets!;
+        DateTime now = _insightsNow;
+        long[] bandSums = _bandSums!;
+        string subtitle = Strings.Format("Insights_TimelineSub", SizeFormatter.Format(bandSums[2] + bandSums[3]));
+        Border card = Card(Strings.Get("Panel_TabTimeline"), subtitle, out StackPanel? body);
 
+        body.Children.Add(BuildTimelineChart(buckets, now));
+        body.Children.Add(BuildTimelineAxis(buckets));
+        body.Children.Add(BuildAgeBandChips(bandSums));
+        AddOldestLargestRows(body, measure, now);
+
+        return card;
+    }
+
+    /// <summary>One bar per month over a baseline rule; hovering a month dims the others, clicking it filters the map to that month.</summary>
+    /// <param name="buckets">One bucket per month, oldest first, <see cref="TimelineMonths"/> of them; at least one.</param>
+    /// <param name="now">The UTC time the ages are measured from; colors each bar by its age band.</param>
+    /// <returns>The chart, 110 pixels high.</returns>
+    private Grid BuildTimelineChart(List<MonthBucket> buckets, DateTime now)
+    {
         const double chartHeight = 110;
+        long maxBytes = Math.Max(1, buckets.Max(bucket => bucket.Bytes));
         var bars = new Grid { Height = chartHeight, Margin = new Thickness(0, 4, 0, 0) };
-        var rects = new List<Rectangle>();
+        var barRects = new List<Rectangle>();
         for (int i = 0; i < buckets.Count; i++)
         {
-            var bucket = buckets[i];
+            MonthBucket bucket = buckets[i];
             bars.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-            double h = bucket.Bytes <= 0 ? 2 : Math.Max(3, chartHeight * bucket.Bytes / max);
-            var rect = new Rectangle { Height = h, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(1, 0, 1, 0), RadiusX = 1.5, RadiusY = 1.5, Fill = BandBrush((int)InspectSummary.BucketFor(new DateTime(bucket.Year, bucket.Month, 15, 0, 0, 0, DateTimeKind.Utc), now)) };
-            Grid.SetColumn(rect, i);
-            var hit = new Rectangle { Fill = Brushes.Transparent, Cursor = new Cursor(StandardCursorType.Hand) };
-            Grid.SetColumn(hit, i);
-            bars.Children.Add(rect);
-            bars.Children.Add(hit);   // topmost: catches the pointer for the whole column
-            rects.Add(rect);
-            int index = i;
-            string tip = Strings.Format("Panel_TimelineMonth", MonthLabel(bucket), SizeFormatter.Format(bucket.Bytes), bucket.Files) + (index == 0 ? Strings.Get("Panel_TimelineFirst") : string.Empty);
-            ToolTip.SetTip(hit, tip);
-            hit.PointerEntered += (_, _) => { foreach (var r in rects) r.Opacity = ReferenceEquals(r, rect) ? 1 : 0.35; };
-            hit.PointerExited += (_, _) => { foreach (var r in rects) r.Opacity = 1; };
-            hit.PointerPressed += (_, _) => FilterAndShowMap(DriveInsights.MonthFilter(now, TimelineMonths, index).ToText());
+
+            // Empty months keep a 2 px stub so the axis reads as continuous.
+            double barHeight = bucket.Bytes <= 0 ? 2 : Math.Max(3, chartHeight * bucket.Bytes / maxBytes);
+            var midMonth = new DateTime(bucket.Year, bucket.Month, 15, 0, 0, 0, DateTimeKind.Utc);
+            var barRect = new Rectangle
+            {
+                Height = barHeight,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                Margin = new Thickness(1, 0, 1, 0),
+                RadiusX = 1.5,
+                RadiusY = 1.5,
+                Fill = BandBrush((int)InspectSummary.BucketFor(midMonth, now))
+            };
+            Grid.SetColumn(barRect, i);
+            var hitArea = new Rectangle { Fill = Brushes.Transparent, Cursor = new Cursor(StandardCursorType.Hand) };
+            Grid.SetColumn(hitArea, i);
+            bars.Children.Add(barRect);
+            bars.Children.Add(hitArea);   // topmost: catches the pointer for the whole column
+            barRects.Add(barRect);
+
+            int monthIndex = i;
+            string tip = Strings.Format("Panel_TimelineMonth", MonthLabel(bucket), SizeFormatter.Format(bucket.Bytes), bucket.Files)
+                + (monthIndex == 0 ? Strings.Get("Panel_TimelineFirst") : string.Empty);
+            ToolTip.SetTip(hitArea, tip);
+            hitArea.PointerEntered += (_, _) =>
+            {
+                foreach (Rectangle otherRect in barRects)
+                {
+                    otherRect.Opacity = ReferenceEquals(otherRect, barRect) ? 1 : 0.35;
+                }
+            };
+            hitArea.PointerExited += (_, _) =>
+            {
+                foreach (Rectangle otherRect in barRects)
+                {
+                    otherRect.Opacity = 1;
+                }
+            };
+            hitArea.PointerPressed += (_, _) => FilterAndShowMap(DriveInsights.MonthFilter(now, TimelineMonths, monthIndex).ToText());
         }
+
         var baseline = new Border { Height = 1, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "rule" } };
         var chart = new Grid();
         chart.Children.Add(bars);
         chart.Children.Add(baseline);
-        body.Children.Add(chart);
 
+        return chart;
+    }
+
+    /// <summary>Four labels under the chart: the oldest month, one and two years in, and the current month.</summary>
+    /// <param name="buckets">The chart's buckets, oldest first; at least one.</param>
+    /// <returns>The axis row.</returns>
+    private static Grid BuildTimelineAxis(List<MonthBucket> buckets)
+    {
         var axis = new Grid { Margin = new Thickness(0, 3, 0, 8), ColumnDefinitions = new ColumnDefinitions("*,*,*,*") };
-        var labels = new[] { Strings.Format("Panel_TimelineOldest", MonthLabel(buckets[0])), MonthLabel(buckets[Math.Min(12, buckets.Count - 1)]), MonthLabel(buckets[Math.Min(24, buckets.Count - 1)]), MonthLabel(buckets[^1]) };
+        string[] labels =
+        {
+            Strings.Format("Panel_TimelineOldest", MonthLabel(buckets[0])),
+            MonthLabel(buckets[Math.Min(12, buckets.Count - 1)]),
+            MonthLabel(buckets[Math.Min(24, buckets.Count - 1)]),
+            MonthLabel(buckets[^1])
+        };
         for (int i = 0; i < 4; i++)
         {
-            var t = Small(labels[i]); t.TextAlignment = i == 0 ? TextAlignment.Left : i == 3 ? TextAlignment.Right : TextAlignment.Center;
-            Grid.SetColumn(t, i); axis.Children.Add(t);
+            TextBlock label = Small(labels[i]);
+            label.TextAlignment = i == 0 ? TextAlignment.Left : i == 3 ? TextAlignment.Right : TextAlignment.Center;
+            Grid.SetColumn(label, i);
+            axis.Children.Add(label);
         }
-        body.Children.Add(axis);
 
+        return axis;
+    }
+
+    /// <summary>A chip per age band with its total and file count; clicking one filters the map to that band.</summary>
+    /// <param name="bandSums">Bytes per band in <see cref="InspectSummary.AgeBucket"/> order; the file counts come from <c>_bandFiles</c>.</param>
+    /// <returns>Four chips, two by two in a narrow card.</returns>
+    private UniformGrid BuildAgeBandChips(long[] bandSums)
+    {
         var bands = new UniformGrid();
-        var bandNames = new[] { "Age_ThisMonth", "Age_ThisYear", "Age_OneToThree", "Age_Older" };
-        for (int b = 0; b < 4; b++)
+        string[] bandNames = { "Age_ThisMonth", "Age_ThisYear", "Age_OneToThree", "Age_Older" };
+        for (int band = 0; band < 4; band++)
         {
             var chip = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Classes = { "chip" } };
-            ToolTip.SetTip(chip, Strings.Format("Panel_BandTip", Strings.Get(bandNames[b])));
+            ToolTip.SetTip(chip, Strings.Format("Panel_BandTip", Strings.Get(bandNames[band])));
+
             var lines = new StackPanel();
             var nameRow = new StackPanel { Orientation = Orientation.Horizontal };
-            nameRow.Children.Add(new Border { Width = 8, Height = 8, CornerRadius = new CornerRadius(2), Background = BandBrush(b), Margin = new Thickness(0, 0, 6, 0), VerticalAlignment = VerticalAlignment.Center });
-            nameRow.Children.Add(Small(Strings.Get(bandNames[b])));
+            nameRow.Children.Add(new Border
+            {
+                Width = 8,
+                Height = 8,
+                CornerRadius = new CornerRadius(2),
+                Background = BandBrush(band),
+                Margin = new Thickness(0, 0, 6, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            });
+            nameRow.Children.Add(Small(Strings.Get(bandNames[band])));
             lines.Children.Add(nameRow);
-            lines.Children.Add(new TextBlock { Text = SizeFormatter.Format(sums[b]), FontSize = 14, FontWeight = FontWeight.Bold, Margin = new Thickness(0, 1, 0, 0) });
-            lines.Children.Add(Small(Strings.Format("Panel_TypeFiles", _bandFiles![b])));
+            lines.Children.Add(new TextBlock { Text = SizeFormatter.Format(bandSums[band]), FontSize = 14, FontWeight = FontWeight.Bold, Margin = new Thickness(0, 1, 0, 0) });
+            lines.Children.Add(Small(Strings.Format("Panel_TypeFiles", _bandFiles![band])));
             chip.Child = lines;
-            string filter = DriveInsights.BandFilter((InspectSummary.AgeBucket)b).ToText();
-            Clickable(chip, () => FilterAndShowMap(filter));
+
+            string bandFilter = DriveInsights.BandFilter((InspectSummary.AgeBucket)band).ToText();
+            Clickable(chip, () => FilterAndShowMap(bandFilter));
             bands.Children.Add(chip);
         }
         Fit.Columns(bands, 4, 2, 8);   // two by two in a narrow card, so the sizes stay whole
-        body.Children.Add(bands);
 
-        var old = DriveInsights.OldestLargest(_root!, measure, now, 5);
-        if (old.Count > 0)
-        {
-            var heading = Small(Strings.Get("Insights_OldestLargest").ToUpperInvariant()); heading.Margin = new Thickness(0, 12, 0, 4);
-            body.Children.Add(heading);
-            foreach (var f in old)
-            {
-                var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,70,Auto") };
-                var name = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 0, 8, 0) };
-                name.Inlines!.Add(new Run(f.Name));
-                var where = new Run("  " + (f.Parent?.FullPath ?? string.Empty)) { FontSize = 11 };
-                where.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
-                name.Inlines.Add(where);
-                var size = new TextBlock { Text = SizeFormatter.Format(f.SizeFor(measure)), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-                var age = new TextBlock { Text = Ago(f.LastWriteUtc), FontSize = 12, MinWidth = 84, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right, Classes = { "dim" } };   // a long date widens the column
-                Grid.SetColumn(size, 1); Grid.SetColumn(age, 2);
-                row.Children.Add(name); row.Children.Add(size); row.Children.Add(age);
-                var line = Hairline(row, 25); ToolTip.SetTip(line, f.FullPath);
-                var captured = f;
-                Clickable(line, () => ShowOnMap(captured));
-                body.Children.Add(line);
-            }
-        }
-        return card;
+        return bands;
     }
 
-    private static string MonthLabel(MonthBucket b) => new DateTime(b.Year, b.Month, 1).ToString("MMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
+    /// <summary>The "oldest largest" list: the biggest files not touched in years, with where they are and how old.</summary>
+    /// <param name="body">The card body the heading and rows are appended to; nothing is added when there are no such files.</param>
+    /// <param name="measure">File size or size on disk.</param>
+    /// <param name="now">The UTC time the ages are measured from.</param>
+    private void AddOldestLargestRows(StackPanel body, SizeMeasure measure, DateTime now)
+    {
+        List<FsNode> oldestLargest = DriveInsights.OldestLargest(_root!, measure, now, 5);
+        if (oldestLargest.Count == 0)
+        {
+            return;
+        }
 
-    // amber, bright to dim
+        TextBlock heading = Small(Strings.Get("Insights_OldestLargest").ToUpperInvariant());
+        heading.Margin = new Thickness(0, 12, 0, 4);
+        body.Children.Add(heading);
+
+        foreach (FsNode file in oldestLargest)
+        {
+            var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,70,Auto") };
+            var nameText = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 0, 8, 0) };
+            nameText.Inlines!.Add(new Run(file.Name));
+            var locationRun = new Run("  " + (file.Parent?.FullPath ?? string.Empty)) { FontSize = 11 };
+            locationRun.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
+            nameText.Inlines.Add(locationRun);
+            var sizeText = new TextBlock { Text = SizeFormatter.Format(file.SizeFor(measure)), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
+            // A long date widens the column instead of being cut.
+            var ageText = new TextBlock
+            {
+                Text = Ago(file.LastWriteUtc),
+                FontSize = 12,
+                MinWidth = 84,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Right,
+                Classes = { "dim" }
+            };
+            Grid.SetColumn(sizeText, 1);
+            Grid.SetColumn(ageText, 2);
+            row.Children.Add(nameText);
+            row.Children.Add(sizeText);
+            row.Children.Add(ageText);
+
+            Border line = Hairline(row, 25);
+            ToolTip.SetTip(line, file.FullPath);
+            FsNode capturedFile = file;
+            Clickable(line, () => ShowOnMap(capturedFile));
+            body.Children.Add(line);
+        }
+    }
+
+    /// <summary>A month as "MMM yyyy" in the current culture.</summary>
+    /// <param name="bucket">The month to label.</param>
+    /// <returns>For example "Mar 2026".</returns>
+    private static string MonthLabel(MonthBucket bucket) =>
+        new DateTime(bucket.Year, bucket.Month, 1).ToString("MMM yyyy", System.Globalization.CultureInfo.CurrentCulture);
+
+    /// <summary>The four age-band colors in <see cref="InspectSummary.AgeBucket"/> order: amber, bright to dim.</summary>
     private static readonly IBrush[] BandBrushes =
     {
         new ImmutableSolidColorBrush(Color.FromRgb(0xF5, 0xB8, 0x2E)), new ImmutableSolidColorBrush(Color.FromRgb(0xD9, 0x9C, 0x2B)), new ImmutableSolidColorBrush(Color.FromRgb(0xA8, 0x78, 0x2A)), new ImmutableSolidColorBrush(Color.FromRgb(0x6E, 0x5A, 0x35))
     };
+    /// <summary>The color of an age band.</summary>
+    /// <param name="band">An <see cref="InspectSummary.AgeBucket"/> as an int, 0..3; out-of-range values are clamped.</param>
+    /// <returns>The band's brush.</returns>
     private static IBrush BandBrush(int band) => BandBrushes[Math.Clamp(band, 0, 3)];
 
     // ---------------------------------------------------------------- second row
 
+    /// <summary>The largest-folders card: up to seven folders anywhere in the scan, each with its share and a bar relative to the biggest.</summary>
+    /// <returns>The card.</returns>
     private Border BuildFoldersCard()
     {
-        var measure = Treemap.SizeMode;
-        var root = _root!;
-        long total = Math.Max(1, root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0));
-        var top = root.DescendantDirectories()
-            .Where(d => !ReferenceEquals(d, root) && !d.Children.Any(c => c.IsDirectory && c.SizeFor(measure) == d.SizeFor(measure)))
-            .OrderByDescending(d => d.SizeFor(measure)).Take(7).ToList();
-        var card = Card(Strings.Get("Insights_LargestFolders"), Strings.Get("Insights_AnywhereInScan"), out var body);
-        double largest = top.Count > 0 ? (double)top[0].SizeFor(measure) / total : 1;
-        foreach (var d in top)
+        SizeMeasure measure = Treemap.SizeMode;
+        FsNode root = _root!;
+        long scannedBytes = Math.Max(1, root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0));
+
+        // A folder whose whole size is one child folder is skipped; the child says the same thing more precisely.
+        var largestFolders = root.DescendantDirectories()
+            .Where(directory => !ReferenceEquals(directory, root)
+                && !directory.Children.Any(child => child.IsDirectory && child.SizeFor(measure) == directory.SizeFor(measure)))
+            .OrderByDescending(directory => directory.SizeFor(measure))
+            .Take(7)
+            .ToList();
+        Border card = Card(Strings.Get("Insights_LargestFolders"), Strings.Get("Insights_AnywhereInScan"), out StackPanel? body);
+
+        double largestShare = largestFolders.Count > 0 ? (double)largestFolders[0].SizeFor(measure) / scannedBytes : 1;
+        foreach (FsNode? folder in largestFolders)
         {
-            double share = (double)d.SizeFor(measure) / total;
+            double share = (double)folder.SizeFor(measure) / scannedBytes;
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,70") };
+
             var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0) };
-            text.Children.Add(new TextBlock { Text = PathWithin(d), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
+            text.Children.Add(new TextBlock { Text = PathWithin(folder), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
             var barRow = new DockPanel { Margin = new Thickness(0, 3, 0, 0) };
-            var pct = Small(InspectSummary.Percent(share)); pct.Margin = new Thickness(8, 0, 0, 0);
-            DockPanel.SetDock(pct, Dock.Right);
-            barRow.Children.Add(pct);
-            barRow.Children.Add(Bar(share / largest, TileBrush("FolderBar"), 5));
+            TextBlock percentText = Small(InspectSummary.Percent(share));
+            percentText.Margin = new Thickness(8, 0, 0, 0);
+            DockPanel.SetDock(percentText, Dock.Right);
+            barRow.Children.Add(percentText);
+            barRow.Children.Add(Bar(share / largestShare, TileBrush("FolderBar"), 5));
             text.Children.Add(barRow);
-            var size = new TextBlock { Text = SizeFormatter.Format(d.SizeFor(measure)), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-            Grid.SetColumn(size, 1);
-            row.Children.Add(text); row.Children.Add(size);
-            var line = Hairline(row, 40); ToolTip.SetTip(line, Strings.Format("TopList_FilesIn", d.FileCount, d.FullPath));
-            var captured = d;
-            Clickable(line, () => ShowOnMap(captured));
+
+            var sizeText = new TextBlock { Text = SizeFormatter.Format(folder.SizeFor(measure)), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
+            Grid.SetColumn(sizeText, 1);
+            row.Children.Add(text);
+            row.Children.Add(sizeText);
+
+            Border line = Hairline(row, 40);
+            ToolTip.SetTip(line, Strings.Format("TopList_FilesIn", folder.FileCount, folder.FullPath));
+            FsNode capturedFolder = folder;
+            Clickable(line, () => ShowOnMap(capturedFolder));
             body.Children.Add(line);
         }
+
         return card;
     }
 
+    /// <summary>The largest-files card: up to eight files anywhere in the scan, colored by type, with where they are and how old.</summary>
+    /// <returns>The card.</returns>
     private Border BuildFilesCard()
     {
-        var measure = Treemap.SizeMode;
-        var top = _root!.DescendantFiles().OrderByDescending(f => f.SizeFor(measure)).Take(8).ToList();
-        var card = Card(Strings.Get("Insights_LargestFiles"), Strings.Get("Insights_AnywhereInScan"), out var body);
-        double largest = top.Count > 0 ? top[0].SizeFor(measure) : 1;
-        foreach (var f in top)
+        SizeMeasure measure = Treemap.SizeMode;
+        var largestFiles = _root!.DescendantFiles().OrderByDescending(file => file.SizeFor(measure)).Take(8).ToList();
+        Border card = Card(Strings.Get("Insights_LargestFiles"), Strings.Get("Insights_AnywhereInScan"), out StackPanel? body);
+
+        double largestBytes = largestFiles.Count > 0 ? largestFiles[0].SizeFor(measure) : 1;
+        foreach (FsNode? file in largestFiles)
         {
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("20,*,90"), RowDefinitions = new RowDefinitions("*,Auto"), Margin = new Thickness(0, 0, 0, 9) };
-            var fill = Treemap.Scheme.Fill(f, 0, ColorMode.ByFileType);
-            var swatch = Swatch(fill); swatch.VerticalAlignment = VerticalAlignment.Center; swatch.HorizontalAlignment = HorizontalAlignment.Left;
+            IBrush fill = Treemap.Scheme.Fill(file, 0, ColorMode.ByFileType);
+            Border swatch = Swatch(fill);
+            swatch.VerticalAlignment = VerticalAlignment.Center;
+            swatch.HorizontalAlignment = HorizontalAlignment.Left;
+
             var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
-            text.Children.Add(new TextBlock { Text = f.Name, FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
-            var path = Small(PathShort(f.Parent)); path.Margin = new Thickness(0, 2, 0, 0);
-            text.Children.Add(path);
+            text.Children.Add(new TextBlock { Text = file.Name, FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis });
+            TextBlock pathText = Small(PathShort(file.Parent));
+            pathText.Margin = new Thickness(0, 2, 0, 0);
+            text.Children.Add(pathText);
+
             var right = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            right.Children.Add(new TextBlock { Text = SizeFormatter.Format(f.SizeFor(measure)), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Right });
-            var age = Small(Ago(f.LastWriteUtc)); age.TextAlignment = TextAlignment.Right; age.Margin = new Thickness(0, 2, 0, 0);
-            right.Children.Add(age);
-            var bar = Bar(f.SizeFor(measure) / largest, fill, 3); bar.Margin = new Thickness(0, 7, 0, 0);
-            Grid.SetColumn(text, 1); Grid.SetColumn(right, 2);
-            Grid.SetRow(bar, 1); Grid.SetColumn(bar, 1); Grid.SetColumnSpan(bar, 2);
-            row.Children.Add(swatch); row.Children.Add(text); row.Children.Add(right); row.Children.Add(bar);
-            var line = Hairline(row, 58); ToolTip.SetTip(line, $"{f.FullPath}\n{Strings.Category(FileCategories.Categorize(f.Extension))}");
-            var captured = f;
-            Clickable(line, () => ShowOnMap(captured));
+            right.Children.Add(new TextBlock { Text = SizeFormatter.Format(file.SizeFor(measure)), FontSize = 12.5, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Right });
+            TextBlock ageText = Small(Ago(file.LastWriteUtc));
+            ageText.TextAlignment = TextAlignment.Right;
+            ageText.Margin = new Thickness(0, 2, 0, 0);
+            right.Children.Add(ageText);
+
+            Border bar = Bar(file.SizeFor(measure) / largestBytes, fill, 3);
+            bar.Margin = new Thickness(0, 7, 0, 0);
+            Grid.SetColumn(text, 1);
+            Grid.SetColumn(right, 2);
+            Grid.SetRow(bar, 1);
+            Grid.SetColumn(bar, 1);
+            Grid.SetColumnSpan(bar, 2);
+            row.Children.Add(swatch);
+            row.Children.Add(text);
+            row.Children.Add(right);
+            row.Children.Add(bar);
+
+            Border line = Hairline(row, 58);
+            ToolTip.SetTip(line, $"{file.FullPath}\n{Strings.Category(FileCategories.Categorize(file.Extension))}");
+            FsNode capturedFile = file;
+            Clickable(line, () => ShowOnMap(capturedFile));
             body.Children.Add(line);
         }
+
         return card;
     }
 
+    /// <summary>The since-last-scan card: grew, shrank and new in three boxes, then the six biggest changes.</summary>
+    /// <returns>The card; a hint only when no scan is compared.</returns>
     private Border BuildChangesCard()
     {
-        var measure = Treemap.SizeMode;
-        var root = _root!;
+        SizeMeasure measure = Treemap.SizeMode;
+        FsNode root = _root!;
         if (!HasBaseline)
         {
-            var empty = Card(Strings.Get("Insights_SinceLast"), string.Empty, out var emptyBody);
+            Border emptyCard = Card(Strings.Get("Insights_SinceLast"), string.Empty, out StackPanel? emptyBody);
             emptyBody.Children.Add(new TextBlock { Text = Strings.Get("Insights_NoBaselineLong"), FontSize = 12, TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
-            return empty;
+            return emptyCard;
         }
-        var totals = DriveInsights.Changes(root, measure, _comparison);
-        string when = _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc);
-        long net = totals.Net;
-        var open = new Button { Content = Strings.Get("Changes_OpenView"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12, Margin = new Thickness(8, 0, 0, 0) };
-        open.Click += (_, _) => ShowView(MainView.Changes);
-        var card = Card(Strings.Get("Insights_SinceLast"), $"{when} · {(net >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(net))}".Trim(' ', '·'), out var body, open);
 
+        ChangeTotals totals = DriveInsights.Changes(root, measure, _comparison);
+        string comparedAgainst = _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc);
+        long netBytes = totals.Net;
+        var openButton = new Button { Content = Strings.Get("Changes_OpenView"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12, Margin = new Thickness(8, 0, 0, 0) };
+        openButton.Click += (_, _) => ShowView(MainView.Changes);
+        string subtitle = $"{comparedAgainst} · {(netBytes >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(netBytes))}".Trim(' ', '·');
+        Border card = Card(Strings.Get("Insights_SinceLast"), subtitle, out StackPanel? body, openButton);
+
+        // Three stat boxes: grew, shrank, new.
         var strip = new UniformGrid { Margin = new Thickness(0, 0, 0, 6) };
-        void Stat(string label, string value, IBrush color)
+        void AddStat(string label, string value, IBrush color)
         {
             var box = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(10, 7, 10, 7), Classes = { "frame" } };
             var lines = new StackPanel();
@@ -808,73 +1497,136 @@ public partial class MainWindow
             box.Child = lines;
             strip.Children.Add(box);
         }
-        Stat(Strings.Get("Insights_Grew"), "+" + SizeFormatter.Format(totals.Grew), Palette.GrewBrush);
-        Stat(Strings.Get("Insights_Shrank"), "−" + SizeFormatter.Format(totals.Shrank), Palette.ShrankBrush);
-        Stat(Strings.Get("Insights_New"), Strings.Format("Panel_TypeFiles", totals.NewFiles), Palette.NewBrush);
+        AddStat(Strings.Get("Insights_Grew"), "+" + SizeFormatter.Format(totals.Grew), Palette.GrewBrush);
+        AddStat(Strings.Get("Insights_Shrank"), "−" + SizeFormatter.Format(totals.Shrank), Palette.ShrankBrush);
+        AddStat(Strings.Get("Insights_New"), Strings.Format("Panel_TypeFiles", totals.NewFiles), Palette.NewBrush);
         Fit.Columns(strip, 3, 1, 8);
         body.Children.Add(strip);
 
-        foreach (var r in TopLists.Build(root, TopListKind.Changes, measure, Treemap.Scheme).Take(6))
+        foreach (TopRow? topRow in TopLists.Build(root, TopListKind.Changes, measure, Treemap.Scheme).Take(6))
         {
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,76") };
             var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0) };
-            text.Children.Add(new TextBlock { Text = r.Name, FontSize = 12.5, TextTrimming = TextTrimming.CharacterEllipsis });
-            text.Children.Add(Small(r.Detail));
-            var size = new TextBlock { Text = r.SizeText, FontSize = 12.5, FontWeight = FontWeight.SemiBold, Foreground = r.Swatch, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-            Grid.SetColumn(size, 1);
-            row.Children.Add(text); row.Children.Add(size);
-            var line = Hairline(row, 35); if (r.Node is not null) ToolTip.SetTip(line, r.Node.FullPath);
-            var captured = r.Node;
-            if (captured is not null) Clickable(line, () => ShowOnMap(captured));
+            text.Children.Add(new TextBlock { Text = topRow.Name, FontSize = 12.5, TextTrimming = TextTrimming.CharacterEllipsis });
+            text.Children.Add(Small(topRow.Detail));
+            var sizeText = new TextBlock
+            {
+                Text = topRow.SizeText,
+                FontSize = 12.5,
+                FontWeight = FontWeight.SemiBold,
+                Foreground = topRow.Swatch,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Right
+            };
+            Grid.SetColumn(sizeText, 1);
+            row.Children.Add(text);
+            row.Children.Add(sizeText);
+
+            Border line = Hairline(row, 35);
+            if (topRow.Node is not null)
+            {
+                ToolTip.SetTip(line, topRow.Node.FullPath);
+            }
+            FsNode? capturedNode = topRow.Node;
+            if (capturedNode is not null)
+            {
+                Clickable(line, () => ShowOnMap(capturedNode));
+            }
             body.Children.Add(line);
         }
+
         return card;
     }
 
+    /// <summary>The extensions card: the eight largest extensions and the folder most of each lives in.</summary>
+    /// <returns>The card.</returns>
     private Border BuildExtensionsCard()
     {
-        var measure = Treemap.SizeMode;
-        var homes = DriveInsights.ExtensionHomes(_root!, measure, 8);
-        var card = Card(Strings.Get("Insights_Extensions"), Strings.Get("Insights_ExtensionsSub"), out var body);
-        foreach (var h in homes)
+        SizeMeasure measure = Treemap.SizeMode;
+        List<ExtensionHome> homes = DriveInsights.ExtensionHomes(_root!, measure, 8);
+        Border card = Card(Strings.Get("Insights_Extensions"), Strings.Get("Insights_ExtensionsSub"), out StackPanel? body);
+        foreach (ExtensionHome home in homes)
         {
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("58,*,70") };
-            var ext = new TextBlock { Text = h.Extension, FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
-            var where = Small(h.Folder is null ? Strings.Format("Panel_TypeFiles", h.Files) : $"{PathShort(h.Folder)} · {InspectSummary.Percent(h.Share)}");
-            where.FontSize = 11.5; where.VerticalAlignment = VerticalAlignment.Center; where.Margin = new Thickness(0, 0, 8, 0);
-            var size = new TextBlock { Text = SizeFormatter.Format(h.Bytes), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
-            Grid.SetColumn(where, 1); Grid.SetColumn(size, 2);
-            row.Children.Add(ext); row.Children.Add(where); row.Children.Add(size);
-            var line = Hairline(row, 35);
-            ToolTip.SetTip(line, Strings.Format("TopList_FilesOfType", h.Files, Strings.Category(FileCategories.Categorize(h.Extension)).ToLowerInvariant()) + (h.Folder is null ? string.Empty : "\n" + h.Folder.FullPath));
-            var captured = h.Extension;
-            Clickable(line, () => FilterAndShowMap(captured.StartsWith('.') ? "*" + captured : captured));
+            var extensionText = new TextBlock { Text = home.Extension, FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
+
+            // Where most of the extension lives, or just the count when it is spread out.
+            string location = home.Folder is null
+                ? Strings.Format("Panel_TypeFiles", home.Files)
+                : $"{PathShort(home.Folder)} · {InspectSummary.Percent(home.Share)}";
+            TextBlock locationText = Small(location);
+            locationText.FontSize = 11.5;
+            locationText.VerticalAlignment = VerticalAlignment.Center;
+            locationText.Margin = new Thickness(0, 0, 8, 0);
+
+            var sizeText = new TextBlock { Text = SizeFormatter.Format(home.Bytes), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = TextAlignment.Right };
+            Grid.SetColumn(locationText, 1);
+            Grid.SetColumn(sizeText, 2);
+            row.Children.Add(extensionText);
+            row.Children.Add(locationText);
+            row.Children.Add(sizeText);
+
+            Border line = Hairline(row, 35);
+            string categoryName = Strings.Category(FileCategories.Categorize(home.Extension)).ToLowerInvariant();
+            string tip = Strings.Format("TopList_FilesOfType", home.Files, categoryName) + (home.Folder is null ? string.Empty : "\n" + home.Folder.FullPath);
+            ToolTip.SetTip(line, tip);
+            string capturedExtension = home.Extension;
+            Clickable(line, () => FilterAndShowMap(capturedExtension.StartsWith('.') ? "*" + capturedExtension : capturedExtension));
             body.Children.Add(line);
         }
+
         return card;
     }
 
     private static readonly char Sep = System.IO.Path.DirectorySeparatorChar;
 
     /// <summary>The path relative to the scan root.</summary>
+    /// <param name="node">A node of the current scan; null gives an empty string.</param>
+    /// <returns>The folder names below the root joined with the separator; the root's full path for the root itself.</returns>
     private string PathWithin(FsNode? node)
     {
-        if (node is null) return string.Empty;
-        if (ReferenceEquals(node, _root)) return _root.FullPath;
-        var parts = new List<string>();
-        for (var n = node; n is not null && !ReferenceEquals(n, _root); n = n.Parent) parts.Add(n.Name);
-        parts.Reverse();
-        return string.Join(Sep, parts);
+        if (node is null)
+        {
+            return string.Empty;
+        }
+        if (ReferenceEquals(node, _root))
+        {
+            return _root.FullPath;
+        }
+
+        return string.Join(Sep, PathPartsWithin(node));
     }
 
     /// <summary>The path within the scan with the middle folded.</summary>
+    /// <param name="node">A node of the current scan; null gives an empty string.</param>
+    /// <returns>Up to three names in full; longer paths keep the first two and the last with an ellipsis between.</returns>
     private string PathShort(FsNode? node)
     {
-        if (node is null) return string.Empty;
-        if (ReferenceEquals(node, _root)) return _root.FullPath;
-        var parts = new List<string>();
-        for (var n = node; n is not null && !ReferenceEquals(n, _root); n = n.Parent) parts.Add(n.Name);
-        parts.Reverse();
+        if (node is null)
+        {
+            return string.Empty;
+        }
+        if (ReferenceEquals(node, _root))
+        {
+            return _root.FullPath;
+        }
+
+        List<string> parts = PathPartsWithin(node);
         return parts.Count <= 3 ? string.Join(Sep, parts) : $"{parts[0]}{Sep}{parts[1]}{Sep}…{Sep}{parts[^1]}";
+    }
+
+    /// <summary>The folder names from just below the scan root down to the node.</summary>
+    /// <param name="node">A node under the scan root; the root itself gives an empty list.</param>
+    /// <returns>The names in top-down order, the node's own name last.</returns>
+    private List<string> PathPartsWithin(FsNode node)
+    {
+        var parts = new List<string>();
+        for (FsNode? ancestor = node; ancestor is not null && !ReferenceEquals(ancestor, _root); ancestor = ancestor.Parent)
+        {
+            parts.Add(ancestor.Name);
+        }
+        parts.Reverse();
+
+        return parts;
     }
 }

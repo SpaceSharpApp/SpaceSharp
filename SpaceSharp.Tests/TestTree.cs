@@ -28,8 +28,13 @@ internal static class TestTree
     /// <summary>Sums sizes bottom-up and sorts children.</summary>
     public static FsNode Finish(FsNode dir)
     {
-        foreach (var child in dir.Children)
-            if (child.IsDirectory) Finish(child);
+        foreach (FsNode child in dir.Children)
+        {
+            if (child.IsDirectory)
+            {
+                Finish(child);
+            }
+        }
         dir.FinishDirectory();
         return dir;
     }
@@ -37,7 +42,7 @@ internal static class TestTree
     /// <summary>A single file under a throwaway root.</summary>
     public static FsNode LooseFile(string name, long size = 1, DateTime? modified = null)
     {
-        var root = Dir(@"C:\");
+        FsNode root = Dir(@"C:\");
         return File(root, name, size, modified: modified);
     }
 }

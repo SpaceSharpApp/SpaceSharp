@@ -1,6 +1,6 @@
 # Developing SpaceSharp
 
-How the pieces fit, where things live, and where to add a palette, a file type or a translation. The README covers building and releasing; CONTRIBUTING.md covers how to send changes.
+How the pieces fit, where things live, and where to add a palette, a file type or a translation. The README covers building and releasing; CONTRIBUTING.md covers how to send changes; CODING_STANDARDS.md covers how the C# is written.
 
 ## How it works
 

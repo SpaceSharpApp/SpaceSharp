@@ -1,9 +1,22 @@
 namespace SpaceSharp.Util;
 
 /// <summary>A set of chrome colors for one theme, as hex strings.</summary>
+/// <param name="Name">The look's display name, unique within its theme and stored in settings as chosen.</param>
+/// <param name="Dark">True when the look belongs to the dark theme, false for the light theme.</param>
+/// <param name="Bg">The window background, "#RRGGBB".</param>
+/// <param name="Panel">Side panel and card surfaces.</param>
+/// <param name="Control">Buttons and inputs at rest.</param>
+/// <param name="ControlHover">Buttons and inputs under the pointer.</param>
+/// <param name="ControlPressed">Buttons and inputs while pressed.</param>
+/// <param name="Stroke">Borders and separators.</param>
+/// <param name="MenuBg">Context menu and flyout background.</param>
+/// <param name="Text">Primary text.</param>
+/// <param name="TextDim">Secondary text and icons.</param>
+/// <param name="MapBg">The treemap's background behind the boxes.</param>
 public sealed record UiLook(string Name, bool Dark, string Bg, string Panel, string Control, string ControlHover, string ControlPressed, string Stroke, string MenuBg, string Text, string TextDim, string MapBg)
 {
     /// <summary>Every surface by theme key as "#RRGGBB"; the scrim as "#AARRGGBB".</summary>
+    /// <returns>The eleven (key, hex) pairs in a fixed order, Bg first and Scrim last; the keys match the resource names in App.axaml.</returns>
     public IEnumerable<(string Key, string Hex)> Colors()
     {
         yield return ("Bg", Bg);
@@ -23,11 +36,16 @@ public sealed record UiLook(string Name, bool Dark, string Bg, string Panel, str
     public string[] Swatches => new[] { Bg, Panel, Control };
 }
 
+/// <summary>The built-in looks and the lookups Settings and the theme code use.</summary>
 public static class UiLooks
 {
+    /// <summary>The look applied on the dark theme when none is chosen or the chosen one is gone.</summary>
     public const string DefaultDark = "Graphite";
+
+    /// <summary>The look applied on the light theme when none is chosen or the chosen one is gone.</summary>
     public const string DefaultLight = "Paper";
 
+    /// <summary>Every look, dark ones first, in the order the Settings pickers show them.</summary>
     public static readonly IReadOnlyList<UiLook> All = new[]
     {
         // ---- dark
@@ -47,9 +65,16 @@ public static class UiLooks
         new UiLook("GitHub Light", false, "#F6F8FA", "#FFFFFF", "#F0F3F6", "#EAEEF2", "#E0E6EB", "#D1D9E0", "#FFFFFF", "#1F2328", "#59636E", "#EAEEF2")
     };
 
-    public static IReadOnlyList<UiLook> For(bool dark) => All.Where(l => l.Dark == dark).ToList();
+    /// <summary>The looks of one theme, in picker order.</summary>
+    /// <param name="dark">True for the dark theme's looks, false for the light theme's.</param>
+    /// <returns>A new list with at least one look; never empty.</returns>
+    public static IReadOnlyList<UiLook> For(bool dark) => All.Where(look => look.Dark == dark).ToList();
 
     /// <summary>The named look for the theme, or the theme's first look.</summary>
+    /// <param name="name">A look name as stored in settings, compared ignoring case; null or an unknown name falls back.</param>
+    /// <param name="dark">Which theme to search; a name from the other theme is not matched.</param>
+    /// <returns>The matching look, or the first look of the theme (Graphite or Paper) when nothing matches.</returns>
     public static UiLook Find(string? name, bool dark) =>
-        All.FirstOrDefault(l => l.Dark == dark && string.Equals(l.Name, name, StringComparison.OrdinalIgnoreCase)) ?? For(dark)[0];
+        All.FirstOrDefault(look => look.Dark == dark && string.Equals(look.Name, name, StringComparison.OrdinalIgnoreCase))
+        ?? For(dark)[0];
 }

@@ -12,7 +12,7 @@ public class PaletteDraftTests
     [InlineData("0xFF0000", 0xFF, 0x00, 0x00)]
     public void HexParsesTheUsualSpellings(string text, int r, int g, int b)
     {
-        Assert.True(PaletteDraft.TryParseHex(text, out var color));
+        Assert.True(PaletteDraft.TryParseHex(text, out Color color));
         Assert.Equal(Color.FromRgb((byte)r, (byte)g, (byte)b), color);
     }
 
@@ -28,7 +28,7 @@ public class PaletteDraftTests
     {
         var c = Color.FromRgb(0x0A, 0xB3, 0xFF);
         Assert.Equal("#0AB3FF", PaletteDraft.ToHex(c));
-        Assert.True(PaletteDraft.TryParseHex(PaletteDraft.ToHex(c), out var back));
+        Assert.True(PaletteDraft.TryParseHex(PaletteDraft.ToHex(c), out Color back));
         Assert.Equal(c, back);
     }
 
@@ -39,7 +39,7 @@ public class PaletteDraftTests
     [InlineData(PaletteSpread.OneHue)]
     public void GenerateGivesTwelveDistinctColors(PaletteSpread spread)
     {
-        var colors = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), spread);
+        List<Color> colors = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), spread);
         Assert.Equal(PaletteDraft.FolderCount, colors.Count);
         Assert.Equal(PaletteDraft.FolderCount, colors.Distinct().Count());
     }
@@ -71,7 +71,7 @@ public class PaletteDraftTests
     [Fact]
     public void FromSchemeRecoversATintAndNamesOnlyTheOverrides()
     {
-        var graphite = Palette.Schemes.First(s => s.Name == "Graphite");
+        ColorScheme graphite = Palette.Schemes.First(s => s.Name == "Graphite");
         var draft = PaletteDraft.FromScheme(graphite);
         Assert.Null(draft.Files);                 // derived from folders
         Assert.Equal(0.42, draft.FileTint, 2);
@@ -94,7 +94,7 @@ public class PaletteDraftTests
         try
         {
             File.WriteAllText(file, draft.ToJson());
-            var back = CustomPalettes.Read(file);
+            PaletteDraft back = CustomPalettes.Read(file);
             Assert.Equal(draft.Name, back.Name);
             Assert.Equal(PaletteTheme.Light, back.Theme);
             Assert.Equal(draft.Folders, back.Folders);

@@ -2,6 +2,15 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.5.2 (unreleased)
+
+No visible change: a readability pass over the whole code base.
+
+### Under the hood
+- Every C# file was reworked for readability without changing what it does: descriptive names in place of one-letter variables and lambda parameters, long methods split into focused ones (the MFT scanner, the Settings tabs, the Insights and Changes views, the scan card), nested blocks flattened with early returns, long expressions and argument lists broken up, and a comment on every intentionally ignored exception saying why it is safe to ignore. Public members, settings, file formats and localized strings are untouched.
+- The XML documentation now covers the whole solution: every documented method and constructor has a `<param>` for each parameter, in declaration order, with the unit, range, null meaning or callback contract rather than a restated name, plus `<returns>` and `<typeparam>` where they apply; public members and the non-trivial private ones that had no summary have one. The code itself is unchanged.
+- `CODING_STANDARDS.md` writes those rules down, with examples from the code of what to do and what not to do; CONTRIBUTING and DEVELOPING link to it.
+
 ## 2.5.1
 
 A small release: labels that a long translation cut off, found by a new layout check that runs the app through every language.

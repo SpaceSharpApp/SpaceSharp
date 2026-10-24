@@ -11,21 +11,21 @@ public class InspectSummaryTests
     /// <summary>C:\ with 1000 free and a Local folder holding a thin wrapper chain and files of various ages.</summary>
     private static (FsNode Root, FsNode Local) Sample()
     {
-        var root = TestTree.Dir(@"C:\");
-        var local = TestTree.Dir("Local", root);
-        var google = TestTree.Dir("Google", local);
-        var chrome = TestTree.Dir("Chrome", google);
-        var userData = TestTree.Dir("User Data", chrome);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode local = TestTree.Dir("Local", root);
+        FsNode google = TestTree.Dir("Google", local);
+        FsNode chrome = TestTree.Dir("Chrome", google);
+        FsNode userData = TestTree.Dir("User Data", chrome);
         TestTree.File(userData, "History", 4100, modified: Now.AddDays(-1));
         TestTree.File(userData, "Cookies", 800, modified: Now.AddDays(-2));
         TestTree.File(google, "update.log", 10, modified: Now.AddDays(-400));
-        var docker = TestTree.Dir("Docker", local);
+        FsNode docker = TestTree.Dir("Docker", local);
         TestTree.File(docker, "ext4.vhdx", 2200, modified: Now.AddDays(-3));
-        var cache = TestTree.Dir("Cache", local);
+        FsNode cache = TestTree.Dir("Cache", local);
         TestTree.File(cache, "a.tmp", 500, modified: Now.AddDays(-500));
         TestTree.File(cache, "b.tmp", 400, modified: Now.AddDays(-1500));
         TestTree.File(local, "readme.txt", 90, modified: Now.AddDays(-100));
-        var other = TestTree.Dir("Other", root);
+        FsNode other = TestTree.Dir("Other", root);
         TestTree.File(other, "x.bin", 1900, modified: Now.AddDays(-5));
         TestTree.Finish(root);
         root.AddFreeSpace(1000);
@@ -35,7 +35,7 @@ public class InspectSummaryTests
     [Fact]
     public void HeadlineNumbersAndShares()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Equal(8100, s.Size);
@@ -52,7 +52,7 @@ public class InspectSummaryTests
     [Fact]
     public void LargestSkipsThinWrappersAndNestedDuplicates()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         var names = s.Largest.Select(r => r.Name).ToList();
@@ -66,7 +66,7 @@ public class InspectSummaryTests
     [Fact]
     public void LargestLeavesARemainder()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, largestCount: 2, nowUtc: Now);
 
         Assert.Equal(2, s.Largest.Count);
@@ -77,8 +77,8 @@ public class InspectSummaryTests
     [Fact]
     public void RelativeNamesAreBuiltFromTheInspectedFolder()
     {
-        var (_, local) = Sample();
-        var userData = local.FindDescendant(@"C:\Local\Google\Chrome\User Data")!;
+        (FsNode _, FsNode? local) = Sample();
+        FsNode userData = local.FindDescendant(@"C:\Local\Google\Chrome\User Data")!;
         Assert.Equal(@"Google\Chrome\User Data", InspectSummary.RelativeName(local, userData));
         Assert.Equal(string.Empty, InspectSummary.RelativeName(local, local));
     }
@@ -86,13 +86,15 @@ public class InspectSummaryTests
     [Fact]
     public void TypeBreakdownPutsOtherLast()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Equal(8100, s.ByType.Sum(t => t.Bytes));
         Assert.Equal(1.0, s.ByType.Sum(t => t.Share), 6);
         if (s.ByType.Any(t => t.Category == FileCategory.Other))
+        {
             Assert.Equal(FileCategory.Other, s.ByType[^1].Category);
+        }
         var sized = s.ByType.Where(t => t.Category != FileCategory.Other).Select(t => t.Bytes).ToList();
         Assert.Equal(sized.OrderByDescending(b => b), sized);
     }
@@ -100,7 +102,7 @@ public class InspectSummaryTests
     [Fact]
     public void AgeBucketsSumToTheWhole()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Equal(4, s.ByAge.Count);
@@ -126,7 +128,7 @@ public class InspectSummaryTests
     [Fact]
     public void CalloutNamesTheDominantItem()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Single(s.Callouts);
@@ -138,13 +140,16 @@ public class InspectSummaryTests
     [Fact]
     public void ChangeAndNewnessAreComputedButNotCalledOut()
     {
-        var (root, local) = Sample();
-        local.HasBaseline = true; local.BaselineSize = 7000; local.BaselineAllocated = 7000;
+        (FsNode? root, FsNode? local) = Sample();
+        local.HasBaseline = true;
+        local.BaselineSize = 7000;
+        local.BaselineAllocated = 7000;
         var grew = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
         Assert.Equal(1100, grew.Change);
         Assert.False(grew.IsNew);
 
-        local.BaselineSize = null; local.BaselineAllocated = null;
+        local.BaselineSize = null;
+        local.BaselineAllocated = null;
         var fresh = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
         Assert.True(fresh.IsNew);
         Assert.Null(fresh.Change);
@@ -156,11 +161,11 @@ public class InspectSummaryTests
     [Fact]
     public void RankIsAmongSiblingsOfTheSameKind()
     {
-        var (root, local) = Sample();
-        var docker = local.FindDescendant(@"C:\Local\Docker")!;
-        var cache = local.FindDescendant(@"C:\Local\Cache")!;
-        var readme = local.Children.Single(c => c.Name == "readme.txt");
-        var cookies = local.FindDescendant(@"C:\Local\Google\Chrome\User Data")!.Children.Single(c => c.Name == "Cookies");
+        (FsNode? root, FsNode? local) = Sample();
+        FsNode docker = local.FindDescendant(@"C:\Local\Docker")!;
+        FsNode cache = local.FindDescendant(@"C:\Local\Cache")!;
+        FsNode readme = local.Children.Single(c => c.Name == "readme.txt");
+        FsNode cookies = local.FindDescendant(@"C:\Local\Google\Chrome\User Data")!.Children.Single(c => c.Name == "Cookies");
 
         Assert.Equal((2, 3), new InspectSummary(new[] { docker }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
         Assert.Equal((3, 3), new InspectSummary(new[] { cache }, root, SizeMeasure.FileSize, nowUtc: Now).Rank);
@@ -172,7 +177,7 @@ public class InspectSummaryTests
     [Fact]
     public void MedianFileSize()
     {
-        var (root, local) = Sample();
+        (FsNode? root, FsNode? local) = Sample();
         var s = new InspectSummary(new[] { local }, root, SizeMeasure.FileSize, nowUtc: Now);
         // 10, 90, 400, 500, 800, 2200, 4100 -> 500
         Assert.Equal(500, s.MedianFileBytes);
@@ -183,8 +188,8 @@ public class InspectSummaryTests
     [Fact]
     public void OldFoldersReportTheirAge()
     {
-        var root = TestTree.Dir(@"C:\");
-        var old = TestTree.Dir("Old", root);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode old = TestTree.Dir("Old", root);
         TestTree.File(old, "a.zip", 500, modified: Now.AddDays(-5 * 365 - 10));
         TestTree.File(old, "b.zip", 400, modified: Now.AddDays(-4 * 365));
         TestTree.Finish(root);
@@ -198,9 +203,9 @@ public class InspectSummaryTests
     [Fact]
     public void SelectionListsTheItemsThemselves()
     {
-        var (root, local) = Sample();
-        var docker = local.FindDescendant(@"C:\Local\Docker")!;
-        var cache = local.FindDescendant(@"C:\Local\Cache")!;
+        (FsNode? root, FsNode? local) = Sample();
+        FsNode docker = local.FindDescendant(@"C:\Local\Docker")!;
+        FsNode cache = local.FindDescendant(@"C:\Local\Cache")!;
         var s = new InspectSummary(new[] { docker, cache }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Null(s.Single);
@@ -215,8 +220,8 @@ public class InspectSummaryTests
     [Fact]
     public void SingleFileHasNoListsAndNoFolderCallouts()
     {
-        var (root, local) = Sample();
-        var file = local.FindDescendant(@"C:\Local\Docker")!.Children.Single(c => c.Name == "ext4.vhdx");
+        (FsNode? root, FsNode? local) = Sample();
+        FsNode file = local.FindDescendant(@"C:\Local\Docker")!.Children.Single(c => c.Name == "ext4.vhdx");
         var s = new InspectSummary(new[] { file }, root, SizeMeasure.FileSize, nowUtc: Now);
 
         Assert.Empty(s.Largest);
@@ -230,8 +235,8 @@ public class InspectSummaryTests
     [Fact]
     public void SizeOnDiskMeasureIsHonored()
     {
-        var root = TestTree.Dir(@"C:\");
-        var d = TestTree.Dir("D", root);
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode d = TestTree.Dir("D", root);
         TestTree.File(d, "sparse.bin", 1000, allocated: 100);
         TestTree.File(d, "dense.bin", 100, allocated: 100);
         TestTree.Finish(root);
@@ -255,7 +260,9 @@ public class InspectSummaryTests
     [Fact]
     public void AgeBucketStringsExist()
     {
-        foreach (var b in Enum.GetNames<InspectSummary.AgeBucket>())
+        foreach (string b in Enum.GetNames<InspectSummary.AgeBucket>())
+        {
             Assert.DoesNotContain("[", Strings.Get("Inspect_Age_" + b));
+        }
     }
 }

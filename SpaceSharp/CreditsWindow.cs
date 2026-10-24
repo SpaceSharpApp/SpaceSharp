@@ -16,28 +16,32 @@ public sealed class CreditsWindow : Window
 {
     private const string Licenses = "https://github.com/SpaceSharpApp/SpaceSharp/blob/main/THIRD-PARTY.md";
 
+    /// <summary>Builds the whole window in code: header with the logo, three text sections, a licenses link and Close.</summary>
     public CreditsWindow()
     {
         Title = Strings.Get("About_Credits");
-        Width = 520; SizeToContent = SizeToContent.Height; CanResize = false;
-        WindowStartupLocation = WindowStartupLocation.CenterOwner; ShowInTaskbar = false;
+        Width = 520;
+        SizeToContent = SizeToContent.Height;
+        CanResize = false;
+        WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        ShowInTaskbar = false;
         Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp.ico")));
         TitleBarTheme.Attach(this);
 
         var root = new Grid { RowDefinitions = new RowDefinitions("Auto,*,Auto") };
 
         // ---- header
-        var head = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(40, 30, 40, 22) };
-        head.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
-        head.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
-        var headStack = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Center };
+        var header = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(40, 30, 40, 22) };
+        header.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+        header.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        var headerStack = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Center };
         var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 40, Height = 40, HorizontalAlignment = HorizontalAlignment.Center };
         RenderOptions.SetBitmapInterpolationMode(logo, BitmapInterpolationMode.HighQuality);
-        headStack.Children.Add(logo);
-        headStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
-        headStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Thanks"), Classes = { "dim" }, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
-        head.Child = headStack;
-        root.Children.Add(head);
+        headerStack.Children.Add(logo);
+        headerStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
+        headerStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Thanks"), Classes = { "dim" }, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
+        header.Child = headerStack;
+        root.Children.Add(header);
 
         // ---- body
         var body = new StackPanel { Margin = new Thickness(40, 22, 40, 24), Spacing = 16 };
@@ -48,22 +52,26 @@ public sealed class CreditsWindow : Window
         root.Children.Add(body);
 
         // ---- footer
-        var foot = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12) };
-        foot.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
-        var footGrid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
+        var footer = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12) };
+        footer.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        var footerGrid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
         var licenses = new Button { Classes = { "textlink" }, Content = Icons.WithText("Notes", Strings.Get("Credits_Licenses")), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center };
         licenses.Click += (_, _) => OpenUrl(Licenses);
-        footGrid.Children.Add(licenses);
+        footerGrid.Children.Add(licenses);
         var close = new Button { Classes = { "primary" }, Content = Strings.Get("About_Close"), IsDefault = true, IsCancel = true };
         close.Click += (_, _) => Close();
         Grid.SetColumn(close, 1);
-        footGrid.Children.Add(close);
-        foot.Child = footGrid;
-        Grid.SetRow(foot, 2);
-        root.Children.Add(foot);
+        footerGrid.Children.Add(close);
+        footer.Child = footerGrid;
+        Grid.SetRow(footer, 2);
+        root.Children.Add(footer);
         Content = root;
     }
 
+    /// <summary>One heading with a paragraph under it.</summary>
+    /// <param name="heading">Bold line above the text, already localized.</param>
+    /// <param name="markup">Paragraph text with optional "[label](url)" links; clicking one opens the url in the browser.</param>
+    /// <returns>The heading and text stacked, ready to add to the body.</returns>
     private StackPanel Section(string heading, string markup)
     {
         var section = new StackPanel { Spacing = 3 };
@@ -74,6 +82,8 @@ public sealed class CreditsWindow : Window
         return section;
     }
 
+    /// <summary>Opens a web address in the default browser; failures show an error dialog instead of throwing.</summary>
+    /// <param name="url">Absolute http(s) address.</param>
     private void OpenUrl(string url)
     {
         try

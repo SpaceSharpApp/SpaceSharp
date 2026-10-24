@@ -40,17 +40,20 @@ public class KeyboardLayoutsTests
     [Fact]
     public void EveryLayoutPrintsEachShortcutKeyOnce()
     {
-        foreach (var layout in KeyboardLayouts.All)
+        foreach (KeyboardLayout layout in KeyboardLayouts.All)
         {
             var keys = layout.AllKeys().ToList();
-            foreach (var key in ShortcutKeys) Assert.True(keys.Count(k => k == key) == 1, $"{layout.Name} prints {key} {keys.Count(k => k == key)} times");
+            foreach (string key in ShortcutKeys)
+            {
+                Assert.True(keys.Count(k => k == key) == 1, $"{layout.Name} prints {key} {keys.Count(k => k == key)} times");
+            }
         }
     }
 
     [Fact]
     public void EveryLayoutHasTheRowLengthsTheDrawingExpects()
     {
-        foreach (var layout in KeyboardLayouts.All)
+        foreach (KeyboardLayout layout in KeyboardLayouts.All)
         {
             Assert.Equal(13, layout.Digits.Length);
             Assert.Equal(12, layout.Top.Length);
@@ -63,7 +66,7 @@ public class KeyboardLayoutsTests
     [Fact]
     public void NoLayoutPrintsTheSameKeyTwice()
     {
-        foreach (var layout in KeyboardLayouts.All)
+        foreach (KeyboardLayout layout in KeyboardLayouts.All)
         {
             var keys = layout.AllKeys().ToList();
             Assert.True(keys.Distinct(StringComparer.Ordinal).Count() == keys.Count, $"{layout.Name} repeats a key");
@@ -73,7 +76,7 @@ public class KeyboardLayoutsTests
     [Fact]
     public void IsoLayoutsHaveTheExtraKeysAndAnsiLayoutsDoNot()
     {
-        foreach (var layout in KeyboardLayouts.All)
+        foreach (KeyboardLayout layout in KeyboardLayouts.All)
         {
             bool iso = layout.Name is "Nordic" or "QWERTZ" or "AZERTY" or "Spanish" or "Italian";
             Assert.Equal(iso, layout.Iso);

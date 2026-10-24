@@ -8,6 +8,7 @@ namespace SpaceSharp.Util;
 /// <summary>One selectable color palette.</summary>
 public sealed class ColorScheme
 {
+    /// <summary>How many depth levels have their own color before the cycle repeats.</summary>
     private const int DepthCycle = 12;
 
     private static readonly IBrush DarkText = Palette.Freeze(Color.FromRgb(0x14, 0x14, 0x18));
@@ -19,50 +20,75 @@ public sealed class ColorScheme
     private readonly Dictionary<FileCategory, IBrush> _categories;
     private readonly Dictionary<IBrush, IBrush> _labels = new();
 
+    /// <summary>Builds a scheme from color functions, freezing the twelve depth colors and six neutrals up front.</summary>
+    /// <param name="name">The display name, also the key settings store the chosen palette by.</param>
+    /// <param name="folder">Folder color per depth, called for 0 to 11; the result cycles past that.</param>
+    /// <param name="file">File color per depth, called for 0 to 11.</param>
     /// <param name="categories">One color per <see cref="FileCategory"/> in enum order; a shorter list names the first categories and Other (last entry).</param>
+    /// <param name="neutral">Folder color per depth in file type mode, called for 0 to 5; greys, so the type colors stand out.</param>
     internal ColorScheme(string name, Func<int, Color> folder, Func<int, Color> file,
         IReadOnlyList<Color> categories, Func<int, Color> neutral)
     {
         Name = name;
-        _folders = Enumerable.Range(0, DepthCycle).Select(d => Palette.Freeze(folder(d))).ToArray();
-        _files = Enumerable.Range(0, DepthCycle).Select(d => Palette.Freeze(file(d))).ToArray();
-        _neutral = Enumerable.Range(0, 6).Select(d => Palette.Freeze(neutral(d))).ToArray();
-        int count = Enum.GetValues<FileCategory>().Length;
-        if (categories.Count < count)
+        _folders = Enumerable.Range(0, DepthCycle).Select(depth => Palette.Freeze(folder(depth))).ToArray();
+        _files = Enumerable.Range(0, DepthCycle).Select(depth => Palette.Freeze(file(depth))).ToArray();
+        _neutral = Enumerable.Range(0, 6).Select(depth => Palette.Freeze(neutral(depth))).ToArray();
+
+        // A short list names the first categories and Other; System gets its fixed grey and the rest take file colors.
+        int categoryCount = Enum.GetValues<FileCategory>().Length;
+        if (categories.Count < categoryCount)
         {
-            int given = Math.Max(0, categories.Count - 1);
-            var full = new Color[count];
-            for (int i = 0; i < count - 1; i++)
-                full[i] = i < given ? categories[i]
+            int named = Math.Max(0, categories.Count - 1);
+            var full = new Color[categoryCount];
+            for (int i = 0; i < categoryCount - 1; i++)
+            {
+                full[i] = i < named ? categories[i]
                     : i == (int)FileCategory.System ? Color.FromRgb(0x8F, 0xA3, 0xB8)
                     : file(i);
-            full[count - 1] = categories.Count > 0 ? categories[^1] : Color.FromRgb(0xB8, 0xB4, 0xAC);
+            }
+            full[categoryCount - 1] = categories.Count > 0 ? categories[^1] : Color.FromRgb(0xB8, 0xB4, 0xAC);
             categories = full;
         }
-        _categories = Enum.GetValues<FileCategory>().ToDictionary(c => c, c => Palette.Freeze(categories[(int)c]));
+
+        _categories = Enum.GetValues<FileCategory>()
+            .ToDictionary(category => category, category => Palette.Freeze(categories[(int)category]));
         Swatches = _folders.Take(8).ToArray();
     }
 
-    public string Name { get; }
+    /// <summary>The display name; unique among built-in palettes, and what the settings file stores.</summary>
+    public string Name
+    {
+        get;
+    }
 
     /// <summary>True for a palette read from the user's palettes folder.</summary>
-    public bool IsCustom { get; internal set; }
+    public bool IsCustom
+    {
+        get; internal set;
+    }
 
+    /// <summary>The window theme the palette is made for; Any lists it under both.</summary>
     public PaletteTheme Theme { get; internal set; } = PaletteTheme.Any;
 
     /// <summary>The file a custom palette was read from.</summary>
-    public string? SourceFile { get; internal set; }
+    public string? SourceFile
+    {
+        get; internal set;
+    }
 
     /// <summary>The folder colors in depth order.</summary>
-    public IReadOnlyList<Color> FolderColors => _folders.Select(b => TreemapControl.ColorOf(b)).ToList();
+    public IReadOnlyList<Color> FolderColors => _folders.Select(brush => TreemapControl.ColorOf(brush)).ToList();
 
     /// <summary>The file colors in depth order.</summary>
-    public IReadOnlyList<Color> FileColors => _files.Select(b => TreemapControl.ColorOf(b)).ToList();
+    public IReadOnlyList<Color> FileColors => _files.Select(brush => TreemapControl.ColorOf(brush)).ToList();
 
     /// <summary>One color per <see cref="FileCategory"/>, in enum order.</summary>
-    public IReadOnlyList<Color> CategoryColors => Enum.GetValues<FileCategory>().Select(c => TreemapControl.ColorOf(_categories[c])).ToList();
+    public IReadOnlyList<Color> CategoryColors =>
+        Enum.GetValues<FileCategory>().Select(category => TreemapControl.ColorOf(_categories[category])).ToList();
 
     /// <summary>True when the palette fits the given theme.</summary>
+    /// <param name="dark">True for the dark window theme, false for light.</param>
+    /// <returns>True for an untagged palette or one tagged for that theme.</returns>
     public bool Suits(bool dark) => Theme == PaletteTheme.Any || (Theme == PaletteTheme.Dark) == dark;
 
     /// <summary>The picker group header for this palette.</summary>
@@ -74,12 +100,19 @@ public sealed class ColorScheme
     };
 
     /// <summary>Representative colors for the palette picker.</summary>
-    public IReadOnlyList<IBrush> Swatches { get; }
+    public IReadOnlyList<IBrush> Swatches
+    {
+        get;
+    }
 
     /// <summary>The folder color of a top-level branch (what Color by top folder paints it).</summary>
+    /// <param name="branch">The index of the top-level folder under the root; negative is treated as 0, and the twelve colors cycle.</param>
+    /// <returns>A frozen brush shared by every call for that branch.</returns>
     public IBrush FolderBrush(int branch) => _folders[Math.Max(0, branch) % DepthCycle];
 
     /// <summary>The string key of a built-in palette's one-line description: its name, letters only.</summary>
+    /// <param name="name">The palette name, such as "Sea glass".</param>
+    /// <returns>"PaletteAbout_" plus the letters of the name ("PaletteAbout_Seaglass").</returns>
     public static string AboutKey(string name) => "PaletteAbout_" + new string(name.Where(char.IsLetter).ToArray());
 
     /// <summary>One line on the palette for the picker; custom palettes name their file.</summary>
@@ -87,63 +120,100 @@ public sealed class ColorScheme
         ? Strings.Format("Palette_CustomAbout", SourceFile is null ? string.Empty : System.IO.Path.GetFileName(SourceFile))
         : Strings.Get(AboutKey(Name));
 
+    /// <summary>Every file category with its frozen brush, in enum order.</summary>
     public IEnumerable<(FileCategory Category, IBrush Brush)> Categories =>
-        _categories.Select(kv => (kv.Key, kv.Value));
+        _categories.Select(pair => (pair.Key, pair.Value));
 
+    /// <summary>Brushes already made for Color by top folder, keyed by branch, capped level and folder-or-file.</summary>
     private readonly Dictionary<(int Branch, int Depth, bool Folder), IBrush> _branchShades = new();
 
+    /// <summary>The fill for a node in any color mode.</summary>
+    /// <param name="node">The node to paint; only whether it is a directory and its extension matter.</param>
+    /// <param name="depth">The node's depth below the root, 0 for the root's children.</param>
+    /// <param name="branch">The index of the node's top-level ancestor, for Color by top folder; ignored in the other modes.</param>
+    /// <param name="mode">Which coloring the user chose.</param>
+    /// <returns>A frozen brush; by top folder, the branch hue lightened per level (capped at six levels), files a step lighter than folders.</returns>
     public IBrush Fill(FsNode node, int depth, int branch, ColorMode mode)
     {
-        if (mode != ColorMode.ByBranch || depth == 0) return Fill(node, depth, mode);
+        if (mode != ColorMode.ByBranch || depth == 0)
+        {
+            return Fill(node, depth, mode);
+        }
 
+        // Each top-level branch keeps one hue, lightened per level; files sit a step lighter than folders.
         int level = Math.Min(depth - 1, 6);
-        var key = (branch % DepthCycle, level, node.IsDirectory);
-        if (_branchShades.TryGetValue(key, out var shade)) return shade;
+        (int, int level, bool IsDirectory) key = (branch % DepthCycle, level, node.IsDirectory);
+        if (_branchShades.TryGetValue(key, out IBrush? shade))
+        {
+            return shade;
+        }
 
-        var hue = TreemapControl.ColorOf(_folders[branch % DepthCycle]);
-        double t = node.IsDirectory ? level * 0.09 : 0.30 + level * 0.07;
-        shade = Palette.Freeze(Palette.Mix(hue, Colors.White, t));
+        Color hue = TreemapControl.ColorOf(_folders[branch % DepthCycle]);
+        double whiteAmount = node.IsDirectory ? level * 0.09 : 0.30 + level * 0.07;
+        shade = Palette.Freeze(Palette.Mix(hue, Colors.White, whiteAmount));
         _branchShades[key] = shade;
         return shade;
     }
 
+    /// <summary>The fill for a node in the depth and file type modes.</summary>
+    /// <param name="node">The node to paint.</param>
+    /// <param name="depth">The node's depth below the root; cycles every twelve levels (six for neutral folders).</param>
+    /// <param name="mode">ByDepth gives the depth colors; anything else is file type mode, with neutral folders and category-colored files.</param>
+    /// <returns>A frozen brush.</returns>
     public IBrush Fill(FsNode node, int depth, ColorMode mode)
     {
         if (mode == ColorMode.ByDepth)
+        {
             return node.IsDirectory ? _folders[depth % DepthCycle] : _files[depth % DepthCycle];
+        }
 
         return node.IsDirectory
             ? _neutral[depth % _neutral.Length]
             : _categories[Palette.Categorize(node.Extension)];
     }
 
+    /// <summary>The text color that reads on a fill: near-black on light fills, near-white on dark ones.</summary>
+    /// <param name="fill">A brush returned by <see cref="Fill(FsNode, int, int, ColorMode)"/>; a non-solid brush counts as gray.</param>
+    /// <returns>One of two shared brushes, cached per fill.</returns>
     public IBrush LabelFor(IBrush fill)
     {
-        if (_labels.TryGetValue(fill, out var label)) return label;
+        if (_labels.TryGetValue(fill, out IBrush? label))
+        {
+            return label;
+        }
 
-        var c = fill is ISolidColorBrush solid ? solid.Color : Colors.Gray;
-        double luminance = 0.2126 * Linear(c.R) + 0.7152 * Linear(c.G) + 0.0722 * Linear(c.B);
+        Color fillColor = fill is ISolidColorBrush solid ? solid.Color : Colors.Gray;
+        double luminance = 0.2126 * Linear(fillColor.R) + 0.7152 * Linear(fillColor.G) + 0.0722 * Linear(fillColor.B);
         label = luminance > 0.2 ? DarkText : LightText;
         _labels[fill] = label;
         return label;
     }
 
+    /// <summary>sRGB channel to linear light, for luminance.</summary>
+    /// <param name="channel">A red, green or blue byte.</param>
+    /// <returns>The linear value, 0..1.</returns>
     private static double Linear(byte channel)
     {
-        double v = channel / 255.0;
-        return v <= 0.04045 ? v / 12.92 : Math.Pow((v + 0.055) / 1.055, 2.4);
+        double srgb = channel / 255.0;
+        return srgb <= 0.04045 ? srgb / 12.92 : Math.Pow((srgb + 0.055) / 1.055, 2.4);
     }
 
+    /// <summary>The name, for debugger and combo box display.</summary>
+    /// <returns><see cref="Name"/>.</returns>
     public override string ToString() => Name;
 }
 
+/// <summary>The built-in palettes, the custom ones alongside them, and the color math they share.</summary>
 public static class Palette
 {
+    /// <summary>Built-in then custom, rebuilt by <see cref="Reload"/>.</summary>
     private static List<ColorScheme> _schemes = BuildSchemes().Concat(CustomPalettes.Load()).ToList();
 
     /// <summary>Built-in palettes followed by custom ones.</summary>
     public static IReadOnlyList<ColorScheme> Schemes => _schemes;
 
+    /// <summary>Rereads the custom palette files; the built-in list is rebuilt too so the order stays built-in then custom.</summary>
+    /// <returns>The new <see cref="Schemes"/>.</returns>
     public static IReadOnlyList<ColorScheme> Reload()
     {
         _schemes = BuildSchemes().Concat(CustomPalettes.Load()).ToList();
@@ -151,32 +221,51 @@ public static class Palette
     }
 
     /// <summary>The first built-in palette made for the theme.</summary>
-    public static ColorScheme DefaultFor(bool dark) => Schemes.First(s => !s.IsCustom && s.Suits(dark));
+    /// <param name="dark">True for the dark window theme.</param>
+    /// <returns>The first built-in scheme that <see cref="ColorScheme.Suits"/> the theme; the lists always hold one.</returns>
+    public static ColorScheme DefaultFor(bool dark) => Schemes.First(scheme => !scheme.IsCustom && scheme.Suits(dark));
 
+    /// <summary>The dark theme's default palette, used where no theme is known yet.</summary>
     public static ColorScheme Default => DefaultFor(true);
 
     /// <summary>Palettes in picker order for the theme: matching, untagged, other theme, custom.</summary>
+    /// <param name="dark">True for the dark window theme.</param>
+    /// <returns>Every scheme, stably sorted into those four groups.</returns>
     public static IReadOnlyList<ColorScheme> OrderedFor(bool dark) => Schemes
-        .OrderBy(s => s.IsCustom ? 3 : s.Theme == PaletteTheme.Any ? 1 : s.Suits(dark) ? 0 : 2)
+        .OrderBy(scheme => scheme.IsCustom ? 3 : scheme.Theme == PaletteTheme.Any ? 1 : scheme.Suits(dark) ? 0 : 2)
         .ToList();
 
     /// <summary>Default neutral folder colors for file type mode.</summary>
-    internal static Color NeutralFolder(int d) => FromHsl(225, 0.10, 0.50 + d * 0.05);
+    /// <param name="depth">The depth, 0 to 5; each level is a twentieth lighter.</param>
+    /// <returns>A desaturated slate blue.</returns>
+    internal static Color NeutralFolder(int depth) => FromHsl(225, 0.10, 0.50 + depth * 0.05);
 
+    /// <summary>The named palette, or the dark default when unknown.</summary>
+    /// <param name="name">The stored palette name, compared case-insensitively; null matches nothing.</param>
+    /// <returns>The scheme, or <see cref="Default"/>.</returns>
     public static ColorScheme Find(string? name) =>
-        Schemes.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase)) ?? Default;
+        Schemes.FirstOrDefault(scheme => string.Equals(scheme.Name, name, StringComparison.OrdinalIgnoreCase)) ?? Default;
 
     /// <summary>The named palette, or the theme's default when unknown.</summary>
+    /// <param name="name">The stored palette name, compared case-insensitively; null matches nothing.</param>
+    /// <param name="dark">Which theme's default to fall back to.</param>
+    /// <returns>The scheme, or <see cref="DefaultFor"/>.</returns>
     public static ColorScheme Find(string? name, bool dark) =>
-        Schemes.FirstOrDefault(s => string.Equals(s.Name, name, StringComparison.OrdinalIgnoreCase)) ?? DefaultFor(dark);
+        Schemes.FirstOrDefault(scheme => string.Equals(scheme.Name, name, StringComparison.OrdinalIgnoreCase)) ?? DefaultFor(dark);
 
+    /// <summary>The file category for an extension; the Core lookup, exposed here for the map.</summary>
+    /// <param name="extension">The extension with its dot, or empty for none.</param>
+    /// <returns>The category, Other when the extension is unknown.</returns>
     public static FileCategory Categorize(string extension) => FileCategories.Categorize(extension);
 
     // ------------------------------------------------------------ schemes
 
+    /// <summary>The built-in palettes: twelve for the dark theme, then their light twins and the light-only ones.</summary>
+    /// <returns>The dark list followed by the light list, each in picker order.</returns>
     private static List<ColorScheme> BuildSchemes()
     {
-        Color Neutral(int d) => NeutralFolder(d);
+        Color Neutral(int depth) => NeutralFolder(depth);
+
         // twelve hues per palette, ordered so adjacent entries are far apart on the color wheel
         var dark = new List<ColorScheme>
         {
@@ -215,10 +304,10 @@ public static class Palette
                 new[] { "#D94848", "#E07A2E", "#D4A41E", "#78B22E", "#2FA862", "#2AA8A8", "#3B8FE0", "#5B62E0", "#9C4FD9", "#D44FB0", "#E0567A", "#8FA81E" }, 0.42),
 
             new("Monochrome",
-                d => FromHsl(230, 0.06, 0.36 + (d % 6) * 0.06),
-                d => FromHsl(230, 0.05, 0.72 + (d % 4) * 0.05),
+                depth => FromHsl(230, 0.06, 0.36 + (depth % 6) * 0.06),
+                depth => FromHsl(230, 0.05, 0.72 + (depth % 4) * 0.05),
                 Hex("#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"),
-                d => FromHsl(230, 0.06, 0.34 + d * 0.05)),
+                depth => FromHsl(230, 0.06, 0.34 + depth * 0.05)),
 
             // Okabe-Ito's eight plus four from Tol's bright set
             FromList("Color-blind safe",
@@ -265,94 +354,171 @@ public static class Palette
             // the dark set lifted a quarter toward white
             FromList("Color-blind safe (light)",
                 Lift(new[] { "#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#4477AA", "#EE6677", "#228833", "#AA3377", "#66CCEE" }, 0.25), 0.4,
-                Lift(new[] { "#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB" }, 0.25).Select(h => Hex(h)[0]).ToArray())
+                Lift(new[] { "#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB" }, 0.25).Select(hex => Hex(hex)[0]).ToArray())
         };
 
-        foreach (var s in dark) s.Theme = PaletteTheme.Dark;
-        foreach (var s in light) s.Theme = PaletteTheme.Light;
+        foreach (ColorScheme scheme in dark)
+        {
+            scheme.Theme = PaletteTheme.Dark;
+        }
+        foreach (ColorScheme scheme in light)
+        {
+            scheme.Theme = PaletteTheme.Light;
+        }
+
         return dark.Concat(light).ToList();
 
+        /// <summary>A built-in scheme from twelve folder colors; files are the folders lifted toward white.</summary>
+        /// <param name="name">The display name.</param>
+        /// <param name="folderHex">Twelve "#RRGGBB" strings in depth order, neighbors far apart on the wheel.</param>
+        /// <param name="fileTint">How far files are lifted toward white, 0..1.</param>
+        /// <param name="categories">The first category colors in enum order plus Other as the last entry; null derives all of them from the folder hues.</param>
+        /// <returns>The scheme, untagged; the caller sets its theme.</returns>
         ColorScheme FromList(string name, string[] folderHex, double fileTint, Color[]? categories = null)
         {
-            var folders = Hex(folderHex);
+            Color[] folders = Hex(folderHex);
+
             // categories names the first few plus Other (last); the rest derive from folder hues
-            int count = Enum.GetValues<FileCategory>().Length;
-            int given = categories is null ? 0 : categories.Length - 1;
-            var full = new Color[count];
-            for (int i = 0; i < count - 1; i++)
-                full[i] = i < given ? categories![i]
+            int categoryCount = Enum.GetValues<FileCategory>().Length;
+            int named = categories is null ? 0 : categories.Length - 1;
+            var full = new Color[categoryCount];
+            for (int i = 0; i < categoryCount - 1; i++)
+            {
+                full[i] = i < named ? categories![i]
                     : i == (int)FileCategory.System ? Hex("#8FA3B8")[0]
                     : Mix(folders[i % folders.Length], Colors.White, 0.2);
-            full[count - 1] = categories?[^1] ?? Hex("#B8B4AC")[0];
+            }
+            full[categoryCount - 1] = categories?[^1] ?? Hex("#B8B4AC")[0];
             categories = full;
 
             return new ColorScheme(name,
-                d => folders[d % folders.Length],
-                d => Mix(folders[d % folders.Length], Colors.White, fileTint),
+                depth => folders[depth % folders.Length],
+                depth => Mix(folders[depth % folders.Length], Colors.White, fileTint),
                 categories,
                 Neutral);
         }
 
-        static string[] Lift(string[] hex, double t) => hex.Select(h => { var c = Mix(Hex(h)[0], Colors.White, t); return $"#{c.R:X2}{c.G:X2}{c.B:X2}"; }).ToArray();
+        /// <summary>The same hex list moved a fraction toward white, for the light-theme twin of a dark palette.</summary>
+        /// <param name="hexes">"#RRGGBB" strings.</param>
+        /// <param name="whiteAmount">How far toward white, 0..1.</param>
+        /// <returns>New "#RRGGBB" strings in the same order.</returns>
+        static string[] Lift(string[] hexes, double whiteAmount) => hexes
+            .Select(hex =>
+            {
+                Color lifted = Mix(Hex(hex)[0], Colors.White, whiteAmount);
+                return $"#{lifted.R:X2}{lifted.G:X2}{lifted.B:X2}";
+            })
+            .ToArray();
     }
 
     // ------------------------------------------------------------ helpers
 
     // ---- the colors of change: the Changes view, the tooltip, the side panel's Changes tab and Insights
+    /// <summary>Orange for an item that grew since the baseline.</summary>
     public static readonly IBrush GrewBrush = Freeze(Color.FromRgb(0xE8, 0x7A, 0x4F));
+    /// <summary>Blue for an item that shrank since the baseline.</summary>
     public static readonly IBrush ShrankBrush = Freeze(Color.FromRgb(0x5D, 0xA9, 0xC9));
+    /// <summary>Amber for an item the baseline did not have.</summary>
     public static readonly IBrush NewBrush = Freeze(Color.FromRgb(0xF5, 0xB8, 0x2E));
+    /// <summary>Grey for an item whose size did not change.</summary>
     public static readonly IBrush UnchangedBrush = Freeze(Color.FromRgb(0x6A, 0x6A, 0x74));
 
+    /// <summary>An immutable solid brush, safe to share between threads and cache forever.</summary>
+    /// <param name="color">The brush color, alpha included.</param>
+    /// <returns>A new immutable brush.</returns>
     internal static IBrush Freeze(Color color) => new ImmutableSolidColorBrush(color);
 
-    private static Color[] Hex(params string[] values) => values.Select(v => Color.FromRgb(
-        Convert.ToByte(v.Substring(1, 2), 16),
-        Convert.ToByte(v.Substring(3, 2), 16),
-        Convert.ToByte(v.Substring(5, 2), 16))).ToArray();
+    /// <summary>"#RRGGBB" strings to colors.</summary>
+    /// <param name="hexes">Strings of exactly "#" and six hex digits; anything else throws at startup, which is the point for a built-in table.</param>
+    /// <returns>Opaque colors in the same order.</returns>
+    private static Color[] Hex(params string[] hexes) => hexes.Select(hex => Color.FromRgb(
+        Convert.ToByte(hex.Substring(1, 2), 16),
+        Convert.ToByte(hex.Substring(3, 2), 16),
+        Convert.ToByte(hex.Substring(5, 2), 16))).ToArray();
 
-    internal static Color Mix(Color a, Color b, double t) => Color.FromRgb(
-        (byte)Math.Round(a.R + (b.R - a.R) * t),
-        (byte)Math.Round(a.G + (b.G - a.G) * t),
-        (byte)Math.Round(a.B + (b.B - a.B) * t));
+    /// <summary>Linear blend from one color toward another; <paramref name="amount"/> 0 is the first, 1 the second.</summary>
+    /// <param name="start">The color at amount 0.</param>
+    /// <param name="end">The color at amount 1.</param>
+    /// <param name="amount">The position between them, 0..1; values outside are not clamped by the blend, only by the byte conversion.</param>
+    /// <returns>The opaque blend, each channel rounded.</returns>
+    internal static Color Mix(Color start, Color end, double amount) => Color.FromRgb(
+        (byte)Math.Round(start.R + (end.R - start.R) * amount),
+        (byte)Math.Round(start.G + (end.G - start.G) * amount),
+        (byte)Math.Round(start.B + (end.B - start.B) * amount));
 
     /// <summary>Converts to HSL: hue 0..360, saturation and lightness 0..1.</summary>
-    internal static (double H, double S, double L) ToHsl(Color c)
+    /// <param name="color">The color; alpha is ignored.</param>
+    /// <returns>Hue in degrees (0 for greys), saturation and lightness as fractions.</returns>
+    internal static (double H, double S, double L) ToHsl(Color color)
     {
-        double r = c.R / 255.0, g = c.G / 255.0, b = c.B / 255.0;
+        // r, g, b, h, s, l are the textbook names of the HSL conversion.
+        double r = color.R / 255.0, g = color.G / 255.0, b = color.B / 255.0;
         double max = Math.Max(r, Math.Max(g, b)), min = Math.Min(r, Math.Min(g, b));
         double l = (max + min) / 2, h = 0, sat = 0;
+
         if (max > min)
         {
-            double d = max - min;
-            sat = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            if (max == r) h = (g - b) / d + (g < b ? 6 : 0);
-            else if (max == g) h = (b - r) / d + 2;
-            else h = (r - g) / d + 4;
+            double chroma = max - min;
+            sat = l > 0.5 ? chroma / (2 - max - min) : chroma / (max + min);
+            if (max == r)
+            {
+                h = (g - b) / chroma + (g < b ? 6 : 0);
+            }
+            else if (max == g)
+            {
+                h = (b - r) / chroma + 2;
+            }
+            else
+            {
+                h = (r - g) / chroma + 4;
+            }
             h *= 60;
         }
+
         return (h, sat, l);
     }
 
     /// <summary>WCAG relative luminance, 0..1.</summary>
-    internal static double Luminance(Color c) => 0.2126 * LinearChannel(c.R) + 0.7152 * LinearChannel(c.G) + 0.0722 * LinearChannel(c.B);
+    /// <param name="color">The color; alpha is ignored.</param>
+    /// <returns>0 for black, 1 for white.</returns>
+    internal static double Luminance(Color color) =>
+        0.2126 * LinearChannel(color.R) + 0.7152 * LinearChannel(color.G) + 0.0722 * LinearChannel(color.B);
 
-    private static double LinearChannel(byte channel) { double v = channel / 255.0; return v <= 0.04045 ? v / 12.92 : Math.Pow((v + 0.055) / 1.055, 2.4); }
+    /// <summary>sRGB channel to linear light, for luminance.</summary>
+    /// <param name="channel">A red, green or blue byte.</param>
+    /// <returns>The linear value, 0..1.</returns>
+    private static double LinearChannel(byte channel)
+    {
+        double srgb = channel / 255.0;
+        return srgb <= 0.04045 ? srgb / 12.92 : Math.Pow((srgb + 0.055) / 1.055, 2.4);
+    }
 
     /// <summary>The label color for a fill, matching <see cref="ColorScheme.LabelFor"/>.</summary>
+    /// <param name="fill">The box color.</param>
+    /// <returns>Near-black when the fill's luminance is above 0.2, else near-white.</returns>
     internal static Color LabelColorFor(Color fill) => Luminance(fill) > 0.2 ? Color.FromRgb(0x14, 0x14, 0x18) : Color.FromRgb(0xF2, 0xF2, 0xF6);
 
     /// <summary>WCAG contrast ratio, 1..21.</summary>
-    internal static double Contrast(Color a, Color b)
+    /// <param name="first">One color; order does not matter.</param>
+    /// <param name="second">The other color.</param>
+    /// <returns>1 for equal luminance, 21 for black on white; 4.5 is the usual readability threshold.</returns>
+    internal static double Contrast(Color first, Color second)
     {
-        double la = Luminance(a), lb = Luminance(b);
-        return (Math.Max(la, lb) + 0.05) / (Math.Min(la, lb) + 0.05);
+        double firstLuminance = Luminance(first), secondLuminance = Luminance(second);
+        return (Math.Max(firstLuminance, secondLuminance) + 0.05) / (Math.Min(firstLuminance, secondLuminance) + 0.05);
     }
 
+    /// <summary>HSL to color: hue in degrees (any range), saturation and lightness 0..1.</summary>
+    /// <param name="h">Hue in degrees; wrapped into 0..360, so negatives and values past 360 are fine.</param>
+    /// <param name="s">Saturation, 0..1; 0 or less gives a grey.</param>
+    /// <param name="l">Lightness, 0..1, clamped.</param>
+    /// <returns>The opaque color.</returns>
     internal static Color FromHsl(double h, double s, double l)
     {
+        // The standard HSL to RGB formula, with its conventional p, q and t names.
         h = ((h % 360) + 360) % 360 / 360.0;
         l = Math.Clamp(l, 0, 1);
+
         double r, g, b;
         if (s <= 0)
         {
@@ -370,15 +536,39 @@ public static class Palette
         return Color.FromRgb(ToByte(r), ToByte(g), ToByte(b));
     }
 
+    /// <summary>One channel of the HSL to RGB formula.</summary>
+    /// <param name="p">The lower bound of the channel range, from lightness and saturation.</param>
+    /// <param name="q">The upper bound of the channel range.</param>
+    /// <param name="t">The channel's position on the hue circle as a 0..1 fraction, offset by a third per channel; wrapped here.</param>
+    /// <returns>The channel value, 0..1.</returns>
     private static double HueToRgb(double p, double q, double t)
     {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1.0 / 6) return p + (q - p) * 6 * t;
-        if (t < 0.5) return q;
-        if (t < 2.0 / 3) return p + (q - p) * (2.0 / 3 - t) * 6;
+        if (t < 0)
+        {
+            t += 1;
+        }
+        if (t > 1)
+        {
+            t -= 1;
+        }
+
+        if (t < 1.0 / 6)
+        {
+            return p + (q - p) * 6 * t;
+        }
+        if (t < 0.5)
+        {
+            return q;
+        }
+        if (t < 2.0 / 3)
+        {
+            return p + (q - p) * (2.0 / 3 - t) * 6;
+        }
         return p;
     }
 
-    private static byte ToByte(double v) => (byte)Math.Clamp(Math.Round(v * 255), 0, 255);
+    /// <summary>A 0..1 channel to a byte, clamped.</summary>
+    /// <param name="unit">The channel as a fraction; values outside 0..1 clamp to 0 or 255.</param>
+    /// <returns>The rounded byte.</returns>
+    private static byte ToByte(double unit) => (byte)Math.Clamp(Math.Round(unit * 255), 0, 255);
 }

@@ -4,11 +4,23 @@ using SpaceSharp.Util;
 namespace SpaceSharp.Services;
 
 /// <summary>One file type's share of a scan, with its top three extensions.</summary>
+/// <param name="Category">The file type.</param>
+/// <param name="Bytes">The bytes of its files by the measure the summary was built with; always positive.</param>
+/// <param name="Files">How many files have that type, counting only files with a positive size.</param>
+/// <param name="Largest">The single biggest file of the type; null only if no file had a positive size, which cannot happen for a listed share.</param>
+/// <param name="Extensions">Up to three extensions largest first, "(none)" standing for files without one.</param>
 public sealed record TypeShare(FileCategory Category, long Bytes, int Files, FsNode? Largest, IReadOnlyList<ExtensionShare> Extensions);
 
+/// <summary>One extension's bytes within a type.</summary>
+/// <param name="Extension">The lowercase extension with its dot, or "(none)".</param>
+/// <param name="Bytes">Its bytes by the measure in use.</param>
 public sealed record ExtensionShare(string Extension, long Bytes);
 
 /// <summary>Bytes changed in one calendar month.</summary>
+/// <param name="Year">The calendar year.</param>
+/// <param name="Month">The month, 1 to 12.</param>
+/// <param name="Bytes">The bytes of files last written that month; the oldest bucket also holds everything older.</param>
+/// <param name="Files">How many files that is.</param>
 public sealed record MonthBucket(int Year, int Month, long Bytes, int Files);
 
 /// <summary>The action a cleanup suggestion offers.</summary>
@@ -25,28 +37,58 @@ public enum CleanupAction
 }
 
 /// <summary>One card on the "Safe to clear" panel.</summary>
+/// <param name="Key">One of <see cref="DriveInsights.SuggestionKeys"/>; the card's title and note are the "Cleanup_&lt;Key&gt;" strings.</param>
+/// <param name="Bytes">The items' total by the measure in use; at least <see cref="DriveInsights.MinSuggestionBytes"/>.</param>
+/// <param name="Items">The folders or files the action applies to, none nested in another.</param>
+/// <param name="Action">What the card's button does.</param>
 public sealed record CleanupSuggestion(string Key, long Bytes, IReadOnlyList<FsNode> Items, CleanupAction Action);
 
 /// <summary>An extension's total and the deepest folder holding at least half of it.</summary>
+/// <param name="Extension">The lowercase extension with its dot, or "(none)".</param>
+/// <param name="Bytes">All bytes of that extension in the scan.</param>
+/// <param name="Files">How many files have it.</param>
+/// <param name="Folder">The deepest folder holding at least half of the bytes; null when the extension has no bytes.</param>
+/// <param name="Share">The fraction of <paramref name="Bytes"/> inside <paramref name="Folder"/>, 0.5 to 1, or 0 when there is no folder.</param>
 public sealed record ExtensionHome(string Extension, long Bytes, int Files, FsNode? Folder, double Share);
 
-/// <summary>Change totals since the compared scan.</summary>
 /// <summary>Bytes grew and shrank (gone files count as shrank), files new and files gone, since the compared scan.</summary>
+/// <param name="Grew">The sum of positive per-file changes; a new file contributes its whole size.</param>
+/// <param name="Shrank">The sum of negative per-file changes as a positive number, plus the bytes of gone files when a comparison was given.</param>
+/// <param name="NewFiles">Files with no baseline.</param>
+/// <param name="GoneFiles">Files in the older scan that are gone; 0 without a comparison.</param>
 public sealed record ChangeTotals(long Grew, long Shrank, int NewFiles, int GoneFiles)
 {
+    /// <summary>Grew minus shrank; negative when the scan got smaller.</summary>
     public long Net => Grew - Shrank;
 }
 
 /// <summary>A drive's fill now and after freeing <see cref="Freed"/> bytes.</summary>
+/// <param name="Total">The drive's capacity in bytes.</param>
+/// <param name="FreeNow">Free bytes now.</param>
+/// <param name="Freed">The bytes the checked suggestions would free; negative is treated as 0.</param>
 public sealed record FreeProjection(long Total, long FreeNow, long Freed)
 {
+    /// <summary>Bytes in use now, never negative.</summary>
     public long UsedNow => Math.Max(0, Total - FreeNow);
+
+    /// <summary>Free bytes after clearing, capped at the capacity.</summary>
     public long FreeAfter => Math.Clamp(FreeNow + Math.Max(0, Freed), 0, Math.Max(Total, FreeNow));
+
+    /// <summary>Bytes in use after clearing, never negative.</summary>
     public long UsedAfter => Math.Max(0, Total - FreeAfter);
+
+    /// <summary>The used fraction of the drive now, 0 to 1.</summary>
     public double UsedNowShare => Share(UsedNow);
+
+    /// <summary>The used fraction of the drive after clearing, 0 to 1.</summary>
     public double UsedAfterShare => Share(UsedAfter);
+
     /// <summary>The part of the drive the freed bytes take up now.</summary>
     public double FreedShare => Share(UsedNow - UsedAfter);
+
+    /// <summary>A byte count as a fraction of the capacity.</summary>
+    /// <param name="bytes">Any byte count.</param>
+    /// <returns>The fraction clamped to 0..1, or 0 for a drive of unknown capacity.</returns>
     private double Share(long bytes) => Total > 0 ? Math.Clamp((double)bytes / Total, 0, 1) : 0;
 }
 
@@ -56,104 +98,202 @@ public static class DriveInsights
     // ---------------------------------------------------------------- by type
 
     /// <summary>Every category with any bytes, largest first.</summary>
+    /// <param name="root">The scan root; every file below it is visited once.</param>
+    /// <param name="measure">The size that is summed and that picks each type's largest file.</param>
+    /// <returns>At most one share per category, ordered by bytes descending; empty for a scan without sized files.</returns>
     public static List<TypeShare> ByType(FsNode root, SizeMeasure measure)
     {
-        var bytes = new long[Enum.GetValues<FileCategory>().Length];
-        var files = new int[bytes.Length];
-        var largest = new FsNode?[bytes.Length];
-        var byExtension = new Dictionary<string, long>[bytes.Length];
-        foreach (var f in root.DescendantFiles())
+        int categoryCount = Enum.GetValues<FileCategory>().Length;
+        long[] bytesByCategory = new long[categoryCount];
+        int[] filesByCategory = new int[categoryCount];
+        var largestByCategory = new FsNode?[categoryCount];
+        var extensionsByCategory = new Dictionary<string, long>[categoryCount];
+
+        foreach (FsNode file in root.DescendantFiles())
         {
-            long size = f.SizeFor(measure);
-            if (size <= 0) continue;
-            string ext = f.Extension;
-            int c = (int)FileCategories.Categorize(ext);
-            bytes[c] += size;
-            files[c]++;
-            if (largest[c] is null || largest[c]!.SizeFor(measure) < size) largest[c] = f;
-            var exts = byExtension[c] ??= new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-            exts[ext.Length == 0 ? "(none)" : ext] = exts.GetValueOrDefault(ext.Length == 0 ? "(none)" : ext) + size;
+            long size = file.SizeFor(measure);
+            if (size <= 0)
+            {
+                continue;
+            }
+
+            string extension = file.Extension;
+            int category = (int)FileCategories.Categorize(extension);
+            bytesByCategory[category] += size;
+            filesByCategory[category]++;
+            if (largestByCategory[category] is not { } largestSoFar || largestSoFar.SizeFor(measure) < size)
+            {
+                largestByCategory[category] = file;
+            }
+
+            Dictionary<string, long> extensionBytes = extensionsByCategory[category]
+                ??= new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+            string extensionKey = extension.Length == 0 ? "(none)" : extension;
+            extensionBytes[extensionKey] = extensionBytes.GetValueOrDefault(extensionKey) + size;
         }
-        return Enumerable.Range(0, bytes.Length)
-            .Where(i => bytes[i] > 0)
-            .Select(i => new TypeShare((FileCategory)i, bytes[i], files[i], largest[i],
-                byExtension[i]!.OrderByDescending(kv => kv.Value).Take(3).Select(kv => new ExtensionShare(kv.Key, kv.Value)).ToList()))
-            .OrderByDescending(t => t.Bytes)
+
+        // Every category with bytes also has an extension dictionary, built in the same loop iteration.
+        return Enumerable.Range(0, categoryCount)
+            .Where(category => bytesByCategory[category] > 0)
+            .Select(category => new TypeShare(
+                (FileCategory)category,
+                bytesByCategory[category],
+                filesByCategory[category],
+                largestByCategory[category],
+                extensionsByCategory[category]!
+                    .OrderByDescending(pair => pair.Value)
+                    .Take(3)
+                    .Select(pair => new ExtensionShare(pair.Key, pair.Value))
+                    .ToList()))
+            .OrderByDescending(share => share.Bytes)
             .ToList();
     }
 
     /// <summary>The files of one category plus their ancestors.</summary>
+    /// <param name="root">The scan root.</param>
+    /// <param name="category">The type to collect; files of every size count, zero-sized ones too.</param>
+    /// <returns>The matching files and every folder above them up to and including the root, so the map can dim everything else; empty when none match.</returns>
     public static HashSet<FsNode> FilesOfType(FsNode root, FileCategory category)
     {
-        var set = new HashSet<FsNode>();
-        foreach (var f in root.DescendantFiles())
-            if (FileCategories.Categorize(f.Extension) == category) AddWithAncestors(set, f);
-        return set;
+        var matches = new HashSet<FsNode>();
+        foreach (FsNode file in root.DescendantFiles())
+        {
+            if (FileCategories.Categorize(file.Extension) == category)
+            {
+                AddWithAncestors(matches, file);
+            }
+        }
+
+        return matches;
     }
 
     // ---------------------------------------------------------------- by month
 
     /// <summary>Bytes last changed per calendar month, oldest first; older files fold into the first bucket.</summary>
+    /// <param name="root">The scan root.</param>
+    /// <param name="measure">The size summed per month.</param>
+    /// <param name="nowUtc">The current moment, UTC; its calendar month is the last bucket.</param>
+    /// <param name="months">How many buckets, ending with the current month; less than 1 is treated as 1.</param>
+    /// <returns>Exactly <paramref name="months"/> buckets, oldest first, including empty ones; files without a write time are skipped.</returns>
     public static List<MonthBucket> ByMonth(FsNode root, SizeMeasure measure, DateTime nowUtc, int months = 36)
     {
-        if (months < 1) months = 1;
-        var first = new DateTime(nowUtc.Year, nowUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-(months - 1));
-        var bytes = new long[months];
-        var files = new int[months];
-        foreach (var f in root.DescendantFiles())
+        if (months < 1)
         {
-            long size = f.SizeFor(measure);
-            if (size <= 0 || f.LastWriteUtc <= DateTime.MinValue) continue;
-            int i = Math.Clamp(MonthIndex(first, f.LastWriteUtc), 0, months - 1);
-            bytes[i] += size;
-            files[i]++;
+            months = 1;
         }
-        return Enumerable.Range(0, months).Select(i =>
+
+        DateTime firstMonth = FirstMonth(nowUtc, months);
+        long[] bytesByMonth = new long[months];
+        int[] filesByMonth = new int[months];
+        foreach (FsNode file in root.DescendantFiles())
         {
-            var m = first.AddMonths(i);
-            return new MonthBucket(m.Year, m.Month, bytes[i], files[i]);
+            long size = file.SizeFor(measure);
+            if (size <= 0 || file.LastWriteUtc <= DateTime.MinValue)
+            {
+                continue;
+            }
+
+            int bucket = Math.Clamp(MonthIndex(firstMonth, file.LastWriteUtc), 0, months - 1);
+            bytesByMonth[bucket] += size;
+            filesByMonth[bucket]++;
+        }
+
+        return Enumerable.Range(0, months).Select(bucket =>
+        {
+            DateTime month = firstMonth.AddMonths(bucket);
+            return new MonthBucket(month.Year, month.Month, bytesByMonth[bucket], filesByMonth[bucket]);
         }).ToList();
     }
 
     /// <summary>The files of one month bucket plus their ancestors.</summary>
+    /// <param name="root">The scan root.</param>
+    /// <param name="nowUtc">The same moment <see cref="ByMonth"/> was called with, so the buckets line up.</param>
+    /// <param name="months">The same bucket count <see cref="ByMonth"/> was called with.</param>
+    /// <param name="index">The bucket, 0 for the oldest (which also holds everything older) to <paramref name="months"/> - 1 for the current month.</param>
+    /// <returns>The files last written in that month and every folder above them; empty when none.</returns>
     public static HashSet<FsNode> FilesOfMonth(FsNode root, DateTime nowUtc, int months, int index)
     {
-        var first = new DateTime(nowUtc.Year, nowUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-(months - 1));
-        var set = new HashSet<FsNode>();
-        foreach (var f in root.DescendantFiles())
+        DateTime firstMonth = FirstMonth(nowUtc, months);
+        var matches = new HashSet<FsNode>();
+        foreach (FsNode file in root.DescendantFiles())
         {
-            if (f.LastWriteUtc <= DateTime.MinValue) continue;
-            int i = Math.Clamp(MonthIndex(first, f.LastWriteUtc), 0, months - 1);
-            if (i == index) AddWithAncestors(set, f);
+            if (file.LastWriteUtc <= DateTime.MinValue)
+            {
+                continue;
+            }
+
+            int bucket = Math.Clamp(MonthIndex(firstMonth, file.LastWriteUtc), 0, months - 1);
+            if (bucket == index)
+            {
+                AddWithAncestors(matches, file);
+            }
         }
-        return set;
+
+        return matches;
     }
 
+    /// <summary>The first day of the oldest month in a <paramref name="months"/>-long range ending this month.</summary>
+    /// <param name="nowUtc">The current moment, UTC.</param>
+    /// <param name="months">The range length in months, at least 1.</param>
+    /// <returns>Midnight UTC on the first of that month.</returns>
+    private static DateTime FirstMonth(DateTime nowUtc, int months) =>
+        new DateTime(nowUtc.Year, nowUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-(months - 1));
+
+    /// <summary>How many calendar months a date is after the first bucket's month.</summary>
+    /// <param name="first">The first bucket's month, from <see cref="FirstMonth"/>.</param>
+    /// <param name="when">Any date; days within the month do not matter.</param>
+    /// <returns>0 for the same month, negative for earlier months (callers clamp it), positive for later.</returns>
     private static int MonthIndex(DateTime first, DateTime when) => (when.Year - first.Year) * 12 + when.Month - first.Month;
 
     /// <summary>A filter matching the files of one month bucket.</summary>
+    /// <param name="nowUtc">The current moment, UTC, as passed to <see cref="ByMonth"/>.</param>
+    /// <param name="months">The bucket count, as passed to <see cref="ByMonth"/>.</param>
+    /// <param name="index">The bucket, 0 for the oldest.</param>
+    /// <returns>A files-only spec with age bounds in whole days; the oldest bucket has no lower age bound and the current month no upper one.</returns>
     public static FilterSpec MonthFilter(DateTime nowUtc, int months, int index)
     {
-        var first = new DateTime(nowUtc.Year, nowUtc.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-(months - 1));
-        var start = first.AddMonths(index);
-        var end = start.AddMonths(1);
+        DateTime start = FirstMonth(nowUtc, months).AddMonths(index);
+        DateTime end = start.AddMonths(1);
+
+        // The oldest bucket has no lower bound: older files fold into it.
         var spec = new FilterSpec { Kind = ItemKind.Files };
-        if (index > 0) spec.NewerThanDays = Math.Max(1, (int)Math.Ceiling((nowUtc - start).TotalDays));
-        if (end < nowUtc) spec.OlderThanDays = Math.Max(1, (int)Math.Floor((nowUtc - end).TotalDays));
+        if (index > 0)
+        {
+            spec.NewerThanDays = Math.Max(1, (int)Math.Ceiling((nowUtc - start).TotalDays));
+        }
+
+        if (end < nowUtc)
+        {
+            spec.OlderThanDays = Math.Max(1, (int)Math.Floor((nowUtc - end).TotalDays));
+        }
+
         return spec;
     }
 
     /// <summary>A filter matching one Inspect age band.</summary>
+    /// <param name="band">The age range to match.</param>
+    /// <returns>A files-only spec with the band's day bounds (30, 365 and 1095 days), matching <see cref="InspectSummary.BucketFor"/>.</returns>
     public static FilterSpec BandFilter(InspectSummary.AgeBucket band)
     {
         var spec = new FilterSpec { Kind = ItemKind.Files };
         switch (band)
         {
-            case InspectSummary.AgeBucket.ThisMonth: spec.NewerThanDays = 30; break;
-            case InspectSummary.AgeBucket.ThisYear: spec.NewerThanDays = 365; spec.OlderThanDays = 30; break;
-            case InspectSummary.AgeBucket.OneToThreeYears: spec.NewerThanDays = 3 * 365; spec.OlderThanDays = 365; break;
-            default: spec.OlderThanDays = 3 * 365; break;
+            case InspectSummary.AgeBucket.ThisMonth:
+                spec.NewerThanDays = 30;
+                break;
+            case InspectSummary.AgeBucket.ThisYear:
+                spec.NewerThanDays = 365;
+                spec.OlderThanDays = 30;
+                break;
+            case InspectSummary.AgeBucket.OneToThreeYears:
+                spec.NewerThanDays = 3 * 365;
+                spec.OlderThanDays = 365;
+                break;
+            default:
+                spec.OlderThanDays = 3 * 365;
+                break;
         }
+
         return spec;
     }
 
@@ -178,130 +318,275 @@ public static class DriveInsights
     };
 
     /// <summary>Places usually safe to empty, matched by name only, largest first.</summary>
+    /// <param name="root">The scan root; Windows.old, $Recycle.Bin and the page files are looked for directly under it, the caches anywhere.</param>
+    /// <param name="measure">The size that decides each suggestion's bytes and the 100 MB cutoff.</param>
+    /// <param name="nowUtc">The current moment, UTC; downloads untouched for a year before it count as old.</param>
+    /// <returns>Suggestions of at least <see cref="MinSuggestionBytes"/>, largest first, at most one per key; empty when nothing reaches the cutoff.</returns>
     public static List<CleanupSuggestion> Cleanup(FsNode root, SizeMeasure measure, DateTime nowUtc)
     {
-        var list = new List<CleanupSuggestion>();
-        var topLevel = root.Children.Where(c => c.IsReal).ToList();
+        var suggestions = new List<CleanupSuggestion>();
+        var topLevel = root.Children.Where(child => child.IsReal).ToList();
 
-        FsNode? AtRoot(string name) => topLevel.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
-        if (AtRoot("Windows.old") is { } old) Add("WindowsOld", new[] { old }, CleanupAction.Recycle);
-        if (AtRoot("$Recycle.Bin") is { } bin) Add("RecycleBin", new[] { bin }, CleanupAction.EmptyRecycleBin);
-        var managed = new[] { "hiberfil.sys", "pagefile.sys", "swapfile.sys" }.Select(AtRoot).Where(n => n is not null).Select(n => n!).ToList();
-        if (managed.Count > 0) Add("SystemFiles", managed, CleanupAction.Explain);
+        FsNode? AtRoot(string name) =>
+            topLevel.FirstOrDefault(child => string.Equals(child.Name, name, StringComparison.OrdinalIgnoreCase));
 
-        var dirs = root.DescendantDirectories().ToList();
-        foreach (var (key, paths) in CachePatterns)
+        if (AtRoot("Windows.old") is { } windowsOld)
         {
-            var hits = dirs.Where(d => paths.Any(p => EndsWith(d, p))).ToList();
-            // nested hits are already counted by their ancestor
-            hits = hits.Where(h => !hits.Any(o => !ReferenceEquals(o, h) && o.IsAncestorOf(h))).ToList();
-            if (hits.Count > 0) Add(key, hits, CleanupAction.Recycle);
+            Add("WindowsOld", new[] { windowsOld }, CleanupAction.Recycle);
         }
 
-        var downloads = dirs.Where(d => EndsWith(d, @"Users\*\Downloads")).ToList();
-        var stale = downloads.SelectMany(d => d.Children).Where(c => c.IsReal && (nowUtc - c.LastWriteUtc).TotalDays >= 365).ToList();
-        if (stale.Count > 0) Add("OldDownloads", stale, CleanupAction.Review);
+        if (AtRoot("$Recycle.Bin") is { } recycleBin)
+        {
+            Add("RecycleBin", new[] { recycleBin }, CleanupAction.EmptyRecycleBin);
+        }
 
-        return list.Where(s => s.Bytes >= MinSuggestionBytes).OrderByDescending(s => s.Bytes).ToList();
+        var managedFiles = new[] { "hiberfil.sys", "pagefile.sys", "swapfile.sys" }
+            .Select(AtRoot)
+            .Where(node => node is not null)
+            .Select(node => node!)
+            .ToList();
+        if (managedFiles.Count > 0)
+        {
+            Add("SystemFiles", managedFiles, CleanupAction.Explain);
+        }
+
+        var folders = root.DescendantDirectories().ToList();
+        foreach ((string? key, string[]? paths) in CachePatterns)
+        {
+            var hits = folders.Where(folder => paths.Any(path => EndsWith(folder, path))).ToList();
+
+            // Nested hits are already counted by their ancestor.
+            hits = hits.Where(hit => !hits.Any(other => !ReferenceEquals(other, hit) && other.IsAncestorOf(hit))).ToList();
+            if (hits.Count > 0)
+            {
+                Add(key, hits, CleanupAction.Recycle);
+            }
+        }
+
+        var downloadFolders = folders.Where(folder => EndsWith(folder, @"Users\*\Downloads")).ToList();
+        var staleDownloads = downloadFolders
+            .SelectMany(folder => folder.Children)
+            .Where(item => item.IsReal && (nowUtc - item.LastWriteUtc).TotalDays >= 365)
+            .ToList();
+        if (staleDownloads.Count > 0)
+        {
+            Add("OldDownloads", staleDownloads, CleanupAction.Review);
+        }
+
+        return suggestions
+            .Where(suggestion => suggestion.Bytes >= MinSuggestionBytes)
+            .OrderByDescending(suggestion => suggestion.Bytes)
+            .ToList();
 
         void Add(string key, IReadOnlyList<FsNode> items, CleanupAction action) =>
-            list.Add(new CleanupSuggestion(key, items.Sum(i => i.SizeFor(measure)), items, action));
+            suggestions.Add(new CleanupSuggestion(key, items.Sum(item => item.SizeFor(measure)), items, action));
     }
 
     /// <summary>True when the node's path ends with the pattern's segments; "*" matches one segment.</summary>
+    /// <param name="node">Any node; its name and ancestors' names are compared ignoring case.</param>
+    /// <param name="pattern">Backslash-separated segments without a leading or trailing backslash, such as "Users\*\Downloads".</param>
+    /// <returns>True when the last segments of the node's path match; the scan root itself never matches a segment.</returns>
     internal static bool EndsWith(FsNode node, string pattern)
     {
-        var segments = pattern.Split('\\');
-        var n = node;
+        string[] segments = pattern.Split('\\');
+        FsNode? current = node;
         for (int i = segments.Length - 1; i >= 0; i--)
         {
-            if (n is null || n.Parent is null) return false; // the root itself does not match
-            if (segments[i] != "*" && !string.Equals(n.Name, segments[i], StringComparison.OrdinalIgnoreCase)) return false;
-            n = n.Parent;
+            if (current is null || current.Parent is null)
+            {
+                return false; // the root itself does not match
+            }
+
+            if (segments[i] != "*" && !string.Equals(current.Name, segments[i], StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            current = current.Parent;
         }
+
         return true;
     }
 
+    /// <summary>Adds the node and its ancestors, stopping at the first one already in the set.</summary>
+    /// <param name="set">The set being built; an ancestor already present means the rest of the chain is too.</param>
+    /// <param name="node">The file to add together with its parent chain.</param>
     private static void AddWithAncestors(HashSet<FsNode> set, FsNode node)
     {
-        for (var n = node; n is not null && set.Add(n); n = n.Parent) { }
+        for (FsNode? current = node; current is not null && set.Add(current); current = current.Parent)
+        {
+        }
     }
 
     // ---------------------------------------------------------------- extra cards
 
     /// <summary>The biggest extensions and the folder each mostly lives in.</summary>
+    /// <param name="root">The scan root; its files are visited twice.</param>
+    /// <param name="measure">The size summed per extension and per folder.</param>
+    /// <param name="count">How many extensions to report, by bytes.</param>
+    /// <returns>Up to <paramref name="count"/> homes, largest extension first; fewer when the scan has fewer distinct extensions.</returns>
     public static List<ExtensionHome> ExtensionHomes(FsNode root, SizeMeasure measure, int count)
     {
+        // Pass one: bytes and files per extension.
         var totals = new Dictionary<string, (long Bytes, int Files)>(StringComparer.OrdinalIgnoreCase);
-        foreach (var f in root.DescendantFiles())
+        foreach (FsNode file in root.DescendantFiles())
         {
-            string ext = f.Extension.Length == 0 ? "(none)" : f.Extension;
-            totals.TryGetValue(ext, out var t);
-            totals[ext] = (t.Bytes + f.SizeFor(measure), t.Files + 1);
+            string extension = file.Extension.Length == 0 ? "(none)" : file.Extension;
+            totals.TryGetValue(extension, out (long Bytes, int Files) total);
+            totals[extension] = (total.Bytes + file.SizeFor(measure), total.Files + 1);
         }
-        var top = totals.OrderByDescending(kv => kv.Value.Bytes).Take(count).Select(kv => kv.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var under = new Dictionary<string, Dictionary<FsNode, long>>(StringComparer.OrdinalIgnoreCase);
-        foreach (var f in root.DescendantFiles())
+
+        var topExtensions = totals
+            .OrderByDescending(pair => pair.Value.Bytes)
+            .Take(count)
+            .Select(pair => pair.Key)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        // Pass two: for the top extensions, bytes under every ancestor folder.
+        var bytesUnderFolder = new Dictionary<string, Dictionary<FsNode, long>>(StringComparer.OrdinalIgnoreCase);
+        foreach (FsNode file in root.DescendantFiles())
         {
-            string ext = f.Extension.Length == 0 ? "(none)" : f.Extension;
-            if (!top.Contains(ext)) continue;
-            long size = f.SizeFor(measure);
-            if (!under.TryGetValue(ext, out var tally)) under[ext] = tally = new Dictionary<FsNode, long>();
-            for (var p = f.Parent; p is not null; p = p.Parent) tally[p] = tally.GetValueOrDefault(p) + size;
-        }
-        var result = new List<ExtensionHome>();
-        foreach (var ext in top.OrderByDescending(e => totals[e].Bytes))
-        {
-            var (bytes, files) = totals[ext];
-            FsNode? home = null; double share = 0;
-            if (bytes > 0 && under.TryGetValue(ext, out var tally))
+            string extension = file.Extension.Length == 0 ? "(none)" : file.Extension;
+            if (!topExtensions.Contains(extension))
             {
-                foreach (var (folder, b) in tally)
-                {
-                    if (b * 2 < bytes) continue;
-                    int depth = Depth(folder);
-                    if (home is null || depth > Depth(home) || (depth == Depth(home) && b > tally[home])) home = folder;
-                }
-                if (home is not null) share = (double)tally[home] / bytes;
+                continue;
             }
-            result.Add(new ExtensionHome(ext, bytes, files, home, share));
+
+            long size = file.SizeFor(measure);
+            if (!bytesUnderFolder.TryGetValue(extension, out Dictionary<FsNode, long>? tally))
+            {
+                bytesUnderFolder[extension] = tally = new Dictionary<FsNode, long>();
+            }
+
+            for (FsNode? ancestor = file.Parent; ancestor is not null; ancestor = ancestor.Parent)
+            {
+                tally[ancestor] = tally.GetValueOrDefault(ancestor) + size;
+            }
         }
-        return result;
+
+        // The home is the deepest folder holding at least half; ties go to the one holding more.
+        var homes = new List<ExtensionHome>();
+        foreach (string? extension in topExtensions.OrderByDescending(candidate => totals[candidate].Bytes))
+        {
+            (long bytes, int files) = totals[extension];
+            FsNode? home = null;
+            double share = 0;
+            if (bytes > 0 && bytesUnderFolder.TryGetValue(extension, out Dictionary<FsNode, long>? tally))
+            {
+                foreach ((FsNode? folder, long bytesInFolder) in tally)
+                {
+                    if (bytesInFolder * 2 < bytes)
+                    {
+                        continue;
+                    }
+
+                    int depth = Depth(folder);
+                    if (home is null || depth > Depth(home) || (depth == Depth(home) && bytesInFolder > tally[home]))
+                    {
+                        home = folder;
+                    }
+                }
+
+                if (home is not null)
+                {
+                    share = (double)tally[home] / bytes;
+                }
+            }
+
+            homes.Add(new ExtensionHome(extension, bytes, files, home, share));
+        }
+
+        return homes;
     }
 
-    private static int Depth(FsNode n) { int d = 0; for (var p = n.Parent; p is not null; p = p.Parent) d++; return d; }
+    /// <summary>How many ancestors a node has.</summary>
+    /// <param name="node">Any node.</param>
+    /// <returns>0 for the root, 1 for its children, and so on.</returns>
+    private static int Depth(FsNode node)
+    {
+        int depth = 0;
+        for (FsNode? ancestor = node.Parent; ancestor is not null; ancestor = ancestor.Parent)
+        {
+            depth++;
+        }
+
+        return depth;
+    }
 
     /// <summary>The largest files not written to for at least a year, largest first.</summary>
+    /// <param name="root">The scan root.</param>
+    /// <param name="measure">The size the files are ordered by.</param>
+    /// <param name="nowUtc">The current moment, UTC; the cutoff is one year before it.</param>
+    /// <param name="count">How many files to return at most.</param>
+    /// <returns>Files with a real write time older than the cutoff, largest first; fewer than <paramref name="count"/> when there are not enough.</returns>
     public static List<FsNode> OldestLargest(FsNode root, SizeMeasure measure, DateTime nowUtc, int count)
     {
-        var cutoff = nowUtc.AddYears(-1);
-        return root.DescendantFiles().Where(f => f.LastWriteUtc > DateTime.MinValue && f.LastWriteUtc < cutoff)
-            .OrderByDescending(f => f.SizeFor(measure)).Take(count).ToList();
+        DateTime cutoff = nowUtc.AddYears(-1);
+        return root.DescendantFiles()
+            .Where(file => file.LastWriteUtc > DateTime.MinValue && file.LastWriteUtc < cutoff)
+            .OrderByDescending(file => file.SizeFor(measure))
+            .Take(count)
+            .ToList();
     }
 
     /// <summary>Smallest change in a drive's free space worth a word on the start screen: 1% of the drive, never under 500 MB.</summary>
+    /// <param name="total">The drive's capacity in bytes.</param>
+    /// <returns>The threshold in bytes.</returns>
     public static long NotableDrift(long total) => Math.Max(500L << 20, total / 100);
 
     /// <summary>Bytes a drive filled since a scan (negative when it emptied) and whether that is notable; unknown drives are never notable.</summary>
+    /// <param name="freeAtScan">Free bytes recorded in the saved scan's header; 0 or less means unknown (a folder scan).</param>
+    /// <param name="freeNow">Free bytes on the drive now.</param>
+    /// <param name="total">The drive's capacity in bytes; 0 or less means unknown.</param>
+    /// <returns>The change in used bytes (positive when the drive filled) and whether it reaches <see cref="NotableDrift"/>; (0, false) when either input is unknown.</returns>
     public static (long FilledSince, bool Notable) DriftSince(long freeAtScan, long freeNow, long total)
     {
-        if (total <= 0 || freeAtScan <= 0) return (0, false);
+        if (total <= 0 || freeAtScan <= 0)
+        {
+            return (0, false);
+        }
         long filled = freeAtScan - freeNow;
         return (filled, Math.Abs(filled) >= NotableDrift(total));
     }
 
     /// <summary>Totals of the change since the compared scan.</summary>
+    /// <param name="root">The scan root; it must carry a baseline (<see cref="FsNode.HasBaseline"/>) or every total is 0.</param>
+    /// <param name="measure">Which pair of sizes the per-file change is taken from.</param>
+    /// <param name="comparison">The gone items from <see cref="ScanCompare.Apply"/>; null leaves gone bytes and files out of the totals.</param>
+    /// <returns>Grew, shrank, new and gone, all non-negative; all 0 when the tree has no baseline.</returns>
     public static ChangeTotals Changes(FsNode root, SizeMeasure measure, ScanComparison? comparison = null)
     {
-        long grew = 0, shrank = 0; int fresh = 0;
-        if (!root.HasBaseline) return new ChangeTotals(0, 0, 0, 0);
-        foreach (var f in root.DescendantFiles())
+        if (!root.HasBaseline)
         {
-            long c = f.ChangeFor(measure);
-            if (f.BaselineSize is null) fresh++;
-            if (c > 0) grew += c; else shrank -= c;
+            return new ChangeTotals(0, 0, 0, 0);
         }
-        if (comparison is not null) shrank += measure == SizeMeasure.SizeOnDisk ? comparison.GoneAllocated : comparison.GoneBytes;
-        return new ChangeTotals(grew, shrank, fresh, comparison?.GoneFiles ?? 0);
+
+        long grew = 0;
+        long shrank = 0;
+        int newFiles = 0;
+        foreach (FsNode file in root.DescendantFiles())
+        {
+            long change = file.ChangeFor(measure);
+            if (file.BaselineSize is null)
+            {
+                newFiles++;
+            }
+
+            if (change > 0)
+            {
+                grew += change;
+            }
+            else
+            {
+                shrank -= change;
+            }
+        }
+
+        if (comparison is not null)
+        {
+            shrank += measure == SizeMeasure.SizeOnDisk ? comparison.GoneAllocated : comparison.GoneBytes;
+        }
+
+        return new ChangeTotals(grew, shrank, newFiles, comparison?.GoneFiles ?? 0);
     }
 }
