@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using SpaceSharp.Services;
 using SpaceSharp.Util;
 
 namespace SpaceSharp.Tests;
@@ -140,6 +141,23 @@ public class LocalizationTests
         {
             CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("nb");
             Assert.Contains("1 234", Strings.Format("Inspect_ItemsSelected", 1234).Replace('\u00A0', ' '));
+        }
+        finally { (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture) = before; }
+    }
+
+    /// <summary>Sizes, percentages and resources follow the user's culture: a French Windows sees a decimal comma and French text.</summary>
+    /// <remarks>The rest of the suite runs under the invariant culture (see <see cref="TestCulture"/>); this is the one test that asserts the other way.</remarks>
+    [Fact]
+    public void FrenchCultureFormatsWithADecimalComma()
+    {
+        (CultureInfo CurrentCulture, CultureInfo CurrentUICulture) before = (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture);
+        try
+        {
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("fr-FR");
+            Assert.Equal("1,5 KB", SizeFormatter.Format(1536));
+            Assert.Equal("1,07 KB", SizeFormatter.Compact(1100));
+            Assert.Equal("8,9%", InspectSummary.Percent(0.089));
+            Assert.Equal("Langue", Strings.Get("Settings_Language"));
         }
         finally { (CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture) = before; }
     }
