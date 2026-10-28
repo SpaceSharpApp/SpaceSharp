@@ -113,6 +113,78 @@ public class ScanFileTests
         Assert.Equal(-bSize, totals.Net);
     }
 
+    /// <summary>A drive with one file reachable under two names; which path is the primary is the caller's choice.</summary>
+    private static FsNode LinkedDrive(bool primaryInDocs, long sizeNow = 77)
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode docs = TestTree.Dir("Docs", root);
+        FsNode videos = TestTree.Dir("Videos", root);
+        TestTree.File(docs, "notes.txt", 50);
+        FsNode inDocs = TestTree.File(docs, "shared.bin", primaryInDocs ? sizeNow : 0);
+        FsNode inVideos = TestTree.File(videos, "shared.bin", primaryInDocs ? 0 : sizeNow);
+        FsNode duplicate = primaryInDocs ? inVideos : inDocs;
+        duplicate.IsHardLinkDuplicate = true;
+        duplicate.LinkedSize = sizeNow;
+        TestTree.Finish(root);
+        return root;
+    }
+
+    [Fact]
+    public void HardLinkPrimaryMovingBetweenScansIsNotAChange()
+    {
+        // The MFT scan and the folder walk pick the primary path differently, and the parallel walk is not even stable.
+        FsNode then = LinkedDrive(primaryInDocs: true);
+        FsNode now = LinkedDrive(primaryInDocs: false);
+
+        ScanComparison comparison = ScanCompare.Apply(now, then);
+
+        FsNode docs = now.FindDescendant(@"C:\Docs")!;
+        FsNode videos = now.FindDescendant(@"C:\Videos")!;
+        Assert.Equal(0, docs.Children.Single(c => c.Name == "shared.bin").ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, videos.Children.Single(c => c.Name == "shared.bin").ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, docs.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, videos.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, now.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, comparison.GoneFiles);
+
+        ChangeTotals totals = DriveInsights.Changes(now, SizeMeasure.FileSize, comparison);
+        Assert.Equal(0, totals.Grew);
+        Assert.Equal(0, totals.Shrank);
+    }
+
+    [Fact]
+    public void HardLinkGrowthShowsWhereThePrimaryIsNow()
+    {
+        FsNode then = LinkedDrive(primaryInDocs: true, sizeNow: 77);
+        FsNode now = LinkedDrive(primaryInDocs: false, sizeNow: 80);
+
+        ScanCompare.Apply(now, then);
+
+        FsNode videos = now.FindDescendant(@"C:\Videos")!;
+        Assert.Equal(3, videos.Children.Single(c => c.Name == "shared.bin").ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(3, videos.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(0, now.FindDescendant(@"C:\Docs")!.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(3, now.ChangeFor(SizeMeasure.FileSize));
+    }
+
+    [Fact]
+    public void FolderBaselineIsRebuiltFromItsChildren()
+    {
+        // A folder's "then" is what its children added up to, gone ones included, so it stays consistent with the rows under it.
+        FsNode then = SampleDrive();
+        FsNode now = SampleDrive();
+        FsNode videos = now.FindDescendant(@"C:\Videos")!;
+        videos.Children.Remove(videos.Children.Single(c => c.Name == "b.mkv"));
+        TestTree.File(videos, "c.avi", 60);
+        TestTree.Finish(now);
+
+        ScanCompare.Apply(now, then);
+
+        Assert.Equal(500, videos.BaselineSize);           // a.mp4 300 + the gone b.mkv 200
+        Assert.Equal(300 + 60 - 500, videos.ChangeFor(SizeMeasure.FileSize));
+        Assert.Equal(560, now.BaselineSize);              // the whole drive then, without the free-space node
+    }
+
     [Fact]
     public void ChangesListRanksByAbsoluteChange()
     {

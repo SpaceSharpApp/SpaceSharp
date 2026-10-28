@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Più piccolo</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Minimo</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Spazio per tipo di file in {0}. Fai clic su un tipo per filtrare la mappa.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Variazioni maggiori dal {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Variazioni maggiori rispetto alla scansione confrontata</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Analizza un'unità o una cartella per vedere gli elementi più grandi.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>File più grandi in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Cartelle più grandi in {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>File</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Cartella</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Tipo</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Variazione</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Quota della scansione</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Quota</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Dimensione</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Informazioni su SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Invio</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Aperta la scansione del</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>La scansione precedente è stata eseguita in modo diverso ({0} contro {1}), quindi non viene confrontata. La prossima scansione dello stesso tipo lo sarà.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Nuova scansione annullata</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Analizzato di nuovo {0}: {1:N0} file · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Analizzato di nuovo {0} · {1:N0} file · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Nuova scansione di {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Salvato {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Scansione annullata</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Disegnato per una tastiera {0}; scegline un altro se non è il tuo.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>I tasti ambra sono quelli usati da SpaceSharp; un piccolo {0} nell'angolo significa tenere premuto {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>I tasti ambra sono quelli usati da SpaceSharp; un piccolo {0} nell'angolo significa tenere premuto Comando. Delete è il tasto sopra Invio.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Scegli un'unità a sinistra</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Scegli un'unità a sinistra, oppure riprendi da dove eri rimasto</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Le scansioni salvate si aprono all'istante e vengono confrontate con quella nuova.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Ogni file e cartella diventa un riquadro proporzionato allo spazio che occupa.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Analizza una cartella</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Apri una scansione salvata…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Intere unità in pochi secondi con i diritti di amministratore.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Cartella · {0} file</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>L'unità si è riempita di {0} da questa scansione. Scansiona di nuovo per vedere dove è finito.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>L'unità ha {0} di spazio libero in più rispetto a questa scansione. Scansiona di nuovo per vederla com'è ora.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Le tue scansioni</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Le scansioni vengono conservate per {0}, così la successiva può mostrare cosa è cambiato.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Le scansioni vengono conservate, così la successiva può mostrare cosa è cambiato.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>La tua prima scansione apparirà qui</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Scegli un'unità a sinistra, oppure una cartella. La scansione disegna ogni file e cartella come un riquadro grande quanto lo spazio che occupa, e viene conservata qui così puoi riaprirla e vedere cosa è cambiato.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Scansiona {0} adesso</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>scansioni</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Intere unità in pochi secondi</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Con i diritti di amministratore SpaceSharp legge la tabella dei file NTFS invece di percorrere ogni cartella.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Conserva le scansioni salvate per</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>I salvataggi automatici più vecchi di questo periodo vengono eliminati all'avvio di SpaceSharp. Le scansioni che hai salvato tu come file non vengono mai toccate.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} giorni</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Per sempre</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Elimina tutte le scansioni salvate</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Non ci sono scansioni salvate.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Eliminare {0} scansioni salvate? La mappa sullo schermo resta; i confronti con le scansioni precedenti non saranno possibili finché non ne verranno create di nuove.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Eliminate {0} scansioni salvate.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Eliminare tutte le scansioni salvate?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>La mappa sullo schermo resta aperta. I confronti con scansioni precedenti non saranno possibili finché non ne verranno salvate di nuove.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Unità o cartella</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Scansioni</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>Su disco</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Tutte le scansioni salvate</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} e {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Conservale</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Elimina 1 scansione</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Elimina {0} scansioni</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Eliminata 1 scansione salvata</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Eliminate {0} scansioni salvate</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} liberati nella cartella delle scansioni.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>La mappa sullo schermo resta aperta. La prossima scansione di un'unità o cartella non avrà nulla con cui confrontarsi finché non ne verrà salvata una nuova.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Un file è in uso ed è stato lasciato; verrà eliminato la prossima volta.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} file sono in uso e sono stati lasciati; verranno eliminati la prossima volta.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Nome o modello, ad es. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Aggiungi</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Rimuovi</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Lingue</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Il norvegese è dell'autore stesso; le altre 16 traduzioni sono automatiche e attendono ancora la revisione di un madrelingua. Se qualcosa suona male nella tua lingua, [segnalalo su GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Testi completi delle licenze</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Tipi di scansione diversi</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Quella scansione è stata fatta in modo diverso ({0}) da questa ({1}). I file che solo un metodo vede, come le cartelle di sistema protette, e i collegamenti fisici contati una volta da un metodo e per intero dall'altro, appariranno come spariti, nuovi, cresciuti o ridotti.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Confronta comunque</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Specchio, specchio</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Quel file è il salvataggio di questa stessa scansione. Nulla può cambiare tra una scansione e se stessa, per quanto si guardi. Scegli una scansione precedente per vedere cosa è cambiato davvero.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Obiettivo sbloccato</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Ha chiesto all'unità cosa fosse cambiato rispetto a se stessa. L'unità, da brava unità, non ha detto nulla.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Fatte in modo diverso ({0} contro {1}): le differenze includono file che solo un metodo vede.</value></data>
 </root>

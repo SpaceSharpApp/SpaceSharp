@@ -257,8 +257,6 @@ public partial class MainWindow : Window
         PaletteLabel.Text = Strings.Get("Main_Palette");
         DrivesTitle.Text = Strings.Get("Main_Drives");
         DrivesHint.Text = Strings.Get("Main_ClickADriveTo");
-        EmptyTitle.Text = Strings.Get("Start_PickADrive");
-        EmptyText.Text = Strings.Get("Start_FirstHint");
         ScanSizeLabel.Text = Strings.Get("Scan_FoundSoFar");
         ScanRateLabel.Text = Strings.Get("Scan_FilesPerSecond");
         ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
@@ -280,16 +278,13 @@ public partial class MainWindow : Window
         DrawerClearButton.Content = Strings.Get("Drawer_ClearAll");
         ToolTip.SetTip(DrawerCloseButton, Strings.Get("Main_Close"));
         ListsTitle.Text = Strings.Get("Main_LargestItems");
-        ListFilesButton.Content = Icons.WithText("File", Strings.Get("Main_Files"), 14);
-        ListFoldersButton.Content = Icons.WithText("Folder", Strings.Get("Main_Folders"), 14);
-        ListTypesButton.Content = Icons.WithText("Composition", Strings.Get("Main_Types"), 14);
+        FillListSwitch();
         ListHint.Text = Strings.Get("List_HintNoScan");
         MarkListKind();
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
         ToolTip.SetTip(ChangesButton, Strings.Get("Main_ViewChangesTip"));
 
-        ListChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_Changes"), 14);
         FillPalettes();
         _building = false;
         FitToolbar();
@@ -998,7 +993,7 @@ public partial class MainWindow : Window
     /// <summary>The drive letter or folder name of a path.</summary>
     /// <param name="path">Any path, with or without a trailing separator.</param>
     /// <returns>"C:" for a Windows drive root, the last segment for a folder, or the path itself when it has no name (such as "/").</returns>
-    private static string DisplayName(string path)
+    internal static string DisplayName(string path)
     {
         string trimmed = path.TrimEnd('\\', '/');
         if (trimmed.Length == 0)
@@ -1692,7 +1687,53 @@ public partial class MainWindow : Window
         ListFilesButton.Classes.Set("active", _listKind == TopListKind.Files);
         ListFoldersButton.Classes.Set("active", _listKind == TopListKind.Folders);
         ListTypesButton.Classes.Set("active", _listKind == TopListKind.Types);
-        ListChangesButton.Classes.Set("active", _listKind == TopListKind.Changes);
+    }
+
+    private bool _listSwitchIcons = true;   // false when the parts are too narrow for an icon beside the text
+
+    /// <summary>Puts the labels in the Files / Folders / Types switch, with an icon before each when there is room for it.</summary>
+    private void FillListSwitch()
+    {
+        ListFilesButton.Content = SwitchLabel("File", "Main_Files");
+        ListFoldersButton.Content = SwitchLabel("Folder", "Main_Folders");
+        ListTypesButton.Content = SwitchLabel("Composition", "Main_Types");
+    }
+
+    /// <summary>One label of the switch.</summary>
+    /// <param name="iconName">The icon shown before the text when icons are on.</param>
+    /// <param name="key">The string key of the label.</param>
+    /// <returns>Icon and text, or the text alone when the switch has dropped its icons.</returns>
+    private object SwitchLabel(string iconName, string key) => _listSwitchIcons
+        ? Icons.WithText(iconName, Strings.Get(key), 14)
+        : new TextBlock { Text = Strings.Get(key), VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
+
+    /// <summary>Drops the switch's icons when the widest label would not fit beside one, and brings them back when there is room again, so the text is never clipped.</summary>
+    /// <param name="sender">The switch's border; unused.</param>
+    /// <param name="e">The new size; unused, the border's bounds are read instead.</param>
+    private void ListSwitch_SizeChanged(object? sender, SizeChangedEventArgs e)
+    {
+        // Each part gets a third of the width inside the border, less its own padding.
+        double room = (ListSwitch.Bounds.Width - 2) / 3 - 12;
+        double widestLabel = 0;
+        foreach (Button part in new[] { ListFilesButton, ListFoldersButton, ListTypesButton })
+        {
+            // The label is the text after the icon, or the whole content once the icons are gone.
+            TextBlock? label = part.Content is StackPanel iconAndText ? iconAndText.Children[^1] as TextBlock : part.Content as TextBlock;
+            if (label is null)
+            {
+                continue;
+            }
+            label.Measure(Size.Infinity);
+            widestLabel = Math.Max(widestLabel, label.DesiredSize.Width);
+        }
+
+        // The icon is 14 px wide with an 8 px gap after it.
+        bool iconsFit = widestLabel + 22 <= room;
+        if (iconsFit != _listSwitchIcons)
+        {
+            _listSwitchIcons = iconsFit;
+            FillListSwitch();
+        }
     }
 
     /// <summary>Rebuilds the side panel's largest-items list for the current kind: hint, legend, header and up to 60 rows.</summary>
@@ -1708,9 +1749,6 @@ public partial class MainWindow : Window
         {
             TopListKind.Files => Strings.Format("List_LargestFiles", _root.FullPath),
             TopListKind.Folders => Strings.Format("List_LargestFolders", _root.FullPath),
-            TopListKind.Changes => _baselineInfo is { } baseline
-                ? Strings.Format("List_ChangesSince", Ago(baseline.ScannedUtc))
-                : Strings.Get("List_ChangesSinceCompared"),
             _ => Strings.Format("List_ByType", _root.FullPath)
         };
 
@@ -1787,8 +1825,7 @@ public partial class MainWindow : Window
         {
             TopListKind.Files => "List_HeadFile",
             TopListKind.Folders => "List_HeadFolder",
-            TopListKind.Types => "List_HeadType",
-            _ => "List_HeadChange"
+            _ => "List_HeadType"
         };
         TextBlock nameHead = ColumnHead(Strings.Get(nameHeadKey));
         Grid.SetColumn(nameHead, 1);
@@ -1898,8 +1935,7 @@ public partial class MainWindow : Window
             Classes = { "dim" },
             FontSize = 11,
             FontWeight = FontWeight.SemiBold,
-            LetterSpacing = 0.4,
-            TextTrimming = TextTrimming.CharacterEllipsis
+            LetterSpacing = 0.4
         };
 
     /// <summary>A share as a percentage with one decimal.</summary>

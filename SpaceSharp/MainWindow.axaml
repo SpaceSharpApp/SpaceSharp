@@ -95,12 +95,14 @@
           <Border Height="1" VerticalAlignment="Center" Background="{DynamicResource Stroke}" />
         </Border>
         <TextBlock x:Name="ListsTitle" Grid.Row="4" FontSize="15" FontWeight="SemiBold" Margin="14,4,14,2" />
-        <StackPanel Grid.Row="5" Orientation="Horizontal" Spacing="6" Margin="14,4,14,6">
-          <Button x:Name="ListFilesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Files" />
-          <Button x:Name="ListFoldersButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Folders" />
-          <Button x:Name="ListTypesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Types" />
-          <Button x:Name="ListChangesButton" Classes="segment" Height="30" Click="ListKind_Click" Tag="Changes" IsVisible="False" />
-        </StackPanel>
+        <!-- one segmented control across the panel: the three parts share the width, the chosen one is filled amber -->
+        <Border x:Name="ListSwitch" Grid.Row="5" Classes="segments" Height="32" Margin="14,4,14,6" SizeChanged="ListSwitch_SizeChanged">
+          <Grid ColumnDefinitions="*,*,*">
+            <Button x:Name="ListFilesButton" Classes="segment-part" Click="ListKind_Click" Tag="Files" />
+            <Button x:Name="ListFoldersButton" Grid.Column="1" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Folders" />
+            <Button x:Name="ListTypesButton" Grid.Column="2" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Types" />
+          </Grid>
+        </Border>
         <TextBlock x:Name="ListHint" Grid.Row="6" Classes="dim" FontSize="12" Margin="14,0,14,6" TextTrimming="CharacterEllipsis" />
         <ScrollViewer Grid.Row="7">
           <StackPanel x:Name="TopList" Margin="8,0,8,8" Spacing="1" />
@@ -138,10 +140,10 @@
                 <TextBlock x:Name="EmptyText" Classes="dim" FontSize="13.5" Margin="0,4,0,0" TextWrapping="Wrap" />
               </StackPanel>
             </DockPanel>
-            <!-- the last scan as a panel, the earlier ones as a list; built by BuildRecentScans -->
+            <!-- the last scan as a panel, the earlier ones as a list; before the first scan, the slot it will fill and the fast-scan card. Built by BuildRecentScans -->
             <StackPanel x:Name="RecentHost" Margin="0,22,0,0" Spacing="12" />
-            <!-- the two actions, with the fast-scan line on the right -->
-            <DockPanel Margin="0,16,0,0">
+            <!-- the two actions, with the fast-scan line on the right; hidden before the first scan, when the slot holds them -->
+            <DockPanel x:Name="EmptyActions" Margin="0,16,0,0">
               <TextBlock x:Name="EmptyFastLine" DockPanel.Dock="Right" Classes="dim" FontSize="12.5" VerticalAlignment="Center" Margin="16,0,0,0" TextWrapping="Wrap" />
               <StackPanel Orientation="Horizontal" Spacing="10">
                 <Button x:Name="EmptyScanButton" Classes="action" Click="ScanFolder_Click">

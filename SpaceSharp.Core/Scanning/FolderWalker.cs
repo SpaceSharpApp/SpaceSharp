@@ -65,12 +65,17 @@ public sealed class FolderWalker
     /// <param name="platform">The source of cluster sizes, compressed sizes, hard-link checks and free space; null uses <see cref="IPlatformFiles.Plain"/>.</param>
     public FolderWalker(IPlatformFiles? platform = null) => _platform = platform ?? IPlatformFiles.Plain;
 
-    /// <summary>The System.IO options for listing one folder: inaccessible entries skipped, no recursion, no "." and "..".</summary>
+    /// <summary>The System.IO options for listing one folder: no recursion, no "." and "..", and access errors thrown rather than hidden.</summary>
+    /// <remarks>
+    /// With IgnoreInaccessible on, .NET returns an empty listing for a folder it cannot open, so protected folders such as
+    /// Program Files\WindowsApps looked empty instead of denied. Off, the open fails, <see cref="ScanDirectory"/> catches it and
+    /// marks the folder; the entries of a listing that did open never fail individually, since their data comes with the listing.
+    /// </remarks>
     /// <param name="includeHidden">False skips entries with the Hidden or System attribute.</param>
     /// <returns>A new options object; the walker keeps one per scan.</returns>
     private static EnumerationOptions MakeEnumerationOptions(bool includeHidden) => new()
     {
-        IgnoreInaccessible = true,
+        IgnoreInaccessible = false,
         RecurseSubdirectories = false,
         ReturnSpecialDirectories = false,
         AttributesToSkip = includeHidden ? 0 : FileAttributes.Hidden | FileAttributes.System

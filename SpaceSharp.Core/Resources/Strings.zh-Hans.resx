@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>较小</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>最小</value></data>
   <data name="List_ByType" xml:space="preserve"><value>{0} 中各文件类型占用的空间。单击某个类型可筛选地图。</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>自 {0} 以来的最大变化</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>相对于比较扫描的最大变化</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>扫描驱动器或文件夹即可查看最大的项目。</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>{0} 中最大的文件</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>{0} 中最大的文件夹</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>文件</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>文件夹</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>类型</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>变化</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>占扫描的比例</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>占比</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>大小</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>关于 SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>已打开扫描，来自</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>上次扫描的方式不同（{0} 与 {1}），因此不进行比较。下次同类扫描将会比较。</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>已取消重新扫描</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>已重新扫描 {0}：{1:N0} 个文件 · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>已重新扫描 {0} · {1:N0} 个文件 · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>正在重新扫描 {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>已保存 {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>已取消扫描</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>按 {0} 键盘绘制；如果不对，请另选一种。</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>琥珀色按键是 SpaceSharp 使用的；角上的小 {0} 表示按住 {0}。</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>琥珀色按键是 SpaceSharp 使用的；角上的小 {0} 表示按住 Command。Delete 是 Return 上方的键。</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>在左侧选择一个驱动器</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>在左侧选择一个驱动器，或从上次停下的地方继续</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>已保存的扫描会立即打开，并与新扫描进行比较。</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>每个文件和文件夹都成为一个方块，大小取决于其占用的空间。</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>扫描文件夹</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>打开已保存的扫描…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>有管理员权限时，几秒内即可扫描整个驱动器。</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>文件夹 · {0} 个文件</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>自此次扫描以来，驱动器又占用了 {0}。重新扫描以查看空间去了哪里。</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>驱动器的可用空间比此次扫描时多了 {0}。重新扫描以查看当前状态。</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>你的扫描</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>扫描会保留 {0}，以便下一次扫描显示有什么变化。</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>扫描会一直保留，以便下一次扫描显示有什么变化。</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>你的第一次扫描会显示在这里</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>在左侧选择一个驱动器，或选择一个文件夹。扫描会把每个文件和文件夹画成与其占用空间成比例的方块，并保留在这里，以便你再次打开并查看有什么变化。</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>立即扫描 {0}</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>次扫描</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>几秒钟扫描整个驱动器</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>拥有管理员权限时，SpaceSharp 会读取 NTFS 文件表，而不是逐个遍历文件夹。</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存的扫描保留</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>SpaceSharp 启动时会删除早于此时限的自动保存。您自己保存为文件的扫描不受影响。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 天</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>永久</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>删除所有已保存的扫描</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>没有已保存的扫描。</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>删除 {0} 个已保存的扫描？屏幕上的地图会保留；在生成新的扫描之前，将无法与之前的扫描比较。</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>已删除 {0} 个已保存的扫描。</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>删除所有已保存的扫描？</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>屏幕上的地图保持打开。在保存新的扫描之前，无法与之前的扫描进行比较。</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>驱动器或文件夹</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>扫描</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>占用空间</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>所有已保存的扫描</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0}和{1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>保留</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>删除 1 次扫描</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>删除 {0} 次扫描</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>已删除 1 次已保存的扫描</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>已删除 {0} 次已保存的扫描</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>扫描文件夹中释放了 {0}。</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>屏幕上的地图保持打开。在保存新的扫描之前，驱动器或文件夹的下一次扫描没有可比较的对象。</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>有 1 个文件正在使用中，已保留；下次会删除。</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>有 {0} 个文件正在使用中，已保留；下次会删除。</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>名称或模式，例如 *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>添加</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>移除</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>语言</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>挪威语由作者本人翻译；其他 16 种为机器翻译，尚待母语者校对。如果你的语言中有不通顺之处，请[在 GitHub 上告诉我们](https://github.com/SpaceSharpApp/SpaceSharp/issues)。</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>完整许可证文本</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>扫描类型不同</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>那次扫描的方式 ({0}) 与这次 ({1}) 不同。只有一种方式能看到的文件（例如受保护的系统文件夹），以及一种方式只计一次而另一种方式全额计算的硬链接，会显示为消失、新增、增大或减小。</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>仍然比较</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>魔镜魔镜</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>那个文件是这次扫描自己的保存文件。一次扫描和它自己之间不可能有任何变化，再仔细看也一样。请选择更早的扫描来查看真正的变化。</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>成就已解锁</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>问驱动器自它自己以来有什么变化。驱动器毕竟是驱动器，什么也没说。</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>方式不同 ({0} 与 {1})：差异包含只有一种方式能看到的文件。</value></data>
 </root>

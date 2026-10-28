@@ -135,7 +135,7 @@ When the plain noun could mean two things, put the unit or the role in the name.
 
 ### Fields and members
 
-Private fields are `_camelCase`, constants and everything else `PascalCase`, interfaces `I`-prefixed; `.editorconfig` checks this. Local functions get method names (`ShowStep`, `AddPattern`, `RenderChips`), not `Show`, `Add`, `Render`, and never a single letter such as `F` or `D`.
+Private fields are `_camelCase`; constants, `private static readonly` fields (brushes, regexes, lookup tables) and everything else `PascalCase`; interfaces `I`-prefixed. `.editorconfig` checks this and the build warns (IDE1006). Local functions get method names (`ShowStep`, `AddPattern`, `RenderChips`), not `Show`, `Add`, `Render`, and never a single letter such as `F` or `D`.
 
 ---
 
@@ -601,25 +601,49 @@ A lambda with a body follows the same rule: `(_, _) => { _settings.CushionEnable
 
 ## `var` and types
 
-`var` when the right-hand side already shows the type; the explicit type when it does not.
+`var` only where the right-hand side states the type by itself; the explicit type everywhere else, and always for the built-in types. These are not matters of taste in this repo: `.editorconfig` sets `csharp_style_var_when_type_is_apparent = true`, `csharp_style_var_for_built_in_types = false` and `csharp_style_var_elsewhere = false`, and both IDE0007 ("use var") and IDE0008 ("use explicit type") build as warnings, so the compiler says which of the two a line needs.
 
-### Use `var` for `new`, casts, parse and factory calls, and LINQ that ends in a materializing call
+### Use `var` only when the type is apparent
+
+"Apparent" is what the analyzer calls apparent: an object or array creation, a cast (including `as`), a static call on a type that returns that type (`CommandLine.Parse`, `Color.FromRgb`, `TopLevel.GetTopLevel`, `Process.Start`), and a conversion method named for its result (`ToList()`, `ToArray()`, `ToDictionary()`, `ToHashSet()`).
 
 ```csharp
 var scanner = new MftScanner(path, includeHidden, exclude, progress);
 var badge = new Border { ... };
+var managedFiles = new[] { "hiberfil.sys", "pagefile.sys", "swapfile.sys" };
 var arguments = CommandLine.Parse(rawArgs);
 var topLevel = TopLevel.GetTopLevel(this);
 var folders = root.DescendantDirectories().ToList();
+var mainWindow = owner as MainWindow;
 var topExtensions = totals.OrderByDescending(...).Select(entry => entry.Key).ToHashSet(StringComparer.OrdinalIgnoreCase);
 using var process = Process.Start(startInfo);
 ```
 
-Writing `List<FsNode> folders = root.DescendantDirectories().ToList();` says the type twice, and the build warns about it (IDE0007).
+Writing `List<FsNode> folders = root.DescendantDirectories().ToList();` says the type twice and warns (IDE0007).
+
+### Write the built-in types out
+
+A literal shows the value, not the type the code means by it: `0` can be an `int`, a `long` or a `double`, and the difference matters in byte counts and screen geometry. So `int`, `long`, `double`, `bool`, `string` and the rest are always written.
+
+**Don't**
+
+```csharp
+var filled = 0;
+var name = "C:";
+var found = false;
+```
+
+**Do**
+
+```csharp
+int filled = 0;
+string name = "C:";
+bool found = false;
+```
 
 ### Write the type when the right-hand side does not show it
 
-A method call on your own type, a property, a field, an element of a collection, arithmetic, a ternary: none of those tell the reader the type.
+A call on your own type, a property, a field, an element of a collection, arithmetic, a ternary, a LINQ chain that stops before a conversion method: none of those tell the reader the type, and the build warns about `var` on them (IDE0008).
 
 **Don't**
 

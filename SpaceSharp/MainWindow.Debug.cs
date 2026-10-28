@@ -76,7 +76,7 @@ public partial class MainWindow
     private static readonly string[] AuditScenes =
     {
         "start", "none", "wiki-colorby-type", "wiki-zoomed", "insights", "changes", "wiki-changes-everything", "drawer", "wiki-rail", "wiki-filtered",
-        "wiki-sidepanel-changes", "inspect", "wiki-inspect-selection", "settings", "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance",
+        "inspect", "wiki-inspect-selection", "settings", "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance",
         "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-shortcuts", "about", "update", "wiki-palette-editor", "light"
     };
 

@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>작게</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>가장 작게</value></data>
   <data name="List_ByType" xml:space="preserve"><value>{0}의 파일 형식별 공간입니다. 형식을 클릭하면 맵이 필터링됩니다.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>{0} 이후 가장 큰 변경</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>비교 대상 검사 이후 가장 큰 변경</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>드라이브나 폴더를 검사하면 가장 큰 항목이 표시됩니다.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>{0}에서 가장 큰 파일</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>{0}에서 가장 큰 폴더</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>파일</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>폴더</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>종류</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>변화</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>스캔 내 비중</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>비율</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>크기</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp 정보(F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>검사를 열었습니다:</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>이전 검사는 방식이 달라({0}과(와) {1}) 비교하지 않습니다. 같은 방식의 다음 검사부터 비교합니다.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>다시 검사가 취소되었습니다</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} 다시 검사 완료: 파일 {1:N0}개 · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} 다시 검사 완료 · 파일 {1:N0}개 · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} 다시 검사 중…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} 저장됨</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>검사가 취소되었습니다</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>{0} 키보드 기준으로 그렸습니다. 다르면 다른 배열을 고르세요.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>호박색 키가 SpaceSharp가 쓰는 키입니다. 모서리의 작은 {0}은 {0}을 누른 채라는 뜻입니다.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>호박색 키가 SpaceSharp가 쓰는 키입니다. 모서리의 작은 {0}은 Command를 누른 채라는 뜻입니다. Delete는 Return 위의 키입니다.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>왼쪽에서 드라이브를 선택하세요</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>왼쪽에서 드라이브를 선택하거나 이전 작업을 이어서 하세요</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>저장된 검사는 즉시 열리며 새 검사와 비교됩니다.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>모든 파일과 폴더가 차지하는 공간에 비례하는 크기의 상자가 됩니다.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>폴더 검사</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>저장된 검사 열기…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>관리자 권한으로 드라이브 전체를 몇 초 만에 검사합니다.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>폴더 · 파일 {0}개</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>이 검사 이후 드라이브 사용량이 {0} 늘었습니다. 다시 검사하여 어디에 쓰였는지 확인하세요.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>이 검사 때보다 여유 공간이 {0} 늘었습니다. 다시 검사하여 현재 상태를 확인하세요.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>내 스캔</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>스캔은 {0} 동안 보관되어 다음 스캔에서 무엇이 바뀌었는지 보여줍니다.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>스캔은 보관되어 다음 스캔에서 무엇이 바뀌었는지 보여줍니다.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>첫 스캔이 여기에 표시됩니다</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>왼쪽에서 드라이브를 선택하거나 폴더를 선택하세요. 스캔은 모든 파일과 폴더를 차지하는 공간 크기의 상자로 그리며, 여기에 보관되어 다시 열고 무엇이 바뀌었는지 볼 수 있습니다.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>{0} 지금 스캔</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>개 스캔</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>드라이브 전체를 몇 초 만에</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>관리자 권한이 있으면 SpaceSharp는 모든 폴더를 순회하는 대신 NTFS 파일 테이블을 읽습니다.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>저장된 검사 보관 기간</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>이보다 오래된 자동 저장본은 SpaceSharp이(가) 시작될 때 삭제됩니다. 직접 파일로 저장한 검사는 건드리지 않습니다.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0}일</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>영구</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>저장된 검사 모두 삭제</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>저장된 검사가 없습니다.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>저장된 검사 {0}개를 삭제하시겠습니까? 화면의 맵은 유지되지만, 새 검사를 만들기 전까지 이전 검사와 비교할 수 없습니다.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>저장된 검사 {0}개를 삭제했습니다.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>저장된 스캔을 모두 삭제할까요?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>화면의 맵은 그대로 열려 있습니다. 새 스캔이 저장될 때까지 이전 스캔과 비교할 수 없습니다.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>드라이브 또는 폴더</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>스캔</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>디스크 사용량</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>저장된 모든 스캔</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} 및 {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>유지</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>스캔 1개 삭제</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>스캔 {0}개 삭제</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>저장된 스캔 1개를 삭제했습니다</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>저장된 스캔 {0}개를 삭제했습니다</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>스캔 폴더에서 {0}를 확보했습니다.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>화면의 맵은 그대로 열려 있습니다. 드라이브나 폴더의 다음 스캔은 새 스캔이 저장될 때까지 비교할 대상이 없습니다.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>파일 1개가 사용 중이어서 남겨 두었습니다. 다음에 삭제됩니다.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>파일 {0}개가 사용 중이어서 남겨 두었습니다. 다음에 삭제됩니다.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>이름 또는 패턴, 예: *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>추가</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>제거</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>언어</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>노르웨이어는 작성자가 직접 번역했고, 나머지 16개 번역은 기계 번역이며 아직 원어민의 검토를 기다리고 있습니다. 사용하는 언어에서 이상한 부분이 있으면 [GitHub에 알려 주세요](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>전체 라이선스 텍스트</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>서로 다른 종류의 검사</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>그 검사는 이번 검사({1})와 다른 방식({0})으로 수행되었습니다. 보호된 시스템 폴더처럼 한 방식만 볼 수 있는 파일과, 한 방식은 한 번만 세고 다른 방식은 전부 세는 하드 링크가 사라짐, 새로움, 커짐, 작아짐으로 표시됩니다.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>그래도 비교</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>거울아, 거울아</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>그 파일은 이 스캔 자체의 저장 파일입니다. 아무리 자세히 봐도 스캔과 그 자신 사이에는 아무것도 바뀔 수 없습니다. 실제로 무엇이 바뀌었는지 보려면 이전 스캔을 선택하세요.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>업적 달성</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>드라이브에게 자기 자신 이후로 무엇이 바뀌었는지 물었습니다. 드라이브는 드라이브답게 아무 말도 하지 않았습니다.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>다른 방식({0} 대 {1}): 차이에는 한 방식만 볼 수 있는 파일이 포함됩니다.</value></data>
 </root>

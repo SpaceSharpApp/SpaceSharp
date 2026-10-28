@@ -56,6 +56,7 @@ public partial class MainWindow
     private readonly ObservableCollection<ChangeRow> _changeRows = new();
     private ListBox _changeTable = null!;
     private TextBlock _changesTitle = null!, _changesThenNow = null!, _changesShrank = null!, _changesGrew = null!, _changesFooter = null!, _changesPickerText = null!;
+    private TextBlock _changesMethodNote = null!;
     private Border _changesBar = null!, _changesHeaderRow = null!;
     private Button _changesOnlyButton = null!, _changesAllButton = null!, _changesShowButton = null!;
     private ComboBox _changesThreshold = null!;
@@ -125,6 +126,10 @@ public partial class MainWindow
         lines.Children.Add(BuildChangesTitleRow());
         lines.Children.Add(BuildChangesToolRow());
         lines.Children.Add(BuildChangesTotalsRow());
+
+        // Shown only while the two scans were made differently, when part of the difference is the method, not the disk.
+        _changesMethodNote = new TextBlock { FontSize = 12, TextWrapping = TextWrapping.Wrap, IsVisible = false, Classes = { "dim" } };
+        lines.Children.Add(_changesMethodNote);
         header.Child = lines;
 
         return header;
@@ -1024,6 +1029,13 @@ public partial class MainWindow
         _changesShrank.Text = Strings.Format("Changes_ShrankTotal", SizeFormatter.Format(totals.Shrank), totals.GoneFiles);
         _changesGrew.Text = Strings.Format("Changes_GrewTotal", SizeFormatter.Format(totals.Grew), totals.NewFiles);
         _changesBar.Child = TotalsBar(totals);
+
+        string currentSignature = CurrentSignature();
+        bool madeDifferently = _baselineInfo is not null && !Comparable(_baselineInfo.Method, currentSignature);
+        _changesMethodNote.IsVisible = madeDifferently;
+        _changesMethodNote.Text = madeDifferently && _baselineInfo is not null
+            ? Strings.Format("Changes_MadeDifferently", _baselineInfo.Method, currentSignature)
+            : string.Empty;
 
         _changeScale = BiggestTopLevelChange(root, measure);
 

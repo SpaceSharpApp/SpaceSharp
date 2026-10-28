@@ -22,7 +22,7 @@ public partial class MainWindow
     public static readonly string[] WikiScenes =
     {
         "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
-        "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-sidepanel-changes", "wiki-palettes", "wiki-palette-editor",
+        "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
         "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl"
     };
 
@@ -200,11 +200,6 @@ public partial class MainWindow
                     ShowInspect();
                     dialog = LastOwned();
                 }
-                break;
-            case "wiki-sidepanel-changes":
-                _listKind = TopListKind.Changes;
-                MarkListKind();
-                RefreshTopList();
                 break;
             case "wiki-palettes":
                 await RenderPaletteSheetAsync();

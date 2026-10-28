@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Мельче</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Самый мелкий</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Место по типам файлов в {0}. Щёлкните тип, чтобы отфильтровать карту.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Крупнейшие изменения с {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Крупнейшие изменения относительно сравниваемого сканирования</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Просканируйте диск или папку, чтобы увидеть крупнейшие элементы.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Крупнейшие файлы в {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Крупнейшие папки в {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Файл</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Папка</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Тип</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Изменение</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Доля от сканирования</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Доля</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Размер</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>О SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Открыто сканирование от</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Предыдущее сканирование выполнено иначе ({0} и {1}), поэтому не сравнивается. Следующее сканирование того же вида будет сравнено.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Повторное сканирование отменено</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Заново просканировано {0}: файлов {1:N0} · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Заново просканировано {0} · файлов {1:N0} · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Повторное сканирование {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Сохранено {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Сканирование отменено</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Нарисовано для клавиатуры {0}; выберите другую, если это не так.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Янтарные клавиши использует SpaceSharp; маленький {0} в углу означает удерживать {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Янтарные клавиши использует SpaceSharp; маленький {0} в углу означает удерживать Command. Delete — клавиша над Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Выберите диск слева</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Выберите диск слева или продолжите с того места, где остановились</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Сохранённые сканирования открываются мгновенно и сравниваются с новым.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Каждый файл и папка становятся блоком размером с занимаемое ими место.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Сканировать папку</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Открыть сохранённое сканирование…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Целые диски за секунды с правами администратора.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлов: {0}</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>С момента этого сканирования диск заполнился на {0}. Запустите сканирование снова, чтобы увидеть, куда ушло место.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>На диске на {0} больше свободного места, чем при этом сканировании. Запустите сканирование снова, чтобы увидеть его текущее состояние.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Ваши сканирования</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Сканирования хранятся {0}, чтобы следующее могло показать, что изменилось.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Сканирования хранятся, чтобы следующее могло показать, что изменилось.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Здесь появится ваше первое сканирование</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Выберите диск слева или папку. Сканирование рисует каждый файл и папку в виде прямоугольника размером с занимаемое место и хранится здесь, чтобы его можно было открыть снова и увидеть, что изменилось.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Сканировать {0} сейчас</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>сканирований</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Целые диски за секунды</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>С правами администратора SpaceSharp читает таблицу файлов NTFS вместо обхода каждой папки.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Хранить сохранённые сканирования</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Автоматические сохранения старше этого срока удаляются при запуске SpaceSharp. Сканирования, которые вы сохранили в файлы сами, не трогаются.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} дн.</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Всегда</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Удалить все сохранённые сканирования</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Сохранённых сканирований нет.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Удалить сохранённые сканирования ({0})? Карта на экране останется; сравнение с прошлыми сканированиями будет невозможно, пока не появятся новые.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Удалено сохранённых сканирований: {0}.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Удалить все сохраненные сканирования?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>Карта на экране останется открытой. Сравнение с прежними сканированиями будет невозможно, пока не будут сохранены новые.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Диск или папка</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Сканирования</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>На диске</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Все сохраненные сканирования</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} и {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Оставить</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Удалить 1 сканирование</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Удалить сканирований: {0}</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Удалено 1 сохраненное сканирование</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Удалено сохраненных сканирований: {0}</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>Освобождено {0} в папке сканирований.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Карта на экране останется открытой. Следующему сканированию диска или папки будет не с чем сравниваться, пока не будет сохранено его новое сканирование.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Один файл используется и оставлен; он будет удален в следующий раз.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>Файлов используется и оставлено: {0}; они будут удалены в следующий раз.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Имя или шаблон, например *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Добавить</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Удалить</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Языки</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Норвежский перевод сделан автором; остальные 16 переводов машинные и ещё ждут проверки носителем языка. Если что-то звучит неправильно на вашем языке, [напишите на GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Полные тексты лицензий</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Разные виды сканирования</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>То сканирование выполнено иначе ({0}), чем это ({1}). Файлы, которые видит только один метод, например защищённые системные папки, и жёсткие ссылки, которые один метод считает один раз, а другой полностью, будут показаны как исчезнувшие, новые, выросшие или уменьшившиеся.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Всё равно сравнить</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Свет мой, зеркальце</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Этот файл является сохранением этого же сканирования. Между сканированием и им самим ничего не может измениться, как бы внимательно мы ни смотрели. Выберите более раннее сканирование, чтобы увидеть, что изменилось на самом деле.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Достижение открыто</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Спросили у диска, что изменилось с него самого. Диск, будучи диском, промолчал.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Выполнены по-разному ({0} и {1}): различия включают файлы, которые видит только один метод.</value></data>
 </root>

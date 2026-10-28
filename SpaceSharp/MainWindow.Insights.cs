@@ -440,7 +440,7 @@ public partial class MainWindow
     /// <summary>How long ago a time was, in words.</summary>
     /// <param name="utc">A UTC time, not in the future.</param>
     /// <returns>"just now", minutes, hours, "yesterday" or days up to a month; beyond that the local date.</returns>
-    private static string Ago(DateTime utc)
+    internal static string Ago(DateTime utc)
     {
         TimeSpan age = DateTime.UtcNow - utc;
         return age.TotalMinutes < 2 ? Strings.Get("Ago_JustNow")

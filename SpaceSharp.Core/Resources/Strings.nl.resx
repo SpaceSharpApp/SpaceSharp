@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Kleiner</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Kleinst</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Ruimte per bestandstype in {0}. Klik op een type om de kaart te filteren.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Grootste wijzigingen sinds {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Grootste wijzigingen sinds de vergeleken scan</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan een station of map om de grootste items te zien.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Grootste bestanden in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Grootste mappen in {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Bestand</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Map</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Wijziging</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Aandeel in de scan</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Aandeel</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Grootte</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Over SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Scan geopend van</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>De vorige scan is anders gemaakt ({0} vs {1}), dus wordt die niet vergeleken. De volgende scan van dezelfde soort wel.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Opnieuw scannen geannuleerd</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} opnieuw gescand: {1:N0} bestanden · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} opnieuw gescand · {1:N0} bestanden · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} wordt opnieuw gescand…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} opgeslagen</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan geannuleerd</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Getekend voor een {0}-toetsenbord; kies een andere als dat niet klopt.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Gele toetsen gebruikt SpaceSharp; een kleine {0} in de hoek betekent {0} ingedrukt houden.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Gele toetsen gebruikt SpaceSharp; een kleine {0} in de hoek betekent Command ingedrukt houden. Delete is de toets boven Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Kies links een station</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Kies links een station, of ga verder waar u was gebleven</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Opgeslagen scans openen direct en worden vergeleken met de nieuwe.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Elk bestand en elke map wordt een vak ter grootte van de ruimte die het inneemt.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Een map scannen</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Een opgeslagen scan openen…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hele stations in seconden met beheerdersrechten.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Map · {0} bestanden</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>De schijf is sinds deze scan {0} voller geworden. Scan opnieuw om te zien waar het heen ging.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>De schijf heeft {0} meer vrije ruimte dan bij deze scan. Scan opnieuw om hem te zien zoals hij nu is.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Je scans</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Scans worden {0} bewaard, zodat de volgende kan laten zien wat er is veranderd.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Scans worden bewaard, zodat de volgende kan laten zien wat er is veranderd.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Je eerste scan komt hier</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Kies links een schijf, of een map. De scan tekent elk bestand en elke map als een vak ter grootte van de ruimte die het inneemt, en wordt hier bewaard zodat je hem opnieuw kunt openen en kunt zien wat er is veranderd.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>{0} nu scannen</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>scans</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Hele schijven in seconden</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Met beheerdersrechten leest SpaceSharp de NTFS-bestandstabel in plaats van elke map te doorlopen.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Opgeslagen scans bewaren gedurende</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisch opgeslagen scans ouder dan dit worden verwijderd wanneer SpaceSharp start. Scans die u zelf als bestand hebt opgeslagen, blijven onaangeroerd.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagen</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Voor altijd</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Alle opgeslagen scans verwijderen</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Er zijn geen opgeslagen scans.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} opgeslagen scans verwijderen? De kaart op het scherm blijft; vergelijkingen met eerdere scans zijn pas weer mogelijk als er nieuwe zijn gemaakt.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} opgeslagen scans verwijderd.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Alle opgeslagen scans verwijderen?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>De kaart op het scherm blijft open. Vergelijken met eerdere scans is pas weer mogelijk als er nieuwe zijn opgeslagen.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Schijf of map</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Scans</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>Op schijf</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Alle opgeslagen scans</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} en {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Bewaren</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>1 scan verwijderen</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>{0} scans verwijderen</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>1 opgeslagen scan verwijderd</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} opgeslagen scans verwijderd</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} vrijgemaakt in de scanmap.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>De kaart op het scherm blijft open. De volgende scan van een schijf of map heeft niets om mee te vergelijken tot er een nieuwe scan van is opgeslagen.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Eén bestand is in gebruik en is blijven staan; het wordt de volgende keer verwijderd.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} bestanden zijn in gebruik en zijn blijven staan; ze worden de volgende keer verwijderd.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Naam of patroon, bijv. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Toevoegen</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Verwijderen</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Talen</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Noors is van de auteur zelf; de 16 andere vertalingen zijn machinaal gemaakt en wachten nog op controle door een moedertaalspreker. Klinkt iets verkeerd in jouw taal, [zeg het dan op GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Volledige licentieteksten</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Verschillende soorten scans</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Die scan is anders gemaakt ({0}) dan deze ({1}). Bestanden die maar één methode ziet, zoals beschermde systeemmappen, en harde koppelingen die de ene methode één keer en de andere volledig telt, verschijnen als verdwenen, nieuw, gegroeid of gekrompen.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Toch vergelijken</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spiegeltje, spiegeltje</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Dat bestand is het opgeslagen bestand van deze scan zelf. Tussen een scan en zichzelf kan niets veranderen, hoe goed we ook kijken. Kies een eerdere scan om te zien wat er echt is veranderd.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Prestatie ontgrendeld</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Vroeg de schijf wat er sinds zichzelf was veranderd. De schijf, schijf zijnde, zei niets.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Anders gemaakt ({0} tegenover {1}): de verschillen omvatten bestanden die maar één methode ziet.</value></data>
 </root>

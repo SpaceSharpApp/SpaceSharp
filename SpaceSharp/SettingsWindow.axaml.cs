@@ -1,6 +1,7 @@
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -829,26 +830,7 @@ public partial class SettingsWindow : Window
         }
         var slider = new Slider { Minimum = 0, Maximum = KeepSteps.Length - 1, Value = stepIndex, TickFrequency = 1, IsSnapToTickEnabled = true, SmallChange = 1, LargeChange = 1 };
 
-        void ShowStep(int index)
-        {
-            int days = KeepSteps[index];
-            if (days == 0)
-            {
-                label.Text = Strings.Get("KeepScans_Forever");
-            }
-            else if (days % 365 == 0)
-            {
-                label.Text = Strings.Get("KeepScans_OneYear");
-            }
-            else if (days >= 30)
-            {
-                label.Text = Strings.Format("KeepScans_Months", days / 30);
-            }
-            else
-            {
-                label.Text = Strings.Format("KeepScans_Days", days);
-            }
-        }
+        void ShowStep(int index) => label.Text = KeepScansText(KeepSteps[index]);
 
         ShowStep(stepIndex);
         slider.ValueChanged += (_, e) =>
@@ -860,26 +842,7 @@ public partial class SettingsWindow : Window
         };
 
         var deleteAll = new Button { Classes = { "danger-outline" }, Content = Strings.Get("KeepScans_DeleteAll"), Height = 30, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 0) };
-        deleteAll.Click += async (_, _) =>
-        {
-            int savedCount = ScanFile.RecentAutoSaves(int.MaxValue).Count;
-            if (savedCount == 0)
-            {
-                await Dialog.Info(this, Strings.Get("KeepScans_DeleteAll"), Strings.Get("KeepScans_NoneToDelete"));
-                return;
-            }
-
-            bool confirmed = await Dialog.Confirm(this,
-                Strings.Get("KeepScans_DeleteAll"),
-                Strings.Format("KeepScans_DeleteQuestion", savedCount),
-                Strings.Get("Delete_ErrorTitle"),
-                danger: true);
-            if (confirmed)
-            {
-                int removedCount = ScanFile.DeleteAll();
-                await Dialog.Info(this, Strings.Get("KeepScans_DeleteAll"), Strings.Format("KeepScans_Deleted", removedCount));
-            }
-        };
+        deleteAll.Click += async (_, _) => await DeleteSavedScansAsync();
 
         sliderPanel.Children.Add(label);
         sliderPanel.Children.Add(slider);
@@ -887,6 +850,188 @@ public partial class SettingsWindow : Window
         panel.Children.Add(deleteAll);
         return panel;
     }
+
+    /// <summary>The keep period in words, as the slider's label and the start screen show it.</summary>
+    /// <param name="days">The period in days; 0 keeps scans forever.</param>
+    /// <returns>"Forever", "1 year", "n months" for 30 days and up, or "n days", localized.</returns>
+    internal static string KeepScansText(int days)
+    {
+        if (days <= 0)
+        {
+            return Strings.Get("KeepScans_Forever");
+        }
+        if (days % 365 == 0)
+        {
+            return Strings.Get("KeepScans_OneYear");
+        }
+        if (days >= 30)
+        {
+            return Strings.Format("KeepScans_Months", days / 30);
+        }
+        return Strings.Format("KeepScans_Days", days);
+    }
+
+    /// <summary>Asks before deleting every automatic save, listing what goes per drive or folder, then reports what was freed.</summary>
+    private async Task DeleteSavedScansAsync()
+    {
+        List<SavedScanGroup> groups = ScanFile.AutoSaveGroups();
+        if (groups.Count == 0)
+        {
+            await Dialog.Info(this, Strings.Get("KeepScans_DeleteAll"), Strings.Get("KeepScans_NoneToDelete"));
+            return;
+        }
+
+        int scanCount = groups.Sum(group => group.ScannedUtc.Count);
+        bool confirmed = await Dialog.Confirm(this,
+            Strings.Get("KeepScans_DeleteTitle"),
+            Strings.Get("KeepScans_DeleteIntro"),
+            SavedScansTable(groups, scanCount),
+            scanCount == 1 ? Strings.Get("KeepScans_DeleteOne") : Strings.Format("KeepScans_DeleteCount", scanCount),
+            Strings.Get("KeepScans_Keep"),
+            danger: true);
+        if (!confirmed)
+        {
+            return;
+        }
+
+        (int deletedFiles, long deletedBytes) = ScanFile.DeleteAll();
+        _main?.SavedScansChanged();
+
+        string note = Strings.Get("KeepScans_AfterDelete");
+        int leftBehind = scanCount - deletedFiles;
+        if (leftBehind > 0)
+        {
+            note += " " + (leftBehind == 1 ? Strings.Get("KeepScans_LockedOne") : Strings.Format("KeepScans_LockedMany", leftBehind));
+        }
+        await Dialog.Done(this,
+            deletedFiles == 1 ? Strings.Get("KeepScans_DeletedOne") : Strings.Format("KeepScans_DeletedMany", deletedFiles),
+            Strings.Format("KeepScans_Freed", SizeFormatter.Format(deletedBytes)),
+            NoteCard(note));
+    }
+
+    /// <summary>The table in the delete confirmation: a row per drive or folder with its scan times and size, and a total row.</summary>
+    /// <param name="groups">The saves grouped by root, newest first; at least one.</param>
+    /// <param name="scanCount">The number of save files across the groups, for the total row.</param>
+    /// <returns>An outlined card holding the header, the rows and the total.</returns>
+    private static Border SavedScansTable(List<SavedScanGroup> groups, int scanCount)
+    {
+        var rows = new StackPanel();
+        rows.Children.Add(TableRow(
+            Caps("KeepScans_HeadRoot"), Caps("KeepScans_HeadScans"), Caps("KeepScans_HeadOnDisk"), shaded: true, rule: false));
+
+        foreach (SavedScanGroup group in groups)
+        {
+            var name = new TextBlock { TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
+            name.Inlines!.Add(new Run(MainWindow.DisplayName(group.RootPath)) { FontWeight = FontWeight.SemiBold });
+            name.Inlines.Add(new Run(" " + RootDetail(group)) { Foreground = DimBrush() });
+            var count = new TextBlock { Text = group.ScannedUtc.Count.ToString(CultureInfo.CurrentCulture), Classes = { "dim" }, VerticalAlignment = VerticalAlignment.Center };
+            var size = new TextBlock { Text = SizeFormatter.Format(group.Bytes), TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+            rows.Children.Add(TableRow(name, count, size, shaded: false, rule: true));
+        }
+
+        long totalBytes = groups.Sum(group => group.Bytes);
+        rows.Children.Add(TableRow(
+            new TextBlock { Text = Strings.Get("KeepScans_AllRow"), FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center },
+            new TextBlock { Text = scanCount.ToString(CultureInfo.CurrentCulture), FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center },
+            new TextBlock { Text = SizeFormatter.Format(totalBytes), FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center },
+            shaded: true, rule: true));
+
+        var card = new Border { Child = rows, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), ClipToBounds = true, Margin = new Thickness(0, 8, 0, 0) };
+        card.Bind(Border.BorderBrushProperty, card.GetResourceObservable("Stroke"));
+        return card;
+    }
+
+    /// <summary>The dim text after a root's name in the delete table: the volume label or folder path, then when its saves were scanned.</summary>
+    /// <param name="group">The root and its scan times, newest first.</param>
+    /// <returns>"Local Disk · today and 3 days ago" for a drive; the full path and the times for a folder.</returns>
+    private static string RootDetail(SavedScanGroup group)
+    {
+        string? place = null;
+        if (PlatformFiles.Current.IsVolumeRoot(group.RootPath))
+        {
+            try
+            {
+                var drive = new DriveInfo(group.RootPath);
+                if (drive.IsReady && !string.IsNullOrWhiteSpace(drive.VolumeLabel))
+                {
+                    place = drive.VolumeLabel;
+                }
+            }
+            catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
+            {
+                // A drive that is gone is listed by its letter alone.
+            }
+        }
+        else
+        {
+            place = group.RootPath;
+        }
+
+        string when = group.ScannedUtc.Count == 1
+            ? MainWindow.Ago(group.ScannedUtc[0])
+            : Strings.Format("KeepScans_TwoTimes", MainWindow.Ago(group.ScannedUtc[0]), MainWindow.Ago(group.ScannedUtc[1]));
+        return place is null ? when : place + " · " + when;
+    }
+
+    /// <summary>A column heading of the delete table: small caps, dim.</summary>
+    /// <param name="key">The heading's string key.</param>
+    /// <returns>The text block, uppercased in the current culture.</returns>
+    private static TextBlock Caps(string key) => new()
+    {
+        Text = Strings.Get(key).ToUpper(CultureInfo.CurrentCulture),
+        FontSize = 11,
+        FontWeight = FontWeight.SemiBold,
+        LetterSpacing = 0.4,
+        Classes = { "dim" },
+        VerticalAlignment = VerticalAlignment.Center
+    };
+
+    /// <summary>One row of the delete table: the name stretches, the count and size take what they need.</summary>
+    /// <param name="name">The first column's content.</param>
+    /// <param name="count">The second column's content.</param>
+    /// <param name="size">The third column's content, right-aligned.</param>
+    /// <param name="shaded">True paints the row in the window color, for the header and the total.</param>
+    /// <param name="rule">True draws a line over the row.</param>
+    /// <returns>The row as a border around a three-column grid.</returns>
+    private static Border TableRow(Control name, Control count, Control size, bool shaded, bool rule)
+    {
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto,Auto"), ColumnSpacing = 16 };
+        grid.Children.Add(name);
+        Grid.SetColumn(count, 1);
+        grid.Children.Add(count);
+        size.MinWidth = 64;
+        Grid.SetColumn(size, 2);
+        grid.Children.Add(size);
+
+        var row = new Border { Child = grid, Padding = new Thickness(14, 9), BorderThickness = new Thickness(0, rule ? 1 : 0, 0, 0) };
+        row.Bind(Border.BorderBrushProperty, row.GetResourceObservable("Stroke"));
+        if (shaded)
+        {
+            row.Bind(Border.BackgroundProperty, row.GetResourceObservable("Window"));
+        }
+        return row;
+    }
+
+    /// <summary>A dim note with an info icon, in an outlined card.</summary>
+    /// <param name="text">The note, wrapped.</param>
+    /// <returns>The card, spaced from what is above it.</returns>
+    private static Border NoteCard(string text)
+    {
+        var line = new DockPanel();
+        Icon icon = Icons.Make("Info", 16, "TextDim");
+        icon.VerticalAlignment = VerticalAlignment.Top;
+        icon.Margin = new Thickness(0, 1, 10, 0);
+        line.Children.Add(icon);
+        line.Children.Add(new TextBlock { Text = text, FontSize = 12.5, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+
+        var card = new Border { Child = line, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(14, 12), Margin = new Thickness(0, 8, 0, 0) };
+        card.Bind(Border.BorderBrushProperty, card.GetResourceObservable("Stroke"));
+        return card;
+    }
+
+    /// <summary>The dim text brush, for runs inside a text block that is otherwise in the normal color.</summary>
+    /// <returns>The theme's TextDim brush, or null before the application resources exist.</returns>
+    private static IBrush? DimBrush() => Application.Current?.FindResource("TextDim") as IBrush;
 
     /// <summary>The layout bias slider, -1 (horizontal strips) to 1 (vertical strips) in quarter steps, with end labels.</summary>
     /// <returns>The slider and its labels stacked; changes are rounded to two decimals and applied like any other setting.</returns>

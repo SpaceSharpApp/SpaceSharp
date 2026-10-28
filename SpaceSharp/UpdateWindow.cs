@@ -49,7 +49,7 @@ public static class UpdateWindow
     {
         string version = AppInfo.Version;
         string current = AppInfo.PreviousVersion ?? GuessPreviousVersion(version);
-        PreviewNotes = version;
+        _previewNotes = version;
 
         static async Task Install(Action<int> progress)
         {
@@ -81,7 +81,7 @@ public static class UpdateWindow
     }
 
     /// <summary>The version the preview offers; its notes are canned.</summary>
-    private static string? PreviewNotes;
+    private static string? _previewNotes;
 
     /// <summary>Canned release notes for the preview prompt, in the changelog's markdown shape.</summary>
     /// <param name="version">Version written into the "##" heading.</param>
@@ -280,7 +280,7 @@ public static class UpdateWindow
         window.Content = body;
 
         Task<string?> notesTask;
-        if (version == PreviewNotes)
+        if (version == _previewNotes)
         {
             notesTask = Task.FromResult<string?>(PreviewMarkdown(version));
         }

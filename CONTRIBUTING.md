@@ -10,7 +10,7 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 - **Screenshots** for the README, the website and store listings come from the app itself on a pretend PC with generic sample data, so no real file names end up online: `.\tools\screenshots.ps1` poses and captures every scene (see DEVELOPING.md), or start the app with `--scene <name>` to look at one.
 - **Report bugs** and **suggest features** through the [issue forms](https://github.com/SpaceSharpApp/SpaceSharp/issues/new/choose). Clear steps and a screenshot go a long way.
 - **Add a palette.** Palettes are a name, a theme and twelve colors in `SpaceSharp/Util/Palette.cs`; see the Retro entry for the simplest form. Check it in every color mode, and in the theme it is for.
-- **Add file types.** Extensions and their categories live in `BuildExtensionMap()` in the same file.
+- **Add file types.** Extensions and their categories live in `SpaceSharp.Core/Resources/FileTypes.txt`, a text table with one `[Category]` section each; no C# needed.
 - **Improve the docs.** The README and CHANGELOG are plain Markdown; fixes to wording or missing steps are welcome.
 - **Code.** Anything from an open issue. [DEVELOPING.md](DEVELOPING.md) says how the pieces fit and where to change things. For larger changes, open an issue first so we can agree on the approach before you spend time on it.
 

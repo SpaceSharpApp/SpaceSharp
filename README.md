@@ -76,7 +76,7 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 | **One map, shaded your way** | Folders are frames, files are cushioned boxes. Shading depth, spread, tone, fade and light direction, title bars, text colors and grid are controls in Settings with a live preview. |
 | **Filter in plain words** | `videos over 500MB older than 1 year` dims everything else and keeps the layout, so you see where the matches are. A drawer with type tiles, size and age scales and quick filters writes the same filter for you. |
 | **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty with one Recycle button; when files were last changed; the largest folders and files; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
-| **Remembers every scan** | Every scan is saved and compared with the one before. The Changes view lays the two out as a folder table: then, now, a bar from a center line (shrank left in blue, grew right in orange), new and gone files marked, folders that open in place, a size threshold to quiet the noise, and a double-click back to the map. The side panel's Largest items has a Changes tab with the biggest movers. |
+| **Remembers every scan** | Every scan is saved and compared with the one before. The Changes view lays the two out as a folder table: then, now, a bar from a center line (shrank left in blue, grew right in orange), new and gone files marked, folders that open in place, a size threshold to quiet the noise, and a double-click back to the map. The Insights view's "Since last scan" card has the biggest movers. |
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
 | **Twenty-four palettes, twelve looks, and your own** | Twelve palettes for the dark theme, twelve for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
@@ -223,7 +223,7 @@ The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` 
 
 - The macOS and Linux packages are not published yet; the app builds and runs there from source.
 - Size on disk is an estimate for files stored inside the MFT and leaves out alternate data streams.
-- Hard links count once per name unless "Count hard links once" is on, so `WinSxS` can look bigger than it is.
+- With "Count hard links once" off (it is on by default), a folder walk counts hard-linked data once per name, so `WinSxS` can look bigger than it is. The file-table scan always counts it once.
 - Junctions and symbolic links are not followed; the target counts where it lives.
 - Online-only cloud files show their full size in file-size mode; size on disk shows the local footprint.
 

@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Kleiner</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Am kleinsten</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Speicher nach Dateityp in {0}. Klicken Sie auf einen Typ, um die Karte zu filtern.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Größte Änderungen seit {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Größte Änderungen seit dem Vergleichsscan</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Scannen Sie ein Laufwerk oder einen Ordner, um die größten Elemente zu sehen.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Größte Dateien in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Größte Ordner in {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Datei</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Ordner</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Typ</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Änderung</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Anteil am Scan</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Anteil</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Größe</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Info über SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Eingabe</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Geöffnet: Scan vom</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Der vorherige Scan wurde anders erstellt ({0} statt {1}) und wird daher nicht verglichen. Der nächste Scan derselben Art wird es.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Erneuter Scan abgebrochen</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} erneut gescannt: {1:N0} Dateien · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} erneut gescannt · {1:N0} Dateien · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} wird erneut gescannt…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} gespeichert</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan abgebrochen</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Gezeichnet für eine {0}-Tastatur; wählen Sie eine andere, wenn das nicht stimmt.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Gelbe Tasten nutzt SpaceSharp; ein kleines {0} in der Ecke heißt {0} gedrückt halten.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Gelbe Tasten nutzt SpaceSharp; ein kleines {0} in der Ecke heißt Command gedrückt halten. Delete ist die Taste über Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Wählen Sie links ein Laufwerk</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Wählen Sie links ein Laufwerk oder machen Sie dort weiter, wo Sie aufgehört haben</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Gespeicherte Scans öffnen sich sofort und werden mit dem neuen verglichen.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Jede Datei und jeder Ordner wird zu einem Feld, dessen Größe dem belegten Speicher entspricht.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Ordner scannen</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Gespeicherten Scan öffnen…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Ganze Laufwerke in Sekunden mit Administratorrechten.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Ordner · {0} Dateien</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Das Laufwerk hat sich seit diesem Scan um {0} gefüllt. Scannen Sie erneut, um zu sehen, wohin der Platz ging.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Das Laufwerk hat {0} mehr freien Platz als bei diesem Scan. Scannen Sie erneut, um es so zu sehen, wie es jetzt ist.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Ihre Scans</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Scans werden {0} aufbewahrt, damit der nächste zeigen kann, was sich geändert hat.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Scans werden aufbewahrt, damit der nächste zeigen kann, was sich geändert hat.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Hier erscheint Ihr erster Scan</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Wählen Sie links ein Laufwerk oder einen Ordner. Der Scan zeichnet jede Datei und jeden Ordner als Kasten in der Größe des belegten Platzes und wird hier aufbewahrt, damit Sie ihn wieder öffnen und sehen können, was sich geändert hat.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>{0} jetzt scannen</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>Scans</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Ganze Laufwerke in Sekunden</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Mit Administratorrechten liest SpaceSharp die NTFS-Dateitabelle, statt jeden Ordner zu durchlaufen.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Gespeicherte Scans aufbewahren für</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatische Speicherungen, die älter sind, werden beim Start von SpaceSharp gelöscht. Scans, die Sie selbst als Dateien gespeichert haben, werden nie angerührt.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} Tage</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Unbegrenzt</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Alle gespeicherten Scans löschen</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Es gibt keine gespeicherten Scans.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} gespeicherte Scans löschen? Die Karte auf dem Bildschirm bleibt; Vergleiche mit früheren Scans sind erst wieder möglich, wenn neue erstellt wurden.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} gespeicherte Scans gelöscht.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Alle gespeicherten Scans löschen?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>Die Karte auf dem Bildschirm bleibt geöffnet. Vergleiche mit früheren Scans sind erst wieder möglich, wenn neue gespeichert sind.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Laufwerk oder Ordner</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Scans</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>Auf der Festplatte</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Alle gespeicherten Scans</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} und {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Behalten</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>1 Scan löschen</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>{0} Scans löschen</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>1 gespeicherter Scan gelöscht</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} gespeicherte Scans gelöscht</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} im Scan-Ordner freigegeben.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Die Karte auf dem Bildschirm bleibt geöffnet. Der nächste Scan eines Laufwerks oder Ordners hat nichts zum Vergleichen, bis ein neuer Scan davon gespeichert ist.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Eine Datei ist in Benutzung und blieb erhalten; sie wird beim nächsten Mal gelöscht.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} Dateien sind in Benutzung und blieben erhalten; sie werden beim nächsten Mal gelöscht.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Name oder Muster, z. B. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Hinzufügen</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Entfernen</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprachen</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Norwegisch stammt vom Autor selbst; die 16 anderen Übersetzungen sind maschinell erstellt und warten noch auf die Prüfung durch Muttersprachler. Wenn etwas in deiner Sprache falsch klingt, [sag es auf GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Vollständige Lizenztexte</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Unterschiedliche Scan-Arten</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Dieser Scan wurde anders erstellt ({0}) als der aktuelle ({1}). Dateien, die nur eine Methode sieht, etwa geschützte Systemordner, und Hardlinks, die eine Methode einmal und die andere voll zählt, erscheinen als verschwunden, neu, gewachsen oder geschrumpft.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Trotzdem vergleichen</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spieglein, Spieglein</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Diese Datei ist die eigene Sicherung dieses Scans. Zwischen einem Scan und sich selbst kann sich nichts ändern, so genau wir auch hinsehen. Wählen Sie einen früheren Scan, um zu sehen, was sich wirklich geändert hat.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Erfolg freigeschaltet</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Hat das Laufwerk gefragt, was sich seit ihm selbst geändert hat. Das Laufwerk, ein Laufwerk eben, sagte nichts.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Anders erstellt ({0} statt {1}): die Unterschiede umfassen Dateien, die nur eine Methode sieht.</value></data>
 </root>

@@ -1,0 +1,156 @@
+# SpaceSharp file types: which extensions belong to which category.
+#
+# This file is embedded in SpaceSharp.Core and read once at startup. To add a file type, put its extension,
+# with the dot, under the right [Category] heading. Extensions are separated by spaces or new lines, matched
+# ignoring case, and anything after # on a line is a comment. The categories are the FileCategory enum:
+#   Images Video Audio Archives Programs GameData Installers DiskImages Databases Fonts System Documents Code
+# An extension listed twice goes to the category it is listed under last, and the tests fail on a duplicate,
+# so when one extension means two things pick the category whose files are big and common on a PC and leave
+# a comment. Everything not listed here is "Other".
+
+[Images]
+# Everyday
+.jpg .jpeg .jpe .jfif .png .apng .gif .bmp .dib .webp .avif .jxl .jp2 .j2k .jpf .jpx
+.tif .tiff .heic .heif .hif .ico .icns .cur .ani .wbmp .xpm .emf .wmf
+# Editors
+.psd .psb .psdc .ai .eps .svg .svgz .xcf .kra .ora .pdn .clip .procreate .afphoto .afdesign .sketch .fig
+.cdr .indd .idml .sai .sai2
+# Camera raw
+.raw .dng .cr2 .cr3 .crw .nef .nrw .arw .srf .sr2 .orf .rw2 .raf .pef .srw .x3f
+# Textures and HDR
+.dds .tga .exr .hdr .pic .ktx .ktx2 .pcx .ppm .pgm .pbm .pnm .qoi
+
+[Video]
+.mp4 .mkv .avi .mov .qt .wmv .webm .m4v .mpg .mpeg .mpe .m1v .m2v .m2p .mpv .flv .f4v
+.mts .m2ts .m2t .mxf .vob .vro .evo .ogv .ogm .3gp .3g2 .asf .divx .rm .rmvb .amv .y4m
+.h264 .264 .h265 .265 .hevc .ivf .mjpeg .mjpg .dav
+# TV recordings
+.wtv .dvr-ms
+# Game video
+.bik .bk2 .smk .usm
+.ts    # transport stream, not TypeScript: the video files are the big ones
+
+[Audio]
+.mp3 .mp2 .mpa .wav .wave .flac .ogg .oga .m4a .m4b .m4p .m4r .aac .wma .opus .weba .3ga
+.aif .aiff .aifc .alac .ape .wv .tta .tak .mpc .ofr .shn .ac3 .eac3 .dts .amr .au .snd .voc .caf
+.aax .aa .dsf .dff .mka .ra .spx
+# Instruments and sample libraries
+.sf2 .sfz .nki .nkx
+# Trackers and sequencers
+.mid .midi .kar .mod .xm .it .s3m
+# Game audio
+.wem .bnk .fsb .fsv .adx .hca .at9 .xma .brstm .bcstm .bfstm .vgm
+
+[Archives]
+.zip .zipx .rar .7z .s7z .tar .gz .gzip .bz .bz2 .bzip2 .xz .lz .lzma .lzo .lz4 .zst .zpaq .lrz .rz
+.tgz .tbz .tbz2 .txz .tlz .tzst .cab .arj .ace .lzh .lha .cpio .z .br .sit .sitx .xar .pea .zoo .uue
+.war .ear .crate .egg
+.pack   # git packfiles under .git/objects, the bulk of any clone
+# Comics
+.cbz .cbr .cb7 .cbt .cba
+
+[Programs]
+.exe .dll .so .dylib .ko .bin .com .scr .ocx .cpl .ax .acm .msc .mun .rll .tlb .olb
+.jar .class .pyc .pyo .pyd .pyz .node .wasm .elf .bpl .dcu
+# Audio plugins
+.vst .vst3
+# Build output
+.pdb .lib .a .o .obj .exp .res .ilk .idb .ipdb .iobj .pch .ipch
+
+[GameData]
+# Engines and launchers
+.pak .archive .ba2 .bsa .vpk .rpa .uasset .uexp .ubulk .umap .upk .utoc .ucas .forge .bundle .assetbundle
+.unity3d .unitypackage .assets .ress .resource .pck .wad .wads .gcf .ncf .nif .esp .esm .esl
+.vdf .acf .bsp .nav .vmt .vtf .iwd .ff .pk3 .pk4 .mpq .casc .big .rpf .ytd .ydr .yft .ymap .ytyp
+.dzip .dz .vfs .sga .scs .cas .sb .toc .psarc .xnb .bf .cpk .afs .grp .pod .wz .rez .hog .hogg .mix
+.lsf .lsx .lsv .gpk .xp3 .dcx .bdt .bhd .tpf .npk .fpk .arz .sabs .sabl .blp .dbc
+# RPG Maker
+.rvdata2 .rpgmvp .rpgmvo .rpgmvm
+# Saves
+.sav .save .savegame .ess .fos .skse .f4se
+# Console images
+.nes .sfc .smc .gba .nds .3ds .cia .wbfs .rvz .gcm .nsp .xci .chd .cso .pbp .z64 .n64 .v64
+
+[Installers]
+.msi .msp .mst .msm .msix .msixbundle .appx .appxbundle .appinstaller .msu
+.nupkg .snupkg .vsix .whl .gem
+.apk .apks .aab .xapk .ipa
+.deb .rpm .pkg .mpkg .appimage .flatpak .flatpakref .snap .run
+# Browser and office extensions
+.xpi .crx .oxt
+
+[DiskImages]
+.iso .img .ima .cue .nrg .mds .mdx .ccd .cdi .udf .toast .dsk .vfd
+# Virtual machines
+.vhd .vhdx .avhd .avhdx .vhdset .vhds .vmdk .vdi .qcow .qcow2 .qed .hdd .pvm .ova .ovf .xva .box
+.vud .vsv .vmem .vmss .vmsn
+# Windows images
+.wim .swm .esd
+# Mac
+.dmg .sparseimage .sparsebundle
+# Backups and forensic images
+.tib .tibx .vbk .vib .vbm .mrimg .mrbak .gho .ghs .spf .spi .bkf .e01 .dd .aff
+# .vhd is a disk image, not VHDL: the images are the big ones
+
+[Databases]
+.db .db3 .sqlite .sqlite3 .s3db .sdf .db-wal .db-shm .db-journal
+.sqlite-wal .sqlite-shm .sqlite-journal .sqlite3-wal .sqlite3-shm .sqlite3-journal
+.ldf .ndf .accdb .accde .mdb .mde .edb .realm .dbf .fdb .gdb .ibd .ibdata .myd .myi .frm .rdb .aof
+.duckdb .odb .fp7 .fmp12 .nsf .kdbx .ldb .sst .cdb
+.mdf   # SQL Server data file, not an Alcohol disc image (.mds and .mdx stay with the disc images)
+# Data and model files
+.parquet .arrow .feather .avro .orc .msgpack .bson .h5 .hdf5 .npy .npz .pkl .pickle .mat .rds .rdata .rda
+.dta .sas7bdat
+.safetensors .gguf .ggml .pt .pth .ckpt .onnx .tflite .pb
+
+[Fonts]
+.ttf .otf .ttc .otc .woff .woff2 .eot .dfont .fon .fnt .otb .psf
+.pfb .pfm .afm .pfa .bdf .pcf .snf
+# Font sources
+.sfd .glyphs .vfb
+
+[System]
+.sys .drv .mui .etl .evtx .evt .dmp .mdmp .hdmp .cdmp .wer .pf .manifest .cat .inf .pnf .winmd .mum
+.pol .reg .hiv .sdb .blf .regtrans-ms .clb .efi .acpi .aml .nls .mof .xrm-ms .mfl .diagcab
+.lnk .url .appref-ms .scf .msstyles .theme .themepack .deskthemepack .icm .icc .gpd .ppd
+
+[Documents]
+# Office
+.pdf .doc .docx .docm .dot .dotx .dotm .xls .xlsx .xlsm .xlsb .xlt .xltx .xltm .xlam .xlr
+.ppt .pptx .pptm .pps .ppsx .ppsm .pot .potx .potm .pub .vsd .vsdx .vsdm .mpp .one .onepkg .xps .oxps
+.odt .ott .ods .ots .odp .otp .odg .odf .odm .sxw .sxc .sxi .sdw .sdc .uot .uos .uop .wpd .wps .abw .hwp .wri
+.pages .numbers .key .gdoc .gsheet .gslides
+# Text
+.txt .text .md .markdown .mdown .rst .adoc .asciidoc .org .rtf .tex .bib .dvi .ps .djvu .djv .chm .nfo .diz
+.csv .tsv .log .slk .dif .prn .opml .enex .nb
+# Books
+.epub .mobi .azw .azw3 .fb2
+# Mail and calendar
+.eml .emlx .msg .oft .pst .ost .mbox .ics .vcf
+# Subtitles and lyrics
+.srt .vtt .ass .ssa .sub .lrc
+# Mind maps
+.xmind
+
+[Code]
+# .NET
+.cs .csx .vb .fs .fsx .fsi .cshtml .razor .xaml .axaml .resx .settings .snk .ruleset .pubxml .nuspec
+.csproj .vbproj .fsproj .vcxproj .vcproj .props .targets .sln .slnx .slnf .dsp .dsw
+# Web
+.js .mjs .cjs .cts .tsx .jsx .coffee .litcoffee .purs .html .htm .xhtml .css .scss .sass .less .styl
+.vue .svelte .astro .hbs .handlebars .mustache .ejs .pug .jade .haml .erb .liquid .twig .jinja .jinja2 .j2
+.php .phtml .jsp .asp .aspx .ascx .ashx .asmx .master .webmanifest .har
+# Languages
+.py .pyw .pyi .ipynb .cpp .cxx .cc .c .h .hpp .hxx .hh .inl .ipp .ixx .cppm .m .mm .cu .cuh .metal
+.java .kt .kts .scala .sc .groovy .go .rs .swift .dart .rb .r .rmd .jl .pl .pm .lua .luau .ex .exs
+.erl .hrl .hs .lhs .cabal .clj .cljs .cljc .edn .elm .ml .mli .pas .pp .zig .nim .cr .d .f .f90 .f95 .for
+.cob .cbl .ada .adb .ads .tcl .vbs .wsf .ahk .au3 .applescript .scpt .sol .vala .rkt .scm .lisp .el .wren .fnl
+.asm .s .nasm .inc .v .sv .vhdl .idl .odl .def .rc .rc2 .vim
+# Data and config
+.json .jsonc .json5 .jsonl .ndjson .xml .xsd .xsl .xslt .dtd .sql .graphql .gql .proto .plist .strings .po
+.yml .yaml .toml .ini .cfg .conf .config .properties .env .editorconfig .nix .dhall .hcl .tf .tfvars
+# Game scripting and shaders
+.reds .psc .pex .gd .gdshader .qml .ui .hlsl .hlsli .glsl .wgsl .vert .frag .geom .comp .shader
+# Scripts and build
+.ps1 .psm1 .psd1 .sh .bash .zsh .fish .bat .cmd .cmake .gradle .sbt .make .mk .ninja .bazel .bzl .buck
+.pro .pri .nsi .nsh .iss .wxs .wxi .wxl .diff .patch .cls .sty .bst

@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Más pequeño</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Mínimo</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Espacio por tipo de archivo en {0}. Haga clic en un tipo para filtrar el mapa.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Mayores cambios desde {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Mayores cambios desde el análisis comparado</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Analice una unidad o carpeta para ver los elementos más grandes.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Archivos más grandes en {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Carpetas más grandes en {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Archivo</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Carpeta</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Tipo</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Cambio</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Parte del escaneo</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Parte</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Tamaño</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Acerca de SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Entrar</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Se abrió el análisis del</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>El análisis anterior se hizo de otra forma ({0} frente a {1}), así que no se compara. El próximo análisis del mismo tipo sí se comparará.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Nuevo análisis cancelado</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Se volvió a analizar {0}: {1:N0} archivos · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Se volvió a analizar {0} · {1:N0} archivos · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Volviendo a analizar {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Se guardó {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Análisis cancelado</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Dibujado para un teclado {0}; elige otro si no es el tuyo.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Las teclas ámbar son las que usa SpaceSharp; un pequeño {0} en la esquina significa mantener {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Las teclas ámbar son las que usa SpaceSharp; un pequeño {0} en la esquina significa mantener Comando. Delete es la tecla sobre Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Elija una unidad a la izquierda</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Elija una unidad a la izquierda o continúe donde lo dejó</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Los análisis guardados se abren al instante y se comparan con el nuevo.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Cada archivo y carpeta se convierte en un cuadro proporcional al espacio que ocupa.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Analizar una carpeta</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Abrir un análisis guardado…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Unidades enteras en segundos con derechos de administrador.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Carpeta · {0} archivos</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>La unidad se ha llenado {0} desde este análisis. Analiza de nuevo para ver adónde fue.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>La unidad tiene {0} más de espacio libre que en este análisis. Analiza de nuevo para verla como está ahora.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Tus análisis</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Los análisis se conservan {0} para que el siguiente muestre qué cambió.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Los análisis se conservan para que el siguiente muestre qué cambió.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Tu primer análisis aparecerá aquí</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Elige una unidad a la izquierda, o una carpeta. El análisis dibuja cada archivo y carpeta como un recuadro del tamaño del espacio que ocupa, y se conserva aquí para que puedas abrirlo de nuevo y ver qué cambió.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Analizar {0} ahora</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>análisis</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Unidades enteras en segundos</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Con permisos de administrador, SpaceSharp lee la tabla de archivos NTFS en lugar de recorrer cada carpeta.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Conservar los análisis guardados durante</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Los guardados automáticos más antiguos que esto se eliminan cuando SpaceSharp se inicia. Los análisis que guardó usted mismo como archivos nunca se tocan.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} días</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Para siempre</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Eliminar todos los análisis guardados</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>No hay análisis guardados.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>¿Eliminar {0} análisis guardados? El mapa en pantalla se mantiene; no se podrá comparar con análisis anteriores hasta que se hagan otros nuevos.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Se eliminaron {0} análisis guardados.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>¿Eliminar todos los análisis guardados?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>El mapa en pantalla sigue abierto. No será posible comparar con análisis anteriores hasta que se guarden otros nuevos.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Unidad o carpeta</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Análisis</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>En disco</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Todos los análisis guardados</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} y {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Conservarlos</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Eliminar 1 análisis</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Eliminar {0} análisis</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Se eliminó 1 análisis guardado</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Se eliminaron {0} análisis guardados</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} liberados en la carpeta de análisis.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>El mapa en pantalla sigue abierto. El próximo análisis de una unidad o carpeta no tendrá con qué compararse hasta que se guarde uno nuevo.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Un archivo está en uso y se dejó; se eliminará la próxima vez.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} archivos están en uso y se dejaron; se eliminarán la próxima vez.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Nombre o patrón, p. ej. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Añadir</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Quitar</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Idiomas</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>El noruego es del propio autor; las otras 16 traducciones son automáticas y aún esperan la revisión de un hablante nativo. Si algo suena mal en tu idioma, [dilo en GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Textos completos de las licencias</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Tipos de análisis distintos</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Ese análisis se hizo de otra manera ({0}) que este ({1}). Los archivos que solo ve un método, como las carpetas protegidas del sistema, y los enlaces duros que un método cuenta una vez y el otro por completo, aparecerán como desaparecidos, nuevos, crecidos o reducidos.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Comparar de todos modos</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Espejito, espejito</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Ese archivo es el guardado de este mismo análisis. Nada puede cambiar entre un análisis y sí mismo, por mucho que miremos. Elige un análisis anterior para ver qué cambió de verdad.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Logro desbloqueado</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Preguntó a la unidad qué había cambiado desde sí misma. La unidad, como buena unidad, no dijo nada.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Hechos de distinta manera ({0} frente a {1}): las diferencias incluyen archivos que solo ve un método.</value></data>
 </root>

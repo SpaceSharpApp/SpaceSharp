@@ -42,36 +42,66 @@ public static class FileCategories
     /// <summary>Every known extension.</summary>
     public static IReadOnlyCollection<string> Known => Extensions.Keys;
 
-    /// <summary>The extension table; the one place to add a file type.</summary>
-    /// <returns>A case-insensitive map from dotted extension to category, where a later line wins if an extension is listed twice.</returns>
+    /// <summary>The name of the embedded table, Resources/FileTypes.txt, as the assembly stores it.</summary>
+    internal const string TableResource = "SpaceSharp.Resources.FileTypes.txt";
+
+    /// <summary>Reads the embedded table: a [Category] heading starts a section, the dotted extensions under it belong to that category.</summary>
+    /// <returns>A case-insensitive map from dotted extension to category, where the last listing of an extension wins.</returns>
+    /// <exception cref="InvalidDataException">The table has a heading that is not a <see cref="FileCategory"/>, an entry without its dot, or an entry before the first heading.</exception>
     private static Dictionary<string, FileCategory> BuildExtensionMap()
     {
-        var map = new Dictionary<string, FileCategory>(StringComparer.OrdinalIgnoreCase);
-        void Add(FileCategory category, params string[] extensions)
+        using Stream? stream = typeof(FileCategories).Assembly.GetManifestResourceStream(TableResource);
+        if (stream is null)
         {
-            foreach (string extension in extensions)
+            throw new InvalidDataException($"The file type table {TableResource} is not embedded in the assembly.");
+        }
+        using var reader = new StreamReader(stream);
+        return ParseTable(reader);
+    }
+
+    /// <summary>Parses the table format: one [Category] heading per section, extensions separated by spaces or new lines, # to the end of a line is a comment.</summary>
+    /// <param name="reader">The table text; read to its end.</param>
+    /// <returns>A case-insensitive map from dotted extension to category, where the last listing of an extension wins.</returns>
+    /// <exception cref="InvalidDataException">A heading is not a <see cref="FileCategory"/> other than Other, an entry has no leading dot, or an entry comes before any heading.</exception>
+    internal static Dictionary<string, FileCategory> ParseTable(TextReader reader)
+    {
+        var map = new Dictionary<string, FileCategory>(StringComparer.OrdinalIgnoreCase);
+        FileCategory? category = null;
+        int lineNumber = 0;
+        while (reader.ReadLine() is { } rawLine)
+        {
+            lineNumber++;
+            int commentStart = rawLine.IndexOf('#');
+            string line = (commentStart < 0 ? rawLine : rawLine[..commentStart]).Trim();
+            if (line.Length == 0)
             {
-                map[extension] = category;
+                continue;
+            }
+
+            if (line[0] == '[')
+            {
+                string name = line.TrimEnd().TrimEnd(']')[1..].Trim();
+                if (!Enum.TryParse(name, ignoreCase: false, out FileCategory parsed) || parsed == FileCategory.Other)
+                {
+                    throw new InvalidDataException($"File type table line {lineNumber}: [{name}] is not a category.");
+                }
+                category = parsed;
+                continue;
+            }
+
+            if (category is null)
+            {
+                throw new InvalidDataException($"File type table line {lineNumber}: an extension before the first [Category] heading.");
+            }
+            foreach (string extension in line.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                if (extension.Length < 2 || extension[0] != '.')
+                {
+                    throw new InvalidDataException($"File type table line {lineNumber}: \"{extension}\" is not an extension with its dot.");
+                }
+                map[extension] = category.Value;
             }
         }
-
-        Add(FileCategory.Images, ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".tif", ".tiff", ".psd",
-            ".raw", ".cr2", ".nef", ".heic", ".svg", ".ico", ".dds", ".tga", ".exr", ".hdr");
-        Add(FileCategory.Video, ".mp4", ".mkv", ".avi", ".mov", ".wmv", ".webm", ".m4v", ".mpg", ".mpeg", ".flv", ".ts", ".bk2", ".bik");
-        Add(FileCategory.Audio, ".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aac", ".wma", ".opus", ".wem", ".bnk");
-        Add(FileCategory.Archives, ".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz", ".tgz", ".zst", ".lz4", ".cab");
-        Add(FileCategory.Programs, ".exe", ".dll", ".so", ".bin", ".pdb", ".lib", ".ocx", ".jar", ".pyd", ".node");
-        Add(FileCategory.GameData, ".pak", ".archive", ".ba2", ".bsa", ".vpk", ".rpa", ".uasset", ".ubulk", ".umap", ".upk",
-            ".forge", ".bundle", ".pck", ".wad", ".gcf", ".nif", ".esp", ".esm", ".esl", ".sav");
-        Add(FileCategory.Installers, ".msi", ".msp", ".msix", ".msixbundle", ".appx", ".appxbundle", ".nupkg", ".apk", ".deb", ".rpm");
-        Add(FileCategory.DiskImages, ".iso", ".img", ".vhd", ".vhdx", ".vmdk", ".vdi", ".qcow2", ".wim", ".esd", ".dmg");
-        Add(FileCategory.Databases, ".db", ".sqlite", ".sqlite3", ".mdf", ".ldf", ".ndf", ".accdb", ".mdb", ".edb", ".realm", ".db-wal");
-        Add(FileCategory.Fonts, ".ttf", ".otf", ".ttc", ".woff", ".woff2", ".fon", ".pfb");
-        Add(FileCategory.System, ".sys", ".drv", ".mui", ".etl", ".evtx", ".dmp", ".pf", ".manifest", ".cat", ".inf", ".winmd");
-        Add(FileCategory.Documents, ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".txt", ".md",
-            ".rtf", ".odt", ".ods", ".odp", ".epub", ".csv", ".log");
-        Add(FileCategory.Code, ".cs", ".js", ".ts", ".tsx", ".jsx", ".php", ".py", ".cpp", ".c", ".h", ".hpp",
-            ".java", ".json", ".xml", ".html", ".css", ".scss", ".sql", ".xaml", ".reds", ".psc", ".pex", ".lua", ".yml", ".yaml");
         return map;
     }
 }

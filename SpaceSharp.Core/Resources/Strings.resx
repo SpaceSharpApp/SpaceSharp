@@ -240,16 +240,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Smaller</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Smallest</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Space by file type in {0}. Click a type to filter the map.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Biggest changes since {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Biggest changes since the compared scan</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan a drive or folder to see the largest items.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Largest files in {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Largest folders in {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>File</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Folder</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Change</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Share of the scan</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Share</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Size</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>About SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -542,7 +539,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Opened the scan from</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>The previous scan was made differently ({0} vs {1}), so it isn't compared. The next scan of the same kind will be.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Rescan cancelled</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Rescanned {0}: {1:N0} files · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Rescanned {0} · {1:N0} files · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Rescanning {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Saved {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan cancelled</value></data>
@@ -672,10 +669,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Drawn for a {0} keyboard; pick another if that is wrong.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Amber keys are the ones SpaceSharp uses; a small {0} in the corner means hold {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Amber keys are the ones SpaceSharp uses; a small {0} in the corner means hold Command. Delete is the key above Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Pick a drive on the left</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Pick a drive on the left, or pick up where you left off</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Saved scans open instantly and are compared with the new one.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Every file and folder becomes a box sized by the space it takes.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Scan a folder</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Open a saved scan…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Whole drives in seconds with administrator rights.</value></data>
@@ -693,6 +688,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · {0} files</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>The drive has filled {0} since this scan. Scan again to see where it went.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>The drive has {0} more free space than at this scan. Scan again to see it as it is now.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Your scans</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Scans are kept for {0} so the next one can show what changed.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Scans are kept so the next one can show what changed.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Your first scan goes here</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Pick a drive on the left, or a folder. The scan draws every file and folder as a box sized by the space it takes, and it is kept here so you can open it again and see what changed.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Scan {0} now</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>scans</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Whole drives in seconds</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>With administrator rights SpaceSharp reads the NTFS file table instead of walking every folder.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Keep saved scans for</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatic saves older than this are deleted when SpaceSharp starts. Scans you saved as files yourself are never touched.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} days</value></data>
@@ -701,8 +705,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Forever</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Delete all saved scans</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>There are no saved scans.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Delete {0} saved scans? The map on screen stays; comparisons with earlier scans will not be possible until new ones are made.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Deleted {0} saved scans.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Delete all saved scans?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>The map on screen stays open. Comparisons with earlier scans are not possible until new ones are saved.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Drive or folder</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Scans</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>On disk</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>All saved scans</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} and {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Keep them</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Delete 1 scan</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Delete {0} scans</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Deleted 1 saved scan</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Deleted {0} saved scans</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} freed in the scans folder.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>The map on screen stays open. The next scan of a drive or folder has nothing to compare with until a new scan of it is saved.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>One file is in use and was left; it goes the next time.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} files are in use and were left; they go the next time.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Name or pattern, e.g. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Add</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Remove</value></data>
@@ -1019,4 +1037,13 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Languages</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Norwegian is the author's own; the other 16 translations are machine-made and still waiting for a native speaker's review. If something reads wrong in your language, [say so on GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Full license texts</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Different kinds of scan</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>That scan was made differently ({0}) from this one ({1}). Files only one method can see, such as protected system folders, and hard links counted once by one method and in full by the other, will show as gone, new, grown or shrunk.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Compare anyway</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Mirror, Mirror</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>That file is this scan's own save. Nothing can change between a scan and itself, however hard we look. Pick an earlier scan to see what did.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Achievement unlocked</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Asked the drive what changed since itself. The drive, being a drive, said nothing.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Made differently ({0} vs {1}): the differences include files only one method can see.</value></data>
 </root>

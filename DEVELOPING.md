@@ -76,7 +76,7 @@ Until 2.3.0 the Windows app was a separate WPF project; git history has it. Next
 
 **Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.
 
-**Add a file type.** Extensions and their categories are in `FileCategories` in `SpaceSharp.Core/Util/FileCategory.cs`. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
+**Add a file type.** Extensions and their categories are in `SpaceSharp.Core/Resources/FileTypes.txt`, a plain text table embedded in Core: put the extension, with its dot, under its `[Category]` heading. The file's header has the rules, and `FileTypesTests` fails on a duplicate or a missing dot. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
 
 **Change theme colors.** The surfaces and text are the looks in `SpaceSharp.Core/Util/UiLooks.cs` (five per theme); the accent, Danger and the Fluent overrides are the theme dictionaries in `App.axaml`. Both dictionaries must define the same keys.
 

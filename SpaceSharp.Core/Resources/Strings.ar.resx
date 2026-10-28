@@ -240,16 +240,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>أصغر</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>الأصغر</value></data>
   <data name="List_ByType" xml:space="preserve"><value>المساحة حسب نوع الملف في {0}. انقر نوعًا لتصفية الخريطة.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>أكبر التغييرات منذ {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>أكبر التغييرات منذ الفحص المقارَن</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>افحص قرصًا أو مجلدًا لرؤية أكبر العناصر.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>أكبر الملفات في {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>أكبر المجلدات في {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>ملف</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>مجلد</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>النوع</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>التغيير</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>الحصة من الفحص</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>الحصة</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>الحجم</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>حول SpaceSharp ‏(F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -541,7 +538,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>فُتح الفحص من</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>أُجري الفحص السابق بطريقة مختلفة ({0} مقابل {1})، لذا لا تتم المقارنة. سيُقارَن الفحص التالي من النوع نفسه.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>أُلغيت إعادة الفحص</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>أُعيد فحص {0}: {1:N0} ملف · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>أُعيد فحص {0} · {1:N0} ملف · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>جارٍ إعادة فحص {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>حُفظ {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>أُلغي الفحص</value></data>
@@ -671,10 +668,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>مرسوم للوحة مفاتيح {0}؛ اختر تخطيطًا آخر إن كان خاطئًا.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>المفاتيح الكهرمانية هي التي يستخدمها SpaceSharp؛ {0} الصغير في الزاوية يعني الضغط مع {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>المفاتيح الكهرمانية هي التي يستخدمها SpaceSharp؛ {0} الصغير في الزاوية يعني الضغط مع Command. مفتاح Delete هو المفتاح فوق Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>اختر قرصًا من اللوحة الجانبية</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>اختر قرصًا من اللوحة الجانبية، أو تابع من حيث توقفت</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>تُفتح الفحوصات المحفوظة فورًا وتُقارن بالفحص الجديد.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>يصبح كل ملف ومجلد مربعًا بحجم المساحة التي يشغلها.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>فحص مجلد</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>فتح فحص محفوظ…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>أقراص كاملة في ثوانٍ بصلاحيات المسؤول.</value></data>
@@ -692,6 +687,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>مجلد · {0} ملفات</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>امتلأ القرص بمقدار {0} منذ هذا الفحص. افحص مجددًا لترى أين ذهبت المساحة.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>في القرص الآن {0} من المساحة الحرة أكثر مما كان عند هذا الفحص. افحص مجددًا لتراه كما هو الآن.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>عمليات الفحص</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>يُحتفظ بعمليات الفحص لمدة {0} حتى يُظهر الفحص التالي ما تغيّر.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>يُحتفظ بعمليات الفحص حتى يُظهر الفحص التالي ما تغيّر.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>سيظهر فحصك الأول هنا</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>اختر محرك أقراص من اليسار، أو مجلدًا. يرسم الفحص كل ملف ومجلد كمربع بحجم المساحة التي يشغلها، ويُحتفظ به هنا لتفتحه مجددًا وترى ما تغيّر.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>فحص {0} الآن</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>عمليات فحص</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>محركات أقراص كاملة في ثوانٍ</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>بصلاحيات المسؤول يقرأ SpaceSharp جدول ملفات NTFS بدلًا من المرور على كل مجلد.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>الاحتفاظ بالفحوصات المحفوظة لمدة</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>تُحذف الحفظات التلقائية الأقدم من هذا عند بدء SpaceSharp. الفحوصات التي حفظتها كملفات بنفسك لا تُمس أبدًا.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} أيام</value></data>
@@ -700,8 +704,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>للأبد</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>حذف كل الفحوصات المحفوظة</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>لا توجد فحوصات محفوظة.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>هل تريد حذف {0} فحصًا محفوظًا؟ تبقى الخريطة المعروضة؛ ولن تكون المقارنة بالفحوصات السابقة ممكنة حتى تُجرى فحوصات جديدة.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>حُذف {0} فحصًا محفوظًا.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>حذف كل عمليات الفحص المحفوظة؟</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>تبقى الخريطة المعروضة مفتوحة. لن تكون المقارنة مع عمليات فحص سابقة ممكنة حتى تُحفظ عمليات جديدة.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>محرك الأقراص أو المجلد</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>عمليات الفحص</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>على القرص</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>كل عمليات الفحص المحفوظة</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} و{1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>الاحتفاظ بها</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>حذف فحص واحد</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>حذف {0} عمليات فحص</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>تم حذف فحص محفوظ واحد</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>تم حذف {0} عمليات فحص محفوظة</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>تم تحرير {0} في مجلد عمليات الفحص.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>تبقى الخريطة المعروضة مفتوحة. لن يكون للفحص التالي لمحرك أقراص أو مجلد ما يُقارن به حتى يُحفظ فحص جديد له.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>ملف واحد قيد الاستخدام وتُرك؛ سيُحذف في المرة القادمة.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} ملفات قيد الاستخدام وتُركت؛ ستُحذف في المرة القادمة.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>اسم أو نمط، مثل *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>إضافة</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>إزالة</value></data>
@@ -1019,4 +1037,13 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>اللغات</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>الترجمة النرويجية من المؤلف نفسه؛ أما الترجمات الـ16 الأخرى فهي آلية ولا تزال بانتظار مراجعة متحدث أصلي. إذا بدا شيء خاطئًا بلغتك، [أخبرنا على GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>نصوص التراخيص كاملة</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>نوعان مختلفان من الفحص</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>ذلك الفحص أُجري بطريقة مختلفة ({0}) عن هذا ({1}). الملفات التي لا تراها إلا طريقة واحدة، مثل مجلدات النظام المحمية، والروابط الصلبة التي تعدّها طريقة مرة واحدة والأخرى كاملة، ستظهر كمختفية أو جديدة أو أكبر أو أصغر.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>قارن على أي حال</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>مرآتي، يا مرآتي</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>هذا الملف هو الحفظ الخاص بهذا الفحص نفسه. لا يمكن أن يتغير شيء بين الفحص ونفسه مهما دققنا النظر. اختر فحصًا سابقًا لترى ما تغيّر فعلًا.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>تم فتح الإنجاز</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>سألنا القرص عمّا تغيّر منذ نفسه. القرص، وهو قرص، لم يقل شيئًا.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>أُجريا بطريقتين مختلفتين ({0} مقابل {1}): تشمل الفروق ملفات لا تراها إلا طريقة واحدة.</value></data>
 </root>

@@ -17,6 +17,13 @@ namespace SpaceSharp;
 public partial class MainWindow
 {
     private ScanFileInfo? _baselineInfo;
+
+    /// <summary>The signature of a scan opened from a file, since <see cref="ScanSignature"/> describes only a scan made here.</summary>
+    private string? _openedScanMethod;
+
+    /// <summary>How the tree on screen was made: the opened file's record, or the live scan's signature.</summary>
+    /// <returns>A signature in the form <see cref="ScanSignature"/> produces, comparable with a saved scan's method.</returns>
+    private string CurrentSignature() => _openedScanMethod ?? ScanSignature();
     private DateTime _scanTimeUtc;
 
     /// <summary>True while a previous scan is loaded as the baseline, so change colors and the Changes view apply.</summary>
@@ -46,6 +53,7 @@ public partial class MainWindow
         string previousSavePath = ScanFile.PreviousPathFor(rootPath);
         DateTime scannedUtc = DateTime.UtcNow;
         string method = ScanSignature();
+        _openedScanMethod = null;
         _scanTimeUtc = scannedUtc;
 
         try
@@ -139,6 +147,7 @@ public partial class MainWindow
     {
         _scanRoot = info.RootPath;
         _scanTimeUtc = info.ScannedUtc;
+        _openedScanMethod = info.Method;
         _baselineInfo = baseline;
         _comparison = baseline is null ? null : comparison;
         ShowTree(root);
@@ -170,12 +179,6 @@ public partial class MainWindow
             _ => ColorMode.ByBranch
         };
 
-        ListChangesButton.IsVisible = HasBaseline;
-        if (!HasBaseline && _listKind == TopListKind.Changes)
-        {
-            _listKind = TopListKind.Files;
-            MarkListKind();
-        }
         if (!HasBaseline && _changesShowing && _root is not null)
         {
             _changesShowing = false;
@@ -299,6 +302,27 @@ public partial class MainWindow
         FsNode root = _root;
         try
         {
+            // The automatic compare skips a scan made differently; a chosen one is compared after a warning.
+            string currentSignature = CurrentSignature();
+            ScanFileInfo? chosenInfo = ScanFile.Peek(scanFilePath);
+            if (chosenInfo is not null && IsThisScan(chosenInfo, root))
+            {
+                // Its own save, the automatic one or one the user made: nothing can have changed, so the reward is an achievement.
+                await Dialog.Card(this, Strings.Get("Dialog_CompareSelfTitle"), MirrorMirrorCard(DisplayName(root.FullPath)), Strings.Get("Dialog_CompareSelfMessage"));
+                return;
+            }
+            if (chosenInfo is not null && !Comparable(chosenInfo.Method, currentSignature))
+            {
+                bool compareAnyway = await Dialog.Confirm(this,
+                    Strings.Get("Dialog_CompareDifferentTitle"),
+                    Strings.Format("Dialog_CompareDifferentMessage", chosenInfo.Method, currentSignature),
+                    Strings.Get("Dialog_CompareAnyway"));
+                if (!compareAnyway || !ReferenceEquals(_root, root))
+                {
+                    return;
+                }
+            }
+
             (ScanFileInfo baselineInfo, ScanComparison comparison) = await Task.Run(() =>
             {
                 (FsNode baselineRoot, ScanFileInfo info) = ScanFile.Load(scanFilePath, addFreeSpace: false);
@@ -330,6 +354,75 @@ public partial class MainWindow
         {
             await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
         }
+    }
+
+    /// <summary>The "Achievement unlocked: Mirror, Mirror" card shown for comparing a scan with itself: an amber banner over a badge and the joke.</summary>
+    /// <param name="scanName">The scan's drive letter or folder name; a short one is shown as "C:=C:" in the badge, a long one as "=".</param>
+    /// <returns>The card, rounded and clipped, for <see cref="Dialog.Card"/>.</returns>
+    private Border MirrorMirrorCard(string scanName)
+    {
+        var banner = new DockPanel();
+        var xp = new TextBlock { Text = Strings.Get("Dialog_ZeroXp"), FontSize = 12, FontWeight = FontWeight.Bold };
+        DockPanel.SetDock(xp, Dock.Right);
+        banner.Children.Add(xp);
+        banner.Children.Add(new TextBlock
+        {
+            Text = Strings.Get("Dialog_AchievementUnlocked").ToUpper(System.Globalization.CultureInfo.CurrentCulture),
+            FontSize = 12,
+            FontWeight = FontWeight.Bold,
+            LetterSpacing = 1.2,
+            TextTrimming = TextTrimming.CharacterEllipsis
+        });
+        var bannerBox = new Border { Child = banner, Padding = new Thickness(18, 12) };
+        bannerBox.Bind(Border.BackgroundProperty, this.GetResourceObservable("Accent"));
+        bannerBox.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("AccentText"));
+
+        // The badge: the scan's name equal to itself, in the amber outline.
+        string badgeText = scanName.Length <= 3 ? scanName + "=" + scanName : "=";
+        var badge = new Border { Width = 56, Height = 56, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(2), VerticalAlignment = VerticalAlignment.Center };
+        badge.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Accent"));
+        var badgeLabel = new TextBlock
+        {
+            Text = badgeText,
+            FontFamily = new FontFamily("Cascadia Mono, Consolas, Menlo, monospace"),
+            FontSize = badgeText.Length > 3 ? 14 : 20,
+            FontWeight = FontWeight.Bold,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        badgeLabel.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("Accent"));
+        badge.Child = badgeLabel;
+
+        var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+        words.Children.Add(new TextBlock { Text = Strings.Get("Dialog_CompareSelfTitle"), FontSize = 18, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Dialog_MirrorMirrorText"), FontSize = 12.5, LineHeight = 18, Margin = new Thickness(0, 3, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+
+        var body = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 16 };
+        body.Children.Add(badge);
+        Grid.SetColumn(words, 1);
+        body.Children.Add(words);
+        var bodyBox = new Border { Child = body, Padding = new Thickness(18, 16) };
+        bodyBox.Bind(Border.BackgroundProperty, this.GetResourceObservable("Window"));
+
+        var card = new Border
+        {
+            Child = new StackPanel { Children = { bannerBox, bodyBox } },
+            CornerRadius = new CornerRadius(10),
+            BorderThickness = new Thickness(1),
+            ClipToBounds = true
+        };
+        card.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        return card;
+    }
+
+    /// <summary>Whether a saved scan is a save of the scan on screen.</summary>
+    /// <param name="info">The saved scan's header.</param>
+    /// <param name="root">The tree on screen.</param>
+    /// <returns>True when the root path and the scan time both match; a rescan has a new time, so only this scan's own saves match.</returns>
+    private bool IsThisScan(ScanFileInfo info, FsNode root)
+    {
+        bool sameRoot = string.Equals(Path.GetFullPath(info.RootPath), Path.GetFullPath(root.FullPath), StringComparison.OrdinalIgnoreCase);
+        return sameRoot && info.ScannedUtc == _scanTimeUtc;
     }
 
     /// <summary>Drops the baseline: clears the change marks from the tree and every view that showed them.</summary>
@@ -387,6 +480,9 @@ public partial class MainWindow
         ? Strings.Format("Start_FilledSince", SizeFormatter.Format(filled))
         : Strings.Format("Start_FreedSince", SizeFormatter.Format(-filled));
 
+    /// <summary>Rebuilds the start screen after Settings deleted the saved scans, so the list no longer offers them.</summary>
+    public void SavedScansChanged() => BuildRecentScans();
+
     /// <summary>Rebuilds the start screen's list: the hint texts, the totals line, the newest scan as a featured panel and the rest as rows.</summary>
     private void BuildRecentScans()
     {
@@ -394,9 +490,11 @@ public partial class MainWindow
         List<RecentScan> recent = _mock
             ? MockSystem.RecentScans().Select(mockScan => new RecentScan(mockScan.Info, mockScan.IsDrive, mockScan.Label, mockScan.Free, mockScan.Total)).ToList()
             : ScanFile.RecentAutoSaves().Select(Describe).ToList();
-        EmptyTitle.Text = Strings.Get(recent.Count > 0 ? "Start_PickADriveOrContinue" : "Start_PickADrive");
-        EmptyText.Text = Strings.Get(recent.Count > 0 ? "Start_RecentHint" : "Start_FirstHint");
+        bool hasScans = recent.Count > 0;
+        EmptyTitle.Text = Strings.Get(hasScans ? "Start_PickADriveOrContinue" : "Start_YourScans");
+        EmptyText.Text = hasScans ? Strings.Get("Start_RecentHint") : KeptHint();
         EmptyFastLine.Text = OperatingSystem.IsWindows() ? Strings.Get("Start_FastScanLine") : string.Empty;
+        EmptyActions.IsVisible = hasScans;   // before the first scan the slot below carries the actions
 
         // The totals line sums the drives whose size is known.
         long usedAll = 0;
@@ -413,8 +511,13 @@ public partial class MainWindow
         EmptyTotals.Text = Strings.Format("Start_TotalsOf", SizeFormatter.Format(totalAll));
         EmptyTotalsPanel.IsVisible = totalAll > 0;
 
-        if (recent.Count == 0)
+        if (!hasScans)
         {
+            RecentHost.Children.Add(FirstScanSlot());
+            if (OperatingSystem.IsWindows() && !IsElevated)
+            {
+                RecentHost.Children.Add(FastScanCard());
+            }
             return;
         }
         RecentHost.Children.Add(FeaturedScan(recent[0]));
@@ -435,6 +538,115 @@ public partial class MainWindow
             rows.Children.Add(ScanRow(recent[i]));
         }
         RecentHost.Children.Add(new Border { Child = rows, CornerRadius = new CornerRadius(10), Classes = { "start-panel" } });
+    }
+
+    /// <summary>The hint under the start screen's title before the first scan: how long scans are kept, and why.</summary>
+    /// <returns>The sentence with the keep period in words, or the one without a period when scans are kept forever.</returns>
+    private string KeptHint() => _settings.KeepScansDays <= 0
+        ? Strings.Get("Start_KeptForever")
+        : Strings.Format("Start_KeptFor", SettingsWindow.KeepScansText(_settings.KeepScansDays));
+
+    /// <summary>The dashed panel that stands where the first scan will be listed: an empty ring, what a scan is, and the ways to start one.</summary>
+    /// <returns>The panel, ready to add to the recent list.</returns>
+    private Grid FirstScanSlot()
+    {
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 32 };
+        grid.Children.Add(EmptyRing(132, 9));
+
+        var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+        Grid.SetColumn(text, 1);
+        text.Children.Add(new TextBlock { Text = Strings.Get("Start_FirstScanHere"), FontSize = 20, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        text.Children.Add(new TextBlock
+        {
+            Text = Strings.Get("Start_FirstScanText"),
+            FontSize = 13,
+            LineHeight = 19,
+            MaxWidth = 560,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Margin = new Thickness(0, 6, 0, 0),
+            TextWrapping = TextWrapping.Wrap,
+            Classes = { "dim" }
+        });
+
+        // The buttons wrap onto a second line when the window is narrow, so no label is ever cut.
+        var buttons = new WrapPanel { Orientation = Orientation.Horizontal, ItemSpacing = 10, LineSpacing = 10, Margin = new Thickness(0, 16, 0, 0) };
+        string systemRoot = SystemDriveRoot();
+        var scanNowButton = new Button
+        {
+            Content = Icons.WithText("Drive", Strings.Format("Start_ScanDriveNow", DisplayName(systemRoot))),
+            Classes = { "primary" },
+            Height = 36,
+            Padding = new Thickness(16, 0)
+        };
+        scanNowButton.Click += (_, _) => _ = ScanAsync(systemRoot);
+        buttons.Children.Add(scanNowButton);
+        var scanFolderButton = new Button { Content = Icons.WithText("ScanFolder", Strings.Get("Start_ScanAFolder")), Classes = { "action" }, Height = 36 };
+        scanFolderButton.Click += ScanFolder_Click;
+        buttons.Children.Add(scanFolderButton);
+        var openButton = new Button { Content = Icons.WithText("Open", Strings.Get("Start_OpenASavedScan")), Classes = { "action" }, Height = 36 };
+        openButton.Click += (_, _) => _ = OpenScanAsync();
+        buttons.Children.Add(openButton);
+        text.Children.Add(buttons);
+        grid.Children.Add(text);
+
+        // A dashed outline instead of the panels' solid one: this is a placeholder, not a scan.
+        var outline = new Avalonia.Controls.Shapes.Rectangle { StrokeThickness = 1, StrokeDashArray = new AvaloniaList<double> { 4, 3 }, RadiusX = 12, RadiusY = 12 };
+        outline.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Stroke"));
+        var slot = new Grid();
+        slot.Children.Add(outline);
+        slot.Children.Add(new Border { Child = grid, Padding = new Thickness(36, 30) });
+        return slot;
+    }
+
+    /// <summary>The ring of the first-scan slot: a track with "0 scans" in the middle, in the dim color.</summary>
+    /// <param name="size">Outer diameter in device-independent pixels.</param>
+    /// <param name="thickness">Stroke width of the ring in pixels.</param>
+    /// <returns>A square grid of the given size.</returns>
+    private Grid EmptyRing(double size, double thickness)
+    {
+        var grid = new Grid { Width = size, Height = size, VerticalAlignment = VerticalAlignment.Center };
+        var track = new Avalonia.Controls.Shapes.Ellipse { StrokeThickness = thickness };
+        track.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Control"));
+        grid.Children.Add(track);
+
+        var words = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+        words.Children.Add(new TextBlock { Text = "0", FontSize = 26, FontWeight = FontWeight.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_ScansWord"), FontSize = 11.5, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } });
+        grid.Children.Add(words);
+        return grid;
+    }
+
+    /// <summary>The card under the first-scan slot on Windows without administrator rights: what the fast scan is, and the button that restarts for it.</summary>
+    /// <returns>The card, ready to add to the recent list.</returns>
+    private Border FastScanCard()
+    {
+        var line = new DockPanel();
+        Icon icon = Icons.Make("Shield", 20, "Accent");
+        icon.Margin = new Thickness(0, 0, 14, 0);
+        line.Children.Add(icon);
+
+        var restartButton = new Button { Content = Strings.Get("Main_RestartAsAdministrator"), Classes = { "action" }, Height = 32, Margin = new Thickness(16, 0, 0, 0) };
+        restartButton.Click += RestartElevated_Click;
+        DockPanel.SetDock(restartButton, Dock.Right);
+        line.Children.Add(restartButton);
+
+        var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastTitle"), FontSize = 13, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastText"), FontSize = 12, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        line.Children.Add(words);
+
+        return new Border { Child = line, Padding = new Thickness(18, 14), CornerRadius = new CornerRadius(10), Classes = { "start-panel" } };
+    }
+
+    /// <summary>The root of the drive the system runs from, the natural first scan.</summary>
+    /// <returns>"C:\" on Windows (whatever letter holds the system folder), "/" elsewhere.</returns>
+    private static string SystemDriveRoot()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return "/";
+        }
+        return Path.GetPathRoot(Environment.SystemDirectory) ?? "C:\\";
     }
 
     /// <summary>The "Earlier scans" line over the list, with the count and the sort order.</summary>

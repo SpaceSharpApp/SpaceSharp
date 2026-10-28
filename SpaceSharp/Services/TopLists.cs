@@ -53,7 +53,7 @@ public enum TopListKind
     Folders,
     /// <summary>Bytes per extension.</summary>
     Types,
-    /// <summary>The biggest changes since the baseline scan.</summary>
+    /// <summary>The biggest changes since the baseline scan; feeds the Insights "Since last scan" card, not the side panel.</summary>
     Changes
 }
 

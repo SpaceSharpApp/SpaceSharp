@@ -53,9 +53,9 @@ internal sealed class AppSettings
     /// <summary>How boxes are colored: "ByDepth", "ByFileType" or "ByBranch" (top folder); any other value reads as ByBranch.</summary>
     public string? ColorMode { get; set; } = "ByDepth";
     /// <summary>How much the window dims behind a dialog, in percent from 0 (no dim) to 90.</summary>
-    public int DialogDim { get; set; } = 45;                        // 0 to 90 percent
+    public int DialogDim { get; set; } = 45;
     /// <summary>The <see cref="UiLook"/> name used on the dark theme; an unknown name falls back to the first dark look.</summary>
-    public string LookDark { get; set; } = "Graphite";               // UiLooks name
+    public string LookDark { get; set; } = "Graphite";
     /// <summary>The <see cref="UiLook"/> name used on the light theme; an unknown name falls back to the first light look.</summary>
     public string LookLight { get; set; } = "Paper";
     /// <summary>"Light", "Dark" or null/"System" to follow Windows.</summary>
@@ -88,7 +88,7 @@ internal sealed class AppSettings
     /// <summary>True animates zooming into and out of folders; false jumps.</summary>
     public bool AnimateZoom { get; set; } = true;
     /// <summary>True draws the map while a folder walk runs; file-table scans never draw live.</summary>
-    public bool LiveMap { get; set; } = true;        // draw the map while a folder walk runs
+    public bool LiveMap { get; set; } = true;
     /// <summary>True allows a palette made for the other theme without switching the theme.</summary>
     public bool PaletteAnyTheme
     {
@@ -96,17 +96,14 @@ internal sealed class AppSettings
     }        // a palette made for the other theme is used as is instead of switching the theme
     /// <summary>True scans Hidden and System files and folders.</summary>
     public bool IncludeHidden { get; set; } = true;
-    /// <summary>True counts hard-linked data once per scan at the cost of opening every file.</summary>
-    public bool DetectHardLinks
-    {
-        get; set;
-    }
+    /// <summary>True counts hard-linked data once per scan at the cost of opening every file; on by default so a folder walk agrees with the file-table scan.</summary>
+    public bool DetectHardLinks { get; set; } = true;
     /// <summary>True reads the NTFS file table instead of walking folders when the root is an NTFS drive and the process is, or can become, elevated.</summary>
-    public bool FastNtfsScan { get; set; } = true;   // MFT scan; needs administrator
+    public bool FastNtfsScan { get; set; } = true;
     /// <summary>The Leave out patterns, one wildcard per line or separated by semicolons, parsed by <see cref="NamePatterns.Parse"/>.</summary>
-    public string ExcludePatterns { get; set; } = string.Empty;   // one wildcard per line
+    public string ExcludePatterns { get; set; } = string.Empty;
     /// <summary>How long automatic saved scans are kept, in days; 0 keeps them forever.</summary>
-    public int KeepScansDays { get; set; } = 90;                    // 0 keeps all
+    public int KeepScansDays { get; set; } = 90;
     /// <summary>The UI culture name, such as "nb"; null follows the Windows display language.</summary>
     public string? Language
     {
@@ -124,7 +121,7 @@ internal sealed class AppSettings
     }                     // null = detect
     // Treemap options
     /// <summary>How small a box may get before its siblings are grouped: "Sparse", "Normal", "Dense", "Maximum" or "Everything".</summary>
-    public string Density { get; set; } = "Dense";                  // Sparse, Normal, Dense, Maximum, Everything
+    public string Density { get; set; } = "Dense";
     /// <summary>The density to return to when "Everything" is switched off again; null when it was never switched on.</summary>
     public string? DensityBeforeEverything
     {
@@ -136,37 +133,37 @@ internal sealed class AppSettings
         get; set;
     }                                // -1 horizontal, 1 vertical
     /// <summary>The gap between a folder's edge and its children, in pixels from 0 to 6.</summary>
-    public int Padding { get; set; } = 2;                           // 0 to 6 px
+    public int Padding { get; set; } = 2;
     // Shading
     /// <summary>True shades every file box with a cushion gradient; false draws flat fills and ignores the cushion settings.</summary>
     public bool CushionEnabled { get; set; } = false;
     /// <summary>The brightness of file cushions in percent, 0 to 100, where 50 leaves the palette color unchanged; folder colors are never affected.</summary>
-    public int Brightness { get; set; } = 55;                       // 0 to 100, 50 = unchanged
+    public int Brightness { get; set; } = 55;
     /// <summary>The strength of the cushion's light-to-dark gradient in percent, 0 (flat) to 100.</summary>
-    public int CushionShading { get; set; } = 30;                   // 0 to 100
+    public int CushionShading { get; set; } = 30;
     /// <summary>How steeply the cushion curves toward its edges, in percent from 0 to 100.</summary>
     public int CushionHeight { get; set; } = 35;
     /// <summary>How far the cushion effect reaches into large boxes, in percent from 0 to 100.</summary>
     public int ShadingScale { get; set; } = 60;
     /// <summary>The horizontal position of the cushion light, -1 (left) to 1 (right).</summary>
-    public double LightX { get; set; } = -0.5;                      // -1 to 1
+    public double LightX { get; set; } = -0.5;
     /// <summary>The vertical position of the cushion light, -1 (top) to 1 (bottom).</summary>
     public double LightY { get; set; } = -0.5;
     /// <summary>True draws a line of <see cref="GridColor"/> between neighboring boxes.</summary>
     public bool ShowGrid { get; set; } = false;
     /// <summary>The grid line thickness in pixels, 1 to 3.</summary>
-    public int BorderThickness { get; set; } = 1;                   // 1 to 3
+    public int BorderThickness { get; set; } = 1;
     /// <summary>The grid line color as "#RRGGBB".</summary>
     public string GridColor { get; set; } = "#101014";
     /// <summary>The frame color of the hovered and selected boxes as "#RRGGBB".</summary>
     public string HighlightColor { get; set; } = "#F5B82E";
     // Text and title bars
     /// <summary>The space above and below a folder's title text, in pixels from 0 to 8.</summary>
-    public int TitlePadding { get; set; } = 1;                      // 0 to 8 px
+    public int TitlePadding { get; set; } = 1;
     /// <summary>How much a folder's title bar is tinted toward the folder's color, in percent from 0 (none) to 40.</summary>
-    public int TitleBarTint { get; set; } = 0;                      // 0 to 40
+    public int TitleBarTint { get; set; } = 0;
     /// <summary>The folder title color as "#RRGGBB"; empty picks black or white per box for contrast.</summary>
-    public string FolderTextColor { get; set; } = "#000000";        // empty = automatic
+    public string FolderTextColor { get; set; } = "#000000";
     /// <summary>The file label color as "#RRGGBB"; empty picks black or white per box for contrast.</summary>
     public string FileTextColor { get; set; } = "#000000";
     /// <summary>The font family for map labels; an unavailable family falls back to the system default.</summary>
@@ -193,7 +190,7 @@ internal sealed class AppSettings
     /// <summary>True shows the side panel with the top lists next to the map.</summary>
     public bool ShowSidePanel { get; set; } = true;
     /// <summary>Where the filter controls live: "Drawer" (a sheet over the map) or "Rail" (pills under the path).</summary>
-    public string FilterLayout { get; set; } = "Drawer";            // Drawer or Rail
+    public string FilterLayout { get; set; } = "Drawer";
     /// <summary>True shows the filter rail when <see cref="FilterLayout"/> is "Rail".</summary>
     public bool ShowFilterRail { get; set; } = true;
     /// <summary>True opens scans in the Insights view instead of the map.</summary>
@@ -218,7 +215,7 @@ internal sealed class AppSettings
     /// <summary>The height of the drive list on the start screen in device-independent pixels, as last dragged.</summary>
     public double DriveListHeight { get; set; } = 320;
 
-    /// <summary>Restores every preference to its default except window and panel sizes; <see cref="DialogDim"/> is also left as is.</summary>
+    /// <summary>Restores every preference to its default except the window and panel sizes.</summary>
     public void ResetToDefaults()
     {
         // Window and panel sizes are not reset.
@@ -230,6 +227,7 @@ internal sealed class AppSettings
         LookDark = defaults.LookDark;
         LookLight = defaults.LookLight;
         Theme = defaults.Theme;
+        DialogDim = defaults.DialogDim;
         SizeOnDisk = defaults.SizeOnDisk;
         ShowFreeSpace = defaults.ShowFreeSpace;
         LabelSize = defaults.LabelSize;

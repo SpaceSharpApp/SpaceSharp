@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Menor</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Mínimo</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Espaço por tipo de arquivo em {0}. Clique em um tipo para filtrar o mapa.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Maiores mudanças desde {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Maiores mudanças desde a verificação comparada</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Verifique uma unidade ou pasta para ver os maiores itens.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Maiores arquivos em {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Maiores pastas em {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Arquivo</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Pasta</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Tipo</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Alteração</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Parte da verificação</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Parte</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Tamanho</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Sobre o SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Aberta a verificação de</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>A verificação anterior foi feita de outra forma ({0} vs {1}), então não é comparada. A próxima verificação do mesmo tipo será.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Nova verificação cancelada</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} verificado novamente: {1:N0} arquivos · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} verificado novamente · {1:N0} arquivos · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Verificando {0} novamente…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} salvo</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Verificação cancelada</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Desenhado para um teclado {0}; escolha outro se não for o seu.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>As teclas âmbar são as que o SpaceSharp usa; um pequeno {0} no canto significa manter {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>As teclas âmbar são as que o SpaceSharp usa; um pequeno {0} no canto significa manter Command. Delete é a tecla acima de Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Escolha uma unidade à esquerda</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Escolha uma unidade à esquerda ou continue de onde parou</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Verificações salvas abrem instantaneamente e são comparadas com a nova.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Cada arquivo e pasta vira uma caixa dimensionada pelo espaço que ocupa.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Verificar uma pasta</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Abrir uma verificação salva…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Unidades inteiras em segundos com direitos de administrador.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Pasta · {0} ficheiros</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>A unidade encheu {0} desde esta análise. Analise de novo para ver para onde foi.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>A unidade tem {0} mais de espaço livre do que nesta análise. Analise de novo para a ver como está agora.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>As suas verificações</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>As verificações são guardadas durante {0} para que a seguinte mostre o que mudou.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>As verificações são guardadas para que a seguinte mostre o que mudou.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>A sua primeira verificação aparece aqui</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Escolha uma unidade à esquerda, ou uma pasta. A verificação desenha cada ficheiro e pasta como uma caixa do tamanho do espaço que ocupa, e fica guardada aqui para que a possa abrir de novo e ver o que mudou.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Verificar {0} agora</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>verificações</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Unidades inteiras em segundos</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Com direitos de administrador, o SpaceSharp lê a tabela de ficheiros NTFS em vez de percorrer cada pasta.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Manter verificações salvas por</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Salvamentos automáticos mais antigos que isso são excluídos quando o SpaceSharp inicia. Verificações que você salvou como arquivos nunca são tocadas.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dias</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Para sempre</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Excluir todas as verificações salvas</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Não há verificações salvas.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Excluir {0} verificações salvas? O mapa na tela permanece; comparações com verificações anteriores não serão possíveis até que novas sejam feitas.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} verificações salvas excluídas.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Eliminar todas as verificações guardadas?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>O mapa no ecrã continua aberto. As comparações com verificações anteriores só voltam a ser possíveis quando forem guardadas novas.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Unidade ou pasta</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Verificações</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>No disco</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Todas as verificações guardadas</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} e {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Mantê-las</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Eliminar 1 verificação</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Eliminar {0} verificações</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>1 verificação guardada eliminada</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} verificações guardadas eliminadas</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} libertados na pasta das verificações.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>O mapa no ecrã continua aberto. A próxima verificação de uma unidade ou pasta não terá com que se comparar até ser guardada uma nova verificação dela.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Um ficheiro está em uso e ficou; será eliminado da próxima vez.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} ficheiros estão em uso e ficaram; serão eliminados da próxima vez.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Nome ou padrão, por ex. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Adicionar</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Remover</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Idiomas</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>O norueguês é do próprio autor; as outras 16 traduções são automáticas e ainda aguardam revisão por um falante nativo. Se algo soar mal no seu idioma, [diga no GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Textos completos das licenças</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Tipos de verificação diferentes</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Essa verificação foi feita de outra forma ({0}) do que esta ({1}). Arquivos que só um método vê, como pastas protegidas do sistema, e links físicos contados uma vez por um método e por inteiro pelo outro, aparecerão como sumidos, novos, maiores ou menores.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Comparar mesmo assim</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Espelho, espelho meu</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Esse ficheiro é a gravação desta mesma verificação. Nada pode mudar entre uma verificação e ela própria, por mais que olhemos. Escolha uma verificação anterior para ver o que mudou de facto.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Conquista desbloqueada</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Perguntou à unidade o que tinha mudado desde ela própria. A unidade, sendo uma unidade, não disse nada.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Feitas de formas diferentes ({0} vs {1}): as diferenças incluem arquivos que só um método vê.</value></data>
 </root>

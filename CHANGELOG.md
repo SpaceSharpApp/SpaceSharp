@@ -4,12 +4,41 @@ What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x relea
 
 ## 2.5.2 (unreleased)
 
-No visible change: a readability pass over the whole code base.
+Comparing scans no longer invents gigabytes of change, the folder walk admits which folders it could not read, the start screen and the saved-scans dialog say what they are about, and a readability pass over the whole code base.
+
+### Fixes
+- Comparing two scans no longer reports a hard-linked file as grown in one folder and shrunk in another when the two scans picked different paths as the file's primary. The MFT scan and the folder walk choose differently, and the parallel walk does not even choose the same way twice, so a compare could show "+14 GB grew" between scans a minute apart. A file's baseline is now its real size then, whichever path carried it, and a folder's baseline is rebuilt from its children, so only real changes show.
+- The folder walk now marks a folder it cannot open as unreadable instead of listing it as empty. Protected folders such as `Program Files\WindowsApps` and `System Volume Information` silently came back with no contents, so the walk found tens of thousands of files fewer than the file-table scan with no sign of why; they now show as access denied in the tooltip, the Inspect window and the access bar, as they always should have.
+- Compare with... declines to compare a scan with its own save (the automatic one or one you saved yourself). Instead of a change report it awards the achievement "Mirror, Mirror" (+0 XP: asked the drive what changed since itself; the drive, being a drive, said nothing) and asks for an earlier scan.
+- Compare with... now warns before comparing scans that were made differently (file table vs folder walk, hard links counted once or not, hidden files, exclusions), the same rule the automatic compare already applied, and the Changes view says so in its header while such a comparison is showing. Files only one method can see would otherwise look like deletions.
+
+### Start screen
+- Before the first scan, the start screen shows where that scan will go instead of a title over nothing: a dashed slot with an empty ring and "Your first scan goes here", what a scan is in two sentences, and the three ways to start (scan the system drive now, scan a folder, open a saved scan). On Windows without administrator rights a card under it explains the file-table scan and offers the restart. The header says how long scans are kept and why. With scans the screen is unchanged.
+
+### Settings
+- "Delete all saved scans" asks with a table of what goes: each drive or folder with its volume label, when its saves were scanned, how many there are and what they take on disk, and a total row. The button names the count ("Delete 3 scans") and the other one is "Keep them". Afterwards a Done dialog says how many went and how much was freed, and notes that the open map stays while the next scan of that drive has nothing to compare with. Before, the question was one sentence and the answer "Deleted 3 saved scans."
+
+### Side panel
+- The Files / Folders / Types switch is one segmented control across the panel instead of three loose buttons, the chosen part filled amber. The parts share the width, and when the panel is too narrow for an icon beside the longest label the icons go rather than the text, so no label is ever cut.
+- The Largest items list no longer has a Changes tab. It appeared only while a comparison was loaded, was cut off at the panel's edge, and repeated what the Changes view shows better. The Insights "Since last scan" card is unchanged.
+- The share column's header is the one word "Share" instead of "Share of the scan" cut short; the column shows the bar and the percentage anyway.
+
+### Scanning
+- "Count hard links once" is on by default, so a folder walk counts WinSxS and other hard-linked data the way the file-table scan does and two scans of the same drive agree. It can still be turned off in Settings › Scanning.
+
+### Fixes, small
+- The status line after a rescan read "Rescanned C:: 1,045,649 files" with two colons; it now separates the parts with a middle dot in every language.
+- Reset to defaults in Settings also resets the dialog dimming, which it had skipped.
+- The link text control reused one hand cursor instead of creating one on every mouse move.
+
+### File types
+- The file-type table moved out of C# into `SpaceSharp.Core/Resources/FileTypes.txt`, a plain text file embedded in Core with one `[Category]` section each, comments, and a test that rejects duplicates and entries without a dot, so adding a type is a one-line edit with no code. It grew from 172 extensions to 987. Images gain the camera raw formats, HEIF, AVIF, JPEG XL and the editor formats; video the transport-stream, broadcast and phone formats; audio the lossless and tracker formats and the game audio banks; archives the tar variants, comics and legacy packers; programs, installers, disk images, databases, fonts and system files are filled in the same way; documents cover the Office templates, e-books, Apple's formats, mail and subtitles; code covers the languages, shaders, build files and config formats a developer's drive holds; the second pass added console ROM images, backup and forensic images (Acronis, Veeam, Macrium, Ghost, E01), AI model and data files (safetensors, GGUF, checkpoints, HDF5, pickles), Outlook and mbox mail stores, git packfiles, Visual Studio build caches, instrument libraries and the rest of the web template languages. Where an extension means two things (.ts, .mts, .vhd, .mdf) it goes to the kind whose files are large.
 
 ### Under the hood
 - The tests no longer depend on the developer's Windows language: the test assembly pins the invariant culture, so a French Windows no longer fails seven tests on `1,5 KB` and `Langue`. A new test asserts the French output on purpose. Reported by a SpaceMonger veteran trying SpaceSharp on a French PC.
 - Every C# file was reworked for readability without changing what it does: descriptive names in place of one-letter variables and lambda parameters, long methods split into focused ones (the MFT scanner, the Settings tabs, the Insights and Changes views, the scan card), nested blocks flattened with early returns, long expressions and argument lists broken up, and a comment on every intentionally ignored exception saying why it is safe to ignore. Public members, settings, file formats and localized strings are untouched.
 - The XML documentation now covers the whole solution: every documented method and constructor has a `<param>` for each parameter, in declaration order, with the unit, range, null meaning or callback contract rather than a restated name, plus `<returns>` and `<typeparam>` where they apply; public members and the non-trivial private ones that had no summary have one. The code itself is unchanged.
+- The `.editorconfig` rules are stricter and build as warnings: braces on every body, `var` only where the type is apparent and never for built-in types, naming checked, with `private static readonly` fields allowed PascalCase. `CODING_STANDARDS.md` follows the same rules. The Core project no longer carries its own version number; the app's is the only one.
 - `CODING_STANDARDS.md` writes those rules down, with examples from the code of what to do and what not to do; CONTRIBUTING and DEVELOPING link to it.
 
 ## 2.5.1

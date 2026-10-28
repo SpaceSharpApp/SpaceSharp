@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- The part of SpaceSharp that knows nothing about Windows or WPF: the tree, the layout, saved scans, the
-       strings and their translations, sizes, the command line. It is what a Mac, Linux or Android build will
-       share with the Windows app. Nothing in here may reference System.Windows, Velopack or Win32; the project
-       targets plain net10.0 so the compiler enforces that. -->
+  <!-- The part of SpaceSharp that knows nothing about Windows or Avalonia: the tree, the layout, saved scans,
+       the strings and their translations, sizes, the command line. It is what the Mac, Linux and Android builds
+       share with the Windows app. Nothing in here may reference Avalonia, Velopack or Win32; the project
+       targets plain net10.0 with no UI package so the compiler enforces that. -->
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -19,12 +19,16 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <Product>SpaceSharp</Product>
-    <Version>2.5.1</Version>
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>
     <RepositoryUrl>https://github.com/SpaceSharpApp/SpaceSharp</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The file type table; its header says how to add a type. -->
+    <EmbeddedResource Include="Resources\FileTypes.txt" LogicalName="SpaceSharp.Resources.FileTypes.txt" />
+  </ItemGroup>
 
   <ItemGroup>
     <!-- The scanners set sizes and dates on FsNode; the tests build trees the same way. -->

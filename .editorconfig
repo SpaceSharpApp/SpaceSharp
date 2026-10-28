@@ -139,12 +139,20 @@ dotnet_naming_rule.interfaces_prefixed.symbols = interfaces
 dotnet_naming_rule.interfaces_prefixed.style = interface_prefix
 dotnet_naming_rule.interfaces_prefixed.severity = suggestion
 
+# private static readonly fields are PascalCase, like constants: brushes, regexes, lookup tables.
+dotnet_naming_symbols.static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_fields.applicable_accessibilities = private, private_protected
+dotnet_naming_symbols.static_readonly_fields.required_modifiers = static, readonly
+dotnet_naming_rule.static_readonly_pascal.symbols = static_readonly_fields
+dotnet_naming_rule.static_readonly_pascal.style = pascal_case
+dotnet_naming_rule.static_readonly_pascal.severity = warning
+
 dotnet_naming_symbols.private_fields.applicable_kinds = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private, private_protected
 dotnet_naming_symbols.private_fields.required_modifiers =
 dotnet_naming_rule.private_fields_underscore.symbols = private_fields
 dotnet_naming_rule.private_fields_underscore.style = underscore_camel_case
-dotnet_naming_rule.private_fields_underscore.severity = suggestion
+dotnet_naming_rule.private_fields_underscore.severity = warning
 
 dotnet_naming_symbols.constants.applicable_kinds = field
 dotnet_naming_symbols.constants.required_modifiers = const
@@ -156,6 +164,9 @@ dotnet_naming_symbols.locals_and_parameters.applicable_kinds = parameter, local
 dotnet_naming_rule.locals_camel.symbols = locals_and_parameters
 dotnet_naming_rule.locals_camel.style = camel_case
 dotnet_naming_rule.locals_camel.severity = suggestion
+
+# Enforce naming conventions during builds.
+dotnet_diagnostic.IDE1006.severity = warning
 
 # ------------------------------------------------------------------ diagnostics
 

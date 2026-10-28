@@ -11,6 +11,9 @@ namespace SpaceSharp.Controls;
 /// <summary>A TextBlock with Markdown-style "[label](url)" links that raise <see cref="LinkClicked"/>.</summary>
 public sealed partial class LinkText : TextBlock
 {
+    /// <summary>One hand cursor for every link, since pointer moves arrive many times a second.</summary>
+    private static readonly Cursor HandCursor = new(StandardCursorType.Hand);
+
     private readonly List<(int Start, int End, string Url)> _links = new();
 
     /// <summary>Raised on the UI thread with a link's url (the text inside the parentheses, verbatim) when it is left-clicked.</summary>
@@ -90,7 +93,7 @@ public sealed partial class LinkText : TextBlock
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
-        Cursor = LinkAt(e.GetPosition(this)) is null ? Cursor.Default : new Cursor(StandardCursorType.Hand);
+        Cursor = LinkAt(e.GetPosition(this)) is null ? Cursor.Default : HandCursor;
     }
 
     protected override void OnPointerExited(PointerEventArgs e)

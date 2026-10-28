@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>小</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>最小</value></data>
   <data name="List_ByType" xml:space="preserve"><value>{0} 内のファイルの種類別の容量。種類をクリックするとマップをフィルターします。</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>{0} 以降の最大の変化</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>比較対象のスキャン以降の最大の変化</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>ドライブまたはフォルダーをスキャンすると、最大の項目が表示されます。</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>{0} 内の最大のファイル</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>{0} 内の最大のフォルダー</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>ファイル</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>フォルダー</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>種類</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>変化</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>スキャン全体に占める割合</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>割合</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>サイズ</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp について (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>次のスキャンを開きました：</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>前回のスキャンは作成方法が異なる（{0} と {1}）ため、比較されません。次回の同じ種類のスキャンから比較されます。</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>再スキャンをキャンセルしました</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} を再スキャンしました：{1:N0} ファイル · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} を再スキャンしました · {1:N0} ファイル · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} を再スキャン中…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} を保存しました</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>スキャンをキャンセルしました</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>{0} 配列として描いています。違う場合は別の配列を選んでください。</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>琥珀色のキーが SpaceSharp の使うキーです。隅の小さな {0} は {0} を押しながらの意味です。</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>琥珀色のキーが SpaceSharp の使うキーです。隅の小さな {0} は Command を押しながらの意味です。Delete は Return の上のキーです。</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>左側のドライブを選択してください</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>左側のドライブを選択するか、前回の続きから始めてください</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>保存したスキャンはすぐに開き、新しいスキャンと比較されます。</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>すべてのファイルとフォルダーが、使用領域に応じた大きさのボックスになります。</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>フォルダーをスキャン</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>保存したスキャンを開く…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>管理者権限があれば、ドライブ全体を数秒でスキャンできます。</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>フォルダー · {0} ファイル</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>このスキャン以降、ドライブの使用量が {0} 増えました。再スキャンして増えた場所を確認してください。</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>このスキャン時より空き容量が {0} 増えています。再スキャンして現在の状態を確認してください。</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>スキャン一覧</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>スキャンは {0} 保持され、次のスキャンで何が変わったかを確認できます。</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>スキャンは保持され、次のスキャンで何が変わったかを確認できます。</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>最初のスキャンがここに表示されます</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>左側のドライブ、またはフォルダーを選択してください。スキャンはすべてのファイルとフォルダーを使用領域に応じた大きさのボックスとして描き、ここに保持されるので、後で開き直して何が変わったかを確認できます。</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>{0} を今すぐスキャン</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>件のスキャン</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>ドライブ全体を数秒で</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>管理者権限があれば、SpaceSharp は各フォルダーをたどる代わりに NTFS ファイルテーブルを読み取ります。</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存したスキャンの保持期間</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>この期間より古い自動保存は SpaceSharp の起動時に削除されます。ご自身でファイルとして保存したスキャンには影響しません。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 日</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>無期限</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>保存したスキャンをすべて削除</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>保存したスキャンはありません。</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>保存した {0} 件のスキャンを削除しますか？画面上のマップはそのまま残りますが、新しいスキャンを作成するまで以前のスキャンとの比較はできなくなります。</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>保存した {0} 件のスキャンを削除しました。</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>保存したスキャンをすべて削除しますか？</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>画面上のマップはそのまま残ります。新しいスキャンが保存されるまで、以前のスキャンとの比較はできません。</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>ドライブまたはフォルダー</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>スキャン</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>ディスク上</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>保存したスキャンすべて</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0}と{1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>残す</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>1 件のスキャンを削除</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>{0} 件のスキャンを削除</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>保存したスキャン 1 件を削除しました</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>保存したスキャン {0} 件を削除しました</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>スキャンフォルダーで {0} 解放されました。</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>画面上のマップはそのまま残ります。ドライブやフォルダーの次のスキャンは、その新しいスキャンが保存されるまで比較対象がありません。</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>1 件のファイルは使用中のため残されました。次回に削除されます。</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} 件のファイルは使用中のため残されました。次回に削除されます。</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>名前またはパターン。例：*.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>追加</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>削除</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>言語</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>ノルウェー語は作者自身によるもので、他の 16 言語は機械翻訳で、ネイティブスピーカーによる確認はまだ行われていません。お使いの言語でおかしな箇所があれば、[GitHub で教えてください](https://github.com/SpaceSharpApp/SpaceSharp/issues)。</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>ライセンス全文</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>種類の異なるスキャン</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>そのスキャンは今回 ({1}) とは異なる方法 ({0}) で行われました。保護されたシステムフォルダーなど片方の方法でしか見えないファイルや、片方では一度だけ、もう片方では全体として数えられるハードリンクが、消失・新規・増加・減少として表示されます。</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>それでも比較</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>鏡よ鏡</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>そのファイルはこのスキャン自身の保存ファイルです。スキャンとそれ自身の間では、どれだけ調べても何も変わりません。実際に何が変わったかを見るには、以前のスキャンを選んでください。</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>実績を解除しました</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>ドライブに「自分自身から何が変わった？」と尋ねました。ドライブはドライブなので、何も答えませんでした。</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>異なる方法 ({0} と {1}): 差分には片方の方法でしか見えないファイルが含まれます。</value></data>
 </root>

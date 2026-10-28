@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Mindre</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Minst</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Utrymme per filtyp i {0}. Klicka på en typ för att filtrera kartan.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Största förändringarna sedan {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Största förändringarna sedan den jämförda skanningen</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Skanna en enhet eller mapp för att se de största objekten.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Största filerna i {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Största mapparna i {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Fil</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Mapp</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Typ</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Ändring</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Andel av skanningen</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Andel</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Storlek</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Om SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Retur</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Öppnade skanningen från</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Den förra skanningen gjordes på ett annat sätt ({0} mot {1}), så den jämförs inte. Nästa skanning av samma slag kommer att jämföras.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Omskanningen avbröts</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Skannade om {0}: {1:N0} filer · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Skannade om {0} · {1:N0} filer · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Skannar om {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Sparade {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Skanningen avbröts</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Ritat för ett {0}-tangentbord; välj ett annat om det är fel.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Gula tangenter är de SpaceSharp använder; ett litet {0} i hörnet betyder håll {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Gula tangenter är de SpaceSharp använder; ett litet {0} i hörnet betyder håll Command. Delete är tangenten ovanför Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Välj en enhet till vänster</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Välj en enhet till vänster, eller fortsätt där du slutade</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Sparade skanningar öppnas direkt och jämförs med den nya.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Varje fil och mapp blir en ruta i storlek efter utrymmet den tar.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Skanna en mapp</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Öppna en sparad skanning…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hela enheter på sekunder med administratörsbehörighet.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Mapp · {0} filer</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Enheten har fyllts med {0} sedan den här skanningen. Skanna igen för att se vart det tog vägen.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Enheten har {0} mer ledigt utrymme än vid den här skanningen. Skanna igen för att se den som den är nu.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Dina skanningar</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Skanningar sparas i {0} så att nästa kan visa vad som ändrats.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Skanningar sparas så att nästa kan visa vad som ändrats.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Din första skanning hamnar här</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Välj en enhet till vänster, eller en mapp. Skanningen ritar varje fil och mapp som en ruta lika stor som utrymmet den tar, och den sparas här så att du kan öppna den igen och se vad som ändrats.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Skanna {0} nu</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>skanningar</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Hela enheter på några sekunder</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Med administratörsrättigheter läser SpaceSharp NTFS-filtabellen i stället för att gå igenom varje mapp.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behåll sparade skanningar i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatiskt sparade skanningar äldre än detta tas bort när SpaceSharp startar. Skanningar du själv har sparat som filer rörs aldrig.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagar</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>För alltid</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Ta bort alla sparade skanningar</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Det finns inga sparade skanningar.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Vill du ta bort {0} sparade skanningar? Kartan på skärmen finns kvar; jämförelser med tidigare skanningar blir inte möjliga förrän nya har gjorts.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Tog bort {0} sparade skanningar.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Ta bort alla sparade skanningar?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>Kartan på skärmen är kvar. Jämförelser med tidigare skanningar går inte förrän nya har sparats.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Enhet eller mapp</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Skanningar</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>På disk</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Alla sparade skanningar</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} och {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Behåll dem</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Ta bort 1 skanning</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Ta bort {0} skanningar</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Tog bort 1 sparad skanning</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Tog bort {0} sparade skanningar</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} frigjort i skanningsmappen.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Kartan på skärmen är kvar. Nästa skanning av en enhet eller mapp har inget att jämföra med förrän en ny skanning av den har sparats.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>En fil används och lämnades kvar; den tas bort nästa gång.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} filer används och lämnades kvar; de tas bort nästa gång.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Namn eller mönster, t.ex. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Lägg till</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Ta bort</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Språk</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Norska är författarens egen; de 16 andra översättningarna är maskingjorda och väntar fortfarande på granskning av någon med språket som modersmål. Om något låter fel på ditt språk, [säg till på GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Fullständiga licenstexter</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Olika slags skanningar</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Den skanningen gjordes på ett annat sätt ({0}) än den här ({1}). Filer som bara en metod ser, som skyddade systemmappar, och hårda länkar som den ena metoden räknar en gång och den andra fullt ut, visas som borta, nya, större eller mindre.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Jämför ändå</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spegel, spegel</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Den filen är den här skanningens egen sparade fil. Inget kan ändras mellan en skanning och sig själv, hur noga vi än tittar. Välj en tidigare skanning för att se vad som faktiskt ändrats.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Prestation upplåst</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Frågade enheten vad som ändrats sedan den själv. Enheten, som är en enhet, sa ingenting.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Gjorda på olika sätt ({0} mot {1}): skillnaderna omfattar filer som bara en metod ser.</value></data>
 </root>

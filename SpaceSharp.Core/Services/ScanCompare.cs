@@ -105,10 +105,16 @@ public static class ScanCompare
     }
 
     /// <summary>Recursively pairs a current node with its older twin and marks the subtree.</summary>
+    /// <remarks>
+    /// Which path of a hard-linked file carries its size is a choice the scanner makes, and the two scanners (and two runs of the
+    /// parallel folder walk) make it differently. The baseline is therefore taken from the file's real size then, not from the path
+    /// that happened to be the primary, and a folder's baseline is rebuilt from its children so a moved primary is not a change.
+    /// </remarks>
     /// <param name="now">The current node; gets <see cref="FsNode.HasBaseline"/> set and its baseline sizes filled or cleared.</param>
     /// <param name="then">The same item in the older scan, or null when it did not exist then, which marks the whole subtree as new.</param>
     /// <param name="comparison">Receives the children of <paramref name="then"/> that no current child matches.</param>
-    private static void Mark(FsNode now, FsNode? then, ScanComparison comparison)
+    /// <returns>The baseline size and allocated size recorded on <paramref name="now"/>; (0, 0) for a new subtree.</returns>
+    private static (long Size, long Allocated) Mark(FsNode now, FsNode? then, ScanComparison comparison)
     {
         now.HasBaseline = true;
         if (then is null)
@@ -119,14 +125,15 @@ public static class ScanCompare
             {
                 Mark(child, null, comparison);
             }
-            return;
+            return (0, 0);
         }
 
-        now.BaselineSize = then.IsHardLinkDuplicate ? 0 : then.Size;
-        now.BaselineAllocated = then.Allocated;
         if (!now.IsDirectory)
         {
-            return;
+            (long fileSize, long fileAllocated) = FileBaseline(now, then);
+            now.BaselineSize = fileSize;
+            now.BaselineAllocated = fileAllocated;
+            return (fileSize, fileAllocated);
         }
 
         var previousByName = new Dictionary<string, FsNode>(then.Children.Count, StringComparer.OrdinalIgnoreCase);
@@ -138,6 +145,8 @@ public static class ScanCompare
             }
         }
 
+        long baselineSize = 0;
+        long baselineAllocated = 0;
         foreach (FsNode child in now.Children)
         {
             if (!child.IsReal)
@@ -149,33 +158,66 @@ public static class ScanCompare
             previousByName.Remove(child.Name, out FsNode? match);
             if (match is not null && match.IsDirectory != child.IsDirectory)
             {
-                Gone(now, match, comparison);
+                (long goneSize, long goneAllocated) = Gone(now, match, comparison);
+                baselineSize += goneSize;
+                baselineAllocated += goneAllocated;
                 match = null;
             }
 
-            Mark(child, match, comparison);
+            (long childSize, long childAllocated) = Mark(child, match, comparison);
+            baselineSize += childSize;
+            baselineAllocated += childAllocated;
         }
 
-        // Whatever was not matched by a current child is gone.
+        // Whatever was not matched by a current child is gone; it was still part of the folder then.
         foreach (FsNode unmatched in previousByName.Values)
         {
-            Gone(now, unmatched, comparison);
+            (long goneSize, long goneAllocated) = Gone(now, unmatched, comparison);
+            baselineSize += goneSize;
+            baselineAllocated += goneAllocated;
         }
+
+        now.BaselineSize = baselineSize;
+        now.BaselineAllocated = baselineAllocated;
+        return (baselineSize, baselineAllocated);
+    }
+
+    /// <summary>The size a file had in the older scan, independent of which hard-link path carried it.</summary>
+    /// <param name="now">The current file.</param>
+    /// <param name="then">The same path in the older scan.</param>
+    /// <returns>
+    /// (0, 0) when the path is a duplicate link now, since it carries no bytes now and so cannot have shrunk; the real size then
+    /// (<see cref="FsNode.LinkedSize"/>) with the current allocation when it was the duplicate then; otherwise the sizes recorded then.
+    /// </returns>
+    private static (long Size, long Allocated) FileBaseline(FsNode now, FsNode then)
+    {
+        if (now.IsHardLinkDuplicate)
+        {
+            return (0, 0);
+        }
+        if (then.IsHardLinkDuplicate)
+        {
+            // The older scan kept no allocation for a duplicate; the primary moved here, so on disk it is taken as unchanged.
+            return (then.LinkedSize, now.Allocated);
+        }
+        return (then.Size, then.Allocated);
     }
 
     /// <summary>Records an older-scan item as gone from a current folder.</summary>
     /// <param name="folder">The current folder it used to be in.</param>
     /// <param name="then">The item in the older scan; a hard-link duplicate is skipped because its bytes were counted under another name.</param>
     /// <param name="comparison">Where the entry is added.</param>
-    private static void Gone(FsNode folder, FsNode then, ScanComparison comparison)
+    /// <returns>The size and allocated size the item contributed to its folder then; (0, 0) for a skipped duplicate.</returns>
+    private static (long Size, long Allocated) Gone(FsNode folder, FsNode then, ScanComparison comparison)
     {
         if (then.IsHardLinkDuplicate)
         {
-            return;
+            return (0, 0);
         }
 
         // A gone file counts as one even when the old scan recorded no file count for it.
         int fileCount = Math.Max(then.IsDirectory ? 0 : 1, then.FileCount);
         comparison.Add(folder, new GoneEntry(then.Name, then.IsDirectory, then.Size, then.Allocated, fileCount));
+        return (then.Size, then.Allocated);
     }
 }

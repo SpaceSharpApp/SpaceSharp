@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Daha küçük</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>En küçük</value></data>
   <data name="List_ByType" xml:space="preserve"><value>{0} içinde dosya türüne göre alan. Haritayı filtrelemek için bir türe tıklayın.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>{0} tarihinden bu yana en büyük değişiklikler</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Karşılaştırılan taramadan bu yana en büyük değişiklikler</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>En büyük öğeleri görmek için bir sürücü veya klasör tarayın.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>{0} içindeki en büyük dosyalar</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>{0} içindeki en büyük klasörler</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Dosya</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Klasör</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Tür</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Değişim</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Taramadaki payı</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Pay</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Boyut</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>SpaceSharp hakkında (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Açılan tarama:</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Önceki tarama farklı bir yöntemle yapılmış ({0} ve {1}); bu yüzden karşılaştırılmıyor. Aynı türdeki bir sonraki tarama karşılaştırılacak.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Yeniden tarama iptal edildi</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>{0} yeniden tarandı: {1:N0} dosya · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>{0} yeniden tarandı · {1:N0} dosya · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} yeniden taranıyor…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} kaydedildi</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Tarama iptal edildi</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>{0} klavye için çizildi; yanlışsa başka birini seçin.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Kehribar tuşlar SpaceSharp'ın kullandıklarıdır; köşedeki küçük {0}, {0} basılı tutun demektir.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Kehribar tuşlar SpaceSharp'ın kullandıklarıdır; köşedeki küçük {0}, Command basılı tutun demektir. Delete, Return'ün üstündeki tuştur.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Soldan bir sürücü seçin</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Soldan bir sürücü seçin ya da kaldığınız yerden devam edin</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Kaydedilmiş taramalar anında açılır ve yeni taramayla karşılaştırılır.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Her dosya ve klasör, kapladığı alana göre boyutlandırılmış bir kutuya dönüşür.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Klasör tara</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Kaydedilmiş bir tarama aç…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Yönetici haklarıyla sürücülerin tamamı saniyeler içinde.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Klasör · {0} dosya</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Bu taramadan bu yana sürücü {0} doldu. Nereye gittiğini görmek için yeniden tarayın.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Sürücüde bu taramaya göre {0} daha fazla boş alan var. Şimdiki halini görmek için yeniden tarayın.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Taramalarınız</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Taramalar {0} boyunca saklanır, böylece bir sonraki tarama nelerin değiştiğini gösterebilir.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Taramalar saklanır, böylece bir sonraki tarama nelerin değiştiğini gösterebilir.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>İlk taramanız burada görünecek</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Soldan bir sürücü ya da bir klasör seçin. Tarama her dosya ve klasörü kapladığı alan kadar bir kutu olarak çizer ve burada saklanır; böylece yeniden açıp nelerin değiştiğini görebilirsiniz.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>{0} sürücüsünü şimdi tara</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>tarama</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Sürücülerin tamamı saniyeler içinde</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Yönetici haklarıyla SpaceSharp her klasörü dolaşmak yerine NTFS dosya tablosunu okur.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Kaydedilmiş taramaları saklama süresi</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Bundan daha eski otomatik kayıtlar SpaceSharp başlarken silinir. Kendiniz dosya olarak kaydettiğiniz taramalara hiç dokunulmaz.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} gün</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>Süresiz</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Tüm kaydedilmiş taramaları sil</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Kaydedilmiş tarama yok.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>{0} kaydedilmiş tarama silinsin mi? Ekrandaki harita kalır; yenileri yapılana kadar önceki taramalarla karşılaştırma yapılamaz.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>{0} kaydedilmiş tarama silindi.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Kaydedilen tüm taramalar silinsin mi?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>Ekrandaki harita açık kalır. Yenileri kaydedilene kadar önceki taramalarla karşılaştırma yapılamaz.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Sürücü veya klasör</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Taramalar</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>Diskte</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Kaydedilen tüm taramalar</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} ve {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Sakla</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>1 taramayı sil</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>{0} taramayı sil</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Kaydedilen 1 tarama silindi</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Kaydedilen {0} tarama silindi</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>Tarama klasöründe {0} boşaltıldı.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Ekrandaki harita açık kalır. Bir sürücü ya da klasörün bir sonraki taraması, yeni bir taraması kaydedilene kadar hiçbir şeyle karşılaştırılamaz.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Bir dosya kullanımda olduğundan bırakıldı; bir sonraki sefer silinecek.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} dosya kullanımda olduğundan bırakıldı; bir sonraki sefer silinecek.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Ad veya desen, örn. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Ekle</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Kaldır</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Diller</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Norveççe yazarın kendi çevirisidir; diğer 16 çeviri makine çevirisidir ve hâlâ ana dili konuşan birinin incelemesini beklemektedir. Kendi dilinizde yanlış görünen bir şey varsa [GitHub'da bildirin](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Tam lisans metinleri</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Farklı tarama türleri</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>O tarama bundan ({1}) farklı bir yolla ({0}) yapıldı. Yalnızca bir yöntemin gördüğü dosyalar, örneğin korumalı sistem klasörleri, ve bir yöntemin bir kez, diğerinin tam saydığı sabit bağlantılar gitmiş, yeni, büyümüş veya küçülmüş olarak görünecek.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Yine de karşılaştır</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Ayna, ayna</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>O dosya bu taramanın kendi kaydı. Bir taramayla kendisi arasında, ne kadar dikkatli bakarsak bakalım, hiçbir şey değişemez. Gerçekten nelerin değiştiğini görmek için daha önceki bir taramayı seçin.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Başarım açıldı</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Sürücüye kendisinden bu yana nelerin değiştiği soruldu. Sürücü, bir sürücü olarak, hiçbir şey söylemedi.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Farklı yapılmış ({0} ile {1}): farklar yalnızca bir yöntemin gördüğü dosyaları içerir.</value></data>
 </root>

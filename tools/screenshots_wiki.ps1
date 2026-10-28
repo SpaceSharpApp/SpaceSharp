@@ -28,7 +28,7 @@ $files = [ordered]@{
     inspect = "shot-inspect.png"; menu = "shot-menu.png"; settings = "shot-settings.png"; about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
     "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"
     "wiki-rail" = "filter-rail.png"; "wiki-filtered" = "filtered.png"; "wiki-palette-picker" = "palette-picker.png"; "wiki-shortcuts" = "shortcuts.png"
-    "wiki-changes-everything" = "changes-everything.png"; "wiki-inspect-selection" = "inspect-selection.png"; "wiki-sidepanel-changes" = "sidepanel-changes.png"
+    "wiki-changes-everything" = "changes-everything.png"; "wiki-inspect-selection" = "inspect-selection.png"
     "wiki-palettes" = "palettes.png"; "wiki-palette-editor" = "palette-editor.png"
     "wiki-settings-general" = "settings-general.png"; "wiki-settings-behavior" = "settings-behavior.png"; "wiki-settings-appearance" = "settings-appearance.png"
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"

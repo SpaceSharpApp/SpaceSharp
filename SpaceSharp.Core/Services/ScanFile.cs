@@ -16,6 +16,12 @@ namespace SpaceSharp.Services;
 /// <param name="Path">The .sscan file this header was read from.</param>
 public sealed record ScanFileInfo(string RootPath, DateTime ScannedUtc, string Method, long FreeBytes, int FileCount, long Bytes, string Path);
 
+/// <summary>The automatic saves of one scan root: the current save and, when kept, the previous one.</summary>
+/// <param name="RootPath">The scanned drive root or folder.</param>
+/// <param name="ScannedUtc">When each save was scanned, newest first; one or two entries.</param>
+/// <param name="Bytes">What the saves take on disk together.</param>
+public sealed record SavedScanGroup(string RootPath, List<DateTime> ScannedUtc, long Bytes);
+
 /// <summary>Saves and loads a scanned tree as a .sscan file.</summary>
 /// <remarks>Format: gzip stream of a header followed by the tree in preorder, one record per item.</remarks>
 public static class ScanFile
@@ -137,20 +143,62 @@ public static class ScanFile
         return removed;
     }
 
-    /// <summary>Deletes every automatic save and returns the count removed.</summary>
-    /// <returns>How many files were deleted; locked files are left and not counted.</returns>
-    public static int DeleteAll()
+    /// <summary>The automatic saves grouped by scan root, newest root first, for the delete confirmation.</summary>
+    /// <returns>One group per root with the save's and its ".prev" copy's scan times, newest first, and their size on disk together; empty when there are none.</returns>
+    public static List<SavedScanGroup> AutoSaveGroups()
+    {
+        var groups = new List<SavedScanGroup>();
+        foreach (ScanFileInfo save in RecentAutoSaves(int.MaxValue))
+        {
+            var scannedUtc = new List<DateTime> { save.ScannedUtc };
+            long bytes = FileLength(save.Path);
+
+            string previousPath = PreviousPathFor(save.RootPath);
+            if (File.Exists(previousPath))
+            {
+                bytes += FileLength(previousPath);
+                if (Peek(previousPath) is { } previous)
+                {
+                    scannedUtc.Add(previous.ScannedUtc);
+                }
+            }
+            groups.Add(new SavedScanGroup(save.RootPath, scannedUtc, bytes));
+        }
+        return groups;
+    }
+
+    /// <summary>The size of a file, or 0 when it cannot be read.</summary>
+    /// <param name="path">The file to measure.</param>
+    /// <returns>Its length in bytes; 0 for a missing or unreadable file.</returns>
+    private static long FileLength(string path)
+    {
+        try
+        {
+            return new FileInfo(path).Length;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            return 0;
+        }
+    }
+
+    /// <summary>Deletes every automatic save, ".prev" copies included.</summary>
+    /// <returns>How many files were deleted and how many bytes they took; locked files are left and not counted.</returns>
+    public static (int Files, long Bytes) DeleteAll()
     {
         int removed = 0;
+        long bytes = 0;
         try
         {
             // ToList so deleting does not disturb the enumeration.
             foreach (string file in Directory.EnumerateFiles(Folder, "*" + Extension).ToList())
             {
+                long length = FileLength(file);
                 try
                 {
                     File.Delete(file);
                     removed++;
+                    bytes += length;
                 }
                 catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
                 {
@@ -163,7 +211,7 @@ public static class ScanFile
             // An unreadable scans folder has nothing to delete.
         }
 
-        return removed;
+        return (removed, bytes);
     }
 
     // ------------------------------------------------------------------ write

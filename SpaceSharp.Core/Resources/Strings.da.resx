@@ -238,16 +238,13 @@
   <data name="LabelSize_Smaller" xml:space="preserve"><value>Mindre</value></data>
   <data name="LabelSize_Smallest" xml:space="preserve"><value>Mindst</value></data>
   <data name="List_ByType" xml:space="preserve"><value>Plads efter filtype i {0}. Klik på en type for at filtrere kortet.</value></data>
-  <data name="List_ChangesSince" xml:space="preserve"><value>Største ændringer siden {0}</value></data>
-  <data name="List_ChangesSinceCompared" xml:space="preserve"><value>Største ændringer siden den sammenlignede scanning</value></data>
   <data name="List_HintNoScan" xml:space="preserve"><value>Scan et drev eller en mappe for at se de største elementer.</value></data>
   <data name="List_LargestFiles" xml:space="preserve"><value>Største filer i {0}</value></data>
   <data name="List_LargestFolders" xml:space="preserve"><value>Største mapper i {0}</value></data>
   <data name="List_HeadFile" xml:space="preserve"><value>Fil</value></data>
   <data name="List_HeadFolder" xml:space="preserve"><value>Mappe</value></data>
   <data name="List_HeadType" xml:space="preserve"><value>Type</value></data>
-  <data name="List_HeadChange" xml:space="preserve"><value>Ændring</value></data>
-  <data name="List_HeadShare" xml:space="preserve"><value>Andel af scanningen</value></data>
+  <data name="List_HeadShare" xml:space="preserve"><value>Andel</value></data>
   <data name="List_HeadSize" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Main_AboutSpaceSharpF1" xml:space="preserve"><value>Om SpaceSharp (F1)</value></data>
   <data name="Main_AltEnter" xml:space="preserve"><value>Alt+Enter</value></data>
@@ -539,7 +536,7 @@
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Åbnede scanningen fra</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Den forrige scanning blev lavet på en anden måde ({0} mod {1}), så den sammenlignes ikke. Det bliver den næste scanning af samme slags.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Ny scanning annulleret</value></data>
-  <data name="Status_Rescanned" xml:space="preserve"><value>Scannede {0} igen: {1:N0} filer · {2}</value></data>
+  <data name="Status_Rescanned" xml:space="preserve"><value>Scannede {0} igen · {1:N0} filer · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Scanner {0} igen…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Gemte {0}</value></data>
   <data name="Status_ScanCancelled" xml:space="preserve"><value>Scanning annulleret</value></data>
@@ -669,10 +666,8 @@
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Tegnet til et {0}-tastatur; vælg et andet, hvis det er forkert.</value></data>
   <data name="Keys_FootWin" xml:space="preserve"><value>Gule taster er dem, SpaceSharp bruger; et lille {0} i hjørnet betyder hold {0}.</value></data>
   <data name="Keys_FootMac" xml:space="preserve"><value>Gule taster er dem, SpaceSharp bruger; et lille {0} i hjørnet betyder hold Command. Delete er tasten over Return.</value></data>
-  <data name="Start_PickADrive" xml:space="preserve"><value>Vælg et drev til venstre</value></data>
   <data name="Start_PickADriveOrContinue" xml:space="preserve"><value>Vælg et drev til venstre, eller fortsæt, hvor du slap</value></data>
   <data name="Start_RecentHint" xml:space="preserve"><value>Gemte scanninger åbnes med det samme og sammenlignes med den nye.</value></data>
-  <data name="Start_FirstHint" xml:space="preserve"><value>Hver fil og mappe bliver en boks, hvis størrelse svarer til den plads, den fylder.</value></data>
   <data name="Start_ScanAFolder" xml:space="preserve"><value>Scan en mappe</value></data>
   <data name="Start_OpenASavedScan" xml:space="preserve"><value>Åbn en gemt scanning…</value></data>
   <data name="Start_FastScanLine" xml:space="preserve"><value>Hele drev på sekunder med administratorrettigheder.</value></data>
@@ -690,6 +685,15 @@
   <data name="Start_FolderFiles" xml:space="preserve"><value>Mappe · {0} filer</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Drevet er fyldt {0} mere siden denne scanning. Scan igen for at se, hvor det blev af.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Drevet har {0} mere ledig plads end ved denne scanning. Scan igen for at se det, som det er nu.</value></data>
+  <data name="Start_YourScans" xml:space="preserve"><value>Dine scanninger</value></data>
+  <data name="Start_KeptFor" xml:space="preserve"><value>Scanninger gemmes i {0}, så den næste kan vise, hvad der er ændret.</value></data>
+  <data name="Start_KeptForever" xml:space="preserve"><value>Scanninger gemmes, så den næste kan vise, hvad der er ændret.</value></data>
+  <data name="Start_FirstScanHere" xml:space="preserve"><value>Din første scanning kommer her</value></data>
+  <data name="Start_FirstScanText" xml:space="preserve"><value>Vælg et drev til venstre, eller en mappe. Scanningen tegner hver fil og mappe som en boks på størrelse med den plads, den fylder, og den gemmes her, så du kan åbne den igen og se, hvad der er ændret.</value></data>
+  <data name="Start_ScanDriveNow" xml:space="preserve"><value>Scan {0} nu</value></data>
+  <data name="Start_ScansWord" xml:space="preserve"><value>scanninger</value></data>
+  <data name="Start_FastTitle" xml:space="preserve"><value>Hele drev på sekunder</value></data>
+  <data name="Start_FastText" xml:space="preserve"><value>Med administratorrettigheder læser SpaceSharp NTFS-filtabellen i stedet for at gennemgå hver mappe.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behold gemte scanninger i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisk gemte scanninger, der er ældre end dette, slettes, når SpaceSharp starter. Scanninger, du selv har gemt som filer, røres aldrig.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dage</value></data>
@@ -698,8 +702,22 @@
   <data name="KeepScans_Forever" xml:space="preserve"><value>For altid</value></data>
   <data name="KeepScans_DeleteAll" xml:space="preserve"><value>Slet alle gemte scanninger</value></data>
   <data name="KeepScans_NoneToDelete" xml:space="preserve"><value>Der er ingen gemte scanninger.</value></data>
-  <data name="KeepScans_DeleteQuestion" xml:space="preserve"><value>Vil du slette {0} gemte scanninger? Kortet på skærmen bliver; sammenligninger med tidligere scanninger er ikke mulige, før der er lavet nye.</value></data>
-  <data name="KeepScans_Deleted" xml:space="preserve"><value>Slettede {0} gemte scanninger.</value></data>
+  <data name="KeepScans_DeleteTitle" xml:space="preserve"><value>Slet alle gemte scanninger?</value></data>
+  <data name="KeepScans_DeleteIntro" xml:space="preserve"><value>Kortet på skærmen forbliver åbent. Sammenligning med tidligere scanninger er ikke mulig, før nye er gemt.</value></data>
+  <data name="KeepScans_HeadRoot" xml:space="preserve"><value>Drev eller mappe</value></data>
+  <data name="KeepScans_HeadScans" xml:space="preserve"><value>Scanninger</value></data>
+  <data name="KeepScans_HeadOnDisk" xml:space="preserve"><value>På disken</value></data>
+  <data name="KeepScans_AllRow" xml:space="preserve"><value>Alle gemte scanninger</value></data>
+  <data name="KeepScans_TwoTimes" xml:space="preserve"><value>{0} og {1}</value></data>
+  <data name="KeepScans_Keep" xml:space="preserve"><value>Behold dem</value></data>
+  <data name="KeepScans_DeleteOne" xml:space="preserve"><value>Slet 1 scanning</value></data>
+  <data name="KeepScans_DeleteCount" xml:space="preserve"><value>Slet {0} scanninger</value></data>
+  <data name="KeepScans_DeletedOne" xml:space="preserve"><value>Slettede 1 gemt scanning</value></data>
+  <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Slettede {0} gemte scanninger</value></data>
+  <data name="KeepScans_Freed" xml:space="preserve"><value>{0} frigjort i scanningsmappen.</value></data>
+  <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Kortet på skærmen forbliver åbent. Den næste scanning af et drev eller en mappe har intet at sammenligne med, før en ny scanning af det er gemt.</value></data>
+  <data name="KeepScans_LockedOne" xml:space="preserve"><value>Én fil er i brug og blev stående; den slettes næste gang.</value></data>
+  <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} filer er i brug og blev stående; de slettes næste gang.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Navn eller mønster, f.eks. *.tmp</value></data>
   <data name="Exclude_Add" xml:space="preserve"><value>Tilføj</value></data>
   <data name="Exclude_Remove" xml:space="preserve"><value>Fjern</value></data>
@@ -1018,4 +1036,13 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprog</value></data>
   <data name="Credits_LanguagesText" xml:space="preserve"><value>Norsk er forfatterens eget; de 16 andre oversættelser er maskinlavede og venter stadig på gennemgang af en med sproget som modersmål. Hvis noget lyder forkert på dit sprog, [sig til på GitHub](https://github.com/SpaceSharpApp/SpaceSharp/issues).</value></data>
   <data name="Credits_Licenses" xml:space="preserve"><value>Fulde licenstekster</value></data>
+  <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Forskellige slags scanninger</value></data>
+  <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Den scanning blev lavet på en anden måde ({0}) end denne ({1}). Filer, som kun én metode ser, såsom beskyttede systemmapper, og hårde links, som den ene metode tæller én gang og den anden fuldt ud, vil vises som væk, nye, vokset eller skrumpet.</value></data>
+  <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Sammenlign alligevel</value></data>
+  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spejl, spejl</value></data>
+  <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Den fil er denne scannings egen gemte fil. Intet kan ændre sig mellem en scanning og den selv, uanset hvor grundigt vi kigger. Vælg en tidligere scanning for at se, hvad der faktisk er ændret.</value></data>
+  <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Præstation låst op</value></data>
+  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
+  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Spurgte drevet, hvad der var ændret siden det selv. Drevet, som er et drev, sagde ingenting.</value></data>
+  <data name="Changes_MadeDifferently" xml:space="preserve"><value>Lavet forskelligt ({0} mod {1}): forskellene omfatter filer, som kun én metode ser.</value></data>
 </root>

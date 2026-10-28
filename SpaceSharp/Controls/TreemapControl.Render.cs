@@ -10,8 +10,8 @@ namespace SpaceSharp.Controls;
 /// <summary>Rendering part of <see cref="TreemapControl"/>.</summary>
 public sealed partial class TreemapControl
 {
-    private Typeface NormalFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.Normal);
-    private Typeface HeaderFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.SemiBold);
+    private Typeface _normalFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.Normal);
+    private Typeface _headerFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.SemiBold);
 
     /// <summary>Resolves the map font, falling back to the platform default for Segoe names off Windows.</summary>
     /// <param name="name">A font family name as the user typed or picked it; not checked for existence.</param>
@@ -30,19 +30,19 @@ public sealed partial class TreemapControl
     private void RebuildTypefaces()
     {
         FontFamily family = MapFont(_fontFamily);
-        NormalFace = new Typeface(family, FontStyle.Normal, FontWeight.Normal);
-        HeaderFace = new Typeface(family, FontStyle.Normal, FontWeight.SemiBold);
+        _normalFace = new Typeface(family, FontStyle.Normal, FontWeight.Normal);
+        _headerFace = new Typeface(family, FontStyle.Normal, FontWeight.SemiBold);
     }
 
     // ---- pens
-    private IBrush GridBrush = new ImmutableSolidColorBrush(DefaultGridColor);
-    private IPen SelectionPen = new ImmutablePen(new ImmutableSolidColorBrush(DefaultHighlightColor), 3);
+    private IBrush _gridBrush = new ImmutableSolidColorBrush(DefaultGridColor);
+    private IPen _selectionPen = new ImmutablePen(new ImmutableSolidColorBrush(DefaultHighlightColor), 3);
 
     /// <summary>Recreates the grid brush and the selection pen from <see cref="GridColor"/> and <see cref="HighlightColor"/>.</summary>
     private void RebuildPens()
     {
-        GridBrush = new ImmutableSolidColorBrush(_gridColor);
-        SelectionPen = new ImmutablePen(new ImmutableSolidColorBrush(_highlightColor), 3);
+        _gridBrush = new ImmutableSolidColorBrush(_gridColor);
+        _selectionPen = new ImmutablePen(new ImmutableSolidColorBrush(_highlightColor), 3);
     }
 
     private static readonly IBrush GroupShade = new ImmutableSolidColorBrush(Color.FromArgb(0x24, 0x00, 0x00, 0x00));
@@ -263,7 +263,7 @@ public sealed partial class TreemapControl
             Rect strip = Rects.Intersect(new Rect(full.Right - stripRight, full.Y, stripRight, full.Height), _drawClip);
             if (!strip.IsBlank())
             {
-                dc.DrawRectangle(GridBrush, null, strip);
+                dc.DrawRectangle(_gridBrush, null, strip);
             }
         }
         if (stripBottom > 0)
@@ -271,7 +271,7 @@ public sealed partial class TreemapControl
             Rect strip = Rects.Intersect(new Rect(full.X, full.Bottom - stripBottom, full.Width - stripRight, stripBottom), _drawClip);
             if (!strip.IsBlank())
             {
-                dc.DrawRectangle(GridBrush, null, strip);
+                dc.DrawRectangle(_gridBrush, null, strip);
             }
         }
 
@@ -298,7 +298,7 @@ public sealed partial class TreemapControl
                 Rect rule = Rects.Intersect(new Rect(inner.X, inner.Y + HeaderHeight - 1, inner.Width, 1), _drawClip);
                 if (!rule.IsBlank())
                 {
-                    dc.DrawRectangle(GridBrush, null, rule);
+                    dc.DrawRectangle(_gridBrush, null, rule);
                 }
             }
 
@@ -308,7 +308,7 @@ public sealed partial class TreemapControl
             {
                 string headerText = HeaderText(item, headerTextWidth, "  ·  ");
                 DrawLabel(
-                    dc, headerText, HeaderFace, barText,
+                    dc, headerText, _headerFace, barText,
                     headerLeft + 4, inner.Y + _titlePadding, headerTextWidth, HeaderAlign);
             }
             return;
@@ -333,13 +333,13 @@ public sealed partial class TreemapControl
         {
             double nameTop = _fileCenterNames ? box.Y + (box.Height - lineHeight * 2) / 2 : box.Y + 2;
             string sizeText = SizeFormatter.Format(node.SizeFor(_measure));
-            DrawLabel(dc, node.Name, NormalFace, textBrush, textLeft, nameTop, textWidth, align);
-            DrawLabel(dc, sizeText, NormalFace, textBrush, textLeft, nameTop + lineHeight, textWidth, align);
+            DrawLabel(dc, node.Name, _normalFace, textBrush, textLeft, nameTop, textWidth, align);
+            DrawLabel(dc, sizeText, _normalFace, textBrush, textLeft, nameTop + lineHeight, textWidth, align);
         }
         else
         {
             double nameTop = _fileCenterNames ? box.Y + (box.Height - lineHeight) / 2 : box.Y + 2;
-            DrawLabel(dc, node.Name, NormalFace, textBrush, textLeft, nameTop, textWidth, align);
+            DrawLabel(dc, node.Name, _normalFace, textBrush, textLeft, nameTop, textWidth, align);
         }
     }
 
@@ -415,7 +415,7 @@ public sealed partial class TreemapControl
     /// <returns>Width in device-independent pixels, trailing spaces included.</returns>
     private double MeasureWidth(string text) =>
         new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
-            HeaderFace, TextSize * _labelScale, TextBrush).WidthIncludingTrailingWhitespace;
+            _headerFace, TextSize * _labelScale, TextBrush).WidthIncludingTrailingWhitespace;
 
     /// <summary>Draws one line of label text, ellipsized to the width, with the optional halo behind it.</summary>
     /// <param name="dc">The map layer's drawing context.</param>
@@ -512,10 +512,10 @@ public sealed partial class TreemapControl
                 continue;
             }
 
-            Rect selectionFrame = FrameRect(selected.Bounds, SelectionPen.Thickness / 2);
+            Rect selectionFrame = FrameRect(selected.Bounds, _selectionPen.Thickness / 2);
             if (!selectionFrame.IsBlank())
             {
-                dc.DrawRectangle(null, SelectionPen, selectionFrame);
+                dc.DrawRectangle(null, _selectionPen, selectionFrame);
             }
         }
     }

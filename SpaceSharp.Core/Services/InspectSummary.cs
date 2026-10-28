@@ -248,7 +248,7 @@ public sealed class InspectSummary
 
         ByType = TypeBreakdown(files);
         (ByAge, OlderThanYear) = AgeBreakdown(files, now);
-        Callouts = BuildCallouts(now);
+        Callouts = BuildCallouts();
     }
 
     // ---------------------------------------------------------------- where the space is
@@ -446,9 +446,8 @@ public sealed class InspectSummary
     // ---------------------------------------------------------------- callouts
 
     /// <summary>A callout when one item holds most of a folder; otherwise empty.</summary>
-    /// <param name="now">The UTC moment, reserved for age-based callouts; unused by the dominant-item callout.</param>
     /// <returns>Zero or one translated sentence.</returns>
-    private List<string> BuildCallouts(DateTime now)
+    private List<string> BuildCallouts()
     {
         var callouts = new List<string>();
         if (Size <= 0)
