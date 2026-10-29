@@ -282,7 +282,7 @@
                     <TextBlock x:Name="ScanRateLabel" Classes="dim" FontSize="11.5" TextTrimming="CharacterEllipsis" />
                   </StackPanel>
                   <StackPanel Grid.Column="2" MinWidth="52">
-                    <TextBlock x:Name="ScanElapsed" Text="0:00" FontSize="17" FontWeight="Bold" />
+                    <TextBlock x:Name="ScanElapsed" Text="0.00 s" FontSize="17" FontWeight="Bold" />
                     <TextBlock x:Name="ScanElapsedLabel" Classes="dim" FontSize="11.5" />
                   </StackPanel>
                 </Grid>

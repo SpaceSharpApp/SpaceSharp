@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Chiedi di nuovo la prossima volta</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Annulla</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Interrompi</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Variazione</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Variazioni</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Cancella</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Cartella principale: una tinta per cartella di primo livello, più chiara a ogni livello interno. Profondità cartella: un colore diverso per livello. Tipo di file: file colorati per tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Chiedi conferma prima di spostare nel Cestino</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Chiede prima di eliminare. Gli elementi eliminati possono sempre essere ripristinati dal Cestino.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Nascondi le cartelle vuote non sicure</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Elenca solo le cartelle vuote che sono chiaramente tue. Quelle in Windows, Program Files, ProgramData, AppData e nelle cartelle di giochi o di build, che i programmi spesso si aspettano di trovare, restano fuori dall'elenco. Disattivato, le elenca deselezionate, con un avviso quando ne selezioni una.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Tavolozze personalizzate</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usa qualsiasi tavolozza in entrambi i temi</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Disattivato: scegliere una tavolozza fatta per l'altro tema passa a quel tema, quindi una tavolozza chiara porta con sé il tema chiaro. Attivato: la tavolozza è usata com'è, tavolozze chiare sul tema scuro e scure sul chiaro.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} cartelle senza file</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} cartelle senza file, altre {1:N0} annidate dentro</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Nessuna cartella vuota in questa scansione.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Le cartelle sotto Windows, Program Files e ProgramData partono deselezionate: i programmi spesso si aspettano che esistano, ed eliminarle richiede l'autorizzazione di amministratore per ciascuna.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Seleziona sicure</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Seleziona solo le cartelle che sono chiaramente tue: sotto Desktop, Documenti, Download, Immagini, Musica e Video sull'unità di sistema, e fuori dalle cartelle di programmi, giochi e build altrove. È così che parte l'elenco.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Seleziona tutte le cartelle, comprese quelle in Windows, Program Files, AppData e nelle cartelle dei giochi che i programmi si aspettano di trovare.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} delle cartelle selezionate sono in Windows, Program Files, ProgramData, AppData o in una cartella di gioco o di build. I programmi spesso si aspettano che esistano; eliminarle può rompere il programma che le usa.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} selezionate · {1:N0} in cartelle di programmi</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>Altre {0:N0} in cartelle di programmi, app e giochi non sono elencate (Impostazioni › Comportamento).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Elimina le cartelle vuote</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Eliminare {0:N0} cartelle vuote? Vengono eliminate direttamente, senza passare dal Cestino.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} di esse si trovano in Windows, Program Files, ProgramData, AppData o in una cartella di gioco o di build. I programmi spesso si aspettano che esistano; eliminarle può rompere il programma che le usa.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Eliminale</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Eliminate direttamente, senza passare dal Cestino: non c'è nulla da ripristinare. Una cartella che ha ricevuto un file dopo la scansione viene lasciata stare.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} annidate</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Seleziona tutto</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Deseleziona tutto</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} selezionate</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Sposta le selezionate nel Cestino</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} cartelle vuote spostate nel Cestino</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Elimina le cartelle selezionate</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} cartelle vuote eliminate</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Eliminazione delle cartelle vuote…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} di {1:N0} cartelle</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>File duplicati</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>File con esattamente lo stesso contenuto, ovunque si trovino. Prima la dimensione, poi i primi byte, poi l'intero file, così si leggono solo le corrispondenze probabili.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Ignora i file sotto</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Dup_Delete" xml:space="preserve"><value>Sposta i selezionati nel Cestino</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} gruppi hanno tutte le copie selezionate, quindi non ne resterà nulla.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} file duplicati spostati nel Cestino, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Spostamento nel Cestino…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} di {1:N0} file</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Rivedi le cartelle vuote…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplicati</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>non ancora cercati</value></data>

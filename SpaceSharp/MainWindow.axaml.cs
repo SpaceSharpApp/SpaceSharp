@@ -1054,6 +1054,23 @@ public partial class MainWindow : Window
         }));
     }
 
+    /// <summary>A scan's elapsed time as people read it: hundredths under ten seconds ("5.32 s"), tenths under a minute ("41.7 s"), minutes and seconds from there ("2:08").</summary>
+    /// <param name="elapsed">The time since the scan started.</param>
+    /// <returns>The text for the scan card.</returns>
+    private static string ElapsedText(TimeSpan elapsed)
+    {
+        double seconds = elapsed.TotalSeconds;
+        if (seconds < 10)
+        {
+            return seconds.ToString("0.00", CultureInfo.CurrentCulture) + " s";
+        }
+        if (seconds < 60)
+        {
+            return seconds.ToString("0.0", CultureInfo.CurrentCulture) + " s";
+        }
+        return elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
+    }
+
     /// <summary>
     /// Timer tick during a scan: updates the live map, the size, rate, elapsed and path fields, and the stage bars; the first bar fills
     /// by bytes when the drive's used size is known, otherwise it sweeps.
@@ -1064,7 +1081,7 @@ public partial class MainWindow : Window
         WalkProgress progress = _scanMethod == "MFT" ? _mftProgress : _scanner.GetProgress();
         double seconds = Math.Max(0.001, _scanClock.Elapsed.TotalSeconds);
         ScanSize.Text = SizeFormatter.Format(progress.Bytes);
-        ScanElapsed.Text = _scanClock.Elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
+        ScanElapsed.Text = ElapsedText(_scanClock.Elapsed);
 
         bool handover = OperatingSystem.IsWindows() && progress.CurrentPath == ElevatedScan.HandoverMarker;
         bool building = _scanMethod == "MFT" && (progress.CurrentPath == MftBuildingMarker || handover);
@@ -1084,7 +1101,7 @@ public partial class MainWindow : Window
                 _buildStageShown = true;
                 SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
                 SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: true, done: false);
-                StageFindDetail.Text = _scanClock.Elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
+                StageFindDetail.Text = ElapsedText(_scanClock.Elapsed);
             }
             string soFar = Strings.Format("Scan_SoFar", progress.Files, progress.Directories);
             StageBuildDetail.Text = handover ? Strings.Get("Scan_Handover") : soFar;

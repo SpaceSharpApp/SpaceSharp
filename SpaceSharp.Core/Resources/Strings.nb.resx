@@ -264,6 +264,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Spør igjen neste gang</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Tilbake</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Stopp</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Endring</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Endringer</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Tøm</value></data>
@@ -495,6 +496,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Toppmappe: én farge per toppmappe, lysere for hvert nivå innover. Mappedybde: en egen farge per nivå. Filtype: filer farget etter type.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bekreft før flytting til papirkurven</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Spør før sletting. Slettede elementer kan alltid gjenopprettes fra papirkurven.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Skjul utrygge tomme mapper</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Viser bare de tomme mappene som tydelig er dine. De som ligger i Windows, Program Files, ProgramData, AppData og spill- eller byggmapper, som programmer ofte forventer at finnes, holdes helt utenfor listen. Av viser dem uten kryss, med en advarsel når du krysser av en.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Egne paletter</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Bruk hvilken som helst palett i begge temaer</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Av: velger du en palett laget for det andre temaet, byttes det til det temaet, så en lys palett tar med seg det lyse temaet. På: paletten brukes som den er, lyse paletter i mørkt tema og mørke paletter i lyst.</value></data>
@@ -1077,13 +1080,25 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mapper uten filer</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mapper uten filer, {1:N0} til nøstet inni dem</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Ingen tomme mapper i denne skanningen.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Mapper under Windows, Program Files og ProgramData starter uten kryss: programmer forventer ofte at de finnes, og å slette dem krever administratortillatelse for hver enkelt.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Velg trygge</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Krysser bare av mapper som tydelig er dine: under Skrivebord, Dokumenter, Nedlastinger, Bilder, Musikk og Videoer på systemstasjonen, og utenfor program-, spill- og byggmapper ellers. Slik starter listen.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Krysser av alle mapper, også de i Windows, Program Files, AppData og spillmapper som programmer forventer at finnes.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} av de avkryssede mappene ligger i Windows, Program Files, ProgramData, AppData eller en spill- eller byggmappe. Programmer forventer ofte at de finnes; å slette dem kan ødelegge programmet som eier dem.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} avkrysset · {1:N0} i programmapper</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>{0:N0} til i program-, app- og spillmapper vises ikke (Innstillinger › Oppførsel).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Slett tomme mapper</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Slette {0:N0} tomme mapper? De slettes direkte, ikke via papirkurven.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} av dem ligger i Windows, Program Files, ProgramData, AppData eller en spill- eller byggmappe. Programmer forventer ofte at disse mappene finnes; å slette dem kan ødelegge programmet som eier dem.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Slett dem</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Slettes direkte, ikke via papirkurven: det er ingenting i dem å gjenopprette. En mappe som har fått en fil siden skanningen, røres ikke.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nøstet</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Velg alle</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Velg ingen</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} avkrysset</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Flytt avkryssede til papirkurven</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>Flyttet {0:N0} tomme mapper til papirkurven</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Slett avkryssede mapper</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Slettet {0:N0} tomme mapper</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Sletter tomme mapper…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} av {1:N0} mapper</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Dupliserte filer</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Filer med nøyaktig samme innhold, uansett hvor de ligger. Først størrelse, så de første bytene, så hele filen, slik at bare sannsynlige treff leses.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Ignorer filer under</value></data>
@@ -1101,6 +1116,8 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Dup_Delete" xml:space="preserve"><value>Flytt avkryssede til papirkurven</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} sett har alle kopiene avkrysset, så ingenting av dem blir igjen.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>Flyttet {0:N0} dupliserte filer til papirkurven, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Flytter til papirkurven…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} av {1:N0} filer</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Gå gjennom tomme mapper…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplikater</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>ikke søkt ennå</value></data>

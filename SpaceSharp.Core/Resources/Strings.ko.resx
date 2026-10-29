@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>다음에 다시 묻기</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>취소</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>중지</value></data>
   <data name="Main_Change" xml:space="preserve"><value>변경</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>변경 사항</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>지우기</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>최상위 폴더: 최상위 폴더마다 하나의 색조, 안쪽 단계마다 더 밝아집니다. 폴더 깊이: 단계마다 다른 색상입니다. 파일 형식: 파일을 형식별로 색칠합니다.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>휴지통으로 이동하기 전에 확인</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>삭제하기 전에 묻습니다. 삭제한 항목은 언제든지 휴지통에서 복원할 수 있습니다.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>안전하지 않은 빈 폴더 숨기기</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>분명히 내 것인 빈 폴더만 목록에 표시합니다. 프로그램이 있다고 가정하는 경우가 많은 Windows, Program Files, ProgramData, AppData, 게임이나 빌드 폴더 안의 폴더는 목록에서 아예 제외됩니다. 끄면 선택되지 않은 상태로 표시되고, 선택하면 경고가 나타납니다.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>사용자 지정 팔레트</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>두 테마 모두에서 아무 팔레트나 사용</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>끔: 다른 테마용 팔레트를 고르면 그 테마로 전환되어 밝은 팔레트는 밝은 테마를 함께 가져옵니다. 켬: 팔레트를 그대로 사용하여 어두운 테마에 밝은 팔레트를, 밝은 테마에 어두운 팔레트를 쓸 수 있습니다.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Empty_Summary" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개, 그 안에 중첩된 폴더 {1:N0}개</value></data>
   <data name="Empty_None" xml:space="preserve"><value>이 스캔에는 빈 폴더가 없습니다.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows, Program Files, ProgramData 아래의 폴더는 처음에 선택되지 않습니다. 프로그램이 그 폴더가 있다고 가정하는 경우가 많고, 삭제하려면 하나씩 관리자 권한이 필요합니다.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>안전한 항목 선택</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>분명히 내 것인 폴더만 선택합니다. 시스템 드라이브에서는 바탕 화면, 문서, 다운로드, 사진, 음악, 비디오 아래, 다른 드라이브에서는 프로그램, 게임, 빌드 폴더 밖의 폴더입니다. 목록은 이 상태로 시작합니다.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>프로그램이 있다고 가정하는 Windows, Program Files, AppData, 게임 폴더 안의 것까지 모든 폴더를 선택합니다.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>선택한 폴더 중 {0:N0}개는 Windows, Program Files, ProgramData, AppData 또는 게임이나 빌드 폴더 안에 있습니다. 프로그램은 이런 폴더가 있다고 가정하는 경우가 많아 삭제하면 해당 프로그램이 고장 날 수 있습니다.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0}개 선택됨 · 프로그램 폴더 안 {1:N0}개</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>프로그램, 앱, 게임 폴더 안의 {0:N0}개는 표시되지 않습니다 (설정 › 동작).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>빈 폴더 삭제</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>빈 폴더 {0:N0}개를 삭제할까요? 휴지통을 거치지 않고 바로 삭제됩니다.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>그중 {0:N0}개는 Windows, Program Files, ProgramData, AppData 또는 게임이나 빌드 폴더 안에 있습니다. 프로그램은 이런 폴더가 있다고 가정하는 경우가 많아 삭제하면 해당 프로그램이 고장 날 수 있습니다.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>삭제</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>휴지통을 거치지 않고 바로 삭제됩니다. 복원할 내용이 없기 때문입니다. 스캔 이후 파일이 생긴 폴더는 그대로 둡니다.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>중첩 {0:N0}개</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>모두 선택</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>선택 해제</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0}개 선택됨</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>선택한 항목을 휴지통으로</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>빈 폴더 {0:N0}개를 휴지통으로 이동했습니다</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>선택한 폴더 삭제</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>빈 폴더 {0:N0}개를 삭제했습니다</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>빈 폴더 삭제 중…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>폴더 {1:N0}개 중 {0:N0}개</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>중복 파일</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>어디에 있든 내용이 완전히 같은 파일입니다. 먼저 크기, 다음 첫 바이트, 마지막으로 파일 전체를 비교하므로 가능성이 있는 파일만 읽습니다.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>이 크기 미만 파일 무시</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Dup_Delete" xml:space="preserve"><value>선택한 항목을 휴지통으로</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0}개 묶음은 모든 사본이 선택되어 아무것도 남지 않습니다.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>중복 파일 {0:N0}개를 휴지통으로 이동했습니다, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>휴지통으로 이동하는 중…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>파일 {1:N0}개 중 {0:N0}개</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>빈 폴더 검토…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>중복</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>아직 검색 안 함</value></data>

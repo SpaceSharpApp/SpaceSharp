@@ -7,11 +7,13 @@ namespace SpaceSharp.Util;
 /// <summary>Moves items to the system trash, and opens or reveals them in the file manager.</summary>
 internal static class Trash
 {
-    /// <summary>Sends the paths to the trash, blocking the calling thread until the shell has finished.</summary>
+    /// <summary>Sends the paths to the trash, blocking the calling thread until the shell has finished or the token stopped it.</summary>
     /// <param name="paths">Full paths of files and folders; an empty collection succeeds at once, and paths that no longer exist are skipped.</param>
-    /// <param name="error">Null on success; otherwise localized text for the dialog, at most a few lines, naming what stayed behind and why.</param>
-    /// <returns>True when every path is gone; false when something stayed behind.</returns>
-    public static bool TrySend(IReadOnlyCollection<string> paths, out string? error)
+    /// <param name="error">Null on success; otherwise localized text for the dialog, at most a few lines, naming what stayed behind and why. Null too after a stop, which leaves the rest where it was without comment.</param>
+    /// <param name="progress">Told how many of the paths have been handled so far, after each batch; may be null.</param>
+    /// <param name="token">Stops between batches; what was already sent stays sent.</param>
+    /// <returns>True when every path is gone; false when something stayed behind, a stop included.</returns>
+    public static bool TrySend(IReadOnlyCollection<string> paths, out string? error, IProgress<int>? progress = null, CancellationToken token = default)
     {
         if (paths.Count == 0)
         {
@@ -21,17 +23,23 @@ internal static class Trash
 
         if (OperatingSystem.IsWindows())
         {
-            return Windows.TrySend(paths, out error);
+            return Windows.TrySend(paths, out error, progress, token);
         }
 
         var failures = new List<string>();
+        int done = 0;
         foreach (string path in paths)
         {
+            if (token.IsCancellationRequested)
+            {
+                break;
+            }
             string? problem = OperatingSystem.IsMacOS() ? MacTrash(path) : LinuxTrash(path);
             if (problem is not null)
             {
                 failures.Add($"{path}: {problem}");
             }
+            progress?.Report(++done);
         }
 
         var remaining = paths.Where(path => File.Exists(path) || Directory.Exists(path)).ToList();
@@ -43,7 +51,7 @@ internal static class Trash
 
         error = failures.Count > 0
             ? string.Join("\n", failures.Take(5))
-            : Strings.Format("Trash_StillExistMany", remaining.Count, paths.Count);
+            : token.IsCancellationRequested ? null : Strings.Format("Trash_StillExistMany", remaining.Count, paths.Count);
         return false;
     }
 
@@ -162,6 +170,7 @@ internal static class Trash
         private const int FOF_WANTNUKEWARNING = 0x4000;
         private const int FOF_NORECURSEREPARSE = 0x8000;   // do not follow junctions or symlinks
         private const int FOF_NOERRORUI = 0x0400;          // no dialogs on failure; the result code says what happened
+        private const int FOF_SILENT = 0x0004;             // no progress window either
 
         /// <summary>Win32 SHFILEOPSTRUCTW; pFrom is a double-null-terminated list.</summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -221,12 +230,17 @@ internal static class Trash
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern uint GetShortPathName(string longPath, [Out] char[] shortPath, uint bufferLength);
 
-        /// <summary>Sends the paths to the Recycle Bin.</summary>
-        /// <remarks>SHFileOperation fails the whole batch on one bad path (DE_INVALIDFILES), so vanished paths are skipped, long paths use 8.3 form, and a failed batch is retried per item.</remarks>
+        /// <summary>How many paths go to the shell in one call: small enough that one refused path, one prompt or one stop costs little, large enough that the per-call cost does not add up.</summary>
+        private const int BatchSize = 200;
+
+        /// <summary>Sends the paths to the Recycle Bin, a batch at a time.</summary>
+        /// <remarks>SHFileOperation fails a whole call on one bad path (DE_INVALIDFILES), so vanished paths are skipped, long paths use 8.3 form, and a refused batch is split in halves until the culprits are found. The shell's own progress window is off; the caller shows progress from the reports.</remarks>
         /// <param name="paths">Full paths of files and folders; those that no longer exist are skipped.</param>
-        /// <param name="error">Null on success; otherwise up to four "path: reason" lines plus an "and N more" line, or the still-exists message.</param>
+        /// <param name="error">Null on success or after a stop; otherwise up to four "path: reason" lines plus an "and N more" line, or the still-exists message.</param>
+        /// <param name="progress">Told how many paths have been handled after each batch; may be null.</param>
+        /// <param name="token">Stops between batches.</param>
         /// <returns>True when every present path is gone afterwards.</returns>
-        public static bool TrySend(IReadOnlyCollection<string> paths, out string? error)
+        public static bool TrySend(IReadOnlyCollection<string> paths, out string? error, IProgress<int>? progress, CancellationToken token)
         {
             var present = paths.Where(path => File.Exists(path) || Directory.Exists(path)).ToList();
             if (present.Count == 0)
@@ -236,34 +250,34 @@ internal static class Trash
             }
 
             var shellPaths = present.Select(ShellPath).ToList();
-            int batchResult = Send(shellPaths, out _, quiet: false);
-            if (batchResult == 0)
-            {
-                // The shell did its job; what the user skipped in its dialogs (an item needing elevation, say) is still here and is reported as such, not retried, since a retry would ask again for every item.
-                error = Remaining(present, paths.Count);
-                return error is null;
-            }
-
-            // The whole batch was refused, usually for one bad path: retry one at a time, quietly, so the codes name the culprits without a dialog each.
             var failed = new List<(string Path, int Code)>();
-            foreach ((string? original, string? shellPath) in present.Zip(shellPaths))
+            int done = paths.Count - present.Count;
+            bool cancelledInShell = false;
+            for (int start = 0; start < present.Count && !token.IsCancellationRequested && !cancelledInShell; start += BatchSize)
             {
-                if (!File.Exists(original) && !Directory.Exists(original))
+                int count = Math.Min(BatchSize, present.Count - start);
+                List<string> batchOriginals = present.GetRange(start, count);
+                List<string> batchShell = shellPaths.GetRange(start, count);
+                int result = Send(batchShell, out _, quiet: false);
+                if (result == ErrorCancelled)
                 {
-                    continue;
+                    // Cancel in the shell's dialog means stop, the same as our own button.
+                    cancelledInShell = true;
                 }
-
-                int itemResult = Send(new[] { shellPath }, out bool itemAborted, quiet: true);
-                if (itemResult != 0)
+                else if (result != 0)
                 {
-                    failed.Add((original, itemResult));
+                    // The batch was refused, usually for one bad path: halve it until the culprits are alone, quietly, so no dialog appears per item.
+                    Bisect(batchOriginals, batchShell, failed);
                 }
-                else if (itemAborted && (File.Exists(original) || Directory.Exists(original)))
-                {
-                    failed.Add((original, Skipped));
-                }
+                done += count;
+                progress?.Report(done);
             }
 
+            if (token.IsCancellationRequested || cancelledInShell)
+            {
+                error = null;
+                return false;
+            }
             if (failed.Count == 0)
             {
                 error = Remaining(present, paths.Count);
@@ -279,14 +293,52 @@ internal static class Trash
             return false;
         }
 
+        /// <summary>Sends a refused batch again in halves, recursing into the half that fails, until single items name their error.</summary>
+        /// <param name="originals">The paths as the caller gave them, for the report.</param>
+        /// <param name="shellPaths">The same paths in the form the shell takes, same order.</param>
+        /// <param name="failed">Collects the items that still failed on their own, with their codes.</param>
+        private static void Bisect(IReadOnlyList<string> originals, IReadOnlyList<string> shellPaths, List<(string Path, int Code)> failed)
+        {
+            var remaining = Enumerable.Range(0, originals.Count).Where(i => File.Exists(originals[i]) || Directory.Exists(originals[i])).ToList();
+            if (remaining.Count == 0)
+            {
+                return;
+            }
+            int result = Send(remaining.Select(i => shellPaths[i]).ToList(), out bool aborted, quiet: true);
+            if (result == 0)
+            {
+                if (aborted)
+                {
+                    foreach (int i in remaining.Where(i => File.Exists(originals[i]) || Directory.Exists(originals[i])))
+                    {
+                        failed.Add((originals[i], Skipped));
+                    }
+                }
+                return;
+            }
+            if (remaining.Count == 1)
+            {
+                failed.Add((originals[remaining[0]], result));
+                return;
+            }
+            int half = remaining.Count / 2;
+            foreach (List<int> part in new[] { remaining.Take(half).ToList(), remaining.Skip(half).ToList() })
+            {
+                Bisect(part.Select(i => originals[i]).ToList(), part.Select(i => shellPaths[i]).ToList(), failed);
+            }
+        }
+
+        /// <summary>The shell's result when the user cancelled its dialog (ERROR_CANCELLED).</summary>
+        private const int ErrorCancelled = 0x4C7;
+
         /// <summary>One SHFileOperation delete-to-bin call for a batch of paths.</summary>
         /// <param name="shellPaths">Paths already shortened where needed, joined with null separators for pFrom.</param>
         /// <param name="aborted">True when the shell skipped or the user cancelled part of the batch, even with a 0 result.</param>
-        /// <param name="quiet">True suppresses the shell's error dialogs, so a refused item fails with a code instead of a prompt.</param>
+        /// <param name="quiet">True suppresses the shell's error dialogs, so a refused item fails with a code instead of a prompt; the progress window is always off.</param>
         /// <returns>The shell's result code; 0 on success.</returns>
         private static int Send(IReadOnlyCollection<string> shellPaths, out bool aborted, bool quiet)
         {
-            int flags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING | FOF_NORECURSEREPARSE | (quiet ? FOF_NOERRORUI : 0);
+            int flags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING | FOF_NORECURSEREPARSE | FOF_SILENT | (quiet ? FOF_NOERRORUI : 0);
             // pFrom is a double-null-terminated list of null-separated paths.
             var operation = new SHFILEOPSTRUCT
             {
@@ -351,6 +403,7 @@ internal static class Trash
             0x78 or 0x5 => Strings.Get("Trash_AccessDenied"),
             0x20 => Strings.Get("Trash_InUse"),
             0x2 or 0x3 or 0x402 => Strings.Get("Trash_Gone"),
+            ErrorCancelled => Strings.Get("Trash_Skipped"),
             _ => Strings.Format("Trash_Code", $"0x{code:X}")
         };
     }

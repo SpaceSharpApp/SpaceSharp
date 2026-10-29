@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Perguntar novamente da próxima vez</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Parar</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Mudança</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Mudanças</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Limpar</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Pasta principal: uma matiz por pasta de nível superior, mais clara a cada nível interno. Profundidade da pasta: uma cor diferente por nível. Tipo de arquivo: arquivos coloridos por tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmar antes de mover para a Lixeira</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Perguntar antes de excluir. Itens excluídos sempre podem ser restaurados da Lixeira.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar pastas vazias inseguras</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista só as pastas vazias que são claramente suas. As que estão em Windows, Program Files, ProgramData, AppData e pastas de jogos ou de compilação, com que os programas costumam contar, ficam fora da lista. Desligado, lista-as desmarcadas, com um aviso quando marca uma.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usar qualquer paleta em ambos os temas</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Desligado: escolher uma paleta feita para o outro tema muda para esse tema, pelo que uma paleta clara traz consigo o tema claro. Ligado: a paleta é usada tal como está, paletas claras no tema escuro e escuras no claro.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} pastas sem ficheiros</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} pastas sem ficheiros, mais {1:N0} aninhadas dentro delas</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Sem pastas vazias nesta análise.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>As pastas em Windows, Program Files e ProgramData começam desmarcadas: os programas costumam contar com elas, e eliminá-las pede permissão de administrador uma a uma.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Selecionar seguras</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Marca só as pastas que são claramente suas: em Área de Trabalho, Documentos, Transferências, Imagens, Música e Vídeos na unidade do sistema, e fora de pastas de programas, jogos e compilação noutras. É assim que a lista começa.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Marca todas as pastas, incluindo as de Windows, Program Files, AppData e pastas de jogos com que os programas contam.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} das pastas marcadas estão em Windows, Program Files, ProgramData, AppData ou numa pasta de jogo ou de compilação. Os programas costumam contar com elas; eliminá-las pode avariar o programa a que pertencem.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} marcadas · {1:N0} em pastas de programas</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>Mais {0:N0} em pastas de programas, aplicações e jogos não são listadas (Definições › Comportamento).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Eliminar pastas vazias</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Eliminar {0:N0} pastas vazias? São eliminadas diretamente, sem passar pela Reciclagem.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} delas estão em Windows, Program Files, ProgramData, AppData ou numa pasta de jogo ou de compilação. Os programas costumam contar com elas; eliminá-las pode avariar o programa a que pertencem.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Eliminadas diretamente, sem passar pela Reciclagem: não há nada nelas para restaurar. Uma pasta que recebeu um ficheiro desde a análise fica como está.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} aninhadas</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Selecionar tudo</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Não selecionar nada</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} marcadas</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Mover as marcadas para a Reciclagem</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} pastas vazias movidas para a Reciclagem</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Eliminar as pastas marcadas</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} pastas vazias eliminadas</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>A eliminar pastas vazias…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} de {1:N0} pastas</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Ficheiros duplicados</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Ficheiros com exatamente o mesmo conteúdo, estejam onde estiverem. Primeiro o tamanho, depois os primeiros bytes e por fim o ficheiro inteiro, para ler só as correspondências prováveis.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Ignorar ficheiros abaixo de</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Dup_Delete" xml:space="preserve"><value>Mover os marcados para a Reciclagem</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} conjuntos têm todas as cópias marcadas, por isso não sobrará nada deles.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} ficheiros duplicados movidos para a Reciclagem, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>A mover para a Reciclagem…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} de {1:N0} ficheiros</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Rever pastas vazias…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplicados</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>ainda sem procurar</value></data>

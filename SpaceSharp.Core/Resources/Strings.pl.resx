@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Zapytaj ponownie następnym razem</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Anuluj</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Zatrzymaj</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Zmiana</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Zmiany</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Wyczyść</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Folder główny: jeden odcień na folder najwyższego poziomu, jaśniejszy z każdym poziomem w głąb. Głębokość folderu: inny kolor na każdy poziom. Typ pliku: pliki kolorowane według typu.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Potwierdzaj przed przeniesieniem do Kosza</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Pytaj przed usunięciem. Usunięte elementy zawsze można przywrócić z Kosza.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ukryj niebezpieczne puste foldery</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Pokazuje tylko puste foldery, które są wyraźnie Twoje. Te w Windows, Program Files, ProgramData, AppData oraz folderach gier lub kompilacji, których programy często oczekują, są całkiem pomijane. Wyłączone pokazuje je odznaczone, z ostrzeżeniem przy zaznaczeniu.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Palety niestandardowe</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Używaj dowolnej palety w obu motywach</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Wyłączone: wybranie palety dla drugiego motywu przełącza na ten motyw, więc jasna paleta przynosi jasny motyw. Włączone: paleta jest używana taka, jaka jest, jasne palety w ciemnym motywie i ciemne w jasnym.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Empty_Summary" xml:space="preserve"><value>Foldery bez plików: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Foldery bez plików: {0:N0}, zagnieżdżonych w nich: {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Brak pustych folderów w tym skanie.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Foldery w Windows, Program Files i ProgramData zaczynają jako odznaczone: programy często oczekują, że istnieją, a ich usunięcie wymaga uprawnień administratora dla każdego z osobna.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Zaznacz bezpieczne</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Zaznacza tylko foldery, które są wyraźnie Twoje: w Pulpit, Dokumenty, Pobrane, Obrazy, Muzyka i Wideo na dysku systemowym, a poza folderami programów, gier i kompilacji gdzie indziej. Tak zaczyna się lista.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Zaznacza wszystkie foldery, także te w Windows, Program Files, AppData i folderach gier, których programy oczekują.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} z zaznaczonych folderów leży w Windows, Program Files, ProgramData, AppData albo w folderze gry lub kompilacji. Programy często oczekują, że istnieją; ich usunięcie może zepsuć program, do którego należą.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>Zaznaczono: {0:N0} · w folderach programów: {1:N0}</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>Jeszcze {0:N0} w folderach programów, aplikacji i gier nie jest pokazanych (Ustawienia › Zachowanie).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Usuń puste foldery</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Usunąć {0:N0} pustych folderów? Są usuwane bezpośrednio, nie do Kosza.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} z nich leży w Windows, Program Files, ProgramData, AppData albo w folderze gry lub kompilacji. Programy często oczekują, że te foldery istnieją; ich usunięcie może zepsuć program, do którego należą.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Usuń je</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Usuwane bezpośrednio, nie do Kosza: nie ma w nich nic do przywrócenia. Folder, w którym od skanu pojawił się plik, zostaje nietknięty.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} zagnieżdżonych</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Zaznacz wszystko</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Odznacz wszystko</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>Zaznaczono: {0:N0}</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Przenieś zaznaczone do Kosza</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>Przeniesiono do Kosza pustych folderów: {0:N0}</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Usuń zaznaczone foldery</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Usunięto pustych folderów: {0:N0}</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Usuwanie pustych folderów…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} z {1:N0} folderów</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Zduplikowane pliki</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Pliki o dokładnie tej samej zawartości, gdziekolwiek leżą. Najpierw rozmiar, potem pierwsze bajty, potem cały plik, więc czytane są tylko prawdopodobne trafienia.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Pomiń pliki poniżej</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Dup_Delete" xml:space="preserve"><value>Przenieś zaznaczone do Kosza</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>W {0:N0} zestawach zaznaczono każdą kopię, więc nic z nich nie zostanie.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>Przeniesiono do Kosza zduplikowanych plików: {0:N0}, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Przenoszenie do Kosza…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} z {1:N0} plików</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Przejrzyj puste foldery…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplikaty</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>jeszcze nie szukano</value></data>

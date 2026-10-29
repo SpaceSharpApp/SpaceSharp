@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Fråga igen nästa gång</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backsteg</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Avbryt</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Stoppa</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Förändring</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Förändringar</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Rensa</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Toppmapp: en nyans per mapp på toppnivå, ljusare för varje nivå inåt. Mappdjup: en annan färg per nivå. Filtyp: filer färgade efter typ.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bekräfta innan något flyttas till Papperskorgen</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Fråga innan något tas bort. Borttagna objekt kan alltid återställas från Papperskorgen.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Dölj osäkra tomma mappar</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Visar bara de tomma mappar som tydligt är dina. De i Windows, Program Files, ProgramData, AppData och spel- eller byggmappar, som program ofta förväntar sig finns, hålls helt utanför listan. Av visar dem omarkerade, med en varning när du markerar en.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Egna paletter</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Använd vilken palett som helst i båda temana</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Av: väljer du en palett gjord för det andra temat byts det till det temat, så en ljus palett tar med sig det ljusa temat. På: paletten används som den är, ljusa paletter i mörkt tema och mörka paletter i ljust.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mappar utan filer</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mappar utan filer, {1:N0} till nästlade i dem</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Inga tomma mappar i den här skanningen.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Mappar under Windows, Program Files och ProgramData börjar omarkerade: program förväntar sig ofta att de finns, och att ta bort dem kräver administratörsbehörighet för var och en.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Välj säkra</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Markerar bara mappar som tydligt är dina: under Skrivbord, Dokument, Hämtade filer, Bilder, Musik och Videor på systemenheten, och utanför program-, spel- och byggmappar annars. Så börjar listan.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Markerar alla mappar, även de i Windows, Program Files, AppData och spelmappar som program förväntar sig finns.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} av de markerade mapparna ligger i Windows, Program Files, ProgramData, AppData eller en spel- eller byggmapp. Program förväntar sig ofta att de finns; att ta bort dem kan förstöra programmet som äger dem.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} markerade · {1:N0} i programmappar</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>{0:N0} till i program-, app- och spelmappar visas inte (Inställningar › Beteende).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Ta bort tomma mappar</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Ta bort {0:N0} tomma mappar? De tas bort direkt, inte via papperskorgen.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} av dem ligger i Windows, Program Files, ProgramData, AppData eller en spel- eller byggmapp. Program förväntar sig ofta att de finns; att ta bort dem kan förstöra programmet som äger dem.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Ta bort dem</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Tas bort direkt, inte via papperskorgen: det finns inget i dem att återställa. En mapp som fått en fil sedan skanningen lämnas orörd.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nästlade</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Markera alla</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Avmarkera alla</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} markerade</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Flytta markerade till papperskorgen</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>Flyttade {0:N0} tomma mappar till papperskorgen</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Ta bort markerade mappar</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Tog bort {0:N0} tomma mappar</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Tar bort tomma mappar…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} av {1:N0} mappar</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Dubblettfiler</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Filer med exakt samma innehåll, var de än ligger. Först storlek, sedan de första byten, sedan hela filen, så att bara troliga träffar läses.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Ignorera filer under</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Dup_Delete" xml:space="preserve"><value>Flytta markerade till papperskorgen</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} uppsättningar har alla kopior markerade, så inget av dem blir kvar.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>Flyttade {0:N0} dubblettfiler till papperskorgen, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Flyttar till papperskorgen…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} av {1:N0} filer</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Gå igenom tomma mappar…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Dubbletter</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>inte sökt än</value></data>

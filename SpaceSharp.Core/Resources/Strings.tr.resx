@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Bir dahaki sefere yeniden sor</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>İptal</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Durdur</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Değişim</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Değişiklikler</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Temizle</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Üst klasör: üst düzey klasör başına bir ton, içeri doğru her düzeyde daha açık. Klasör derinliği: her düzey için farklı bir renk. Dosya türü: dosyalar türe göre renklendirilir.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşımadan önce onay iste</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Silmeden önce sorar. Silinen öğeler her zaman Geri Dönüşüm Kutusu'ndan geri yüklenebilir.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Güvenli olmayan boş klasörleri gizle</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Yalnızca açıkça sizin olan boş klasörleri listeler. Programların genellikle var olmasını beklediği Windows, Program Files, ProgramData, AppData ile oyun veya derleme klasörlerindekiler listeye hiç alınmaz. Kapalıyken işaretsiz listelenir, birini işaretleyince uyarı çıkar.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Özel paletler</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Her iki temada da herhangi bir paleti kullan</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Kapalı: diğer tema için yapılmış bir paleti seçmek o temaya geçirir, yani açık bir palet açık temayı da getirir. Açık: palet olduğu gibi kullanılır, koyu temada açık paletler ve açık temada koyu paletler.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Empty_Summary" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör, bunların içinde iç içe {1:N0} tane daha</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Bu taramada boş klasör yok.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows, Program Files ve ProgramData altındaki klasörler başlangıçta işaretsizdir: programlar genellikle onların var olmasını bekler ve her birini silmek yönetici izni ister.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Güvenlileri seç</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Yalnızca açıkça sizin olan klasörleri işaretler: sistem sürücüsünde Masaüstü, Belgeler, İndirilenler, Resimler, Müzik ve Videolar altındakiler, başka yerlerde program, oyun ve derleme klasörleri dışındakiler. Liste böyle başlar.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Programların var olmasını beklediği Windows, Program Files, AppData ve oyun klasörlerindekiler dahil her klasörü işaretler.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>İşaretli klasörlerin {0:N0} tanesi Windows, Program Files, ProgramData, AppData ya da bir oyun veya derleme klasörünün içinde. Programlar genellikle bu klasörlerin var olmasını bekler; silmek sahibi olan programı bozabilir.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} işaretli · {1:N0} program klasöründe</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>Program, uygulama ve oyun klasörlerindeki {0:N0} tanesi daha listelenmedi (Ayarlar › Davranış).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Boş klasörleri sil</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>{0:N0} boş klasör silinsin mi? Geri Dönüşüm Kutusu'na taşınmadan doğrudan silinirler.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>Bunların {0:N0} tanesi Windows, Program Files, ProgramData, AppData ya da bir oyun veya derleme klasörünün içinde. Programlar genellikle bu klasörlerin var olmasını bekler; silmek sahibi olan programı bozabilir.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Sil</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşınmadan doğrudan silinir: içlerinde geri yüklenecek bir şey yoktur. Taramadan bu yana dosya eklenmiş bir klasöre dokunulmaz.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} iç içe</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Tümünü seç</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Hiçbirini seçme</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} işaretli</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>İşaretlileri Geri Dönüşüm Kutusu'na taşı</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} boş klasör Geri Dönüşüm Kutusu'na taşındı</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>İşaretli klasörleri sil</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} boş klasör silindi</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Boş klasörler siliniyor…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} klasör</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Yinelenen dosyalar</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Nerede olursa olsun içeriği birebir aynı olan dosyalar. Önce boyut, sonra ilk baytlar, sonra dosyanın tamamı; böylece yalnızca olası eşleşmeler okunur.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Şundan küçük dosyaları yok say</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Dup_Delete" xml:space="preserve"><value>İşaretlileri Geri Dönüşüm Kutusu'na taşı</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} kümede her kopya işaretli, onlardan geriye hiçbir şey kalmayacak.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} yinelenen dosya Geri Dönüşüm Kutusu'na taşındı, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşınıyor…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} dosya</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Boş klasörleri gözden geçir…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Yinelenenler</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>henüz aranmadı</value></data>

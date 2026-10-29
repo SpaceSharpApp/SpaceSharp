@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Запитати знову наступного разу</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Скасувати</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Зупинити</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Зміни</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Зміни</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Очистити</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Папка верхнього рівня: один відтінок на папку верхнього рівня, світліший з кожним рівнем усередині. Глибина папки: інший колір на кожному рівні. Тип файлу: файли забарвлено за типом.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Підтверджувати переміщення до Кошика</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Запитувати перед видаленням. Видалені елементи завжди можна відновити з Кошика.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Приховувати небезпечні порожні папки</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Показує лише порожні папки, які явно ваші. Ті, що у Windows, Program Files, ProgramData, AppData та папках ігор чи збірок, на які часто розраховують програми, до списку не потрапляють зовсім. Вимкнено: вони показуються непозначеними, з попередженням при позначенні.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Власні палітри</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Використовувати будь-яку палітру в обох темах</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Вимкнено: вибір палітри для іншої теми перемикає на ту тему, тож світла палітра приносить світлу тему. Увімкнено: палітра використовується як є, світлі палітри в темній темі й темні у світлій.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Empty_Summary" xml:space="preserve"><value>Папок без файлів: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Папок без файлів: {0:N0}, вкладених у них ще {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>У цьому скані немає порожніх папок.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Папки у Windows, Program Files і ProgramData спочатку не позначені: програми часто розраховують на їх наявність, а видалення кожної потребує дозволу адміністратора.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Вибрати безпечні</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Позначає лише папки, які явно ваші: у Робочому столі, Документах, Завантаженнях, Зображеннях, Музиці та Відео на системному диску, а на інших дисках усе поза папками програм, ігор і збірок. Так список і починається.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Позначає всі папки, зокрема ті у Windows, Program Files, AppData та папках ігор, на які розраховують програми.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} з позначених папок містяться у Windows, Program Files, ProgramData, AppData або в папці гри чи збірки. Програми часто розраховують на них; видалення може зламати програму, якій вони належать.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>Позначено: {0:N0} · у папках програм: {1:N0}</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>Ще {0:N0} у папках програм, застосунків та ігор не показано (Налаштування › Поведінка).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Видалити порожні папки</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>Видалити порожніх папок: {0:N0}? Вони видаляються одразу, оминаючи кошик.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} з них містяться у Windows, Program Files, ProgramData, AppData або в папці гри чи збірки. Програми часто розраховують на ці папки; їх видалення може зламати програму, якій вони належать.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Видалити</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Видаляються одразу, оминаючи кошик: відновлювати в них нічого. Папку, у якій після скану з'явився файл, не чіпають.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>Вкладених: {0:N0}</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Вибрати всі</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Зняти вибір</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>Позначено: {0:N0}</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Позначені в кошик</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>Переміщено в кошик порожніх папок: {0:N0}</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Видалити позначені папки</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Видалено порожніх папок: {0:N0}</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Видалення порожніх папок…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} з {1:N0} папок</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Файли-дублікати</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Файли з повністю однаковим вмістом, де б вони не лежали. Спочатку розмір, потім перші байти, потім увесь файл, тож читаються лише ймовірні збіги.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Пропускати файли менші за</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Dup_Delete" xml:space="preserve"><value>Позначені в кошик</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>У {0:N0} наборах позначено всі копії, від них нічого не залишиться.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>Переміщено в кошик дублікатів: {0:N0}, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Переміщення в кошик…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} з {1:N0} файлів</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Переглянути порожні папки…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Дублікати</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>ще не шукали</value></data>

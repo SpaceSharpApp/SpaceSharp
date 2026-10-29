@@ -183,6 +183,8 @@ internal sealed class AppSettings
     public bool FolderShowCounts { get; set; } = true;
     /// <summary>True asks before moving items to the recycle bin.</summary>
     public bool ConfirmDelete { get; set; } = true;
+    /// <summary>True keeps the empty folder list to the folders that are plainly the user's own; the ones inside program, app and game folders are not even listed.</summary>
+    public bool HideUnsafeEmptyFolders { get; set; } = true;
     /// <summary>True checks GitHub for a newer release at startup (installed builds only).</summary>
     public bool CheckForUpdates { get; set; } = true;
 
@@ -259,6 +261,7 @@ internal sealed class AppSettings
         FolderShowCounts = defaults.FolderShowCounts;
         DetectHardLinks = defaults.DetectHardLinks;
         ConfirmDelete = defaults.ConfirmDelete;
+        HideUnsafeEmptyFolders = defaults.HideUnsafeEmptyFolders;
         CheckForUpdates = defaults.CheckForUpdates;
         ShowSidePanel = defaults.ShowSidePanel;
         InsightsView = defaults.InsightsView;

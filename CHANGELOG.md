@@ -2,6 +2,19 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.6.2
+
+The rest of the empty folder fix, the same afternoon. 2.6.1 stopped the prompt storm; this one makes the list safe by default and fast. If you ran the 2.6.0 or 2.6.1 list on a system drive with everything ticked, read the first point.
+
+### Fixes
+- The empty folder list no longer starts with everything ticked, and by default no longer lists the risky ones at all. 2.6.0 and 2.6.1 offered every empty folder on the drive, including the ones Windows Store apps, games and installed programs expect to exist (a Store app's `Packages` folders, a game's save folder, `Program Files` subfolders), and deleting those breaks the app that owns them. Now only folders that are plainly yours are offered: on the system drive, those under your own Desktop, Documents, Downloads, Pictures, Music and Videos; on another drive, anything outside a program, game or build folder. A new setting, Settings › Behavior › **Hide unsafe empty folders** (on by default), keeps the rest out of the list entirely, and the summary says how many were left out. With it off they are listed unticked, Select all is red, a warning under the buttons says how many risky folders are ticked and what can break, the footer counts them, and the delete asks first and repeats the number. If an earlier version broke something for you (the Snipping Tool, say), the folders are in the Recycle Bin: sort it by date deleted, restore that day's folders, and the app is whole again; failing that, Settings › Apps › the app › Advanced options › Repair.
+- Empty folders are deleted directly instead of going to the Recycle Bin, which takes a transaction per item and needed minutes for twenty thousand of them. There is nothing in an empty folder to restore, so the bin added nothing but time. The delete is the non-recursive one: a folder that gained a file since the scan refuses to go and is reported. Folders that need no administrator permission go first.
+- Both the empty folder and the duplicates window show a progress panel while they work ("Deleting empty folders… 4,200 of 23,223") with a Stop button that ends it between items, keeping what was already done, instead of looking frozen. The duplicates window moves its copies to the Recycle Bin two hundred at a time; the shell's own transfer window no longer appears, and a Cancel in a Windows prompt stops the rest instead of being retried one by one.
+- The empty folder window's header is title, numbers, one line on how the delete works, and three buttons: Select safe (what the list starts with), Select none, and Select all.
+
+### Small things
+- The scanning card's clock reads "5.32 s" under ten seconds and "41.7 s" under a minute, instead of "0:05"; minutes and seconds from there. A four-second scan of a terabyte deserves the decimals.
+
 ## 2.6.1
 
 A hotfix for the empty folder list, two hours after 2.6.0.

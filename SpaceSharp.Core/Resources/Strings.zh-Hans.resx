@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>下次再询问</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Backspace</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>停止</value></data>
   <data name="Main_Change" xml:space="preserve"><value>变化</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>变化</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>清除</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>顶层文件夹：每个顶层文件夹一种色相，每深入一层颜色更浅。文件夹深度：每一层使用不同颜色。文件类型：按类型为文件着色。</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>移至回收站前确认</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>删除前询问。已删除的项目始终可以从回收站还原。</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>隐藏不安全的空文件夹</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>只列出明显属于你的空文件夹。位于 Windows、Program Files、ProgramData、AppData 以及游戏或构建文件夹内、程序往往需要其存在的那些，完全不列出。关闭后它们会以未勾选状态列出，勾选时给出警告。</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>自定义配色</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>在两种主题中使用任意调色板</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>关闭：选择为另一主题制作的调色板会切换到该主题，因此浅色调色板会带来浅色主题。开启：调色板按原样使用，深色主题可用浅色调色板，浅色主题可用深色调色板。</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件，其中还嵌套了 {1:N0} 个</value></data>
   <data name="Empty_None" xml:space="preserve"><value>此次扫描没有空文件夹。</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows、Program Files 和 ProgramData 下的文件夹默认不勾选：程序往往需要它们存在，而且删除每一个都需要管理员权限。</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>选择安全项</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>只勾选明显属于你的文件夹：系统驱动器上的桌面、文档、下载、图片、音乐、视频之下，其他驱动器上程序、游戏和构建文件夹之外。列表初始就是这样。</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>勾选所有文件夹，包括程序需要存在的 Windows、Program Files、AppData 和游戏文件夹内的那些。</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>已勾选的文件夹中有 {0:N0} 个位于 Windows、Program Files、ProgramData、AppData 或游戏、构建文件夹内。程序往往需要它们存在，删除可能导致相应程序损坏。</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>已勾选 {0:N0} 个 · {1:N0} 个在程序文件夹内</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>另有 {0:N0} 个位于程序、应用和游戏文件夹内，未列出（设置 › 行为）。</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>删除空文件夹</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>删除 {0:N0} 个空文件夹？它们会直接删除，不经过回收站。</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>其中 {0:N0} 个位于 Windows、Program Files、ProgramData、AppData 或游戏、构建文件夹内。程序往往需要这些文件夹存在，删除可能导致相应程序损坏。</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>删除</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>直接删除，不经过回收站：其中没有可恢复的内容。扫描后新增了文件的文件夹会被保留。</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>嵌套 {0:N0} 个</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>全选</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>全不选</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>已勾选 {0:N0} 个</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>将勾选项移到回收站</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>已将 {0:N0} 个空文件夹移到回收站</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>删除勾选的文件夹</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>已删除 {0:N0} 个空文件夹</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>正在删除空文件夹…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} 个文件夹</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>重复文件</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>内容完全相同的文件，无论位于何处。先比大小，再比开头字节，最后比整个文件，因此只读取可能匹配的文件。</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>忽略小于以下大小的文件</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Dup_Delete" xml:space="preserve"><value>将勾选项移到回收站</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} 组的所有副本都已勾选，它们将一个不留。</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>已将 {0:N0} 个重复文件移到回收站，{1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>正在移到回收站…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} 个文件</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>查看空文件夹…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>重复</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>尚未查找</value></data>

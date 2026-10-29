@@ -190,6 +190,8 @@ public partial class SettingsWindow : Window
         Section(Strings.Get("Settings_Safety"));
         Row(Strings.Get("Settings_ConfirmDelete"), Strings.Get("Settings_ConfirmDelete_Desc"),
             Switch(_settings.ConfirmDelete, enabled => _settings.ConfirmDelete = enabled));
+        Row(Strings.Get("Settings_HideUnsafeEmpty"), Strings.Get("Settings_HideUnsafeEmpty_Desc"),
+            Switch(_settings.HideUnsafeEmptyFolders, enabled => _settings.HideUnsafeEmptyFolders = enabled));
     }
 
     /// <summary>Theme variant, the dark and light looks and the dialog dimming.</summary>

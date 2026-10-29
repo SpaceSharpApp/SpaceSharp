@@ -61,4 +61,26 @@ public class EmptyFoldersTests
         Assert.True(EmptyFolders.IsProgramPlace(inside));
         Assert.False(EmptyFolders.IsProgramPlace(mine));
     }
+
+    [Fact]
+    public void OnTheSystemDriveOnlyTheUsersOwnFoldersStartTicked()
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode users = TestTree.Dir("Users", root);
+        FsNode me = TestTree.Dir("me", users);
+        FsNode documents = TestTree.Dir("Empty", TestTree.Dir("Projects", TestTree.Dir("Documents", me)));
+        FsNode packages = TestTree.Dir("TempState", TestTree.Dir("Microsoft.ScreenSketch_8wekyb3d8bbwe", TestTree.Dir("Packages", TestTree.Dir("Local", TestTree.Dir("AppData", me)))));
+        FsNode profileRoot = TestTree.Dir("Empty", me);
+        FsNode programs = TestTree.Dir("Empty", TestTree.Dir("Some App", TestTree.Dir("Program Files", root)));
+        FsNode loose = TestTree.Dir("Empty", TestTree.Dir("Tools", root));
+        TestTree.Finish(root);
+
+        Assert.True(EmptyFolders.IsSafeByDefault(documents, onSystemDrive: true));
+        Assert.False(EmptyFolders.IsSafeByDefault(packages, onSystemDrive: true));
+        Assert.False(EmptyFolders.IsSafeByDefault(profileRoot, onSystemDrive: true));
+        Assert.False(EmptyFolders.IsSafeByDefault(programs, onSystemDrive: true));
+        Assert.False(EmptyFolders.IsSafeByDefault(loose, onSystemDrive: true));
+        Assert.True(EmptyFolders.IsSafeByDefault(loose, onSystemDrive: false));
+        Assert.False(EmptyFolders.IsSafeByDefault(programs, onSystemDrive: false));
+    }
 }

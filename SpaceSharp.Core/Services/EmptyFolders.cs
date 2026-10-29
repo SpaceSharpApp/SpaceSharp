@@ -40,13 +40,14 @@ public static class EmptyFolders
         return found.OrderBy(entry => entry.Folder.FullPath, StringComparer.OrdinalIgnoreCase).ToList();
     }
 
-    /// <summary>Folder names under which an empty folder is usually part of a program and needs administrator rights to remove.</summary>
+    /// <summary>Folder names under which an empty folder is usually part of a program (a Store app's package folders, a game's save folders, a build tree) and removing it breaks something or needs administrator rights.</summary>
     private static readonly HashSet<string> ProgramPlaces = new(StringComparer.OrdinalIgnoreCase)
     {
-        "Windows", "Program Files", "Program Files (x86)", "ProgramData", "$Recycle.Bin", "System Volume Information", "WindowsApps"
+        "Windows", "Program Files", "Program Files (x86)", "ProgramData", "AppData", "Packages", "$Recycle.Bin", "System Volume Information", "WindowsApps",
+        "steamapps", "XboxGames", "node_modules", ".git"
     };
 
-    /// <summary>Whether a folder sits inside Windows, Program Files, ProgramData or the like, where empty folders are often expected by a program and deleting needs elevation.</summary>
+    /// <summary>Whether a folder sits inside Windows, Program Files, ProgramData, AppData or the like, where empty folders are often expected by a program.</summary>
     /// <param name="folder">The folder.</param>
     /// <returns>True when any part of its path is one of those names.</returns>
     public static bool IsProgramPlace(FsNode folder)
@@ -59,6 +60,33 @@ public static class EmptyFolders
             }
         }
         return false;
+    }
+
+    /// <summary>The user-profile folders whose empty subfolders are the user's own to delete.</summary>
+    private static readonly HashSet<string> OwnPlaces = new(StringComparer.OrdinalIgnoreCase) { "Desktop", "Documents", "Downloads", "Pictures", "Music", "Videos" };
+
+    /// <summary>Whether an empty folder may start ticked: only one that is plainly the user's own, so a program's folder is never deleted by a default.</summary>
+    /// <param name="folder">The folder.</param>
+    /// <param name="onSystemDrive">True when the scan is on the drive Windows runs from, where everything outside the user's own folders belongs to something.</param>
+    /// <returns>True for a folder with no program place in its path that sits under Desktop, Documents, Downloads, Pictures, Music or Videos of a user profile, or anywhere on a drive that is not the system drive.</returns>
+    public static bool IsSafeByDefault(FsNode folder, bool onSystemDrive)
+    {
+        if (IsProgramPlace(folder))
+        {
+            return false;
+        }
+        if (!onSystemDrive)
+        {
+            return true;
+        }
+        // C:\Users\<name>\Documents\... : the fourth segment from the root must be one of the user's own folders.
+        var names = new List<string>();
+        for (FsNode? node = folder; node?.Parent is not null; node = node.Parent)
+        {
+            names.Add(node.Name);
+        }
+        names.Reverse();
+        return names.Count >= 4 && string.Equals(names[0], "Users", StringComparison.OrdinalIgnoreCase) && OwnPlaces.Contains(names[2]);
     }
 
     /// <summary>Whether a folder holds no files at any depth, as far as the scan could see.</summary>

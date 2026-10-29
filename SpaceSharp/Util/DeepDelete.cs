@@ -29,7 +29,32 @@ internal static class DeepDelete
             {
                 return true;
             }
-            DeleteTree(target);
+            DeleteTree(target, filesToo: true);
+            return !Directory.Exists(target);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            error = ex.Message;
+            return false;
+        }
+    }
+
+    /// <summary>Deletes a folder that holds no files, and the empty folders nested in it, and nothing else: a folder with a file in it is left standing and reported.</summary>
+    /// <remarks>Empty folders have nothing to restore, so they skip the Recycle Bin, which takes a transaction per item and is far too slow for tens of thousands. The folders are deleted one by one with the non-recursive delete, which refuses a folder with anything in it, so a file added since the scan is safe.</remarks>
+    /// <param name="path">The full path, without the \\?\ prefix.</param>
+    /// <param name="error">Why it stopped, or null when everything went.</param>
+    /// <returns>True when the folder is gone afterwards.</returns>
+    public static bool TryDeleteEmpty(string path, out string? error)
+    {
+        error = null;
+        string target = Extended(path);
+        try
+        {
+            if (!Directory.Exists(target))
+            {
+                return true;
+            }
+            DeleteTree(target, filesToo: false);
             return !Directory.Exists(target);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
@@ -47,7 +72,8 @@ internal static class DeepDelete
 
     /// <summary>Deletes a folder tree bottom up with an explicit stack, so a tree hundreds of levels deep does not recurse.</summary>
     /// <param name="root">The folder, already prefixed.</param>
-    private static void DeleteTree(string root)
+    /// <param name="filesToo">True deletes the files in each folder first; false leaves them, so a folder with a file in it refuses to go and the walk stops there.</param>
+    private static void DeleteTree(string root, bool filesToo)
     {
         // Post-order: every folder is listed after its subfolders, so deleting the list backwards empties each folder first.
         var order = new List<string>();
@@ -70,7 +96,7 @@ internal static class DeepDelete
         for (int i = order.Count - 1; i >= 0; i--)
         {
             string folder = order[i];
-            if (!IsLink(folder))
+            if (filesToo && !IsLink(folder))
             {
                 foreach (string file in Directory.EnumerateFiles(folder))
                 {

@@ -24,8 +24,8 @@
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>   <!-- validates the XML docs; CS1591 for an undocumented public member -->
     <Product>SpaceSharp</Product>
-    <Version>2.6.1</Version>
-    <PreviousVersion>2.6.0</PreviousVersion>   <!-- the release before this one -->
+    <Version>2.6.2</Version>
+    <PreviousVersion>2.6.1</PreviousVersion>   <!-- the release before this one -->
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
     <Copyright>© 2026 ClearanceClarence</Copyright>

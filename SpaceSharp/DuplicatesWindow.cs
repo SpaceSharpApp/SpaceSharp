@@ -38,6 +38,10 @@ public sealed class DuplicatesWindow : Window
     private readonly TextBlock _checkedText = new() { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly StackPanel _picks = new() { Orientation = Orientation.Horizontal, Spacing = 12, IsVisible = false, Margin = new Thickness(0, 8, 0, 0) };
     private readonly ListBox _list;
+    private readonly Border _listBox;
+    private readonly BusyPanel _busy = new();
+    private readonly Button _closeButton;
+    private CancellationTokenSource? _stop;
     private readonly List<Line> _lines = new();
     private CancellationTokenSource? _search;
     private DuplicateResult? _result;
@@ -90,15 +94,16 @@ public sealed class DuplicatesWindow : Window
         _list = PickList.Make();
         // The template is also asked for null while the panel clears a recycled container, so it must not touch the model then.
         _list.ItemTemplate = new FuncDataTemplate<Line>((line, _) => line is null ? new Border() : line.File is null ? BuildHeader(line) : BuildFileRow(line), supportsRecycling: false);
-        var listBox = new Border { Child = _list, CornerRadius = new CornerRadius(10), Classes = { "start-panel" } };
+        _listBox = new Border { Child = _list, CornerRadius = new CornerRadius(10), Classes = { "start-panel" } };
+        _busy.Stopped += (_, _) => _stop?.Cancel();
 
         _deleteButton = new Button { Content = Strings.Get("Dup_Delete"), Classes = { "danger" }, Height = 32, Padding = new Thickness(14, 0), IsEnabled = false };
         _deleteButton.Click += async (_, _) => await DeleteCheckedAsync();
-        var closeButton = new Button { Content = Strings.Get("Main_Close"), Classes = { "tool" }, IsCancel = true, MinWidth = 88 };
-        closeButton.Click += (_, _) => Close();
+        _closeButton = new Button { Content = Strings.Get("Main_Close"), Classes = { "tool" }, IsCancel = true, MinWidth = 88 };
+        _closeButton.Click += (_, _) => Close();
         var footer = new DockPanel { Margin = new Thickness(0, 14, 0, 0) };
         var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
-        buttons.Children.Add(closeButton);
+        buttons.Children.Add(_closeButton);
         buttons.Children.Add(_deleteButton);
         DockPanel.SetDock(buttons, Dock.Right);
         footer.Children.Add(buttons);
@@ -106,13 +111,19 @@ public sealed class DuplicatesWindow : Window
 
         var page = new DockPanel { Margin = new Thickness(22, 20, 22, 18) };
         DockPanel.SetDock(header, Dock.Top);
+        DockPanel.SetDock(_busy, Dock.Top);
         DockPanel.SetDock(footer, Dock.Bottom);
         page.Children.Add(header);
+        page.Children.Add(_busy);
         page.Children.Add(footer);
-        page.Children.Add(listBox);
+        page.Children.Add(_listBox);
         Content = page;
 
-        Closing += (_, _) => _search?.Cancel();
+        Closing += (_, e) =>
+        {
+            _search?.Cancel();
+            e.Cancel = _stop is not null;
+        };
         if (earlier is not null)
         {
             Show(earlier);
@@ -320,30 +331,50 @@ public sealed class DuplicatesWindow : Window
             return;
         }
 
-        _deleteButton.IsEnabled = false;
+        _stop = new CancellationTokenSource();
+        CancellationToken token = _stop.Token;
+        SetBusy(true);
+        _busy.Start(Strings.Get("Dup_Moving"), picked.Count, Strings.Get("Dup_Progress"));
+        var progress = new Progress<int>(done => _busy.Report(done));
+        string? error = null;
+        bool allSent = false;
         try
         {
-            string? error = null;
-            bool allSent = await Task.Run(() => Trash.TrySend(picked.Select(file => file.FullPath).ToList(), out error));
-            int gone = picked.Count(file => !File.Exists(file.FullPath));
-            await _main.RemovedFromDiskAsync(picked, Strings.Format("Dup_Deleted", gone, size));
-
-            // The sets shrink to what is still on disk; a set down to one file is no longer a set.
-            List<DuplicateGroup> remaining = _result is null ? new List<DuplicateGroup>() : _result.Groups
-                .Select(group => new DuplicateGroup(group.Size, group.Files.Where(file => File.Exists(file.FullPath)).ToList(), group.Hash))
-                .Where(group => group.Files.Count > 1)
-                .ToList();
-            var result = new DuplicateResult(remaining, _result?.Candidates ?? 0, _result?.BytesRead ?? 0);
-            Show(result);
-            _main.DuplicatesFound(_root, result);
-            if (!allSent)
-            {
-                await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
-            }
+            allSent = await Task.Run(() => Trash.TrySend(picked.Select(file => file.FullPath).ToList(), out error, progress, token));
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
         {
-            await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), ex.Message);
+            error = ex.Message;
         }
+        _stop = null;
+        int gone = picked.Count(file => !File.Exists(file.FullPath));
+        await _main.RemovedFromDiskAsync(picked, Strings.Format("Dup_Deleted", gone, size));
+        SetBusy(false);
+
+        // The sets shrink to what is still on disk; a set down to one file is no longer a set.
+        List<DuplicateGroup> remaining = _result is null ? new List<DuplicateGroup>() : _result.Groups
+            .Select(group => new DuplicateGroup(group.Size, group.Files.Where(file => File.Exists(file.FullPath)).ToList(), group.Hash))
+            .Where(group => group.Files.Count > 1)
+            .ToList();
+        var result = new DuplicateResult(remaining, _result?.Candidates ?? 0, _result?.BytesRead ?? 0);
+        Show(result);
+        _main.DuplicatesFound(_root, result);
+        if (!allSent && error is not null)
+        {
+            await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
+        }
+    }
+
+    /// <summary>Shows or hides the progress panel and locks the rest of the window while the Recycle Bin works.</summary>
+    /// <param name="busy">True while the shell is working.</param>
+    private void SetBusy(bool busy)
+    {
+        _busy.IsVisible = busy;
+        _picks.IsVisible = !busy && _lines.Count > 0;
+        _listBox.Opacity = busy ? 0.45 : 1;
+        _list.IsHitTestVisible = !busy;
+        _deleteButton.IsEnabled = !busy;
+        _closeButton.IsEnabled = !busy;
+        _findButton.IsEnabled = !busy;
     }
 }

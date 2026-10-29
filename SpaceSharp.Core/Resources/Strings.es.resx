@@ -263,6 +263,7 @@
   <data name="Main_AskAgainNextTime" xml:space="preserve"><value>Volver a preguntar la próxima vez</value></data>
   <data name="Main_Backspace" xml:space="preserve"><value>Retroceso</value></data>
   <data name="Main_Cancel" xml:space="preserve"><value>Cancelar</value></data>
+  <data name="Main_Stop" xml:space="preserve"><value>Detener</value></data>
   <data name="Main_Change" xml:space="preserve"><value>Cambio</value></data>
   <data name="Main_Changes" xml:space="preserve"><value>Cambios</value></data>
   <data name="Main_Clear" xml:space="preserve"><value>Borrar</value></data>
@@ -494,6 +495,8 @@
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Carpeta superior: un tono por carpeta de nivel superior, más claro con cada nivel interior. Profundidad de carpeta: un color distinto por nivel. Tipo de archivo: archivos coloreados por tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmar antes de mover a la Papelera de reciclaje</value></data>
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Preguntar antes de eliminar. Los elementos eliminados siempre se pueden restaurar desde la Papelera de reciclaje.</value></data>
+  <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar carpetas vacías no seguras</value></data>
+  <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista solo las carpetas vacías que son claramente tuyas. Las de Windows, Program Files, ProgramData, AppData y carpetas de juegos o de compilación, que los programas suelen esperar que existan, quedan fuera de la lista. Desactivado, se listan sin marcar, con un aviso al marcar una.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usar cualquier paleta en ambos temas</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Desactivado: elegir una paleta hecha para el otro tema cambia a ese tema, así que una paleta clara trae consigo el tema claro. Activado: la paleta se usa tal cual, paletas claras en el tema oscuro y oscuras en el claro.</value></data>
@@ -1076,13 +1079,25 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} carpetas sin archivos</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} carpetas sin archivos, {1:N0} más anidadas dentro</value></data>
   <data name="Empty_None" xml:space="preserve"><value>No hay carpetas vacías en este análisis.</value></data>
-  <data name="Empty_SystemHint" xml:space="preserve"><value>Las carpetas bajo Windows, Program Files y ProgramData empiezan sin marcar: los programas suelen esperar que existan, y eliminarlas requiere permiso de administrador una por una.</value></data>
+  <data name="Empty_SelectSafe" xml:space="preserve"><value>Seleccionar seguras</value></data>
+  <data name="Empty_SafeTip" xml:space="preserve"><value>Marca solo las carpetas que son claramente tuyas: bajo Escritorio, Documentos, Descargas, Imágenes, Música y Vídeos en la unidad del sistema, y fuera de carpetas de programas, juegos y compilación en otras. Así empieza la lista.</value></data>
+  <data name="Empty_AllTip" xml:space="preserve"><value>Marca todas las carpetas, incluidas las de Windows, Program Files, AppData y carpetas de juegos que los programas esperan que existan.</value></data>
+  <data name="Empty_Warning" xml:space="preserve"><value>{0:N0} de las carpetas marcadas están en Windows, Program Files, ProgramData, AppData o una carpeta de juego o de compilación. Los programas suelen esperar que existan; eliminarlas puede romper el programa que las usa.</value></data>
+  <data name="Empty_CheckedRisky" xml:space="preserve"><value>{0:N0} marcadas · {1:N0} en carpetas de programas</value></data>
+  <data name="Empty_HiddenUnsafe" xml:space="preserve"><value>{0:N0} más en carpetas de programas, aplicaciones y juegos no se listan (Ajustes › Comportamiento).</value></data>
+  <data name="Empty_ConfirmTitle" xml:space="preserve"><value>Eliminar carpetas vacías</value></data>
+  <data name="Empty_ConfirmQuestion" xml:space="preserve"><value>¿Eliminar {0:N0} carpetas vacías? Se eliminan directamente, sin pasar por la Papelera.</value></data>
+  <data name="Empty_ConfirmProgram" xml:space="preserve"><value>{0:N0} de ellas están en Windows, Program Files, ProgramData, AppData o una carpeta de juego o de compilación. Los programas suelen esperar que existan; eliminarlas puede romper el programa que las usa.</value></data>
+  <data name="Empty_ConfirmButton" xml:space="preserve"><value>Eliminarlas</value></data>
+  <data name="Empty_NoBin" xml:space="preserve"><value>Se eliminan directamente, sin pasar por la Papelera: no hay nada en ellas que restaurar. Una carpeta que haya recibido un archivo desde el análisis se deja en paz.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} anidadas</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Seleccionar todo</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>No seleccionar nada</value></data>
   <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} marcadas</value></data>
-  <data name="Empty_Delete" xml:space="preserve"><value>Mover las marcadas a la Papelera</value></data>
-  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} carpetas vacías movidas a la Papelera</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Eliminar las carpetas marcadas</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} carpetas vacías eliminadas</value></data>
+  <data name="Empty_Moving" xml:space="preserve"><value>Eliminando carpetas vacías…</value></data>
+  <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} de {1:N0} carpetas</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Archivos duplicados</value></data>
   <data name="Dup_Intro" xml:space="preserve"><value>Archivos con exactamente el mismo contenido, estén donde estén. Primero el tamaño, luego los primeros bytes y después el archivo entero, así solo se leen las coincidencias probables.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Ignorar archivos menores de</value></data>
@@ -1100,6 +1115,8 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Dup_Delete" xml:space="preserve"><value>Mover los marcados a la Papelera</value></data>
   <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} grupos tienen todas sus copias marcadas, así que no quedará nada de ellos.</value></data>
   <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} archivos duplicados movidos a la Papelera, {1}</value></data>
+  <data name="Dup_Moving" xml:space="preserve"><value>Moviendo a la Papelera…</value></data>
+  <data name="Dup_Progress" xml:space="preserve"><value>{0:N0} de {1:N0} archivos</value></data>
   <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Revisar carpetas vacías…</value></data>
   <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplicados</value></data>
   <data name="Insights_DupNotSearched" xml:space="preserve"><value>aún sin buscar</value></data>
