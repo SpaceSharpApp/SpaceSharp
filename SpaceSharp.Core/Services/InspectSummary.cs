@@ -35,7 +35,14 @@ public sealed class InspectSummary
     /// <summary>How long ago a file was last written: under 30 days, under a year, under three years, or older; see <see cref="BucketFor"/>.</summary>
     public enum AgeBucket
     {
-        ThisMonth, ThisYear, OneToThreeYears, Older
+        /// <summary>Written in the last 30 days.</summary>
+        ThisMonth,
+        /// <summary>Written in the last year, but not the last 30 days.</summary>
+        ThisYear,
+        /// <summary>Written one to three years ago.</summary>
+        OneToThreeYears,
+        /// <summary>Written more than three years ago.</summary>
+        Older
     }
 
     /// <summary>The inspected items after dropping pseudo nodes; one item or a multi-selection.</summary>

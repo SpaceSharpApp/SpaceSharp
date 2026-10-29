@@ -9,7 +9,7 @@
 # decides the pixel size of the PNGs, 125% or 150% gives the crisp ones GitHub shows well. Afterwards run
 # tools/make-mobile-shots.py for the small WebP copies the website shows on phones.
 param(
-    [string[]] $Scenes = @("none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light"),
+    [string[]] $Scenes = @("none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates"),
     [string] $Size = "1600x900",
     [string] $Configuration = "Release"
 )
@@ -23,7 +23,7 @@ $docs = Join-Path $root "docs"
 $files = @{
     none = "screenshot.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; settings = "shot-settings.png"; menu = "shot-menu.png"; start = "shot-start.png"
-    about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
+    about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"; duplicates = "shot-duplicates.png"
 }
 
 Write-Host "Building $Configuration..."

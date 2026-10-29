@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>移至回收站</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>永久删除</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>跳过回收站，并能处理资源管理器打不开的超长路径。无法撤销。</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>永久删除？</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} 将被彻底删除，不经过回收站。这是删除资源管理器无法打开的文件夹的方法，且无法撤销。
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>彻底删除</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>已彻底删除 {0} 项，{1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} 嵌套在自身之中，重复了 {1:N0} 次。</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>删除重复部分…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>保留第一份，从 {1} 开始删除其下嵌套的 {0:N0} 份。</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows 跳过了它（正在使用，或对回收站来说太大）</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>路径对回收站来说太长</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>访问被拒绝</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>打开已保存的扫描</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>放大时平移</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>最大文件、文件夹和类型面板</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>成就</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>所选项目的 Windows 属性</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>重新扫描</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>关闭扫描并返回开始屏幕</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>已删除 {0} 次已保存的扫描</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>扫描文件夹中释放了 {0}。</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>屏幕上的地图保持打开。在保存新的扫描之前，驱动器或文件夹的下一次扫描没有可比较的对象。</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>屏幕上的地图保持打开，但它显示的对比已关闭，因为用于对比的扫描已不存在。在保存新的扫描之前，驱动器或文件夹的下一次扫描将没有可对比的对象。</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>有 1 个文件正在使用中，已保留；下次会删除。</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>有 {0} 个文件正在使用中，已保留；下次会删除。</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>名称或模式，例如 *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} 个位置 · 已勾选 {1}</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>一年未改动</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>占扫描的 {0} · {1:N0} 个文件</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>最大的文件夹</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} 个文件</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>自上次扫描以来</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} 个新文件</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>没有之前的扫描</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>改天再扫描一次即可查看变化</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} 种类型 · 单击某行可筛选地图</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0}占扫描的 {1}，主要位于 {2}。其次是{3}，占 {4}。</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} 位于通常可以安全清空的位置 · 未经您确认，不会删除任何内容</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>勾选要一起移至回收站的位置</value></data>
@@ -980,9 +990,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_AfterTip" xml:space="preserve"><value>上方进度条的琥珀色部分是勾选位置目前占用的空间；下方进度条是清理后的驱动器。</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} 已超过一年未改动 · 单击某个月份或区段可筛选</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>最大且一年以上未改动</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>最大的文件夹</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>扫描范围内的任意位置</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>最大的文件</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>改天再扫描一次此驱动器，此卡片就会显示期间增大、缩小和新增的内容。也可以通过“扫描文件 › 与已保存的扫描比较”来比较已保存的扫描。</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>增大</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>缩小</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Changes_SortTip" xml:space="preserve"><value>点击按此列排序；再次点击反转顺序</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>已消失</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>存在于所比较的扫描中，但不在本次扫描中</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>此方法看不到</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>存在于对比的扫描中；此次扫描的方法看不到它，因此不算变化</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>还有 {0:N0} 项…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} 项变更 · 已隐藏 {1:N0} 项未变更</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} 项 · {1:N0} 项变更</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Changes_NoneOver" xml:space="preserve"><value>没有超过 {0} 的变化。</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>还没有可比较的扫描</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>打开变更</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>最大的扩展名</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>以及每种扩展名主要位于何处</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} 种类型</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>另 {0} 种</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>点击一行以筛选地图。</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>另 {0} 处</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>在你确认之前不会删除任何内容</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} 旧文件</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>本月 {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>今年 {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>一年未动 {0}，{1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>最大</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>扩展名</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>游戏</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1}，{2} 款游戏</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1}，1 款游戏</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>媒体</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>图片 {0}，{1:N0} 张</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>音频 {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>视频 {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} 张截图 {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>其中 {0:N0} 张图片位于 Screenshots 文件夹，{1}。</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>开发</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0}，{1} 个项目</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0}，{1} 个仓库</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>构建输出 {0}，{1} 个文件夹</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>全部可重新生成</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>已安装的包、仓库历史和构建输出：重新安装或构建即可再生。最大的几个：</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>下载</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>最早的来自 {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} 个已运行过的安装程序，{1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} 个已解压的压缩包，{1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>位于下载文件夹的安装程序视为已运行；旁边有同名文件夹的压缩包视为已解压。最大的文件：</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>硬链接</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>只计一次</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} 个链接</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} 个链接，大多在 {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>把它们全部计入的工具会让驱动器看起来比实际多占 {0}</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>硬链接是同一个文件的多个名字。SpaceSharp 只计一次；资源管理器和多数工具会按名字计数，所以它们的总数更高。节省主要在：</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>小文件与空文件夹</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>簇浪费</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} 个小于 4 KB 的文件</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} 个空文件夹</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} 个只有一个文件的文件夹</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} 个文件小于 4 KB；它们只有 {1}，但磁盘按整簇分配，因此其中 {2} 是任何工具都无法释放的浪费。{3:N0} 个文件夹是空的。</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>深与长</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>空文件夹</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件，其中还嵌套了 {1:N0} 个</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>此次扫描没有空文件夹。</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>嵌套 {0:N0} 个</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>全选</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>全不选</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>已勾选 {0:N0} 个</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>将勾选项移到回收站</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>已将 {0:N0} 个空文件夹移到回收站</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>重复文件</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>内容完全相同的文件，无论位于何处。先比大小，再比开头字节，最后比整个文件，因此只读取可能匹配的文件。</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>忽略小于以下大小的文件</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>查找重复</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>按大小分组…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>比较开头字节：{0:N0} / {1:N0} · 已读 {2}</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>读取整个文件：{0:N0} / {1:N0} · 已读 {2}</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 组 · {1:N0} 个多余副本 · 可释放 {2}</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>大于 {0} 的文件中没有重复。</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>每组保留第一个</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>每组保留最新的</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>清除所有勾选</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} 个副本 · 每个 {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>已勾选 {0:N0} 个 · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>将勾选项移到回收站</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} 组的所有副本都已勾选，它们将一个不留。</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>已将 {0:N0} 个重复文件移到回收站，{1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>查看空文件夹…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>重复</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>尚未查找</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>查找内容相同的文件，每组可保留一个</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>查找重复…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>只读取与其他文件大小相同的文件，因此在多数驱动器上查找很快。硬链接是同一个文件，不计入。</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} 组</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} 个多余副本</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>为判定已读 {0}</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>可释放</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>按所用的大小下限未找到重复。</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} 个副本</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} 层深</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} 条路径超过 260 字符</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>最深的文件夹，位于根目录下 {0} 层：</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} 条路径超过了经典的 260 字符限制；最长的几条：</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} 字符</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>与已保存的扫描比较…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} 个新文件</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>正在从管理员助手接收目录树</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>此版本</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>扫描类型不同</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>那次扫描的方式 ({0}) 与这次 ({1}) 不同。只有一种方式能看到的文件（例如受保护的系统文件夹），以及一种方式只计一次而另一种方式全额计算的硬链接，会显示为消失、新增、增大或减小。</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>仍然比较</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>魔镜魔镜</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>那个文件是这次扫描自己的保存文件。一次扫描和它自己之间不可能有任何变化，再仔细看也一样。请选择更早的扫描来查看真正的变化。</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>成就已解锁</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>问驱动器自它自己以来有什么变化。驱动器毕竟是驱动器，什么也没说。</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>成就</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>有的一次扫描就能拿到，有的要一年。它们都一文不值，这正是重点。</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>已解锁 {0} / {1}</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>未解锁</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>未解锁。怎么拿到它，拿到之前是个秘密。</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>全部成就已解锁</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>这是最后一个了。应用没有别的可发了，从现在起它只会给你看你的磁盘。</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>魔镜魔镜</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>问驱动器自它自己以来有什么变化。驱动器毕竟是驱动器，什么也没说。</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>速通</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>不到五秒就从文件表读完了整个驱动器。</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>绕远路</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>文件表就在手边，却逐个文件夹地遍历了整个驱动器。选择了观光路线。</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>夜班</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>在凌晨两点到五点之间开始了一次扫描。</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>百科全书</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>一次扫描超过一百万个文件。</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>深潜</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>发现了一条深度超过二十层文件夹的路径。你的文件夹里有文件夹。</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>TB 俱乐部</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>扫描了一块 1 TB 或更大的驱动器。</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>常客</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>同一驱动器或文件夹扫描了十次。</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>喘口气</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>两次扫描之间，驱动器的可用空间从不足 10% 变为超过 25%。</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>大扫除</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>同一驱动器的两次扫描之间释放了超过 50 GB。</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>客满</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>扫描了一块可用空间不足 1% 的驱动器。客栈没有空房了。</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>囤积者</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>一个文件夹里有超过一万个文件。</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>鲸鱼</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>单个文件超过 100 GB。</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>镜厅</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>硬链接在一块驱动器上节省了超过 10 GB。</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>灰尘</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>发现了一个十多年没人碰过的文件。</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>什么都没发生</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>相隔一周以上的两次扫描，变化不到 1 MB。</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>剧情反转</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>最大的文件夹已不是上次扫描时的那个。</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>游客</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>在一次会话中看遍了地图、洞察和变化。</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>多语言</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>换了三次语言。Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>考古学家</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>打开了一个一年多以前保存的扫描。</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>收藏家</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>解锁了其他所有成就。没有什么可找的了，这正是这个应用的意义。</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>方式不同 ({0} 与 {1})：差异包含只有一种方式能看到的文件。</value></data>
 </root>

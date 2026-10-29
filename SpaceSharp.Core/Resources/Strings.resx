@@ -123,6 +123,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Move to Recycle Bin</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Delete permanently</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Skips the Recycle Bin and reaches paths too long for Explorer. Cannot be undone.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Delete permanently?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} will be deleted for good, skipping the Recycle Bin. This is the way to remove folders Explorer cannot open, and it cannot be undone.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Delete for good</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>Deleted {0} items for good, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} repeats {1:N0} times, nested inside itself.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Delete the repeats…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Keeps the first copy and deletes the {0:N0} nested below it, starting at {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows skipped it (in use, or too large for the Recycle Bin)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>the path is too long for the Recycle Bin</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>access denied</value></data>
@@ -223,6 +234,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Open a saved scan</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Pan while zoomed in</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Drives and largest items panel</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Achievements</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows Properties for the selected item</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Rescan</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Close the scan and go back to the start screen</value></data>
@@ -719,6 +731,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Deleted {0} saved scans</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>{0} freed in the scans folder.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>The map on screen stays open. The next scan of a drive or folder has nothing to compare with until a new scan of it is saved.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>The map on screen stays open, but the comparison it showed is closed, since the scan it compared with is gone. The next scan of a drive or folder has nothing to compare with until a new scan of it is saved.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>One file is in use and was left; it goes the next time.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} files are in use and were left; they go the next time.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Name or pattern, e.g. *.tmp</value></data>
@@ -964,13 +977,10 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} places · {1} checked</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Untouched for a year</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} of the scan · {1:N0} files</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Biggest folder</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} files</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Since last scan</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} new files</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>No earlier scan</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Scan again another day to see what changed</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} types · click a row to filter the map</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} is {1} of the scan, mostly under {2}. Then {3} at {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} in places that are usually safe to empty · nothing is deleted until you say so</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Tick the places to recycle together</value></data>
@@ -983,9 +993,7 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Insights_AfterTip" xml:space="preserve"><value>The amber part of the top bar is what the ticked places take up now; the lower bar is the drive with them gone.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} untouched for over a year · click a month or a band to filter</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Largest, untouched for a year or more</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Largest folders</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>anywhere in the scan</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Largest files</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Scan this drive again another day and this card shows what grew, shrank and appeared in between. A saved scan can also be compared from Scan file › Compare with a saved scan.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Grew</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Shrank</value></data>
@@ -1013,6 +1021,8 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Changes_SortTip" xml:space="preserve"><value>Click to sort by this column; click again to flip the order</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Gone</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>was in the compared scan and is not in this one</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Not visible to this method</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>was in the compared scan; the method that made this scan cannot see it, so it is not a change</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} more…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} changed · {1:N0} unchanged hidden</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} items · {1:N0} changed</value></data>
@@ -1021,8 +1031,96 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Changes_NoneOver" xml:space="preserve"><value>Nothing changed by more than {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Nothing to compare with yet</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Open Changes</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Biggest extensions</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>and where most of each lives</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} types</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} more</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Click a row to filter the map.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} more places</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>nothing is deleted until you say so</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} old</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>this month {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>this year {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>untouched for a year {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Largest</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Extensions</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Games</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} in {2} games</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} in 1 game</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Media</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Images {0}, {1:N0} photos</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Audio {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Video {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} screenshots {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} of the images are in Screenshots folders, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Developer</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} in {1} projects</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} in {1} repos</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>build output {0} in {1} folders</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>all rebuildable</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Installed packages, repository history and build output: an install or a build makes them again. The largest:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>oldest from {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} installers you already ran, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} archives already extracted, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>An installer is counted as already run when it sits in Downloads; an archive as extracted when a folder of its name sits beside it. The largest files:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Hard links</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>counted once</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} links</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} links, mostly {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>a tool that counts them in full shows the drive {0} fuller than it is</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>A hard link is one file under several names. SpaceSharp counts it once; Explorer and most other tools count every name, which is why their totals come out higher. Where most of the saving is:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Small and empty</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>of cluster slack</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} files under 4 KB</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} empty folders</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} folders with one file</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} files are under 4 KB; they hold {1} but the disk hands out whole clusters, so {2} of it is slack no tool can free. {3:N0} folders are empty.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Deep and long</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Empty folders</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} folders with no files in them</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} folders with no files in them, {1:N0} more nested inside those</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>No empty folders in this scan.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nested</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Select all</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Select none</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} checked</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Move checked to Recycle Bin</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Moved {0:N0} empty folders to the Recycle Bin</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Duplicate files</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Files with exactly the same contents, wherever they sit. Same size first, then the first bytes, then the whole file, so only likely matches are read.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Ignore files under</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Find duplicates</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Grouping by size…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Comparing the first bytes: {0:N0} of {1:N0} · {2} read</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Reading whole files: {0:N0} of {1:N0} · {2} read</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sets · {1:N0} extra copies · {2} could go</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>No duplicates among files over {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Keep the first of each</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Keep the newest of each</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Clear all ticks</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} copies · {1} each</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} checked · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Move checked to Recycle Bin</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} sets have every copy ticked, so nothing of them will be left.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>Moved {0:N0} duplicate files to the Recycle Bin, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Review empty folders…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplicates</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>not searched yet</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Finds files with identical contents and lets you keep one of each</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Find duplicates…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Reads only files that share a size with another, so the search is quick on most drives. Hard links are the same file and are not counted.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} sets</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} extra copies</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>{0} read to decide</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>could go</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>No duplicates were found at the size limit used.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} copies</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} deep</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} paths over 260 chars</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>The deepest folder, {0} levels below the root:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} paths are longer than the classic 260-character limit; the longest:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} chars</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Compare with a saved scan…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} new files</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>This version</value></data>
   <data name="About_GroupHelp" xml:space="preserve"><value>Help and feedback</value></data>
   <data name="About_GroupProject" xml:space="preserve"><value>Project</value></data>
@@ -1040,10 +1138,56 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Different kinds of scan</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>That scan was made differently ({0}) from this one ({1}). Files only one method can see, such as protected system folders, and hard links counted once by one method and in full by the other, will show as gone, new, grown or shrunk.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Compare anyway</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Mirror, Mirror</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>That file is this scan's own save. Nothing can change between a scan and itself, however hard we look. Pick an earlier scan to see what did.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Achievement unlocked</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Asked the drive what changed since itself. The drive, being a drive, said nothing.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Achievements</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Some take a scan, some take a year. None of them are worth anything, which is the point.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} of {1} unlocked</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Locked</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Locked. How you earn it stays a secret until you do.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>All achievements unlocked</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>That was all of them. The app has nothing left to hand out, so from here on it will just show you your disk.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Mirror, Mirror</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Asked the drive what changed since itself. The drive, being a drive, said nothing.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>A whole drive read from the file table in under five seconds.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>The Long Way Round</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Walked a whole drive folder by folder with the file table right there. Scenic route taken.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Night Shift</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Started a scan between two and five in the morning.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Encyclopedia</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>A scan with more than a million files.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Deep Dive</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Found a path more than twenty folders deep. Your folders have folders.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Terabyte Club</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Scanned a drive of a terabyte or more.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Regular</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Scanned the same drive or folder ten times.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Breathing Room</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>A drive went from under 10% free to over 25% free between two scans.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Spring Cleaning</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Freed more than 50 GB between two scans of the same drive.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Full House</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Scanned a drive with 1% or less free. There is no room in the inn.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Hoarder</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>More than ten thousand files in one folder.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Whale</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>A single file over 100 GB.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Hall of Mirrors</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Hard links saved more than 10 GB on one drive.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Dust</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Found a file nobody has touched in over ten years.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Nothing Happened</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Two scans a week or more apart with less than a megabyte of change.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Plot Twist</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>The biggest folder is not the one it was at the last scan.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Tourist</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Visited the map, Insights and Changes in one session.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Polyglot</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Changed the language three times. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Archaeologist</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Opened a saved scan more than a year old.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Collector</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Unlocked every other achievement. There is nothing left to find, which is the point of the app.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Made differently ({0} vs {1}): the differences include files only one method can see.</value></data>
 </root>

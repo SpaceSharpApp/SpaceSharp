@@ -78,6 +78,11 @@ public class LocalizationTests
         {
             Assert.Contains("Category_" + c, keys);
         }
+        foreach (string a in Enum.GetNames<SpaceSharp.Services.Achievement>())
+        {
+            Assert.Contains("Ach_" + a + "_Name", keys);
+            Assert.Contains("Ach_" + a + "_Hint", keys);
+        }
         foreach (string? p in new[] { "Soft", "Classic", "Deep" })
         {
             Assert.Contains("Preset_" + p, keys);

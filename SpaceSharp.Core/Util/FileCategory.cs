@@ -3,26 +3,42 @@ namespace SpaceSharp.Util;
 /// <summary>A file type by extension; the order is the palette color order and Other stays last.</summary>
 public enum FileCategory
 {
+    /// <summary>Pictures and raw camera files.</summary>
     Images,
+    /// <summary>Movies, clips and subtitles.</summary>
     Video,
+    /// <summary>Music, recordings and playlists.</summary>
     Audio,
+    /// <summary>Compressed archives and bundles.</summary>
     Archives,
+    /// <summary>Executables, libraries and scripts that run.</summary>
     Programs,
+    /// <summary>Text, office and e-book files.</summary>
     Documents,
+    /// <summary>Source code, project files and markup.</summary>
     Code,
+    /// <summary>Game packages, saves and assets.</summary>
     GameData,
+    /// <summary>Setup packages and update files.</summary>
     Installers,
+    /// <summary>Disk and virtual machine images.</summary>
     DiskImages,
+    /// <summary>Database files and their logs.</summary>
     Databases,
+    /// <summary>Font files.</summary>
     Fonts,
+    /// <summary>Operating system files, drivers and logs.</summary>
     System,
+    /// <summary>Everything else, including files without an extension.</summary>
     Other
 }
 
 /// <summary>The window theme a palette is made for.</summary>
 public enum PaletteTheme
 {
+    /// <summary>Made for the dark window theme.</summary>
     Dark,
+    /// <summary>Made for the light window theme.</summary>
     Light,
     /// <summary>Untagged; listed under both themes.</summary>
     Any

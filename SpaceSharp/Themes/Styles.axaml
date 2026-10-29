@@ -350,6 +350,13 @@
     <Setter Property="Background" Value="{DynamicResource ControlHover}" />
     <Setter Property="Foreground" Value="{DynamicResource Text}" />
   </Style>
+  <!-- the Insights rows: the header line lights on hover and stays lit while its body is open -->
+  <Style Selector="Border.insight-row:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ControlHover}" />
+  </Style>
+  <Style Selector="Border.insight-row.open">
+    <Setter Property="Background" Value="{DynamicResource MenuBg}" />
+  </Style>
   <Style Selector="Border.rule">
     <Setter Property="Background" Value="{DynamicResource Stroke}" />
   </Style>

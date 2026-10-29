@@ -8,7 +8,8 @@ namespace SpaceSharp.Services;
 /// <param name="Size">Its logical size in bytes in the older scan.</param>
 /// <param name="Allocated">Its size on disk in bytes in the older scan.</param>
 /// <param name="Files">The files it held, at least 1 for a file even when the older scan recorded 0.</param>
-public sealed record GoneEntry(string Name, bool IsDirectory, long Size, long Allocated, int Files)
+/// <param name="Unseen">True when the item is not gone but invisible to the method that made this scan (an NTFS metafile, or a folder the folder walk cannot open), so it is listed with that label and left out of the totals.</param>
+public sealed record GoneEntry(string Name, bool IsDirectory, long Size, long Allocated, int Files, bool Unseen = false)
 {
     /// <summary>The size by the chosen measure, matching <see cref="FsNode.SizeFor"/>.</summary>
     /// <param name="measure">File size or size on disk.</param>
@@ -61,6 +62,10 @@ public sealed class ScanComparison
         }
 
         entries.Add(entry);
+        if (entry.Unseen)
+        {
+            return;
+        }
         GoneFiles += entry.Files;
         GoneBytes += entry.Size;
         GoneAllocated += entry.Allocated;
@@ -79,6 +84,18 @@ public sealed class ScanComparison
 /// <summary>Marks every node with its size in an older scan, matching by name within each folder.</summary>
 public static class ScanCompare
 {
+    /// <summary>Root items only one scan method sees: the NTFS metafiles the file table lists and the folder walk cannot open, and the one folder only the file table can read.</summary>
+    private static readonly HashSet<string> MethodOnly = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "$MFT", "$MFTMirr", "$LogFile", "$Volume", "$AttrDef", "$Bitmap", "$Boot", "$BadClus", "$Secure", "$UpCase", "$Extend", "$Quota", "$ObjId", "$Reparse",
+        "System Volume Information"
+    };
+
+    /// <summary>Whether an item is one only a particular scan method can see, so its absence from one scan is not a change.</summary>
+    /// <param name="folder">The folder the item is in; only the scan root qualifies.</param>
+    /// <param name="name">The item's name.</param>
+    /// <returns>True for the NTFS metafiles and System Volume Information at the root.</returns>
+    public static bool IsMethodOnly(FsNode folder, string name) => folder.Parent is null && MethodOnly.Contains(name);
     /// <summary>Sets the baseline fields on every node of the current tree from the older tree and collects what is gone.</summary>
     /// <param name="current">The root of the tree just scanned; its nodes are modified in place.</param>
     /// <param name="baseline">The root of the older tree, read only; the two roots are assumed to be the same folder.</param>
@@ -117,6 +134,11 @@ public static class ScanCompare
     private static (long Size, long Allocated) Mark(FsNode now, FsNode? then, ScanComparison comparison)
     {
         now.HasBaseline = true;
+        if (then is null && now.Parent is not null && IsMethodOnly(now.Parent, now.Name))
+        {
+            // The older scan was made by a method that cannot see this item; it is not new, it was just not listed.
+            return MarkUnchanged(now);
+        }
         if (then is null)
         {
             now.BaselineSize = null;
@@ -203,11 +225,29 @@ public static class ScanCompare
         return (then.Size, then.Allocated);
     }
 
+    /// <summary>Gives a subtree a baseline equal to its current size, so nothing in it shows as changed.</summary>
+    /// <param name="node">The subtree root.</param>
+    /// <returns>Its size and allocated size, which are also its baseline.</returns>
+    private static (long Size, long Allocated) MarkUnchanged(FsNode node)
+    {
+        node.HasBaseline = true;
+        node.BaselineSize = node.Size;
+        node.BaselineAllocated = node.Allocated;
+        foreach (FsNode child in node.Children)
+        {
+            if (child.IsReal)
+            {
+                MarkUnchanged(child);
+            }
+        }
+        return (node.Size, node.Allocated);
+    }
+
     /// <summary>Records an older-scan item as gone from a current folder.</summary>
     /// <param name="folder">The current folder it used to be in.</param>
     /// <param name="then">The item in the older scan; a hard-link duplicate is skipped because its bytes were counted under another name.</param>
     /// <param name="comparison">Where the entry is added.</param>
-    /// <returns>The size and allocated size the item contributed to its folder then; (0, 0) for a skipped duplicate.</returns>
+    /// <returns>The size and allocated size the item contributed to its folder then; (0, 0) for a skipped duplicate or an item only the other method sees.</returns>
     private static (long Size, long Allocated) Gone(FsNode folder, FsNode then, ScanComparison comparison)
     {
         if (then.IsHardLinkDuplicate)
@@ -217,6 +257,12 @@ public static class ScanCompare
 
         // A gone file counts as one even when the old scan recorded no file count for it.
         int fileCount = Math.Max(then.IsDirectory ? 0 : 1, then.FileCount);
+        if (IsMethodOnly(folder, then.Name))
+        {
+            // Not gone, just invisible to the method that made this scan: listed with that label, and not part of the folder's baseline.
+            comparison.Add(folder, new GoneEntry(then.Name, then.IsDirectory, then.Size, then.Allocated, fileCount, Unseen: true));
+            return (0, 0);
+        }
         comparison.Add(folder, new GoneEntry(then.Name, then.IsDirectory, then.Size, then.Allocated, fileCount));
         return (then.Size, then.Allocated);
     }

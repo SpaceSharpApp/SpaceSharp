@@ -103,6 +103,9 @@ public sealed class DonutChart : Control
     /// leaves the ring or enters the hole.</summary>
     public event Action<int>? HoverChanged;
 
+    /// <summary>Asks for a square: the smaller of the two offered sides, 120 when both are unbounded.</summary>
+    /// <param name="availableSize">What the parent offers.</param>
+    /// <returns>The square's size.</returns>
     protected override Size MeasureOverride(Size availableSize)
     {
         double width = double.IsInfinity(availableSize.Width) ? 120 : availableSize.Width;
@@ -111,6 +114,8 @@ public sealed class DonutChart : Control
         return new Size(side, side);
     }
 
+    /// <summary>Draws the ring with its slices, the hovered one lifted, and the center text; nothing under 8 px.</summary>
+    /// <param name="dc">The drawing context.</param>
     public override void Render(DrawingContext dc)
     {
         double size = Math.Min(Bounds.Width, Bounds.Height);
@@ -250,12 +255,16 @@ public sealed class DonutChart : Control
         return geometry;
     }
 
+    /// <summary>Lifts the slice under the pointer.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
         SetHover(SliceAt(e.GetPosition(this)));
     }
 
+    /// <summary>Drops the lifted slice.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerExited(PointerEventArgs e)
     {
         base.OnPointerExited(e);

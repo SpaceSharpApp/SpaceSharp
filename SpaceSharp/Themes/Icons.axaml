@@ -54,10 +54,18 @@
     <StreamGeometry x:Key="Icon.Question">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3 M12 17h.01</StreamGeometry>
     <StreamGeometry x:Key="Icon.Error">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M15 9 l-6 6 M9 9 l6 6</StreamGeometry>
     <StreamGeometry x:Key="Icon.Search">M3,11 A8,8 0 1 0 19,11 A8,8 0 1 0 3,11 Z M21 21 l-4.3-4.3</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Trophy">M6 9H4.5a2.5 2.5 0 0 1 0-5H6 M18 9h1.5a2.5 2.5 0 0 0 0-5H18 M4 22h16 M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22 M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22 M18 2H6v7a6 6 0 0 0 12 0V2Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Check">M20 6 9 17l-5-5</StreamGeometry>
     <StreamGeometry x:Key="Icon.Drive">M22,12 L2,12 M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z M6,16 L6.01,16 M10,16 L10.01,16</StreamGeometry>
     <StreamGeometry x:Key="Icon.Usb">M9,7 A1,1 0 1 0 11,7 A1,1 0 1 0 9,7 Z M3,20 A1,1 0 1 0 5,20 A1,1 0 1 0 3,20 Z M4.7 19.3 19 5 M21 3 l-3 1 2 2Z M9.26 7.68 5 12l2 5 M10 14 l5 2 3.5-3.5 M18 12 l1-1 1 1-1 1Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Network">M17,16 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 Z M3,16 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 Z M10,2 h4 a1,1 0 0 1 1,1 v4 a1,1 0 0 1 -1,1 h-4 a1,1 0 0 1 -1,-1 v-4 a1,1 0 0 1 1,-1 Z M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3 M12 12V8</StreamGeometry>
+    <!-- drive kinds as filled silhouettes (drawn with Icon.Filled): an M.2 stick, a 2.5-inch SSD, a disk with its platter, a USB stick with its plug, three networked nodes, a disc -->
+    <StreamGeometry x:Key="Icon.DriveNvme">M2,7 h20 v10 h-20 Z M5,17 v-3 h1.5 v3 Z M8,17 v-3 h1.5 v3 Z M11,17 v-3 h1.5 v3 Z M13,9.5 h6 v4 h-6 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.DriveSsd">M4,4 h16 a2,2 0 0 1 2,2 v12 a2,2 0 0 1 -2,2 h-16 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 Z M7,15 h10 v2 h-10 Z M7,8 h4 v2 h-4 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.DriveHdd">M3,6 a2,2 0 0 1 2,-2 h14 a2,2 0 0 1 2,2 v12 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 Z M6,11 A6,6 0 1 0 18,11 A6,6 0 1 0 6,11 Z M10.5,11 A1.5,1.5 0 1 0 13.5,11 A1.5,1.5 0 1 0 10.5,11 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.DriveUsb">M2,8 h12 a2,2 0 0 1 2,2 v4 a2,2 0 0 1 -2,2 h-12 a2,2 0 0 1 -2,-2 v-4 a2,2 0 0 1 2,-2 Z M16,9.5 h7 v5 h-7 Z M17.5,11 h3 v1 h-3 Z M17.5,12.5 h3 v1 h-3 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.DriveNetwork">M9,2 h6 v5 h-6 Z M2,17 h6 v5 h-6 Z M16,17 h6 v5 h-6 Z M11,7 h2 v4 h-2 Z M4,11 h16 v2 h-16 Z M4,13 h2 v4 h-2 Z M18,13 h2 v4 h-2 Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.DriveDisc">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M9.5,12 A2.5,2.5 0 1 0 14.5,12 A2.5,2.5 0 1 0 9.5,12 Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Disc">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M10,12 A2,2 0 1 0 14,12 A2,2 0 1 0 10,12 Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Ssd">M5,4 h14 a2,2 0 0 1 2,2 v12 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 Z M13 8l-3.5 4.5H14L10.5 17</StreamGeometry>
     <StreamGeometry x:Key="Icon.Treemap">M5,3 h14 a2,2 0 0 1 2,2 v14 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-14 a2,2 0 0 1 2,-2 Z M3 12h11 M14 3v18 M14 15h7</StreamGeometry>

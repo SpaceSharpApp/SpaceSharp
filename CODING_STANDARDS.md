@@ -992,7 +992,8 @@ When a method throws something the caller is expected to catch, say which and wh
 - A short block keeps `/// <summary>...</summary>` on one line, followed by one line per `<param>` and `<returns>`.
 - A sentence that passes about 140 columns is split: the tag on its own line, the text wrapped beneath, the closing tag on its own line.
 - `<see cref="..."/>` for members, `<paramref name="..."/>` for the method's own parameters, `<c>...</c>` for literals; no bare backticks, which the tooltip shows verbatim.
-- The block must be well-formed XML: `&amp;` for `&`, `&lt;` for a literal `<`. (`GenerateDocumentationFile` is off, so the compiler will not tell you.)
+- The block must be well-formed XML: `&amp;` for `&`, `&lt;` for a literal `<`. `GenerateDocumentationFile` is on in the app and Core, so a bad block, a wrong parameter name, a broken cref or an undocumented public member is a build warning (CS1570, CS1573, CS1574, CS1591).
+- A local function gets a `//` comment, not a `///` block: the compiler has no place to put docs for it and warns (CS1587). Keep the same content, one line per parameter as `// name: what it is`.
 - A `<remarks>` holds the one thing that does not fit the summary: a format note, a thread rule, a reference. Not a second summary.
 - Comments inside the body stay `//`; a `///` block belongs only in front of a declaration.
 

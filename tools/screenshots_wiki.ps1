@@ -33,6 +33,8 @@ $files = [ordered]@{
     "wiki-settings-general" = "settings-general.png"; "wiki-settings-behavior" = "settings-behavior.png"; "wiki-settings-appearance" = "settings-appearance.png"
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"
     "wiki-rtl" = "rtl.png"
+    "wiki-achievements" = "achievements.png"; "wiki-achievement-toast" = "achievement-toast.png"
+    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"
 }
 if ($Scenes.Count -eq 0) { $Scenes = @($files.Keys) }
 

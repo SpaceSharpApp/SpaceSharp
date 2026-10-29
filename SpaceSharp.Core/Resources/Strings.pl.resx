@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Przenieś do Kosza</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Usuń trwale</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Omija Kosz i sięga ścieżek za długich dla Eksploratora. Nie da się cofnąć.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Usunąć trwale?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} zostanie usunięte na dobre, z pominięciem Kosza. Tak usuwa się foldery, których Eksplorator nie może otworzyć, i nie da się tego cofnąć.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Usuń na dobre</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>Usunięto na dobre elementów: {0}, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} powtarza się {1:N0} razy, zagnieżdżone w sobie.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Usuń powtórzenia…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Zachowuje pierwszą kopię i usuwa {0:N0} zagnieżdżonych poniżej, począwszy od {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows go pominął (w użyciu lub za duży dla Kosza)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>ścieżka jest za długa dla Kosza</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>odmowa dostępu</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Otwórz zapisane skanowanie</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Przesuwanie po powiększeniu</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Panel największych plików, folderów i typów</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Osiągnięcia</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Właściwości systemu Windows zaznaczonego elementu</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Skanuj ponownie</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Zamknij skanowanie i wróć do ekranu startowego</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Usunięto zapisane skanowania: {0}</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>Zwolniono {0} w folderze skanowań.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Mapa na ekranie pozostaje otwarta. Następne skanowanie dysku lub folderu nie będzie miało z czym się porównać, dopóki nie zostanie zapisane jego nowe skanowanie.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>Mapa na ekranie pozostaje otwarta, ale pokazywane porównanie zostało zamknięte, bo skan, z którym porównywano, zniknął. Następny skan dysku lub folderu nie będzie miał z czym się porównać, dopóki nie zostanie zapisany nowy.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Jeden plik jest w użyciu i został pozostawiony; zostanie usunięty następnym razem.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>Pliki w użyciu, które pozostawiono: {0}; zostaną usunięte następnym razem.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Nazwa lub wzorzec, np. *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} miejsc · {1} zaznaczono</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Nietknięte od roku</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} skanowania · {1:N0} plików</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Największy folder</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} plików</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Od ostatniego skanowania</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nowych plików</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Brak wcześniejszego skanowania</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Przeskanuj ponownie innego dnia, aby zobaczyć, co się zmieniło</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} typów · kliknij wiersz, aby przefiltrować mapę</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} to {1} skanowania, głównie w {2}. Następnie {3} z {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} w miejscach, które zwykle można bezpiecznie opróżnić · nic nie zostanie usunięte bez Twojej zgody</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Zaznacz miejsca, które mają razem trafić do Kosza</value></data>
@@ -980,9 +990,7 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Insights_AfterTip" xml:space="preserve"><value>Bursztynowa część górnego paska to tyle, ile zajmują teraz zaznaczone miejsca; dolny pasek to dysk bez nich.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} nietknięte od ponad roku · kliknij miesiąc lub pasmo, aby filtrować</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Największe, nietknięte od roku lub dłużej</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Największe foldery</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>gdziekolwiek w skanowaniu</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Największe pliki</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Przeskanuj ten dysk ponownie innego dnia, a ta karta pokaże, co w międzyczasie urosło, zmalało i pojawiło się. Zapisane skanowanie można też porównać z menu Plik skanowania › Porównaj z zapisanym skanowaniem.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Urosło</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Zmalało</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Changes_SortTip" xml:space="preserve"><value>Kliknij, aby sortować według tej kolumny; kliknij ponownie, aby odwrócić kolejność</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Zniknęło</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>było w porównywanym skanie, a nie ma go w tym</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Niewidoczne dla tej metody</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>było w porównywanym skanie; metoda tego skanu tego nie widzi, więc to nie zmiana</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} więcej…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} zmienionych · {1:N0} niezmienionych ukryto</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} elementów · {1:N0} zmienionych</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Changes_NoneOver" xml:space="preserve"><value>Nic nie zmieniło się o więcej niż {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Nie ma jeszcze z czym porównać</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Otwórz Zmiany</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Największe rozszerzenia</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>i gdzie znajduje się większość każdego z nich</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>Typy: {0}</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>jeszcze {0}</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Kliknij wiersz, aby przefiltrować mapę.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>jeszcze {0} miejsc</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>nic nie jest usuwane, dopóki nie powiesz</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} starych</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>w tym miesiącu {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>w tym roku {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>nietknięte od roku {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Największe</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Rozszerzenia</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Gry</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} w {2} grach</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} w 1 grze</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Multimedia</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Obrazy {0}, {1:N0} zdjęć</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Audio {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Wideo {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} zrzutów ekranu {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} obrazów leży w folderach Screenshots, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Programista</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} w {1} projektach</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} w {1} repozytoriach</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>wyniki kompilacji {0} w {1} folderach</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>wszystko do odtworzenia</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Zainstalowane pakiety, historia repozytoriów i wyniki kompilacji: instalacja lub kompilacja tworzy je na nowo. Największe:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Pobrane</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>najstarszy z {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} instalatorów już uruchomionych, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} archiwów już rozpakowanych, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>Instalator liczy się jako uruchomiony, gdy leży w Pobranych; archiwum jako rozpakowane, gdy obok leży folder o tej nazwie. Największe pliki:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Twarde dowiązania</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>liczone raz</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} dowiązań</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} dowiązań, głównie w {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>narzędzie liczące je w całości pokaże dysk o {0} pełniejszy, niż jest</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Twarde dowiązanie to jeden plik pod kilkoma nazwami. SpaceSharp liczy go raz; Eksplorator i większość innych narzędzi liczy każdą nazwę, dlatego ich sumy wychodzą wyżej. Gdzie jest większość oszczędności:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Małe i puste</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>straty na klastrach</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} plików poniżej 4 KB</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} pustych folderów</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} folderów z jednym plikiem</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} plików ma mniej niż 4 KB; zawierają {1}, ale dysk przydziela całe klastry, więc {2} z tego to strata, której żadne narzędzie nie zwolni. {3:N0} folderów jest pustych.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Głęboko i długo</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Puste foldery</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>Foldery bez plików: {0:N0}</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>Foldery bez plików: {0:N0}, zagnieżdżonych w nich: {1:N0}</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Brak pustych folderów w tym skanie.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} zagnieżdżonych</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Zaznacz wszystko</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Odznacz wszystko</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>Zaznaczono: {0:N0}</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Przenieś zaznaczone do Kosza</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Przeniesiono do Kosza pustych folderów: {0:N0}</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Zduplikowane pliki</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Pliki o dokładnie tej samej zawartości, gdziekolwiek leżą. Najpierw rozmiar, potem pierwsze bajty, potem cały plik, więc czytane są tylko prawdopodobne trafienia.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Pomiń pliki poniżej</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Znajdź duplikaty</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Grupowanie według rozmiaru…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Porównywanie pierwszych bajtów: {0:N0} z {1:N0} · odczytano {2}</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Odczyt całych plików: {0:N0} z {1:N0} · odczytano {2}</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>Zestawów: {0:N0} · dodatkowych kopii: {1:N0} · do zwolnienia: {2}</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Brak duplikatów wśród plików powyżej {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Zachowaj pierwszy z każdego</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Zachowaj najnowszy z każdego</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Wyczyść zaznaczenia</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>Kopii: {0:N0} · po {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>Zaznaczono: {0:N0} · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Przenieś zaznaczone do Kosza</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>W {0:N0} zestawach zaznaczono każdą kopię, więc nic z nich nie zostanie.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>Przeniesiono do Kosza zduplikowanych plików: {0:N0}, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Przejrzyj puste foldery…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplikaty</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>jeszcze nie szukano</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Znajduje pliki o identycznej zawartości i pozwala zachować po jednym</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Znajdź duplikaty…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Czyta tylko pliki o rozmiarze wspólnym z innym, więc na większości dysków szukanie jest szybkie. Dowiązania twarde to ten sam plik i nie są liczone.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>Zestawów: {0:N0}</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>Dodatkowych kopii: {0:N0}</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>Odczytano {0}, by rozstrzygnąć</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>do zwolnienia</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Nie znaleziono duplikatów przy użytym progu rozmiaru.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>Kopii: {0:N0}</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} poziomów</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} ścieżek ponad 260 znaków</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>Najgłębszy folder, {0} poziomów poniżej korzenia:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} ścieżek przekracza klasyczny limit 260 znaków; najdłuższe:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} znaków</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Porównaj z zapisanym skanowaniem…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} nowych plików</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>odbieranie drzewa od pomocnika administratora</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Ta wersja</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Różne rodzaje skanowania</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Tamto skanowanie wykonano inaczej ({0}) niż to ({1}). Pliki widoczne tylko dla jednej metody, takie jak chronione foldery systemowe, oraz dowiązania twarde liczone raz przez jedną metodę i w całości przez drugą, pokażą się jako usunięte, nowe, większe lub mniejsze.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Porównaj mimo to</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Lustereczko, lustereczko</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Ten plik to zapis tego samego skanowania. Między skanowaniem a nim samym nic nie może się zmienić, choćbyśmy patrzyli najuważniej. Wybierz wcześniejsze skanowanie, aby zobaczyć, co naprawdę się zmieniło.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Osiągnięcie odblokowane</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Zapytano dysk, co się zmieniło od niego samego. Dysk, jak to dysk, nic nie powiedział.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Osiągnięcia</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Niektóre wymagają jednego skanowania, inne roku. Żadne nie jest nic warte i o to chodzi.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>Odblokowano {0} z {1}</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Zablokowane</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Zablokowane. Jak je zdobyć, pozostaje tajemnicą, dopóki go nie zdobędziesz.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Wszystkie osiągnięcia odblokowane</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>To były wszystkie. Aplikacja nie ma już nic do rozdania, więc od teraz będzie po prostu pokazywać twój dysk.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Lustereczko, lustereczko</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Zapytano dysk, co się zmieniło od niego samego. Dysk, jak to dysk, nic nie powiedział.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Cały dysk odczytany z tabeli plików w mniej niż pięć sekund.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Okrężną drogą</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Cały dysk przejrzany folder po folderze, choć tabela plików była pod ręką. Trasa widokowa.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Nocna zmiana</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Skanowanie rozpoczęte między drugą a piątą w nocy.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Encyklopedia</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Skanowanie z ponad milionem plików.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Głębokie nurkowanie</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Znaleziono ścieżkę głębszą niż dwadzieścia folderów. Twoje foldery mają foldery.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Klub terabajta</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Przeskanowano dysk o pojemności terabajta lub większej.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Stały bywalec</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Ten sam dysk lub folder przeskanowany dziesięć razy.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Oddech</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Dysk przeszedł z mniej niż 10% wolnego do ponad 25% wolnego między dwoma skanowaniami.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Wiosenne porządki</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Ponad 50 GB zwolnione między dwoma skanowaniami tego samego dysku.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Komplet</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Przeskanowano dysk z 1% lub mniej wolnego miejsca. W gospodzie nie ma miejsc.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Zbieracz</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Ponad dziesięć tysięcy plików w jednym folderze.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Wieloryb</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Jeden plik większy niż 100 GB.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Gabinet luster</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Twarde dowiązania zaoszczędziły ponad 10 GB na jednym dysku.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Kurz</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Znaleziono plik, którego nikt nie dotykał od ponad dziesięciu lat.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Nic się nie stało</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Dwa skanowania w odstępie co najmniej tygodnia i mniej niż megabajt zmian.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Zwrot akcji</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>Największy folder nie jest już tym z ostatniego skanowania.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Turysta</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Mapa, Wgląd i Zmiany odwiedzone w jednej sesji.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Poliglota</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Język zmieniony trzy razy. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Archeolog</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Otwarto zapisane skanowanie starsze niż rok.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Kolekcjoner</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Odblokowano wszystkie pozostałe osiągnięcia. Nie ma już nic do znalezienia, a o to w tej aplikacji chodzi.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Wykonane inaczej ({0} a {1}): różnice obejmują pliki widoczne tylko dla jednej metody.</value></data>
 </root>

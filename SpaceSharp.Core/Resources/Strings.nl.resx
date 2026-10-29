@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Naar Prullenbak verplaatsen</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Definitief verwijderen</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Slaat de Prullenbak over en bereikt paden die te lang zijn voor Verkenner. Kan niet ongedaan worden gemaakt.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Definitief verwijderen?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} wordt voorgoed verwijderd, buiten de Prullenbak om. Zo verwijder je mappen die Verkenner niet kan openen, en het is niet ongedaan te maken.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Voorgoed verwijderen</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0} items voorgoed verwijderd, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} herhaalt zich {1:N0} keer, in zichzelf genest.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Herhalingen verwijderen…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Houdt de eerste kopie en verwijdert de {0:N0} eronder geneste, vanaf {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows heeft het overgeslagen (in gebruik, of te groot voor de Prullenbak)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>het pad is te lang voor de Prullenbak</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>toegang geweigerd</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Een opgeslagen scan openen</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Verschuiven terwijl ingezoomd</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Paneel met grootste bestanden, mappen en typen</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Prestaties</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-eigenschappen van het geselecteerde item</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Opnieuw scannen</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>De scan sluiten en terug naar het startscherm</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} opgeslagen scans verwijderd</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>{0} vrijgemaakt in de scanmap.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>De kaart op het scherm blijft open. De volgende scan van een schijf of map heeft niets om mee te vergelijken tot er een nieuwe scan van is opgeslagen.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>De kaart op het scherm blijft open, maar de vergelijking die hij toonde is gesloten, omdat de scan waarmee werd vergeleken weg is. De volgende scan van een schijf of map heeft niets om mee te vergelijken tot er een nieuwe scan van is opgeslagen.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Eén bestand is in gebruik en is blijven staan; het wordt de volgende keer verwijderd.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} bestanden zijn in gebruik en zijn blijven staan; ze worden de volgende keer verwijderd.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Naam of patroon, bijv. *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} plekken · {1} aangevinkt</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Een jaar onaangeroerd</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} van de scan · {1:N0} bestanden</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Grootste map</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} bestanden</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Sinds vorige scan</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nieuwe bestanden</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Geen eerdere scan</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Scan op een andere dag opnieuw om te zien wat er is veranderd</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} typen · klik op een rij om de kaart te filteren</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} is {1} van de scan, vooral onder {2}. Daarna {3} met {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} op plekken die meestal veilig leeg te maken zijn · er wordt niets verwijderd totdat u dat zegt</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Vink de plekken aan om ze samen naar de Prullenbak te verplaatsen</value></data>
@@ -980,9 +990,7 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Insights_AfterTip" xml:space="preserve"><value>Het amberkleurige deel van de bovenste balk is wat de aangevinkte plekken nu innemen; de onderste balk is de schijf zonder ze.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} al meer dan een jaar onaangeroerd · klik op een maand of een band om te filteren</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Grootste, een jaar of langer onaangeroerd</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Grootste mappen</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>overal in de scan</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Grootste bestanden</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Scan dit station op een andere dag opnieuw en deze kaart toont wat in de tussentijd is gegroeid, gekrompen en verschenen. Een opgeslagen scan kan ook worden vergeleken via Scanbestand › Vergelijken met een opgeslagen scan.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Gegroeid</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Gekrompen</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Changes_SortTip" xml:space="preserve"><value>Klik om op deze kolom te sorteren; klik nogmaals om de volgorde om te keren</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Weg</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>zat in de vergeleken scan en niet in deze</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Niet zichtbaar voor deze methode</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>stond in de vergeleken scan; de methode van deze scan kan het niet zien, dus het is geen verandering</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} meer…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} gewijzigd · {1:N0} ongewijzigde verborgen</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} items · {1:N0} gewijzigd</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Changes_NoneOver" xml:space="preserve"><value>Niets veranderde met meer dan {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Nog niets om mee te vergelijken</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Wijzigingen openen</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Grootste extensies</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>en waar het meeste van elk staat</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} typen</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} meer</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Klik op een rij om de kaart te filteren.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} plekken meer</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>er wordt niets verwijderd tot je het zegt</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} oud</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>deze maand {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>dit jaar {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>een jaar onaangeraakt {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Grootste</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Extensies</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Games</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} in {2} games</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} in 1 game</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Media</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Afbeeldingen {0}, {1:N0} foto's</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Audio {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Video {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} schermafbeeldingen {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} van de afbeeldingen staan in Screenshots-mappen, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Ontwikkelaar</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} in {1} projecten</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} in {1} repo's</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>buildoutput {0} in {1} mappen</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>alles opnieuw te maken</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Geïnstalleerde pakketten, repositorygeschiedenis en buildoutput: een installatie of een build maakt ze opnieuw. De grootste:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>oudste van {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} installers die je al hebt uitgevoerd, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} archieven die al zijn uitgepakt, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>Een installer telt als uitgevoerd als hij in Downloads staat; een archief als uitgepakt als er een map met dezelfde naam naast staat. De grootste bestanden:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Harde koppelingen</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>eenmaal geteld</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} koppelingen</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} koppelingen, vooral in {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>een tool die ze volledig telt toont de schijf {0} voller dan hij is</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Een harde koppeling is één bestand onder meerdere namen. SpaceSharp telt het één keer; Verkenner en de meeste andere tools tellen elke naam, daarom vallen hun totalen hoger uit. Waar het meeste van de besparing zit:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Klein en leeg</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>aan clusterverlies</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} bestanden onder 4 KB</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} lege mappen</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} mappen met één bestand</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} bestanden zijn kleiner dan 4 KB; ze bevatten {1}, maar de schijf deelt hele clusters uit, dus {2} daarvan is verlies dat geen tool kan vrijmaken. {3:N0} mappen zijn leeg.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Diep en lang</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Lege mappen</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mappen zonder bestanden</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mappen zonder bestanden, {1:N0} meer daarin genest</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Geen lege mappen in deze scan.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} genest</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Alles selecteren</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Niets selecteren</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} aangevinkt</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Aangevinkte naar Prullenbak</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} lege mappen naar de Prullenbak verplaatst</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Dubbele bestanden</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Bestanden met precies dezelfde inhoud, waar ze ook staan. Eerst de grootte, dan de eerste bytes, dan het hele bestand, zodat alleen waarschijnlijke treffers worden gelezen.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Bestanden negeren onder</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Dubbele zoeken</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Groeperen op grootte…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Eerste bytes vergelijken: {0:N0} van {1:N0} · {2} gelezen</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Hele bestanden lezen: {0:N0} van {1:N0} · {2} gelezen</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sets · {1:N0} extra kopieën · {2} kan weg</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Geen dubbele onder de bestanden boven {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Van elke set de eerste houden</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Van elke set de nieuwste houden</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Alle vinkjes wissen</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} kopieën · elk {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} aangevinkt · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Aangevinkte naar Prullenbak</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} sets hebben elke kopie aangevinkt, daar blijft dus niets van over.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} dubbele bestanden naar de Prullenbak verplaatst, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Lege mappen bekijken…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Dubbele</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>nog niet gezocht</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Vindt bestanden met identieke inhoud en laat er van elk één houden</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Dubbele zoeken…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Leest alleen bestanden die hun grootte met een ander delen, dus het zoeken is snel op de meeste schijven. Harde koppelingen zijn hetzelfde bestand en tellen niet mee.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} sets</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} extra kopieën</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>{0} gelezen om te beslissen</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>kan weg</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Geen dubbele gevonden met de gebruikte minimumgrootte.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} kopieën</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} diep</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} paden langer dan 260 tekens</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>De diepste map, {0} niveaus onder de root:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} paden zijn langer dan de klassieke limiet van 260 tekens; de langste:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} tekens</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Vergelijken met een opgeslagen scan…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} nieuwe bestanden</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>de boom wordt ontvangen van de beheerdershelper</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Deze versie</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Verschillende soorten scans</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Die scan is anders gemaakt ({0}) dan deze ({1}). Bestanden die maar één methode ziet, zoals beschermde systeemmappen, en harde koppelingen die de ene methode één keer en de andere volledig telt, verschijnen als verdwenen, nieuw, gegroeid of gekrompen.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Toch vergelijken</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spiegeltje, spiegeltje</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Dat bestand is het opgeslagen bestand van deze scan zelf. Tussen een scan en zichzelf kan niets veranderen, hoe goed we ook kijken. Kies een eerdere scan om te zien wat er echt is veranderd.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Prestatie ontgrendeld</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Vroeg de schijf wat er sinds zichzelf was veranderd. De schijf, schijf zijnde, zei niets.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Prestaties</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Sommige kosten een scan, andere een jaar. Geen enkele is iets waard, en dat is precies de bedoeling.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} van {1} ontgrendeld</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Vergrendeld</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Vergrendeld. Hoe je hem verdient blijft geheim tot je hem hebt.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle prestaties ontgrendeld</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Dat waren ze allemaal. De app heeft niets meer uit te delen en laat je vanaf nu gewoon je schijf zien.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Spiegeltje, spiegeltje</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Vroeg de schijf wat er sinds zichzelf was veranderd. De schijf, schijf zijnde, zei niets.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Een hele schijf in minder dan vijf seconden uit de bestandstabel gelezen.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>De lange weg</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Een hele schijf map voor map doorlopen terwijl de bestandstabel klaarlag. Toeristische route genomen.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Nachtdienst</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Een scan gestart tussen twee en vijf uur 's nachts.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Encyclopedie</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Een scan met meer dan een miljoen bestanden.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Diepe duik</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Een pad van meer dan twintig mappen diep gevonden. Je mappen hebben mappen.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Terabyteclub</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Een schijf van een terabyte of meer gescand.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Stamgast</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Dezelfde schijf of map tien keer gescand.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Ademruimte</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Een schijf ging tussen twee scans van minder dan 10% vrij naar meer dan 25% vrij.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Voorjaarsschoonmaak</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Meer dan 50 GB vrijgemaakt tussen twee scans van dezelfde schijf.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Vol huis</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Een schijf gescand met 1% of minder vrij. Geen plaats in de herberg.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Verzamelaar</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Meer dan tienduizend bestanden in één map.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Walvis</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Eén bestand van meer dan 100 GB.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Spiegelpaleis</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Harde koppelingen bespaarden meer dan 10 GB op één schijf.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Stof</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Een bestand gevonden dat al meer dan tien jaar door niemand is aangeraakt.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Er gebeurde niets</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Twee scans met een week of meer ertussen en minder dan een megabyte verschil.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Plotwending</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>De grootste map is niet meer die van de vorige scan.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Toerist</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>De kaart, Inzichten en Wijzigingen in één sessie bezocht.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Polyglot</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>De taal drie keer gewisseld. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Archeoloog</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Een opgeslagen scan van meer dan een jaar oud geopend.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Completist</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Alle andere prestaties ontgrendeld. Er valt niets meer te vinden, en daar draait de app om.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Anders gemaakt ({0} tegenover {1}): de verschillen omvatten bestanden die maar één methode ziet.</value></data>
 </root>

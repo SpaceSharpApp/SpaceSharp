@@ -199,6 +199,8 @@ public partial class MainWindow
         Treemap.ClearSelection();
         Treemap.Root = null;
         _root = null;
+        _duplicateRoot = null;
+        _duplicateResult = null;
         _scanRoot = null;
         _baselineInfo = null;
         _comparison = null;

@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Переместить в корзину</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Удалить навсегда</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Минует корзину и достает пути, слишком длинные для Проводника. Отменить нельзя.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Удалить навсегда?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} будет удалено безвозвратно, минуя корзину. Так убирают папки, которые Проводник не может открыть, и отменить это нельзя.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Удалить безвозвратно</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>Удалено безвозвратно элементов: {0}, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} повторяется {1:N0} раз, вложенное само в себя.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Удалить повторы…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Оставляет первую копию и удаляет {0:N0} вложенных ниже, начиная с {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows пропустил его (используется или слишком велик для корзины)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>путь слишком длинный для корзины</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>доступ запрещён</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Открыть сохранённое сканирование</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Прокрутка при увеличении</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Панель крупнейших файлов, папок и типов</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Достижения</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Свойства Windows для выбранного элемента</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Сканировать заново</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Закрыть сканирование и вернуться на начальный экран</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Удалено сохраненных сканирований: {0}</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>Освобождено {0} в папке сканирований.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Карта на экране останется открытой. Следующему сканированию диска или папки будет не с чем сравниваться, пока не будет сохранено его новое сканирование.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>Карта на экране остается открытой, но показанное сравнение закрыто, так как скана, с которым сравнивали, больше нет. Следующему скану диска или папки будет не с чем сравниваться, пока не будет сохранен новый.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Один файл используется и оставлен; он будет удален в следующий раз.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>Файлов используется и оставлено: {0}; они будут удалены в следующий раз.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Имя или шаблон, например *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Insights_ClearDetail" xml:space="preserve"><value>мест: {0} · отмечено {1}</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Не тронуто год</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} сканирования · файлов: {1:N0}</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Крупнейшая папка</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · файлов: {2:N0}</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>С прошлого сканирования</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · новых файлов: {1:N0}</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Нет предыдущего сканирования</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Просканируйте снова в другой день, чтобы увидеть изменения</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>типов: {0} · щёлкните строку, чтобы отфильтровать карту</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} составляют {1} сканирования, в основном в {2}. Затем {3} с {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} в местах, которые обычно можно безопасно очистить · ничего не удаляется без вашего подтверждения</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Отметьте места, чтобы отправить их в корзину вместе</value></data>
@@ -980,9 +990,7 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Insights_AfterTip" xml:space="preserve"><value>Янтарная часть верхней полосы показывает, сколько сейчас занимают отмеченные места; нижняя полоса показывает диск без них.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} не тронуто больше года · щёлкните месяц или полосу, чтобы отфильтровать</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Крупнейшие, не тронутые год и больше</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Крупнейшие папки</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>по всему сканированию</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Крупнейшие файлы</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Просканируйте этот диск снова в другой день, и эта карточка покажет, что выросло, уменьшилось и появилось за это время. Сохранённое сканирование также можно сравнить через Файл сканирования › Сравнить с сохранённым сканированием.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Выросло</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Уменьшилось</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Changes_SortTip" xml:space="preserve"><value>Нажмите, чтобы сортировать по этому столбцу; нажмите ещё раз, чтобы обратить порядок</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Исчез</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>был в сравниваемом сканировании, а в этом его нет</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Невидимо для этого метода</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>было в сравниваемом скане; метод этого скана его не видит, так что это не изменение</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>ещё {0:N0}…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} изменено · {1:N0} неизменённых скрыто</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} элементов · {1:N0} изменено</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Changes_NoneOver" xml:space="preserve"><value>Ничего не изменилось больше чем на {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Пока не с чем сравнивать</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Открыть Изменения</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Крупнейшие расширения</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>и где находится большая часть каждого</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>Типов: {0}</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>еще {0}</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Нажмите строку, чтобы отфильтровать карту.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>еще {0} мест</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>ничего не удаляется, пока вы не скажете</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} старого</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>в этом месяце {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>в этом году {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>нетронуто год {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Самое большое</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Расширения</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Игры</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} в {2} играх</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} в 1 игре</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Медиа</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Изображения {0}, {1:N0} фото</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Аудио {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Видео {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} снимков экрана {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} изображений лежат в папках Screenshots, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Разработка</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} в {1} проектах</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} в {1} репозиториях</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>результаты сборки {0} в {1} папках</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>все восстанавливается</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Установленные пакеты, история репозиториев и результаты сборки: установка или сборка создадут их заново. Самые большие:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Загрузки</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>самый старый от {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} установщиков, которые вы уже запускали, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} архивов, которые уже распакованы, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>Установщик считается запущенным, если лежит в Загрузках; архив распакованным, если рядом лежит папка с его именем. Самые большие файлы:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Жесткие ссылки</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>посчитаны один раз</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} ссылок</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} ссылок, в основном в {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>инструмент, считающий их полностью, покажет диск на {0} полнее, чем он есть</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Жесткая ссылка — это один файл под несколькими именами. SpaceSharp считает его один раз; Проводник и большинство других инструментов считают каждое имя, поэтому их итоги выше. Где основная экономия:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Мелкое и пустое</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>потерь на кластерах</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} файлов меньше 4 КБ</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} пустых папок</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} папок с одним файлом</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} файлов меньше 4 КБ; они содержат {1}, но диск выделяет целые кластеры, так что {2} из этого — потери, которые не освободит ни один инструмент. {3:N0} папок пусты.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Глубоко и длинно</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Пустые папки</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>Папок без файлов: {0:N0}</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>Папок без файлов: {0:N0}, вложенных в них еще {1:N0}</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>В этом скане нет пустых папок.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>Вложенных: {0:N0}</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Выбрать все</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Снять выбор</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>Отмечено: {0:N0}</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Отмеченные в корзину</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Перемещено в корзину пустых папок: {0:N0}</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Файлы-дубликаты</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Файлы с полностью одинаковым содержимым, где бы они ни лежали. Сначала размер, затем первые байты, затем весь файл, так что читаются только вероятные совпадения.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Пропускать файлы меньше</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Найти дубликаты</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Группировка по размеру…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Сравнение первых байтов: {0:N0} из {1:N0} · прочитано {2}</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Чтение файлов целиком: {0:N0} из {1:N0} · прочитано {2}</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>Наборов: {0:N0} · лишних копий: {1:N0} · можно освободить {2}</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Среди файлов больше {0} дубликатов нет.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Оставить первый в каждом</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Оставить новейший в каждом</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Снять все отметки</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>Копий: {0:N0} · по {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>Отмечено: {0:N0} · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Отмеченные в корзину</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>В {0:N0} наборах отмечены все копии, от них ничего не останется.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>Перемещено в корзину дубликатов: {0:N0}, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Просмотреть пустые папки…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Дубликаты</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>еще не искали</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Находит файлы с одинаковым содержимым и позволяет оставить по одному</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Найти дубликаты…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Читает только файлы, размер которых совпадает с другим, поэтому на большинстве дисков поиск быстрый. Жесткие ссылки — тот же файл и не считаются.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>Наборов: {0:N0}</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>Лишних копий: {0:N0}</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>Прочитано {0}, чтобы решить</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>можно освободить</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>С использованным порогом размера дубликатов не найдено.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>Копий: {0:N0}</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} уровней</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} путей длиннее 260 символов</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>Самая глубокая папка, {0} уровней ниже корня:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} путей длиннее классического предела в 260 символов; самые длинные:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} символов</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Сравнить с сохраненным сканированием…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} новых файлов</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>получение дерева от помощника администратора</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Эта версия</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Разные виды сканирования</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>То сканирование выполнено иначе ({0}), чем это ({1}). Файлы, которые видит только один метод, например защищённые системные папки, и жёсткие ссылки, которые один метод считает один раз, а другой полностью, будут показаны как исчезнувшие, новые, выросшие или уменьшившиеся.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Всё равно сравнить</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Свет мой, зеркальце</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Этот файл является сохранением этого же сканирования. Между сканированием и им самим ничего не может измениться, как бы внимательно мы ни смотрели. Выберите более раннее сканирование, чтобы увидеть, что изменилось на самом деле.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Достижение открыто</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Спросили у диска, что изменилось с него самого. Диск, будучи диском, промолчал.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Достижения</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Одни требуют одного сканирования, другие года. Ни одно ничего не стоит, в этом и смысл.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>Открыто {0} из {1}</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Закрыто. Как его получить, останется секретом, пока вы его не получите.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Все достижения открыты</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Это были все. Приложению больше нечего раздавать, так что дальше оно будет просто показывать вам ваш диск.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Свет мой, зеркальце</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Спросили у диска, что изменилось с него самого. Диск, будучи диском, промолчал.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Спидран</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Целый диск прочитан из таблицы файлов быстрее чем за пять секунд.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Длинный путь</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Целый диск пройден папка за папкой, хотя таблица файлов была под рукой. Выбран живописный маршрут.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Ночная смена</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Сканирование запущено между двумя и пятью часами ночи.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Энциклопедия</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Сканирование с более чем миллионом файлов.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Глубокое погружение</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Найден путь глубже двадцати папок. У ваших папок есть папки.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Клуб терабайта</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Отсканирован диск объемом терабайт и больше.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Завсегдатай</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Один и тот же диск или папка отсканированы десять раз.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Глоток воздуха</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Между двумя сканированиями диск перешел от менее 10% свободного места к более чем 25%.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Генеральная уборка</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Между двумя сканированиями одного диска освобождено более 50 ГБ.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Мест нет</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Отсканирован диск, на котором свободно 1% или меньше. В гостинице нет мест.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Накопитель</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Более десяти тысяч файлов в одной папке.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Кит</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Один файл размером более 100 ГБ.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Зеркальный зал</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Жесткие ссылки сэкономили более 10 ГБ на одном диске.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Пыль</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Найден файл, которого никто не касался более десяти лет.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Ничего не произошло</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Два сканирования с разницей в неделю и больше и менее мегабайта изменений.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Поворот сюжета</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>Самая большая папка уже не та, что была при прошлом сканировании.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Турист</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Карта, Обзор и Изменения посещены за один сеанс.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Полиглот</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Язык сменен три раза. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Археолог</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Открыто сохраненное сканирование старше года.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Коллекционер</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Открыты все остальные достижения. Искать больше нечего, в чем и смысл приложения.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Выполнены по-разному ({0} и {1}): различия включают файлы, которые видит только один метод.</value></data>
 </root>

@@ -77,7 +77,7 @@ public partial class MainWindow
     {
         "start", "none", "wiki-colorby-type", "wiki-zoomed", "insights", "changes", "wiki-changes-everything", "drawer", "wiki-rail", "wiki-filtered",
         "inspect", "wiki-inspect-selection", "settings", "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance",
-        "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-shortcuts", "about", "update", "wiki-palette-editor", "light"
+        "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-shortcuts", "wiki-achievements", "wiki-empty-folders", "wiki-duplicates", "about", "update", "wiki-palette-editor", "light"
     };
 
     private static readonly (int Width, int Height)[] AuditSizes = { (1600, 900), (1040, 620) };

@@ -63,6 +63,7 @@ public partial class MainWindow
     /// <param name="view">The view to show; Map and Insights are remembered in Settings, Changes is not.</param>
     private void ShowView(MainView view)
     {
+        NoteViewForAchievements(view);
         _changesShowing = view == MainView.Changes;
         if (view != MainView.Changes && _settings.InsightsView != (view == MainView.Insights))
         {
@@ -121,6 +122,7 @@ public partial class MainWindow
         _cleanup = null;
         _bandSums = null;
         _bandFiles = null;
+        _extra = null;
         _insightsRoot = null;
     }
 
@@ -177,12 +179,8 @@ public partial class MainWindow
         }
 
         _tiles = BuildTiles();
-        _cards = new List<(Control, int)>
-        {
-            (BuildTypeCard(), 0), (BuildCleanupCard(), 1), (BuildTimelineCard(), 2),
-            (BuildFoldersCard(), 3), (BuildFilesCard(), 4), (BuildChangesCard(), 5), (BuildExtensionsCard(), 6)
-        };
-        _insightsColumns = 0;
+        _rows = BuildRows();
+        _rowsBox = null;
         ArrangeInsights();
     }
 
@@ -230,124 +228,9 @@ public partial class MainWindow
         }
     }
 
-    private UniformGrid? _tiles;
-    /// <summary>The seven cards with their index into the span tables of <see cref="ArrangeInsights"/>.</summary>
-    private List<(Control Card, int Index)>? _cards;
-    /// <summary>The column count the cards were last laid out for; 0 forces a re-layout.</summary>
-    private int _insightsColumns;
-
     private void InsightsView_SizeChanged(object? sender, SizeChangedEventArgs e) => ArrangeInsights();
 
-    /// <summary>Lays the cards out on a twelve-unit grid for the available width.</summary>
-    private void ArrangeInsights()
-    {
-        if (_cards is null || _tiles is null || !InsightsShowing)
-        {
-            return;
-        }
-        double width = Math.Max(0, InsightsView.Viewport.Width - InsightsHost.Margin.Left - InsightsHost.Margin.Right);
-        if (width <= 0)
-        {
-            width = Math.Max(0, InsightsView.Bounds.Width - 40);
-        }
-        int columns = width >= 1380 ? 4 : width >= 980 ? 3 : width >= 620 ? 2 : 1;
-        if (columns == _insightsColumns)
-        {
-            return;
-        }
-        _insightsColumns = columns;
-
-        _tiles.Columns = width >= 1100 ? 6 : width >= 560 ? 3 : 2;
-
-        int[] spans = columns switch
-        {
-            4 => new[] { 4, 4, 4, 3, 3, 3, 3 },
-            3 => new[] { 4, 4, 4, 6, 6, 6, 6 },
-            2 => new[] { 6, 6, 6, 6, 6, 6, 12 },
-            _ => new[] { 12, 12, 12, 12, 12, 12, 12 }
-        };
-
-        // The cards are reused across layouts, so each one leaves its old parent first.
-        InsightsHost.Children.Clear();
-        foreach ((Control? card, int _) in _cards)
-        {
-            if (card.Parent is Panel oldParent)
-            {
-                oldParent.Children.Remove(card);
-            }
-        }
-        if (_tiles.Parent is Panel tileParent)
-        {
-            tileParent.Children.Remove(_tiles);
-        }
-        InsightsHost.Children.Add(_tiles);
-
-        var grid = new Grid { Margin = new Thickness(0, 12, 0, 0) };
-        for (int i = 0; i < 12; i++)
-        {
-            grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-        }
-
-        int row = 0;
-        int unitsUsed = 0;
-        grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-        foreach ((Control? card, int index) in _cards)
-        {
-            int span = spans[index];
-            if (unitsUsed + span > 12)
-            {
-                row++;
-                unitsUsed = 0;
-                grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            }
-
-            card.Margin = new Thickness(unitsUsed == 0 ? 0 : 12, row == 0 ? 0 : 12, 0, 0);
-            card.VerticalAlignment = VerticalAlignment.Stretch;
-            Grid.SetColumn(card, unitsUsed);
-            Grid.SetColumnSpan(card, span);
-            Grid.SetRow(card, row);
-            grid.Children.Add(card);
-            unitsUsed += span;
-        }
-        InsightsHost.Children.Add(grid);
-    }
-
     // ---------------------------------------------------------------- building blocks
-
-    /// <summary>A card with a title line and an empty body to fill.</summary>
-    /// <param name="title">The bold heading.</param>
-    /// <param name="subtitle">Dim text after the heading; empty for none.</param>
-    /// <param name="body">The panel under the heading the caller fills with rows.</param>
-    /// <param name="headerRight">A control docked at the right of the heading, such as a button; null for none. It must not already have a parent.</param>
-    /// <returns>The card border.</returns>
-    private Border Card(string title, string subtitle, out StackPanel body, Control? headerRight = null)
-    {
-        var card = new Border { CornerRadius = new CornerRadius(10), BorderThickness = new Thickness(1), Padding = new Thickness(16, 13, 16, 14), Classes = { "card", "flat" } };
-
-        var head = new DockPanel { Margin = new Thickness(0, 0, 0, 8), LastChildFill = true };
-        if (headerRight is not null)
-        {
-            DockPanel.SetDock(headerRight, Dock.Right);
-            head.Children.Add(headerRight);
-        }
-        var titles = new TextBlock { TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
-        titles.Inlines!.Add(new Run(title) { FontSize = 15, FontWeight = FontWeight.Bold });
-        if (subtitle.Length > 0)
-        {
-            var subtitleRun = new Run("   " + subtitle) { FontSize = 12 };
-            subtitleRun.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("TextDim"));
-            titles.Inlines.Add(subtitleRun);
-        }
-        head.Children.Add(titles);
-
-        body = new StackPanel();
-        var stack = new StackPanel();
-        stack.Children.Add(head);
-        stack.Children.Add(body);
-        card.Child = stack;
-
-        return card;
-    }
 
     /// <summary>A fixed-height row with a hairline under it.</summary>
     /// <param name="content">The row's content; it must not already have a parent.</param>
@@ -454,31 +337,6 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- headline strip
 
-    /// <summary>The headline strip: scanned, free space, clearable, untouched, biggest folder (when any) and since last scan.</summary>
-    /// <returns>A six-column grid; <see cref="ArrangeInsights"/> changes the column count for the width.</returns>
-    private UniformGrid BuildTiles()
-    {
-        SizeMeasure measure = Treemap.SizeMode;
-        FsNode root = _root!;
-        long scannedBytes = root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0);
-        var grid = new UniformGrid { Columns = 6, Margin = new Thickness(-5) };
-
-        grid.Children.Add(ScannedTile(root, scannedBytes));
-        grid.Children.Add(FreeSpaceTile(root));
-        grid.Children.Add(ClearableTile(scannedBytes));
-        grid.Children.Add(UntouchedTile(scannedBytes));
-
-        Border? biggestFolderTile = BiggestFolderTile(root, measure, scannedBytes);
-        if (biggestFolderTile is not null)
-        {
-            grid.Children.Add(biggestFolderTile);
-        }
-
-        grid.Children.Add(SinceLastTile(root, measure, scannedBytes));
-
-        return grid;
-    }
-
     /// <summary>The scanned total with the file and folder counts and how the scan was made.</summary>
     /// <param name="root">The scan root; the folder count leaves it out.</param>
     /// <param name="scannedBytes">The root's bytes without the free-space box.</param>
@@ -536,32 +394,6 @@ public partial class MainWindow
         string detail = Strings.Format("Insights_UntouchedDetail", InspectSummary.Percent(share), untouchedFiles);
 
         return Tile(Strings.Get("Insights_Untouched"), SizeFormatter.Format(untouchedBytes), share, "OldBar", detail);
-    }
-
-    /// <summary>The largest folder below the root, or null when the scan has none.</summary>
-    /// <param name="root">The scan root, excluded from the search.</param>
-    /// <param name="measure">File size or size on disk.</param>
-    /// <param name="scannedBytes">The scanned total the bar is relative to; 0 gives an empty bar.</param>
-    /// <returns>A clickable tile that shows the folder on the map, or null for a scan without subfolders.</returns>
-    private Border? BiggestFolderTile(FsNode root, SizeMeasure measure, long scannedBytes)
-    {
-        FsNode? biggestFolder = root.DescendantDirectories()
-            .Where(directory => !ReferenceEquals(directory, root))
-            .OrderByDescending(directory => directory.SizeFor(measure))
-            .FirstOrDefault();
-        if (biggestFolder is null)
-        {
-            return null;
-        }
-
-        long folderBytes = biggestFolder.SizeFor(measure);
-        double share = scannedBytes > 0 ? (double)folderBytes / scannedBytes : 0;
-        string detail = Strings.Format("Insights_BiggestFolderDetail", SizeFormatter.Format(folderBytes), InspectSummary.Percent(share), biggestFolder.FileCount);
-        Border tile = Tile(Strings.Get("Insights_BiggestFolder"), biggestFolder.Name, share, "FolderBar", detail);
-        ToolTip.SetTip(tile, biggestFolder.FullPath);
-        Clickable(tile, () => ShowOnMap(biggestFolder));
-
-        return tile;
     }
 
     /// <summary>The net change since the compared scan, or a hint when there is none to compare against.</summary>
@@ -652,37 +484,29 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- by type
 
-    /// <summary>The by-type card: a donut of every type with a sentence about the biggest, then one clickable row per type.</summary>
-    /// <returns>The card; only its heading when the scan has no bytes.</returns>
-    private Border BuildTypeCard()
+    /// <summary>The by-type row: a stacked bar and the three biggest types in the header; open, a sentence about the biggest and one clickable row per type.</summary>
+    private void BuildTypeRow()
     {
         SizeMeasure measure = Treemap.SizeMode;
         List<TypeShare> shares = _typeShares!;
         long totalBytes = shares.Sum(share => share.Bytes);
         ColorScheme scheme = Treemap.Scheme;
-        Border card = Card(Strings.Get("Panel_TabType"), Strings.Format("Insights_TypesSub", shares.Count), out StackPanel? body);
+        IBrush FillOf(TypeShare share) => scheme.Categories.First(categoryColor => categoryColor.Category == share.Category).Brush;
+
+        Grid? visual = totalBytes <= 0 ? null : StackedBar(shares.Select(share => ((double)share.Bytes / totalBytes, FillOf(share))));
+        var topFacts = shares.Take(3).Select(share => $"{Strings.Category(share.Category)} {InspectSummary.Percent((double)share.Bytes / Math.Max(1, totalBytes))}").ToList();
+        if (shares.Count > 3)
+        {
+            topFacts.Add(Strings.Format("Insights_MoreTypes", shares.Count - 3));
+        }
+        Row("Type", Strings.Get("Panel_TabType"), Strings.Format("Insights_RowTypes", shares.Count), visual, Facts(topFacts.ToArray()), out StackPanel body);
         if (totalBytes <= 0)
         {
-            return card;
+            return;
         }
 
-        // The head: a donut of every type, and a sentence about the biggest one or two.
+        // A sentence about the biggest one or two, then one row per type.
         TypeShare topShare = shares[0];
-        var head = new DockPanel { Margin = new Thickness(0, 2, 0, 8) };
-        var donut = new DonutChart { Width = 104, Height = 104, Thickness = 16, Margin = new Thickness(0, 0, 14, 0), VerticalAlignment = VerticalAlignment.Center };
-        donut.Bind(DonutChart.TextBrushProperty, this.GetResourceObservable("Text"));
-        donut.Bind(DonutChart.DimBrushProperty, this.GetResourceObservable("TextDim"));
-        donut.Bind(DonutChart.TrackBrushProperty, this.GetResourceObservable("Control"));
-        donut.CenterValue = SizeFormatter.Compact(totalBytes);
-        donut.CenterLabel = Strings.Format("Panel_TypeFiles", _root!.FileCount);
-        donut.SetSlices(shares.Select(share => new DonutChart.Slice(
-            Strings.Category(share.Category),
-            SizeFormatter.Compact(share.Bytes),
-            share.Bytes,
-            scheme.Categories.First(categoryColor => categoryColor.Category == share.Category).Brush)));
-        DockPanel.SetDock(donut, Dock.Left);
-        head.Children.Add(donut);
-
         bool hasRunnerUp = shares.Count > 1;
         string reading = Strings.Format("Insights_TypesReading",
             Strings.Category(topShare.Category),
@@ -690,23 +514,20 @@ public partial class MainWindow
             PathWithin(topShare.Largest?.Parent),
             hasRunnerUp ? Strings.Category(shares[1].Category).ToLowerInvariant() : string.Empty,
             hasRunnerUp ? InspectSummary.Percent((double)shares[1].Bytes / totalBytes) : string.Empty);
-        head.Children.Add(new TextBlock { Text = reading, FontSize = 12, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center, LineHeight = 18, Classes = { "dim" } });
-        body.Children.Add(head);
+        body.Children.Add(new TextBlock { Text = reading + " " + Strings.Get("Insights_ClickRowToFilter"), FontSize = 12, TextWrapping = TextWrapping.Wrap, LineHeight = 18, Margin = new Thickness(0, 8, 0, 6), Classes = { "dim" } });
 
         // One row per type; the bars are relative to the biggest type, not to the total.
         double topFraction = (double)shares[0].Bytes / totalBytes;
         foreach (TypeShare share in shares)
         {
             double fraction = (double)share.Bytes / totalBytes;
-            IBrush fill = scheme.Categories.First(categoryColor => categoryColor.Category == share.Category).Brush;
+            IBrush fill = FillOf(share);
             Border line = Hairline(TypeShareRow(share, fraction, fraction / topFraction, fill), 25);
             ToolTip.SetTip(line, TypeShareTip(share, measure));
             TypeShare capturedShare = share;
             Clickable(line, () => FilterAndShowMap("type:" + capturedShare.Category.ToString().ToLowerInvariant()));
             body.Children.Add(line);
         }
-
-        return card;
     }
 
     /// <summary>A type row: swatch, name, bar, size and share of the total.</summary>
@@ -775,21 +596,29 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- safe to clear
 
-    /// <summary>The safe-to-clear card: one row per suggestion, and a footer with what is ticked and the drive before and after.</summary>
-    /// <returns>The card; a hint only when there are no suggestions.</returns>
-    private Border BuildCleanupCard()
+    /// <summary>The safe-to-clear row: the total and the places in the header; open, one row per suggestion and a footer with what is ticked and the drive before and after.</summary>
+    private void BuildCleanupRow()
     {
         List<CleanupSuggestion> suggestions = _cleanup!;
         var clearable = suggestions.Where(suggestion => suggestion.Action == CleanupAction.Recycle).ToList();
-        string subtitle = suggestions.Count == 0
-            ? Strings.Get("Panel_CleanupNone")
-            : Strings.Format("Insights_ClearSub", SizeFormatter.Format(suggestions.Where(suggestion => suggestion.Action != CleanupAction.Explain).Sum(suggestion => suggestion.Bytes)));
-        Border card = Card(Strings.Get("Panel_TabCleanup"), subtitle, out StackPanel? body);
+        var counted = suggestions.Where(suggestion => suggestion.Action != CleanupAction.Explain).ToList();
+        long clearableBytes = counted.Sum(suggestion => suggestion.Bytes);
+        IBrush accent = this.FindResource("Accent") as IBrush ?? Palette.NewBrush;
+        Grid? visual = clearableBytes <= 0 ? null : StackedBar(counted.Select((suggestion, i) => ((double)suggestion.Bytes / clearableBytes, Shade(accent, 1 - 0.15 * Math.Min(i, 4)))));
+        var facts = counted.Take(2).Select(suggestion => $"{Strings.Get("Cleanup_" + suggestion.Key)} {SizeFormatter.Format(suggestion.Bytes)}").ToList();
+        if (suggestions.Count > 2)
+        {
+            facts.Add(Strings.Format("Insights_MorePlaces", suggestions.Count - 2));
+        }
+        facts.Add(Strings.Get("Insights_NothingDeleted"));
+        Row("Cleanup", Strings.Get("Panel_TabCleanup"), suggestions.Count == 0 ? Strings.Get("Panel_CleanupNone") : SizeFormatter.Format(clearableBytes), visual,
+            suggestions.Count == 0 ? Strings.Get("Panel_CleanupNoneHint") : Facts(facts.ToArray()), out StackPanel body, accent: suggestions.Count > 0);
         if (suggestions.Count == 0)
         {
-            body.Children.Add(new TextBlock { Text = Strings.Get("Panel_CleanupNoneHint"), FontSize = 12, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
-            return card;
+            body.Children.Add(new TextBlock { Text = Strings.Get("Panel_CleanupNoneHint"), FontSize = 12, Margin = new Thickness(0, 8, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            return;
         }
+        body.Children.Add(new TextBlock { Text = Strings.Format("Insights_ClearSub", SizeFormatter.Format(clearableBytes)), FontSize = 12, Margin = new Thickness(0, 8, 0, 6), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
 
         // The footer's controls are built after the rows but the rows' checkboxes update them, so they are declared first.
         TextBlock? footerText = null;
@@ -866,7 +695,6 @@ public partial class MainWindow
         body.Children.Add(footer);
 
         UpdateFooter();
-        return card;
     }
 
     /// <summary>One suggestion: a checkbox for the ones that can be recycled, the name and note, the size, Show, and the action.</summary>
@@ -1154,23 +982,32 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- when changed
 
-    /// <summary>The when-changed card: a bar per month, an axis, the four age-band chips and the oldest large files.</summary>
-    /// <returns>The card.</returns>
-    private Border BuildTimelineCard()
+    /// <summary>The when-changed row: a sparkline of the months and the age bands in the header; open, the chart, the axis, the four band chips and the oldest large files.</summary>
+    private void BuildTimelineRow()
     {
         SizeMeasure measure = Treemap.SizeMode;
         List<MonthBucket> buckets = _monthBuckets!;
         DateTime now = _insightsNow;
         long[] bandSums = _bandSums!;
-        string subtitle = Strings.Format("Insights_TimelineSub", SizeFormatter.Format(bandSums[2] + bandSums[3]));
-        Border card = Card(Strings.Get("Panel_TabTimeline"), subtitle, out StackPanel? body);
+        long oldBytes = bandSums[2] + bandSums[3];
+        long scannedBytes = Math.Max(1, _root!.SizeFor(measure) - (_root.FreeSpaceNode?.SizeFor(measure) ?? 0));
 
+        // The header's sparkline is the chart at a glance: the last eighteen months, one bar each, colored by band.
+        var recent = buckets.Skip(Math.Max(0, buckets.Count - 18)).ToList();
+        Grid visual = Sparkline(
+            recent.Select(bucket => bucket.Bytes).ToList(),
+            recent.Select(bucket => BandBrush((int)InspectSummary.BucketFor(new DateTime(bucket.Year, bucket.Month, 1, 0, 0, 0, DateTimeKind.Utc), now))).ToList());
+        string facts = Facts(
+            Strings.Format("Insights_FactThisMonth", SizeFormatter.Format(bandSums[0])),
+            Strings.Format("Insights_FactThisYear", SizeFormatter.Format(bandSums[1])),
+            Strings.Format("Insights_FactUntouched", SizeFormatter.Format(oldBytes), InspectSummary.Percent((double)oldBytes / scannedBytes)));
+        Row("Timeline", Strings.Get("Panel_TabTimeline"), Strings.Format("Insights_RowOld", SizeFormatter.Format(oldBytes)), visual, facts, out StackPanel body);
+
+        body.Children.Add(new TextBlock { Text = Strings.Format("Insights_TimelineSub", SizeFormatter.Format(oldBytes)), FontSize = 12, Margin = new Thickness(0, 8, 0, 8), Classes = { "dim" } });
         body.Children.Add(BuildTimelineChart(buckets, now));
         body.Children.Add(BuildTimelineAxis(buckets));
         body.Children.Add(BuildAgeBandChips(bandSums));
         AddOldestLargestRows(body, measure, now);
-
-        return card;
     }
 
     /// <summary>One bar per month over a baseline rule; hovering a month dims the others, clicking it filters the map to that month.</summary>
@@ -1365,9 +1202,9 @@ public partial class MainWindow
 
     // ---------------------------------------------------------------- second row
 
-    /// <summary>The largest-folders card: up to seven folders anywhere in the scan, each with its share and a bar relative to the biggest.</summary>
-    /// <returns>The card.</returns>
-    private Border BuildFoldersCard()
+    /// <summary>The largest-folders list: up to seven folders anywhere in the scan, each with its share and a bar relative to the biggest.</summary>
+    /// <param name="body">The panel to fill.</param>
+    private void FillFoldersBody(StackPanel body)
     {
         SizeMeasure measure = Treemap.SizeMode;
         FsNode root = _root!;
@@ -1380,7 +1217,6 @@ public partial class MainWindow
             .OrderByDescending(directory => directory.SizeFor(measure))
             .Take(7)
             .ToList();
-        Border card = Card(Strings.Get("Insights_LargestFolders"), Strings.Get("Insights_AnywhereInScan"), out StackPanel? body);
 
         double largestShare = largestFolders.Count > 0 ? (double)largestFolders[0].SizeFor(measure) / scannedBytes : 1;
         foreach (FsNode? folder in largestFolders)
@@ -1409,17 +1245,14 @@ public partial class MainWindow
             Clickable(line, () => ShowOnMap(capturedFolder));
             body.Children.Add(line);
         }
-
-        return card;
     }
 
-    /// <summary>The largest-files card: up to eight files anywhere in the scan, colored by type, with where they are and how old.</summary>
-    /// <returns>The card.</returns>
-    private Border BuildFilesCard()
+    /// <summary>The largest-files list: up to eight files anywhere in the scan, colored by type, with where they are and how old.</summary>
+    /// <param name="body">The panel to fill.</param>
+    private void FillFilesBody(StackPanel body)
     {
         SizeMeasure measure = Treemap.SizeMode;
         var largestFiles = _root!.DescendantFiles().OrderByDescending(file => file.SizeFor(measure)).Take(8).ToList();
-        Border card = Card(Strings.Get("Insights_LargestFiles"), Strings.Get("Insights_AnywhereInScan"), out StackPanel? body);
 
         double largestBytes = largestFiles.Count > 0 ? largestFiles[0].SizeFor(measure) : 1;
         foreach (FsNode? file in largestFiles)
@@ -1461,30 +1294,34 @@ public partial class MainWindow
             Clickable(line, () => ShowOnMap(capturedFile));
             body.Children.Add(line);
         }
-
-        return card;
     }
 
-    /// <summary>The since-last-scan card: grew, shrank and new in three boxes, then the six biggest changes.</summary>
-    /// <returns>The card; a hint only when no scan is compared.</returns>
-    private Border BuildChangesCard()
+    /// <summary>The since-last-scan row: dim with a hint when no scan is compared; otherwise the net change, grew, shrank and new in the header and the six biggest changes open.</summary>
+    private void BuildChangesRow()
     {
         SizeMeasure measure = Treemap.SizeMode;
         FsNode root = _root!;
         if (!HasBaseline)
         {
-            Border emptyCard = Card(Strings.Get("Insights_SinceLast"), string.Empty, out StackPanel? emptyBody);
-            emptyBody.Children.Add(new TextBlock { Text = Strings.Get("Insights_NoBaselineLong"), FontSize = 12, TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
-            return emptyCard;
+            var compareButton = new Button { Content = Strings.Get("Insights_CompareSaved"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12 };
+            compareButton.Click += (_, _) => _ = CompareWithAsync();
+            Row("Changes", Strings.Get("Insights_SinceLast"), Strings.Get("Insights_NoBaseline"), null, Strings.Get("Insights_NoBaselineHint"), out StackPanel emptyBody, compareButton, dim: true);
+            emptyBody.Children.Add(new TextBlock { Text = Strings.Get("Insights_NoBaselineLong"), FontSize = 12, Margin = new Thickness(0, 8, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
+            return;
         }
 
         ChangeTotals totals = DriveInsights.Changes(root, measure, _comparison);
         string comparedAgainst = _baselineInfo is null ? string.Empty : Ago(_baselineInfo.ScannedUtc);
         long netBytes = totals.Net;
-        var openButton = new Button { Content = Strings.Get("Changes_OpenView"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12, Margin = new Thickness(8, 0, 0, 0) };
+        var openButton = new Button { Content = Strings.Get("Changes_OpenView"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12 };
         openButton.Click += (_, _) => ShowView(MainView.Changes);
-        string subtitle = $"{comparedAgainst} · {(netBytes >= 0 ? "+" : "−")}{SizeFormatter.Format(Math.Abs(netBytes))}".Trim(' ', '·');
-        Border card = Card(Strings.Get("Insights_SinceLast"), subtitle, out StackPanel? body, openButton);
+        string number = (netBytes >= 0 ? "+" : "−") + SizeFormatter.Format(Math.Abs(netBytes));
+        string facts = Facts(
+            Strings.Get("Insights_Grew") + " +" + SizeFormatter.Format(totals.Grew),
+            Strings.Get("Insights_Shrank") + " −" + SizeFormatter.Format(totals.Shrank),
+            Strings.Format("Insights_FactNew", totals.NewFiles));
+        Row("Changes", Strings.Get("Insights_SinceLast"), number, VisualText(comparedAgainst), facts, out StackPanel body, openButton);
+        body.Children.Add(new Border { Height = 8 });
 
         // Three stat boxes: grew, shrank, new.
         var strip = new UniformGrid { Margin = new Thickness(0, 0, 0, 6) };
@@ -1534,17 +1371,14 @@ public partial class MainWindow
             }
             body.Children.Add(line);
         }
-
-        return card;
     }
 
-    /// <summary>The extensions card: the eight largest extensions and the folder most of each lives in.</summary>
-    /// <returns>The card.</returns>
-    private Border BuildExtensionsCard()
+    /// <summary>The extensions list: the eight largest extensions and the folder most of each lives in.</summary>
+    /// <param name="body">The panel to fill.</param>
+    private void FillExtensionsBody(StackPanel body)
     {
         SizeMeasure measure = Treemap.SizeMode;
         List<ExtensionHome> homes = DriveInsights.ExtensionHomes(_root!, measure, 8);
-        Border card = Card(Strings.Get("Insights_Extensions"), Strings.Get("Insights_ExtensionsSub"), out StackPanel? body);
         foreach (ExtensionHome home in homes)
         {
             var row = new Grid { ColumnDefinitions = new ColumnDefinitions("58,*,70") };
@@ -1574,8 +1408,6 @@ public partial class MainWindow
             Clickable(line, () => FilterAndShowMap(capturedExtension.StartsWith('.') ? "*" + capturedExtension : capturedExtension));
             body.Children.Add(line);
         }
-
-        return card;
     }
 
     private static readonly char Sep = System.IO.Path.DirectorySeparatorChar;

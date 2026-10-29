@@ -56,6 +56,7 @@ public sealed class TickScale : Control
         AffectsRender<TickScale>(LabelsProperty, SelectedProperty, SpanToEndProperty);
     }
 
+    /// <summary>Creates the scale with no labels and nothing selected.</summary>
     public TickScale()
     {
         Height = 40;
@@ -93,6 +94,8 @@ public sealed class TickScale : Control
         return nearest;
     }
 
+    /// <summary>Selects the tick nearest the press.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
@@ -105,6 +108,8 @@ public sealed class TickScale : Control
         e.Handled = true;
     }
 
+    /// <summary>Highlights the tick nearest the pointer.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
@@ -116,6 +121,8 @@ public sealed class TickScale : Control
         }
     }
 
+    /// <summary>Clears the highlighted tick.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerExited(PointerEventArgs e)
     {
         base.OnPointerExited(e);
@@ -132,6 +139,8 @@ public sealed class TickScale : Control
     /// <returns>The themed brush, or <paramref name="fallback"/>.</returns>
     private IBrush Brush(string key, IBrush fallback) => this.FindResource(key) as IBrush ?? fallback;
 
+    /// <summary>Draws the line, the ticks and their labels, the selected tick filled and the hovered one brighter.</summary>
+    /// <param name="context">The drawing context.</param>
     public override void Render(DrawingContext context)
     {
         base.Render(context);

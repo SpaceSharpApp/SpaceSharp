@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.5.1-F5B82E" alt="Version 2.5.1"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.6.0-F5B82E" alt="Version 2.6.0"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -20,7 +20,7 @@
 <p align="center">
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
   <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.5-21262D?style=for-the-badge" alt="What's new in 2.5"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.6-21262D?style=for-the-badge" alt="What's new in 2.6"></a>
 </p>
 
 <p align="center">
@@ -29,7 +29,7 @@
   <sub>Every file and folder is a box sized by the space it uses. Sample data.</sub>
 </p>
 
-Your drive is full and you have no idea why. SpaceSharp reads the whole thing in seconds and draws it as one picture: folders are frames with a title bar, files are boxes inside them, and the biggest boxes are where your space went. Zoom into any folder, type a filter in plain words, see what changed since last time, and send what you do not need to the Recycle Bin without leaving the map.
+Your drive is full and you have no idea why. SpaceSharp reads the whole thing in seconds and draws it as one picture: folders are frames with a title bar, files are boxes inside them, and the biggest boxes are where your space went. Zoom into any folder, type a filter in plain words, see what changed since last time, find the files you keep twice and the folders with nothing in them, and send what you do not need to the Recycle Bin without leaving the map.
 
 One portable `.exe`, or an installer that updates itself. Free, open source, code-signed, and it sends nothing anywhere. Since 2.3 SpaceSharp is one app for Windows, macOS and Linux, built on [Avalonia](https://avaloniaui.net); the Mac and Linux packages follow in a later release.
 
@@ -43,7 +43,8 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 
 - **It is fast where it counts.** A drive with a million files is on screen before you have finished reading this sentence, and a folder scan draws the map while it runs. Scans are saved, so yesterday's map is one click away on the start screen and the next scan shows what grew.
 - **It speaks your language.** The filter understands `photos`, `over 500 MB`, `not modified in 2 years`, in any combination, and the drawer writes the same filter from checkboxes and scales. The interface itself comes in 18 languages.
-- **It tells you what is safe to clear.** Insights lists the usual suspects (Windows.old, caches, the Recycle Bin, stale Downloads) with the space they hold and one button each.
+- **It tells you what is safe to clear.** Insights lists the usual suspects (Windows.old, caches, the Recycle Bin, stale Downloads, installers already run, build output, game libraries) with the space they hold, and the rows for empty folders and duplicate files open a window where you tick what goes.
+- **It deletes what Explorer cannot.** A folder nested in itself hundreds of levels deep crashes Explorer; SpaceSharp shows it as a loop and removes it.
 - **It looks the way you want.** Twenty-four palettes, twelve looks for the window, cushion shading with its own light direction, and a palette editor for your own colors, all with a live preview.
 - **It never surprises you.** Deleting always goes through the Recycle Bin, the map updates without a rescan, and the only network traffic is the update check, which the portable exe does not even make.
 
@@ -63,8 +64,12 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
     <td align="center"><a href="docs/shot-menu.png"><img src="docs/shot-menu.png" alt="The right-click menu"></a><br><sub><b>Right-click.</b> Inspect, open, filter to this type, or send it to the Recycle Bin.</sub></td>
   </tr>
   <tr>
+    <td align="center"><a href="docs/shot-duplicates.png"><img src="docs/shot-duplicates.png" alt="The duplicate finder"></a><br><sub><b>Duplicates.</b> Files kept twice, in sets; keep the first or the newest of each with one click.</sub></td>
     <td align="center"><a href="docs/shot-settings.png"><img src="docs/shot-settings.png" alt="Settings, Treemap page"></a><br><sub><b>Shading.</b> Every slider shows in the preview as you drag it.</sub></td>
+  </tr>
+  <tr>
     <td align="center"><a href="docs/shot-light.png"><img src="docs/shot-light.png" alt="The light theme, colored by file type"></a><br><sub><b>Light theme.</b> Colored by file type, with the Pastel palette.</sub></td>
+    <td align="center"><a href="docs/shot-about.png"><img src="docs/shot-about.png" alt="The About window"></a><br><sub><b>About.</b> Version, update, credits, the keyboard map and the achievements.</sub></td>
   </tr>
 </table>
 
@@ -75,16 +80,19 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 | **Scans a whole drive in seconds** | Reads the NTFS file table directly (asks for administrator rights once); a parallel folder walk covers everything else. Hidden and system files included, junctions skipped. |
 | **One map, shaded your way** | Folders are frames, files are cushioned boxes. Shading depth, spread, tone, fade and light direction, title bars, text colors and grid are controls in Settings with a live preview. |
 | **Filter in plain words** | `videos over 500MB older than 1 year` dims everything else and keeps the layout, so you see where the matches are. A drawer with type tiles, size and age scales and quick filters writes the same filter for you. |
-| **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty with one Recycle button; when files were last changed; the largest folders and files; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
+| **Insights view** | One click swaps the map for the numbers: what is scanned, free and safe to clear; space by file type; places that are usually safe to empty with one Recycle button; when files were last changed; the largest folders and files; games, media, developer leftovers, Downloads, hard links, small and empty, deep and long; what grew, shrank and appeared since last scan. Every row is a click back to the map, filtered to it. |
+| **Empty folders and duplicates** | The Small and empty row lists every folder with no files in it, ticked and ready for the Recycle Bin. The Duplicates row finds files with identical contents (size, then the first bytes, then a full hash, so little is read and it runs on several threads), shows them in sets, and keeps the first or the newest of each with one click. |
+| **Deletes what Explorer cannot** | "Delete permanently" reaches paths too long for Explorer and walks a folder hundreds of levels deep without recursion; the Deep and long row spots a folder nested inside itself and offers to delete the repeats. |
+| **Achievements** | Twenty-one of them, announced with a toast and listed under About (T). A locked one shows only its name; the hint appears once it is earned, or when you click it for a peek. |
 | **Remembers every scan** | Every scan is saved and compared with the one before. The Changes view lays the two out as a folder table: then, now, a bar from a center line (shrank left in blue, grew right in orange), new and gone files marked, folders that open in place, a size threshold to quiet the noise, and a double-click back to the map. The Insights view's "Since last scan" card has the biggest movers. |
 | **Inspect anything** | Size and share, where the space is inside, donuts by type and by age, and a callout when one thing holds most of a folder. |
 | **Twenty-four palettes, twelve looks, and your own** | Twelve palettes for the dark theme, twelve for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
 | **Knows your keyboard** | The shortcuts window draws your keyboard (QWERTY, Nordic, QWERTZ, AZERTY or Dvorak, Mac keys on a Mac) with the keys SpaceSharp uses lit up. |
 
-### New in 2.5
+### New in 2.6
 
-Ten more palettes (twelve per theme) and a tabbed picker with a line about each; a map that draws itself while a folder scan runs, easing into the finished map; a scanning card in the corner instead of over the window; a Behavior tab in Settings; the drive and SpaceSharp's memory as meters in the status bar; Close the scan (Ctrl+W); Insights showing the drive before and after clearing what you tick; the start screen saying when a drive moved on since its scan; a keyboard map that is right for ISO layouts; and a new mark. The whole story is in the [changelog](CHANGELOG.md).
+Insights rebuilt as one quiet column of rows with eight new ones (games, media, developer leftovers, Downloads, hard links, small and empty, deep and long, duplicates); an empty folder scanner and a duplicate finder, both deleting to the Recycle Bin; "Delete permanently" for the folders Explorer crashes on; achievements; a start screen that says what to do first; drive tiles tinted by kind with Windows' own drive icons; a Files / Folders / Types switch that never cuts a label; a compare that no longer invents gigabytes of change between two scans a minute apart, and no longer calls the NTFS metafiles gone; 987 file types in a text file; and hard links counted once by default. The whole story is in the [changelog](CHANGELOG.md).
 
 ## Download
 
@@ -107,8 +115,8 @@ For 64-bit Windows 10 and 11 (Windows on ARM runs them through x64 emulation). G
 
 1. Click a drive in the **Drives** list, or **Scan folder** for one folder. Windows asks for administrator rights for a drive scan; without them, protected folders are skipped and marked.
 2. The biggest boxes are the biggest space users. Hover for the path and size, double-click a folder to zoom in, Backspace or the mouse back button to go up.
-3. Right-click a box for Inspect, Open, Show in Explorer, Properties, copy, filter to its type, select its folder, or Recycle Bin.
-4. Press **B** to switch between the map and Insights, **Ctrl+F** for the filter, **L** for the side panel with your drives and the largest files, and the gear or **Ctrl+,** for Settings. **F1** draws your keyboard with every shortcut on it.
+3. Right-click a box for Inspect, Open, Show in Explorer, Properties, copy, filter to its type, select its folder, Recycle Bin, or Delete permanently for what Explorer cannot open.
+4. Press **B** to switch between the map and Insights, **Ctrl+F** for the filter, **L** for the side panel with your drives and the largest files, **T** for your achievements, and the gear or **Ctrl+,** for Settings. **F1** draws your keyboard with every shortcut on it.
 
 <details>
 <summary><b>The filter language</b></summary>
@@ -186,6 +194,7 @@ Only one SpaceSharp runs at a time; starting it again hands the request to the o
 | K | Next color mode |
 | B | Map, Insights, Changes |
 | L | Side panel |
+| T | Achievements |
 | Ctrl+, | Settings |
 | Esc | Cancel a scan, close the filter |
 | F1 | About and shortcuts |
@@ -200,6 +209,7 @@ The same list, drawn on your own keyboard layout, is under About › Keyboard sh
 | What | Where |
 |---|---|
 | Settings | `%AppData%\SpaceSharp\settings.json` |
+| Achievements | `%LocalAppData%\SpaceSharp\achievements.json` |
 | Saved scans | `%LocalAppData%\SpaceSharp\scans\*.sscan` |
 | Custom palettes | `%LocalAppData%\SpaceSharp\palettes\*.json` |
 | The installed app | `%LocalAppData%\SpaceSharp\` |
@@ -217,7 +227,7 @@ dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
+The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push, on Windows and on Linux in six system languages. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
 
 ## Known limitations
 

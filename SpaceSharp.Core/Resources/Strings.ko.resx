@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>휴지통으로 이동</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>영구 삭제</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>휴지통을 거치지 않고 탐색기에는 너무 긴 경로까지 처리합니다. 되돌릴 수 없습니다.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>영구 삭제할까요?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0}이(가) 휴지통을 거치지 않고 완전히 삭제됩니다. 탐색기가 열 수 없는 폴더를 지우는 방법이며 되돌릴 수 없습니다.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>완전히 삭제</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0}개 항목을 완전히 삭제했습니다, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0}이(가) 자기 안에 중첩되어 {1:N0}번 반복됩니다.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>반복 삭제…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>첫 번째 사본은 남기고 그 아래 중첩된 {0:N0}개를 {1}부터 삭제합니다.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows가 건너뛰었습니다(사용 중이거나 휴지통에 넣기에 너무 큼)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>경로가 휴지통에 넣기에 너무 깁니다</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>접근이 거부되었습니다</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>저장된 검사 열기</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>확대 상태에서 이동</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>가장 큰 파일, 폴더, 형식 패널</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>업적</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>선택한 항목의 Windows 속성</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>다시 검사</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>검사를 닫고 시작 화면으로 돌아가기</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>저장된 스캔 {0}개를 삭제했습니다</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>스캔 폴더에서 {0}를 확보했습니다.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>화면의 맵은 그대로 열려 있습니다. 드라이브나 폴더의 다음 스캔은 새 스캔이 저장될 때까지 비교할 대상이 없습니다.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>화면의 지도는 그대로 열려 있지만, 비교 대상 스캔이 사라졌으므로 표시하던 비교는 닫혔습니다. 드라이브나 폴더의 다음 스캔은 새 스캔이 저장될 때까지 비교할 대상이 없습니다.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>파일 1개가 사용 중이어서 남겨 두었습니다. 다음에 삭제됩니다.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>파일 {0}개가 사용 중이어서 남겨 두었습니다. 다음에 삭제됩니다.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>이름 또는 패턴, 예: *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0}곳 · {1} 선택됨</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>1년 동안 변경 없음</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>검사의 {0} · 파일 {1:N0}개</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>가장 큰 폴더</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · 파일 {2:N0}개</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>마지막 검사 이후</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · 새 파일 {1:N0}개</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>이전 검사 없음</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>다른 날 다시 검사하면 변경 사항을 볼 수 있습니다</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>형식 {0}개 · 행을 클릭하면 맵이 필터링됩니다</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0}이(가) 검사의 {1}이며 대부분 {2} 아래에 있습니다. 다음은 {3}으로 {4}입니다.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>보통 비워도 안전한 위치에 {0} · 확인하기 전까지 아무것도 삭제되지 않습니다</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>함께 휴지통으로 보낼 위치를 선택하세요</value></data>
@@ -980,9 +990,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Insights_AfterTip" xml:space="preserve"><value>위쪽 막대의 호박색 부분은 선택한 항목이 지금 차지하는 공간이고, 아래쪽 막대는 그것들을 없앤 뒤의 드라이브입니다.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0}이(가) 1년 넘게 변경 없음 · 월 또는 구간을 클릭하면 필터링됩니다</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>1년 이상 변경 없는 가장 큰 항목</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>가장 큰 폴더</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>검사 전체에서</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>가장 큰 파일</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>다른 날 이 드라이브를 다시 검사하면 그 사이에 증가하거나 감소하거나 새로 생긴 항목이 이 카드에 표시됩니다. 저장된 검사는 검사 파일 › 저장된 검사와 비교에서도 비교할 수 있습니다.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>증가</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>감소</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Changes_SortTip" xml:space="preserve"><value>클릭하면 이 열로 정렬하고, 다시 클릭하면 순서를 뒤집습니다</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>사라짐</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>비교한 검사에는 있었지만 이번 검사에는 없습니다</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>이 방식에서는 보이지 않음</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>비교한 스캔에는 있었지만 이 스캔의 방식으로는 볼 수 없으므로 변경이 아닙니다</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0}개 더…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0}개 변경 · 변경 없는 {1:N0}개 숨김</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0}개 항목 · {1:N0}개 변경</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Changes_NoneOver" xml:space="preserve"><value>{0}보다 크게 바뀐 것이 없습니다.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>아직 비교할 대상이 없습니다</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>변경 사항 열기</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>가장 큰 확장명</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>및 각 확장명이 주로 있는 위치</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0}개 유형</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>외 {0}개</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>행을 클릭하면 맵을 필터링합니다.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>외 {0}곳</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>말하기 전까지 아무것도 삭제되지 않습니다</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>오래된 {0}</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>이번 달 {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>올해 {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>1년간 손대지 않음 {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>가장 큰 항목</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>확장자</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>게임</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1}, 게임 {2}개</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1}, 게임 1개</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>미디어</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>이미지 {0}, 사진 {1:N0}장</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>오디오 {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>비디오 {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>스크린샷 {0:N0}장 {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>이미지 중 {0:N0}장이 Screenshots 폴더에 있습니다({1}).</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>개발</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0}, 프로젝트 {1}개</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0}, 저장소 {1}개</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>빌드 출력 {0}, 폴더 {1}개</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>모두 다시 만들 수 있음</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>설치된 패키지, 저장소 기록, 빌드 출력은 설치나 빌드로 다시 만들어집니다. 가장 큰 것:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>다운로드</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>가장 오래된 것은 {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>이미 실행한 설치 파일 {0}개, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>이미 압축을 푼 보관 파일 {0}개, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>다운로드 폴더에 있는 설치 파일은 실행한 것으로, 같은 이름의 폴더가 옆에 있는 보관 파일은 압축을 푼 것으로 봅니다. 가장 큰 파일:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>하드 링크</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>한 번만 계산</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>링크 {0:N0}개</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>링크 {0:N0}개, 대부분 {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>전부 세는 도구는 드라이브를 실제보다 {0} 더 찬 것으로 보여줍니다</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>하드 링크는 이름이 여러 개인 하나의 파일입니다. SpaceSharp는 한 번만 세지만 탐색기와 대부분의 도구는 이름마다 세기 때문에 합계가 더 커집니다. 절약의 대부분이 있는 곳:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>작은 파일과 빈 폴더</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>클러스터 낭비</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>4 KB 미만 파일 {0:N0}개</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>빈 폴더 {0:N0}개</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>파일 하나뿐인 폴더 {0:N0}개</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0}개 파일이 4 KB 미만입니다. 내용은 {1}이지만 디스크는 클러스터 단위로 할당하므로 {2}는 어떤 도구로도 확보할 수 없는 낭비입니다. 빈 폴더는 {3:N0}개입니다.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>깊고 긴 경로</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>빈 폴더</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개, 그 안에 중첩된 폴더 {1:N0}개</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>이 스캔에는 빈 폴더가 없습니다.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>중첩 {0:N0}개</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>모두 선택</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>선택 해제</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0}개 선택됨</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>선택한 항목을 휴지통으로</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>빈 폴더 {0:N0}개를 휴지통으로 이동했습니다</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>중복 파일</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>어디에 있든 내용이 완전히 같은 파일입니다. 먼저 크기, 다음 첫 바이트, 마지막으로 파일 전체를 비교하므로 가능성이 있는 파일만 읽습니다.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>이 크기 미만 파일 무시</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>중복 찾기</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>크기별로 묶는 중…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>첫 바이트 비교 중: {0:N0} / {1:N0} · {2} 읽음</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>파일 전체 읽는 중: {0:N0} / {1:N0} · {2} 읽음</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0}개 묶음 · 여분 사본 {1:N0}개 · {2} 확보 가능</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>{0} 이상 파일 중 중복이 없습니다.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>묶음마다 첫 번째 유지</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>묶음마다 최신 항목 유지</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>모든 선택 해제</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>사본 {0:N0}개 · 각 {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0}개 선택됨 · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>선택한 항목을 휴지통으로</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0}개 묶음은 모든 사본이 선택되어 아무것도 남지 않습니다.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>중복 파일 {0:N0}개를 휴지통으로 이동했습니다, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>빈 폴더 검토…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>중복</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>아직 검색 안 함</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>내용이 같은 파일을 찾아 묶음마다 하나만 남길 수 있습니다</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>중복 찾기…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>다른 파일과 크기가 같은 파일만 읽으므로 대부분의 드라이브에서 검색이 빠릅니다. 하드 링크는 같은 파일이라 세지 않습니다.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0}개 묶음</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>여분 사본 {0:N0}개</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>판단을 위해 {0} 읽음</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>확보 가능</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>사용한 크기 기준으로는 중복을 찾지 못했습니다.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>사본 {0:N0}개</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>깊이 {0}</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>260자 초과 경로 {0:N0}개</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>가장 깊은 폴더, 루트에서 {0}단계 아래:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0}개 경로가 기존 260자 제한을 넘습니다. 가장 긴 것:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0}자</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>저장된 스캔과 비교…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>새 파일 {0:N0}개</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>관리자 도우미에서 트리를 받는 중</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>이 버전</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>서로 다른 종류의 검사</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>그 검사는 이번 검사({1})와 다른 방식({0})으로 수행되었습니다. 보호된 시스템 폴더처럼 한 방식만 볼 수 있는 파일과, 한 방식은 한 번만 세고 다른 방식은 전부 세는 하드 링크가 사라짐, 새로움, 커짐, 작아짐으로 표시됩니다.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>그래도 비교</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>거울아, 거울아</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>그 파일은 이 스캔 자체의 저장 파일입니다. 아무리 자세히 봐도 스캔과 그 자신 사이에는 아무것도 바뀔 수 없습니다. 실제로 무엇이 바뀌었는지 보려면 이전 스캔을 선택하세요.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>업적 달성</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>드라이브에게 자기 자신 이후로 무엇이 바뀌었는지 물었습니다. 드라이브는 드라이브답게 아무 말도 하지 않았습니다.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>업적</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>어떤 것은 스캔 한 번, 어떤 것은 일 년이 걸립니다. 아무 가치도 없다는 게 핵심입니다.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{1}개 중 {0}개 달성</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>잠김</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>잠김. 얻는 방법은 얻을 때까지 비밀입니다.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>모든 업적 달성</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>이게 전부였습니다. 앱은 더 이상 줄 것이 없으므로, 이제부터는 그냥 디스크만 보여줍니다.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>거울아, 거울아</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>드라이브에게 자기 자신 이후로 무엇이 바뀌었는지 물었습니다. 드라이브는 드라이브답게 아무 말도 하지 않았습니다.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>스피드런</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>드라이브 전체를 파일 테이블에서 5초 안에 읽었습니다.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>먼 길</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>파일 테이블이 바로 옆에 있는데도 드라이브 전체를 폴더 하나하나 돌았습니다. 경치 좋은 길을 택했습니다.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>야간 근무</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>새벽 2시에서 5시 사이에 스캔을 시작했습니다.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>백과사전</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>파일이 백만 개가 넘는 스캔.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>심해 탐사</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>폴더 스무 단계보다 깊은 경로를 찾았습니다. 폴더 안에 폴더 안에 폴더.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>테라바이트 클럽</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>1테라바이트 이상의 드라이브를 스캔했습니다.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>단골</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>같은 드라이브나 폴더를 열 번 스캔했습니다.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>숨 돌리기</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>두 스캔 사이에 드라이브의 여유 공간이 10% 미만에서 25% 초과로 늘었습니다.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>대청소</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>같은 드라이브의 두 스캔 사이에 50GB 넘게 확보했습니다.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>만원</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>여유 공간이 1% 이하인 드라이브를 스캔했습니다. 여관에 방이 없습니다.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>수집광</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>폴더 하나에 파일이 만 개가 넘습니다.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>고래</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>100GB가 넘는 파일 하나.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>거울의 방</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>하드 링크가 드라이브 하나에서 10GB 넘게 절약했습니다.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>먼지</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>십 년 넘게 아무도 손대지 않은 파일을 찾았습니다.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>아무 일도 없었다</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>일주일 이상 떨어진 두 스캔의 변화가 1MB 미만입니다.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>반전</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>가장 큰 폴더가 지난 스캔 때와 다릅니다.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>관광객</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>한 세션에서 맵, 인사이트, 변경 사항을 모두 봤습니다.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>다국어 사용자</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>언어를 세 번 바꿨습니다. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>고고학자</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>일 년이 넘은 저장 스캔을 열었습니다.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>수집가</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>다른 모든 업적을 달성했습니다. 더 찾을 것이 없는데, 그게 이 앱의 목적입니다.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>다른 방식({0} 대 {1}): 차이에는 한 방식만 볼 수 있는 파일이 포함됩니다.</value></data>
 </root>

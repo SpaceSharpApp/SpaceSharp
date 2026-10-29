@@ -10,11 +10,22 @@ public readonly record struct LayoutRect(double X, double Y, double Width, doubl
     /// <summary>The rectangle at the origin with no size; what <see cref="Intersect"/> returns for disjoint rectangles.</summary>
     public static readonly LayoutRect Empty = new(0, 0, 0, 0);
 
+    /// <summary>The left edge, the same as <see cref="X"/>.</summary>
     public double Left => X;
+
+    /// <summary>The top edge, the same as <see cref="Y"/>.</summary>
     public double Top => Y;
+
+    /// <summary>The right edge, <see cref="X"/> plus <see cref="Width"/>.</summary>
     public double Right => X + Width;
+
+    /// <summary>The bottom edge, <see cref="Y"/> plus <see cref="Height"/>.</summary>
     public double Bottom => Y + Height;
+
+    /// <summary>Width times height; negative extents give a meaningless number, so check <see cref="IsEmpty"/> first.</summary>
     public double Area => Width * Height;
+
+    /// <summary>True when the rectangle has no extent in either direction.</summary>
     public bool IsEmpty => Width <= 0 || Height <= 0;
 
     /// <summary>Whether a point lies inside the rectangle; the left and top edges count, the right and bottom edges do not.</summary>
@@ -37,5 +48,7 @@ public readonly record struct LayoutRect(double X, double Y, double Width, doubl
         return right > left && bottom > top ? new LayoutRect(left, top, right - left, bottom - top) : Empty;
     }
 
+    /// <summary>The origin and size in one line, for the debugger.</summary>
+    /// <returns>"x,y wxh" with up to two decimals.</returns>
     public override string ToString() => $"{X:0.##},{Y:0.##} {Width:0.##}x{Height:0.##}";
 }

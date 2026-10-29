@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>ごみ箱に移動</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>完全に削除</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>ごみ箱を経由せず、エクスプローラーには長すぎるパスにも届きます。元に戻せません。</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>完全に削除しますか？</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} はごみ箱を経由せず完全に削除されます。エクスプローラーで開けないフォルダーを取り除く方法で、元に戻せません。
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>完全に削除</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0} 件を完全に削除しました（{1}）</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} が入れ子で {1:N0} 回繰り返されています。</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>繰り返しを削除…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>最初の一つを残し、その下に入れ子になった {0:N0} 個を {1} から削除します。</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows がスキップしました (使用中、またはごみ箱には大きすぎます)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>パスがごみ箱には長すぎます</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>アクセスが拒否されました</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>保存したスキャンを開く</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>拡大中に移動</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>最大のファイル、フォルダー、種類のパネル</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>実績</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>選択した項目の Windows プロパティ</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>再スキャン</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>スキャンを閉じてスタート画面に戻る</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>保存したスキャン {0} 件を削除しました</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>スキャンフォルダーで {0} 解放されました。</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>画面上のマップはそのまま残ります。ドライブやフォルダーの次のスキャンは、その新しいスキャンが保存されるまで比較対象がありません。</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>画面上のマップは開いたままですが、比較対象のスキャンがなくなったため、表示していた比較は閉じられました。ドライブやフォルダーの次回のスキャンは、新しいスキャンが保存されるまで比較するものがありません。</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>1 件のファイルは使用中のため残されました。次回に削除されます。</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} 件のファイルは使用中のため残されました。次回に削除されます。</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>名前またはパターン。例：*.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} か所 · {1} をチェック済み</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>1 年間未変更</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>スキャンの {0} · {1:N0} ファイル</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>最大のフォルダー</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} ファイル</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>前回のスキャンから</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · 新規ファイル {1:N0} 個</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>以前のスキャンがありません</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>別の日にもう一度スキャンすると変化がわかります</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} 種類 · 行をクリックするとマップをフィルター</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0}がスキャンの {1} を占め、大半は {2} の下にあります。次は{3}の {4} です。</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>通常は安全に空にできる場所に {0} · 指示するまで何も削除されません</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>まとめてごみ箱に移動する場所にチェックを付けてください</value></data>
@@ -980,9 +990,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Insights_AfterTip" xml:space="preserve"><value>上のバーの琥珀色の部分は、チェックした項目が現在占めている容量です。下のバーはそれらを削除した後のドライブです。</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} が 1 年以上未変更 · 月または帯をクリックするとフィルター</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>1 年以上未変更の最大の項目</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>最大のフォルダー</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>スキャン全体</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>別の日にこのドライブをもう一度スキャンすると、その間に増加、減少、追加されたものがこのカードに表示されます。保存したスキャンは「スキャンファイル › 保存したスキャンと比較」からも比較できます。</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>増加</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>減少</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Changes_SortTip" xml:space="preserve"><value>クリックでこの列で並べ替え、もう一度クリックで順序を反転</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>消失</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>比較したスキャンにはあり、今回のスキャンにはありません</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>この方法では見えません</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>比較したスキャンにはありましたが、このスキャンの方法では見えないため、変更ではありません</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>さらに {0:N0} 件…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} 件変更 · 未変更 {1:N0} 件を非表示</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} 件 · {1:N0} 件変更</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Changes_NoneOver" xml:space="preserve"><value>{0} を超える変更はありません。</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>まだ比較対象がありません</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>変更を開く</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>最大の拡張子</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>と、それぞれの大半がある場所</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} 種類</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>ほか {0}</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>行をクリックするとマップを絞り込めます。</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>ほか {0} か所</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>指示するまで何も削除されません</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} が古い</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>今月 {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>今年 {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>一年以上未使用 {0}、{1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>最大</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>拡張子</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>ゲーム</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1}、{2} 本</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1}、1 本</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>メディア</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>画像 {0}、{1:N0} 枚</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>音声 {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>動画 {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>スクリーンショット {0:N0} 枚 {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>画像のうち {0:N0} 枚は Screenshots フォルダーにあります（{1}）。</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>開発</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0}、{1} プロジェクト</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0}、{1} リポジトリ</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>ビルド出力 {0}、{1} フォルダー</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>すべて再生成可能</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>インストール済みパッケージ、リポジトリ履歴、ビルド出力は、インストールやビルドで再び作られます。最大のもの:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>ダウンロード</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>最古は {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>実行済みのインストーラー {0} 個、{1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>展開済みのアーカイブ {0} 個、{1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>ダウンロードにあるインストーラーは実行済み、同名フォルダーが隣にあるアーカイブは展開済みとみなします。最大のファイル:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>ハードリンク</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>一度だけ集計</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} 個のリンク</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} 個のリンク、主に {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>すべて数えるツールではドライブが実際より {0} 多く埋まって見えます</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>ハードリンクは一つのファイルに複数の名前が付いたものです。SpaceSharp は一度だけ数えますが、エクスプローラーや多くのツールは名前ごとに数えるため合計が大きくなります。節約の大半がある場所:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>小さいものと空</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>クラスターの無駄</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>4 KB 未満のファイル {0:N0} 個</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>空のフォルダー {0:N0} 個</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>ファイル一つだけのフォルダー {0:N0} 個</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} 個のファイルが 4 KB 未満で、中身は {1} ですが、ディスクはクラスター単位で割り当てるため {2} はどのツールでも解放できない無駄です。{3:N0} 個のフォルダーが空です。</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>深さと長さ</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>空のフォルダー</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個、その中に入れ子で {1:N0} 個</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>このスキャンに空のフォルダーはありません。</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>入れ子 {0:N0} 個</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>すべて選択</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>選択解除</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} 個をチェック</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>チェックしたものをごみ箱へ</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>空のフォルダー {0:N0} 個をごみ箱に移動しました</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>重複ファイル</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>場所を問わず中身が完全に同じファイルです。まずサイズ、次に先頭バイト、最後にファイル全体を比べるので、候補になるものだけを読みます。</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>無視するファイルの下限</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>重複を探す</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>サイズでグループ化中…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>先頭バイトを比較中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>ファイル全体を読み取り中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 組 · 余分なコピー {1:N0} 個 · {2} を空けられます</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>{0} を超えるファイルに重複はありません。</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>各組の最初を残す</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>各組の最新を残す</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>チェックをすべて外す</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} 個のコピー · 各 {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} 個をチェック · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>チェックしたものをごみ箱へ</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} 組はすべてのコピーにチェックがあり、何も残りません。</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>重複ファイル {0:N0} 個をごみ箱に移動しました（{1}）</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>空のフォルダーを確認…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>重複</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>未検索</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>中身が同じファイルを見つけ、各組から一つを残せます</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>重複を探す…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>他のファイルとサイズが同じファイルだけを読むので、ほとんどのドライブで検索は速く終わります。ハードリンクは同じファイルなので数えません。</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} 組</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>余分なコピー {0:N0} 個</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>判定のため {0} 読み取り</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>空けられます</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>使用したサイズ下限では重複は見つかりませんでした。</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} 個のコピー</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>深さ {0}</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>260 文字超のパス {0:N0} 件</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>最も深いフォルダー（ルートから {0} 階層）:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} 件のパスが従来の 260 文字の上限を超えています。最も長いもの:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} 文字</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>保存したスキャンと比較…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>新しいファイル {0:N0} 個</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>管理者ヘルパーからツリーを受信中</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>このバージョン</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>種類の異なるスキャン</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>そのスキャンは今回 ({1}) とは異なる方法 ({0}) で行われました。保護されたシステムフォルダーなど片方の方法でしか見えないファイルや、片方では一度だけ、もう片方では全体として数えられるハードリンクが、消失・新規・増加・減少として表示されます。</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>それでも比較</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>鏡よ鏡</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>そのファイルはこのスキャン自身の保存ファイルです。スキャンとそれ自身の間では、どれだけ調べても何も変わりません。実際に何が変わったかを見るには、以前のスキャンを選んでください。</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>実績を解除しました</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>ドライブに「自分自身から何が変わった？」と尋ねました。ドライブはドライブなので、何も答えませんでした。</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>実績</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>スキャン一回で取れるものも、一年かかるものもあります。どれも何の価値もありません。それが肝心です。</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} / {1} 解除</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>未解除</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>未解除。取り方は、取るまで秘密です。</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>すべての実績を解除</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>これで全部です。アプリにはもう配るものがないので、これからはただディスクを表示するだけです。</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>鏡よ鏡</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>ドライブに「自分自身から何が変わった？」と尋ねました。ドライブはドライブなので、何も答えませんでした。</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>スピードラン</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>ドライブ全体をファイルテーブルから五秒未満で読み取りました。</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>遠回り</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>ファイルテーブルがすぐそこにあるのに、ドライブ全体をフォルダーごとにたどりました。景色のよい道を選択。</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>夜勤</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>午前二時から五時の間にスキャンを開始しました。</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>百科事典</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>百万を超えるファイルのスキャン。</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>深海探査</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>二十階層より深いパスを見つけました。フォルダーの中にフォルダーの中にフォルダー。</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>テラバイトクラブ</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>一テラバイト以上のドライブをスキャンしました。</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>常連</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>同じドライブまたはフォルダーを十回スキャンしました。</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>ひと息</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>二回のスキャンの間に、ドライブの空きが 10% 未満から 25% 超になりました。</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>大掃除</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>同じドライブの二回のスキャンの間に 50 GB 超を解放しました。</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>満室</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>空きが 1% 以下のドライブをスキャンしました。宿に部屋はありません。</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>ため込み</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>一つのフォルダーに一万を超えるファイル。</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>クジラ</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>100 GB を超える単一のファイル。</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>鏡の間</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>ハードリンクが一つのドライブで 10 GB 超を節約しました。</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>ほこり</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>十年以上誰も触れていないファイルを見つけました。</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>何も起こらなかった</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>一週間以上離れた二回のスキャンで、変化が 1 MB 未満でした。</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>どんでん返し</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>最大のフォルダーが前回のスキャンと違います。</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>観光客</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>一つのセッションでマップ、インサイト、変更をすべて見ました。</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>多言語話者</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>言語を三回切り替えました。Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>考古学者</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>一年以上前に保存したスキャンを開きました。</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>コレクター</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>ほかのすべての実績を解除しました。もう見つけるものはありません。それがこのアプリの目的です。</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>異なる方法 ({0} と {1}): 差分には片方の方法でしか見えないファイルが含まれます。</value></data>
 </root>

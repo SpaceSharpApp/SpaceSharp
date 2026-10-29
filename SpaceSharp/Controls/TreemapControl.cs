@@ -120,6 +120,9 @@ public sealed partial class TreemapControl : Panel
         public override void Render(DrawingContext context) => _draw(context);
     }
 
+    /// <summary>Measures the overlay children and takes all the space offered.</summary>
+    /// <param name="availableSize">What the parent offers.</param>
+    /// <returns>The available size.</returns>
     protected override Size MeasureOverride(Size availableSize)
     {
         foreach (Control child in Children)
@@ -129,6 +132,9 @@ public sealed partial class TreemapControl : Panel
         return availableSize;
     }
 
+    /// <summary>Stretches every overlay child over the whole map.</summary>
+    /// <param name="finalSize">The size given.</param>
+    /// <returns>The same size.</returns>
     protected override Size ArrangeOverride(Size finalSize)
     {
         var bounds = new Rect(finalSize);
@@ -154,6 +160,8 @@ public sealed partial class TreemapControl : Panel
         set => SetValue(MapBackgroundProperty, value);
     }
 
+    /// <summary>Drops caches that depend on the changed property, such as the dimmed brushes when the map background changes.</summary>
+    /// <param name="change">The change.</param>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
@@ -905,6 +913,8 @@ public sealed partial class TreemapControl : Panel
     /// <summary>Re-lays out and redraws after the tree was modified (a delete, a rescan of a folder); the camera stays where it is.</summary>
     public void Refresh() => InvalidateLayout();
 
+    /// <summary>Keeps the zoomed view on the same part of the map when the control is resized, then lays the map out again.</summary>
+    /// <param name="e">The old and new sizes.</param>
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
         base.OnSizeChanged(e);

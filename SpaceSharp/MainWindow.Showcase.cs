@@ -16,14 +16,15 @@ namespace SpaceSharp;
 public partial class MainWindow
 {
     /// <summary>The README's scenes, each a screen or dialog posed on the pretend PC; <c>--scene &lt;name&gt;</c> shows one, <c>--shot &lt;file&gt;</c> also captures it.</summary>
-    public static readonly string[] Scenes = { "none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light" };
+    public static readonly string[] Scenes = { "none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates" };
 
     /// <summary>The wiki's pictures (tools/screenshots_wiki.ps1): one screen or state each, on top of the README scenes.</summary>
     public static readonly string[] WikiScenes =
     {
         "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
-        "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl"
+        "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl",
+        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates"
     };
 
     /// <summary>Runs one <c>--scene</c>: sizes the window, poses the scene, and with <c>--shot</c> captures it to a PNG and exits.</summary>
@@ -77,7 +78,7 @@ public partial class MainWindow
     private async Task<Window?> PoseSceneAsync(string scene)
     {
         EnterMock();
-        ShowView(insights: scene == "insights");   // the remembered view must not leak into a pose
+        ShowView(insights: scene is "insights" or "duplicates" or "wiki-empty-folders" or "wiki-duplicates");   // the remembered view must not leak into a pose
         if (scene != "start")
         {
             LoadMock(MockSystem.Drives[0].Root);
@@ -178,6 +179,26 @@ public partial class MainWindow
                 dialog = new ShortcutsWindow();
                 _ = dialog.ShowDialog(this);
                 break;
+            case "wiki-achievements":
+                // The mock store: four mild ones unlocked, the rest locked, nothing from the real file.
+                dialog = new AchievementsWindow();
+                _ = dialog.ShowDialog(this);
+                break;
+            case "wiki-achievement-toast":
+                QueueToast(Achievement.Speedrun);
+                break;
+            case "wiki-empty-folders":
+                dialog = new EmptyFoldersWindow(this, _root!);
+                _ = dialog.ShowDialog(this);
+                break;
+            case "duplicates":
+            case "wiki-duplicates":
+                // A canned result: the pretend files have no bytes to hash. Keep the first of each, as a user would.
+                var duplicates = new DuplicatesWindow(this, _root!, MockSystem.Duplicates(_root!));
+                duplicates.PoseKeepFirst();
+                dialog = duplicates;
+                _ = dialog.ShowDialog(this);
+                break;
             case "wiki-changes-everything":
                 // Unlike the README's scene: every row, unchanged ones included, sorted by size now, two folders open.
                 ShowView(MainView.Changes);
@@ -251,6 +272,8 @@ public partial class MainWindow
         }
         PaletteButton.Flyout?.Hide();
         Treemap.ContextMenu?.Close();
+        _toastQueue.Clear();
+        DismissToast();
         FilterBox.Text = string.Empty;
         FilterDrawer.IsVisible = false;
         _settings.FilterLayout = "Drawer";

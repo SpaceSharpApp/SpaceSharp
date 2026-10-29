@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Media.Immutable;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using SpaceSharp.Controls;
@@ -64,6 +65,7 @@ public partial class MainWindow : Window
         ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
 
         HookResizeHandles();
+        HookAchievements();
         KeyDown += OnKeyDown;
         Closing += (_, _) => { _scanCts?.Cancel(); _settings.Save(); };
         UpdateNavigation();
@@ -576,7 +578,7 @@ public partial class MainWindow : Window
     /// <param name="rootPath">The drive root to scan when clicked (for example <c>C:\</c>).</param>
     /// <param name="name">The drive's short name as shown in the tile and tooltip; on Windows the letter with its colon.</param>
     /// <param name="volumeLabel">The volume label; null or blank shows the localized "no label" text instead.</param>
-    /// <param name="kind">The detected drive kind, which picks the badge icon; USB, network and optical drives get a dashed frame.</param>
+    /// <param name="kind">The detected drive kind, which picks the tile's tint and symbol.</param>
     /// <param name="format">The file system name (NTFS, exFAT, ...) shown after the kind.</param>
     /// <param name="total">The drive's size in bytes; must be above 0.</param>
     /// <param name="free">Free bytes; the bar turns Warn at 85% used and Danger at 92%.</param>
@@ -584,11 +586,10 @@ public partial class MainWindow : Window
     {
         string letter = OperatingSystem.IsWindows() || _mock ? name.TrimEnd(':') : name;
         string title = string.IsNullOrWhiteSpace(volumeLabel) ? Strings.Get("Drive_NoLabel") : volumeLabel;
-        bool external = kind is DriveKind.Usb or DriveKind.Network or DriveKind.Optical;
         string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {format}" : format;
         double fraction = (double)(total - free) / total;
 
-        Grid tile = DriveTile(letter, kind, external);
+        Grid tile = DriveTile(letter, kind);
 
         var top = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
         var nameText = new TextBlock
@@ -599,7 +600,10 @@ public partial class MainWindow : Window
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Bottom
         };
-        var kindLabel = new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Bottom };
+        // The kind's symbol before its name: the glyph Windows draws for that kind, or a silhouette of the device elsewhere.
+        var kindLabel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Bottom };
+        kindLabel.Children.Add(DriveKindIcon(kind, 14));
+        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
         Grid.SetColumn(kindLabel, 1);
         top.Children.Add(nameText);
         top.Children.Add(kindLabel);
@@ -634,57 +638,59 @@ public partial class MainWindow : Window
         DriveList.Children.Add(button);
     }
 
-    /// <summary>The square with the drive letter and the drive kind badge; external drives get a dashed frame.</summary>
-    /// <param name="letter">The text in the square; three or more characters are drawn smaller.</param>
-    /// <param name="kind">Picks the badge icon in the corner.</param>
-    /// <param name="external">True draws the square's border dashed.</param>
-    /// <returns>A 46 px grid holding the square, the letter and the badge.</returns>
-    private Grid DriveTile(string letter, DriveKind kind, bool external)
+    /// <summary>The kind's icon: on Windows the glyph the system itself uses, from its icon font; elsewhere the app's own silhouette.</summary>
+    /// <param name="kind">The detected kind.</param>
+    /// <param name="size">The glyph's height in device-independent pixels.</param>
+    /// <returns>A text block or an icon, in the dim text color, vertically centered.</returns>
+    private Control DriveKindIcon(DriveKind kind, double size)
     {
-        var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
-        var square = new Avalonia.Controls.Shapes.Rectangle
+        if (!OperatingSystem.IsWindows())
+        {
+            return Icons.Make(DriveKinds.IconName(kind), size, "TextDim", filled: true);
+        }
+        var glyph = new TextBlock
+        {
+            Text = DriveKinds.SystemGlyph(kind),
+            FontFamily = new FontFamily(DriveKinds.SystemIconFont),
+            FontSize = size,
+            VerticalAlignment = VerticalAlignment.Center,
+            Classes = { "dim" }
+        };
+        return glyph;
+    }
+
+    /// <summary>The drive tile: a square tinted by the drive kind with the letter in dark on it; the kind's symbol sits by the kind text instead, where it has room.</summary>
+    /// <param name="letter">The text in the square; three or more characters are drawn smaller.</param>
+    /// <param name="kind">Picks the tint: amber NVMe, green SSD, grey HDD, blue USB, purple network, orange optical.</param>
+    /// <returns>A 46 px grid holding the 40 px square.</returns>
+    private static Grid DriveTile(string letter, DriveKind kind)
+    {
+        var ink = new ImmutableSolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17));
+        var square = new Border
         {
             Width = 40,
             Height = 40,
-            RadiusX = 8,
-            RadiusY = 8,
-            StrokeThickness = 1,
+            CornerRadius = new CornerRadius(8),
+            Background = new ImmutableSolidColorBrush(DriveKinds.TintColor(kind)),
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top
         };
-        square.Bind(Avalonia.Controls.Shapes.Shape.FillProperty, this.GetResourceObservable("Window"));
-        square.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Stroke"));
-        if (external)
-        {
-            square.StrokeDashArray = new AvaloniaList<double> { 3, 2 };
-        }
-
         var letterText = new TextBlock
         {
             Text = letter,
-            FontWeight = FontWeight.SemiBold,
-            FontSize = letter.Length > 2 ? 11 : 15,
-            Width = 40,
-            Height = 40,
+            FontWeight = FontWeight.Bold,
+            FontSize = letter.Length > 2 ? 11 : 18,
+            Foreground = ink,
+            MaxWidth = 36,
             TextAlignment = TextAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
-            Padding = new Thickness(0, 10, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
         };
-        var badge = new Border
-        {
-            CornerRadius = new CornerRadius(9),
-            Padding = new Thickness(1),
-            HorizontalAlignment = HorizontalAlignment.Right,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            Child = Icons.Make(DriveKinds.IconName(kind), 16, "TextDim")
-        };
-        badge.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+        square.Child = letterText;
 
+        var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
         tile.Children.Add(square);
-        tile.Children.Add(letterText);
-        tile.Children.Add(badge);
         return tile;
     }
 
@@ -713,6 +719,7 @@ public partial class MainWindow : Window
             return;
         }
         _mock = true;
+        Achievements.UseForSession(MockSystem.Achievements());
         BuildDrives();
         BuildRecentScans();
     }
@@ -808,6 +815,7 @@ public partial class MainWindow : Window
 
         ResetScanCard(readFileTable);
         _scanClock.Restart();
+        _scanStartedLocal = DateTime.Now;
         _progressTimer.Start();
         StatusText.Text = string.Empty;
         AccessBar.IsVisible = false;
@@ -850,6 +858,7 @@ public partial class MainWindow : Window
                 ShowAccessBar(_scanner.GetProgress().DeniedFolders);
             }
             _ = SaveAndCompareAsync(root, path);
+            _ = JudgeScanAsync(root, path, readFileTable);
         }
         catch (OperationCanceledException)
         {
@@ -1129,6 +1138,12 @@ public partial class MainWindow : Window
     /// <param name="root">The scan root; its free-space box is shown or hidden per the setting.</param>
     private void ShowTree(FsNode root)
     {
+        if (!ReferenceEquals(root, _duplicateRoot))
+        {
+            // the old search's tree would otherwise stay in memory beside the new one
+            _duplicateRoot = null;
+            _duplicateResult = null;
+        }
         _root = root;
         root.SetFreeSpaceVisible(_settings.ShowFreeSpace, _settings.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize);
         // a scan that was drawn live eases into its finished tree instead of snapping to it
@@ -1224,7 +1239,7 @@ public partial class MainWindow : Window
 
     // ------------------------------------------------------------------ right-click menu
 
-    private MenuItem _menuExportMatches = null!, _menuCompare = null!, _menuStopCompare = null!, _menuInspect = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuUp = null!, _menuFit = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuRescan = null!, _menuClose = null!, _menuDelete = null!;
+    private MenuItem _menuExportMatches = null!, _menuCompare = null!, _menuStopCompare = null!, _menuInspect = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuUp = null!, _menuFit = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuRescan = null!, _menuClose = null!, _menuDelete = null!, _menuDeleteForever = null!;
 
     private TextBlock _menuInspectTitle = null!, _menuInspectSub = null!;
 
@@ -1232,13 +1247,13 @@ public partial class MainWindow : Window
     /// <returns>The menu, which refreshes itself on opening.</returns>
     private ContextMenu BuildMenu()
     {
-        /// <summary>One menu item with a localized header, an optional shortcut and icon.</summary>
-        /// <param name="key">The resource key of the header text.</param>
-        /// <param name="gesture">A key gesture such as "Ctrl+S" shown at the right, or null for none; it is display only, the key handler does the work.</param>
-        /// <param name="action">Run on click.</param>
-        /// <param name="icon">An icon name from Icons.axaml, or null for no icon.</param>
-        /// <param name="iconKey">The theme brush the icon is drawn in.</param>
-        /// <returns>The item, not yet added to a menu.</returns>
+        // One menu item with a localized header, an optional shortcut and icon.
+        // key: The resource key of the header text.
+        // gesture: A key gesture such as "Ctrl+S" shown at the right, or null for none; it is display only, the key handler does the work.
+        // action: Run on click.
+        // icon: An icon name from Icons.axaml, or null for no icon.
+        // iconKey: The theme brush the icon is drawn in.
+        // Returns: The item, not yet added to a menu.
         MenuItem Item(string key, string? gesture, Action action, string? icon = null, string? iconKey = "TextDim")
         {
             var item = new MenuItem { Header = Strings.Get(key), InputGesture = null };
@@ -1275,6 +1290,9 @@ public partial class MainWindow : Window
         _menuRescan = Item("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
         _menuDelete = Item("Main_MoveToRecycleBin", "Delete", () => _ = DeleteNodes(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
         _menuDelete.Classes.Add("danger");
+        _menuDeleteForever = Item("Main_DeletePermanently", null, () => _ = DeletePermanentlyAsync(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
+        _menuDeleteForever.Classes.Add("danger");
+        ToolTip.SetTip(_menuDeleteForever, Strings.Get("Main_DeletePermanentlyTip"));
 
         var menu = new ContextMenu();
         menu.Items.Add(_menuInspect);
@@ -1311,6 +1329,7 @@ public partial class MainWindow : Window
         menu.Items.Add(export);
         menu.Items.Add(new Separator());
         menu.Items.Add(_menuDelete);
+        menu.Items.Add(_menuDeleteForever);
         menu.Opening += (_, _) => UpdateContextMenu();
         return menu;
     }
@@ -1346,6 +1365,7 @@ public partial class MainWindow : Window
         _menuRescan.IsEnabled = _scanRoot is not null && _scanCts is null;
         _menuClose.IsEnabled = _root is not null && _scanCts is null;
         _menuDelete.IsEnabled = Treemap.SelectedNodes.Any(selected => selected.IsReal && selected.Parent is not null) && _scanCts is null;
+        _menuDeleteForever.IsEnabled = _menuDelete.IsEnabled;
     }
 
     /// <summary>The line under "Inspect": why it is unavailable, the selection's total, or the one node's name, size and kind.</summary>
@@ -1540,6 +1560,85 @@ public partial class MainWindow : Window
             allSent = false;
         }
 
+        await AfterDeletionAsync(items, measure, allSent, error, removed => removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size));
+    }
+
+    /// <summary>Deletes for good, skipping the Recycle Bin, with the long-path form that reaches folders Explorer cannot open; asks first.</summary>
+    /// <param name="nodes">The items; folders take their contents, and an item inside another selected folder goes with that folder.</param>
+    private async Task DeletePermanentlyAsync(IReadOnlyList<FsNode> nodes)
+    {
+        if (_scanCts is not null)
+        {
+            return;
+        }
+        var candidates = nodes.Where(node => node.IsReal && node.Parent is not null && !ReferenceEquals(node, Treemap.Root)).ToList();
+        var items = candidates.Where(node => !candidates.Any(other => !ReferenceEquals(other, node) && other.IsAncestorOf(node))).ToList();
+        if (items.Count == 0)
+        {
+            return;
+        }
+
+        SizeMeasure measure = Treemap.SizeMode;
+        string size = SizeFormatter.Format(items.Sum(node => node.SizeFor(measure)));
+        string what = items.Count == 1
+            ? items[0].IsDirectory ? Strings.Format("Delete_WhatFolder", items[0].Name, items[0].FileCount, size) : Strings.Format("Delete_WhatFile", items[0].Name, size)
+            : Strings.Format("Delete_WhatMany", items.Count, items.Sum(node => node.FileCount), size);
+        string list = string.Join("\n", items.Take(8).Select(node => PathLoops.Compact(node.FullPath, 160)));
+        bool confirmed = await Dialog.Confirm(this,
+            Strings.Get("Delete_PermanentTitle"),
+            Strings.Format("Delete_PermanentQuestion", what, list),
+            Strings.Get("Delete_PermanentButton"),
+            danger: true);
+        if (!confirmed)
+        {
+            return;
+        }
+
+        // Off the UI thread: a loop hundreds of levels deep takes a while to walk and delete.
+        var errors = new List<string>();
+        await Task.Run(() =>
+        {
+            foreach (FsNode node in items)
+            {
+                if (!DeepDelete.TryDelete(node.FullPath, out string? itemError) && itemError is not null)
+                {
+                    errors.Add($"{PathLoops.Compact(node.FullPath, 160)}: {itemError}");
+                }
+            }
+        });
+        await AfterDeletionAsync(items, measure, errors.Count == 0, errors.Count == 0 ? null : string.Join("\n", errors), removed => Strings.Format("Status_DeletedForGood", removed, size));
+    }
+
+    /// <summary>Lets a tool window report items it moved to the Recycle Bin itself, so the tree, map and lists follow.</summary>
+    /// <param name="items">The items that were sent; only those no longer on disk leave the tree.</param>
+    /// <param name="statusText">The status line to show afterward.</param>
+    internal Task RemovedFromDiskAsync(List<FsNode> items, string statusText) => AfterDeletionAsync(items, Treemap.SizeMode, true, null, _ => statusText);
+
+    /// <summary>Keeps a duplicate search's result for the Insights row, as long as the same scan is open.</summary>
+    /// <param name="root">The root that was searched.</param>
+    /// <param name="result">What was found.</param>
+    internal void DuplicatesFound(FsNode root, DuplicateResult result)
+    {
+        _duplicateRoot = root;
+        _duplicateResult = result;
+        InvalidateInsights();
+        RefreshInsights();
+    }
+
+    private FsNode? _duplicateRoot;
+    private DuplicateResult? _duplicateResult;
+
+    /// <summary>The last duplicate search of the open scan, or null when it was never searched or another scan is open.</summary>
+    private DuplicateResult? DuplicatesForScan => _duplicateRoot is not null && ReferenceEquals(_duplicateRoot, _root) ? _duplicateResult : null;
+
+    /// <summary>After a delete of either kind: drops what is really gone from the tree, refreshes every view, reports what was refused.</summary>
+    /// <param name="items">The items that were sent for deletion.</param>
+    /// <param name="measure">The size measure the freed bytes are counted in.</param>
+    /// <param name="allSent">False shows the error dialog with <paramref name="error"/>.</param>
+    /// <param name="error">What was refused and why; shown in the dialog's card.</param>
+    /// <param name="status">The status line for the number of items that are gone.</param>
+    private async Task AfterDeletionAsync(List<FsNode> items, SizeMeasure measure, bool allSent, string? error, Func<int, string> status)
+    {
         // Only what is really gone leaves the tree; the shell may have refused some items.
         long freed = 0;
         int removed = 0;
@@ -1572,7 +1671,7 @@ public partial class MainWindow : Window
         {
             await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
         }
-        StatusText.Text = removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size);
+        StatusText.Text = status(removed);
     }
 
     /// <summary>Asks before moving the items to the recycle bin; the question names the one item or counts the many.</summary>
@@ -2151,6 +2250,10 @@ public partial class MainWindow : Window
                 break;
             case Key.B when !FilterHasFocus:
                 NextView();
+                e.Handled = true;
+                break;
+            case Key.T when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
+                new AchievementsWindow().ShowDialog(this);
                 e.Handled = true;
                 break;
             case Key.OemComma when e.KeyModifiers.HasFlag(KeyModifiers.Control):

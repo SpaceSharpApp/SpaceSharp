@@ -98,4 +98,16 @@ public class MockSystemTests
         Assert.False(CommandLine.Parse(Array.Empty<string>()).Mock);
         Assert.DoesNotContain("--mock", CommandLine.HelpText);
     }
+    [Fact]
+    public void TheMockAchievementsAreInMemoryAndMild()
+    {
+        Achievements store = MockSystem.Achievements();
+        Assert.Equal(4, store.UnlockedAt.Count);
+        Assert.True(store.IsUnlocked(Achievement.Speedrun));
+        Assert.False(store.IsUnlocked(Achievement.Collector));
+        Assert.False(store.IsUnlocked(Achievement.MirrorMirror));
+        // Unlocking in the mock store raises the event but writes no file.
+        store.Unlock(Achievement.Whale);
+        Assert.True(store.IsUnlocked(Achievement.Whale));
+    }
 }

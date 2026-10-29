@@ -46,6 +46,7 @@ public partial class MainWindow
         public long Then, Now;
         public long Delta => Now - Then;
         public bool IsNew, IsGone;
+        public bool IsUnseen;               // in the compared scan, invisible to this scan's method: not a change
         public bool IsFolder => Gone?.IsDirectory ?? Node?.IsDirectory ?? false;
         public string Name => Gone?.Name ?? Node?.Name ?? string.Empty;
         public bool IsMore => MoreFrom >= 0;
@@ -490,8 +491,9 @@ public partial class MainWindow
         Folder = folder,
         Depth = depth,
         Then = gone.SizeFor(measure),
-        Now = 0,
-        IsGone = true
+        Now = gone.Unseen ? gone.SizeFor(measure) : 0,
+        IsGone = !gone.Unseen,
+        IsUnseen = gone.Unseen
     };
 
     /// <summary>Whether the header's filters let a row through.</summary>
@@ -731,7 +733,7 @@ public partial class MainWindow
         grid.Children.Add(BuildChangeNameCell(row, indent));
 
         TextBlock thenText = Number(row.IsNew ? "·" : SizeFormatter.Format(row.Then), dim: true);
-        TextBlock nowText = Number(row.IsGone ? "·" : SizeFormatter.Format(row.Now), dim: false);
+        TextBlock nowText = Number(row.IsGone || row.IsUnseen ? "·" : SizeFormatter.Format(row.Now), dim: false);
         Grid.SetColumn(thenText, 1);
         Grid.SetColumn(nowText, 2);
         grid.Children.Add(thenText);
@@ -747,7 +749,7 @@ public partial class MainWindow
 
         string tip = row.Node is { } node
             ? node.FullPath
-            : System.IO.Path.Combine(row.Folder.FullPath, row.Name) + "  ·  " + Strings.Get("Changes_GoneTip");
+            : System.IO.Path.Combine(row.Folder.FullPath, row.Name) + "  ·  " + Strings.Get(row.IsUnseen ? "Changes_UnseenTip" : "Changes_GoneTip");
         ToolTip.SetTip(grid, tip);
 
         return grid;
@@ -792,16 +794,16 @@ public partial class MainWindow
         }
 
         var nameText = new TextBlock { Text = row.Name, FontSize = 13, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
-        if (row.IsGone)
+        if (row.IsGone || row.IsUnseen)
         {
             nameText.Classes.Add("dim");
         }
         Grid.SetColumn(nameText, 2);
         nameCell.Children.Add(nameText);
 
-        if (row.IsNew || row.IsGone)
+        if (row.IsNew || row.IsGone || row.IsUnseen)
         {
-            string tagText = row.IsNew ? Strings.Get("Insights_New") : Strings.Get("Changes_Gone");
+            string tagText = row.IsNew ? Strings.Get("Insights_New") : Strings.Get(row.IsUnseen ? "Changes_Unseen" : "Changes_Gone");
             Border tag = ChangeTag(tagText, row.IsNew ? Palette.NewBrush : null);
             Grid.SetColumn(tag, 3);
             nameCell.Children.Add(tag);

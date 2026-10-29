@@ -72,6 +72,10 @@ public partial class MainWindow
             UpdateCompareUi();
             if (baseline is not null)
             {
+                if (comparison is not null)
+                {
+                    JudgeComparison(root, baseline, comparison);
+                }
                 StatusText.Text += Strings.Format("Status_ComparedWithSuffix", Ago(baseline.ScannedUtc));
                 Treemap.Refresh();
                 RefreshTopList();
@@ -147,6 +151,7 @@ public partial class MainWindow
     {
         _scanRoot = info.RootPath;
         _scanTimeUtc = info.ScannedUtc;
+        NoteOpenedScanForAchievements(info);
         _openedScanMethod = info.Method;
         _baselineInfo = baseline;
         _comparison = baseline is null ? null : comparison;
@@ -308,7 +313,8 @@ public partial class MainWindow
             if (chosenInfo is not null && IsThisScan(chosenInfo, root))
             {
                 // Its own save, the automatic one or one the user made: nothing can have changed, so the reward is an achievement.
-                await Dialog.Card(this, Strings.Get("Dialog_CompareSelfTitle"), MirrorMirrorCard(DisplayName(root.FullPath)), Strings.Get("Dialog_CompareSelfMessage"));
+                Achievements.Current.Unlock(Achievement.MirrorMirror);
+                await Dialog.Card(this, AchievementName(Achievement.MirrorMirror), AchievementCard(Achievement.MirrorMirror, MirrorBadgeText(DisplayName(root.FullPath))), Strings.Get("Dialog_CompareSelfMessage"));
                 return;
             }
             if (chosenInfo is not null && !Comparable(chosenInfo.Method, currentSignature))
@@ -354,65 +360,6 @@ public partial class MainWindow
         {
             await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
         }
-    }
-
-    /// <summary>The "Achievement unlocked: Mirror, Mirror" card shown for comparing a scan with itself: an amber banner over a badge and the joke.</summary>
-    /// <param name="scanName">The scan's drive letter or folder name; a short one is shown as "C:=C:" in the badge, a long one as "=".</param>
-    /// <returns>The card, rounded and clipped, for <see cref="Dialog.Card"/>.</returns>
-    private Border MirrorMirrorCard(string scanName)
-    {
-        var banner = new DockPanel();
-        var xp = new TextBlock { Text = Strings.Get("Dialog_ZeroXp"), FontSize = 12, FontWeight = FontWeight.Bold };
-        DockPanel.SetDock(xp, Dock.Right);
-        banner.Children.Add(xp);
-        banner.Children.Add(new TextBlock
-        {
-            Text = Strings.Get("Dialog_AchievementUnlocked").ToUpper(System.Globalization.CultureInfo.CurrentCulture),
-            FontSize = 12,
-            FontWeight = FontWeight.Bold,
-            LetterSpacing = 1.2,
-            TextTrimming = TextTrimming.CharacterEllipsis
-        });
-        var bannerBox = new Border { Child = banner, Padding = new Thickness(18, 12) };
-        bannerBox.Bind(Border.BackgroundProperty, this.GetResourceObservable("Accent"));
-        bannerBox.Bind(TextElement.ForegroundProperty, this.GetResourceObservable("AccentText"));
-
-        // The badge: the scan's name equal to itself, in the amber outline.
-        string badgeText = scanName.Length <= 3 ? scanName + "=" + scanName : "=";
-        var badge = new Border { Width = 56, Height = 56, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(2), VerticalAlignment = VerticalAlignment.Center };
-        badge.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Accent"));
-        var badgeLabel = new TextBlock
-        {
-            Text = badgeText,
-            FontFamily = new FontFamily("Cascadia Mono, Consolas, Menlo, monospace"),
-            FontSize = badgeText.Length > 3 ? 14 : 20,
-            FontWeight = FontWeight.Bold,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        badgeLabel.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("Accent"));
-        badge.Child = badgeLabel;
-
-        var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-        words.Children.Add(new TextBlock { Text = Strings.Get("Dialog_CompareSelfTitle"), FontSize = 18, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
-        words.Children.Add(new TextBlock { Text = Strings.Get("Dialog_MirrorMirrorText"), FontSize = 12.5, LineHeight = 18, Margin = new Thickness(0, 3, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
-
-        var body = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 16 };
-        body.Children.Add(badge);
-        Grid.SetColumn(words, 1);
-        body.Children.Add(words);
-        var bodyBox = new Border { Child = body, Padding = new Thickness(18, 16) };
-        bodyBox.Bind(Border.BackgroundProperty, this.GetResourceObservable("Window"));
-
-        var card = new Border
-        {
-            Child = new StackPanel { Children = { bannerBox, bodyBox } },
-            CornerRadius = new CornerRadius(10),
-            BorderThickness = new Thickness(1),
-            ClipToBounds = true
-        };
-        card.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
-        return card;
     }
 
     /// <summary>Whether a saved scan is a save of the scan on screen.</summary>
@@ -480,8 +427,19 @@ public partial class MainWindow
         ? Strings.Format("Start_FilledSince", SizeFormatter.Format(filled))
         : Strings.Format("Start_FreedSince", SizeFormatter.Format(-filled));
 
-    /// <summary>Rebuilds the start screen after Settings deleted the saved scans, so the list no longer offers them.</summary>
-    public void SavedScansChanged() => BuildRecentScans();
+    /// <summary>Rebuilds the start screen after Settings deleted the saved scans, so the list no longer offers them, and closes a comparison whose baseline file went with them.</summary>
+    /// <returns>True when a comparison was closed.</returns>
+    public bool SavedScansChanged()
+    {
+        BuildRecentScans();
+        if (_baselineInfo is { } baseline && baseline.Path.Length > 0 && !File.Exists(baseline.Path))
+        {
+            // The comparison on screen was made against a file that is gone; the change marks would outlive their source.
+            StopComparing();
+            return true;
+        }
+        return false;
+    }
 
     /// <summary>Rebuilds the start screen's list: the hint texts, the totals line, the newest scan as a featured panel and the rest as rows.</summary>
     private void BuildRecentScans()
@@ -907,8 +865,9 @@ public partial class MainWindow
         var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         if (!scan.IsDrive || double.IsNaN(scan.Fraction))
         {
-            string iconName = scan.IsDrive ? DriveKinds.IconName(DriveKinds.Detect(scan.Info.RootPath)) : "Folder";
-            Icon icon = Icons.Make(iconName, Math.Round(size * 0.55), "TextDim");
+            Control icon = scan.IsDrive
+                ? DriveKindIcon(DriveKinds.Detect(scan.Info.RootPath), Math.Round(size * 0.5))
+                : Icons.Make("Folder", Math.Round(size * 0.55), "TextDim");
             icon.HorizontalAlignment = HorizontalAlignment.Center;
             icon.VerticalAlignment = VerticalAlignment.Center;
             grid.Children.Add(icon);

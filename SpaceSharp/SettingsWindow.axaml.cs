@@ -28,7 +28,7 @@ public partial class SettingsWindow : Window
     private string _tab = "General";
     private static readonly string[] Tabs = { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" };
 
-    // XAML previewer only
+    /// <summary>For the XAML previewer only: no owner.</summary>
     public SettingsWindow() : this(null) { }
 
     /// <summary>Opens Settings on the General tab; the page is built in code and rebuilt whenever the theme changes.</summary>
@@ -529,6 +529,10 @@ public partial class SettingsWindow : Window
             }
             _settings.Language = chosenName;
             _settings.Save();
+            if (Achievements.Current.Bump("languages") >= 3)
+            {
+                Achievements.Current.Unlock(Achievement.Polyglot);
+            }
 
             string displayName = chosenCulture is null
                 ? AppLanguages.DisplayName(AppLanguages.SystemCulture)
@@ -895,9 +899,9 @@ public partial class SettingsWindow : Window
         }
 
         (int deletedFiles, long deletedBytes) = ScanFile.DeleteAll();
-        _main?.SavedScansChanged();
+        bool comparisonClosed = _main?.SavedScansChanged() == true;
 
-        string note = Strings.Get("KeepScans_AfterDelete");
+        string note = Strings.Get(comparisonClosed ? "KeepScans_AfterDeleteCompared" : "KeepScans_AfterDelete");
         int leftBehind = scanCount - deletedFiles;
         if (leftBehind > 0)
         {

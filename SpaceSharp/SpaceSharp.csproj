@@ -22,8 +22,9 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>   <!-- validates the XML docs; CS1591 for an undocumented public member -->
     <Product>SpaceSharp</Product>
-    <Version>2.5.2</Version>
+    <Version>2.6.0</Version>
     <PreviousVersion>2.5.1</PreviousVersion>   <!-- the release before this one -->
     <Authors>ClearanceClarence</Authors>
     <Company>ClearanceClarence</Company>
@@ -59,7 +60,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="12.1.*" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.*" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.*" />
-    <PackageReference Include="Velopack" Version="*" />
+    <PackageReference Include="Velopack" Version="1.2.161" />
   </ItemGroup>
 
   <ItemGroup>

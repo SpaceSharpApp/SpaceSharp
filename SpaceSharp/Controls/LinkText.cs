@@ -90,18 +90,24 @@ public sealed partial class LinkText : TextBlock
         return null;
     }
 
+    /// <summary>Shows the hand cursor over a link and the arrow elsewhere.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
         Cursor = LinkAt(e.GetPosition(this)) is null ? Cursor.Default : HandCursor;
     }
 
+    /// <summary>Restores the arrow cursor.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerExited(PointerEventArgs e)
     {
         base.OnPointerExited(e);
         Cursor = Cursor.Default;
     }
 
+    /// <summary>Follows the link under the pointer on a left click.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);

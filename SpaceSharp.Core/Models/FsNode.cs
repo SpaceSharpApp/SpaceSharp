@@ -3,7 +3,9 @@ namespace SpaceSharp.Models;
 /// <summary>What a tree node stands for; only File and Directory are real items on disk.</summary>
 public enum NodeKind
 {
+    /// <summary>A file on disk.</summary>
     File,
+    /// <summary>A folder on disk, the scan root included.</summary>
     Directory,
     /// <summary>Pseudo node for the unused space of a drive.</summary>
     FreeSpace,
@@ -478,5 +480,7 @@ public sealed class FsNode
         return false;
     }
 
+    /// <summary>The full path, for the debugger and logs.</summary>
+    /// <returns><see cref="FullPath"/>.</returns>
     public override string ToString() => FullPath;
 }

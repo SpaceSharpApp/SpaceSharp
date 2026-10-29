@@ -35,6 +35,7 @@ public sealed class ShortcutsWindow : Window
         ["K"] = (Strings.Get("Key_NextColor"), false),
         ["B"] = (Strings.Get("Key_BottomPanel"), false),
         ["L"] = (Strings.Get("Key_Panel"), false),
+        ["T"] = (Strings.Get("Key_Achievements"), false),
         ["F5"] = (Strings.Get("Key_Rescan"), false),
         ["Esc"] = (Strings.Get("Key_CancelScan"), false),
         ["esc"] = (Strings.Get("Key_CancelScan"), false),
@@ -202,7 +203,8 @@ public sealed class ShortcutsWindow : Window
             (Strings.Get("Keys_View"), new[]
             {
                 (WithCtrl("F"), Strings.Get("Key_Filter")), ("K", Strings.Get("Key_NextColor")), ("B", Strings.Get("Key_BottomPanel")), ("L", Strings.Get("Key_Panel")),
-                (WithCtrl("S"), Strings.Get("Key_SaveScan")), (WithCtrl("O"), Strings.Get("Key_OpenScan")), (WithCtrl(","), Strings.Get("Key_Settings"))
+                (WithCtrl("S"), Strings.Get("Key_SaveScan")), (WithCtrl("O"), Strings.Get("Key_OpenScan")), (WithCtrl(","), Strings.Get("Key_Settings")),
+                ("T", Strings.Get("Key_Achievements"))
             })
         };
     }

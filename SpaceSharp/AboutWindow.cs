@@ -86,6 +86,7 @@ public sealed class AboutWindow : Window
         StackPanel version = Group(Strings.Get("About_GroupVersion"));
         version.Children.Add(Link("Notes", Strings.Format("Update_WhatsNewIn", UpdateWindow.ShortVersion(_version)), () => _ = UpdateWindow.ShowWhatsNew(this, _version)));
         version.Children.Add(Link("Keyboard", Strings.Get("About_Shortcuts"), () => new ShortcutsWindow().ShowDialog(this)));
+        version.Children.Add(Link("Trophy", Strings.Get("Ach_Title") + " (T)", () => new AchievementsWindow().ShowDialog(this)));
         if (installed)
         {
             _checkButton = Link("Sync", Strings.Get("About_CheckForUpdates"), null);

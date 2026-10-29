@@ -25,6 +25,8 @@ public sealed partial class TreemapControl
         return null;
     }
 
+    /// <summary>Zooms around the pointer by one step per wheel notch, stopping any animation first.</summary>
+    /// <param name="e">The wheel event.</param>
     protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
     {
         base.OnPointerWheelChanged(e);
@@ -41,6 +43,8 @@ public sealed partial class TreemapControl
         e.Handled = true;
     }
 
+    /// <summary>Starts a pan once the pressed pointer moved past the drag threshold, pans while one is on, otherwise tracks the hovered node for the tooltip.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
@@ -85,6 +89,8 @@ public sealed partial class TreemapControl
         return Math.Sqrt(dx * dx + dy * dy);
     }
 
+    /// <summary>Clears the hovered node and its tooltip, unless a pan is on.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerExited(PointerEventArgs e)
     {
         base.OnPointerExited(e);
@@ -98,6 +104,8 @@ public sealed partial class TreemapControl
         HoveredNodeChanged?.Invoke(this, null);
     }
 
+    /// <summary>Takes focus, then: middle button pans a zoomed map, right button selects the node under the pointer for its menu, left button selects (Ctrl toggles, Shift extends), a double click activates, and a single click on a zoomed map arms a pan.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
@@ -163,6 +171,8 @@ public sealed partial class TreemapControl
         e.Handled = true;
     }
 
+    /// <summary>Ends a pan when the left or middle button comes up.</summary>
+    /// <param name="e">The pointer event.</param>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
@@ -172,6 +182,8 @@ public sealed partial class TreemapControl
         }
     }
 
+    /// <summary>Forgets the pan when the pointer is taken away mid-drag.</summary>
+    /// <param name="e">The capture event.</param>
     protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
     {
         base.OnPointerCaptureLost(e);

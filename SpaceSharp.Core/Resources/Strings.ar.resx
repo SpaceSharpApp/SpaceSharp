@@ -123,6 +123,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>نقل إلى سلة المحذوفات</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>حذف نهائي</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>يتجاوز سلة المحذوفات ويصل إلى مسارات أطول مما يحتمله المستكشف. لا يمكن التراجع.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>حذف نهائيًا؟</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>سيُحذف {0} نهائيًا متجاوزًا سلة المحذوفات. هذه طريقة إزالة المجلدات التي لا يستطيع المستكشف فتحها، ولا يمكن التراجع عنها.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>حذف نهائي</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>حُذف {0} عناصر نهائيًا، {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} يتكرر {1:N0} مرة متداخلًا في نفسه.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>حذف التكرارات…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>يحتفظ بالنسخة الأولى ويحذف {0:N0} نسخة متداخلة تحتها، بدءًا من {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>تخطّاه Windows (قيد الاستخدام أو أكبر من أن تستوعبه سلة المحذوفات)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>المسار أطول مما تسمح به سلة المحذوفات</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>الوصول مرفوض</value></data>
@@ -223,6 +234,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>فتح فحص محفوظ</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>التحريك أثناء التكبير</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>لوحة أكبر الملفات والمجلدات والأنواع</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>الإنجازات</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>خصائص Windows للعنصر المحدد</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>إعادة الفحص</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>إغلاق الفحص والعودة إلى شاشة البدء</value></data>
@@ -718,6 +730,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>تم حذف {0} عمليات فحص محفوظة</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>تم تحرير {0} في مجلد عمليات الفحص.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>تبقى الخريطة المعروضة مفتوحة. لن يكون للفحص التالي لمحرك أقراص أو مجلد ما يُقارن به حتى يُحفظ فحص جديد له.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>تبقى الخريطة على الشاشة مفتوحة، لكن المقارنة التي كانت تعرضها أُغلقت لأن الفحص الذي قورن به لم يعد موجودًا. الفحص التالي لقرص أو مجلد لن يجد ما يقارن به حتى يُحفظ فحص جديد له.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>ملف واحد قيد الاستخدام وتُرك؛ سيُحذف في المرة القادمة.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} ملفات قيد الاستخدام وتُركت؛ ستُحذف في المرة القادمة.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>اسم أو نمط، مثل *.tmp</value></data>
@@ -963,13 +976,10 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} أماكن · {1} محدد</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>لم يُمَس منذ سنة</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} من الفحص · {1:N0} ملف</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>أكبر مجلد</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} ملف</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>منذ آخر فحص</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} ملف جديد</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>لا يوجد فحص سابق</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>افحص مجددًا في يوم آخر لترى ما تغير</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} أنواع · انقر صفًا لتصفية الخريطة</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} تمثل {1} من الفحص، معظمها تحت {2}. ثم {3} بنسبة {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} في أماكن يكون تفريغها آمنًا عادةً · لا يُحذف شيء حتى تقرر أنت</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>حدد الأماكن لنقلها إلى السلة معًا</value></data>
@@ -982,9 +992,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Insights_AfterTip" xml:space="preserve"><value>الجزء الكهرماني من الشريط العلوي هو ما تشغله الأماكن المحددة الآن؛ الشريط السفلي هو القرص بعد إزالتها.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} لم يُمَس منذ أكثر من سنة · انقر شهرًا أو شريحة للتصفية</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>الأكبر، لم يُمَس منذ سنة أو أكثر</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>أكبر المجلدات</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>في أي مكان من الفحص</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>أكبر الملفات</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>افحص هذا القرص مجددًا في يوم آخر وستعرض هذه البطاقة ما كبُر وصغُر وظهر بين الفحصين. يمكن أيضًا مقارنة فحص محفوظ من «ملف الفحص › مقارنة مع فحص محفوظ».</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>كبُر</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>صغُر</value></data>
@@ -1012,6 +1020,8 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Changes_SortTip" xml:space="preserve"><value>انقر للترتيب حسب هذا العمود؛ انقر مرة أخرى لعكس الترتيب</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>اختفى</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>كان في الفحص المقارَن وليس في هذا الفحص</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>غير مرئي لهذه الطريقة</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>كان في الفحص المقارن؛ الطريقة التي أجرت هذا الفحص لا تراه، فليس تغييرًا</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} أخرى…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} تغيّر · {1:N0} بلا تغيير مخفية</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} عنصرًا · {1:N0} تغيّر</value></data>
@@ -1020,8 +1030,96 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Changes_NoneOver" xml:space="preserve"><value>لم يتغيّر شيء بأكثر من {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>لا شيء للمقارنة به بعد</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>فتح التغييرات</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>أكبر الامتدادات</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>وأين يوجد معظم كل منها</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} أنواع</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} أخرى</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>انقر صفًا لتصفية الخريطة.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} أماكن أخرى</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>لا يُحذف شيء حتى تقول ذلك</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} قديمة</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>هذا الشهر {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>هذه السنة {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>لم تُمس منذ سنة {0}، {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>الأكبر</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>الامتدادات</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>الألعاب</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} في {2} ألعاب</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} في لعبة واحدة</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>الوسائط</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>الصور {0}، {1:N0} صورة</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>الصوت {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>الفيديو {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} لقطة شاشة {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} من الصور في مجلدات Screenshots، {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>المطوّر</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} في {1} مشاريع</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} في {1} مستودعات</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>مخرجات البناء {0} في {1} مجلدات</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>كلها قابلة لإعادة الإنشاء</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>الحزم المثبتة وسجل المستودعات ومخرجات البناء: التثبيت أو البناء يعيد إنشاءها. الأكبر:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>التنزيلات</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>الأقدم من {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} مثبّتات شغّلتها من قبل، {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} أرشيفات فُكّ ضغطها من قبل، {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>يُعدّ المثبّت مشغّلًا إذا كان في التنزيلات؛ ويُعدّ الأرشيف مفكوكًا إذا كان بجانبه مجلد بالاسم نفسه. أكبر الملفات:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>الروابط الصلبة</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>تُحسب مرة واحدة</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} روابط</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} روابط، معظمها في {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>أداة تحسبها كاملة تُظهر القرص أكثر امتلاءً بمقدار {0} مما هو عليه</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>الرابط الصلب ملف واحد بعدة أسماء. يحسبه SpaceSharp مرة واحدة؛ أما المستكشف ومعظم الأدوات فتحسب كل اسم، ولذلك تأتي مجاميعها أعلى. أين معظم التوفير:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>صغيرة وفارغة</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>هدر العناقيد</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} ملفات أصغر من 4 ك.ب</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} مجلدات فارغة</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} مجلدات فيها ملف واحد</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} ملفات أصغر من 4 ك.ب؛ تحوي {1} لكن القرص يخصص عناقيد كاملة، فيكون {2} منها هدرًا لا تحرره أي أداة. {3:N0} مجلدات فارغة.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>عميق وطويل</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>المجلدات الفارغة</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات، و{1:N0} أخرى متداخلة فيها</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>لا مجلدات فارغة في هذا الفحص.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} متداخلة</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>تحديد الكل</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>إلغاء التحديد</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} محددة</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>نقل المحددة إلى سلة المحذوفات</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>نُقل {0:N0} مجلدات فارغة إلى سلة المحذوفات</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>الملفات المكررة</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>ملفات بمحتوى متطابق تمامًا أينما كانت. الحجم أولًا، ثم البايتات الأولى، ثم الملف كاملًا، فلا يُقرأ إلا ما يُرجّح تطابقه.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>تجاهل الملفات الأصغر من</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>البحث عن المكررات</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>التجميع حسب الحجم…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>مقارنة البايتات الأولى: {0:N0} من {1:N0} · قُرئ {2}</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>قراءة الملفات كاملة: {0:N0} من {1:N0} · قُرئ {2}</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} مجموعات · {1:N0} نسخ زائدة · يمكن تحرير {2}</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>لا مكررات بين الملفات الأكبر من {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>الاحتفاظ بالأولى من كل مجموعة</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>الاحتفاظ بالأحدث من كل مجموعة</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>إزالة كل التحديدات</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} نسخ · {1} لكل منها</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} محددة · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>نقل المحددة إلى سلة المحذوفات</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} مجموعات حُددت كل نسخها، فلن يبقى منها شيء.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>نُقل {0:N0} ملفات مكررة إلى سلة المحذوفات، {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>مراجعة المجلدات الفارغة…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>المكررات</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>لم يُبحث بعد</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>يجد الملفات ذات المحتوى المتطابق ويتيح الاحتفاظ بواحد من كل مجموعة</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>البحث عن المكررات…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>يقرأ فقط الملفات التي تشارك حجمها ملفًا آخر، لذا يكون البحث سريعًا على معظم الأقراص. الروابط الصلبة هي الملف نفسه ولا تُحسب.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} مجموعات</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} نسخ زائدة</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>قُرئ {0} للحسم</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>يمكن تحريرها</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>لم يُعثر على مكررات بحد الحجم المستخدم.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} نسخ</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} مستويات</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} مسارات تتجاوز 260 حرفًا</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>أعمق مجلد، {0} مستويات تحت الجذر:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} مسارات أطول من الحد الكلاسيكي 260 حرفًا؛ الأطول:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} حرفًا</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>قارن مع فحص محفوظ…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} ملفات جديدة</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>يتم استلام الشجرة من مساعد المسؤول</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>هذا الإصدار</value></data>
   <data name="About_GroupHelp" xml:space="preserve"><value>المساعدة والملاحظات</value></data>
@@ -1040,10 +1138,56 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>نوعان مختلفان من الفحص</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>ذلك الفحص أُجري بطريقة مختلفة ({0}) عن هذا ({1}). الملفات التي لا تراها إلا طريقة واحدة، مثل مجلدات النظام المحمية، والروابط الصلبة التي تعدّها طريقة مرة واحدة والأخرى كاملة، ستظهر كمختفية أو جديدة أو أكبر أو أصغر.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>قارن على أي حال</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>مرآتي، يا مرآتي</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>هذا الملف هو الحفظ الخاص بهذا الفحص نفسه. لا يمكن أن يتغير شيء بين الفحص ونفسه مهما دققنا النظر. اختر فحصًا سابقًا لترى ما تغيّر فعلًا.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>تم فتح الإنجاز</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>سألنا القرص عمّا تغيّر منذ نفسه. القرص، وهو قرص، لم يقل شيئًا.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>الإنجازات</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>بعضها يحتاج فحصًا واحدًا، وبعضها يحتاج سنة. لا قيمة لأي منها، وهذا هو المقصود.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>فُتح {0} من {1}</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>مقفل</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>مقفل. طريقة الحصول عليه تبقى سرًا حتى تحصل عليه.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>فُتحت كل الإنجازات</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>كان هذا آخرها. لم يبقَ لدى التطبيق ما يمنحه، فمن الآن سيكتفي بأن يعرض لك قرصك.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>مرآتي، يا مرآتي</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>سألنا القرص عمّا تغيّر منذ نفسه. القرص، وهو قرص، لم يقل شيئًا.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>سباق سرعة</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>قُرئ محرك أقراص كامل من جدول الملفات في أقل من خمس ثوانٍ.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>الطريق الطويل</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>مررنا على محرك أقراص كامل مجلدًا مجلدًا وجدول الملفات أمامنا. اخترنا الطريق السياحي.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>وردية الليل</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>بدأ فحص بين الثانية والخامسة فجرًا.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>موسوعة</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>فحص فيه أكثر من مليون ملف.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>غوص عميق</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>وجدنا مسارًا أعمق من عشرين مجلدًا. مجلداتك فيها مجلدات.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>نادي التيرابايت</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>فُحص محرك أقراص بسعة تيرابايت أو أكثر.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>زبون دائم</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>فُحص محرك الأقراص أو المجلد نفسه عشر مرات.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>متنفّس</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>انتقل محرك أقراص بين فحصين من أقل من 10% مساحة حرة إلى أكثر من 25%.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>تنظيف الربيع</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>حُرّر أكثر من 50 جيجابايت بين فحصين لمحرك الأقراص نفسه.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>كامل العدد</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>فُحص محرك أقراص مساحته الحرة 1% أو أقل. لا مكان في النُزل.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>مكتنز</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>أكثر من عشرة آلاف ملف في مجلد واحد.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>حوت</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>ملف واحد يزيد على 100 جيجابايت.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>قاعة المرايا</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>وفّرت الروابط الصلبة أكثر من 10 جيجابايت على محرك أقراص واحد.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>غبار</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>وجدنا ملفًا لم يلمسه أحد منذ أكثر من عشر سنوات.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>لم يحدث شيء</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>فحصان بينهما أسبوع أو أكثر وتغيير أقل من ميجابايت.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>تحوّل في الحبكة</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>أكبر مجلد لم يعد المجلد الذي كان في الفحص السابق.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>سائح</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>زُرت الخريطة والرؤى والتغييرات في جلسة واحدة.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>متعدد اللغات</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>غُيّرت اللغة ثلاث مرات. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>عالم آثار</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>فُتح فحص محفوظ عمره أكثر من سنة.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>جامع</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>فُتحت كل الإنجازات الأخرى. لم يبقَ ما يُعثر عليه، وهذا هو مغزى التطبيق.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>أُجريا بطريقتين مختلفتين ({0} مقابل {1}): تشمل الفروق ملفات لا تراها إلا طريقة واحدة.</value></data>
 </root>

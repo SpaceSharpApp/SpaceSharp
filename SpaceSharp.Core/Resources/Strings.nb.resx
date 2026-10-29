@@ -122,6 +122,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Flytt til papirkurven</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Slett permanent</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Hopper over papirkurven og når stier som er for lange for Utforsker. Kan ikke angres.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Slette permanent?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} slettes for godt, utenom papirkurven. Dette er måten å fjerne mapper Utforsker ikke kan åpne, og det kan ikke angres.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Slett for godt</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>Slettet {0} elementer for godt, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} gjentar seg {1:N0} ganger, nøstet inni seg selv.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Slett gjentakelsene…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Beholder den første kopien og sletter de {0:N0} som ligger nøstet under, fra {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows hoppet over den (i bruk, eller for stor for papirkurven)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>stien er for lang for papirkurven</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>ingen tilgang</value></data>
@@ -222,6 +233,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Åpne en lagret skanning</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Panorer når du er zoomet inn</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Panel med største filer, mapper og typer</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Prestasjoner</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-egenskaper for det valgte</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Skann på nytt</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Lukk skanningen og gå tilbake til startskjermen</value></data>
@@ -717,6 +729,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Slettet {0} lagrede skanninger</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>{0} frigjort i skanningsmappen.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Kartet på skjermen blir værende. Neste skanning av en stasjon eller mappe har ingenting å sammenligne med før en ny skanning av den er lagret.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>Kartet på skjermen blir værende, men sammenligningen det viste er lukket, siden skanningen det ble sammenlignet med er borte. Neste skanning av en stasjon eller mappe har ingenting å sammenligne med før en ny skanning av den er lagret.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Én fil er i bruk og ble stående; den slettes neste gang.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} filer er i bruk og ble stående; de slettes neste gang.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Navn eller mønster, f.eks. *.tmp</value></data>
@@ -962,13 +975,10 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} steder · {1} avkrysset</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Urørt i et år</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} av skanningen · {1:N0} filer</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Største mappe</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} filer</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Siden forrige skanning</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nye filer</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Ingen tidligere skanning</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Skann igjen en annen dag for å se hva som endret seg</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} typer · klikk en rad for å filtrere kartet</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} er {1} av skanningen, mest under {2}. Deretter {3} med {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} på steder som vanligvis er trygge å tømme · ingenting slettes før du sier fra</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Kryss av stedene du vil sende til papirkurven samlet</value></data>
@@ -981,9 +991,7 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Insights_AfterTip" xml:space="preserve"><value>Den ravgule delen av den øverste linjen er det de avhukede stedene tar nå; den nederste linjen er disken uten dem.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} urørt i over et år · klikk en måned eller en gruppe for å filtrere</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Største, urørt i et år eller mer</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Største mapper</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>hvor som helst i skanningen</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Største filer</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Skann denne disken igjen en annen dag, så viser dette kortet hva som vokste, krympet og kom til i mellomtiden. En lagret skanning kan også sammenlignes fra Skannefil › Sammenlign med en lagret skanning.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Vokste</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Krympet</value></data>
@@ -1011,6 +1019,8 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Changes_SortTip" xml:space="preserve"><value>Klikk for å sortere etter denne kolonnen; klikk igjen for å snu rekkefølgen</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Borte</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>var i den sammenlignede skanningen og er ikke i denne</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Ikke synlig for denne metoden</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>var i den sammenlignede skanningen; metoden som laget denne skanningen kan ikke se den, så det er ingen endring</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} til…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} endret · {1:N0} uendrede skjult</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} elementer · {1:N0} endret</value></data>
@@ -1019,8 +1029,96 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Changes_NoneOver" xml:space="preserve"><value>Ingenting endret seg med mer enn {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Ingenting å sammenligne med ennå</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Åpne Endringer</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Største filendelser</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>og hvor det meste av hver ligger</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} typer</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} til</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Klikk på en rad for å filtrere kartet.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} steder til</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>ingenting slettes før du sier fra</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} gammelt</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>denne måneden {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>i år {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>urørt i et år {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Størst</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Filtyper</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Spill</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} i {2} spill</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} i 1 spill</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Medier</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Bilder {0}, {1:N0} foto</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Lyd {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Video {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} skjermbilder {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} av bildene ligger i Screenshots-mapper, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Utvikler</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} i {1} prosjekter</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} i {1} repoer</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>byggeresultat {0} i {1} mapper</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>alt kan bygges på nytt</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Installerte pakker, repo-historikk og byggeresultat: en installasjon eller et bygg lager dem igjen. De største:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Nedlastinger</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>eldste fra {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} installasjonsfiler du allerede har kjørt, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} arkiver som allerede er pakket ut, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>En installasjonsfil regnes som kjørt når den ligger i Nedlastinger; et arkiv som pakket ut når en mappe med samme navn ligger ved siden av. De største filene:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Harde lenker</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>talt én gang</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} lenker</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} lenker, mest i {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>et verktøy som teller dem fullt ut viser disken {0} fullere enn den er</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>En hard lenke er én fil under flere navn. SpaceSharp teller den én gang; Utforsker og de fleste andre verktøy teller hvert navn, og derfor blir summene deres høyere. Her er mesteparten av besparelsen:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Små og tomme</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>i klyngesvinn</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} filer under 4 KB</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} tomme mapper</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} mapper med én fil</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} filer er under 4 KB; de inneholder {1}, men disken deler ut hele klynger, så {2} av det er svinn ingen verktøy kan frigjøre. {3:N0} mapper er tomme.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Dypt og langt</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Tomme mapper</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mapper uten filer</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mapper uten filer, {1:N0} til nøstet inni dem</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Ingen tomme mapper i denne skanningen.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nøstet</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Velg alle</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Velg ingen</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} avkrysset</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Flytt avkryssede til papirkurven</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>Flyttet {0:N0} tomme mapper til papirkurven</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Dupliserte filer</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Filer med nøyaktig samme innhold, uansett hvor de ligger. Først størrelse, så de første bytene, så hele filen, slik at bare sannsynlige treff leses.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Ignorer filer under</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Finn duplikater</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Grupperer etter størrelse…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Sammenligner de første bytene: {0:N0} av {1:N0} · {2} lest</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Leser hele filer: {0:N0} av {1:N0} · {2} lest</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sett · {1:N0} ekstra kopier · {2} kan fjernes</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Ingen duplikater blant filer over {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Behold den første i hvert sett</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Behold den nyeste i hvert sett</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Fjern alle kryss</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} kopier · {1} hver</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} avkrysset · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Flytt avkryssede til papirkurven</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} sett har alle kopiene avkrysset, så ingenting av dem blir igjen.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>Flyttet {0:N0} dupliserte filer til papirkurven, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Gå gjennom tomme mapper…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplikater</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>ikke søkt ennå</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Finner filer med identisk innhold og lar deg beholde én av hver</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Finn duplikater…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Leser bare filer som deler størrelse med en annen, så søket går raskt på de fleste disker. Harde lenker er samme fil og telles ikke.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} sett</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} ekstra kopier</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>{0} lest for å avgjøre</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>kan fjernes</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Ingen duplikater ble funnet med den brukte størrelsesgrensen.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} kopier</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} dypt</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} stier over 260 tegn</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>Den dypeste mappen, {0} nivåer under roten:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} stier er lengre enn den klassiske grensen på 260 tegn; de lengste:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} tegn</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Sammenlign med en lagret skanning…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} nye filer</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>mottar treet fra administratorhjelperen</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Denne versjonen</value></data>
   <data name="About_GroupHelp" xml:space="preserve"><value>Hjelp og tilbakemelding</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Ulike typer skanning</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Den skanningen ble laget på en annen måte ({0}) enn denne ({1}). Filer bare én metode ser, som beskyttede systemmapper, og harde lenker som den ene metoden teller én gang og den andre fullt ut, vil vises som borte, nye, større eller mindre.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Sammenlign likevel</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Speil, speil</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Den filen er denne skanningens egen lagring. Ingenting kan endre seg mellom en skanning og den selv, uansett hvor nøye vi ser. Velg en tidligere skanning for å se hva som faktisk er endret.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Prestasjon låst opp</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Spurte disken hva som var endret siden den selv. Disken, som er en disk, sa ingenting.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Prestasjoner</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Noen tar én skanning, noen tar et år. Ingen av dem er verdt noe, og det er poenget.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} av {1} låst opp</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Låst</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Låst. Hvordan du får den er hemmelig til du har den.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle prestasjoner låst opp</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Det var alle sammen. Appen har ikke mer å dele ut, så fra nå av viser den deg bare disken din.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Speil, speil</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Spurte disken hva som var endret siden den selv. Disken, som er en disk, sa ingenting.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>En hel stasjon lest fra filtabellen på under fem sekunder.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Den lange veien</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Gikk gjennom en hel stasjon mappe for mappe med filtabellen rett ved siden av. Valgte naturstien.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Nattskift</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Startet en skanning mellom klokken to og fem om natten.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Leksikon</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>En skanning med over en million filer.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Dypdykk</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Fant en sti mer enn tjue mapper dyp. Mappene dine har mapper.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Terabyte-klubben</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Skannet en stasjon på en terabyte eller mer.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Stamgjest</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Skannet samme stasjon eller mappe ti ganger.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Pusterom</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>En stasjon gikk fra under 10 % ledig til over 25 % ledig mellom to skanninger.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Vårrengjøring</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Frigjorde over 50 GB mellom to skanninger av samme stasjon.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Fullt hus</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Skannet en stasjon med 1 % eller mindre ledig. Det er ikke plass i herberget.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Samler</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Over ti tusen filer i én mappe.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Hval</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Én fil på over 100 GB.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Speilsalen</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Harde lenker sparte over 10 GB på én stasjon.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Støv</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Fant en fil ingen har rørt på over ti år.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Ingenting skjedde</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>To skanninger med minst en uke mellom og under en megabyte endring.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Uventet vending</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>Den største mappen er ikke den samme som ved forrige skanning.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Turist</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Besøkte kartet, Innsikt og Endringer i én økt.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Polyglott</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Byttet språk tre ganger. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Arkeolog</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Åpnet en lagret skanning som er over ett år gammel.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Komplettist</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Låste opp alle de andre prestasjonene. Det er ingenting igjen å finne, og det er hele poenget med appen.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Laget på ulik måte ({0} mot {1}): forskjellene omfatter filer bare én metode ser.</value></data>
 </root>

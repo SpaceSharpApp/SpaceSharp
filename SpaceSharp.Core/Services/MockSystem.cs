@@ -37,6 +37,19 @@ public static class MockSystem
     /// <param name="Total">The drive's capacity in bytes; 0 for a folder scan.</param>
     public sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total);
 
+    /// <summary>The mock PC's achievements: an in-memory store with four of the mild ones unlocked at dates relative to now, so screenshots spoil nothing worth keeping secret.</summary>
+    /// <returns>A store that is never written to disk.</returns>
+    public static Achievements Achievements()
+    {
+        DateTime now = DateTime.UtcNow;
+        var store = new Achievements();
+        store.Pretend(Achievement.Speedrun, now - TimeSpan.FromDays(12));
+        store.Pretend(Achievement.NightShift, now - TimeSpan.FromDays(9));
+        store.Pretend(Achievement.Tourist, now - TimeSpan.FromDays(3));
+        store.Pretend(Achievement.Regular, now - TimeSpan.FromDays(1));
+        return store;
+    }
+
     /// <summary>The mock saved scans, newest first.</summary>
     /// <returns>Three drive scans and one folder scan with scan times relative to now, so the ages read naturally whenever the app runs.</returns>
     public static IReadOnlyList<RecentScan> RecentScans()
@@ -98,6 +111,25 @@ public static class MockSystem
     }
 
     // ------------------------------------------------------------------ the tree
+
+    /// <summary>A canned duplicate search of the mock tree, since a real one reads bytes the pretend files do not have.</summary>
+    /// <param name="root">A tree from <see cref="Build"/>.</param>
+    /// <returns>The files the tree holds twice under the same name and size, as sets, biggest waste first, with made-up hashes.</returns>
+    public static DuplicateResult Duplicates(FsNode root)
+    {
+        var groups = new List<DuplicateGroup>();
+        foreach (IGrouping<(string, long), FsNode> same in root.DescendantFiles().GroupBy(file => (file.Name, file.Size)))
+        {
+            var files = same.OrderBy(file => file.FullPath, StringComparer.OrdinalIgnoreCase).ToList();
+            if (files.Count > 1)
+            {
+                string hash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(same.Key.Item1 + same.Key.Item2))).ToLowerInvariant();
+                groups.Add(new DuplicateGroup(same.Key.Item2, files, hash));
+            }
+        }
+        groups = groups.OrderByDescending(group => group.Wasted).ToList();
+        return new DuplicateResult(groups, groups.Sum(group => group.Files.Count), groups.Sum(group => group.Size * group.Files.Count));
+    }
 
     /// <summary>Builds the fixed sample tree; one instance per tree so the random sequence starts over.</summary>
     private sealed class Builder
@@ -199,16 +231,31 @@ public static class MockSystem
             AddFile(downloads, "tools.zip", 0.18 * GB);
             Many(downloads, "archive_#.zip", 22, 2, 260);
             Many(downloads, "photo_#.jpg", 30, 1, 6);
+            AddFolder(downloads, "New folder");
             FsNode pictures = AddFolder(user, "Pictures");
             Many(AddFolder(pictures, "Screenshots"), "screenshot_#.png", 120, 0.4, 5);
-            Many(AddFolder(pictures, "Camera"), "photo_#.jpg", 160, 2, 9);
+            FsNode camera = AddFolder(pictures, "Camera");
+            Many(camera, "photo_#.jpg", 160, 2, 9);
+            // Copies of the same files in two places, for the duplicate finder's scene; Duplicates() pairs them by name and size.
+            FsNode holiday = AddFolder(pictures, "Holiday 2025");
+            foreach (int i in new[] { 3, 7, 12, 18, 25 })
+            {
+                AddFile(holiday, $"photo_{i}.jpg", camera.Children[i - 1].Size);
+            }
             FsNode documents = AddFolder(user, "Documents");
+            FsNode backup = AddFolder(documents, "Backup");
+            AddFile(backup, "recording_01.mp4", 4.3 * GB);
+            AddFile(backup, "os_installer.iso", 5.4 * GB);
+            AddFile(AddFolder(backup, "Old"), "tools.zip", 0.18 * GB);
+            AddFolder(AddFolder(documents, "Drafts"), "2024");
+            AddFolder(documents, "Scans");
             FsNode savedGames = AddFolder(documents, "Saved Games");
             Many(AddFolder(savedGames, "Game One"), "save_#.dat", 40, 2, 9);
             Many(AddFolder(savedGames, "Game Two"), "save_#.dat", 30, 8, 24);
             Many(documents, "document_#.docx", 18, 0.05, 2);
             Many(documents, "report_#.pdf", 12, 0.2, 6);
             FsNode projects = AddFolder(user, "Projects");
+            AddFolder(AddFolder(AddFolder(projects, "Project D"), "bin"), "Debug");
             Many(AddFolder(projects, "Project A"), "source_#.cs", 16, 0.01, 0.06);
             Many(AddFolder(projects, "Project B"), "source_#.js", 60, 0.01, 0.2);
             Many(AddFolder(projects, "Project C"), "source_#.py", 30, 0.02, 0.5);

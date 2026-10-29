@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Endgültig löschen</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Umgeht den Papierkorb und erreicht Pfade, die für den Explorer zu lang sind. Nicht rückgängig zu machen.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Endgültig löschen?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} wird endgültig gelöscht, am Papierkorb vorbei. So entfernt man Ordner, die der Explorer nicht öffnen kann; es lässt sich nicht rückgängig machen.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Endgültig löschen</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0} Elemente endgültig gelöscht, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} wiederholt sich {1:N0}-mal, in sich selbst verschachtelt.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Wiederholungen löschen…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Behält die erste Kopie und löscht die {0:N0} darunter verschachtelten, ab {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows hat es übersprungen (in Benutzung oder zu groß für den Papierkorb)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>der Pfad ist zu lang für den Papierkorb</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>Zugriff verweigert</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Gespeicherten Scan öffnen</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Verschieben bei Vergrößerung</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Bereich mit den größten Dateien, Ordnern und Typen</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Erfolge</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-Eigenschaften des ausgewählten Elements</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Erneut scannen</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Den Scan schließen und zum Startbildschirm zurückkehren</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} gespeicherte Scans gelöscht</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>{0} im Scan-Ordner freigegeben.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Die Karte auf dem Bildschirm bleibt geöffnet. Der nächste Scan eines Laufwerks oder Ordners hat nichts zum Vergleichen, bis ein neuer Scan davon gespeichert ist.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>Die Karte auf dem Bildschirm bleibt geöffnet, aber der gezeigte Vergleich ist geschlossen, da der Scan, mit dem verglichen wurde, weg ist. Der nächste Scan eines Laufwerks oder Ordners hat nichts zum Vergleichen, bis ein neuer Scan davon gespeichert ist.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Eine Datei ist in Benutzung und blieb erhalten; sie wird beim nächsten Mal gelöscht.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} Dateien sind in Benutzung und blieben erhalten; sie werden beim nächsten Mal gelöscht.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Name oder Muster, z. B. *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} Orte · {1} ausgewählt</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Seit einem Jahr unberührt</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} des Scans · {1:N0} Dateien</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Größter Ordner</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} Dateien</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Seit letztem Scan</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} neue Dateien</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Kein früherer Scan</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Scannen Sie an einem anderen Tag erneut, um zu sehen, was sich geändert hat</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} Typen · auf eine Zeile klicken, um die Karte zu filtern</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} macht {1} des Scans aus, überwiegend unter {2}. Dann {3} mit {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} an Orten, die sich meist gefahrlos leeren lassen · nichts wird gelöscht, bevor Sie es sagen</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Haken Sie die Orte ab, die zusammen in den Papierkorb sollen</value></data>
@@ -980,9 +990,7 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Insights_AfterTip" xml:space="preserve"><value>Der bernsteinfarbene Teil des oberen Balkens ist, was die angehakten Orte jetzt belegen; der untere Balken ist das Laufwerk ohne sie.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} seit über einem Jahr unberührt · auf einen Monat oder ein Band klicken, um zu filtern</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Größte, seit mindestens einem Jahr unberührt</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Größte Ordner</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>irgendwo im Scan</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Größte Dateien</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Scannen Sie dieses Laufwerk an einem anderen Tag erneut, und diese Karte zeigt, was in der Zwischenzeit gewachsen, geschrumpft und neu hinzugekommen ist. Ein gespeicherter Scan lässt sich auch über Scandatei › Mit gespeichertem Scan vergleichen heranziehen.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Gewachsen</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Geschrumpft</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Changes_SortTip" xml:space="preserve"><value>Klicken sortiert nach dieser Spalte; erneut klicken kehrt die Reihenfolge um</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Weg</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>war im verglichenen Scan und ist in diesem nicht mehr</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Für diese Methode unsichtbar</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>war im verglichenen Scan; die Methode dieses Scans kann es nicht sehen, also ist es keine Änderung</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} weitere…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} geändert · {1:N0} unveränderte ausgeblendet</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} Elemente · {1:N0} geändert</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Changes_NoneOver" xml:space="preserve"><value>Nichts hat sich um mehr als {0} geändert.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Noch nichts zum Vergleichen</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Änderungen öffnen</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Größte Erweiterungen</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>und wo der Großteil jeweils liegt</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} Typen</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} weitere</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Klicken Sie auf eine Zeile, um die Karte zu filtern.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} weitere Orte</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>nichts wird gelöscht, bevor Sie es sagen</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} alt</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>diesen Monat {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>dieses Jahr {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>seit einem Jahr unberührt {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Größtes</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Endungen</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Spiele</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} in {2} Spielen</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} in 1 Spiel</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Medien</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Bilder {0}, {1:N0} Fotos</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Audio {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Video {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} Screenshots {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} der Bilder liegen in Screenshots-Ordnern, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Entwickler</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} in {1} Projekten</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} in {1} Repos</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>Build-Ausgabe {0} in {1} Ordnern</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>alles neu erzeugbar</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Installierte Pakete, Repository-Verlauf und Build-Ausgabe: eine Installation oder ein Build erzeugt sie wieder. Die größten:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Downloads</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>ältestes von {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} Installer, die Sie schon ausgeführt haben, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} Archive, die schon entpackt sind, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>Ein Installer gilt als ausgeführt, wenn er in Downloads liegt; ein Archiv als entpackt, wenn ein gleichnamiger Ordner daneben liegt. Die größten Dateien:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Harte Links</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>einmal gezählt</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} Links</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} Links, meist in {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>ein Werkzeug, das sie voll zählt, zeigt das Laufwerk {0} voller, als es ist</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Ein harter Link ist eine Datei unter mehreren Namen. SpaceSharp zählt sie einmal; der Explorer und die meisten anderen Werkzeuge zählen jeden Namen, weshalb ihre Summen höher ausfallen. Wo die meiste Ersparnis liegt:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Klein und leer</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>Cluster-Verschnitt</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} Dateien unter 4 KB</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} leere Ordner</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} Ordner mit einer Datei</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} Dateien sind unter 4 KB; sie halten {1}, aber die Festplatte vergibt ganze Cluster, also sind {2} davon Verschnitt, den kein Werkzeug freigeben kann. {3:N0} Ordner sind leer.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Tief und lang</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Leere Ordner</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien, {1:N0} weitere darin verschachtelt</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Keine leeren Ordner in diesem Scan.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} verschachtelt</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Alle auswählen</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Keine auswählen</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} markiert</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Markierte in den Papierkorb verschieben</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} leere Ordner in den Papierkorb verschoben</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Doppelte Dateien</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Dateien mit exakt gleichem Inhalt, egal wo sie liegen. Erst die Größe, dann die ersten Bytes, dann die ganze Datei, sodass nur wahrscheinliche Treffer gelesen werden.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Dateien ignorieren unter</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Duplikate suchen</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Nach Größe gruppieren…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Erste Bytes vergleichen: {0:N0} von {1:N0} · {2} gelesen</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Ganze Dateien lesen: {0:N0} von {1:N0} · {2} gelesen</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} Gruppen · {1:N0} zusätzliche Kopien · {2} könnten weg</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Keine Duplikate unter den Dateien über {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Jeweils die erste behalten</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Jeweils die neueste behalten</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Alle Häkchen entfernen</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} Kopien · je {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} markiert · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Markierte in den Papierkorb verschieben</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>In {0:N0} Gruppen ist jede Kopie markiert, davon bleibt also nichts übrig.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} doppelte Dateien in den Papierkorb verschoben, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Leere Ordner prüfen…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Duplikate</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>noch nicht gesucht</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Findet Dateien mit identischem Inhalt und lässt je eine behalten</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Duplikate suchen…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Liest nur Dateien, die ihre Größe mit einer anderen teilen, daher ist die Suche auf den meisten Laufwerken schnell. Harte Links sind dieselbe Datei und zählen nicht.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} Gruppen</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} zusätzliche Kopien</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>{0} zur Entscheidung gelesen</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>könnten weg</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Mit der verwendeten Größengrenze wurden keine Duplikate gefunden.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} Kopien</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} tief</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} Pfade über 260 Zeichen</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>Der tiefste Ordner, {0} Ebenen unter der Wurzel:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} Pfade sind länger als die klassische Grenze von 260 Zeichen; die längsten:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} Zeichen</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Mit gespeichertem Scan vergleichen…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} neue Dateien</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>der Baum wird vom Administrator-Helfer übernommen</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Diese Version</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Unterschiedliche Scan-Arten</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Dieser Scan wurde anders erstellt ({0}) als der aktuelle ({1}). Dateien, die nur eine Methode sieht, etwa geschützte Systemordner, und Hardlinks, die eine Methode einmal und die andere voll zählt, erscheinen als verschwunden, neu, gewachsen oder geschrumpft.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Trotzdem vergleichen</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Spieglein, Spieglein</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Diese Datei ist die eigene Sicherung dieses Scans. Zwischen einem Scan und sich selbst kann sich nichts ändern, so genau wir auch hinsehen. Wählen Sie einen früheren Scan, um zu sehen, was sich wirklich geändert hat.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Erfolg freigeschaltet</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Hat das Laufwerk gefragt, was sich seit ihm selbst geändert hat. Das Laufwerk, ein Laufwerk eben, sagte nichts.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Erfolge</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Manche brauchen einen Scan, manche ein Jahr. Keiner ist etwas wert, und genau darum geht es.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} von {1} freigeschaltet</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Gesperrt</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Gesperrt. Wie man ihn bekommt, bleibt geheim, bis man ihn hat.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle Erfolge freigeschaltet</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Das waren alle. Die App hat nichts mehr zu vergeben und zeigt Ihnen von jetzt an einfach nur Ihre Festplatte.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Spieglein, Spieglein</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Hat das Laufwerk gefragt, was sich seit ihm selbst geändert hat. Das Laufwerk, ein Laufwerk eben, sagte nichts.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Ein ganzes Laufwerk in unter fünf Sekunden aus der Dateitabelle gelesen.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Der lange Weg</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Ein ganzes Laufwerk Ordner für Ordner durchlaufen, obwohl die Dateitabelle bereitlag. Die Panoramaroute genommen.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Nachtschicht</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Einen Scan zwischen zwei und fünf Uhr morgens gestartet.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Enzyklopädie</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Ein Scan mit über einer Million Dateien.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Tiefseetauchen</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Einen Pfad gefunden, der mehr als zwanzig Ordner tief ist. Ihre Ordner haben Ordner.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Terabyte-Club</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Ein Laufwerk mit einem Terabyte oder mehr gescannt.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Stammgast</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Dasselbe Laufwerk oder denselben Ordner zehnmal gescannt.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Luft zum Atmen</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Ein Laufwerk ging zwischen zwei Scans von unter 10 % frei auf über 25 % frei.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Frühjahrsputz</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Zwischen zwei Scans desselben Laufwerks mehr als 50 GB freigegeben.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Volles Haus</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Ein Laufwerk mit 1 % oder weniger frei gescannt. Kein Platz in der Herberge.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Sammler</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Mehr als zehntausend Dateien in einem Ordner.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Wal</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Eine einzelne Datei über 100 GB.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Spiegelkabinett</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Harte Links haben auf einem Laufwerk mehr als 10 GB gespart.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Staub</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Eine Datei gefunden, die seit über zehn Jahren niemand angefasst hat.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Nichts passiert</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Zwei Scans mit mindestens einer Woche Abstand und weniger als einem Megabyte Änderung.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Wendung</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>Der größte Ordner ist nicht mehr der vom letzten Scan.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Tourist</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Karte, Einblicke und Änderungen in einer Sitzung besucht.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Polyglott</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Die Sprache dreimal gewechselt. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Archäologe</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Einen gespeicherten Scan geöffnet, der über ein Jahr alt ist.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Komplettist</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Jeden anderen Erfolg freigeschaltet. Es gibt nichts mehr zu finden, und genau darum geht es in der App.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Anders erstellt ({0} statt {1}): die Unterschiede umfassen Dateien, die nur eine Methode sieht.</value></data>
 </root>

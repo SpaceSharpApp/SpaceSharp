@@ -25,7 +25,7 @@ public partial class InspectWindow : Window
     private readonly StringBuilder _copy = new();
     private readonly AppSettings _settings = AppSettings.Current;
 
-    // XAML previewer only
+    /// <summary>For the XAML previewer only: an empty selection under a nameless root.</summary>
     public InspectWindow() : this(new[] { new FsNode("", NodeKind.Directory, null) }, null, SizeMeasure.FileSize, Palette.Default) { }
 
     /// <summary>Builds the window for a selection; an empty selection closes it as soon as it opens.</summary>

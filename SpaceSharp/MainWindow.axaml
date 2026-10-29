@@ -175,6 +175,26 @@
         </Border>
       </Canvas>
 
+      <!-- the achievement toast: bottom right of the map for seven seconds or until clicked; filled by ShowNextToast -->
+      <Border x:Name="AchievementToast" IsVisible="False" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,18,18" Width="340"
+              Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="10" ClipToBounds="True"
+              BoxShadow="0 6 24 0 #80000000" Cursor="Hand">
+        <StackPanel>
+          <Border Background="{DynamicResource Accent}" Padding="14,6">
+            <TextBlock x:Name="ToastKicker" FontSize="11" FontWeight="Bold" LetterSpacing="1.2" Foreground="{DynamicResource AccentText}" TextTrimming="CharacterEllipsis" />
+          </Border>
+          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Margin="14,10,14,12">
+            <Border Width="40" Height="40" CornerRadius="8" BorderThickness="2" BorderBrush="{DynamicResource Accent}" VerticalAlignment="Center">
+              <controls:Icon x:Name="ToastIcon" Width="20" Height="20" Foreground="{DynamicResource Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+              <TextBlock x:Name="ToastName" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap" />
+              <TextBlock x:Name="ToastHint" Classes="dim" FontSize="12" LineHeight="16" Margin="0,2,0,0" TextWrapping="Wrap" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+      </Border>
+
       <!-- the filter drawer (the default filter layout): a sheet over the right of the map -->
       <Border x:Name="FilterDrawer" HorizontalAlignment="Right" Width="380" IsVisible="False" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1,0,0,0" BoxShadow="0 0 24 0 #80000000">
         <DockPanel>

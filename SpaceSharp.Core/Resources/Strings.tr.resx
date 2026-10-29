@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Kalıcı olarak sil</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Geri Dönüşüm Kutusu'nu atlar ve Gezgin için fazla uzun yollara ulaşır. Geri alınamaz.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Kalıcı olarak silinsin mi?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0}, Geri Dönüşüm Kutusu'na uğramadan tamamen silinecek. Gezgin'in açamadığı klasörler böyle kaldırılır ve bu geri alınamaz.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Tamamen sil</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0} öğe tamamen silindi, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} kendi içinde iç içe {1:N0} kez yineleniyor.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Yinelemeleri sil…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>İlk kopyayı tutar ve altındaki iç içe {0:N0} kopyayı {1} konumundan başlayarak siler.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows bunu atladı (kullanımda ya da Geri Dönüşüm Kutusu için çok büyük)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>yol Geri Dönüşüm Kutusu için çok uzun</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>erişim reddedildi</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Kaydedilmiş bir tarama aç</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Yakınlaştırılmışken kaydır</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>En büyük dosyalar, klasörler ve türler paneli</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Başarımlar</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Seçili öğe için Windows Özellikleri</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Yeniden tara</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Taramayı kapat ve başlangıç ekranına dön</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>Kaydedilen {0} tarama silindi</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>Tarama klasöründe {0} boşaltıldı.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>Ekrandaki harita açık kalır. Bir sürücü ya da klasörün bir sonraki taraması, yeni bir taraması kaydedilene kadar hiçbir şeyle karşılaştırılamaz.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>Ekrandaki harita açık kalır, ancak gösterdiği karşılaştırma kapatıldı, çünkü karşılaştırılan tarama artık yok. Bir sürücü veya klasörün bir sonraki taramasının, yeni bir taraması kaydedilene kadar karşılaştıracağı bir şey olmaz.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Bir dosya kullanımda olduğundan bırakıldı; bir sonraki sefer silinecek.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} dosya kullanımda olduğundan bırakıldı; bir sonraki sefer silinecek.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Ad veya desen, örn. *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} yer · {1} işaretli</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Bir yıldır dokunulmamış</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>taramanın {0} kadarı · {1:N0} dosya</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>En büyük klasör</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} dosya</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Son taramadan bu yana</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} yeni dosya</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Önceki tarama yok</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Neyin değiştiğini görmek için başka bir gün yeniden tarayın</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} tür · haritayı filtrelemek için bir satıra tıklayın</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0}, taramanın {1} kadarı, çoğunlukla {2} altında. Sonra {3}, {4} ile.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>genellikle güvenle boşaltılabilen yerlerde {0} · siz onaylamadan hiçbir şey silinmez</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Birlikte Geri Dönüşüm Kutusu'na taşınacak yerleri işaretleyin</value></data>
@@ -980,9 +990,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Insights_AfterTip" xml:space="preserve"><value>Üst çubuğun kehribar rengi kısmı işaretli yerlerin şu an kapladığı alandır; alt çubuk onlar silindikten sonraki sürücüdür.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} bir yıldan uzun süredir dokunulmamış · filtrelemek için bir aya veya banda tıklayın</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>En büyükler, bir yıl veya daha uzun süredir dokunulmamış</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>En büyük klasörler</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>taramanın herhangi bir yerinde</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>En büyük dosyalar</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Bu sürücüyü başka bir gün yeniden tarayın; bu kart arada neyin büyüdüğünü, küçüldüğünü ve ortaya çıktığını gösterir. Kaydedilmiş bir tarama da Tarama dosyası › Kaydedilmiş bir taramayla karşılaştır üzerinden karşılaştırılabilir.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>Büyüdü</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>Küçüldü</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Changes_SortTip" xml:space="preserve"><value>Bu sütuna göre sıralamak için tıklayın; sırayı çevirmek için yeniden tıklayın</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Gitti</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>karşılaştırılan taramada vardı, bunda yok</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Bu yöntem için görünmez</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>karşılaştırılan taramada vardı; bu taramayı yapan yöntem onu göremez, bu yüzden bir değişiklik değil</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} tane daha…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} değişti · {1:N0} değişmeyen gizlendi</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} öğe · {1:N0} değişti</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Changes_NoneOver" xml:space="preserve"><value>Hiçbir şey {0} üzerinde değişmedi.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Henüz karşılaştırılacak bir şey yok</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Değişiklikleri aç</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>En büyük uzantılar</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>ve her birinin çoğunun bulunduğu yer</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} tür</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} tane daha</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Haritayı filtrelemek için bir satıra tıklayın.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} yer daha</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>siz söyleyene kadar hiçbir şey silinmez</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} eski</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>bu ay {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>bu yıl {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>bir yıldır dokunulmamış {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>En büyükler</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Uzantılar</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Oyunlar</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1}, {2} oyun</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1}, 1 oyun</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Medya</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Görseller {0}, {1:N0} fotoğraf</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Ses {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Video {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} ekran görüntüsü {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>Görsellerin {0:N0} tanesi Screenshots klasörlerinde, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Geliştirici</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0}, {1} projede</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0}, {1} depoda</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>derleme çıktısı {0}, {1} klasörde</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>hepsi yeniden oluşturulabilir</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Yüklü paketler, depo geçmişi ve derleme çıktısı: bir yükleme ya da derleme bunları yeniden oluşturur. En büyükleri:</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>İndirilenler</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>en eskisi {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} zaten çalıştırdığınız yükleyici, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} zaten çıkarılmış arşiv, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>İndirilenler'de duran bir yükleyici çalıştırılmış sayılır; yanında aynı adlı klasör bulunan bir arşiv çıkarılmış sayılır. En büyük dosyalar:</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Sabit bağlantılar</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>bir kez sayıldı</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} bağlantı</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} bağlantı, çoğu {1} içinde</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>bunları tam sayan bir araç sürücüyü olduğundan {0} daha dolu gösterir</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Sabit bağlantı, birden çok adı olan tek bir dosyadır. SpaceSharp onu bir kez sayar; Gezgin ve diğer araçların çoğu her adı sayar, bu yüzden toplamları daha yüksek çıkar. Tasarrufun çoğu şurada:</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Küçük ve boş</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>küme boşluğu</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>4 KB altında {0:N0} dosya</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} boş klasör</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>tek dosyalı {0:N0} klasör</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} dosya 4 KB'den küçük; {1} tutuyorlar ama disk tam kümeler ayırdığından {2} kadarı hiçbir aracın boşaltamayacağı boşluk. {3:N0} klasör boş.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Derin ve uzun</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Boş klasörler</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör, bunların içinde iç içe {1:N0} tane daha</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Bu taramada boş klasör yok.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} iç içe</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Tümünü seç</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Hiçbirini seçme</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} işaretli</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>İşaretlileri Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} boş klasör Geri Dönüşüm Kutusu'na taşındı</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Yinelenen dosyalar</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Nerede olursa olsun içeriği birebir aynı olan dosyalar. Önce boyut, sonra ilk baytlar, sonra dosyanın tamamı; böylece yalnızca olası eşleşmeler okunur.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Şundan küçük dosyaları yok say</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Yinelenenleri bul</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Boyuta göre gruplanıyor…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>İlk baytlar karşılaştırılıyor: {0:N0} / {1:N0} · {2} okundu</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Dosyalar tamamen okunuyor: {0:N0} / {1:N0} · {2} okundu</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} küme · {1:N0} fazla kopya · {2} gidebilir</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>{0} üzerindeki dosyalar arasında yinelenen yok.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Her kümenin ilkini tut</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Her kümenin en yenisini tut</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Tüm işaretleri kaldır</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} kopya · her biri {1}</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} işaretli · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>İşaretlileri Geri Dönüşüm Kutusu'na taşı</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} kümede her kopya işaretli, onlardan geriye hiçbir şey kalmayacak.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} yinelenen dosya Geri Dönüşüm Kutusu'na taşındı, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Boş klasörleri gözden geçir…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Yinelenenler</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>henüz aranmadı</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>İçeriği aynı olan dosyaları bulur ve her birinden birini tutmanızı sağlar</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Yinelenenleri bul…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Yalnızca boyutu başka bir dosyayla aynı olan dosyaları okur, bu yüzden çoğu sürücüde arama hızlıdır. Sabit bağlantılar aynı dosyadır ve sayılmaz.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} küme</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} fazla kopya</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>Karar için {0} okundu</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>gidebilir</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Kullanılan boyut sınırıyla yinelenen bulunamadı.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} kopya</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} derin</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>260 karakteri aşan {0:N0} yol</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>En derin klasör, kökün {0} seviye altında:</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} yol klasik 260 karakter sınırını aşıyor; en uzunları:</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} karakter</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Kaydedilmiş bir taramayla karşılaştır…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} yeni dosya</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>ağaç yönetici yardımcısından alınıyor</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Bu sürüm</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Farklı tarama türleri</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>O tarama bundan ({1}) farklı bir yolla ({0}) yapıldı. Yalnızca bir yöntemin gördüğü dosyalar, örneğin korumalı sistem klasörleri, ve bir yöntemin bir kez, diğerinin tam saydığı sabit bağlantılar gitmiş, yeni, büyümüş veya küçülmüş olarak görünecek.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Yine de karşılaştır</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Ayna, ayna</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>O dosya bu taramanın kendi kaydı. Bir taramayla kendisi arasında, ne kadar dikkatli bakarsak bakalım, hiçbir şey değişemez. Gerçekten nelerin değiştiğini görmek için daha önceki bir taramayı seçin.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Başarım açıldı</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>Sürücüye kendisinden bu yana nelerin değiştiği soruldu. Sürücü, bir sürücü olarak, hiçbir şey söylemedi.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Başarımlar</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Bazıları bir tarama, bazıları bir yıl ister. Hiçbirinin bir değeri yok; olay da bu.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} / {1} açıldı</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Kilitli</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Kilitli. Nasıl kazanıldığı, kazanana kadar sır olarak kalır.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tüm başarımlar açıldı</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Hepsi bu kadardı. Uygulamanın dağıtacak bir şeyi kalmadı; bundan sonra size sadece diskinizi gösterecek.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Ayna, ayna</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Sürücüye kendisinden bu yana nelerin değiştiği soruldu. Sürücü, bir sürücü olarak, hiçbir şey söylemedi.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Bir sürücünün tamamı dosya tablosundan beş saniyeden kısa sürede okundu.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Uzun yol</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Dosya tablosu hemen oradayken bir sürücünün tamamı klasör klasör dolaşıldı. Manzaralı rota seçildi.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Gece vardiyası</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Gece iki ile beş arasında bir tarama başlatıldı.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Ansiklopedi</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Bir milyondan fazla dosya içeren bir tarama.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Derin dalış</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Yirmi klasörden derin bir yol bulundu. Klasörlerinizin klasörleri var.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Terabayt kulübü</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Bir terabayt veya daha büyük bir sürücü tarandı.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Müdavim</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Aynı sürücü veya klasör on kez tarandı.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Nefes alma payı</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Bir sürücü iki tarama arasında %10'dan az boştan %25'ten fazla boşa çıktı.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Bahar temizliği</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Aynı sürücünün iki taraması arasında 50 GB'tan fazla yer açıldı.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Yer yok</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Boş alanı %1 veya daha az olan bir sürücü tarandı. Handa yer kalmadı.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>İstifçi</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Tek bir klasörde on binden fazla dosya.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Balina</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>100 GB'tan büyük tek bir dosya.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Aynalı salon</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Sabit bağlantılar bir sürücüde 10 GB'tan fazla yer kazandırdı.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Toz</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>On yıldan uzun süredir kimsenin dokunmadığı bir dosya bulundu.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Hiçbir şey olmadı</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Aralarında en az bir hafta olan ve bir megabayttan az değişiklik içeren iki tarama.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Beklenmedik gelişme</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>En büyük klasör artık son taramadaki klasör değil.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Turist</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>Harita, İçgörüler ve Değişiklikler tek oturumda ziyaret edildi.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Çok dilli</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Dil üç kez değiştirildi. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Arkeolog</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Bir yıldan eski kaydedilmiş bir tarama açıldı.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Koleksiyoncu</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Diğer tüm başarımlar açıldı. Bulunacak bir şey kalmadı; uygulamanın amacı da bu.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Farklı yapılmış ({0} ile {1}): farklar yalnızca bir yöntemin gördüğü dosyaları içerir.</value></data>
 </root>

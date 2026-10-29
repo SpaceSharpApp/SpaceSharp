@@ -121,6 +121,17 @@
 
 {1}</value></data>
   <data name="Delete_Title" xml:space="preserve"><value>Déplacer vers la Corbeille</value></data>
+  <data name="Main_DeletePermanently" xml:space="preserve"><value>Supprimer définitivement</value></data>
+  <data name="Main_DeletePermanentlyTip" xml:space="preserve"><value>Contourne la Corbeille et atteint les chemins trop longs pour l'Explorateur. Irréversible.</value></data>
+  <data name="Delete_PermanentTitle" xml:space="preserve"><value>Supprimer définitivement ?</value></data>
+  <data name="Delete_PermanentQuestion" xml:space="preserve"><value>{0} sera supprimé pour de bon, sans passer par la Corbeille. C'est ainsi qu'on retire les dossiers que l'Explorateur ne peut pas ouvrir, et c'est irréversible.
+
+{1}</value></data>
+  <data name="Delete_PermanentButton" xml:space="preserve"><value>Supprimer pour de bon</value></data>
+  <data name="Status_DeletedForGood" xml:space="preserve"><value>{0} éléments supprimés pour de bon, {1}</value></data>
+  <data name="Insights_PathRepeats" xml:space="preserve"><value>{0} se répète {1:N0} fois, imbriqué en lui-même.</value></data>
+  <data name="Insights_DeleteRepeats" xml:space="preserve"><value>Supprimer les répétitions…</value></data>
+  <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Garde la première copie et supprime les {0:N0} imbriquées en dessous, à partir de {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows l'a ignoré (en cours d'utilisation, ou trop gros pour la Corbeille)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>le chemin est trop long pour la Corbeille</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>accès refusé</value></data>
@@ -221,6 +232,7 @@
   <data name="Key_OpenScan" xml:space="preserve"><value>Ouvrir une analyse enregistrée</value></data>
   <data name="Key_Pan" xml:space="preserve"><value>Déplacer la vue en zoom</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Panneau des plus gros fichiers, dossiers et types</value></data>
+  <data name="Key_Achievements" xml:space="preserve"><value>Succès</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Propriétés Windows de l'élément sélectionné</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Analyser à nouveau</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Fermer l'analyse et revenir à l'écran d'accueil</value></data>
@@ -716,6 +728,7 @@
   <data name="KeepScans_DeletedMany" xml:space="preserve"><value>{0} analyses enregistrées supprimées</value></data>
   <data name="KeepScans_Freed" xml:space="preserve"><value>{0} libérés dans le dossier des analyses.</value></data>
   <data name="KeepScans_AfterDelete" xml:space="preserve"><value>La carte à l'écran reste ouverte. La prochaine analyse d'un lecteur ou d'un dossier n'aura rien à comparer tant qu'une nouvelle analyse n'en sera pas enregistrée.</value></data>
+  <data name="KeepScans_AfterDeleteCompared" xml:space="preserve"><value>La carte à l'écran reste ouverte, mais la comparaison qu'elle montrait est fermée, puisque l'analyse de référence a disparu. La prochaine analyse d'un disque ou d'un dossier n'aura rien à comparer tant qu'une nouvelle analyse n'en est pas enregistrée.</value></data>
   <data name="KeepScans_LockedOne" xml:space="preserve"><value>Un fichier est en cours d'utilisation et a été conservé ; il sera supprimé la prochaine fois.</value></data>
   <data name="KeepScans_LockedMany" xml:space="preserve"><value>{0} fichiers sont en cours d'utilisation et ont été conservés ; ils seront supprimés la prochaine fois.</value></data>
   <data name="Exclude_Placeholder" xml:space="preserve"><value>Nom ou modèle, par ex. *.tmp</value></data>
@@ -961,13 +974,10 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Insights_ClearDetail" xml:space="preserve"><value>{0} emplacements · {1} cochés</value></data>
   <data name="Insights_Untouched" xml:space="preserve"><value>Non modifiés depuis un an</value></data>
   <data name="Insights_UntouchedDetail" xml:space="preserve"><value>{0} de l'analyse · {1:N0} fichiers</value></data>
-  <data name="Insights_BiggestFolder" xml:space="preserve"><value>Plus gros dossier</value></data>
-  <data name="Insights_BiggestFolderDetail" xml:space="preserve"><value>{0} · {1} · {2:N0} fichiers</value></data>
   <data name="Insights_SinceLast" xml:space="preserve"><value>Depuis la dernière analyse</value></data>
   <data name="Insights_SinceLastDetail" xml:space="preserve"><value>{0} · {1:N0} nouveaux fichiers</value></data>
   <data name="Insights_NoBaseline" xml:space="preserve"><value>Aucune analyse antérieure</value></data>
   <data name="Insights_NoBaselineHint" xml:space="preserve"><value>Analysez à nouveau un autre jour pour voir ce qui a changé</value></data>
-  <data name="Insights_TypesSub" xml:space="preserve"><value>{0} types · cliquez sur une ligne pour filtrer la carte</value></data>
   <data name="Insights_TypesReading" xml:space="preserve"><value>{0} représentent {1} de l'analyse, surtout sous {2}. Puis {3} avec {4}.</value></data>
   <data name="Insights_ClearSub" xml:space="preserve"><value>{0} dans des emplacements généralement sans risque à vider · rien n'est supprimé sans votre accord</value></data>
   <data name="Insights_NoneChecked" xml:space="preserve"><value>Cochez les emplacements à mettre à la Corbeille ensemble</value></data>
@@ -980,9 +990,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Insights_AfterTip" xml:space="preserve"><value>La partie ambre de la barre du haut est ce qu'occupent aujourd'hui les emplacements cochés ; la barre du bas est le disque sans eux.</value></data>
   <data name="Insights_TimelineSub" xml:space="preserve"><value>{0} non modifiés depuis plus d'un an · cliquez sur un mois ou une bande pour filtrer</value></data>
   <data name="Insights_OldestLargest" xml:space="preserve"><value>Les plus gros, non modifiés depuis un an ou plus</value></data>
-  <data name="Insights_LargestFolders" xml:space="preserve"><value>Plus gros dossiers</value></data>
   <data name="Insights_AnywhereInScan" xml:space="preserve"><value>n'importe où dans l'analyse</value></data>
-  <data name="Insights_LargestFiles" xml:space="preserve"><value>Plus gros fichiers</value></data>
   <data name="Insights_NoBaselineLong" xml:space="preserve"><value>Analysez à nouveau ce lecteur un autre jour et cette carte montrera ce qui a grossi, rétréci et est apparu entre-temps. Une analyse enregistrée peut aussi être comparée depuis Fichier d'analyse › Comparer avec une analyse enregistrée.</value></data>
   <data name="Insights_Grew" xml:space="preserve"><value>A grossi</value></data>
   <data name="Insights_Shrank" xml:space="preserve"><value>A rétréci</value></data>
@@ -1010,6 +1018,8 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Changes_SortTip" xml:space="preserve"><value>Cliquer trie selon cette colonne ; cliquer encore inverse l'ordre</value></data>
   <data name="Changes_Gone" xml:space="preserve"><value>Disparu</value></data>
   <data name="Changes_GoneTip" xml:space="preserve"><value>était dans l'analyse comparée et n'est plus dans celle-ci</value></data>
+  <data name="Changes_Unseen" xml:space="preserve"><value>Invisible pour cette méthode</value></data>
+  <data name="Changes_UnseenTip" xml:space="preserve"><value>figurait dans l'analyse comparée ; la méthode de cette analyse ne peut pas le voir, ce n'est donc pas un changement</value></data>
   <data name="Changes_MoreRows" xml:space="preserve"><value>{0:N0} de plus…</value></data>
   <data name="Changes_Footer" xml:space="preserve"><value>{0:N0} modifiés · {1:N0} inchangés masqués</value></data>
   <data name="Changes_FooterAll" xml:space="preserve"><value>{0:N0} éléments · {1:N0} modifiés</value></data>
@@ -1018,8 +1028,96 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Changes_NoneOver" xml:space="preserve"><value>Rien n'a changé de plus de {0}.</value></data>
   <data name="Changes_NoCompare" xml:space="preserve"><value>Rien à comparer pour l'instant</value></data>
   <data name="Changes_OpenView" xml:space="preserve"><value>Ouvrir Changements</value></data>
-  <data name="Insights_Extensions" xml:space="preserve"><value>Plus grosses extensions</value></data>
-  <data name="Insights_ExtensionsSub" xml:space="preserve"><value>et où se trouve l'essentiel de chacune</value></data>
+  <data name="Insights_RowTypes" xml:space="preserve"><value>{0} types</value></data>
+  <data name="Insights_MoreTypes" xml:space="preserve"><value>{0} de plus</value></data>
+  <data name="Insights_ClickRowToFilter" xml:space="preserve"><value>Cliquez sur une ligne pour filtrer la carte.</value></data>
+  <data name="Insights_MorePlaces" xml:space="preserve"><value>{0} autres endroits</value></data>
+  <data name="Insights_NothingDeleted" xml:space="preserve"><value>rien n'est supprimé sans votre accord</value></data>
+  <data name="Insights_RowOld" xml:space="preserve"><value>{0} anciens</value></data>
+  <data name="Insights_FactThisMonth" xml:space="preserve"><value>ce mois-ci {0}</value></data>
+  <data name="Insights_FactThisYear" xml:space="preserve"><value>cette année {0}</value></data>
+  <data name="Insights_FactUntouched" xml:space="preserve"><value>intouchés depuis un an {0}, {1}</value></data>
+  <data name="Insights_RowLargest" xml:space="preserve"><value>Plus gros</value></data>
+  <data name="Insights_SegExtensions" xml:space="preserve"><value>Extensions</value></data>
+  <data name="Insights_RowGames" xml:space="preserve"><value>Jeux</value></data>
+  <data name="Insights_StoreGames" xml:space="preserve"><value>{0} {1} en {2} jeux</value></data>
+  <data name="Insights_StoreGamesOne" xml:space="preserve"><value>{0} {1} en 1 jeu</value></data>
+  <data name="Insights_RowMedia" xml:space="preserve"><value>Médias</value></data>
+  <data name="Insights_FactImages" xml:space="preserve"><value>Images {0}, {1:N0} photos</value></data>
+  <data name="Insights_FactAudio" xml:space="preserve"><value>Audio {0}</value></data>
+  <data name="Insights_FactVideo" xml:space="preserve"><value>Vidéo {0}</value></data>
+  <data name="Insights_FactScreenshots" xml:space="preserve"><value>{0:N0} captures d'écran {1}</value></data>
+  <data name="Insights_ScreenshotsNote" xml:space="preserve"><value>{0:N0} des images sont dans des dossiers Screenshots, {1}.</value></data>
+  <data name="Insights_RowDeveloper" xml:space="preserve"><value>Développement</value></data>
+  <data name="Insights_FactNodeModules" xml:space="preserve"><value>node_modules {0} dans {1} projets</value></data>
+  <data name="Insights_FactGit" xml:space="preserve"><value>.git {0} dans {1} dépôts</value></data>
+  <data name="Insights_FactBuild" xml:space="preserve"><value>sorties de build {0} dans {1} dossiers</value></data>
+  <data name="Insights_AllRebuildable" xml:space="preserve"><value>tout se régénère</value></data>
+  <data name="Insights_DeveloperExplain" xml:space="preserve"><value>Paquets installés, historique des dépôts et sorties de build : une installation ou un build les recrée. Les plus gros :</value></data>
+  <data name="Insights_RowDownloads" xml:space="preserve"><value>Téléchargements</value></data>
+  <data name="Insights_FactOldest" xml:space="preserve"><value>le plus ancien de {0}</value></data>
+  <data name="Insights_FactInstallers" xml:space="preserve"><value>{0} installateurs déjà exécutés, {1}</value></data>
+  <data name="Insights_FactExtracted" xml:space="preserve"><value>{0} archives déjà extraites, {1}</value></data>
+  <data name="Insights_DownloadsExplain" xml:space="preserve"><value>Un installateur compte comme exécuté quand il est dans Téléchargements ; une archive comme extraite quand un dossier du même nom est à côté. Les plus gros fichiers :</value></data>
+  <data name="Insights_RowHardLinks" xml:space="preserve"><value>Liens physiques</value></data>
+  <data name="Insights_CountedOnce" xml:space="preserve"><value>comptés une fois</value></data>
+  <data name="Insights_FactLinks" xml:space="preserve"><value>{0:N0} liens</value></data>
+  <data name="Insights_FactLinksMostly" xml:space="preserve"><value>{0:N0} liens, surtout dans {1}</value></data>
+  <data name="Insights_FactLinksFuller" xml:space="preserve"><value>un outil qui les compte en entier montre le lecteur {0} plus plein qu'il ne l'est</value></data>
+  <data name="Insights_HardLinksExplain" xml:space="preserve"><value>Un lien physique est un fichier sous plusieurs noms. SpaceSharp le compte une fois ; l'Explorateur et la plupart des autres outils comptent chaque nom, d'où leurs totaux plus élevés. Où se trouve l'essentiel de l'économie :</value></data>
+  <data name="Insights_RowSmall" xml:space="preserve"><value>Petits et vides</value></data>
+  <data name="Insights_OfSlack" xml:space="preserve"><value>de perte de clusters</value></data>
+  <data name="Insights_FactTiny" xml:space="preserve"><value>{0:N0} fichiers sous 4 Ko</value></data>
+  <data name="Insights_FactEmpty" xml:space="preserve"><value>{0:N0} dossiers vides</value></data>
+  <data name="Insights_FactSingle" xml:space="preserve"><value>{0:N0} dossiers à un seul fichier</value></data>
+  <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} fichiers font moins de 4 Ko ; ils contiennent {1} mais le disque attribue des clusters entiers, donc {2} sont perdus et aucun outil ne peut les libérer. {3:N0} dossiers sont vides.</value></data>
+  <data name="Insights_RowDeep" xml:space="preserve"><value>Profond et long</value></data>
+  <data name="Empty_Title" xml:space="preserve"><value>Dossiers vides</value></data>
+  <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} dossiers sans aucun fichier</value></data>
+  <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} dossiers sans aucun fichier, {1:N0} autres imbriqués dedans</value></data>
+  <data name="Empty_None" xml:space="preserve"><value>Aucun dossier vide dans cette analyse.</value></data>
+  <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} imbriqués</value></data>
+  <data name="Empty_SelectAll" xml:space="preserve"><value>Tout sélectionner</value></data>
+  <data name="Empty_SelectNone" xml:space="preserve"><value>Ne rien sélectionner</value></data>
+  <data name="Empty_Checked" xml:space="preserve"><value>{0:N0} cochés</value></data>
+  <data name="Empty_Delete" xml:space="preserve"><value>Déplacer les cochés vers la Corbeille</value></data>
+  <data name="Empty_Deleted" xml:space="preserve"><value>{0:N0} dossiers vides déplacés vers la Corbeille</value></data>
+  <data name="Dup_Title" xml:space="preserve"><value>Fichiers en double</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Des fichiers au contenu strictement identique, où qu'ils soient. La taille d'abord, puis les premiers octets, puis le fichier entier, pour ne lire que les correspondances probables.</value></data>
+  <data name="Dup_MinSize" xml:space="preserve"><value>Ignorer les fichiers sous</value></data>
+  <data name="Dup_Find" xml:space="preserve"><value>Chercher les doublons</value></data>
+  <data name="Dup_Stage1" xml:space="preserve"><value>Regroupement par taille…</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Comparaison des premiers octets : {0:N0} sur {1:N0} · {2} lus</value></data>
+  <data name="Dup_Stage3" xml:space="preserve"><value>Lecture des fichiers entiers : {0:N0} sur {1:N0} · {2} lus</value></data>
+  <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} groupes · {1:N0} copies en trop · {2} libérables</value></data>
+  <data name="Dup_NoneFound" xml:space="preserve"><value>Aucun doublon parmi les fichiers de plus de {0}.</value></data>
+  <data name="Dup_KeepFirst" xml:space="preserve"><value>Garder le premier de chaque</value></data>
+  <data name="Dup_KeepNewest" xml:space="preserve"><value>Garder le plus récent de chaque</value></data>
+  <data name="Dup_ClearTicks" xml:space="preserve"><value>Tout décocher</value></data>
+  <data name="Dup_Copies" xml:space="preserve"><value>{0:N0} copies · {1} chacune</value></data>
+  <data name="Dup_Checked" xml:space="preserve"><value>{0:N0} cochés · {1}</value></data>
+  <data name="Dup_Delete" xml:space="preserve"><value>Déplacer les cochés vers la Corbeille</value></data>
+  <data name="Dup_WholeSets" xml:space="preserve"><value>{0:N0} groupes ont toutes leurs copies cochées, il n'en restera donc rien.</value></data>
+  <data name="Dup_Deleted" xml:space="preserve"><value>{0:N0} fichiers en double déplacés vers la Corbeille, {1}</value></data>
+  <data name="Insights_ReviewEmpty" xml:space="preserve"><value>Passer en revue les dossiers vides…</value></data>
+  <data name="Insights_RowDuplicates" xml:space="preserve"><value>Doublons</value></data>
+  <data name="Insights_DupNotSearched" xml:space="preserve"><value>pas encore cherché</value></data>
+  <data name="Insights_DupFacts" xml:space="preserve"><value>Trouve les fichiers au contenu identique et vous laisse en garder un de chaque</value></data>
+  <data name="Insights_FindDuplicates" xml:space="preserve"><value>Chercher les doublons…</value></data>
+  <data name="Insights_DupExplain" xml:space="preserve"><value>Ne lit que les fichiers qui partagent leur taille avec un autre, la recherche est donc rapide sur la plupart des disques. Les liens physiques sont le même fichier et ne comptent pas.</value></data>
+  <data name="Insights_FactDupSets" xml:space="preserve"><value>{0:N0} groupes</value></data>
+  <data name="Insights_FactDupCopies" xml:space="preserve"><value>{0:N0} copies en trop</value></data>
+  <data name="Insights_FactDupRead" xml:space="preserve"><value>{0} lus pour trancher</value></data>
+  <data name="Insights_DupCouldGo" xml:space="preserve"><value>libérables</value></data>
+  <data name="Insights_DupNoneRow" xml:space="preserve"><value>Aucun doublon trouvé avec la taille minimale utilisée.</value></data>
+  <data name="Insights_DupCopiesOf" xml:space="preserve"><value>{0:N0} copies</value></data>
+  <data name="Insights_DeepNumber" xml:space="preserve"><value>{0} de profondeur</value></data>
+  <data name="Insights_LongPaths" xml:space="preserve"><value>{0:N0} chemins de plus de 260 caractères</value></data>
+  <data name="Insights_DeepestIs" xml:space="preserve"><value>Le dossier le plus profond, {0} niveaux sous la racine :</value></data>
+  <data name="Insights_LongestAre" xml:space="preserve"><value>{0:N0} chemins dépassent la limite classique de 260 caractères ; les plus longs :</value></data>
+  <data name="Insights_Chars" xml:space="preserve"><value>{0:N0} caractères</value></data>
+  <data name="Insights_CompareSaved" xml:space="preserve"><value>Comparer avec une analyse enregistrée…</value></data>
+  <data name="Insights_FactNew" xml:space="preserve"><value>{0:N0} nouveaux fichiers</value></data>
   <data name="Meta_MachineTranslated" xml:space="preserve"><value>true</value></data>
   <data name="Scan_Handover" xml:space="preserve"><value>réception de l'arborescence depuis l'assistant administrateur</value></data>
   <data name="About_GroupVersion" xml:space="preserve"><value>Cette version</value></data>
@@ -1039,10 +1137,56 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Dialog_CompareDifferentTitle" xml:space="preserve"><value>Types d'analyse différents</value></data>
   <data name="Dialog_CompareDifferentMessage" xml:space="preserve"><value>Cette analyse a été faite autrement ({0}) que celle-ci ({1}). Les fichiers qu'une seule méthode voit, comme les dossiers système protégés, et les liens physiques comptés une fois par une méthode et en entier par l'autre, apparaîtront comme disparus, nouveaux, agrandis ou réduits.</value></data>
   <data name="Dialog_CompareAnyway" xml:space="preserve"><value>Comparer quand même</value></data>
-  <data name="Dialog_CompareSelfTitle" xml:space="preserve"><value>Miroir, mon beau miroir</value></data>
   <data name="Dialog_CompareSelfMessage" xml:space="preserve"><value>Ce fichier est la sauvegarde de cette analyse elle-même. Rien ne peut changer entre une analyse et elle-même, si fort que l'on regarde. Choisissez une analyse antérieure pour voir ce qui a vraiment changé.</value></data>
   <data name="Dialog_AchievementUnlocked" xml:space="preserve"><value>Succès débloqué</value></data>
-  <data name="Dialog_ZeroXp" xml:space="preserve"><value>+0 XP</value></data>
-  <data name="Dialog_MirrorMirrorText" xml:space="preserve"><value>A demandé au disque ce qui avait changé depuis lui-même. Le disque, en bon disque, n'a rien dit.</value></data>
+  <data name="Ach_Title" xml:space="preserve"><value>Succès</value></data>
+  <data name="Ach_Intro" xml:space="preserve"><value>Certains demandent une analyse, d'autres une année. Aucun ne vaut rien, et c'est le but.</value></data>
+  <data name="Ach_Count" xml:space="preserve"><value>{0} sur {1} débloqués</value></data>
+  <data name="Ach_Locked" xml:space="preserve"><value>Verrouillé</value></data>
+  <data name="Ach_HiddenHint" xml:space="preserve"><value>Verrouillé. Comment l'obtenir reste secret jusqu'à ce que vous l'ayez.</value></data>
+  <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tous les succès débloqués</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>C'était le dernier. L'application n'a plus rien à distribuer ; désormais elle se contentera de vous montrer votre disque.</value></data>
+  <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Miroir, mon beau miroir</value></data>
+  <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>A demandé au disque ce qui avait changé depuis lui-même. Le disque, en bon disque, n'a rien dit.</value></data>
+  <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
+  <data name="Ach_Speedrun_Hint" xml:space="preserve"><value>Un lecteur entier lu depuis la table des fichiers en moins de cinq secondes.</value></data>
+  <data name="Ach_LongWayRound_Name" xml:space="preserve"><value>Le chemin des écoliers</value></data>
+  <data name="Ach_LongWayRound_Hint" xml:space="preserve"><value>Un lecteur entier parcouru dossier par dossier alors que la table des fichiers était là. Route panoramique.</value></data>
+  <data name="Ach_NightShift_Name" xml:space="preserve"><value>Équipe de nuit</value></data>
+  <data name="Ach_NightShift_Hint" xml:space="preserve"><value>Une analyse lancée entre deux et cinq heures du matin.</value></data>
+  <data name="Ach_Encyclopedia_Name" xml:space="preserve"><value>Encyclopédie</value></data>
+  <data name="Ach_Encyclopedia_Hint" xml:space="preserve"><value>Une analyse de plus d'un million de fichiers.</value></data>
+  <data name="Ach_DeepDive_Name" xml:space="preserve"><value>Plongée profonde</value></data>
+  <data name="Ach_DeepDive_Hint" xml:space="preserve"><value>Un chemin de plus de vingt dossiers de profondeur. Vos dossiers ont des dossiers.</value></data>
+  <data name="Ach_TerabyteClub_Name" xml:space="preserve"><value>Club du téraoctet</value></data>
+  <data name="Ach_TerabyteClub_Hint" xml:space="preserve"><value>Un lecteur d'un téraoctet ou plus analysé.</value></data>
+  <data name="Ach_Regular_Name" xml:space="preserve"><value>Habitué</value></data>
+  <data name="Ach_Regular_Hint" xml:space="preserve"><value>Le même lecteur ou dossier analysé dix fois.</value></data>
+  <data name="Ach_BreathingRoom_Name" xml:space="preserve"><value>Un peu d'air</value></data>
+  <data name="Ach_BreathingRoom_Hint" xml:space="preserve"><value>Un lecteur passé de moins de 10 % libres à plus de 25 % libres entre deux analyses.</value></data>
+  <data name="Ach_SpringCleaning_Name" xml:space="preserve"><value>Grand ménage</value></data>
+  <data name="Ach_SpringCleaning_Hint" xml:space="preserve"><value>Plus de 50 Go libérés entre deux analyses du même lecteur.</value></data>
+  <data name="Ach_FullHouse_Name" xml:space="preserve"><value>Complet</value></data>
+  <data name="Ach_FullHouse_Hint" xml:space="preserve"><value>Un lecteur analysé avec 1 % ou moins de libre. Plus de place à l'auberge.</value></data>
+  <data name="Ach_Hoarder_Name" xml:space="preserve"><value>Accumulateur</value></data>
+  <data name="Ach_Hoarder_Hint" xml:space="preserve"><value>Plus de dix mille fichiers dans un seul dossier.</value></data>
+  <data name="Ach_Whale_Name" xml:space="preserve"><value>Baleine</value></data>
+  <data name="Ach_Whale_Hint" xml:space="preserve"><value>Un seul fichier de plus de 100 Go.</value></data>
+  <data name="Ach_HallOfMirrors_Name" xml:space="preserve"><value>Galerie des glaces</value></data>
+  <data name="Ach_HallOfMirrors_Hint" xml:space="preserve"><value>Les liens physiques ont économisé plus de 10 Go sur un lecteur.</value></data>
+  <data name="Ach_Dust_Name" xml:space="preserve"><value>Poussière</value></data>
+  <data name="Ach_Dust_Hint" xml:space="preserve"><value>Un fichier que personne n'a touché depuis plus de dix ans.</value></data>
+  <data name="Ach_NothingHappened_Name" xml:space="preserve"><value>Rien ne s'est passé</value></data>
+  <data name="Ach_NothingHappened_Hint" xml:space="preserve"><value>Deux analyses à une semaine d'écart ou plus avec moins d'un mégaoctet de changement.</value></data>
+  <data name="Ach_PlotTwist_Name" xml:space="preserve"><value>Retournement</value></data>
+  <data name="Ach_PlotTwist_Hint" xml:space="preserve"><value>Le plus gros dossier n'est plus celui de la dernière analyse.</value></data>
+  <data name="Ach_Tourist_Name" xml:space="preserve"><value>Touriste</value></data>
+  <data name="Ach_Tourist_Hint" xml:space="preserve"><value>La carte, Aperçu et Changements visités dans la même session.</value></data>
+  <data name="Ach_Polyglot_Name" xml:space="preserve"><value>Polyglotte</value></data>
+  <data name="Ach_Polyglot_Hint" xml:space="preserve"><value>Langue changée trois fois. Hei. Hallo. Bonjour.</value></data>
+  <data name="Ach_Archaeologist_Name" xml:space="preserve"><value>Archéologue</value></data>
+  <data name="Ach_Archaeologist_Hint" xml:space="preserve"><value>Une analyse enregistrée de plus d'un an ouverte.</value></data>
+  <data name="Ach_Collector_Name" xml:space="preserve"><value>Collectionneur</value></data>
+  <data name="Ach_Collector_Hint" xml:space="preserve"><value>Tous les autres succès débloqués. Il ne reste rien à trouver, ce qui est le but de l'application.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Faites autrement ({0} contre {1}) : les différences incluent des fichiers qu'une seule méthode voit.</value></data>
 </root>

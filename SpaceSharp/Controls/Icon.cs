@@ -19,6 +19,8 @@ public sealed class Icon : Viewbox
     public static readonly StyledProperty<IBrush?> ForegroundProperty = TextElement.ForegroundProperty.AddOwner<Icon>();
     /// <summary>Stroke width in 24-unit grid units; 2 is the Lucide default.</summary>
     public static readonly StyledProperty<double> StrokeWidthProperty = AvaloniaProperty.Register<Icon, double>(nameof(StrokeWidth), 2.0);
+    /// <summary>True fills the geometry with the foreground instead of stroking it, for silhouettes that must read at small sizes.</summary>
+    public static readonly StyledProperty<bool> FilledProperty = AvaloniaProperty.Register<Icon, bool>(nameof(Filled));
 
     private readonly Path _path;
 
@@ -62,6 +64,24 @@ public sealed class Icon : Viewbox
     {
         get => GetValue(StrokeWidthProperty); set => SetValue(StrokeWidthProperty, value);
     }
+
+    /// <summary>True draws the glyph as a filled silhouette (holes cut where the path overlaps itself) instead of outlines.</summary>
+    public bool Filled
+    {
+        get => GetValue(FilledProperty); set => SetValue(FilledProperty, value);
+    }
+
+    /// <summary>Switches the path between stroked and filled when <see cref="Filled"/> or the foreground changes.</summary>
+    /// <param name="change">The property that changed.</param>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == FilledProperty || change.Property == ForegroundProperty || change.Property == StrokeWidthProperty)
+        {
+            _path.Fill = Filled ? Foreground : null;
+            _path.StrokeThickness = Filled ? 0 : StrokeWidth;
+        }
+    }
 }
 
 /// <summary>Looks up icon geometry by resource name.</summary>
@@ -77,10 +97,11 @@ public static class Icons
     /// <param name="size">Width and height in device-independent pixels.</param>
     /// <param name="foregroundKey">A theme brush resource key ("Text", "TextDim", "Accent") the stroke follows across theme changes, or
     /// null to inherit the parent's text color.</param>
+    /// <param name="filled">True draws the glyph as a filled silhouette; false strokes it.</param>
     /// <returns>A new <see cref="Icon"/>; never null.</returns>
-    public static Icon Make(string name, double size = 14, string? foregroundKey = null)
+    public static Icon Make(string name, double size = 14, string? foregroundKey = null, bool filled = false)
     {
-        var icon = new Icon { Glyph = Get(name), Width = size, Height = size, VerticalAlignment = VerticalAlignment.Center };
+        var icon = new Icon { Glyph = Get(name), Width = size, Height = size, VerticalAlignment = VerticalAlignment.Center, Filled = filled };
         if (foregroundKey is not null && Application.Current is { } app)
         {
             icon.Bind(Icon.ForegroundProperty, app.GetResourceObservable(foregroundKey));

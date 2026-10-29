@@ -91,12 +91,40 @@ public static class DriveKinds
     /// <returns>A key in Icons.axaml; Unknown shares the plain "Drive" icon with Hdd.</returns>
     public static string IconName(DriveKind kind) => kind switch
     {
-        DriveKind.Hdd => "Drive",
-        DriveKind.Ssd or DriveKind.Nvme => "Ssd",
-        DriveKind.Usb => "UsbStick",
-        DriveKind.Network => "Network",
-        DriveKind.Optical => "Disc",
-        _ => "Drive"
+        DriveKind.Hdd => "DriveHdd",
+        DriveKind.Ssd => "DriveSsd",
+        DriveKind.Nvme => "DriveNvme",
+        DriveKind.Usb => "DriveUsb",
+        DriveKind.Network => "DriveNetwork",
+        DriveKind.Optical => "DriveDisc",
+        _ => "DriveHdd"
+    };
+
+    /// <summary>The glyph Windows itself draws for a kind, from the Segoe Fluent Icons font (Segoe MDL2 Assets on Windows 10): HardDrive for every internal drive, USB, MapDrive for a network drive, StorageOptical for a disc.</summary>
+    /// <param name="kind">The detected kind; Unknown gets HardDrive.</param>
+    /// <returns>The one-character string to draw with <see cref="SystemIconFont"/>.</returns>
+    public static string SystemGlyph(DriveKind kind) => kind switch
+    {
+        DriveKind.Usb => "\uE88E",
+        DriveKind.Network => "\uE8CE",
+        DriveKind.Optical => "\uE958",
+        _ => "\uEDA2"
+    };
+
+    /// <summary>The Windows icon font family, with the Windows 10 name as the fallback.</summary>
+    public const string SystemIconFont = "Segoe Fluent Icons, Segoe MDL2 Assets";
+
+    /// <summary>The tile color for a kind: amber NVMe, green SSD, grey HDD, blue USB, purple network, orange optical.</summary>
+    /// <param name="kind">The detected kind; Unknown gets the HDD grey.</param>
+    /// <returns>An opaque color that reads with dark text in both themes.</returns>
+    public static Avalonia.Media.Color TintColor(DriveKind kind) => kind switch
+    {
+        DriveKind.Nvme => Avalonia.Media.Color.FromRgb(0xF5, 0xB8, 0x2E),
+        DriveKind.Ssd => Avalonia.Media.Color.FromRgb(0x9B, 0xC4, 0x6B),
+        DriveKind.Usb => Avalonia.Media.Color.FromRgb(0x61, 0xAF, 0xEF),
+        DriveKind.Network => Avalonia.Media.Color.FromRgb(0xA9, 0x8B, 0xD6),
+        DriveKind.Optical => Avalonia.Media.Color.FromRgb(0xE0, 0x9A, 0x5B),
+        _ => Avalonia.Media.Color.FromRgb(0x8B, 0x94, 0x9E)
     };
 
     /// <summary>The localized label for a kind, or null for Unknown.</summary>

@@ -368,12 +368,12 @@ public static class Palette
 
         return dark.Concat(light).ToList();
 
-        /// <summary>A built-in scheme from twelve folder colors; files are the folders lifted toward white.</summary>
-        /// <param name="name">The display name.</param>
-        /// <param name="folderHex">Twelve "#RRGGBB" strings in depth order, neighbors far apart on the wheel.</param>
-        /// <param name="fileTint">How far files are lifted toward white, 0..1.</param>
-        /// <param name="categories">The first category colors in enum order plus Other as the last entry; null derives all of them from the folder hues.</param>
-        /// <returns>The scheme, untagged; the caller sets its theme.</returns>
+        // A built-in scheme from twelve folder colors; files are the folders lifted toward white.
+        // name: The display name.
+        // folderHex: Twelve "#RRGGBB" strings in depth order, neighbors far apart on the wheel.
+        // fileTint: How far files are lifted toward white, 0..1.
+        // categories: The first category colors in enum order plus Other as the last entry; null derives all of them from the folder hues.
+        // Returns: The scheme, untagged; the caller sets its theme.
         ColorScheme FromList(string name, string[] folderHex, double fileTint, Color[]? categories = null)
         {
             Color[] folders = Hex(folderHex);
@@ -398,10 +398,10 @@ public static class Palette
                 Neutral);
         }
 
-        /// <summary>The same hex list moved a fraction toward white, for the light-theme twin of a dark palette.</summary>
-        /// <param name="hexes">"#RRGGBB" strings.</param>
-        /// <param name="whiteAmount">How far toward white, 0..1.</param>
-        /// <returns>New "#RRGGBB" strings in the same order.</returns>
+        // The same hex list moved a fraction toward white, for the light-theme twin of a dark palette.
+        // hexes: "#RRGGBB" strings.
+        // whiteAmount: How far toward white, 0..1.
+        // Returns: New "#RRGGBB" strings in the same order.
         static string[] Lift(string[] hexes, double whiteAmount) => hexes
             .Select(hex =>
             {

@@ -198,6 +198,8 @@ internal sealed class AppSettings
     {
         get; set;
     }
+    /// <summary>The Insights row left open, by its key ("Cleanup", "Type", ...); empty when every row is closed.</summary>
+    public string InsightsOpenRow { get; set; } = "Cleanup";
     /// <summary>True shows the hover tooltip over map boxes.</summary>
     public bool ShowTooltips { get; set; } = true;
     /// <summary>The Inspect window's last width in device-independent pixels; 0 or anything under its minimum uses the default.</summary>
@@ -260,6 +262,7 @@ internal sealed class AppSettings
         CheckForUpdates = defaults.CheckForUpdates;
         ShowSidePanel = defaults.ShowSidePanel;
         InsightsView = defaults.InsightsView;
+        InsightsOpenRow = defaults.InsightsOpenRow;
         FilterLayout = defaults.FilterLayout;
         ShowFilterRail = defaults.ShowFilterRail;
         ShowTooltips = defaults.ShowTooltips;

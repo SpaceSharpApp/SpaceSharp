@@ -8,8 +8,11 @@ namespace SpaceSharp.Services;
 /// <summary>Which kinds of item a filter lets through.</summary>
 public enum ItemKind
 {
+    /// <summary>Files and folders alike.</summary>
     Any,
+    /// <summary>Files only.</summary>
     Files,
+    /// <summary>Folders only.</summary>
     Folders
 }
 
