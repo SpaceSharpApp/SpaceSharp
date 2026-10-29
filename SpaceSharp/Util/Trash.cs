@@ -161,6 +161,7 @@ internal static class Trash
         private const int FOF_ALLOWUNDO = 0x0040;
         private const int FOF_WANTNUKEWARNING = 0x4000;
         private const int FOF_NORECURSEREPARSE = 0x8000;   // do not follow junctions or symlinks
+        private const int FOF_NOERRORUI = 0x0400;          // no dialogs on failure; the result code says what happened
 
         /// <summary>Win32 SHFILEOPSTRUCTW; pFrom is a double-null-terminated list.</summary>
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -235,14 +236,15 @@ internal static class Trash
             }
 
             var shellPaths = present.Select(ShellPath).ToList();
-            int batchResult = Send(shellPaths, out bool batchAborted);
-            if (batchResult == 0 && !batchAborted)
+            int batchResult = Send(shellPaths, out _, quiet: false);
+            if (batchResult == 0)
             {
+                // The shell did its job; what the user skipped in its dialogs (an item needing elevation, say) is still here and is reported as such, not retried, since a retry would ask again for every item.
                 error = Remaining(present, paths.Count);
                 return error is null;
             }
 
-            // retry one at a time
+            // The whole batch was refused, usually for one bad path: retry one at a time, quietly, so the codes name the culprits without a dialog each.
             var failed = new List<(string Path, int Code)>();
             foreach ((string? original, string? shellPath) in present.Zip(shellPaths))
             {
@@ -251,7 +253,7 @@ internal static class Trash
                     continue;
                 }
 
-                int itemResult = Send(new[] { shellPath }, out bool itemAborted);
+                int itemResult = Send(new[] { shellPath }, out bool itemAborted, quiet: true);
                 if (itemResult != 0)
                 {
                     failed.Add((original, itemResult));
@@ -280,16 +282,18 @@ internal static class Trash
         /// <summary>One SHFileOperation delete-to-bin call for a batch of paths.</summary>
         /// <param name="shellPaths">Paths already shortened where needed, joined with null separators for pFrom.</param>
         /// <param name="aborted">True when the shell skipped or the user cancelled part of the batch, even with a 0 result.</param>
+        /// <param name="quiet">True suppresses the shell's error dialogs, so a refused item fails with a code instead of a prompt.</param>
         /// <returns>The shell's result code; 0 on success.</returns>
-        private static int Send(IReadOnlyCollection<string> shellPaths, out bool aborted)
+        private static int Send(IReadOnlyCollection<string> shellPaths, out bool aborted, bool quiet)
         {
+            int flags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING | FOF_NORECURSEREPARSE | (quiet ? FOF_NOERRORUI : 0);
             // pFrom is a double-null-terminated list of null-separated paths.
             var operation = new SHFILEOPSTRUCT
             {
                 hwnd = IntPtr.Zero,
                 wFunc = FO_DELETE,
                 pFrom = string.Join("\0", shellPaths) + "\0\0",
-                fFlags = (ushort)(FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_WANTNUKEWARNING | FOF_NORECURSEREPARSE)
+                fFlags = (ushort)flags
             };
             int result = SHFileOperation(ref operation);
             aborted = operation.fAnyOperationsAborted;

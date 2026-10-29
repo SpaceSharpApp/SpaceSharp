@@ -1076,6 +1076,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Empty_Summary" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>파일이 없는 폴더 {0:N0}개, 그 안에 중첩된 폴더 {1:N0}개</value></data>
   <data name="Empty_None" xml:space="preserve"><value>이 스캔에는 빈 폴더가 없습니다.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows, Program Files, ProgramData 아래의 폴더는 처음에 선택되지 않습니다. 프로그램이 그 폴더가 있다고 가정하는 경우가 많고, 삭제하려면 하나씩 관리자 권한이 필요합니다.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>중첩 {0:N0}개</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>모두 선택</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>선택 해제</value></data>

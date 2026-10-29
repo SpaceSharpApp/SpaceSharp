@@ -1079,6 +1079,7 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} folders with no files in them</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} folders with no files in them, {1:N0} more nested inside those</value></data>
   <data name="Empty_None" xml:space="preserve"><value>No empty folders in this scan.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Folders under Windows, Program Files and ProgramData start unticked: programs often expect them to exist, and deleting them needs administrator permission for each one.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nested</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Select all</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Select none</value></data>

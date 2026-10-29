@@ -1078,6 +1078,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات، و{1:N0} أخرى متداخلة فيها</value></data>
   <data name="Empty_None" xml:space="preserve"><value>لا مجلدات فارغة في هذا الفحص.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>المجلدات تحت Windows وProgram Files وProgramData تبدأ غير محددة: البرامج تتوقع وجودها غالبًا، وحذف كل منها يتطلب إذن المسؤول.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} متداخلة</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>تحديد الكل</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>إلغاء التحديد</value></data>

@@ -1076,6 +1076,7 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} cartelle senza file</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} cartelle senza file, altre {1:N0} annidate dentro</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Nessuna cartella vuota in questa scansione.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Le cartelle sotto Windows, Program Files e ProgramData partono deselezionate: i programmi spesso si aspettano che esistano, ed eliminarle richiede l'autorizzazione di amministratore per ciascuna.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} annidate</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Seleziona tutto</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Deseleziona tutto</value></data>

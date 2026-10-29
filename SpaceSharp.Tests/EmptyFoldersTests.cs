@@ -48,4 +48,17 @@ public class EmptyFoldersTests
 
         Assert.Empty(EmptyFolders.Find(root));
     }
+
+    [Fact]
+    public void FoldersUnderProgramPlacesAreToldApart()
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode programs = TestTree.Dir("Program Files", root);
+        FsNode inside = TestTree.Dir("Empty", TestTree.Dir("Some App", programs));
+        FsNode mine = TestTree.Dir("Empty", TestTree.Dir("Projects", TestTree.Dir("me", TestTree.Dir("Users", root))));
+        TestTree.Finish(root);
+
+        Assert.True(EmptyFolders.IsProgramPlace(inside));
+        Assert.False(EmptyFolders.IsProgramPlace(mine));
+    }
 }

@@ -127,7 +127,12 @@ public sealed class EmptyFoldersWindow : Window
         _summary.Text = found.Count == 0
             ? Strings.Get("Empty_None")
             : nested == 0 ? Strings.Format("Empty_Summary", found.Count) : Strings.Format("Empty_SummaryNested", found.Count, nested);
-        _picks.AddRange(found.Select(entry => new Pick { Entry = entry }));
+        // Folders inside Windows, Program Files and ProgramData start unticked: programs often expect them, and deleting them needs administrator rights, which Windows asks for one folder at a time.
+        _picks.AddRange(found.Select(entry => new Pick { Entry = entry, Checked = !EmptyFolders.IsProgramPlace(entry.Folder) }));
+        if (found.Count > 0 && _picks.Any(pick => !pick.Checked))
+        {
+            _summary.Text += " " + Strings.Get("Empty_SystemHint");
+        }
         PickList.Refresh(_list, _picks);
         UpdateChecked();
     }

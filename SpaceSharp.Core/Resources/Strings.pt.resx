@@ -1076,6 +1076,7 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} pastas sem ficheiros</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} pastas sem ficheiros, mais {1:N0} aninhadas dentro delas</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Sem pastas vazias nesta análise.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>As pastas em Windows, Program Files e ProgramData começam desmarcadas: os programas costumam contar com elas, e eliminá-las pede permissão de administrador uma a uma.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} aninhadas</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Selecionar tudo</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Não selecionar nada</value></data>

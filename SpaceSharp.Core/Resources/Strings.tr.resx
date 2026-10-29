@@ -1076,6 +1076,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Empty_Summary" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör, bunların içinde iç içe {1:N0} tane daha</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Bu taramada boş klasör yok.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows, Program Files ve ProgramData altındaki klasörler başlangıçta işaretsizdir: programlar genellikle onların var olmasını bekler ve her birini silmek yönetici izni ister.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} iç içe</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Tümünü seç</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Hiçbirini seçme</value></data>

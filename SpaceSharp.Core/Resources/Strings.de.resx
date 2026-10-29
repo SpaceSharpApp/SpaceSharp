@@ -1076,6 +1076,7 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien, {1:N0} weitere darin verschachtelt</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Keine leeren Ordner in diesem Scan.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Ordner unter Windows, Program Files und ProgramData sind zunächst nicht markiert: Programme erwarten sie oft, und das Löschen braucht für jeden einzelnen Administratorrechte.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} verschachtelt</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Alle auswählen</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Keine auswählen</value></data>

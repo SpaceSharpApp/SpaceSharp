@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.6.0-F5B82E" alt="Version 2.6.0"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.6.1-F5B82E" alt="Version 2.6.1"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -227,7 +227,7 @@ dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push, on Windows and on Linux in six system languages. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
+The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
 
 ## Known limitations
 

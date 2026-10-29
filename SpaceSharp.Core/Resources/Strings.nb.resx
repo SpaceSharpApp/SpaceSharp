@@ -1077,6 +1077,7 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mapper uten filer</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mapper uten filer, {1:N0} til nøstet inni dem</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Ingen tomme mapper i denne skanningen.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Mapper under Windows, Program Files og ProgramData starter uten kryss: programmer forventer ofte at de finnes, og å slette dem krever administratortillatelse for hver enkelt.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} nøstet</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Velg alle</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Velg ingen</value></data>

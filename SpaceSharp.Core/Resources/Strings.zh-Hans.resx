@@ -1076,6 +1076,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件，其中还嵌套了 {1:N0} 个</value></data>
   <data name="Empty_None" xml:space="preserve"><value>此次扫描没有空文件夹。</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows、Program Files 和 ProgramData 下的文件夹默认不勾选：程序往往需要它们存在，而且删除每一个都需要管理员权限。</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>嵌套 {0:N0} 个</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>全选</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>全不选</value></data>

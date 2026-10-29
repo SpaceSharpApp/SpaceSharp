@@ -1076,6 +1076,7 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Empty_Summary" xml:space="preserve"><value>Папок без файлів: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Папок без файлів: {0:N0}, вкладених у них ще {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>У цьому скані немає порожніх папок.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Папки у Windows, Program Files і ProgramData спочатку не позначені: програми часто розраховують на їх наявність, а видалення кожної потребує дозволу адміністратора.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>Вкладених: {0:N0}</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Вибрати всі</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Зняти вибір</value></data>

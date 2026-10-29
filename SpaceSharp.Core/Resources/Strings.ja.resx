@@ -1076,6 +1076,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Empty_Summary" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個、その中に入れ子で {1:N0} 個</value></data>
   <data name="Empty_None" xml:space="preserve"><value>このスキャンに空のフォルダーはありません。</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Windows、Program Files、ProgramData 配下のフォルダーは最初はチェックされません。プログラムがその存在を前提にしていることが多く、削除には一つずつ管理者の許可が必要です。</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>入れ子 {0:N0} 個</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>すべて選択</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>選択解除</value></data>

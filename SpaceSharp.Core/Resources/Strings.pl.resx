@@ -1076,6 +1076,7 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Empty_Summary" xml:space="preserve"><value>Foldery bez plików: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Foldery bez plików: {0:N0}, zagnieżdżonych w nich: {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Brak pustych folderów w tym skanie.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Foldery w Windows, Program Files i ProgramData zaczynają jako odznaczone: programy często oczekują, że istnieją, a ich usunięcie wymaga uprawnień administratora dla każdego z osobna.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} zagnieżdżonych</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Zaznacz wszystko</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Odznacz wszystko</value></data>

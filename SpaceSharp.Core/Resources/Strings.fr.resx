@@ -1076,6 +1076,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} dossiers sans aucun fichier</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} dossiers sans aucun fichier, {1:N0} autres imbriqués dedans</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Aucun dossier vide dans cette analyse.</value></data>
+  <data name="Empty_SystemHint" xml:space="preserve"><value>Les dossiers sous Windows, Program Files et ProgramData ne sont pas cochés au départ : les programmes s'attendent souvent à les trouver, et leur suppression demande l'autorisation administrateur pour chacun.</value></data>
   <data name="Empty_Nested" xml:space="preserve"><value>{0:N0} imbriqués</value></data>
   <data name="Empty_SelectAll" xml:space="preserve"><value>Tout sélectionner</value></data>
   <data name="Empty_SelectNone" xml:space="preserve"><value>Ne rien sélectionner</value></data>
