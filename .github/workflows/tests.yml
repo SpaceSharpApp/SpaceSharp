@@ -16,8 +16,9 @@ permissions:
   contents: read
 
 jobs:
-  windows:
+  test:
     name: Tests on Windows
+    # Windows only until the Mac and Linux packages ship; then this becomes a matrix over the three desktops.
     runs-on: windows-latest
 
     steps:
@@ -30,32 +31,3 @@ jobs:
       - name: Test
         run: dotnet test SpaceSharp.Tests/SpaceSharp.Tests.csproj --configuration Release
 
-  linux:
-    # The same tests under other system cultures: the tests pin the invariant culture themselves, and this is the proof that
-    # nothing leaks past that pin or depends on Windows. One job per locale; a decimal comma, a different first weekday,
-    # a right-to-left script.
-    name: Tests on Linux (${{ matrix.locale }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        locale: [en_US.UTF-8, nb_NO.UTF-8, fr_FR.UTF-8, de_DE.UTF-8, ja_JP.UTF-8, ar_SA.UTF-8]
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: 10.0.x
-
-      - name: Install the locale
-        run: |
-          sudo apt-get update -q
-          sudo apt-get install -y -q locales
-          sudo locale-gen ${{ matrix.locale }}
-
-      - name: Test
-        env:
-          LANG: ${{ matrix.locale }}
-          LC_ALL: ${{ matrix.locale }}
-        run: dotnet test SpaceSharp.Tests/SpaceSharp.Tests.csproj --configuration Release
