@@ -12,6 +12,9 @@ The rest of the empty folder fix, the same afternoon. 2.6.1 stopped the prompt s
 - Both the empty folder and the duplicates window show a progress panel while they work ("Deleting empty folders… 4,200 of 23,223") with a Stop button that ends it between items, keeping what was already done, instead of looking frozen. The duplicates window moves its copies to the Recycle Bin two hundred at a time; the shell's own transfer window no longer appears, and a Cancel in a Windows prompt stops the rest instead of being retried one by one.
 - The empty folder window's header is title, numbers, one line on how the delete works, and three buttons: Select safe (what the list starts with), Select none, and Select all.
 
+### Under the hood
+- The documentation moved from the GitHub wiki to [docs.spacesharp.app](https://docs.spacesharp.app/). Its text now lives in the repository under `docs-src/`, so a docs change is a normal commit beside the code it describes; the site is built from it and kept outside the repository, like spacesharp.app. The wiki is now one page that points there. `tools/screenshots_wiki.ps1` is `tools/screenshots_docs.ps1` and writes into `docs-src/images`.
+
 ### Small things
 - The scanning card's clock reads "5.32 s" under ten seconds and "41.7 s" under a minute, instead of "0:05"; minutes and seconds from there. A four-second scan of a terabyte deserves the decimals.
 

@@ -1,14 +1,14 @@
-# Renders the wiki's pictures with the app itself, the way tools/screenshots.ps1 renders the README's: every scene is the
-# real window posed on the pretend PC (SpaceSharp.Core/Services/MockSystem.cs), captured off the screen. The scenes are
-# the WikiScenes list in SpaceSharp/MainWindow.Showcase.cs; the README's own scenes are rendered too, since the wiki
-# shows those pictures as well.
+# Renders the pictures of docs.spacesharp.app with the app itself, the way tools/screenshots.ps1 renders the README's:
+# every scene is the real window posed on the pretend PC (SpaceSharp.Core/Services/MockSystem.cs), captured off the
+# screen. The scenes are the WikiScenes list in SpaceSharp/MainWindow.Showcase.cs; the README's own scenes are rendered
+# too, since the docs show those pictures as well.
 #
-#   .\tools\screenshots_wiki.ps1                          everything into ..\SpaceSharp.wiki\images (the wiki clone beside this repo)
-#   .\tools\screenshots_wiki.ps1 -Out C:\path\to\images   somewhere else
-#   .\tools\screenshots_wiki.ps1 wiki-palettes,changes    just those
+#   .\tools\screenshots_docs.ps1                          everything into docs-src\images
+#   .\tools\screenshots_docs.ps1 -Out C:\path\to\images   somewhere else
+#   .\tools\screenshots_docs.ps1 wiki-palettes,changes    just those
 #
 # Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 900 window; the screen's scaling decides
-# the pixel size of the PNGs. Afterwards commit and push the wiki repository.
+# the pixel size of the PNGs. Afterwards commit docs-src\images.
 param(
     [string[]] $Scenes = @(),
     [string] $Out = "",
@@ -19,10 +19,10 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
 $project = Join-Path $root "SpaceSharp\SpaceSharp.csproj"
-if ($Out -eq "") { $Out = Join-Path (Split-Path $root -Parent) "SpaceSharp.wiki\images" }
+if ($Out -eq "") { $Out = Join-Path $root "docs-src\images" }
 if (-not (Test-Path $Out)) { New-Item -ItemType Directory -Path $Out | Out-Null }
 
-# the file each scene becomes, as the wiki pages reference them (README scenes keep the README's names)
+# the file each scene becomes, as the docs pages reference them (README scenes keep the README's names)
 $files = [ordered]@{
     none = "screenshot.png"; start = "shot-start.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; menu = "shot-menu.png"; settings = "shot-settings.png"; about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
@@ -56,4 +56,4 @@ foreach ($scene in $Scenes) {
     if ($proc) { $proc | Wait-Process -Timeout 60 }
     if (-not (Test-Path $target)) { Write-Warning "  nothing written for $scene" }
 }
-Write-Host "Done. Commit and push the wiki repository."
+Write-Host "Done. Commit docs-src\images."

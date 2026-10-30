@@ -20,6 +20,7 @@
 <p align="center">
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
   <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
+  <a href="https://docs.spacesharp.app/"><img src="https://img.shields.io/badge/Docs-docs.spacesharp.app-21262D?style=for-the-badge" alt="Documentation"></a>
   <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.6-21262D?style=for-the-badge" alt="What's new in 2.6"></a>
 </p>
 
@@ -227,7 +228,7 @@ dotnet run --project .\SpaceSharp\SpaceSharp.csproj
 dotnet test
 ```
 
-The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md).
+The app is `SpaceSharp` (Avalonia, drawn with Skia) on top of `SpaceSharp.Core` (plain .NET: the tree, the layout, scanning, scan files, strings, settings, looks). The NuGet dependencies are Avalonia and Velopack. `SpaceSharp.Tests` covers what does not need a screen; GitHub Actions runs them on every push. Releases are built and signed on the developer's PC with `installer\release.ps1`. How the scanner, layout, renderer, filter and updater work, and where to add a palette, a file type or a translation, is in [DEVELOPING.md](DEVELOPING.md). Every screen, setting and shortcut is described at [docs.spacesharp.app](https://docs.spacesharp.app/).
 
 ## Known limitations
 

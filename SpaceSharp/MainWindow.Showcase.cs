@@ -18,7 +18,7 @@ public partial class MainWindow
     /// <summary>The README's scenes, each a screen or dialog posed on the pretend PC; <c>--scene &lt;name&gt;</c> shows one, <c>--shot &lt;file&gt;</c> also captures it.</summary>
     public static readonly string[] Scenes = { "none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates" };
 
-    /// <summary>The wiki's pictures (tools/screenshots_wiki.ps1): one screen or state each, on top of the README scenes.</summary>
+    /// <summary>The docs site's pictures (tools/screenshots_docs.ps1): one screen or state each, on top of the README scenes.</summary>
     public static readonly string[] WikiScenes =
     {
         "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
@@ -141,7 +141,7 @@ public partial class MainWindow
                 await Settle();
                 dialog = LastOwned();
                 break;
-            // ---- the wiki's scenes
+            // ---- the docs site's scenes
             case "wiki-colorby-top":
                 ColorCombo.SelectedIndex = 0;
                 break;

@@ -6,10 +6,10 @@ name: Tests
 on:
   push:
     branches: [main]
-    paths-ignore: ['docs/**', '**.md', 'tools/**']
+    paths-ignore: ['docs/**', 'docs-src/**', '**.md', 'tools/**']
   pull_request:
     branches: [main]
-    paths-ignore: ['docs/**', '**.md', 'tools/**']
+    paths-ignore: ['docs/**', 'docs-src/**', '**.md', 'tools/**']
   workflow_dispatch:
 
 permissions:
