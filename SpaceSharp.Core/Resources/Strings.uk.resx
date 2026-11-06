@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Колір за</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Папка верхнього рівня: один відтінок на папку верхнього рівня, світліший з кожним рівнем усередині. Глибина папки: інший колір на кожному рівні. Тип файлу: файли забарвлено за типом.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Підтверджувати переміщення до Кошика</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Запитувати перед видаленням. Видалені елементи завжди можна відновити з Кошика.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Запитувати перед видаленням. Видалені елементи завжди можна відновити з кошика. Для елементів у теках Windows, програм, застосунків та ігор запит з'являється завжди.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Приховувати небезпечні порожні папки</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Показує лише порожні папки, які явно ваші. Ті, що у Windows, Program Files, ProgramData, AppData та папках ігор чи збірок, на які часто розраховують програми, до списку не потрапляють зовсім. Вимкнено: вони показуються непозначеними, з попередженням при позначенні.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Власні палітри</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 сканування</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>Сканувань: {0}</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Спочатку нові</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Усе інше</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>Зайнято {0}% · вільно {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлів: {0}</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Від часу цього сканування диск заповнився на {0}. Проскануйте знову, щоб побачити, куди поділося місце.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Цього року</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>Від 1 до 3 років</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Старіші</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Найдавніша зміна: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Ці {0} становлять {1} папки. Решта файлів ({2:N0}) ділять {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Найстаріша зміна {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} цієї папки — це одне: {1} розміром {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} на диску</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} від {1}, її єдина папка</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Переважно {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Переважно {0} ({1}) і {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Суміш: {0} ({1}), {2} ({3}) і {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>медіанний файл {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Остання зміна {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Змінено {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} без змін понад рік</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>без змін з останнього сканування</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>збільшився на {0} з останнього сканування</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>зменшився на {0} з останнього сканування</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Ach_Locked" xml:space="preserve"><value>Закрито</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Закрито. Як його отримати, залишиться секретом, доки ви його не отримаєте.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Усі досягнення відкрито</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Це були всі. Застосунку більше нічого роздавати, тож далі він просто показуватиме вам ваш диск.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Це були всі. Застосунку більше нічого роздавати, тож відтепер він просто показуватиме ваш диск. Ну, одне все ж є: у Налаштування › Вигляд з'явилася тема Золото.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Дзеркальце, дзеркальце</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Запитали в диска, що змінилося від нього самого. Диск, як і належить диску, промовчав.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Спідран</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Колекціонер</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Відкрито всі інші досягнення. Шукати більше нічого, і в цьому суть застосунку.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Виконано по-різному ({0} і {1}): відмінності включають файли, які бачить лише один метод.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>У теці програми: {0:N0} з них, у Windows, Program Files, ProgramData, AppData або в теці гри чи збірки. Програма, якій вони потрібні, перестане працювати, доки їх не відновити з кошика.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>У теці програми: {0:N0} з них, у Windows, Program Files, ProgramData, AppData або в теці гри чи збірки. Програма, якій вони потрібні, перестане працювати, і кошика, з якого їх можна повернути, не буде.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>У теці програми: {0:N0} з позначених копій, у Windows, Program Files, ProgramData, AppData або в теці гри чи збірки. Програма, якій потрібна її копія, перестане працювати. Залиште їх і позначте копії в інших місцях.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>Позначено: {0:N0} · {1} · {2:N0} у теках програм</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Позначає решту копій у кожному наборі. Копії в теках Windows, програм, застосунків та ігор лишаються непозначеними.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>тека програми</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Остаточне видалення…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} з {1:N0} елементів</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Очистити кошик на {1}? {0}, що в ньому, буде видалено остаточно; після цього нічого не відновити.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Очистити кошик</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Елемент</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Показати решту {0:N0} ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Близнюки</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Пошук дублікатів, зайві копії в якому займають понад гігабайт. Той самий файл, знову і знову.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Лад</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Тисяча або більше порожніх тек видалені за один раз. У них нічого не було, а тепер у них нічого немає деінде.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Передумав</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Натиснуто «Скасувати» під час видалення після примітки про теки програм. Примітка зробила свою справу.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Господар</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Очищено щось із «Можна безпечно очистити». Кеші повернуться, але поки що було приємно.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Художник</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Збережено власну палітру. Вбудованих виявилося замало, і це справедливо.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Золото</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Дотримуватися налаштування Windows або завжди використовувати світлу чи темну. Золото ваше: усі досягнення відкриті, і застосунок одягнений відповідно, зі своєю палітрою мапи.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Дванадцять металів від латуні до рожевого золота, для теми Золото</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>Типів: {0:N0}</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Тека з {0:N0} файлами в {1:N0} теках, {2:N0} з них просто всередині.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Тека з {0:N0} файлами, усі просто всередині.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Займає {0} і {1} від {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Займає {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Ще {0:N0} типів ділять {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Медіанний файл {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} змінилося цього місяця; {1} не чіпали понад рік.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Тека або файл</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Розмір</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Частка</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Файли</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Змінено</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Тип</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Файл</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>У</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Найбільші файли</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} з {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Решта {0:N0} файлів</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>Ще {0:N0}</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>ці {0:N0} становлять {1} теки</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} теки — одна річ</value></data>
 </root>

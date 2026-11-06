@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.6.2-F5B82E" alt="Version 2.6.2"></a>
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.7.0-F5B82E" alt="Version 2.7.0"></a>
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
@@ -21,7 +21,7 @@
   <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
   <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
   <a href="https://docs.spacesharp.app/"><img src="https://img.shields.io/badge/Docs-docs.spacesharp.app-21262D?style=for-the-badge" alt="Documentation"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.6-21262D?style=for-the-badge" alt="What's new in 2.6"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-2.7-21262D?style=for-the-badge" alt="What's new in 2.7"></a>
 </p>
 
 <p align="center">
@@ -90,6 +90,10 @@ One portable `.exe`, or an installer that updates itself. Free, open source, cod
 | **Twenty-four palettes, twelve looks, and your own** | Twelve palettes for the dark theme, twelve for the light one, twelve hues each, and six looks per theme for the window itself. The palette editor is one list of colors you can type into, with a picker, contrast checks and a sample map. |
 | **Cleans up safely** | Everything goes to the Recycle Bin and the map updates without a rescan. |
 | **Knows your keyboard** | The shortcuts window draws your keyboard (QWERTY, Nordic, QWERTZ, AZERTY or Dvorak, Mac keys on a Mac) with the keys SpaceSharp uses lit up. |
+
+### New in 2.7
+
+Every delete in the app now follows the rules written after the 2.6.0 empty folder incident: progress and a Stop button for the map's deletes, a red note that always asks when a selection touches Windows, program, app or game folders, a duplicates window that never ticks a program-folder copy by itself, and an Empty the Recycle Bin that asks with the size. The delete questions list what goes as rows with name, folder and size. The live map no longer fades in boxes that were already there. Inspect is rewritten as a wider window with a card of sentences over tables for where the space is, by type, by age and the largest files, and the start screen's last-scan card has a strip of the drive's largest folders along its foot. Five new achievements make twenty-six, and collecting every one unlocks a Gold theme. The whole story is in the [changelog](CHANGELOG.md).
 
 ### New in 2.6
 

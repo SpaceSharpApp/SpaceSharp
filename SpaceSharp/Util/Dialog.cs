@@ -68,7 +68,7 @@ internal static class Dialog
     /// <summary>The scrolling card that shows a dialog's longer text.</summary>
     /// <param name="details">The text, such as a path list or an exception message; null or blank gives no card.</param>
     /// <returns>The card, or null when there is nothing to show.</returns>
-    private static Border? DetailsCard(string? details)
+    internal static Border? DetailsCard(string? details)
     {
         if (string.IsNullOrWhiteSpace(details))
         {
@@ -82,6 +82,25 @@ internal static class Dialog
             Margin = new Thickness(0, 6, 0, 0),
             Child = new ScrollViewer { Content = body, MaxHeight = 180, HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled }
         };
+    }
+
+    /// <summary>A note in a red frame with a warning icon, for the risky part of a question: the count of items in program places, say.</summary>
+    /// <param name="host">The window the note is shown in; its Danger brush frames the note.</param>
+    /// <param name="text">The note, wrapped.</param>
+    /// <returns>The framed note.</returns>
+    internal static Border WarningCard(Control host, string text)
+    {
+        var note = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(12, 9) };
+        note.Bind(Border.BorderBrushProperty, host.GetResourceObservable("Danger"));
+        var row = new DockPanel();
+        Icon icon = Icons.Make("Warning", 16, "Danger");
+        icon.VerticalAlignment = VerticalAlignment.Top;
+        icon.Margin = new Thickness(0, 1, 10, 0);
+        DockPanel.SetDock(icon, Dock.Left);
+        row.Children.Add(icon);
+        row.Children.Add(new TextBlock { Text = text, FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 });
+        note.Child = row;
+        return note;
     }
 
     /// <summary>A card with a message under it and one primary button, no badge or heading: for a dialog whose card is the point, such as the self-compare joke.</summary>

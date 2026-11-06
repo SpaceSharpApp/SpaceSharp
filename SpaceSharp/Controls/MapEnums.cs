@@ -39,6 +39,7 @@ public enum MapDensity
 /// <param name="Branch">Index of the top-level folder this item belongs to (0 for the root).</param>
 /// <param name="FlushRight">The box ends at its container's right content edge and draws no grid line there.</param>
 /// <param name="FlushBottom">Same for the bottom edge.</param>
+/// <param name="GroupLevel">0 outside a group; a group box is 1, a group inside a group 2, and their members carry their group's level.</param>
 public readonly record struct TreemapItem(
     FsNode Node,
     Rect Bounds,
@@ -47,7 +48,8 @@ public readonly record struct TreemapItem(
     FsNode? ChainTop,
     int Branch,
     bool FlushRight = true,
-    bool FlushBottom = true);
+    bool FlushBottom = true,
+    int GroupLevel = 0);
 
 /// <summary>Rectangle helpers for the map; an empty (zero-size) rectangle stands for "nothing to draw".</summary>
 internal static class Rects

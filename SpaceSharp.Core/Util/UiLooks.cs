@@ -45,6 +45,9 @@ public static class UiLooks
     /// <summary>The look applied on the light theme when none is chosen or the chosen one is gone.</summary>
     public const string DefaultLight = "Paper";
 
+    /// <summary>The look of the Gold theme, the one Collector unlocks: dark, warm, gilt text. Not in <see cref="All"/>; it belongs to no picker.</summary>
+    public static readonly UiLook Gold = new("Gold", true, "#241A06", "#33250A", "#4A360F", "#5C4414", "#6F5319", "#A17E2C", "#2E2108", "#FFF3C4", "#E6CB78", "#241A06");
+
     /// <summary>Every look, dark ones first, in the order the Settings pickers show them.</summary>
     public static readonly IReadOnlyList<UiLook> All = new[]
     {

@@ -7,12 +7,12 @@
 #   .\tools\screenshots_docs.ps1 -Out C:\path\to\images   somewhere else
 #   .\tools\screenshots_docs.ps1 wiki-palettes,changes    just those
 #
-# Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 900 window; the screen's scaling decides
+# Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 1200 window (the window is this tall so the Inspect window fits inside it); the screen's scaling decides
 # the pixel size of the PNGs. Afterwards commit docs-src\images.
 param(
     [string[]] $Scenes = @(),
     [string] $Out = "",
-    [string] $Size = "1600x900",
+    [string] $Size = "1600x1200",
     [string] $Configuration = "Release"
 )
 

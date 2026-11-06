@@ -24,13 +24,15 @@ public sealed class InspectSummary
     /// <param name="Category">The category, or null for a slice that is not a category.</param>
     /// <param name="Bytes">The bytes of files in that category by <see cref="Measure"/>.</param>
     /// <param name="Share">Its fraction of <see cref="Size"/>, 0 to 1.</param>
-    public sealed record Slice(string Label, FileCategory? Category, long Bytes, double Share);
+    /// <param name="Files">How many files are in that category.</param>
+    public sealed record Slice(string Label, FileCategory? Category, long Bytes, double Share, int Files = 0);
 
     /// <summary>One age band's share of the dated bytes.</summary>
     /// <param name="Bucket">Which age range this is.</param>
     /// <param name="Bytes">The bytes of files last written in that range.</param>
     /// <param name="Share">Its fraction of the dated bytes (files with a real write time), 0 to 1; the four bands sum to 1.</param>
-    public sealed record AgeBand(AgeBucket Bucket, long Bytes, double Share);
+    /// <param name="Files">How many files were last written in that range.</param>
+    public sealed record AgeBand(AgeBucket Bucket, long Bytes, double Share, int Files = 0);
 
     /// <summary>How long ago a file was last written: under 30 days, under a year, under three years, or older; see <see cref="BucketFor"/>.</summary>
     public enum AgeBucket
@@ -141,6 +143,12 @@ public sealed class InspectSummary
         get;
     }
 
+    /// <summary>The largest single files inside, largest first, named relative to the inspected folder; empty for a single file.</summary>
+    public IReadOnlyList<Row> LargestFiles
+    {
+        get;
+    }
+
     /// <summary>Bytes and files not covered by <see cref="Largest"/>.</summary>
     public long RemainderBytes
     {
@@ -183,7 +191,8 @@ public sealed class InspectSummary
     /// <param name="measure">File size or size on disk; every byte figure except <see cref="Logical"/> and <see cref="Allocated"/> follows it.</param>
     /// <param name="largestCount">How many rows <see cref="Largest"/> holds at most; 0 or less gives none.</param>
     /// <param name="nowUtc">The moment ages are measured from; null uses the current UTC time, tests pass a fixed value.</param>
-    public InspectSummary(IReadOnlyList<FsNode> nodes, FsNode? root, SizeMeasure measure, int largestCount = 5, DateTime? nowUtc = null)
+    /// <param name="largestFileCount">The most rows in <see cref="LargestFiles"/>.</param>
+    public InspectSummary(IReadOnlyList<FsNode> nodes, FsNode? root, SizeMeasure measure, int largestCount = 5, DateTime? nowUtc = null, int largestFileCount = 5)
     {
         Nodes = nodes.Where(node => node.IsReal).ToList();
         Measure = measure;
@@ -250,6 +259,14 @@ public sealed class InspectSummary
         MedianFileBytes = Median(files.Select(file => file.SizeFor(measure)));
 
         Largest = FindLargest(largestCount);
+        LargestFiles = Single is { IsDirectory: true } folderForFiles && largestFileCount > 0
+            ? files.Where(file => file.SizeFor(measure) > 0)
+                .OrderByDescending(file => file.SizeFor(measure))
+                .ThenBy(file => file.FullPath, StringComparer.OrdinalIgnoreCase)
+                .Take(largestFileCount)
+                .Select(file => new Row(RelativeName(folderForFiles, file), file, file.SizeFor(measure), Fraction(file.SizeFor(measure), Size)))
+                .ToList()
+            : new List<Row>();
         RemainderBytes = Math.Max(0, Size - Largest.Sum(row => row.Bytes));
         RemainderFiles = Math.Max(0, Files - Largest.Sum(row => row.Node.FileCount));
 
@@ -391,10 +408,12 @@ public sealed class InspectSummary
             return new List<Slice>();
         }
         var bytesByCategory = new Dictionary<FileCategory, long>();
+        var filesByCategory = new Dictionary<FileCategory, int>();
         foreach (FsNode file in files)
         {
             FileCategory category = FileCategories.Categorize(file.Extension);
             bytesByCategory[category] = bytesByCategory.GetValueOrDefault(category) + file.SizeFor(Measure);
+            filesByCategory[category] = filesByCategory.GetValueOrDefault(category) + 1;
         }
 
         // "Other" always last.
@@ -402,7 +421,7 @@ public sealed class InspectSummary
             .Where(pair => pair.Value > 0)
             .OrderBy(pair => pair.Key == FileCategory.Other ? 1 : 0)
             .ThenByDescending(pair => pair.Value)
-            .Select(pair => new Slice(Strings.Category(pair.Key), pair.Key, pair.Value, Fraction(pair.Value, Size)))
+            .Select(pair => new Slice(Strings.Category(pair.Key), pair.Key, pair.Value, Fraction(pair.Value, Size), filesByCategory[pair.Key]))
             .ToList();
     }
 
@@ -418,6 +437,7 @@ public sealed class InspectSummary
         }
 
         long[] bytesByBucket = new long[4];
+        int[] filesByBucket = new int[4];
         foreach (FsNode file in files)
         {
             if (file.LastWriteUtc <= DateTime.MinValue)
@@ -425,13 +445,15 @@ public sealed class InspectSummary
                 continue;
             }
 
-            bytesByBucket[(int)BucketFor(file.LastWriteUtc, now)] += file.SizeFor(Measure);
+            int bucket = (int)BucketFor(file.LastWriteUtc, now);
+            bytesByBucket[bucket] += file.SizeFor(Measure);
+            filesByBucket[bucket]++;
         }
 
         // Shares are of dated bytes only.
         long datedBytes = bytesByBucket.Sum();
         var bands = Enum.GetValues<AgeBucket>()
-            .Select(bucket => new AgeBand(bucket, bytesByBucket[(int)bucket], Fraction(bytesByBucket[(int)bucket], datedBytes)))
+            .Select(bucket => new AgeBand(bucket, bytesByBucket[(int)bucket], Fraction(bytesByBucket[(int)bucket], datedBytes), filesByBucket[(int)bucket]))
             .ToList();
         long olderThanYear = bytesByBucket[(int)AgeBucket.OneToThreeYears] + bytesByBucket[(int)AgeBucket.Older];
         return (bands, olderThanYear);

@@ -123,6 +123,8 @@ public sealed partial class TreemapControl
     /// its own.</param>
     /// <param name="flushRight">True when the box reaches its parent's right content edge, so no grid strip is drawn there.</param>
     /// <param name="flushBottom">Same for the bottom edge.</param>
+    /// <param name="groupLevel">How many group boxes enclose this one up to the nearest real folder: 0 outside a group, 1 inside a group, 2 inside
+    /// a group's own group. A group box's own level is one more, and tells it apart from the group it sits in, which shares its path.</param>
     private void LayoutNode(
         FsNode node,
         Rect bounds,
@@ -130,7 +132,8 @@ public sealed partial class TreemapControl
         int branch,
         bool sole = false,
         bool flushRight = true,
-        bool flushBottom = true)
+        bool flushBottom = true,
+        int groupLevel = 0)
     {
         if (!bounds.IntersectsWith(_viewport))
         {
@@ -149,7 +152,8 @@ public sealed partial class TreemapControl
         bool container = shown.IsDirectory || shown.GroupMembers is not null;
         bool hasHeader = container && !(shown.IsGroup && sole)
             && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= HeaderHeight + MinHeaderBody;
-        var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom);
+        int ownLevel = shown.IsGroup ? groupLevel + 1 : 0;
+        var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom, ownLevel);
         _items.Add(item);
 
         // Every folder merged into the chain maps to the one box that shows it.
@@ -213,7 +217,7 @@ public sealed partial class TreemapControl
             bool childFlushRight = normalized.X + normalized.Width >= 0.999;
             bool childFlushBottom = normalized.Y + normalized.Height >= 0.999;
             LayoutNode(
-                layout.Children[i], childBounds, depth + 1, childBranch, soleChild, childFlushRight, childFlushBottom);
+                layout.Children[i], childBounds, depth + 1, childBranch, soleChild, childFlushRight, childFlushBottom, ownLevel);
         }
     }
 

@@ -261,7 +261,12 @@ public sealed class EmptyFoldersWindow : Window
             }
         });
         _stop = null;
-        await _main.RemovedFromDiskAsync(picked, Strings.Format("Empty_Deleted", picked.Count(folder => !Directory.Exists(folder.FullPath))));
+        int gone = picked.Count(folder => !Directory.Exists(folder.FullPath));
+        await _main.RemovedFromDiskAsync(picked, Strings.Format("Empty_Deleted", gone));
+        if (gone >= 1000)
+        {
+            Achievements.Current.Unlock(Achievement.Tidy);
+        }
         SetBusy(false);
         Fill();
         if (failed.Count > 0)

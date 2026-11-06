@@ -1,8 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:c="using:SpaceSharp.Controls"
         x:Class="SpaceSharp.InspectWindow"
-        Width="660" Height="880" MinWidth="520" MinHeight="480"
+        Width="1000" Height="1120" MinWidth="760" MinHeight="600"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
@@ -18,53 +17,39 @@
       </DockPanel>
     </Border>
 
-    <Border DockPanel.Dock="Top" Padding="24,16,24,16" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1">
-      <StackPanel x:Name="Header" SizeChanged="Header_SizeChanged">
-        <!-- one line: the middle of a long path folds into a … button whose flyout lists the folded folders -->
-        <StackPanel x:Name="Crumbs" Orientation="Horizontal" Margin="-6,0,0,6" />
-        <DockPanel>
-          <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="20" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,12,0" />
-          <TextBlock x:Name="SizeText" DockPanel.Dock="Right" FontSize="30" FontWeight="SemiBold" VerticalAlignment="Center" Margin="16,0,0,0" />
-          <StackPanel VerticalAlignment="Center">
-            <TextBlock x:Name="NameText" FontSize="19" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
-            <TextBlock x:Name="KindText" Classes="dim" FontSize="12" Margin="0,1,0,0" TextTrimming="CharacterEllipsis" />
-          </StackPanel>
-        </DockPanel>
-        <Grid x:Name="Context" Margin="0,14,0,0" ColumnDefinitions="22,*" />
-      </StackPanel>
-    </Border>
-
     <ScrollViewer x:Name="Scroll" VerticalScrollBarVisibility="Auto">
-      <StackPanel x:Name="Body" Margin="24,14,24,20">
-        <Border x:Name="Callout" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="3,0,0,0" Padding="12,9" Margin="0,2,0,0" IsVisible="False">
-          <TextBlock x:Name="CalloutText" TextWrapping="Wrap" FontSize="12.5" />
+      <!-- the same margin on every side, so the last table never sits on the footer -->
+      <StackPanel x:Name="Body" Margin="24,14,24,24" Spacing="14">
+        <!-- ================================================================ header: crumbs, then the name left and the size right -->
+        <StackPanel x:Name="Header" SizeChanged="Header_SizeChanged" Spacing="8">
+          <!-- one line: the middle of a long path folds into a … button whose flyout lists the folded folders -->
+          <StackPanel x:Name="Crumbs" Orientation="Horizontal" Margin="-6,0,0,0" />
+          <Grid ColumnDefinitions="*,16,Auto">
+            <DockPanel VerticalAlignment="Center">
+              <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="18" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
+              <TextBlock x:Name="NameText" FontSize="24" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+            </DockPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <TextBlock x:Name="SizeText" FontSize="30" FontWeight="Bold" VerticalAlignment="Center" />
+              <TextBlock x:Name="OnDiskText" Classes="dim" FontSize="12.5" VerticalAlignment="Center" Margin="0,6,0,0" />
+            </StackPanel>
+          </Grid>
+        </StackPanel>
+
+        <!-- ================================================================ the story: one line per fact, with an icon each -->
+        <Border x:Name="Card" Classes="card flat" CornerRadius="10" Padding="16,2">
+          <StackPanel x:Name="Sentences" />
         </Border>
 
-        <Grid x:Name="Charts" ColumnDefinitions="*,20,*">
-          <StackPanel x:Name="TypePanel" Grid.Column="0">
-            <TextBlock x:Name="TypeHeading" Classes="dim section" />
-            <DockPanel>
-              <c:DonutChart x:Name="TypeDonut" DockPanel.Dock="Left" Width="104" Height="104" Thickness="17" VerticalAlignment="Top" Margin="0,2,14,0"
-                            TextBrush="{DynamicResource Text}" DimBrush="{DynamicResource TextDim}" TrackBrush="{DynamicResource Control}" />
-              <StackPanel x:Name="TypeLegend" VerticalAlignment="Center" />
-            </DockPanel>
-          </StackPanel>
-          <StackPanel x:Name="AgePanel" Grid.Column="2">
-            <TextBlock x:Name="AgeHeading" Classes="dim section" />
-            <DockPanel>
-              <c:DonutChart x:Name="AgeDonut" DockPanel.Dock="Left" Width="104" Height="104" Thickness="17" VerticalAlignment="Top" Margin="0,2,14,0"
-                            TextBrush="{DynamicResource Text}" DimBrush="{DynamicResource TextDim}" TrackBrush="{DynamicResource Control}" />
-              <StackPanel x:Name="AgeLegend" VerticalAlignment="Center" />
-            </DockPanel>
-            <TextBlock x:Name="OldestText" Classes="dim" FontSize="11" Margin="0,8,0,0" />
+        <!-- ================================================================ the tables -->
+        <Panel x:Name="WhereHost" />
+        <Grid x:Name="Pair" ColumnDefinitions="*,14,*">
+          <Panel x:Name="TypeHost" VerticalAlignment="Top" />
+          <StackPanel x:Name="RightColumn" Grid.Column="2" Spacing="14">
+            <Panel x:Name="AgeHost" />
+            <Panel x:Name="FilesHost" />
           </StackPanel>
         </Grid>
-
-        <StackPanel x:Name="LargestPanel">
-          <TextBlock x:Name="LargestHeading" Classes="dim section" />
-          <StackPanel x:Name="LargestRows" />
-          <TextBlock x:Name="RemainderText" Classes="dim" FontSize="11" Margin="0,8,0,0" TextWrapping="Wrap" />
-        </StackPanel>
       </StackPanel>
     </ScrollViewer>
   </DockPanel>

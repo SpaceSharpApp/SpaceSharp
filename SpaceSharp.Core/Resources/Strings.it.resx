@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colora per</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Cartella principale: una tinta per cartella di primo livello, più chiara a ogni livello interno. Profondità cartella: un colore diverso per livello. Tipo di file: file colorati per tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Chiedi conferma prima di spostare nel Cestino</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Chiede prima di eliminare. Gli elementi eliminati possono sempre essere ripristinati dal Cestino.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Chiedi prima di eliminare. Gli elementi eliminati possono sempre essere ripristinati dal Cestino. Gli elementi nelle cartelle di Windows, programmi, app e giochi chiedono sempre.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Nascondi le cartelle vuote non sicure</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Elenca solo le cartelle vuote che sono chiaramente tue. Quelle in Windows, Program Files, ProgramData, AppData e nelle cartelle di giochi o di build, che i programmi spesso si aspettano di trovare, restano fuori dall'elenco. Disattivato, le elenca deselezionate, con un avviso quando ne selezioni una.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Tavolozze personalizzate</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scansione</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} scansioni</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Prima le più recenti</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Tutto il resto</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% usato · {1} liberi</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Cartella · {0} file</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>L'unità si è riempita di {0} da questa scansione. Scansiona di nuovo per vedere dove è finito.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Quest'anno</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>Da 1 a 3 anni</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Più vecchi</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Modifica più vecchia: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Questi {0} sono il {1} della cartella. Gli altri {2:N0} file si dividono {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Modifica più vecchia {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>Il {0} di questa cartella è una cosa sola: {1} con {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} su disco</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} di {1}, la sua unica cartella</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Per lo più {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Per lo più {0} ({1}) e {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Un misto di {0} ({1}), {2} ({3}) e {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>file mediano {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Ultima modifica {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Modificato {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} non toccati da oltre un anno</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>invariato dall'ultima scansione</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>cresciuto di {0} dall'ultima scansione</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>ridotto di {0} dall'ultima scansione</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Ach_Locked" xml:space="preserve"><value>Bloccato</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Bloccato. Come si ottiene resta un segreto finché non lo ottieni.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tutti gli obiettivi sbloccati</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Erano tutti. L'app non ha più nulla da distribuire, quindi d'ora in poi si limiterà a mostrarti il disco.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Erano tutti. L'app non ha più nulla da distribuire, quindi da qui in poi vi mostrerà soltanto il vostro disco. Be', una cosa: Impostazioni › Aspetto ha ora un tema Oro.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Specchio, specchio</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Ha chiesto all'unità cosa fosse cambiato rispetto a se stessa. L'unità, da brava unità, non ha detto nulla.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys e swapfile.sys sono la memoria virtuale. La loro dimensione si impo
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Collezionista</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Sbloccati tutti gli altri obiettivi. Non resta nulla da trovare, che è il senso dell'app.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Fatte in modo diverso ({0} contro {1}): le differenze includono file che solo un metodo vede.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>In una cartella di programma: {0:N0} di questi, in Windows, Program Files, ProgramData, AppData o in una cartella di gioco o di build. Un programma che ne ha bisogno smetterà di funzionare finché non vengono ripristinati dal Cestino.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>In una cartella di programma: {0:N0} di questi, in Windows, Program Files, ProgramData, AppData o in una cartella di gioco o di build. Un programma che ne ha bisogno smetterà di funzionare, e non c'è alcun Cestino da cui ripristinarli.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>In una cartella di programma: {0:N0} delle copie spuntate, in Windows, Program Files, ProgramData, AppData o in una cartella di gioco o di build. Un programma che ha bisogno della sua copia smetterà di funzionare. Tenete quelle e spuntate le copie altrove.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} spuntati · {1} · {2:N0} in cartelle di programmi</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Spunta le altre copie di ogni gruppo. Le copie nelle cartelle di Windows, programmi, app e giochi restano senza spunta.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>cartella di programma</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Eliminazione definitiva…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} di {1:N0} elementi</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Svuotare il Cestino su {1}? I {0} che contiene saranno eliminati definitivamente; dopo non si potrà ripristinare nulla.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Svuota il Cestino</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Elemento</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Mostra gli altri {0:N0} ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Gemelli</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Una ricerca di duplicati le cui copie in più superano un gigabyte. Lo stesso file, ancora e ancora.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>In ordine</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Mille o più cartelle vuote eliminate in un colpo solo. Non contenevano nulla, e ora non contengono nulla da un'altra parte.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Ripensamento</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Ha premuto Annulla su un'eliminazione dopo la nota sulle cartelle di programmi. La nota ha fatto il suo dovere.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Governante</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Ha svuotato qualcosa da Sicuri da svuotare. Le cache torneranno, ma è stato bello finché è durato.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Pittore</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Ha salvato una tavolozza propria. Quelle incluse non bastavano, ed è giusto così.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Oro</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Segui l'impostazione di Windows, o usa sempre chiaro o scuro. Oro è vostro: tutti gli obiettivi sbloccati, e l'app vestita di conseguenza, con una tavolozza della mappa tutta sua.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Dodici metalli dall'ottone all'oro rosa, per il tema Oro</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} tipi</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Una cartella con {0:N0} file in {1:N0} cartelle, {2:N0} dei quali direttamente al suo interno.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Una cartella con {0:N0} file, tutti direttamente al suo interno.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Occupa {0}, e {1} di {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Occupa {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Altri {0:N0} tipi condividono {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>File mediano {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} è cambiato questo mese; {1} è fermo da oltre un anno.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Cartella o file</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Dimensione</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Quota</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>File</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Modificato</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>File</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>In</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>File più grandi</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} di {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Gli altri {0:N0} file</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>Altri {0:N0}</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>questi {0:N0} sono il {1} della cartella</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>Il {0} della cartella è una cosa sola</value></data>
 </root>

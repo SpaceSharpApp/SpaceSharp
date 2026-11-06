@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Koloruj według</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Folder główny: jeden odcień na folder najwyższego poziomu, jaśniejszy z każdym poziomem w głąb. Głębokość folderu: inny kolor na każdy poziom. Typ pliku: pliki kolorowane według typu.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Potwierdzaj przed przeniesieniem do Kosza</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Pytaj przed usunięciem. Usunięte elementy zawsze można przywrócić z Kosza.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Pytaj przed usunięciem. Usunięte elementy zawsze można przywrócić z Kosza. Elementy w folderach Windows, programów, aplikacji i gier zawsze pytają.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ukryj niebezpieczne puste foldery</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Pokazuje tylko puste foldery, które są wyraźnie Twoje. Te w Windows, Program Files, ProgramData, AppData oraz folderach gier lub kompilacji, których programy często oczekują, są całkiem pomijane. Wyłączone pokazuje je odznaczone, z ostrzeżeniem przy zaznaczeniu.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Palety niestandardowe</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanowanie</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>Skanowania: {0}</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Najnowsze najpierw</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Cała reszta</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>Użyto {0}% · wolne {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · pliki: {0}</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Od tego skanowania dysk zapełnił się o {0}. Skanuj ponownie, aby zobaczyć, gdzie się to podziało.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>W tym roku</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 do 3 lat</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Starsze</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Najstarsza zmiana: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Te {0} to {1} folderu. Pozostałe {2:N0} plików dzieli {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Najstarsza zmiana {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} tego folderu to jedna rzecz: {1} o rozmiarze {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} na dysku</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} z {1}, jego jedyny folder</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Głównie {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Głównie {0} ({1}) i {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Mieszanka: {0} ({1}), {2} ({3}) i {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>mediana pliku {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Ostatnia zmiana {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Zmodyfikowano {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} nietknięte od ponad roku</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>bez zmian od ostatniego skanowania</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>urósł o {0} od ostatniego skanowania</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>zmalał o {0} od ostatniego skanowania</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Ach_Locked" xml:space="preserve"><value>Zablokowane</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Zablokowane. Jak je zdobyć, pozostaje tajemnicą, dopóki go nie zdobędziesz.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Wszystkie osiągnięcia odblokowane</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>To były wszystkie. Aplikacja nie ma już nic do rozdania, więc od teraz będzie po prostu pokazywać twój dysk.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>To były wszystkie. Aplikacja nie ma już nic do rozdania, więc od teraz będzie po prostu pokazywać Twój dysk. No, jedno: Ustawienia › Wygląd mają teraz motyw Złoto.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Lustereczko, lustereczko</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Zapytano dysk, co się zmieniło od niego samego. Dysk, jak to dysk, nic nie powiedział.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Kolekcjoner</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Odblokowano wszystkie pozostałe osiągnięcia. Nie ma już nic do znalezienia, a o to w tej aplikacji chodzi.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Wykonane inaczej ({0} a {1}): różnice obejmują pliki widoczne tylko dla jednej metody.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>W folderze programu: {0:N0} z nich, w Windows, Program Files, ProgramData, AppData albo w folderze gry lub kompilacji. Program, który ich potrzebuje, przestanie działać, dopóki nie zostaną przywrócone z Kosza.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>W folderze programu: {0:N0} z nich, w Windows, Program Files, ProgramData, AppData albo w folderze gry lub kompilacji. Program, który ich potrzebuje, przestanie działać, a nie ma Kosza, z którego dałoby się je przywrócić.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>W folderze programu: {0:N0} z zaznaczonych kopii, w Windows, Program Files, ProgramData, AppData albo w folderze gry lub kompilacji. Program, który potrzebuje swojej kopii, przestanie działać. Zostaw je i zaznacz kopie w innych miejscach.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} zaznaczonych · {1} · {2:N0} w folderach programów</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Zaznacza pozostałe kopie w każdym zestawie. Kopie w folderach Windows, programów, aplikacji i gier pozostają niezaznaczone.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>folder programu</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Trwałe usuwanie…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} z {1:N0} elementów</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Opróżnić Kosz na {1}? Znajdujące się w nim {0} zostaną trwale usunięte; potem nic nie da się przywrócić.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Opróżnij Kosz</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Element</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Pokaż pozostałe {0:N0} ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Bliźniaki</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Wyszukiwanie duplikatów, w którym nadmiarowe kopie zajmują ponad gigabajt. Ten sam plik, raz za razem.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Porządek</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Tysiąc lub więcej pustych folderów usuniętych za jednym razem. Nic w nich nie było, a teraz nic w nich nie ma gdzie indziej.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Wątpliwości</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Naciśnięto Anuluj przy usuwaniu po uwadze o folderach programów. Uwaga spełniła swoje zadanie.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Gospodarz</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Wyczyszczono coś z Bezpieczne do wyczyszczenia. Pamięci podręczne wrócą, ale było miło, póki trwało.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Malarz</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Zapisano własną paletę. Wbudowane nie wystarczały, i słusznie.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Złoto</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Zgodnie z ustawieniem Windows albo zawsze jasny lub ciemny. Złoto jest Twoje: wszystkie osiągnięcia odblokowane, a aplikacja ubrana stosownie, z własną paletą mapy.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Dwanaście metali od mosiądzu po różowe złoto, dla motywu Złoto</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} rodzajów</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Folder z {0:N0} plikami w {1:N0} folderach, {2:N0} z nich bezpośrednio w środku.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Folder z {0:N0} plikami, wszystkie bezpośrednio w środku.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Zajmuje {0} oraz {1} z {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Zajmuje {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} innych rodzajów dzieli {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Mediana pliku {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} zmieniło się w tym miesiącu; {1} nie było ruszane od ponad roku.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Folder lub plik</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Rozmiar</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Udział</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Pliki</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Zmieniono</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Rodzaj</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Plik</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>W</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Największe pliki</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} z {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Pozostałe {0:N0} plików</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} więcej</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>te {0:N0} to {1} folderu</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} folderu to jedna rzecz</value></data>
 </root>

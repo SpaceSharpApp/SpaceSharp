@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Kleuren op</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Hoofdmap: één tint per map op het hoogste niveau, lichter met elk niveau erin. Mapdiepte: een andere kleur per niveau. Bestandstype: bestanden gekleurd op type.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bevestigen voor verplaatsen naar de Prullenbak</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vraag voor het verwijderen. Verwijderde items kunnen altijd uit de Prullenbak worden teruggezet.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vragen voor het verwijderen. Verwijderde items kunnen altijd uit de prullenbak worden teruggezet. Items in Windows-, programma-, app- en gamemappen vragen altijd.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Onveilige lege mappen verbergen</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Toont alleen de lege mappen die duidelijk van jou zijn. Die in Windows, Program Files, ProgramData, AppData en game- of buildmappen, die programma's vaak verwachten, staan helemaal niet in de lijst. Uit toont ze zonder vinkje, met een waarschuwing zodra je er een aanvinkt.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Aangepaste paletten</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scan</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} scans</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Nieuwste eerst</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Al het andere</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% gebruikt · {1} vrij</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Map · {0} bestanden</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>De schijf is sinds deze scan {0} voller geworden. Scan opnieuw om te zien waar het heen ging.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 tot 3 jaar</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Ouder</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Oudste wijziging: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Deze {0} vormen {1} van de map. De overige {2:N0} bestanden delen {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Oudste wijziging {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} van deze map is één ding: {1} met {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} op schijf</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} van {1}, de enige map erin</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Vooral {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Vooral {0} ({1}) en {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Een mix van {0} ({1}), {2} ({3}) en {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>mediaan bestand {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Laatst gewijzigd {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Gewijzigd {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} al meer dan een jaar onaangeroerd</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>ongewijzigd sinds de vorige scan</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>{0} gegroeid sinds de vorige scan</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>{0} gekrompen sinds de vorige scan</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Ach_Locked" xml:space="preserve"><value>Vergrendeld</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Vergrendeld. Hoe je hem verdient blijft geheim tot je hem hebt.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle prestaties ontgrendeld</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Dat waren ze allemaal. De app heeft niets meer uit te delen en laat je vanaf nu gewoon je schijf zien.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Dat waren ze allemaal. De app heeft niets meer uit te delen, dus vanaf nu laat hij u gewoon uw schijf zien. Nou ja, één ding: Instellingen › Uiterlijk heeft nu een Goud-thema.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Spiegeltje, spiegeltje</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Vroeg de schijf wat er sinds zichzelf was veranderd. De schijf, schijf zijnde, zei niets.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Completist</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Alle andere prestaties ontgrendeld. Er valt niets meer te vinden, en daar draait de app om.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Anders gemaakt ({0} tegenover {1}): de verschillen omvatten bestanden die maar één methode ziet.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>In een programmamap: {0:N0} ervan, in Windows, Program Files, ProgramData, AppData of een game- of buildmap. Een programma dat ze nodig heeft werkt niet meer tot ze uit de prullenbak zijn teruggezet.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>In een programmamap: {0:N0} ervan, in Windows, Program Files, ProgramData, AppData of een game- of buildmap. Een programma dat ze nodig heeft werkt niet meer, en er is geen prullenbak om ze uit terug te zetten.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>In een programmamap: {0:N0} van de aangevinkte kopieën, in Windows, Program Files, ProgramData, AppData of een game- of buildmap. Een programma dat zijn kopie nodig heeft werkt niet meer. Houd die en vink de kopieën elders aan.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} aangevinkt · {1} · {2:N0} in programmamappen</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Vinkt de andere kopieën van elke set aan. Kopieën in Windows-, programma-, app- en gamemappen blijven uitgevinkt.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>programmamap</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Definitief verwijderen…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} van {1:N0} items</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>De prullenbak op {1} leegmaken? De {0} erin wordt definitief verwijderd; niets ervan kan daarna worden teruggezet.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Prullenbak leegmaken</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Item</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>De andere {0:N0} tonen ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Tweelingen</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Een zoektocht naar duplicaten waarvan de extra kopieën meer dan een gigabyte beslaan. Hetzelfde bestand, keer op keer.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Opgeruimd</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Duizend of meer lege mappen in één keer verwijderd. Ze bevatten niets, en nu bevatten ze ergens anders niets.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Bedenkingen</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Op Annuleren gedrukt bij een verwijdering na de opmerking over programmamappen. De opmerking deed zijn werk.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Huishouder</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Iets uit Veilig op te ruimen opgeruimd. De caches komen terug, maar het was fijn zolang het duurde.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Schilder</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Een eigen palet opgeslagen. De ingebouwde waren niet goed genoeg, en dat is terecht.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Goud</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Volg de Windows-instelling, of gebruik altijd licht of donker. Goud is van u: elke prestatie ontgrendeld, en de app bijpassend gekleed, met een eigen kaartpalet.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Twaalf metalen van messing tot roségoud, voor het Goud-thema</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} soorten</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Een map met {0:N0} bestanden in {1:N0} mappen, {2:N0} daarvan direct erin.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Een map met {0:N0} bestanden, allemaal direct erin.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Het neemt {0} in, en {1} van {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Het neemt {0} in.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} andere soorten delen {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Mediaan bestand {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} ervan is deze maand gewijzigd; {1} is al meer dan een jaar onaangeroerd.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Map of bestand</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Grootte</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Aandeel</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Bestanden</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Gewijzigd</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Soort</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Bestand</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>In</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Grootste bestanden</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} van {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>De andere {0:N0} bestanden</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} meer</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>deze {0:N0} zijn {1} van de map</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} van de map is één ding</value></data>
 </root>

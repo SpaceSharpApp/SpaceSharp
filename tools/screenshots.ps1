@@ -3,14 +3,14 @@
 #
 #   .\tools\screenshots.ps1                 all scenes into docs\
 #   .\tools\screenshots.ps1 start,changes   just those
-#   .\tools\screenshots.ps1 -Size 1600x900  the window's client size (the default)
+#   .\tools\screenshots.ps1 -Size 1600x1200  the window's client size (the default)
 #
-# Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 900 window; the screen's scaling
+# Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 1200 window (the window is this tall so the Inspect window fits inside it); the screen's scaling
 # decides the pixel size of the PNGs, 125% or 150% gives the crisp ones GitHub shows well. Afterwards run
 # tools/make-mobile-shots.py for the small WebP copies the website shows on phones.
 param(
     [string[]] $Scenes = @("none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates"),
-    [string] $Size = "1600x900",
+    [string] $Size = "1600x1200",
     [string] $Configuration = "Release"
 )
 

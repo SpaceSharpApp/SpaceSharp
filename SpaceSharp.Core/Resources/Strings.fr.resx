@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colorer par</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Dossier de premier niveau : une teinte par dossier de premier niveau, plus claire à chaque niveau inférieur. Profondeur de dossier : une couleur différente par niveau. Type de fichier : fichiers colorés selon leur type.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmer avant de déplacer vers la Corbeille</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Demander avant de supprimer. Les éléments supprimés peuvent toujours être restaurés depuis la Corbeille.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Demander avant de supprimer. Les éléments supprimés peuvent toujours être restaurés depuis la Corbeille. Les éléments dans les dossiers Windows, de programmes, d'applications et de jeux demandent toujours.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Masquer les dossiers vides à risque</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Ne liste que les dossiers vides qui sont clairement à vous. Ceux dans Windows, Program Files, ProgramData, AppData et les dossiers de jeux ou de build, que les programmes s'attendent souvent à trouver, sont exclus de la liste. Désactivé, ils sont listés non cochés, avec un avertissement dès que vous en cochez un.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Palettes personnalisées</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 analyse</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} analyses</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Plus récentes en premier</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Tout le reste</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % utilisés · {1} libres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Dossier · {0} fichiers</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Le disque s'est rempli de {0} depuis cette analyse. Relancez l'analyse pour voir où c'est parti.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Cette année</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 à 3 ans</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Plus ancien</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Modification la plus ancienne : {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Ces {0} représentent {1} du dossier. Les {2:N0} autres fichiers se partagent {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Modification la plus ancienne {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} de ce dossier tient en un seul élément : {1} avec {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} sur le disque</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} de {1}, son seul dossier</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Surtout {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Surtout {0} ({1}) et {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Un mélange de {0} ({1}), {2} ({3}) et {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>fichier médian {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Dernière modification {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Modifié {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} non modifiés depuis plus d'un an</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>inchangé depuis la dernière analyse</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>a grossi de {0} depuis la dernière analyse</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>a rétréci de {0} depuis la dernière analyse</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Ach_Locked" xml:space="preserve"><value>Verrouillé</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Verrouillé. Comment l'obtenir reste secret jusqu'à ce que vous l'ayez.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tous les succès débloqués</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>C'était le dernier. L'application n'a plus rien à distribuer ; désormais elle se contentera de vous montrer votre disque.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>C'était le dernier. L'application n'a plus rien à distribuer ; désormais elle se contentera de vous montrer votre disque. Enfin, une chose : Paramètres › Apparence propose maintenant un thème Or.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Miroir, mon beau miroir</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>A demandé au disque ce qui avait changé depuis lui-même. Le disque, en bon disque, n'a rien dit.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Collectionneur</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Tous les autres succès débloqués. Il ne reste rien à trouver, ce qui est le but de l'application.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Faites autrement ({0} contre {1}) : les différences incluent des fichiers qu'une seule méthode voit.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>Dans un dossier de programme : {0:N0} d'entre eux, dans Windows, Program Files, ProgramData, AppData ou un dossier de jeu ou de build. Un programme qui en a besoin cessera de fonctionner tant qu'ils ne sont pas restaurés depuis la Corbeille.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>Dans un dossier de programme : {0:N0} d'entre eux, dans Windows, Program Files, ProgramData, AppData ou un dossier de jeu ou de build. Un programme qui en a besoin cessera de fonctionner, et il n'y a pas de Corbeille d'où les restaurer.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>Dans un dossier de programme : {0:N0} des copies cochées, dans Windows, Program Files, ProgramData, AppData ou un dossier de jeu ou de build. Un programme qui a besoin de sa copie cessera de fonctionner. Gardez-les et cochez les copies situées ailleurs.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} cochés · {1} · {2:N0} dans des dossiers de programmes</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Coche les autres copies de chaque groupe. Les copies dans les dossiers Windows, de programmes, d'applications et de jeux restent décochées.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>dossier de programme</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Suppression définitive…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} sur {1:N0} éléments</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Vider la Corbeille de {1} ? Les {0} qu'elle contient seront supprimés définitivement ; rien ne pourra être restauré ensuite.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Vider la Corbeille</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Élément</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Afficher les {0:N0} autres ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Jumeaux</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Une recherche de doublons dont les copies en trop dépassent un gigaoctet. Le même fichier, encore et encore.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Rangé</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Mille dossiers vides ou plus supprimés d'un coup. Ils ne contenaient rien, et maintenant ils ne contiennent rien ailleurs.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Hésitation</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>A annulé une suppression après la note sur les dossiers de programmes. La note a fait son travail.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Intendant</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>A vidé quelque chose depuis Sans risque à vider. Les caches reviendront, mais c'était agréable tant que ça a duré.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Peintre</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>A enregistré une palette à soi. Celles de l'application ne suffisaient pas, et c'est de bonne guerre.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Or</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Suivre le réglage de Windows, ou toujours utiliser clair ou sombre. Or vous appartient : tous les succès débloqués, et l'application habillée en conséquence, avec sa propre palette de carte.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Douze métaux du laiton à l'or rose, pour le thème Or</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} types</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Un dossier de {0:N0} fichiers dans {1:N0} dossiers, dont {2:N0} directement à l'intérieur.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Un dossier de {0:N0} fichiers, tous directement à l'intérieur.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0} : {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Il occupe {0}, et {1} de {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Il occupe {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} autres types se partagent {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Fichier médian {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} a changé ce mois-ci ; {1} n'a pas bougé depuis plus d'un an.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Dossier ou fichier</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Taille</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Part</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Fichiers</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Modifié</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Type</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Fichier</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>Dans</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Plus gros fichiers</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} sur {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Les {0:N0} autres fichiers</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} de plus</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>ces {0:N0} font {1} du dossier</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} du dossier tient en une seule chose</value></data>
 </root>

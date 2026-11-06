@@ -46,6 +46,15 @@ public sealed class AchievementsWindow : Window
             DateTime? unlockedUtc = store.UnlockedAt.TryGetValue(achievement, out DateTime when) ? when : null;
             (Grid content, TextBlock hint) = Row(achievement, unlockedUtc);
             var row = new Button { Content = content, Classes = { "row" }, Height = double.NaN, MinHeight = 50, Padding = new Thickness(0) };
+            // The end rows round their outer corners, so a hover fill follows the list's frame.
+            if (i == 0)
+            {
+                row.CornerRadius = new CornerRadius(9, 9, 0, 0);
+            }
+            if (i == all.Length - 1)
+            {
+                row.CornerRadius = new CornerRadius(0, 0, 9, 9);
+            }
             if (unlockedUtc is null)
             {
                 // A locked row shows its hint while clicked open, and hides it again on the next click.

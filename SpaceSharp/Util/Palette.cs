@@ -2,6 +2,7 @@ using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using SpaceSharp.Controls;
 using SpaceSharp.Models;
+using SpaceSharp.Services;
 
 namespace SpaceSharp.Util;
 
@@ -69,6 +70,9 @@ public sealed class ColorScheme
 
     /// <summary>The window theme the palette is made for; Any lists it under both.</summary>
     public PaletteTheme Theme { get; internal set; } = PaletteTheme.Any;
+
+    /// <summary>True for a palette that stays out of <see cref="Palette.Schemes"/> until every achievement is unlocked.</summary>
+    public bool IsSecret { get; internal set; }
 
     /// <summary>The file a custom palette was read from.</summary>
     public string? SourceFile
@@ -206,11 +210,13 @@ public sealed class ColorScheme
 /// <summary>The built-in palettes, the custom ones alongside them, and the color math they share.</summary>
 public static class Palette
 {
-    /// <summary>Built-in then custom, rebuilt by <see cref="Reload"/>.</summary>
+    /// <summary>Built-in then custom, rebuilt by <see cref="Reload"/>; the secret one included.</summary>
     private static List<ColorScheme> _schemes = BuildSchemes().Concat(CustomPalettes.Load()).ToList();
 
-    /// <summary>Built-in palettes followed by custom ones.</summary>
-    public static IReadOnlyList<ColorScheme> Schemes => _schemes;
+    /// <summary>Built-in palettes followed by custom ones; the secret one only once Collector is unlocked.</summary>
+    public static IReadOnlyList<ColorScheme> Schemes => Achievements.Current.IsUnlocked(Achievement.Collector)
+        ? _schemes
+        : _schemes.Where(scheme => !scheme.IsSecret).ToList();
 
     /// <summary>Rereads the custom palette files; the built-in list is rebuilt too so the order stays built-in then custom.</summary>
     /// <returns>The new <see cref="Schemes"/>.</returns>
@@ -312,8 +318,14 @@ public static class Palette
             // Okabe-Ito's eight plus four from Tol's bright set
             FromList("Color-blind safe",
                 new[] { "#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#4477AA", "#EE6677", "#228833", "#AA3377", "#66CCEE" }, 0.45,
-                Hex("#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB"))
+                Hex("#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB")),
+
+            // the Gold theme's own: twelve golds from old brass to bright leaf, all yellow, kept apart by lightness and warmth
+            FromList("Gold",
+                new[] { "#FFD700", "#D4A017", "#FFE14D", "#E6B422", "#C49A0C", "#FFD93D", "#F0BC1A", "#FFCC00", "#DAA520", "#FFC933", "#B8860B", "#FFE680" }, 0.18,
+                Hex("#E8B824", "#C2742A", "#E0A8C8", "#FFD24A", "#D9A520", "#F3E2B0", "#B8860B", "#C9BB95"))
         };
+        dark[^1].IsSecret = true;
 
         var light = new List<ColorScheme>
         {

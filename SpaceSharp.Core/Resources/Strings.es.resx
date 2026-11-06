@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colorear por</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Carpeta superior: un tono por carpeta de nivel superior, más claro con cada nivel interior. Profundidad de carpeta: un color distinto por nivel. Tipo de archivo: archivos coloreados por tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmar antes de mover a la Papelera de reciclaje</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Preguntar antes de eliminar. Los elementos eliminados siempre se pueden restaurar desde la Papelera de reciclaje.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Preguntar antes de eliminar. Los elementos eliminados siempre se pueden restaurar desde la Papelera de reciclaje. Los elementos dentro de carpetas de Windows, programas, aplicaciones y juegos siempre preguntan.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar carpetas vacías no seguras</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista solo las carpetas vacías que son claramente tuyas. Las de Windows, Program Files, ProgramData, AppData y carpetas de juegos o de compilación, que los programas suelen esperar que existan, quedan fuera de la lista. Desactivado, se listan sin marcar, con un aviso al marcar una.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 análisis</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} análisis</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Más recientes primero</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Todo lo demás</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % usado · {1} libres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Carpeta · {0} archivos</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>La unidad se ha llenado {0} desde este análisis. Analiza de nuevo para ver adónde fue.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Este año</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>De 1 a 3 años</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Más antiguos</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Cambio más antiguo: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Estos {0} son el {1} de la carpeta. Los otros {2:N0} archivos se reparten {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Cambio más antiguo {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>El {0} de esta carpeta es una sola cosa: {1} con {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} en disco</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} de {1}, su única carpeta</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Sobre todo {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Sobre todo {0} ({1}) y {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Una mezcla de {0} ({1}), {2} ({3}) y {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>archivo mediano {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Último cambio {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Modificado {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} sin tocar desde hace más de un año</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>sin cambios desde el último análisis</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>creció {0} desde el último análisis</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>se redujo {0} desde el último análisis</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Ach_Locked" xml:space="preserve"><value>Bloqueado</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Bloqueado. Cómo se consigue es secreto hasta que lo tengas.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Todos los logros desbloqueados</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Eran todos. La aplicación ya no tiene nada más que repartir, así que a partir de ahora solo te mostrará tu disco.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Ese era el último. La app no tiene nada más que repartir, así que a partir de ahora solo le mostrará su disco. Bueno, una cosa: Ajustes › Apariencia tiene ahora un tema Oro.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Espejito, espejito</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Preguntó a la unidad qué había cambiado desde sí misma. La unidad, como buena unidad, no dijo nada.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Coleccionista</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Todos los demás logros desbloqueados. No queda nada por encontrar, que es de lo que va la aplicación.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Hechos de distinta manera ({0} frente a {1}): las diferencias incluyen archivos que solo ve un método.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>En una carpeta de programa: {0:N0} de ellos, dentro de Windows, Program Files, ProgramData, AppData o una carpeta de juego o de compilación. Un programa que los necesite dejará de funcionar hasta que se restauren desde la Papelera de reciclaje.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>En una carpeta de programa: {0:N0} de ellos, dentro de Windows, Program Files, ProgramData, AppData o una carpeta de juego o de compilación. Un programa que los necesite dejará de funcionar, y no hay Papelera de reciclaje desde la que restaurarlos.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>En una carpeta de programa: {0:N0} de las copias marcadas, dentro de Windows, Program Files, ProgramData, AppData o una carpeta de juego o de compilación. Un programa que necesite su copia dejará de funcionar. Consérvelas y marque las copias de otros sitios.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} marcados · {1} · {2:N0} en carpetas de programas</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Marca las demás copias de cada conjunto. Las copias dentro de carpetas de Windows, programas, aplicaciones y juegos quedan sin marcar.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>carpeta de programa</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Eliminando definitivamente…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} de {1:N0} elementos</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>¿Vaciar la Papelera de reciclaje de {1}? Los {0} que contiene se eliminarán definitivamente; después no se podrá restaurar nada.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Vaciar la papelera</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Elemento</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Mostrar los otros {0:N0} ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Gemelos</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Una búsqueda de duplicados cuyas copias de más suman más de un gigabyte. El mismo archivo, una y otra vez.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Ordenado</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Mil o más carpetas vacías eliminadas de una vez. No contenían nada, y ahora no contienen nada en otro sitio.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Dudas</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Pulsó Cancelar en una eliminación tras la nota sobre carpetas de programas. La nota cumplió su cometido.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Ama de llaves</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Limpió algo de Seguro de limpiar. Las cachés volverán, pero estuvo bien mientras duró.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Pintor</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Guardó una paleta propia. Las incorporadas no eran suficientes, y es comprensible.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Oro</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Seguir el ajuste de Windows, o usar siempre claro u oscuro. Oro es suyo: todos los logros desbloqueados, y la app vestida a juego, con su propia paleta de mapa.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Doce metales del latón al oro rosa, para el tema Oro</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} tipos</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Una carpeta con {0:N0} archivos en {1:N0} carpetas, {2:N0} de ellos directamente dentro.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Una carpeta con {0:N0} archivos, todos directamente dentro.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Ocupa {0}, y {1} de {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Ocupa {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Otros {0:N0} tipos comparten {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Archivo mediano {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} cambió este mes; {1} lleva más de un año sin tocarse.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Carpeta o archivo</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Tamaño</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Parte</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Archivos</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Cambiado</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Archivo</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>En</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Archivos más grandes</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} de {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Los otros {0:N0} archivos</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} más</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>estos {0:N0} son el {1} de la carpeta</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>El {0} de la carpeta es una sola cosa</value></data>
 </root>

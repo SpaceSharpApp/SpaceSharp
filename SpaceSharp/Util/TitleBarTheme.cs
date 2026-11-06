@@ -42,6 +42,20 @@ internal static class TitleBarTheme
         window.ActualThemeVariantChanged += (_, _) => Apply(window);
     }
 
+    /// <summary>Repaints every open window's caption after a look change that keeps the theme variant, which the variant event does not see.</summary>
+    /// <param name="windows">The open windows.</param>
+    public static void Refresh(IEnumerable<Window> windows)
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+        foreach (Window window in windows)
+        {
+            Apply(window);
+        }
+    }
+
     /// <summary>Paints the caption, caption text and border from the theme's WindowBg, TextColor and StrokeColor resources.</summary>
     /// <param name="window">An open window; without a native handle yet nothing is done.</param>
     [SupportedOSPlatform("windows")]

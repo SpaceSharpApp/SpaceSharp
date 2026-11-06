@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -12,7 +13,6 @@ using SpaceSharp.Controls;
 using SpaceSharp.Models;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
-using static SpaceSharp.Util.RichText;
 
 namespace SpaceSharp;
 
@@ -24,6 +24,7 @@ public partial class InspectWindow : Window
     private readonly Action<FsNode>? _navigate;
     private readonly StringBuilder _copy = new();
     private readonly AppSettings _settings = AppSettings.Current;
+    private static readonly Regex SlotPattern = new(@"\{(\d+)(:[^}]*)?\}", RegexOptions.Compiled);
 
     /// <summary>For the XAML previewer only: an empty selection under a nameless root.</summary>
     public InspectWindow() : this(new[] { new FsNode("", NodeKind.Directory, null) }, null, SizeMeasure.FileSize, Palette.Default) { }
@@ -32,13 +33,13 @@ public partial class InspectWindow : Window
     /// <param name="nodes">Selected items; free-space and grouping stand-ins are dropped, one real node gives the single-item layout.</param>
     /// <param name="root">The scan root, for the "of drive" share and the breadcrumb chain; null hides those.</param>
     /// <param name="measure">Whether sizes are file sizes or allocated sizes.</param>
-    /// <param name="scheme">Palette whose category brushes color the type donut.</param>
+    /// <param name="scheme">Palette whose category brushes color the type rows.</param>
     /// <param name="navigate">Called on the UI thread with the clicked breadcrumb's or row's folder after the window closes; null makes crumbs and rows plain text.</param>
     public InspectWindow(IReadOnlyList<FsNode> nodes, FsNode? root, SizeMeasure measure, ColorScheme scheme, Action<FsNode>? navigate = null)
     {
         InitializeComponent();
         TitleBarTheme.Attach(this);
-        _summary = new InspectSummary(nodes, root, measure);
+        _summary = new InspectSummary(nodes, root, measure, largestCount: 8);
         _scheme = scheme;
         _navigate = navigate;
         if (_summary.Nodes.Count == 0)
@@ -50,18 +51,17 @@ public partial class InspectWindow : Window
         CloseButton.Content = Strings.Get("InspectWin_Close");
         CopyButton.Content = Strings.Get("InspectWin_CopyDetails");
         RevealButton.Content = Strings.Get("InspectWin_ShowInExplorer");
-        TypeHeading.Text = Strings.Get("Inspect_ByType");
-        AgeHeading.Text = Strings.Get("Inspect_ByAge");
-        LargestHeading.Text = Strings.Get("Inspect_WhereTheSpaceIs");
 
-        if (_settings.InspectWidth >= MinWidth)
+        // A width saved by the older, narrower layout would cramp this one.
+        if (_settings.InspectWidth >= 1000)
         {
             Width = _settings.InspectWidth;
         }
         BuildHeader(root);
-        BuildCallout();
-        BuildCharts();
-        BuildLargest();
+        BuildSentences();
+        BuildWhere();
+        BuildTypeAndAge();
+        BuildLargestFiles();
         Opened += (_, _) => Dispatcher.UIThread.Post(FitHeightToContent, DispatcherPriority.Loaded);
     }
 
@@ -109,25 +109,17 @@ public partial class InspectWindow : Window
 
     // ---------------------------------------------------------------- header
 
-    /// <summary>Fills the title, glyph, name, kind line, size and context lines for one item or a selection.</summary>
+    /// <summary>Fills the title, glyph, name and size for one item or a selection; the kind line became the first sentence.</summary>
     /// <param name="root">The scan root, passed on to the breadcrumbs; unused for a selection.</param>
     private void BuildHeader(FsNode? root)
     {
         InspectSummary summary = _summary;
-        string onDisk = summary.Allocated != summary.Logical
-            ? Strings.Format("Inspect_Ctx_OnDisk", SizeFormatter.Format(summary.Allocated))
-            : string.Empty;
-
         if (summary.Single is { } item)
         {
             Title = Strings.Format("Inspect_TitleOne", item.FullPath);
             Glyph.Text = item.IsDirectory ? "▣" : "▤";
             NameText.Text = item.Name;
-            KindText.Text = Join(
-                item.IsDirectory ? Strings.Get("Inspect_Folder") : DescribeType(item),
-                item.IsDirectory ? Strings.Format("Inspect_FilesFolders", summary.Files, summary.Folders) : null,
-                onDisk,
-                item.IsHardLinkDuplicate ? Strings.Format("Inspect_HardLinkValue", SizeFormatter.Format(item.LinkedSize)) : null);
+            ToolTip.SetTip(NameText, item.FullPath);
             BuildCrumbs(item);
             _copy.AppendLine(item.FullPath);
         }
@@ -136,14 +128,6 @@ public partial class InspectWindow : Window
             Title = Strings.Format("Inspect_TitleMany", summary.Nodes.Count);
             Glyph.Text = "▦";
             NameText.Text = Strings.Format("Inspect_ItemsSelected", summary.Nodes.Count);
-
-            var parentPaths = summary.Nodes.Select(node => node.Parent?.FullPath).OfType<string>().Distinct().ToList();
-            int fileCount = summary.Nodes.Count(node => !node.IsDirectory);
-            int folderCount = summary.Nodes.Count(node => node.IsDirectory);
-            KindText.Text = Join(
-                Strings.Format("Inspect_FilesFolders", fileCount, folderCount),
-                parentPaths.Count == 1 ? parentPaths[0] : Strings.Format("Inspect_InFolders", parentPaths.Count),
-                onDisk);
             RevealButton.IsVisible = false;
             Crumbs.IsVisible = false;
             foreach (FsNode node in summary.Nodes)
@@ -151,141 +135,617 @@ public partial class InspectWindow : Window
                 _copy.AppendLine(node.FullPath);
             }
         }
-        ToolTip.SetTip(KindText, KindText.Text);
-        _copy.AppendLine(KindText.Text);
 
         SizeText.Text = SizeFormatter.Format(summary.Size);
         ToolTip.SetTip(SizeText, Strings.Format("Inspect_ExactBytes", summary.Size).Trim());
         _copy.Append(Strings.Get("Inspect_Size")).Append(": ").Append(SizeText.Text).AppendLine(Strings.Format("Inspect_ExactBytes", summary.Size));
-
-        BuildContext();
-        if (summary.Single is { AccessDenied: true })
+        if (summary.Allocated != summary.Logical)
         {
-            ContextLine("!", PlainParts(Strings.Get("Inspect_AccessDenied")));
+            OnDiskText.Text = Strings.Format("Inspect_Ctx_OnDisk", SizeFormatter.Format(summary.Allocated));
+            _copy.AppendLine(OnDiskText.Text);
         }
-        if (Context.RowDefinitions.Count == 0)
+        else
         {
-            Context.IsVisible = false;
+            OnDiskText.IsVisible = false;
         }
     }
 
-    /// <summary>The context lines under the size: share of parent and root, the type mix, and age.</summary>
-    private void BuildContext()
+    // ---------------------------------------------------------------- the story
+
+    /// <summary>The facts as short sentences, one line each with an icon: what it is, what it takes, the callouts, what it is mostly, and how old it is.
+    /// The figures are bold, the rest plain, a secondary remark dim.</summary>
+    private void BuildSentences()
     {
         InspectSummary summary = _summary;
         FsNode? item = summary.Single;
+        bool hasContents = item is null || item.IsDirectory;
 
-        var shareParts = new List<Part>();
+        // What it is.
+        List<RichText.Part>? hardLink = item is { IsHardLinkDuplicate: true }
+            ? Fmt("Inspect_HardLinkValue", Strong(SizeFormatter.Format(item.LinkedSize)))
+            : null;
+        if (item is { IsDirectory: true })
+        {
+            int direct = item.Children.Count(child => child.IsReal);
+            Sentence("Folder",
+                summary.Folders > 0
+                    ? Fmt("Inspect_S_Folder", N(summary.Files), N(summary.Folders), N(direct))
+                    : Fmt("Inspect_S_FolderFlat", N(summary.Files)),
+                hardLink);
+        }
+        else if (item is not null)
+        {
+            Sentence("File", Period(new List<RichText.Part> { Strong(DescribeType(item)) }), hardLink);
+        }
+        else
+        {
+            var parentPaths = summary.Nodes.Select(node => node.Parent?.FullPath).OfType<string>().Distinct().ToList();
+            int fileCount = summary.Nodes.Count(node => !node.IsDirectory);
+            int folderCount = summary.Nodes.Count(node => node.IsDirectory);
+            Sentence("Selection", Fmt("Inspect_S_Selection",
+                Strong(Strings.Format("Inspect_ItemsSelected", summary.Nodes.Count)),
+                Strings.Format("Inspect_FilesFolders", fileCount, folderCount),
+                parentPaths.Count == 1 ? parentPaths[0] : Strings.Format("Inspect_InFolders", parentPaths.Count)));
+        }
+
+        // What it takes.
+        List<RichText.Part>? ofParent = null;
         if (summary.OfParent is { } parent && item is not null)
         {
-            string percent = InspectSummary.Percent(parent.Share);
-            if (summary.Rank is { } rank)
-            {
-                string key;
-                if (rank.Count == 1)
-                {
-                    key = item.IsDirectory ? "Inspect_Ctx_OnlyFolder" : "Inspect_Ctx_OnlyFile";
-                }
-                else if (rank.Position == 1)
-                {
-                    key = item.IsDirectory ? "Inspect_Ctx_LargestFolder" : "Inspect_Ctx_LargestFile";
-                }
-                else
-                {
-                    key = item.IsDirectory ? "Inspect_Ctx_RankFolder" : "Inspect_Ctx_RankFile";
-                }
-                shareParts.AddRange(Format(key, Accent(percent), Plain(parent.Name), Plain(rank.Count.ToString("N0")), Plain(rank.Position.ToString("N0"))));
-            }
-            else
-            {
-                shareParts.AddRange(Format("Inspect_Of", Accent(percent), Plain(parent.Name)));
-            }
+            RichText.Part percent = Strong(InspectSummary.Percent(parent.Share));
+            string kind = item.IsDirectory ? "Folder" : "File";
+            ofParent = summary.Rank is { } rank
+                ? rank.Count == 1 ? Fmt("Inspect_Ctx_Only" + kind, percent, parent.Name)
+                    : rank.Position == 1 ? Fmt("Inspect_Ctx_Largest" + kind, percent, parent.Name, N(rank.Count))
+                    : Fmt("Inspect_Ctx_Rank" + kind, percent, parent.Name, N(rank.Count), N(rank.Position))
+                : Fmt("Inspect_Of", percent, parent.Name);
         }
-        if (summary.OfRoot is { } root)
+        if (ofParent is not null && summary.OfRoot is { } root)
         {
-            // The root share is the headline for a selection, and a dimmed footnote after the parent share for one item.
-            string rootPercent = InspectSummary.Percent(root.Share);
-            Part[] ofRoot = Format("Inspect_Of", item is null ? Accent(rootPercent) : Plain(rootPercent), Plain(root.Name));
-            if (shareParts.Count == 0)
-            {
-                shareParts.AddRange(ofRoot);
-            }
-            else
-            {
-                shareParts.AddRange(Dimmed(ofRoot));
-            }
+            Sentence("Share", Fmt("Inspect_S_Takes", ofParent, Strong(InspectSummary.Percent(root.Share)), root.Name));
         }
-        if (shareParts.Count > 0)
+        else if (ofParent is not null)
         {
-            ContextLine("◔", shareParts.ToArray());
+            Sentence("Share", Fmt("Inspect_S_TakesOne", ofParent));
+        }
+        else if (summary.OfRoot is { } rootOnly)
+        {
+            Sentence("Share", Fmt("Inspect_S_TakesOne", Fmt("Inspect_Of", Strong(InspectSummary.Percent(rootOnly.Share)), rootOnly.Name)));
         }
 
-        if ((item is null || item.IsDirectory) && summary.ByType.Count > 0 && summary.Files > 0)
+        // The callouts: one thing holds most of it, hard links, access problems.
+        var notes = new List<string>(summary.Callouts);
+        if (item is { AccessDenied: true })
         {
-            IReadOnlyList<InspectSummary.Slice> byType = summary.ByType;
-            string LabelAt(int index) => byType[index].Label.ToLowerInvariant();
-            string BytesAt(int index) => SizeFormatter.Compact(byType[index].Bytes);
+            notes.Add(Strings.Get("Inspect_AccessDenied"));
+        }
+        foreach (string note in notes)
+        {
+            Sentence("Info", Period(new List<RichText.Part> { RichText.Plain(note) }));
+        }
 
-            Part[] typeParts;
-            if (byType.Count == 1 || byType[0].Share >= 0.9)
+        // What it is mostly.
+        if (hasContents && summary.ByType.Count > 0 && summary.Files > 0)
+        {
+            IReadOnlyList<InspectSummary.Slice> types = summary.ByType;
+            int named = types.Count == 1 || types[0].Share >= 0.6 ? 1 : types.Count == 2 || types[1].Share >= 0.25 ? 2 : 3;
+            List<RichText.Part> mostly = named switch
             {
-                typeParts = Format("Inspect_Ctx_Mostly", Accent(LabelAt(0)), Plain(BytesAt(0)));
-            }
-            else if (byType[0].Share >= 0.5 || byType.Count == 2)
+                1 => Fmt("Inspect_Ctx_Mostly", Strong(types[0].Label), SizeFormatter.Compact(types[0].Bytes)),
+                2 => Fmt("Inspect_Ctx_MostlyAnd", Strong(types[0].Label), SizeFormatter.Compact(types[0].Bytes), Strong(types[1].Label), SizeFormatter.Compact(types[1].Bytes)),
+                _ => Fmt("Inspect_Ctx_Mix", Strong(types[0].Label), SizeFormatter.Compact(types[0].Bytes), Strong(types[1].Label), SizeFormatter.Compact(types[1].Bytes), Strong(types[2].Label), SizeFormatter.Compact(types[2].Bytes))
+            };
+            var tail = new List<RichText.Part>();
+            if (types.Count > named)
             {
-                typeParts = Format("Inspect_Ctx_MostlyAnd", Accent(LabelAt(0)), Plain(BytesAt(0)), Plain(LabelAt(1)), Plain(BytesAt(1)));
+                tail.AddRange(Fmt("Inspect_S_OtherKinds", N(types.Count - named), SizeFormatter.Compact(types.Skip(named).Sum(slice => slice.Bytes))));
             }
-            else
-            {
-                typeParts = Format("Inspect_Ctx_Mix", Accent(LabelAt(0)), Plain(BytesAt(0)), Plain(LabelAt(1)), Plain(BytesAt(1)), Plain(LabelAt(2)), Plain(BytesAt(2)));
-            }
-
-            var typeLine = new List<Part>(typeParts);
             if (summary.Files > 1)
             {
-                typeLine.AddRange(Dimmed(Format("Inspect_Ctx_Median", Plain(SizeFormatter.Compact(summary.MedianFileBytes)))));
+                if (tail.Count > 0)
+                {
+                    tail.Add(RichText.Plain(" "));
+                }
+                tail.AddRange(Fmt("Inspect_S_Median", SizeFormatter.Compact(summary.MedianFileBytes)));
             }
-            ContextLine("▥", typeLine.ToArray());
+            Sentence("Composition", Period(mostly), tail);
         }
 
-        var ageParts = new List<Part>();
+        // How old it is, and what changed since the last scan.
         if (summary.NewestUtc > DateTime.MinValue)
         {
-            string modifiedKey = item is { IsDirectory: false } ? "Inspect_Ctx_Modified" : "Inspect_Ctx_LastChanged";
-            ageParts.AddRange(Format(modifiedKey, Accent(Ago(summary.NewestUtc).ToLowerInvariant())));
-            if ((item is null || item.IsDirectory) && summary.Files > 1 && summary.OlderThanYear > 0)
+            List<RichText.Part> changed = Capitalize(Period(Fmt(item is { IsDirectory: false } ? "Inspect_Ctx_Modified" : "Inspect_Ctx_LastChanged", Strong(Lower(Ago(summary.NewestUtc))))));
+            if (hasContents && summary.Files > 1 && summary.ByAge.Count > 0)
             {
-                string untouchedPercent = InspectSummary.Percent(InspectSummary.Fraction(summary.OlderThanYear, summary.Size));
-                ageParts.AddRange(Format("Inspect_Ctx_Untouched", Plain(untouchedPercent)).Prepend(Plain(", ")));
+                changed.Add(RichText.Plain(" "));
+                changed.AddRange(Fmt("Inspect_S_Age",
+                    Strong(InspectSummary.Percent(summary.ByAge[0].Share)),
+                    Strong(InspectSummary.Percent(InspectSummary.Fraction(summary.OlderThanYear, summary.Size)))));
             }
+            List<RichText.Part>? since = summary.IsNew ? new List<RichText.Part> { RichText.Plain(Strings.Get("Inspect_Ctx_New")) }
+                : summary.Change is { } change
+                    ? change == 0 ? new List<RichText.Part> { RichText.Plain(Strings.Get("Inspect_Ctx_Unchanged")) }
+                        : Fmt(change > 0 ? "Inspect_Ctx_Grew" : "Inspect_Ctx_Shrank", Strong(SizeFormatter.Format(Math.Abs(change))))
+                    : null;
+            Sentence("Age", changed, since is null ? null : Capitalize(Period(since)));
         }
 
-        Part[]? changeParts = null;
-        if (summary.IsNew)
+        if (Sentences.Children.Count == 0)
         {
-            changeParts = Format("Inspect_Ctx_New");
+            Card.IsVisible = false;
+            return;
         }
-        else if (summary.Change is { } changeBytes)
+        // The last sentence needs no rule under it.
+        ((Border)Sentences.Children[^1]).BorderThickness = new Thickness(0);
+    }
+
+    /// <summary>Adds one sentence to the card: an icon, the runs, and a dim tail after them on the same line; also written to the copy buffer.</summary>
+    /// <param name="icon">The icon name without the "Icon." prefix.</param>
+    /// <param name="parts">The sentence's runs, ending with a period.</param>
+    /// <param name="tail">A remark after it, shown dim, or null for none.</param>
+    private void Sentence(string icon, List<RichText.Part> parts, List<RichText.Part>? tail = null)
+    {
+        var line = new DockPanel();
+        Icon glyph = Icons.Make(icon, 16, "TextDim");
+        glyph.VerticalAlignment = VerticalAlignment.Top;
+        glyph.Margin = new Thickness(0, 2, 12, 0);
+        DockPanel.SetDock(glyph, Dock.Left);
+        line.Children.Add(glyph);
+        var block = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = 13.5, LineHeight = 20 };
+        var runs = new List<RichText.Part>(parts);
+        if (tail is { Count: > 0 })
         {
-            changeParts = changeBytes == 0
-                ? Format("Inspect_Ctx_Unchanged")
-                : Format(changeBytes > 0 ? "Inspect_Ctx_Grew" : "Inspect_Ctx_Shrank", Accent(SizeFormatter.Format(Math.Abs(changeBytes))));
+            runs.Add(RichText.Plain(" "));
+            runs.AddRange(tail.Select(part => part with { BrushKey = "TextDim", Bold = false }));
         }
-        if (changeParts is not null)
+        RichText.Fill(block, runs, this);
+        line.Children.Add(block);
+        var row = new Border { Child = line, Padding = new Thickness(0, 10, 0, 10), BorderThickness = new Thickness(0, 0, 0, 1), Classes = { "rule-under" } };
+        Sentences.Children.Add(row);
+        _copy.AppendLine(RichText.ToPlainText(runs));
+    }
+
+    /// <summary>Fills a resource string's slots with runs: a part, a list of parts from a nested format, a plain string, or a formatted number.</summary>
+    /// <param name="key">A key in Strings.resx whose value holds "{0}", "{1:N0}" slots.</param>
+    /// <param name="args">One argument per slot, by slot number; the text between slots stays plain.</param>
+    /// <returns>The runs in reading order.</returns>
+    private static List<RichText.Part> Fmt(string key, params object[] args)
+    {
+        string format = Strings.Get(key);
+        var parts = new List<RichText.Part>();
+        int position = 0;
+        foreach (Match slot in SlotPattern.Matches(format))
         {
-            if (ageParts.Count > 0)
+            if (slot.Index > position)
             {
-                ageParts.AddRange(Dimmed(changeParts));
+                parts.Add(RichText.Plain(format[position..slot.Index]));
             }
-            else
+            int index = int.Parse(slot.Groups[1].Value, CultureInfo.InvariantCulture);
+            if (index < args.Length)
             {
-                ageParts.AddRange(Capitalized(changeParts));
+                switch (args[index])
+                {
+                    case RichText.Part part:
+                        parts.Add(part);
+                        break;
+                    case IEnumerable<RichText.Part> nested:
+                        parts.AddRange(nested);
+                        break;
+                    case string text:
+                        parts.Add(RichText.Plain(text));
+                        break;
+                    default:
+                        parts.Add(RichText.Plain(string.Format(CultureInfo.CurrentCulture, "{0" + slot.Groups[2].Value + "}", args[index])));
+                        break;
+                }
             }
+            position = slot.Index + slot.Length;
         }
-        if (ageParts.Count > 0)
+        if (position < format.Length)
         {
-            ContextLine("◷", ageParts.ToArray());
+            parts.Add(RichText.Plain(format[position..]));
         }
+        return parts;
+    }
+
+    /// <summary>A bold run in the normal text color.</summary>
+    /// <param name="text">The run's text.</param>
+    /// <returns>The part.</returns>
+    private static RichText.Part Strong(string text) => new(text, "Text", null, true);
+
+    /// <summary>A whole number with the culture's thousands separators, as a bold run.</summary>
+    /// <param name="value">The number.</param>
+    /// <returns>The part.</returns>
+    private static RichText.Part N(int value) => Strong(value.ToString("N0", CultureInfo.CurrentCulture));
+
+    /// <summary>Ends the runs with a period unless the last one has one, so reused context strings read as sentences.</summary>
+    /// <param name="parts">The runs; changed in place and returned.</param>
+    /// <returns>The same list.</returns>
+    private static List<RichText.Part> Period(List<RichText.Part> parts)
+    {
+        if (parts.Count > 0 && parts[^1].Text.Length > 0 && !".!?。".Contains(parts[^1].Text[^1]))
+        {
+            parts.Add(RichText.Plain("."));
+        }
+        return parts;
+    }
+
+    /// <summary>Capitalizes the first run's first letter for the current culture.</summary>
+    /// <param name="parts">The runs; changed in place and returned.</param>
+    /// <returns>The same list.</returns>
+    private static List<RichText.Part> Capitalize(List<RichText.Part> parts)
+    {
+        if (parts.Count > 0 && parts[0].Text.Length > 0)
+        {
+            parts[0] = parts[0] with { Text = char.ToUpper(parts[0].Text[0], CultureInfo.CurrentCulture) + parts[0].Text[1..] };
+        }
+        return parts;
+    }
+
+    /// <summary>Lowercases the first letter for the current culture, so "Today" fits mid-sentence.</summary>
+    /// <param name="text">Any text; empty stays empty.</param>
+    /// <returns>The text with its first character in lower case.</returns>
+    private static string Lower(string text) => text.Length > 0 ? char.ToLower(text[0], CultureInfo.CurrentCulture) + text[1..] : text;
+
+    // ---------------------------------------------------------------- tables
+
+    /// <summary>Where the space is: the largest non-nested items as rows with a bar, size, share, file count and last change, then one dim row for the rest.</summary>
+    private void BuildWhere()
+    {
+        InspectSummary summary = _summary;
+        if (summary.Largest.Count == 0)
+        {
+            WhereHost.IsVisible = false;
+            return;
+        }
+        string title = summary.Single is null ? Strings.Get("Inspect_Items") : Strings.Get("Inspect_WhereTheSpaceIs");
+        string subtitle = string.Empty;
+        if (summary.Single is { IsDirectory: true } && summary.RemainderBytes > 0 && summary.RemainderFiles > 0)
+        {
+            subtitle = Strings.Format("Inspect_These", summary.Largest.Count, InspectSummary.Percent(1 - InspectSummary.Fraction(summary.RemainderBytes, summary.Size)));
+        }
+        else if (summary.Largest.Count > 0 && summary.Largest[0].Share >= InspectSummary.DominantShare && summary.Single is not null)
+        {
+            subtitle = Strings.Format("Inspect_OneThing", InspectSummary.Percent(summary.Largest[0].Share));
+        }
+        _copy.AppendLine().AppendLine(title);
+
+        var columns = new ColumnDefinitions("*,170,82,50,70,100");
+        string[] headers = { Strings.Get("Inspect_Col_Item"), string.Empty, Strings.Get("Inspect_Col_Size"), Strings.Get("Inspect_Col_Share"), Strings.Get("Inspect_Col_Files"), Strings.Get("Inspect_Col_Changed") };
+        bool[] right = { false, false, true, true, true, true };
+        StackPanel rows = TableFrame(WhereHost, title, subtitle, columns, headers, right);
+        int index = 0;
+        foreach (InspectSummary.Row row in summary.Largest)
+        {
+            string size = SizeFormatter.Format(row.Bytes);
+            string share = InspectSummary.Percent(row.Share);
+            string files = row.Node.IsDirectory ? row.Node.FileCount.ToString("N0", CultureInfo.CurrentCulture) : "1";
+            string changed = row.Node.LastWriteUtc > DateTime.MinValue ? Ago(row.Node.LastWriteUtc) : string.Empty;
+            Control[] cells =
+            {
+                LinkCell(row.Name, row.Node),
+                Bar(row.Share, 6, Palette.NewBrush),
+                Cell(size, right: true, bold: true),
+                Cell(share, right: true, dim: true),
+                Cell(files, right: true, dim: true),
+                Cell(changed, right: true, dim: true)
+            };
+            AddRow(rows, columns, cells, index++ % 2 == 1);
+            _copy.Append("  ").Append(row.Name).Append("  ").Append(size).Append("  ").Append(share).Append("  ").Append(files).Append("  ").AppendLine(changed);
+        }
+        if (summary.Single is { IsDirectory: true } && summary.RemainderBytes > 0 && summary.RemainderFiles > 0)
+        {
+            string label = Strings.Format("Inspect_OtherFiles", summary.RemainderFiles);
+            Control[] cells =
+            {
+                Cell(label, dim: true),
+                new Panel(),
+                Cell(SizeFormatter.Format(summary.RemainderBytes), right: true, dim: true),
+                Cell(InspectSummary.Percent(InspectSummary.Fraction(summary.RemainderBytes, summary.Size)), right: true, dim: true),
+                Cell(summary.RemainderFiles.ToString("N0", CultureInfo.CurrentCulture), right: true, dim: true),
+                new Panel()
+            };
+            AddRow(rows, columns, cells, index % 2 == 1);
+            _copy.Append("  ").Append(label).Append("  ").AppendLine(SizeFormatter.Format(summary.RemainderBytes));
+        }
+        FinishRows(rows);
+    }
+
+    /// <summary>By type and By age as two tables: kind, files, size, share and a bar per row; the type table lists seven kinds and sums the rest.</summary>
+    private void BuildTypeAndAge()
+    {
+        InspectSummary summary = _summary;
+        bool hasContents = summary.Single is null || summary.Single.IsDirectory;
+        if (!hasContents || summary.Size <= 0 || summary.ByType.Count == 0)
+        {
+            Pair.IsVisible = false;
+            return;
+        }
+
+        var columns = new ColumnDefinitions("*,60,70,50,90");
+        bool[] right = { false, true, true, true, false };
+        var categoryBrushes = _scheme.Categories.ToDictionary(entry => entry.Category, entry => entry.Brush);
+        const int shownKinds = 7;
+        string typeTitle = Strings.Get("Inspect_ByType");
+        StackPanel typeRows = TableFrame(TypeHost, typeTitle, Strings.Format("Inspect_Strip_Kinds", summary.ByType.Count), columns,
+            new[] { Strings.Get("Inspect_Col_Kind"), Strings.Get("Inspect_Col_Files"), Strings.Get("Inspect_Col_Size"), Strings.Get("Inspect_Col_Share"), string.Empty }, right);
+        _copy.AppendLine().AppendLine(typeTitle);
+        double top = summary.ByType[0].Share;
+        int index = 0;
+        foreach (InspectSummary.Slice slice in summary.ByType.Take(shownKinds))
+        {
+            IBrush brush = slice.Category is { } category && categoryBrushes.TryGetValue(category, out IBrush? found) ? found : Palette.UnchangedBrush;
+            Control[] cells =
+            {
+                SwatchCell(slice.Label, brush),
+                Cell(slice.Files.ToString("N0", CultureInfo.CurrentCulture), right: true, dim: true),
+                Cell(SizeFormatter.Compact(slice.Bytes), right: true),
+                Cell(InspectSummary.Percent(slice.Share), right: true, dim: true),
+                Bar(top > 0 ? slice.Share / top : 0, 6, brush)
+            };
+            AddRow(typeRows, columns, cells, index++ % 2 == 1);
+            _copy.Append("  ").Append(slice.Label).Append("  ").Append(slice.Files).Append("  ").Append(SizeFormatter.Compact(slice.Bytes)).Append("  ").AppendLine(InspectSummary.Percent(slice.Share));
+        }
+        if (summary.ByType.Count > shownKinds)
+        {
+            var rest = summary.ByType.Skip(shownKinds).ToList();
+            Control[] cells =
+            {
+                Cell(Strings.Format("Inspect_More", rest.Count), dim: true),
+                Cell(rest.Sum(slice => slice.Files).ToString("N0", CultureInfo.CurrentCulture), right: true, dim: true),
+                Cell(SizeFormatter.Compact(rest.Sum(slice => slice.Bytes)), right: true, dim: true),
+                Cell(InspectSummary.Percent(rest.Sum(slice => slice.Share)), right: true, dim: true),
+                new Panel()
+            };
+            AddRow(typeRows, columns, cells, index % 2 == 1);
+        }
+        FinishRows(typeRows);
+
+        if (summary.ByAge.Count == 0 || summary.ByAge.All(band => band.Bytes == 0))
+        {
+            AgeHost.IsVisible = false;
+            return;
+        }
+        // The window is not attached yet, so resource lookups return nothing; use the palette directly.
+        Color accent = TreemapControl.ColorOf(Palette.NewBrush);
+        var dimColor = Color.Parse(App.Look.Control);
+        IBrush[] ageBrushes =
+        {
+            Palette.Freeze(accent),
+            Palette.Freeze(Palette.Mix(accent, dimColor, 0.3)),
+            Palette.Freeze(Palette.Mix(accent, dimColor, 0.58)),
+            Palette.UnchangedBrush
+        };
+        string ageTitle = Strings.Get("Inspect_ByAge");
+        string oldest = summary.OldestUtc > DateTime.MinValue
+            ? Strings.Format("Inspect_OldestChange", summary.OldestUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture))
+            : string.Empty;
+        StackPanel ageRows = TableFrame(AgeHost, ageTitle, oldest, columns,
+            new[] { Strings.Get("Inspect_Col_Changed"), Strings.Get("Inspect_Col_Files"), Strings.Get("Inspect_Col_Size"), Strings.Get("Inspect_Col_Share"), string.Empty }, right);
+        _copy.AppendLine().AppendLine(ageTitle);
+        double topAge = summary.ByAge.Max(band => band.Share);
+        index = 0;
+        foreach (InspectSummary.AgeBand band in summary.ByAge)
+        {
+            bool empty = band.Bytes == 0;
+            string label = Strings.Get("Inspect_Age_" + band.Bucket);
+            Control[] cells =
+            {
+                SwatchCell(label, ageBrushes[(int)band.Bucket], dim: empty),
+                Cell(band.Files.ToString("N0", CultureInfo.CurrentCulture), right: true, dim: true),
+                Cell(SizeFormatter.Compact(band.Bytes), right: true, dim: empty),
+                Cell(InspectSummary.Percent(band.Share), right: true, dim: true),
+                empty ? new Panel() : Bar(topAge > 0 ? band.Share / topAge : 0, 6, ageBrushes[(int)band.Bucket])
+            };
+            AddRow(ageRows, columns, cells, index++ % 2 == 1);
+            _copy.Append("  ").Append(label).Append("  ").Append(band.Files).Append("  ").Append(SizeFormatter.Compact(band.Bytes)).Append("  ").AppendLine(InspectSummary.Percent(band.Share));
+        }
+        FinishRows(ageRows);
+    }
+
+    /// <summary>The largest single files inside a folder: name, the subfolder they sit in, size and last change.</summary>
+    private void BuildLargestFiles()
+    {
+        InspectSummary summary = _summary;
+        if (summary.LargestFiles.Count == 0)
+        {
+            FilesHost.IsVisible = false;
+            return;
+        }
+        string title = Strings.Get("Inspect_LargestFiles");
+        var columns = new ColumnDefinitions("1.1*,*,80,100");
+        bool[] right = { false, false, true, true };
+        StackPanel rows = TableFrame(FilesHost, title, Strings.Format("Inspect_NOfM", summary.LargestFiles.Count, summary.Files), columns,
+            new[] { Strings.Get("Inspect_Col_File"), Strings.Get("Inspect_Col_In"), Strings.Get("Inspect_Col_Size"), Strings.Get("Inspect_Col_Changed") }, right);
+        _copy.AppendLine().AppendLine(title);
+        int index = 0;
+        foreach (InspectSummary.Row row in summary.LargestFiles)
+        {
+            int cut = row.Name.LastIndexOf('\\');
+            string folder = cut > 0 ? row.Name[..cut] : string.Empty;
+            string size = SizeFormatter.Format(row.Bytes);
+            string changed = row.Node.LastWriteUtc > DateTime.MinValue ? Ago(row.Node.LastWriteUtc) : string.Empty;
+            Control[] cells =
+            {
+                LinkCell(row.Node.Name, row.Node.Parent),
+                Cell(folder, dim: true),
+                Cell(size, right: true, bold: true),
+                Cell(changed, right: true, dim: true)
+            };
+            AddRow(rows, columns, cells, index++ % 2 == 1);
+            _copy.Append("  ").Append(row.Name).Append("  ").Append(size).Append("  ").AppendLine(changed);
+        }
+        FinishRows(rows);
+    }
+
+    // ---------------------------------------------------------------- table pieces
+
+    /// <summary>Puts a table's frame in a host: a title row with a dim subtitle at the right, a column header row, and the panel the data rows go in.</summary>
+    /// <param name="host">The panel the table fills.</param>
+    /// <param name="title">The table's name.</param>
+    /// <param name="subtitle">A dim remark at the right of the title, or empty.</param>
+    /// <param name="columns">The column layout every row shares.</param>
+    /// <param name="headers">One header per column; empty for a column without one.</param>
+    /// <param name="right">Per column, whether its text is right-aligned.</param>
+    /// <returns>The panel to add rows to.</returns>
+    private StackPanel TableFrame(Panel host, string title, string subtitle, ColumnDefinitions columns, string[] headers, bool[] right)
+    {
+        var stack = new StackPanel();
+        var titleRow = new DockPanel { Margin = new Thickness(12, 0, 12, 0), Height = 34 };
+        var subtitleText = new TextBlock { Text = subtitle, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(12, 0, 0, 0), Classes = { "dim" } };
+        DockPanel.SetDock(subtitleText, Dock.Right);
+        titleRow.Children.Add(subtitleText);
+        titleRow.Children.Add(new TextBlock { Text = title, FontSize = 13, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
+        var titleBorder = new Border { Child = titleRow, BorderThickness = new Thickness(0, 0, 0, 1) };
+        titleBorder.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        stack.Children.Add(titleBorder);
+
+        var headerGrid = new Grid { ColumnDefinitions = Clone(columns), ColumnSpacing = 12, Height = 24, Margin = new Thickness(12, 0, 12, 0) };
+        for (int i = 0; i < headers.Length; i++)
+        {
+            var text = new TextBlock { Text = headers[i].ToUpper(CultureInfo.CurrentCulture), FontSize = 10.5, LetterSpacing = 0.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = right[i] ? TextAlignment.Right : TextAlignment.Left, Classes = { "dim" } };
+            Grid.SetColumn(text, i);
+            headerGrid.Children.Add(text);
+        }
+        var headerBorder = new Border { Child = headerGrid };
+        headerBorder.Bind(Border.BackgroundProperty, this.GetResourceObservable("Window"));
+        stack.Children.Add(headerBorder);
+
+        var rows = new StackPanel();
+        stack.Children.Add(rows);
+        host.Children.Add(new Border { Child = stack, Classes = { "card", "flat" }, CornerRadius = new CornerRadius(10), ClipToBounds = true });
+        return rows;
+    }
+
+    /// <summary>A fresh copy of a column layout, since a Grid owns its definitions.</summary>
+    /// <param name="columns">The layout to copy.</param>
+    /// <returns>New definitions with the same widths.</returns>
+    private static ColumnDefinitions Clone(ColumnDefinitions columns)
+    {
+        var copy = new ColumnDefinitions();
+        foreach (ColumnDefinition column in columns)
+        {
+            copy.Add(new ColumnDefinition(column.Width));
+        }
+        return copy;
+    }
+
+    /// <summary>Adds one data row: the cells in a grid with the shared columns, a rule above, and every other row faintly darker.</summary>
+    /// <param name="rows">The table's row panel.</param>
+    /// <param name="columns">The column layout.</param>
+    /// <param name="cells">One control per column.</param>
+    /// <param name="stripe">True darkens the row slightly.</param>
+    private static void AddRow(StackPanel rows, ColumnDefinitions columns, Control[] cells, bool stripe)
+    {
+        var grid = new Grid { ColumnDefinitions = Clone(columns), ColumnSpacing = 12, Height = 30, Margin = new Thickness(12, 0, 12, 0) };
+        for (int i = 0; i < cells.Length; i++)
+        {
+            Grid.SetColumn(cells[i], i);
+            grid.Children.Add(cells[i]);
+        }
+        var border = new Border { Child = grid, BorderThickness = new Thickness(0, 1, 0, 0), Classes = { "rule-under" } };
+        if (stripe)
+        {
+            border.Background = new SolidColorBrush(Colors.Black, 0.14);
+        }
+        rows.Children.Add(border);
+    }
+
+    /// <summary>Rounds the last row's bottom corners so a striped last row follows the table's frame.</summary>
+    /// <param name="rows">The table's row panel.</param>
+    private static void FinishRows(StackPanel rows)
+    {
+        if (rows.Children.Count > 0)
+        {
+            ((Border)rows.Children[^1]).CornerRadius = new CornerRadius(0, 0, 9, 9);
+        }
+    }
+
+    /// <summary>A text cell.</summary>
+    /// <param name="text">The text; trimmed with an ellipsis when the column is too narrow, with the full text as its tooltip.</param>
+    /// <param name="right">True aligns it to the right.</param>
+    /// <param name="dim">True uses the dim text color.</param>
+    /// <param name="bold">True makes it semibold.</param>
+    /// <returns>The block, vertically centered.</returns>
+    private static TextBlock Cell(string text, bool right = false, bool dim = false, bool bold = false)
+    {
+        var block = new TextBlock
+        {
+            Text = text,
+            FontSize = 12.5,
+            VerticalAlignment = VerticalAlignment.Center,
+            TextAlignment = right ? TextAlignment.Right : TextAlignment.Left,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            FontWeight = bold ? FontWeight.SemiBold : FontWeight.Normal
+        };
+        if (dim)
+        {
+            block.Classes.Add("dim");
+        }
+        if (text.Length > 0)
+        {
+            ToolTip.SetTip(block, text);
+        }
+        return block;
+    }
+
+    /// <summary>A name cell that zooms the map to a folder when the caller can navigate; otherwise plain text.</summary>
+    /// <param name="text">The name shown.</param>
+    /// <param name="target">The folder to navigate to; a file or null gives plain text.</param>
+    /// <returns>The cell.</returns>
+    private Control LinkCell(string text, FsNode? target)
+    {
+        TextBlock block = Cell(text);
+        if (target is not null)
+        {
+            ToolTip.SetTip(block, target.FullPath);
+        }
+        if (_navigate is not { } navigate || target is not { IsDirectory: true })
+        {
+            return block;
+        }
+        block.Cursor = new Cursor(StandardCursorType.Hand);
+        ToolTip.SetTip(block, Strings.Get("Inspect_RowTip") + "\n" + target.FullPath);
+        block.PointerReleased += (_, _) =>
+        {
+            Close();
+            navigate(target);
+        };
+        return block;
+    }
+
+    /// <summary>A label cell with a color swatch before it.</summary>
+    /// <param name="text">The label.</param>
+    /// <param name="brush">The swatch color.</param>
+    /// <param name="dim">True dims the label.</param>
+    /// <returns>The cell.</returns>
+    private static Control SwatchCell(string text, IBrush brush, bool dim = false)
+    {
+        var panel = new DockPanel { VerticalAlignment = VerticalAlignment.Center };
+        var swatch = new Border { Width = 9, Height = 9, CornerRadius = new CornerRadius(2), Background = brush, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 8, 0) };
+        DockPanel.SetDock(swatch, Dock.Left);
+        panel.Children.Add(swatch);
+        panel.Children.Add(Cell(text, dim: dim));
+        return panel;
+    }
+
+    /// <summary>A rounded horizontal bar filled to a fraction of its width.</summary>
+    /// <param name="fraction">Filled share, 0..1; values outside are clamped and a zero still draws a hairline fill.</param>
+    /// <param name="height">Bar thickness in device-independent pixels; the corner radius is half of it.</param>
+    /// <param name="fill">The fill color.</param>
+    /// <returns>A two-column grid with the track spanning both and the fill in the first.</returns>
+    private static Grid Bar(double fraction, double height, IBrush fill)
+    {
+        fraction = Math.Clamp(fraction, 0, 1);
+        var grid = new Grid { Height = height, VerticalAlignment = VerticalAlignment.Center };
+        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(fraction, 0.001), GridUnitType.Star));
+        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(1 - fraction, 0.001), GridUnitType.Star));
+        var track = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
+        Grid.SetColumnSpan(track, 2);
+        var filled = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Background = fill };
+        grid.Children.Add(track);
+        grid.Children.Add(filled);
+        return grid;
     }
 
     private List<FsNode>? _chain;
@@ -416,237 +876,6 @@ public partial class InspectWindow : Window
         }
         button.Flyout = flyout;
         return button;
-    }
-
-    /// <summary>Wraps one plain string as a parts array for <see cref="ContextLine"/>.</summary>
-    /// <param name="text">The line's whole text, unstyled.</param>
-    /// <returns>A single plain part.</returns>
-    private static Part[] PlainParts(string text) => new[] { Plain(text) };
-
-    /// <summary>Adds one row to the context grid and its plain-text form to the copy buffer.</summary>
-    /// <param name="glyph">Single character drawn dimmed in the left column.</param>
-    /// <param name="parts">Styled runs of the text, concatenated in order.</param>
-    private void ContextLine(string glyph, params Part[] parts)
-    {
-        int rowIndex = Context.RowDefinitions.Count;
-        Context.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-        var icon = new TextBlock { Text = glyph, FontSize = 13, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 4, 0, 4), Classes = { "dim" } };
-        var text = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = 12.5, Margin = new Thickness(0, 3, 0, 4), LineHeight = 18 };
-        Fill(text, parts, this);
-
-        Grid.SetRow(icon, rowIndex);
-        Grid.SetRow(text, rowIndex);
-        Grid.SetColumn(text, 1);
-        Context.Children.Add(icon);
-        Context.Children.Add(text);
-        _copy.AppendLine(ToPlainText(parts));
-    }
-
-    /// <summary>Joins the non-empty pieces of the kind line with a spaced middle dot.</summary>
-    /// <param name="parts">Pieces in display order; null and empty ones are skipped.</param>
-    /// <returns>The joined line, or an empty string when every piece is empty.</returns>
-    private static string Join(params string?[] parts) => string.Join("  ·  ", parts.Where(part => !string.IsNullOrEmpty(part)));
-
-    // ---------------------------------------------------------------- facts, donuts, largest
-
-    /// <summary>Shows the summary's callouts (hard links, access problems and such) in one line, or leaves the strip hidden.</summary>
-    private void BuildCallout()
-    {
-        if (_summary.Callouts.Count == 0)
-        {
-            return;
-        }
-        CalloutText.Text = string.Join("  ", _summary.Callouts);
-        Callout.IsVisible = true;
-        _copy.AppendLine().AppendLine(CalloutText.Text);
-    }
-
-    /// <summary>Fills the type and age donuts for a folder or selection; a single file, an empty size or no types hides the charts.</summary>
-    private void BuildCharts()
-    {
-        InspectSummary summary = _summary;
-        bool hasContents = summary.Single is null || summary.Single.IsDirectory;
-        if (!hasContents || summary.Size <= 0 || summary.ByType.Count == 0)
-        {
-            Charts.IsVisible = false;
-            return;
-        }
-
-        var categoryBrushes = _scheme.Categories.ToDictionary(entry => entry.Category, entry => entry.Brush);
-        var typeSlices = summary.ByType.Select(slice => new DonutChart.Slice(
-            slice.Label,
-            SizeFormatter.Compact(slice.Bytes),
-            slice.Bytes,
-            slice.Category is { } category && categoryBrushes.TryGetValue(category, out IBrush? brush) ? brush : Palette.UnchangedBrush)).ToList();
-        InspectSummary.Slice topType = summary.ByType[0];
-        Donut(TypeDonut, TypeLegend, typeSlices, summary.ByType.Select(slice => slice.Share).ToList(),
-            SizeFormatter.Compact(topType.Bytes), topType.Label, Strings.Get("Inspect_ByType"));
-
-        if (summary.ByAge.Count == 0 || summary.ByAge.All(band => band.Bytes == 0))
-        {
-            AgePanel.IsVisible = false;
-            return;
-        }
-
-        // The window is not attached yet, so resource lookups return nothing; use the palette directly.
-        Color accent = TreemapControl.ColorOf(Palette.NewBrush);
-        var dimColor = Color.Parse(App.Look.Control);
-        IBrush[] ageBrushes =
-        {
-            Palette.Freeze(accent),
-            Palette.Freeze(Palette.Mix(accent, dimColor, 0.3)),
-            Palette.Freeze(Palette.Mix(accent, dimColor, 0.58)),
-            Palette.UnchangedBrush
-        };
-        var ageSlices = summary.ByAge.Select((band, index) => new DonutChart.Slice(
-            Strings.Get("Inspect_Age_" + band.Bucket),
-            SizeFormatter.Compact(band.Bytes),
-            band.Bytes,
-            ageBrushes[index])).ToList();
-        InspectSummary.AgeBand topAge = summary.ByAge.MaxBy(band => band.Bytes)!;
-        Donut(AgeDonut, AgeLegend, ageSlices, summary.ByAge.Select(band => band.Share).ToList(),
-            SizeFormatter.Compact(topAge.Bytes), Strings.Get("Inspect_Age_" + topAge.Bucket), Strings.Get("Inspect_ByAge"));
-
-        if (summary.OldestUtc > DateTime.MinValue)
-        {
-            string oldestDate = summary.OldestUtc.ToLocalTime().ToString("d", System.Globalization.CultureInfo.CurrentCulture);
-            OldestText.Text = Strings.Format("Inspect_OldestChange", oldestDate);
-        }
-    }
-
-    /// <summary>Fills one donut and its legend, wiring hover in both directions, and writes the rows to the copy buffer.</summary>
-    /// <param name="donut">The chart control to fill.</param>
-    /// <param name="legend">Panel that receives one row per slice.</param>
-    /// <param name="slices">Slices in display order; index positions must match <paramref name="shares"/>.</param>
-    /// <param name="shares">Each slice's share of the whole as a 0..1 fraction, shown as a percentage in the legend.</param>
-    /// <param name="centerValue">Large text in the donut's center, normally the top slice's size.</param>
-    /// <param name="centerLabel">Small text under the center value, normally the top slice's label.</param>
-    /// <param name="heading">Heading written above the rows in the copied text.</param>
-    private void Donut(DonutChart donut, Panel legend, List<DonutChart.Slice> slices, List<double> shares, string centerValue, string centerLabel, string heading)
-    {
-        donut.CenterValue = centerValue;
-        donut.CenterLabel = centerLabel;
-        donut.SetSlices(slices);
-        _copy.AppendLine().AppendLine(heading);
-
-        var rows = new List<Border>();
-        for (int i = 0; i < slices.Count; i++)
-        {
-            int index = i;
-            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("10,*,Auto") };
-            var swatch = new Border { Width = 10, Height = 10, CornerRadius = new CornerRadius(2), Background = slices[i].Fill, VerticalAlignment = VerticalAlignment.Center };
-            var nameText = new TextBlock { Text = slices[i].Label, FontSize = 12, Margin = new Thickness(8, 0, 8, 0), TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
-            var percentText = new TextBlock { Text = InspectSummary.Percent(shares[i]), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
-            Grid.SetColumn(nameText, 1);
-            Grid.SetColumn(percentText, 2);
-            grid.Children.Add(swatch);
-            grid.Children.Add(nameText);
-            grid.Children.Add(percentText);
-
-            // Hovering a legend row lights its slice, and hovering a slice lights its row.
-            var row = new Border { Child = grid, Padding = new Thickness(4, 3), CornerRadius = new CornerRadius(4), Background = Brushes.Transparent, Classes = { "legend" } };
-            ToolTip.SetTip(row, slices[i].Value);
-            row.PointerEntered += (_, _) => donut.Highlight = index;
-            row.PointerExited += (_, _) => donut.Highlight = -1;
-            legend.Children.Add(row);
-            rows.Add(row);
-            _copy.Append("  ").Append(slices[i].Label).Append("  ").Append(slices[i].Value).Append("  ").AppendLine(percentText.Text);
-        }
-        donut.HoverChanged += hoveredIndex =>
-        {
-            for (int i = 0; i < rows.Count; i++)
-            {
-                rows[i].Classes.Set("lit", i == hoveredIndex);
-            }
-        };
-    }
-
-    /// <summary>Lists the largest items with share bars; folder rows navigate when the caller allows it, and a remainder line sums what is not shown.</summary>
-    private void BuildLargest()
-    {
-        InspectSummary summary = _summary;
-        if (summary.Largest.Count == 0)
-        {
-            LargestPanel.IsVisible = false;
-            return;
-        }
-        if (summary.Single is null)
-        {
-            LargestHeading.Text = Strings.Get("Inspect_Items");
-        }
-        _copy.AppendLine().AppendLine(LargestHeading.Text);
-
-        foreach (InspectSummary.Row row in summary.Largest)
-        {
-            var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("200,*,66,44") };
-            var labelPanel = new DockPanel { VerticalAlignment = VerticalAlignment.Center };
-            var rowIcon = new TextBlock { Text = row.Node.IsDirectory ? "▣" : "▤", FontSize = 12, Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
-            DockPanel.SetDock(rowIcon, Dock.Left);
-            labelPanel.Children.Add(rowIcon);
-            var nameText = new TextBlock { Text = row.Name, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
-            ToolTip.SetTip(nameText, row.Node.FullPath);
-            labelPanel.Children.Add(nameText);
-
-            Grid bar = Bar(row.Share, 6);
-            bar.Margin = new Thickness(12, 0, 12, 0);
-            var sizeText = new TextBlock { Text = SizeFormatter.Format(row.Bytes), TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
-            var percentText = new TextBlock { Text = InspectSummary.Percent(row.Share), TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
-            Grid.SetColumn(bar, 1);
-            Grid.SetColumn(sizeText, 2);
-            Grid.SetColumn(percentText, 3);
-            grid.Children.Add(labelPanel);
-            grid.Children.Add(bar);
-            grid.Children.Add(sizeText);
-            grid.Children.Add(percentText);
-
-            // A folder row is a link into the map when the caller can navigate.
-            var border = new Border { Child = grid, Padding = new Thickness(0, 7, 0, 7), BorderThickness = new Thickness(0, 0, 0, 1), Classes = { "rule-under" } };
-            if (_navigate is { } navigate && row.Node.IsDirectory)
-            {
-                border.Cursor = new Cursor(StandardCursorType.Hand);
-                ToolTip.SetTip(border, Strings.Get("Inspect_RowTip"));
-                border.PointerReleased += (_, _) =>
-                {
-                    Close();
-                    navigate(row.Node);
-                };
-            }
-            LargestRows.Children.Add(border);
-            _copy.Append("  ").Append(row.Name).Append("  ").Append(sizeText.Text).Append("  ").AppendLine(percentText.Text);
-        }
-
-        // The last row needs no rule under it.
-        ((Border)LargestRows.Children[^1]).BorderThickness = new Thickness(0);
-
-        if (summary.Single is { IsDirectory: true } && summary.RemainderBytes > 0 && summary.RemainderFiles > 0)
-        {
-            string shownPercent = InspectSummary.Percent(1 - InspectSummary.Fraction(summary.RemainderBytes, summary.Size));
-            RemainderText.Text = Strings.Format("Inspect_Remainder",
-                summary.Largest.Count, shownPercent, summary.RemainderFiles, SizeFormatter.Format(summary.RemainderBytes));
-            _copy.AppendLine(RemainderText.Text);
-        }
-        else
-        {
-            RemainderText.IsVisible = false;
-        }
-    }
-
-    /// <summary>A rounded horizontal bar filled to a fraction of its width.</summary>
-    /// <param name="fraction">Filled share, 0..1; values outside are clamped and a zero still draws a hairline fill.</param>
-    /// <param name="height">Bar thickness in device-independent pixels; the corner radius is half of it.</param>
-    /// <returns>A two-column grid with the track spanning both and the fill in the first.</returns>
-    private Grid Bar(double fraction, double height)
-    {
-        fraction = Math.Clamp(fraction, 0, 1);
-        var grid = new Grid { Height = height, VerticalAlignment = VerticalAlignment.Center };
-        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(fraction, 0.001), GridUnitType.Star));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(1 - fraction, 0.001), GridUnitType.Star));
-        var track = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
-        Grid.SetColumnSpan(track, 2);
-        var fill = new Border { Height = height, CornerRadius = new CornerRadius(height / 2), Classes = { "accent-fill" } };
-        grid.Children.Add(track);
-        grid.Children.Add(fill);
-        return grid;
     }
 
     /// <summary>A file's kind line, such as "PDF document" or "File without extension, document".</summary>

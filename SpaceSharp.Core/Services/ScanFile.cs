@@ -14,7 +14,19 @@ namespace SpaceSharp.Services;
 /// <param name="FileCount">Files in the tree, hard-link duplicates included.</param>
 /// <param name="Bytes">Logical bytes in the tree, excluding the free-space node.</param>
 /// <param name="Path">The .sscan file this header was read from.</param>
-public sealed record ScanFileInfo(string RootPath, DateTime ScannedUtc, string Method, long FreeBytes, int FileCount, long Bytes, string Path);
+/// <param name="Top">The largest items directly under the root, largest first, for the start screen's small map; empty for a save from before they were stored.</param>
+public sealed record ScanFileInfo(string RootPath, DateTime ScannedUtc, string Method, long FreeBytes, int FileCount, long Bytes, string Path, IReadOnlyList<ScanTopItem>? Top = null)
+{
+    /// <summary>The largest items directly under the root, largest first; empty when the save did not store them.</summary>
+    public IReadOnlyList<ScanTopItem> Top { get; init; } = Top ?? [];
+}
+
+/// <summary>One of the largest items directly under a saved scan's root, as the header stores it.</summary>
+/// <param name="Name">The file or folder name.</param>
+/// <param name="IsDirectory">True for a folder.</param>
+/// <param name="Size">Its logical size in bytes.</param>
+/// <param name="Allocated">Its size on disk in bytes.</param>
+public sealed record ScanTopItem(string Name, bool IsDirectory, long Size, long Allocated);
 
 /// <summary>The automatic saves of one scan root: the current save and, when kept, the previous one.</summary>
 /// <param name="RootPath">The scanned drive root or folder.</param>
@@ -29,7 +41,10 @@ public static class ScanFile
     /// <summary>The file extension of a saved scan, with its dot.</summary>
     public const string Extension = ".sscan";
     private const uint Magic = 0x4E435353; // "SSCN"
-    private const byte Version = 1;
+    private const byte Version = 2;
+    private const byte OldestReadable = 1;
+    /// <summary>How many top-level items the header keeps for the start screen's small map.</summary>
+    private const int TopCount = 16;
 
     private const byte KindFile = 0, KindDirectory = 1, KindHardLink = 2;
 
@@ -252,6 +267,17 @@ public static class ScanFile
             writer.Write(root.FileCount);
             writer.Write(root.Size - (root.FreeSpaceVisible ? root.FreeBytes : 0));
 
+            // Version 2: the largest top-level items, so the start screen can draw the root without loading the tree.
+            var top = root.Children.Where(child => child.IsReal && child.Size > 0).OrderByDescending(child => child.Size).Take(TopCount).ToList();
+            writer.Write((byte)top.Count);
+            foreach (FsNode item in top)
+            {
+                writer.Write(item.Name);
+                writer.Write(item.IsDirectory);
+                writer.Write(item.Size);
+                writer.Write(item.Allocated);
+            }
+
             foreach (FsNode child in root.Children)
             {
                 WriteNode(writer, child);
@@ -308,18 +334,16 @@ public static class ScanFile
             using FileStream file = File.OpenRead(path);
             using var gzip = new GZipStream(file, CompressionMode.Decompress);
             using var reader = new BinaryReader(gzip, Encoding.UTF8);
-            if (reader.ReadUInt32() != Magic || reader.ReadByte() != Version)
+            if (reader.ReadUInt32() != Magic)
             {
                 return null;
             }
-
-            string rootPath = reader.ReadString();
-            var scannedUtc = new DateTime(reader.ReadInt64(), DateTimeKind.Utc);
-            string method = reader.ReadString();
-            long freeBytes = reader.ReadInt64();
-            int fileCount = reader.ReadInt32();
-            long bytes = reader.ReadInt64();
-            return new ScanFileInfo(rootPath, scannedUtc, method, freeBytes, fileCount, bytes, path);
+            byte version = reader.ReadByte();
+            if (version is < OldestReadable or > Version)
+            {
+                return null;
+            }
+            return ReadHeader(reader, version, path);
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
         {
@@ -352,27 +376,51 @@ public static class ScanFile
             throw new InvalidDataException(Strings.Get("ScanFile_NotAScan"));
         }
 
-        if (reader.ReadByte() != Version)
+        byte version = reader.ReadByte();
+        if (version is < OldestReadable or > Version)
         {
             throw new InvalidDataException(Strings.Get("ScanFile_Newer"));
         }
 
+        ScanFileInfo info = ReadHeader(reader, version, path);
+        var root = new FsNode(info.RootPath, NodeKind.Directory, null);
+        ReadChildren(reader, root);
+        root.FinishDirectory();
+        if (addFreeSpace && info.FreeBytes > 0)
+        {
+            root.AddFreeSpace(info.FreeBytes);
+        }
+
+        return (root, info);
+    }
+
+    /// <summary>Reads the header fields after the magic number and version, leaving the reader at the first node record.</summary>
+    /// <param name="reader">The gzip-backed reader positioned after the version byte.</param>
+    /// <param name="version">The format version read; 1 has no top-level items.</param>
+    /// <param name="path">Recorded in the header as the file's location.</param>
+    /// <returns>The header.</returns>
+    private static ScanFileInfo ReadHeader(BinaryReader reader, byte version, string path)
+    {
         string rootPath = reader.ReadString();
         var scannedUtc = new DateTime(reader.ReadInt64(), DateTimeKind.Utc);
         string method = reader.ReadString();
         long freeBytes = reader.ReadInt64();
         int fileCount = reader.ReadInt32();
         long bytes = reader.ReadInt64();
-
-        var root = new FsNode(rootPath, NodeKind.Directory, null);
-        ReadChildren(reader, root);
-        root.FinishDirectory();
-        if (addFreeSpace && freeBytes > 0)
+        var top = new List<ScanTopItem>();
+        if (version >= 2)
         {
-            root.AddFreeSpace(freeBytes);
+            int count = reader.ReadByte();
+            for (int i = 0; i < count; i++)
+            {
+                string name = reader.ReadString();
+                bool isDirectory = reader.ReadBoolean();
+                long size = reader.ReadInt64();
+                long allocated = reader.ReadInt64();
+                top.Add(new ScanTopItem(name, isDirectory, size, allocated));
+            }
         }
-
-        return (root, new ScanFileInfo(rootPath, scannedUtc, method, freeBytes, fileCount, bytes, path));
+        return new ScanFileInfo(rootPath, scannedUtc, method, freeBytes, fileCount, bytes, path, top);
     }
 
     /// <summary>Reads records into a folder until its end marker, recursing into subfolders and finishing each.</summary>

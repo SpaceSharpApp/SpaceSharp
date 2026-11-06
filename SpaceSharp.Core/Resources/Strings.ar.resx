@@ -496,7 +496,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>تلوين حسب</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>المجلد الأعلى: لون لكل مجلد أعلى، أفتح مع كل مستوى داخله. عمق المجلد: لون مختلف لكل مستوى. نوع الملف: الملفات ملونة حسب نوعها.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>التأكيد قبل النقل إلى سلة المحذوفات</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>السؤال قبل الحذف. يمكن دائمًا استعادة العناصر المحذوفة من سلة المحذوفات.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>اسأل قبل الحذف. يمكن دائمًا استعادة العناصر المحذوفة من سلة المحذوفات. العناصر الموجودة في مجلدات Windows والبرامج والتطبيقات والألعاب تسأل دائمًا.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>إخفاء المجلدات الفارغة غير الآمنة</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>يعرض فقط المجلدات الفارغة التي هي لك بوضوح. أما التي داخل Windows وProgram Files وProgramData وAppData ومجلدات الألعاب أو البناء، والتي تتوقع البرامج وجودها غالبًا، فتُستبعد من القائمة كليًا. عند الإيقاف تُعرض غير محددة مع تحذير عند تحديد أي منها.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>لوحات ألوان مخصصة</value></data>
@@ -698,6 +698,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>فحص واحد</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} فحوصات</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>الأحدث أولًا</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>كل ما تبقى</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% مستخدمة · {1} متاحة</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>مجلد · {0} ملفات</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>امتلأ القرص بمقدار {0} منذ هذا الفحص. افحص مجددًا لترى أين ذهبت المساحة.</value></data>
@@ -750,8 +751,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>هذه السنة</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>من سنة إلى 3 سنوات</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>أقدم</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>أقدم تغيير: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>هذه الـ{0} تمثل {1} من المجلد. أما الملفات الـ{2:N0} الأخرى فتتشارك {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>أقدم تغيير {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} من هذا المجلد شيء واحد: {1} بحجم {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} على القرص</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} من {1}، مجلده الوحيد</value></data>
@@ -763,10 +763,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>معظمه {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>معظمه {0} ({1}) و{2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>مزيج من {0} ({1}) و{2} ({3}) و{4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>الملف الوسيط {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>آخر تغيير {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>عُدِّل {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} لم يُمَس منذ أكثر من سنة</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>لم يتغير منذ آخر فحص</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>كبُر بمقدار {0} منذ آخر فحص</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>صغُر بمقدار {0} منذ آخر فحص</value></data>
@@ -1164,7 +1162,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Ach_Locked" xml:space="preserve"><value>مقفل</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>مقفل. طريقة الحصول عليه تبقى سرًا حتى تحصل عليه.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>فُتحت كل الإنجازات</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>كان هذا آخرها. لم يبقَ لدى التطبيق ما يمنحه، فمن الآن سيكتفي بأن يعرض لك قرصك.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>كان هذا آخرها. لم يبقَ لدى التطبيق ما يوزعه، فمن الآن سيكتفي بعرض قرصك. حسنًا، شيء واحد: الإعدادات › المظهر فيها الآن سمة ذهبية.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>مرآتي، يا مرآتي</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>سألنا القرص عمّا تغيّر منذ نفسه. القرص، وهو قرص، لم يقل شيئًا.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>سباق سرعة</value></data>
@@ -1208,4 +1206,52 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Ach_Collector_Name" xml:space="preserve"><value>جامع</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>فُتحت كل الإنجازات الأخرى. لم يبقَ ما يُعثر عليه، وهذا هو مغزى التطبيق.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>أُجريا بطريقتين مختلفتين ({0} مقابل {1}): تشمل الفروق ملفات لا تراها إلا طريقة واحدة.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>داخل مجلد برنامج: {0:N0} منها، في Windows أو Program Files أو ProgramData أو AppData أو مجلد لعبة أو بناء. أي برنامج يحتاج إليها سيتوقف عن العمل حتى تُستعاد من سلة المحذوفات.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>داخل مجلد برنامج: {0:N0} منها، في Windows أو Program Files أو ProgramData أو AppData أو مجلد لعبة أو بناء. أي برنامج يحتاج إليها سيتوقف عن العمل، ولا توجد سلة محذوفات لاستعادتها منها.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>داخل مجلد برنامج: {0:N0} من النسخ المحددة، في Windows أو Program Files أو ProgramData أو AppData أو مجلد لعبة أو بناء. أي برنامج يحتاج إلى نسخته سيتوقف عن العمل. أبقِ عليها وحدد النسخ الموجودة في أماكن أخرى.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} محددة · {1} · {2:N0} في مجلدات البرامج</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>يحدد النسخ الأخرى في كل مجموعة. تبقى النسخ الموجودة في مجلدات Windows والبرامج والتطبيقات والألعاب غير محددة.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>مجلد برنامج</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>يتم الحذف نهائيًا…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} من {1:N0} عنصرًا</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>إفراغ سلة المحذوفات على {1}؟ سيُحذف ما فيها ({0}) نهائيًا، ولا يمكن استعادة أي شيء بعد ذلك.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>إفراغ السلة</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>العنصر</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>إظهار {0:N0} الأخرى ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>توائم</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>بحث عن التكرارات بلغت فيه النسخ الزائدة أكثر من غيغابايت. الملف نفسه، مرارًا وتكرارًا.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>مرتّب</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>حذف ألف مجلد فارغ أو أكثر دفعة واحدة. لم تكن تحوي شيئًا، والآن لا تحوي شيئًا في مكان آخر.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>تراجع</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>ضغطت إلغاء على عملية حذف بعد الملاحظة عن مجلدات البرامج. الملاحظة أدت عملها.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>مدبّر المنزل</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>أفرغت شيئًا من «آمن للتفريغ». ستعود ذاكرات التخزين المؤقت، لكنه كان لطيفًا ما دام.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>رسّام</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>حفظت لوحة ألوان خاصة بك. لم تكن اللوحات المضمّنة كافية، وهذا منصف.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>ذهبي</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>اتبع إعداد Windows، أو استخدم الفاتح أو الداكن دائمًا. الذهبي لك: كل الإنجازات مفتوحة، والتطبيق يرتدي ما يليق بذلك، مع لوحة خريطة خاصة به.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>اثنا عشر معدنًا من النحاس الأصفر إلى الذهب الوردي، لسمة الذهبي</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} أنواع</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>مجلد يضم {0:N0} ملفًا في {1:N0} مجلدًا، {2:N0} منها مباشرة بداخله.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>مجلد يضم {0:N0} ملفًا، كلها مباشرة بداخله.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}، {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>يشغل {0}، و{1} من {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>يشغل {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} أنواع أخرى تتقاسم {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>الملف الوسيط {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} منه تغيّر هذا الشهر؛ و{1} لم يُمس منذ أكثر من عام.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>مجلد أو ملف</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>الحجم</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>الحصة</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>الملفات</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>تغيّر</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>النوع</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>الملف</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>في</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>أكبر الملفات</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} من {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>الملفات الأخرى وعددها {0:N0}</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} أخرى</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>هذه الـ{0:N0} تشكّل {1} من المجلد</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} من المجلد شيء واحد</value></data>
 </root>

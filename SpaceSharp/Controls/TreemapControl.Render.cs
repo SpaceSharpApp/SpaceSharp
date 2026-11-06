@@ -518,6 +518,7 @@ public sealed partial class TreemapControl
                 dc.DrawRectangle(null, _selectionPen, selectionFrame);
             }
         }
+        DrawPulse(dc);
     }
 
     /// <summary>Returns the frame rectangle for a box, inset so the stroke stays inside it.</summary>

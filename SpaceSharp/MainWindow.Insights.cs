@@ -678,7 +678,7 @@ public partial class MainWindow
                 .ToList();
             if (pickedItems.Count > 0)
             {
-                _ = DeleteNodes(pickedItems);
+                _ = DeleteNodes(pickedItems, knownSafe: true);
             }
         };
         DockPanel.SetDock(recycleButton, Dock.Right);
@@ -901,6 +901,7 @@ public partial class MainWindow
 
         ShowView(insights: false);
         Treemap.SelectMany(suggestion.Items);
+        Treemap.PulseSelection();   // the map is busy and the places can be small: flash them so they are found
         if (suggestion.Items.Count == 1 && suggestion.Items[0].IsDirectory)
         {
             Treemap.FocusOn(suggestion.Items[0]);
@@ -925,7 +926,7 @@ public partial class MainWindow
         switch (suggestion.Action)
         {
             case CleanupAction.Recycle:
-                await DeleteNodes(suggestion.Items);
+                await DeleteNodes(suggestion.Items, knownSafe: true);
                 break;
             case CleanupAction.EmptyRecycleBin:
                 await EmptyRecycleBinAsync(suggestion);
@@ -945,6 +946,12 @@ public partial class MainWindow
     private async Task EmptyRecycleBinAsync(CleanupSuggestion suggestion)
     {
         string drive = System.IO.Path.GetPathRoot(_root!.FullPath) ?? _root.FullPath;
+        // Emptying skips every other safety net, so it always asks, and the question says what is lost.
+        string question = Strings.Format("Cleanup_EmptyBinQuestion", SizeFormatter.Format(suggestion.Bytes), drive.TrimEnd('\\'));
+        if (!await Dialog.Confirm(this, Strings.Get("Cleanup_RecycleBin"), question, Strings.Get("Cleanup_EmptyBinButton"), danger: true))
+        {
+            return;
+        }
         if (!Trash.TryEmpty(drive, out string? error))
         {
             await Dialog.Error(this, Strings.Get("Cleanup_RecycleBin"), error ?? string.Empty);

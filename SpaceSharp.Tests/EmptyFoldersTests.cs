@@ -63,6 +63,19 @@ public class EmptyFoldersTests
     }
 
     [Fact]
+    public void FilesInsideProgramPlacesCountToo()
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode game = TestTree.Dir("Game", TestTree.Dir("common", TestTree.Dir("steamapps", TestTree.Dir("Steam", root))));
+        FsNode asset = TestTree.File(game, "pack.dat", 10);
+        FsNode copy = TestTree.File(TestTree.Dir("Downloads", TestTree.Dir("me", TestTree.Dir("Users", root))), "pack.dat", 10);
+        TestTree.Finish(root);
+
+        Assert.True(EmptyFolders.IsProgramPlace(asset));
+        Assert.False(EmptyFolders.IsProgramPlace(copy));
+    }
+
+    [Fact]
     public void OnTheSystemDriveOnlyTheUsersOwnFoldersStartTicked()
     {
         FsNode root = TestTree.Dir(@"C:\");

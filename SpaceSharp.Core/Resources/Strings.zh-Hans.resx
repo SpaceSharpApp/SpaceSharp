@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>着色依据</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>顶层文件夹：每个顶层文件夹一种色相，每深入一层颜色更浅。文件夹深度：每一层使用不同颜色。文件类型：按类型为文件着色。</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>移至回收站前确认</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>删除前询问。已删除的项目始终可以从回收站还原。</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>删除前询问。已删除的项目始终可以从回收站还原。Windows、程序、应用和游戏文件夹内的项目始终会询问。</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>隐藏不安全的空文件夹</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>只列出明显属于你的空文件夹。位于 Windows、Program Files、ProgramData、AppData 以及游戏或构建文件夹内、程序往往需要其存在的那些，完全不列出。关闭后它们会以未勾选状态列出，勾选时给出警告。</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>自定义配色</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 次扫描</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} 次扫描</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>最新在前</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>其余所有</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>已用 {0}% · 可用 {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>文件夹 · {0} 个文件</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>自此次扫描以来，驱动器又占用了 {0}。重新扫描以查看空间去了哪里。</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 到 3 年</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>更早</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>最早的更改：{0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>这 {0} 占文件夹的 {1}。其余 {2:N0} 个文件共占 {3}。</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>最早的更改 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>此文件夹的 {0} 来自同一项：{1}，大小 {2}。</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>占用空间 {0}</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>占 {1} 的 {0}，是其唯一的文件夹</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>主要是{0}（{1}）</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>主要是{0}（{1}）和{2}（{3}）</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>混合了{0}（{1}）、{2}（{3}）和{4}（{5}）</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>文件大小中位数 {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>最后更改于{0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>修改于{0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} 已超过一年未改动</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>自上次扫描以来无变化</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>自上次扫描以来增大了 {0}</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>自上次扫描以来缩小了 {0}</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Ach_Locked" xml:space="preserve"><value>未解锁</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>未解锁。怎么拿到它，拿到之前是个秘密。</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>全部成就已解锁</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>这是最后一个了。应用没有别的可发了，从现在起它只会给你看你的磁盘。</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>这就是全部了。应用没有什么可以再发的了，从现在起它只会给你看你的磁盘。好吧，还有一件事：设置 › 外观 现在有了金色主题。</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>魔镜魔镜</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>问驱动器自它自己以来有什么变化。驱动器毕竟是驱动器，什么也没说。</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>速通</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Ach_Collector_Name" xml:space="preserve"><value>收藏家</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>解锁了其他所有成就。没有什么可找的了，这正是这个应用的意义。</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>方式不同 ({0} 与 {1})：差异包含只有一种方式能看到的文件。</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>位于程序文件夹内：{0:N0} 项（Windows、Program Files、ProgramData、AppData 或游戏、构建文件夹）。需要它们的程序会停止工作，直到从回收站还原。</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>位于程序文件夹内：{0:N0} 项（Windows、Program Files、ProgramData、AppData 或游戏、构建文件夹）。需要它们的程序会停止工作，而且没有回收站可以还原。</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>位于程序文件夹内：勾选的副本中有 {0:N0} 项（Windows、Program Files、ProgramData、AppData 或游戏、构建文件夹）。需要该副本的程序会停止工作。请保留这些副本，改为勾选其他位置的副本。</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>已勾选 {0:N0} 项 · {1} · {2:N0} 项位于程序文件夹</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>勾选每组中的其他副本。Windows、程序、应用和游戏文件夹内的副本保持不勾选。</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>程序文件夹</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>正在永久删除…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} / {1:N0} 项</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>清空 {1} 上的回收站？其中的 {0} 将被永久删除，之后无法还原任何内容。</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>清空回收站</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>项目</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>显示其余 {0:N0} 项 ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>双胞胎</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>一次重复文件搜索，多余的副本加起来超过 1 GB。同一个文件，一遍又一遍。</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>整洁</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>一次删除一千个或更多空文件夹。它们本来什么都没有，现在在别处什么都没有。</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>三思</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>看到程序文件夹提示后取消了删除。提示起了作用。</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>管家</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>从“可安全清理”清理了一些内容。缓存还会回来，但这一刻很美好。</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>画家</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>保存了自己的调色板。内置的不够好，这很公平。</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>金色</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>跟随 Windows 设置，或始终使用浅色或深色。金色是你的：全部成就已解锁，应用也相应盛装，并配有专属地图调色板。</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>从黄铜到玫瑰金的十二种金属，用于金色主题</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} 种</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>一个包含 {1:N0} 个文件夹、{0:N0} 个文件的文件夹，其中 {2:N0} 个直接位于其下。</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>一个包含 {0:N0} 个文件的文件夹，全部直接位于其下。</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}：{1}，{2}。</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>占 {0}，以及 {2} 的 {1}。</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>占 {0}。</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>其他 {0:N0} 种类型共占 {1}。</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>文件中位数 {0}。</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} 在本月有改动；{1} 已超过一年未动。</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>文件夹或文件</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>占比</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>文件</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>更改</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>类型</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>文件</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>位于</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>最大的文件</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} 个中的 {0:N0} 个</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>其余 {0:N0} 个文件</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>还有 {0:N0} 个</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>这 {0:N0} 项占文件夹的 {1}</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>文件夹的 {0} 是单个项目</value></data>
 </root>

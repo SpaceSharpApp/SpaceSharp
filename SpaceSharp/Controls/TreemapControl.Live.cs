@@ -10,8 +10,8 @@ namespace SpaceSharp.Controls;
 /// A snapshot is a fresh tree, so nodes are matched by path, not by reference. Every box tweens from where its path was drawn
 /// to where it is now; a box that is new waits for its level's wave (each level a little after the one above), then grows from
 /// half its size and fades in, so a finished tree unfolds level by level rather than landing at once. A snapshot that lands mid-tween
-/// starts from the boxes' current positions,
-/// which keeps the motion continuous however often snapshots arrive.
+/// starts from the boxes' current positions, and a box keeps the wave time it got when first seen, so its fade runs on instead of
+/// starting over; both keep the motion continuous however often snapshots arrive.
 /// </remarks>
 public sealed partial class TreemapControl
 {
@@ -23,6 +23,9 @@ public sealed partial class TreemapControl
     private const double FinishWaveSeconds = 0.16;
 
     private Dictionary<string, Rect>? _liveFrom;   // where each path was drawn when the latest snapshot arrived
+    private readonly Dictionary<string, double> _liveWaveAt = new(StringComparer.Ordinal);   // clock seconds each key's wave starts, set when first seen
+    private readonly Dictionary<string, double> _liveSeen = new(StringComparer.Ordinal);     // clock seconds each key was last laid out
+    private const double LiveGraceSeconds = 10;    // a box gone this long is new again when it returns; shorter absences just pop back
     private readonly List<(TreemapItem Item, Rect From)> _liveLeaving = new();   // boxes the latest snapshot no longer has, fading out
     private double _liveSeconds = LiveSeconds;
     private double _liveWaveSeconds = LiveWaveSeconds;
@@ -45,18 +48,22 @@ public sealed partial class TreemapControl
         EnsureLayout();
         EnsureLiveKeys();
 
-        // Capture where every visible box is drawn right now; the new layout tweens from there.
+        // Capture where every visible box is drawn right now; the new layout tweens from there. A box still waiting for its wave
+        // stays new, but keeps its wave time, so the wait is not restarted.
+        double now = _clock.Elapsed.TotalSeconds;
         var previousBounds = new Dictionary<string, Rect>(_items.Count, StringComparer.Ordinal);
         var shownBoxes = new List<(string Key, TreemapItem Item, Rect Bounds)>(_items.Count);
         for (int i = 0; i < _items.Count; i++)
         {
+            string key = _liveKeys![i];
             Rect currentBounds = LiveBounds(i, out double opacity);
             if (currentBounds.IsBlank() || opacity <= 0)
             {
-                continue;   // a box still waiting for its wave stays new
+                continue;
             }
-            previousBounds[_liveKeys![i]] = currentBounds;
-            shownBoxes.Add((_liveKeys[i], _items[i], currentBounds));
+            previousBounds[key] = currentBounds;
+            shownBoxes.Add((key, _items[i], currentBounds));
+            _liveWaveAt.TryAdd(key, double.NegativeInfinity);   // drawn before this live run: counts as long seen, so it only slides
         }
 
         _root = root;
@@ -85,7 +92,29 @@ public sealed partial class TreemapControl
         _liveFrom = previousBounds;   // empty on the first snapshot: everything grows in
         _liveSeconds = finishing ? FinishSeconds : LiveSeconds;
         _liveWaveSeconds = finishing ? FinishWaveSeconds : LiveWaveSeconds;
-        _liveStart = _clock.Elapsed.TotalSeconds;
+        _liveStart = now;
+
+        // A key new to the map gets its level's wave from now; a key seen before keeps the one it had. A box that slipped under the
+        // size cut or out of a group for a few snapshots is not new when it returns, so keys are kept for a grace period, not dropped
+        // the moment they are missing.
+        var gone = new List<string>();
+        foreach ((string key, double seen) in _liveSeen)
+        {
+            if (now - seen > LiveGraceSeconds && !currentKeys.Contains(key))
+            {
+                gone.Add(key);
+            }
+        }
+        foreach (string key in gone)
+        {
+            _liveSeen.Remove(key);
+            _liveWaveAt.Remove(key);
+        }
+        for (int i = 0; i < _items.Count; i++)
+        {
+            _liveSeen[_liveKeys![i]] = now;
+            _liveWaveAt.TryAdd(_liveKeys[i], now + _liveWaveSeconds * Math.Min(_items[i].Depth, LiveWaves));
+        }
         RequestLiveFrame();
         ZoomChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -95,12 +124,24 @@ public sealed partial class TreemapControl
     {
         _liveFrom = null;
         _liveLeaving.Clear();
+        // the wave times stay: a snapshot that comes late, after the tween has settled, must not fade in boxes that are already there
     }
 
-    /// <summary>A node's identity across snapshots: its path; a pseudo node shares its parent's path, so its kind tells it apart.</summary>
-    /// <param name="node">A node of any snapshot; the path is rebuilt from its parent chain each call.</param>
-    /// <returns>The full path for a real file or folder, or the path with "|Group" or "|FreeSpace" appended for a pseudo node.</returns>
-    private static string LiveKey(FsNode node) => node.IsReal ? node.FullPath : node.FullPath + "|" + node.Kind;
+    /// <summary>A box's identity across snapshots: the path of the node at the top of its merged chain, so a folder keeps its key when a
+    /// second subfolder turns up and the chain under it breaks; a pseudo node shares its parent's path, so its kind tells it apart, and a
+    /// group inside a group carries its level too, since both hang off the same folder.</summary>
+    /// <param name="item">A laid-out box of any snapshot; the path is rebuilt from the parent chain each call.</param>
+    /// <returns>The full path for a real file or folder, the path with "|FreeSpace" for the free-space box, or with "|Group1", "|Group2"
+    /// and so on for a group by its nesting.</returns>
+    private static string LiveKey(TreemapItem item)
+    {
+        FsNode node = item.ChainTop ?? item.Node;
+        if (node.IsReal)
+        {
+            return node.FullPath;
+        }
+        return node.IsGroup ? node.FullPath + "|Group" + item.GroupLevel : node.FullPath + "|" + node.Kind;
+    }
 
     /// <summary>Keys for the current items; paths are built once per layout, not per frame.</summary>
     private void EnsureLiveKeys()
@@ -112,14 +153,14 @@ public sealed partial class TreemapControl
         _liveKeys = new string[_items.Count];
         for (int i = 0; i < _items.Count; i++)
         {
-            _liveKeys[i] = LiveKey(_items[i].Node);
+            _liveKeys[i] = LiveKey(_items[i]);
         }
     }
 
     /// <summary>Where the item is drawn right now, between its previous and its laid-out bounds, and how opaque.</summary>
     /// <param name="index">Position in the current item list; <see cref="EnsureLiveKeys"/> must have run for this layout.</param>
-    /// <param name="opacity">1 for a box that existed in the previous snapshot or has finished arriving; the eased wave progress 0..1 for a
-    /// new box still fading in.</param>
+    /// <param name="opacity">1 for a box that has finished arriving; the eased wave progress 0..1 for a box still fading in, counted from
+    /// the snapshot that first brought it, so later snapshots do not start it over.</param>
     /// <returns>The box to draw in control pixels: the laid-out bounds outside a tween, a position on the way there during one, or <see
     /// cref="Rects.Empty"/> for a new box whose wave has not started.</returns>
     private Rect LiveBounds(int index, out double opacity)
@@ -130,26 +171,27 @@ public sealed partial class TreemapControl
         {
             return item.Bounds;
         }
-        double elapsed = _clock.Elapsed.TotalSeconds - _liveStart;
-        if (_liveFrom.TryGetValue(_liveKeys![index], out Rect previousBounds))
+        double now = _clock.Elapsed.TotalSeconds;
+        string key = _liveKeys![index];
+
+        // the fade runs from the wave time set when the box was first seen, however many snapshots land meanwhile
+        double waveAt = _liveWaveAt.TryGetValue(key, out double since) ? since : _liveStart;
+        double waveProgress = Math.Clamp((now - waveAt) / _liveSeconds, 0, 1);
+        double eased = Ease(waveProgress);
+
+        if (_liveFrom.TryGetValue(key, out Rect previousBounds))
         {
-            double progress = Math.Clamp(elapsed / _liveSeconds, 0, 1);
-            if (progress >= 1)
-            {
-                return item.Bounds;
-            }
-            return Lerp(previousBounds, item.Bounds, Ease(progress));
+            // drawn before: slides from where it was, and finishes any fade it was in the middle of
+            opacity = eased;
+            double progress = Math.Clamp((now - _liveStart) / _liveSeconds, 0, 1);
+            return progress >= 1 ? item.Bounds : Lerp(previousBounds, item.Bounds, Ease(progress));
         }
 
-        // new on the map: waits for its level's wave, then grows from half its size about its own center while it fades in
-        double waveDelay = _liveWaveSeconds * Math.Min(item.Depth, LiveWaves);
-        double waveProgress = Math.Clamp((elapsed - waveDelay) / _liveSeconds, 0, 1);
+        // never drawn: waits for its wave, then grows from half its size about its own center while it fades in
         if (waveProgress >= 1)
         {
             return item.Bounds;
         }
-
-        double eased = Ease(waveProgress);
         opacity = eased;
         return eased <= 0 ? Rects.Empty : Lerp(Scaled(item.Bounds, 0.5), item.Bounds, eased);
     }

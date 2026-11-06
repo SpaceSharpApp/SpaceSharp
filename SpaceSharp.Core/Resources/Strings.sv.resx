@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Färga efter</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Toppmapp: en nyans per mapp på toppnivå, ljusare för varje nivå inåt. Mappdjup: en annan färg per nivå. Filtyp: filer färgade efter typ.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Bekräfta innan något flyttas till Papperskorgen</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Fråga innan något tas bort. Borttagna objekt kan alltid återställas från Papperskorgen.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Fråga innan borttagning. Borttagna objekt kan alltid återställas från papperskorgen. Objekt i Windows-, program-, app- och spelmappar frågar alltid.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Dölj osäkra tomma mappar</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Visar bara de tomma mappar som tydligt är dina. De i Windows, Program Files, ProgramData, AppData och spel- eller byggmappar, som program ofta förväntar sig finns, hålls helt utanför listan. Av visar dem omarkerade, med en varning när du markerar en.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Egna paletter</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanning</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} skanningar</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Nyaste först</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Allt annat</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % använt · {1} ledigt</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Mapp · {0} filer</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Enheten har fyllts med {0} sedan den här skanningen. Skanna igen för att se vart det tog vägen.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>I år</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 till 3 år</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Äldre</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Äldsta ändring: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>De här {0} utgör {1} av mappen. De övriga {2:N0} filerna delar på {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Äldsta ändring {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} av den här mappen är en enda sak: {1} på {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} på disk</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} av {1}, dess enda mapp</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Mest {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Mest {0} ({1}) och {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>En blandning av {0} ({1}), {2} ({3}) och {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>medianfil {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Senast ändrad {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Ändrad {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} orört i över ett år</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>oförändrad sedan förra skanningen</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>växte {0} sedan förra skanningen</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>krympte {0} sedan förra skanningen</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Ach_Locked" xml:space="preserve"><value>Låst</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Låst. Hur du får den är hemligt tills du har den.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alla prestationer upplåsta</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Det var alla. Appen har inget mer att dela ut, så från och med nu visar den dig bara din disk.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Det var alla. Appen har inget mer att dela ut, så från och med nu visar den bara din disk. Nåja, en sak: Inställningar › Utseende har nu ett Guld-tema.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Spegel, spegel</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Frågade enheten vad som ändrats sedan den själv. Enheten, som är en enhet, sa ingenting.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Komplettist</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Låste upp alla andra prestationer. Det finns inget mer att hitta, vilket är hela poängen med appen.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Gjorda på olika sätt ({0} mot {1}): skillnaderna omfattar filer som bara en metod ser.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>I en programmapp: {0:N0} av dem, i Windows, Program Files, ProgramData, AppData eller en spel- eller byggmapp. Ett program som behöver dem slutar fungera tills de läggs tillbaka från papperskorgen.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>I en programmapp: {0:N0} av dem, i Windows, Program Files, ProgramData, AppData eller en spel- eller byggmapp. Ett program som behöver dem slutar fungera, och det finns ingen papperskorg att hämta dem från.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>I en programmapp: {0:N0} av de markerade kopiorna, i Windows, Program Files, ProgramData, AppData eller en spel- eller byggmapp. Ett program som behöver sin kopia slutar fungera. Behåll dem och markera kopiorna på andra ställen.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} markerade · {1} · {2:N0} i programmappar</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Markerar de andra kopiorna i varje grupp. Kopior i Windows-, program-, app- och spelmappar förblir omarkerade.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>programmapp</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Tar bort permanent…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} av {1:N0} objekt</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Töm papperskorgen på {1}? De {0} som ligger där tas bort permanent; inget i den kan återställas efteråt.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Töm papperskorgen</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Objekt</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Visa de {0:N0} andra ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Tvillingar</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>En dublettsökning där de extra kopiorna blir mer än en gigabyte. Samma fil, om och om igen.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Prydlig</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Tusen eller fler tomma mappar borttagna på en gång. De innehöll inget, och nu innehåller de inget någon annanstans.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Betänkt</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Tryckte Avbryt på en borttagning efter noten om programmappar. Noten gjorde sitt jobb.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Hushållerska</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Rensade något från Säkert att rensa. Cacharna kommer tillbaka, men det var trevligt medan det varade.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Målare</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Sparade en egen palett. De inbyggda dög inte, och det är rimligt.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Guld</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Följ Windows-inställningen, eller använd alltid ljust eller mörkt. Guld är ditt: alla prestationer upplåsta, och appen klädd därefter, med en egen kartpalett.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Tolv metaller från mässing till roséguld, för Guld-temat</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} typer</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>En mapp med {0:N0} filer i {1:N0} mappar, {2:N0} av dem direkt inuti.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>En mapp med {0:N0} filer, alla direkt inuti.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Den tar {0}, och {1} av {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Den tar {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} andra typer delar på {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Medianfil {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} av den ändrades denna månad; {1} har varit orörd i över ett år.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Mapp eller fil</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Storlek</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Andel</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Filer</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Ändrad</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Typ</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Fil</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>I</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Största filer</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} av {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>De andra {0:N0} filerna</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} till</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>dessa {0:N0} är {1} av mappen</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} av mappen är en enda sak</value></data>
 </root>

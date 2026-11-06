@@ -199,18 +199,26 @@ public partial class SettingsWindow : Window
     {
         Section(Strings.Get("Settings_Appearance"));
 
-        string[] themeNames = { Strings.Get("Theme_MatchWindows"), Strings.Get("Theme_LightName"), Strings.Get("Theme_DarkName") };
-        int themeIndex = _settings.Theme switch
+        // Gold is a fourth choice only once every achievement is unlocked; it comes with its own look and map palette.
+        bool goldUnlocked = Achievements.Current.IsUnlocked(Achievement.Collector);
+        var themeKeys = new List<string> { "System", "Light", "Dark" };
+        var themeNames = new List<string> { Strings.Get("Theme_MatchWindows"), Strings.Get("Theme_LightName"), Strings.Get("Theme_DarkName") };
+        if (goldUnlocked)
         {
-            "Light" => 1,
-            "Dark" => 2,
-            _ => 0
-        };
-        Row(Strings.Get("Settings_Theme"), Strings.Get("Settings_Theme_Desc"),
-            Combo(themeNames, themeIndex, index =>
+            themeKeys.Add(App.GoldTheme);
+            themeNames.Add(Strings.Get("Theme_GoldName"));
+        }
+        int themeIndex = Math.Max(0, themeKeys.IndexOf(_settings.Theme ?? "System"));
+        Row(Strings.Get("Settings_Theme"), Strings.Get(goldUnlocked ? "Settings_Theme_GoldDesc" : "Settings_Theme_Desc"),
+            Combo(themeNames.ToArray(), themeIndex, index =>
             {
-                _settings.Theme = new[] { "System", "Light", "Dark" }[index];
+                _settings.Theme = themeKeys[index];
+                if (_settings.Theme == App.GoldTheme)
+                {
+                    _settings.SetPalette(dark: true, "Gold");
+                }
                 App.ApplyTheme();
+                _main?.ApplySettings();
             }));
 
         Row(Strings.Get("Settings_LookDark"), Strings.Get("Settings_LookDark_Desc"), LookCombo(dark: true));

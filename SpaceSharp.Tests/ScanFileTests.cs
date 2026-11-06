@@ -39,6 +39,12 @@ public class ScanFileTests
             Assert.Equal(1000, info.FreeBytes);
             Assert.Equal(5, info.FileCount);
             Assert.Equal(560, info.Bytes);
+            // The header keeps the largest top-level items, largest first, for the start screen's small map.
+            Assert.Equal(["Videos", "Docs", "readme.md"], info.Top.Select(item => item.Name));
+            Assert.True(info.Top[0].IsDirectory);
+            Assert.Equal(500, info.Top[0].Size);
+            Assert.Equal(556, info.Top[0].Allocated);
+            Assert.False(info.Top[2].IsDirectory);
 
             (FsNode? loaded, ScanFileInfo _) = ScanFile.Load(path);
             Assert.Equal(root.Size, loaded.Size);

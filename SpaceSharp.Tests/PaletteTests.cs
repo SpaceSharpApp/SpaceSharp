@@ -31,7 +31,8 @@ public class PaletteTests
     [Fact]
     public void TwelveBuiltInPalettesPerTheme()
     {
-        var builtIn = Palette.Schemes.Where(s => !s.IsCustom).ToList();
+        // The secret Gold palette is left out: whether it is listed depends on the achievements file of whoever runs the tests.
+        var builtIn = Palette.Schemes.Where(s => !s.IsCustom && !s.IsSecret).ToList();
         Assert.Equal(12, builtIn.Count(s => s.Theme == PaletteTheme.Dark));
         Assert.Equal(12, builtIn.Count(s => s.Theme == PaletteTheme.Light));
         Assert.Equal(builtIn.Count, builtIn.Select(s => s.Name).Distinct(StringComparer.OrdinalIgnoreCase).Count());

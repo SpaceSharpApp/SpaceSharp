@@ -1,3 +1,4 @@
+using System.IO;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -6,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using SpaceSharp.Controls;
 using SpaceSharp.Models;
 using SpaceSharp.Services;
@@ -709,12 +711,13 @@ public partial class MainWindow
         return block;
     }
 
-    /// <summary>The newest scan as the start screen's featured panel: a large ring, the name, size and usage, a drift note, and Open and Scan again buttons.</summary>
+    /// <summary>The newest scan as the start screen's featured panel: a large ring, the name, size and usage, a drift note, Open and Scan again buttons,
+    /// and along the foot a strip of the drive's largest top-level items by size.</summary>
     /// <param name="scan">The most recent entry.</param>
     /// <returns>The panel, ready to add to the recent list.</returns>
     private Control FeaturedScan(RecentScan scan)
     {
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 26 };
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), ColumnSpacing = 26 };
         Grid ring = Ring(scan, 104, 7, 26);
         ToolTip.SetTip(ring, scan.Info.RootPath);
         grid.Children.Add(ring);
@@ -754,7 +757,10 @@ public partial class MainWindow
             text.Children.Add(line);
         }
 
-        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 16, 0, 0) };
+        grid.Children.Add(text);
+
+        var buttons = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(26, 0, 0, 0) };
+        Grid.SetColumn(buttons, 2);
         var openButton = new Button
         {
             Content = Icons.WithText("Treemap", Strings.Get("Start_OpenTheMap")),
@@ -768,10 +774,134 @@ public partial class MainWindow
         ToolTip.SetTip(scanAgainButton, Strings.Get("Start_RecentHint"));
         scanAgainButton.Click += (_, _) => _ = ScanAsync(scan.Info.RootPath);
         buttons.Children.Add(scanAgainButton);
-        text.Children.Add(buttons);
-        grid.Children.Add(text);
+        grid.Children.Add(buttons);
 
-        return new Border { Child = grid, Padding = new Thickness(28, 22), Classes = { "start-panel" } };
+        var body = new DockPanel();
+        if (StartStrip(scan.Info) is { } strip)
+        {
+            DockPanel.SetDock(strip, Dock.Bottom);
+            body.Children.Add(strip);
+        }
+        body.Children.Add(new Border { Child = grid, Padding = new Thickness(28, 22) });
+        return new Border { Child = body, Classes = { "start-panel" } };
+    }
+
+    /// <summary>The panel's foot: the drive's largest top-level items as one strip, left to right by size, from the header when the save stored
+    /// them, otherwise from the file in the background.</summary>
+    /// <param name="info">The header; a save from before the items were stored is loaded off the UI thread and the strip filled when it is in.</param>
+    /// <returns>The strip, or null when the scan holds nothing or the save cannot be read.</returns>
+    private Control? StartStrip(ScanFileInfo info)
+    {
+        if (info.Bytes <= 0)
+        {
+            return null;
+        }
+        // Grid gaps show the strip's own background as the lines between segments.
+        var strip = new Grid { Height = 40, ColumnSpacing = 1 };
+        strip.Bind(Panel.BackgroundProperty, this.GetResourceObservable("Stroke"));
+        var frame = new Border { Child = strip, BorderThickness = new Thickness(0, 1, 0, 0) };
+        frame.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        if (info.Top.Count > 0)
+        {
+            FillStartStrip(strip, info.Top, info.Bytes);
+            return frame;
+        }
+
+        // An older save has no items in its header: read the tree once, in the background, and fill the strip when it is in. The pretend PC's
+        // scans have no file at all, and get no strip.
+        if (info.Path.Length == 0 || !File.Exists(info.Path))
+        {
+            return null;
+        }
+        frame.IsVisible = false;
+        _ = Task.Run(() =>
+        {
+            try
+            {
+                FsNode root = ScanFile.Load(info.Path, addFreeSpace: false).Root;
+                var top = root.Children.Where(child => child.IsReal && child.Size > 0).OrderByDescending(child => child.Size).Take(16)
+                    .Select(child => new ScanTopItem(child.Name, child.IsDirectory, child.Size, child.Allocated)).ToList();
+                Dispatcher.UIThread.Post(() =>
+                {
+                    FillStartStrip(strip, top, info.Bytes);
+                    frame.IsVisible = true;
+                });
+            }
+            catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or EndOfStreamException)
+            {
+                // A save that cannot be read just leaves the panel without its foot.
+            }
+        });
+        return frame;
+    }
+
+    /// <summary>Fills the strip: one segment per item, its width the item's share by the current size mode, the palette's folder colors in turn for
+    /// folders and the type color for files, then one grey segment for whatever the root holds beyond them. A segment shows its name, and its size
+    /// too, when it is wide enough.</summary>
+    /// <param name="strip">The grid the segments go in.</param>
+    /// <param name="top">The largest top-level items.</param>
+    /// <param name="bytes">The root's logical size, so the rest segment is what the items leave over.</param>
+    private void FillStartStrip(Grid strip, IReadOnlyList<ScanTopItem> top, long bytes)
+    {
+        SizeMeasure measure = Treemap.SizeMode;
+        ColorScheme scheme = Treemap.Scheme;
+        var categoryBrushes = scheme.Categories.ToDictionary(entry => entry.Category, entry => entry.Brush);
+        IReadOnlyList<Color> folderColors = scheme.FolderColors;
+        int folderIndex = 0;
+        var items = top
+            .Select(item => new FsNode(item.Name, item.IsDirectory ? NodeKind.Directory : NodeKind.File, null) { Size = item.Size, Allocated = item.Allocated })
+            .Where(node => node.SizeFor(measure) > 0)
+            .OrderByDescending(node => node.SizeFor(measure))
+            .ToList();
+        long rest = bytes - items.Sum(node => node.Size);
+        if (rest > 0)
+        {
+            items.Add(new FsNode(Strings.Get("Start_MapRest"), NodeKind.Group, null) { Size = rest, Allocated = rest });
+        }
+        strip.Children.Clear();
+        strip.ColumnDefinitions.Clear();
+        if (items.Count == 0)
+        {
+            return;
+        }
+        double total = items.Sum(node => (double)node.SizeFor(measure));
+        for (int i = 0; i < items.Count; i++)
+        {
+            FsNode node = items[i];
+            IBrush fill = node.IsGroup ? Palette.UnchangedBrush
+                : node.IsDirectory ? Palette.Freeze(folderColors[folderIndex++ % folderColors.Count])
+                : categoryBrushes.TryGetValue(FileCategories.Categorize(node.Extension), out IBrush? typeBrush) ? typeBrush : Palette.UnchangedBrush;
+            strip.ColumnDefinitions.Add(new ColumnDefinition(node.SizeFor(measure) / total, GridUnitType.Star));
+            // The panel clips to its rectangle, so the end segments round the panel's bottom corners themselves.
+            var segment = new Border
+            {
+                Background = fill,
+                CornerRadius = new CornerRadius(0, 0, i == items.Count - 1 ? 11 : 0, i == 0 ? 11 : 0),
+                Padding = new Thickness(8, 0),
+                ClipToBounds = true
+            };
+            Color color = TreemapControl.ColorOf(fill);
+            bool light = 0.299 * color.R + 0.587 * color.G + 0.114 * color.B > 150;
+            string size = SizeFormatter.Format(node.SizeFor(measure));
+            var label = new TextBlock
+            {
+                FontSize = 11.5,
+                FontWeight = FontWeight.SemiBold,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = light ? Brushes.Black : Brushes.White,
+                Opacity = node.IsGroup ? 0.7 : 0.85
+            };
+            segment.Child = label;
+            segment.SizeChanged += (_, e) =>
+            {
+                // Name and size when both fit, the name alone when it does, nothing on a sliver.
+                double room = e.NewSize.Width - 16;
+                label.Text = room >= (node.Name.Length + size.Length + 2) * 6.4 ? node.Name + "  " + size : room >= node.Name.Length * 6.4 ? node.Name : string.Empty;
+            };
+            ToolTip.SetTip(segment, node.Name + "  ·  " + size);
+            Grid.SetColumn(segment, i);
+            strip.Children.Add(segment);
+        }
     }
 
     /// <summary>One earlier scan as a clickable row: small ring, name, size, age and usage, with a chevron.</summary>

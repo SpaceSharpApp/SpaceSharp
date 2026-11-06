@@ -2,6 +2,33 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.7.0
+
+Every way of deleting now follows the rules written down after the 2.6.0 empty folder incident, not only the empty folder list.
+
+### Safety
+- Moving things to the Recycle Bin from the map, the Del key or the Safe to clear row no longer freezes the window: the items go two hundred at a time with a progress panel in the map's corner and a Stop button that ends it between batches, keeping what was already moved. Delete permanently and Delete the repeats get the same panel; Stop ends them between items.
+- When something selected sits inside Windows, Program Files, ProgramData, AppData or a game or build folder, the confirmation says how many of the items do and that a program which needs them stops working until they are put back from the Recycle Bin, or, for Delete permanently, that there is no bin to put them back from. That question is asked even when Settings › Behavior › Confirm before moving to the Recycle Bin is off. The Safe to clear row is left alone, since its places are caches and temp folders chosen by name.
+- The duplicates window no longer ticks a copy inside a program folder by itself: Keep the first and Keep the newest leave those unticked, each is marked "program folder" in red, a warning counts them while any is ticked, the footer counts them, and the confirmation repeats the number. Tick them by hand if you mean it.
+- Emptying the Recycle Bin from Safe to clear asks first and says how much is in it, since there is nothing to put back afterward.
+- The delete questions are laid out as a question, a red note when something sits in a program folder, and the items as a list: a row each with the name, the folder and the size, largest first, the three largest shown and the rest behind "Show the other n". Before, a long NuGet path filled the whole dialog and the note came before the question it was about.
+
+### Fixes
+- The live map no longer makes small boxes flicker while a folder walk is running. A box new to the map waits for its level's turn before fading in, and every snapshot (one every 0.6 s) started that wait over for any box that had not finished, so the small boxes deep in the tree, the "128 items" groups among them, were reset each time a file turned up near them and only settled once the walk left the area. A box now keeps the moment it was first seen and fades in from there, whatever lands in between; a half-faded box carries on instead of jumping to full. Two more cases of a folder fading in that was already there are gone too: a folder whose single-subfolder chain broke when a second subfolder turned up (the box was keyed by the deepest folder, so it counted as new), a box that slipped under the size cut for a snapshot or two and came back, and an "n items" group whose members had grown enough to need a group of their own inside it: the inner group shared the outer one's identity, so the outer box took the inner box's position as its starting point every snapshot and looked like it was arriving again.
+
+### Small things
+- The "protected folders couldn't be read" notice is a card under the toolbar, with a shield badge and an outlined Restart as administrator, instead of a bar with an amber edge.
+- The scanning card no longer shows a stray dot on the progress bar for a stage that has started but has nothing to measure yet.
+- The start screen's last-scan card has a strip along its foot: the drive's largest top-level folders and files left to right by size, each in its own color with name and size inside when there is room, and everything else as one grey segment. It is drawn from the scan file's header, which now stores those items, so nothing is loaded for it; for a scan saved by an earlier version the file is read in the background and the strip appears a moment later.
+- The window opens at 1500 × 1200 instead of 1400 × 880, so the new Inspect window fits inside it with room around; on a screen too small for that it opens as large as the screen allows. The screenshot scripts pose at 1600 × 1200 for the same reason.
+- Before a scan, the side panel shows only the drives: the Largest items switch and its "scan something first" hint stay hidden until a scan loads, and the drive list may use the whole panel meanwhile.
+- The Inspect window is rewritten, and wider (1000 × 1120 to start). Under the name and size sits a card of short sentences: what the item is, what it takes of its parent and of the scan, a note when one thing holds most of it, what it is mostly, and how old it is and what changed since the last scan. Then tables: Where the space is with eight rows and a bar, size, share, file count and last change each; By type and By age with file counts, sizes, shares and bars; and Largest files, the five biggest single files with the subfolder each sits in. The donuts, tiles and strips are gone, and nothing is cut off.
+- Collector now unlocks something: a Gold theme, next to Light and Dark in Settings › Appearance. Dark gilt for the window and a palette of twelve metals for the map, from brass to rose gold. The dark look and palette you had wait underneath and come back when you switch away; the toolbar's theme button treats Gold as dark. Just for fun.
+- Five new achievements for the tools that arrived in 2.6: Twins (a duplicate search whose extra copies pass a gigabyte), Tidy (a thousand empty folders gone in one go), Second thoughts (Cancel on a delete after the program-folder note), Housekeeper (cleared something from Safe to clear) and Painter (saved a palette of your own). Twenty-six in all; Collector still needs every one.
+- The achievement toast and card, and the achievements list, no longer show square amber corners under their rounded frames; the banner rounds its own.
+- The Files / Folders / Types switch's amber fill follows the control's rounded corners instead of poking square ones out of them.
+- Show on a Safe to clear place flashes the selection three times on the map, so the Temp folder it points at can be found among a thousand small boxes.
+
 ## 2.6.2
 
 The rest of the empty folder fix, the same afternoon. 2.6.1 stopped the prompt storm; this one makes the list safe by default and fast. If you ran the 2.6.0 or 2.6.1 list on a system drive with everything ticked, read the first point.

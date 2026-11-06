@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>色分け</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>最上位フォルダー：最上位フォルダーごとに 1 色相、内側の階層ほど明るくなります。フォルダーの深さ：階層ごとに異なる色。ファイルの種類：種類別に色分け。</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>ごみ箱に移動する前に確認</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>削除前に確認します。削除した項目はいつでもごみ箱から復元できます。</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>削除前に確認します。削除した項目はいつでもごみ箱から戻せます。Windows、プログラム、アプリ、ゲームのフォルダー内の項目は常に確認します。</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>安全でない空のフォルダーを隠す</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>明らかに自分のものである空のフォルダーだけを一覧に表示します。プログラムが存在を前提にしていることの多い Windows、Program Files、ProgramData、AppData、ゲームやビルドのフォルダー内のものは一覧から除外されます。オフにするとチェックなしで表示され、チェックすると警告が出ます。</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>カスタムパレット</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 件のスキャン</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} 件のスキャン</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>新しい順</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>その他すべて</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% 使用中 · 空き {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>フォルダー · {0} ファイル</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>このスキャン以降、ドライブの使用量が {0} 増えました。再スキャンして増えた場所を確認してください。</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ～ 3 年</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>それ以前</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>最も古い変更：{0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>これら {0} がフォルダーの {1} を占めています。残りの {2:N0} ファイルで {3} です。</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>最も古い変更 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>このフォルダーの {0} は 1 つの項目です：{1}（{2}）。</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>ディスク上 {0}</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} の {0}、唯一のフォルダー</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>大半は{0}（{1}）</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>大半は{0}（{1}）と{2}（{3}）</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0}（{1}）、{2}（{3}）、{4}（{5}）の混在</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>ファイルの中央値 {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>最終変更：{0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>更新：{0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} が 1 年以上未変更</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>前回のスキャンから変更なし</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>前回のスキャンから {0} 増加</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>前回のスキャンから {0} 減少</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Ach_Locked" xml:space="preserve"><value>未解除</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>未解除。取り方は、取るまで秘密です。</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>すべての実績を解除</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>これで全部です。アプリにはもう配るものがないので、これからはただディスクを表示するだけです。</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>これで全部です。アプリにはもう配るものがないので、これからはただディスクを見せるだけです。いや、ひとつだけ: 設定 › 外観にゴールドテーマが加わりました。</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>鏡よ鏡</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>ドライブに「自分自身から何が変わった？」と尋ねました。ドライブはドライブなので、何も答えませんでした。</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>スピードラン</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Ach_Collector_Name" xml:space="preserve"><value>コレクター</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>ほかのすべての実績を解除しました。もう見つけるものはありません。それがこのアプリの目的です。</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>異なる方法 ({0} と {1}): 差分には片方の方法でしか見えないファイルが含まれます。</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>プログラムのフォルダー内: {0:N0} 件（Windows、Program Files、ProgramData、AppData、またはゲームやビルドのフォルダー）。これらを必要とするプログラムは、ごみ箱から戻すまで動作しなくなります。</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>プログラムのフォルダー内: {0:N0} 件（Windows、Program Files、ProgramData、AppData、またはゲームやビルドのフォルダー）。これらを必要とするプログラムは動作しなくなり、戻すためのごみ箱はありません。</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>プログラムのフォルダー内: チェックしたコピーのうち {0:N0} 件（Windows、Program Files、ProgramData、AppData、またはゲームやビルドのフォルダー）。そのコピーを必要とするプログラムは動作しなくなります。それらは残し、別の場所のコピーにチェックを付けてください。</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} 件を選択 · {1} · プログラムのフォルダー内 {2:N0} 件</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>各セットの他のコピーにチェックを付けます。Windows、プログラム、アプリ、ゲームのフォルダー内のコピーはチェックされません。</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>プログラムのフォルダー</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>完全に削除しています…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} / {1:N0} 件</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>{1} のごみ箱を空にしますか？中の {0} は完全に削除され、その後は何も戻せません。</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>ごみ箱を空にする</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>項目</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>残りの {0:N0} 件を表示 ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>双子</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>余分なコピーの合計が 1 GB を超える重複検索。同じファイルが何度も。</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>整頓</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>空のフォルダーを一度に 1,000 個以上削除。中身は何もなく、今は別の場所で何もない。</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>考え直し</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>プログラムのフォルダーについての注意を見て削除をキャンセルした。注意は役目を果たした。</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>家政</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>「安全に削除可能」から何かを消去した。キャッシュは戻ってくるが、しばらくは気持ちよかった。</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>画家</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>自分のパレットを保存した。内蔵のものでは足りなかった。それも当然だ。</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>ゴールド</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows の設定に従うか、常にライトまたはダークを使います。ゴールドはあなたのもの: 実績をすべて解除し、アプリもそれに合わせた装いに、専用のマップパレット付きで。</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>真鍮からローズゴールドまでの 12 の金属、ゴールドテーマ用</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} 種類</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0} 個のフォルダーに {0:N0} 個のファイルを含むフォルダー。うち {2:N0} 個は直下にあります。</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0} 個のファイルを含むフォルダー。すべて直下にあります。</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}、{2}。</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0}、また {2} の {1} を占めています。</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0} を占めています。</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>他の {0:N0} 種類で合計 {1} です。</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>ファイルの中央値は {0} です。</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} は今月変更され、{1} は 1 年以上手つかずです。</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>フォルダーまたはファイル</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>割合</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>変更</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>ファイル</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>場所</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} 件中 {0:N0} 件</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>その他 {0:N0} 個のファイル</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>他 {0:N0} 件</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>この {0:N0} 件でフォルダーの {1}</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>フォルダーの {0} は 1 つの項目</value></data>
 </root>

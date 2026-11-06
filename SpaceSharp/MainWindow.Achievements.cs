@@ -80,7 +80,8 @@ public partial class MainWindow
             LetterSpacing = 1.2,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        var bannerBox = new Border { Child = kicker, Padding = new Thickness(18, 12) };
+        // The banner and the body round their outer corners themselves: the card's clip is rectangular, so a plain fill would poke square corners out of it.
+        var bannerBox = new Border { Child = kicker, Padding = new Thickness(18, 12), CornerRadius = new CornerRadius(9, 9, 0, 0) };
         BindBrush(bannerBox, Border.BackgroundProperty, unlocked ? "Accent" : "Control");
         BindBrush(bannerBox, TextElement.ForegroundProperty, unlocked ? "AccentText" : "TextDim");
 
@@ -136,7 +137,7 @@ public partial class MainWindow
         body.Children.Add(badge);
         Grid.SetColumn(words, 1);
         body.Children.Add(words);
-        var bodyBox = new Border { Child = body, Padding = collector ? new Thickness(22, 20) : new Thickness(18, 16) };
+        var bodyBox = new Border { Child = body, Padding = collector ? new Thickness(22, 20) : new Thickness(18, 16), CornerRadius = new CornerRadius(0, 0, 9, 9) };
         BindBrush(bodyBox, Border.BackgroundProperty, "Window");
 
         var card = new Border

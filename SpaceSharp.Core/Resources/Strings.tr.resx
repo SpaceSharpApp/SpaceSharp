@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Renklendirme ölçütü</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Üst klasör: üst düzey klasör başına bir ton, içeri doğru her düzeyde daha açık. Klasör derinliği: her düzey için farklı bir renk. Dosya türü: dosyalar türe göre renklendirilir.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na taşımadan önce onay iste</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Silmeden önce sorar. Silinen öğeler her zaman Geri Dönüşüm Kutusu'ndan geri yüklenebilir.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Silmeden önce sor. Silinen öğeler her zaman Geri Dönüşüm Kutusu'ndan geri alınabilir. Windows, program, uygulama ve oyun klasörlerindeki öğeler için her zaman sorulur.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Güvenli olmayan boş klasörleri gizle</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Yalnızca açıkça sizin olan boş klasörleri listeler. Programların genellikle var olmasını beklediği Windows, Program Files, ProgramData, AppData ile oyun veya derleme klasörlerindekiler listeye hiç alınmaz. Kapalıyken işaretsiz listelenir, birini işaretleyince uyarı çıkar.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Özel paletler</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 tarama</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} tarama</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Önce en yeni</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Geri kalan her şey</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>%{0} dolu · {1} boş</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Klasör · {0} dosya</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Bu taramadan bu yana sürücü {0} doldu. Nereye gittiğini görmek için yeniden tarayın.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Bu yıl</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ila 3 yıl</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Daha eski</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>En eski değişiklik: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Bu {0} öğe klasörün {1} kadarını oluşturuyor. Diğer {2:N0} dosya {3} paylaşıyor.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>En eski değişiklik {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>Bu klasörün {0} kadarı tek bir şey: {1}, {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>diskte {0}</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} içinde {0}, tek klasörü</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Çoğunlukla {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Çoğunlukla {0} ({1}) ve {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0} ({1}), {2} ({3}) ve {4} ({5}) karışımı</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>ortanca dosya {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Son değişiklik: {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Değiştirilme: {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} bir yıldan uzun süredir dokunulmamış</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>son taramadan bu yana değişmedi</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>son taramadan bu yana {0} büyüdü</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>son taramadan bu yana {0} küçüldü</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Ach_Locked" xml:space="preserve"><value>Kilitli</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Kilitli. Nasıl kazanıldığı, kazanana kadar sır olarak kalır.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tüm başarımlar açıldı</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Hepsi bu kadardı. Uygulamanın dağıtacak bir şeyi kalmadı; bundan sonra size sadece diskinizi gösterecek.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Hepsi buydu. Uygulamanın dağıtacak bir şeyi kalmadı, bundan sonra size yalnızca diskinizi gösterecek. Şey, bir şey var: Ayarlar › Görünüm'de artık bir Altın teması var.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Ayna, ayna</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Sürücüye kendisinden bu yana nelerin değiştiği soruldu. Sürücü, bir sürücü olarak, hiçbir şey söylemedi.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Koleksiyoncu</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Diğer tüm başarımlar açıldı. Bulunacak bir şey kalmadı; uygulamanın amacı da bu.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Farklı yapılmış ({0} ile {1}): farklar yalnızca bir yöntemin gördüğü dosyaları içerir.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>Program klasöründe: {0:N0} tanesi, Windows, Program Files, ProgramData, AppData ya da bir oyun veya derleme klasörünün içinde. Bunlara ihtiyaç duyan bir program, Geri Dönüşüm Kutusu'ndan geri alınana kadar çalışmaz.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>Program klasöründe: {0:N0} tanesi, Windows, Program Files, ProgramData, AppData ya da bir oyun veya derleme klasörünün içinde. Bunlara ihtiyaç duyan bir program çalışmaz hale gelir ve geri alınabilecekleri bir Geri Dönüşüm Kutusu yoktur.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>Program klasöründe: işaretli kopyalardan {0:N0} tanesi, Windows, Program Files, ProgramData, AppData ya da bir oyun veya derleme klasörünün içinde. Kendi kopyasına ihtiyaç duyan bir program çalışmaz hale gelir. Bunları bırakıp başka yerlerdeki kopyaları işaretleyin.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} işaretli · {1} · {2:N0} tanesi program klasörlerinde</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Her kümedeki diğer kopyaları işaretler. Windows, program, uygulama ve oyun klasörlerindeki kopyalar işaretsiz kalır.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>program klasörü</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>Kalıcı olarak siliniyor…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} / {1:N0} öğe</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>{1} üzerindeki Geri Dönüşüm Kutusu boşaltılsın mı? İçindeki {0} kalıcı olarak silinir; sonrasında hiçbir şey geri alınamaz.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Kutuyu boşalt</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Öğe</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Diğer {0:N0} öğeyi göster ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>İkizler</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Fazladan kopyaları bir gigabayttan fazla tutan bir kopya araması. Aynı dosya, tekrar tekrar.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Derli toplu</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Tek seferde bin ya da daha fazla boş klasör silindi. İçlerinde hiçbir şey yoktu, şimdi de başka bir yerde hiçbir şey yok.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>İkinci düşünce</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Program klasörleri notundan sonra bir silme işleminde İptal'e basıldı. Not görevini yaptı.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Kâhya</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Güvenle temizlenebilir'den bir şey temizlendi. Önbellekler geri gelecek ama sürdüğü sürece güzeldi.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Ressam</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Kendi paletinizi kaydettiniz. Hazır olanlar yeterince iyi değildi, bu da anlaşılır.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Altın</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows ayarını izle ya da her zaman açık veya koyu kullan. Altın sizin: her başarım açıldı ve uygulama ona uygun giyindi, kendi harita paletiyle.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Pirinçten pembe altına on iki metal, Altın teması için</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} tür</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0} klasörde {0:N0} dosya içeren bir klasör, {2:N0} tanesi doğrudan içinde.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0} dosya içeren bir klasör, hepsi doğrudan içinde.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0} ve {2} içinde {1} yer kaplıyor.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0} yer kaplıyor.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Diğer {0:N0} tür toplam {1} yer kaplıyor.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Ortanca dosya {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} bu ay değişti; {1} bir yıldan uzun süredir dokunulmadı.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Klasör veya dosya</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Boyut</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Pay</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Değişti</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Tür</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Dosya</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>Konum</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>En büyük dosyalar</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} içinden {0:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Diğer {0:N0} dosya</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0} tane daha</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>bu {0:N0} öğe klasörün {1} kadarı</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>klasörün {0} kadarı tek bir öğe</value></data>
 </root>

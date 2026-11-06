@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using SpaceSharp.Controls;
 using SpaceSharp.Models;
+using SpaceSharp.Services;
 using SpaceSharp.Util;
 
 namespace SpaceSharp;
@@ -943,6 +944,7 @@ public sealed class PaletteEditorWindow : Window
         _settings.SetPalette(App.IsDark, _draft.Name);
         _settings.Save();
         _main?.ApplySettings();
+        Achievements.Current.Unlock(Achievement.Painter);
         Saved = true;
         Close(true);
     }

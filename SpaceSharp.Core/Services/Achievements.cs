@@ -47,6 +47,16 @@ public enum Achievement
     Polyglot,
     /// <summary>Opened a saved scan more than a year old.</summary>
     Archaeologist,
+    /// <summary>A duplicate search whose extra copies add up to more than a gigabyte.</summary>
+    Twins,
+    /// <summary>A thousand or more empty folders deleted in one go.</summary>
+    Tidy,
+    /// <summary>Pressed Cancel on a delete after the program-folder note.</summary>
+    SecondThoughts,
+    /// <summary>Cleared something from the Safe to clear row.</summary>
+    Housekeeper,
+    /// <summary>Saved a palette of one's own.</summary>
+    Painter,
     /// <summary>Unlocked every other achievement.</summary>
     Collector
 }
@@ -236,6 +246,15 @@ public sealed class Achievements
             earned.Add(Achievement.Dust);
         }
         return earned;
+    }
+
+    /// <summary>The achievement a finished duplicate search earns, if any.</summary>
+    /// <param name="result">The search's result.</param>
+    /// <returns>Twins when the extra copies (every copy but one of each set) add up to more than a gigabyte; else nothing.</returns>
+    public static List<Achievement> ForDuplicates(DuplicateResult result)
+    {
+        long extra = result.Groups.Sum(group => (group.Files.Count - 1) * group.Size);
+        return extra > Gigabyte ? new List<Achievement> { Achievement.Twins } : new List<Achievement>();
     }
 
     /// <summary>The achievements a comparison with the previous scan of the same root earns.</summary>

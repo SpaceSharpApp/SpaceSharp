@@ -4,6 +4,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
+using SpaceSharp.Controls;
 using SpaceSharp.Models;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
@@ -37,6 +38,8 @@ public sealed class DuplicatesWindow : Window
     private readonly TextBlock _status = new() { FontSize = 12.5, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
     private readonly TextBlock _checkedText = new() { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly StackPanel _picks = new() { Orientation = Orientation.Horizontal, Spacing = 12, IsVisible = false, Margin = new Thickness(0, 8, 0, 0) };
+    private readonly Border _warning;   // red note while a ticked copy sits in a program place
+    private readonly TextBlock _warningText = new() { FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
     private readonly ListBox _list;
     private readonly Border _listBox;
     private readonly BusyPanel _busy = new();
@@ -85,10 +88,21 @@ public sealed class DuplicatesWindow : Window
         header.Children.Add(_progress);
         header.Children.Add(_status);
 
-        AddPick("Dup_KeepFirst", () => KeepOne(files => files[0]));
-        AddPick("Dup_KeepNewest", () => KeepOne(files => files.OrderByDescending(file => file.LastWriteUtc).First()));
+        AddPick("Dup_KeepFirst", () => KeepOne(files => files[0]), Strings.Get("Dup_KeepTip"));
+        AddPick("Dup_KeepNewest", () => KeepOne(files => files.OrderByDescending(file => file.LastWriteUtc).First()), Strings.Get("Dup_KeepTip"));
         AddPick("Dup_ClearTicks", () => SetAll(false));
         header.Children.Add(_picks);
+        _warning = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(12, 9), Margin = new Thickness(0, 12, 0, 0), IsVisible = false };
+        _warning.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Danger"));
+        var warningRow = new DockPanel();
+        Controls.Icon warningIcon = Icons.Make("Warning", 16, "Danger");
+        warningIcon.VerticalAlignment = VerticalAlignment.Top;
+        warningIcon.Margin = new Thickness(0, 1, 10, 0);
+        DockPanel.SetDock(warningIcon, Dock.Left);
+        warningRow.Children.Add(warningIcon);
+        warningRow.Children.Add(_warningText);
+        _warning.Child = warningRow;
+        header.Children.Add(_warning);
         header.Margin = new Thickness(0, 0, 0, 12);
 
         _list = PickList.Make();
@@ -143,10 +157,15 @@ public sealed class DuplicatesWindow : Window
     /// <summary>Adds a quick-pick link above the list.</summary>
     /// <param name="key">The link text's string key.</param>
     /// <param name="action">What the link does.</param>
-    private void AddPick(string key, Action action)
+    /// <param name="tip">The link's tooltip; null gives none.</param>
+    private void AddPick(string key, Action action, string? tip = null)
     {
         var link = new Button { Content = Strings.Get(key), Classes = { "link" }, FontSize = 12.5 };
         link.Click += (_, _) => action();
+        if (tip is not null)
+        {
+            ToolTip.SetTip(link, tip);
+        }
         _picks.Children.Add(link);
     }
 
@@ -171,7 +190,7 @@ public sealed class DuplicatesWindow : Window
     private Control BuildFileRow(Line line)
     {
         FsNode file = line.File!;
-        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,Auto,*,Auto"), ColumnSpacing = 10, Height = 30, Margin = new Thickness(10, 0, 0, 0) };
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,Auto,*,Auto,Auto"), ColumnSpacing = 10, Height = 30, Margin = new Thickness(10, 0, 0, 0) };
         var tick = new CheckBox { IsChecked = line.Checked, MinWidth = 0, Padding = new Thickness(0), VerticalAlignment = VerticalAlignment.Center };
         tick.IsCheckedChanged += (_, _) =>
         {
@@ -187,8 +206,16 @@ public sealed class DuplicatesWindow : Window
         ToolTip.SetTip(where, file.FullPath);
         Grid.SetColumn(where, 2);
         row.Children.Add(where);
+        if (EmptyFolders.IsProgramPlace(file))
+        {
+            // A copy a program may depend on: named so, in the danger color, so the tick next to it is a considered one.
+            var program = new TextBlock { Text = Strings.Get("Dup_InProgram"), FontSize = 11.5, VerticalAlignment = VerticalAlignment.Center };
+            program.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("Danger"));
+            Grid.SetColumn(program, 3);
+            row.Children.Add(program);
+        }
         var age = new TextBlock { Text = file.LastWriteUtc > DateTime.MinValue ? MainWindow.Ago(file.LastWriteUtc) : string.Empty, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
-        Grid.SetColumn(age, 3);
+        Grid.SetColumn(age, 4);
         row.Children.Add(age);
         return row;
     }
@@ -216,6 +243,7 @@ public sealed class DuplicatesWindow : Window
             DuplicateResult result = await Task.Run(() => DuplicateFinder.Find(_root, minimum, progress, token), token);
             Show(result);
             _main.DuplicatesFound(_root, result);
+            Achievements.Current.UnlockAll(Achievements.ForDuplicates(result));
         }
         catch (OperationCanceledException)
         {
@@ -275,7 +303,7 @@ public sealed class DuplicatesWindow : Window
     /// <returns>One list of lines per set, in list order.</returns>
     private IEnumerable<List<Line>> Sets() => _lines.Where(line => line.File is not null).GroupBy(line => line.Group).Select(set => set.ToList());
 
-    /// <summary>Ticks every copy in each set except the one to keep.</summary>
+    /// <summary>Ticks every copy in each set except the one to keep; a copy inside a program place is never ticked by this, only by hand.</summary>
     /// <param name="keep">Picks the file to keep from a set's files.</param>
     private void KeepOne(Func<List<FsNode>, FsNode> keep)
     {
@@ -284,7 +312,7 @@ public sealed class DuplicatesWindow : Window
             FsNode kept = keep(set.Select(line => line.File!).ToList());
             foreach (Line line in set)
             {
-                line.Checked = !ReferenceEquals(line.File, kept);
+                line.Checked = !ReferenceEquals(line.File, kept) && !EmptyFolders.IsProgramPlace(line.File!);
             }
         }
         PickList.Refresh(_list, _lines);
@@ -303,12 +331,16 @@ public sealed class DuplicatesWindow : Window
         UpdateChecked();
     }
 
-    /// <summary>Refreshes the "n checked" line and the delete button.</summary>
+    /// <summary>Refreshes the "n checked" line, the delete button, and the warning that shows while any ticked copy sits in a program place.</summary>
     private void UpdateChecked()
     {
         var picked = _lines.Where(line => line.Checked && line.File is not null).Select(line => line.File!).ToList();
-        _checkedText.Text = Strings.Format("Dup_Checked", picked.Count, SizeFormatter.Format(picked.Sum(file => file.Size)));
+        int risky = picked.Count(EmptyFolders.IsProgramPlace);
+        string size = SizeFormatter.Format(picked.Sum(file => file.Size));
+        _checkedText.Text = risky > 0 ? Strings.Format("Dup_CheckedRisky", picked.Count, size, risky) : Strings.Format("Dup_Checked", picked.Count, size);
         _deleteButton.IsEnabled = picked.Count > 0;
+        _warning.IsVisible = risky > 0;
+        _warningText.Text = Strings.Format("Dup_Warning", risky);
     }
 
     /// <summary>Moves the ticked copies to the Recycle Bin after a confirmation that also warns about sets losing every copy.</summary>
@@ -321,13 +353,24 @@ public sealed class DuplicatesWindow : Window
         }
         int wholeSets = Sets().Count(set => set.All(line => line.Checked));
         string size = SizeFormatter.Format(picked.Sum(file => file.Size));
-        string question = Strings.Format("Delete_Question", Strings.Format("Delete_WhatMany", picked.Count, picked.Count, size), string.Join("\n", picked.Take(8).Select(file => PathLoops.Compact(file.FullPath, 120))));
+        string question = Strings.Format("Delete_Question", Strings.Format("Delete_WhatMany", picked.Count, picked.Count, size), string.Empty).TrimEnd();
+        int inProgramPlaces = picked.Count(EmptyFolders.IsProgramPlace);
+        var body = new StackPanel { Spacing = 10 };
         if (wholeSets > 0)
         {
-            question = Strings.Format("Dup_WholeSets", wholeSets) + "\n\n" + question;
+            body.Children.Add(Dialog.WarningCard(this, Strings.Format("Dup_WholeSets", wholeSets)));
         }
-        if (!await Dialog.Confirm(this, Strings.Get("Delete_Title"), question, Strings.Get("Delete_Title"), danger: true))
+        if (inProgramPlaces > 0)
         {
+            body.Children.Add(Dialog.WarningCard(this, Strings.Format("Delete_Program", inProgramPlaces)));
+        }
+        body.Children.Add(DeleteList.Build(this, picked, SizeMeasure.FileSize));
+        if (!await Dialog.Confirm(this, Strings.Get("Delete_Title"), question, body, Strings.Get("Delete_Title"), danger: true))
+        {
+            if (inProgramPlaces > 0)
+            {
+                Achievements.Current.Unlock(Achievement.SecondThoughts);
+            }
             return;
         }
 

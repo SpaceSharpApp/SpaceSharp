@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>색상 기준</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>최상위 폴더: 최상위 폴더마다 하나의 색조, 안쪽 단계마다 더 밝아집니다. 폴더 깊이: 단계마다 다른 색상입니다. 파일 형식: 파일을 형식별로 색칠합니다.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>휴지통으로 이동하기 전에 확인</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>삭제하기 전에 묻습니다. 삭제한 항목은 언제든지 휴지통에서 복원할 수 있습니다.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>삭제하기 전에 묻습니다. 삭제된 항목은 언제든 휴지통에서 복원할 수 있습니다. Windows, 프로그램, 앱, 게임 폴더 안의 항목은 항상 묻습니다.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>안전하지 않은 빈 폴더 숨기기</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>분명히 내 것인 빈 폴더만 목록에 표시합니다. 프로그램이 있다고 가정하는 경우가 많은 Windows, Program Files, ProgramData, AppData, 게임이나 빌드 폴더 안의 폴더는 목록에서 아예 제외됩니다. 끄면 선택되지 않은 상태로 표시되고, 선택하면 경고가 나타납니다.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>사용자 지정 팔레트</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>스캔 1개</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>스캔 {0}개</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>최신순</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>나머지 전부</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% 사용 중 · {1} 남음</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>폴더 · 파일 {0}개</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>이 검사 이후 드라이브 사용량이 {0} 늘었습니다. 다시 검사하여 어디에 쓰였는지 확인하세요.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>올해</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1~3년</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>더 오래됨</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>가장 오래된 변경: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>이 {0}이(가) 폴더의 {1}을(를) 차지합니다. 나머지 파일 {2:N0}개가 {3}을(를) 나눠 씁니다.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>가장 오래된 변경 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>이 폴더의 {0}이(가) 하나의 항목입니다: {1}, {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>디스크 할당 크기 {0}</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1}의 {0}, 유일한 폴더</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>대부분 {0}({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>대부분 {0}({1}) 및 {2}({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0}({1}), {2}({3}), {4}({5})의 혼합</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>파일 중앙값 {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>마지막 변경 {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>수정됨 {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0}은(는) 1년 이상 변경 없음</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>마지막 검사 이후 변경 없음</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>마지막 검사 이후 {0} 증가</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>마지막 검사 이후 {0} 감소</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Ach_Locked" xml:space="preserve"><value>잠김</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>잠김. 얻는 방법은 얻을 때까지 비밀입니다.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>모든 업적 달성</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>이게 전부였습니다. 앱은 더 이상 줄 것이 없으므로, 이제부터는 그냥 디스크만 보여줍니다.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>이것으로 전부입니다. 앱에는 더 나눠줄 것이 없으니, 이제부터는 그저 디스크를 보여줄 뿐입니다. 아, 하나 있습니다: 설정 › 모양에 골드 테마가 생겼습니다.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>거울아, 거울아</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>드라이브에게 자기 자신 이후로 무엇이 바뀌었는지 물었습니다. 드라이브는 드라이브답게 아무 말도 하지 않았습니다.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>스피드런</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Ach_Collector_Name" xml:space="preserve"><value>수집가</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>다른 모든 업적을 달성했습니다. 더 찾을 것이 없는데, 그게 이 앱의 목적입니다.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>다른 방식({0} 대 {1}): 차이에는 한 방식만 볼 수 있는 파일이 포함됩니다.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>프로그램 폴더 안: {0:N0}개 (Windows, Program Files, ProgramData, AppData 또는 게임이나 빌드 폴더). 이 항목이 필요한 프로그램은 휴지통에서 복원할 때까지 작동하지 않습니다.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>프로그램 폴더 안: {0:N0}개 (Windows, Program Files, ProgramData, AppData 또는 게임이나 빌드 폴더). 이 항목이 필요한 프로그램은 작동을 멈추며, 복원할 휴지통도 없습니다.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>프로그램 폴더 안: 선택한 사본 중 {0:N0}개 (Windows, Program Files, ProgramData, AppData 또는 게임이나 빌드 폴더). 그 사본이 필요한 프로그램은 작동을 멈춥니다. 이 사본은 남겨 두고 다른 위치의 사본을 선택하세요.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0}개 선택 · {1} · 프로그램 폴더 내 {2:N0}개</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>각 집합의 다른 사본을 선택합니다. Windows, 프로그램, 앱, 게임 폴더 안의 사본은 선택하지 않습니다.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>프로그램 폴더</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>영구 삭제 중…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} / {1:N0}개</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>{1}의 휴지통을 비울까요? 안에 있는 {0}은(는) 영구 삭제되며, 이후에는 아무것도 복원할 수 없습니다.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>휴지통 비우기</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>항목</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>나머지 {0:N0}개 표시 ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>쌍둥이</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>여분의 사본이 합쳐서 1GB를 넘는 중복 검색. 같은 파일이 몇 번이고.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>정리</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>빈 폴더를 한 번에 1,000개 이상 삭제. 아무것도 없었고, 이제 다른 곳에서 아무것도 없다.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>재고</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>프로그램 폴더 안내를 보고 삭제를 취소함. 안내가 제 역할을 했다.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>살림꾼</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>'정리해도 안전'에서 무언가를 비움. 캐시는 돌아오겠지만, 그동안은 좋았다.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>화가</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>직접 만든 팔레트를 저장함. 기본 팔레트로는 부족했고, 그럴 만하다.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>골드</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows 설정을 따르거나 항상 라이트 또는 다크를 사용합니다. 골드는 당신의 것: 모든 도전 과제를 달성했고, 앱도 거기에 맞춰 차려입었습니다. 전용 지도 팔레트와 함께.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>황동부터 로즈골드까지 열두 가지 금속, 골드 테마용</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0}가지</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0}개 폴더에 {0:N0}개 파일이 든 폴더이며, 그중 {2:N0}개는 바로 안에 있습니다.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0}개 파일이 든 폴더이며, 모두 바로 안에 있습니다.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0}을(를) 차지하며, {2}의 {1}입니다.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0}을(를) 차지합니다.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>다른 {0:N0}개 종류가 {1}을(를) 나눕니다.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>중간값 파일 {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0}은(는) 이번 달에 바뀌었고, {1}은(는) 1년 넘게 손대지 않았습니다.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>폴더 또는 파일</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>크기</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>비율</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>파일</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>변경</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>종류</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>파일</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>위치</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>가장 큰 파일</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0}개 중 {0:N0}개</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>나머지 {0:N0}개 파일</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>{0:N0}개 더</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>이 {0:N0}개가 폴더의 {1}</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>폴더의 {0}이(가) 하나의 항목</value></data>
 </root>

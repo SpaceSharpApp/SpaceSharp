@@ -43,6 +43,18 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        _deleteBusy.Width = 460;
+        _deleteBusy.Margin = new Thickness(18);
+        _deleteBusy.HorizontalAlignment = HorizontalAlignment.Right;
+        _deleteBusy.VerticalAlignment = VerticalAlignment.Bottom;
+        _deleteBusy.BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 12, Blur = 40, Color = Color.FromArgb(0x99, 0, 0, 0) });
+        _deleteBusy.CornerRadius = new CornerRadius(12);
+        _deleteBusy.Padding = new Thickness(18, 16, 18, 14);
+        _deleteBusy.BorderThickness = new Thickness(1);
+        _deleteBusy.Bind(BackgroundProperty, this.GetResourceObservable("Panel"));
+        _deleteBusy.Bind(BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        _deleteBusy.Stopped += (_, _) => _deleteStop?.Cancel();
+        MapHost.Children.Add(_deleteBusy);
         TitleBarTheme.Attach(this);
         BuildStatusRight();   // before Build and ApplyLook, which refresh it
         BuildChangesView();
@@ -76,6 +88,7 @@ public partial class MainWindow : Window
 
         Opened += async (_, _) =>
         {
+            FitToScreen();
             _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
             if (App.Args.Audit is { } auditFile)
             {
@@ -275,7 +288,7 @@ public partial class MainWindow : Window
         EmptyOpenContent.Children.Add(Icons.Make("Open", 15));
         EmptyOpenContent.Children.Add(new TextBlock { Text = Strings.Get("Start_OpenASavedScan"), VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center });
         DrawerTitle.Text = Strings.Get("Main_Filter");
-        AccessRestartButton.Content = Icons.WithText("Shield", Strings.Get("Main_RestartAsAdministrator"));
+        AccessRestartButton.Content = Strings.Get("Main_RestartAsAdministrator");   // the badge beside the text carries the shield
         ToolTip.SetTip(AccessCloseButton, Strings.Get("Main_Dismiss"));
         DrawerClearButton.Content = Strings.Get("Drawer_ClearAll");
         ToolTip.SetTip(DrawerCloseButton, Strings.Get("Main_Close"));
@@ -283,6 +296,7 @@ public partial class MainWindow : Window
         FillListSwitch();
         ListHint.Text = Strings.Get("List_HintNoScan");
         MarkListKind();
+        RefreshTopList();   // hides the section until a scan loads
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
         ToolTip.SetTip(ChangesButton, Strings.Get("Main_ViewChangesTip"));
@@ -344,6 +358,29 @@ public partial class MainWindow : Window
     // ------------------------------------------------------------------ look
 
     private int _dimDepth;
+
+    /// <summary>Shrinks the window to the screen's working area when the default size is taller or wider than the screen, keeping it centered.
+    /// The default is tall enough to hold the Inspect window with room around it, which a 1080p screen is not.</summary>
+    private void FitToScreen()
+    {
+        if (WindowState != WindowState.Normal || Screens.ScreenFromWindow(this) is not { } screen)
+        {
+            return;
+        }
+        double maxWidth = screen.WorkingArea.Width / RenderScaling - 32;
+        double maxHeight = screen.WorkingArea.Height / RenderScaling - 32;
+        double width = Math.Max(MinWidth, Math.Min(Bounds.Width, maxWidth));
+        double height = Math.Max(MinHeight, Math.Min(Bounds.Height, maxHeight));
+        if (Math.Abs(width - Bounds.Width) < 1 && Math.Abs(height - Bounds.Height) < 1)
+        {
+            return;
+        }
+        Width = width;
+        Height = height;
+        Position = new PixelPoint(
+            screen.WorkingArea.X + (int)((screen.WorkingArea.Width - width * RenderScaling) / 2),
+            screen.WorkingArea.Y + (int)((screen.WorkingArea.Height - height * RenderScaling) / 2));
+    }
 
     /// <summary>Dims the window while a dialog is open over it; nested calls are counted.</summary>
     /// <param name="on">True when a dialog opens, false when it closes; the overlay shows while more dialogs have opened than closed and the Dialog dim setting is above 0.</param>
@@ -1118,6 +1155,7 @@ public partial class MainWindow : Window
         {
             double fraction = Math.Clamp((double)progress.Bytes / expected, 0, 1);
             StageFindFill.Width = Math.Max(4, StageFindBar.Bounds.Width * fraction);
+            StageFindFill.IsVisible = true;
             ScanPercent.Text = $"{fraction * 100:0}%";
         }
         else
@@ -1127,6 +1165,7 @@ public partial class MainWindow : Window
             double sweepPhase = _scanClock.Elapsed.TotalSeconds % 1.6 / 1.6;
             double sweepWidth = barWidth * 0.3;
             StageFindFill.Width = Math.Max(4, sweepWidth);
+            StageFindFill.IsVisible = true;
             StageFindFill.Margin = new Thickness(Math.Max(0, (barWidth - sweepWidth) * sweepPhase), 0, 0, 0);
         }
     }
@@ -1148,7 +1187,9 @@ public partial class MainWindow : Window
         icon.Glyph = Icons.Get(done ? "Check" : running ? "Loader" : "Circle");
         icon.Bind(Controls.Icon.ForegroundProperty, this.GetResourceObservable(running || done ? "Accent" : "TextDim"));
         fill.Margin = new Thickness(0);
-        fill.Width = done ? bar.Bounds.Width : running ? 4 : 0;
+        // a running stage's fill grows with its progress; until there is any, nothing shows (a 4 px starter read as a stray dot)
+        fill.Width = done ? bar.Bounds.Width : 0;
+        fill.IsVisible = done;
     }
 
     /// <summary>Makes a finished tree the current scan and refreshes everything that shows it; a live-drawn scan eases into the final map.</summary>
@@ -1533,11 +1574,16 @@ public partial class MainWindow : Window
         await ClipboardText.SetAsync(Clipboard, text);
     }
 
+    private readonly BusyPanel _deleteBusy = new();   // progress and Stop over the map's corner while a delete runs
+    private CancellationTokenSource? _deleteStop;      // set while a delete runs; Stop cancels it between items
+
     /// <summary>Moves nodes to the recycle bin after confirmation, skipping files that changed since the scan, and removes from the tree only what is really gone.</summary>
-    /// <param name="nodes">The selection; clusters, the free-space box, the scan root and anything inside another selected folder are left out. Nothing happens during a scan.</param>
-    private async Task DeleteNodes(IReadOnlyList<FsNode> nodes)
+    /// <remarks>The confirmation is skipped by Settings › Behavior › Confirm before moving to the Recycle Bin, except when an item sits in a program place: those always ask, and the question says so.</remarks>
+    /// <param name="nodes">The selection; clusters, the free-space box, the scan root and anything inside another selected folder are left out. Nothing happens during a scan or another delete.</param>
+    /// <param name="knownSafe">True for the Safe to clear places, which are caches and temp folders chosen by name: no program-place warning, since the warning would name the very folders the row exists to clear.</param>
+    private async Task DeleteNodes(IReadOnlyList<FsNode> nodes, bool knownSafe = false)
     {
-        if (_scanCts is not null)
+        if (_scanCts is not null || _deleteStop is not null)
         {
             return;
         }
@@ -1556,8 +1602,13 @@ public partial class MainWindow : Window
         SizeMeasure measure = Treemap.SizeMode;
         long total = items.Sum(node => node.SizeFor(measure));
         string size = SizeFormatter.Format(total);
-        if (_settings.ConfirmDelete && !await ConfirmDeleteAsync(items, size))
+        int inProgramPlaces = knownSafe ? 0 : items.Count(EmptyFolders.IsProgramPlace);
+        if ((_settings.ConfirmDelete || inProgramPlaces > 0) && !await ConfirmDeleteAsync(items, size, inProgramPlaces))
         {
+            if (inProgramPlaces > 0)
+            {
+                Store.Unlock(Achievement.SecondThoughts);
+            }
             return;
         }
 
@@ -1565,7 +1616,30 @@ public partial class MainWindow : Window
         var changed = items.Where(node => !node.IsDirectory && !MatchesScan(node)).ToList();
         var toSend = items.Except(changed).ToList();
         string? error = null;
-        bool allSent = toSend.Count == 0 || Trash.TrySend(toSend.Select(node => node.FullPath).ToList(), out error);
+        bool allSent = true;
+        if (toSend.Count > 0)
+        {
+            // Off the UI thread, with the panel's progress and Stop; a stop keeps what was already sent and is not an error.
+            _deleteStop = new CancellationTokenSource();
+            CancellationToken token = _deleteStop.Token;
+            _deleteBusy.Start(Strings.Get("Dup_Moving"), toSend.Count, Strings.Get("Main_DeleteProgress"));
+            IProgress<int> progress = new Progress<int>(done => _deleteBusy.Report(done));
+            var paths = toSend.Select(node => node.FullPath).ToList();
+            string? sendError = null;
+            try
+            {
+                allSent = await Task.Run(() => Trash.TrySend(paths, out sendError, progress, token));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+            {
+                sendError = ex.Message;
+                allSent = false;
+            }
+            error = sendError;
+            allSent |= token.IsCancellationRequested && error is null;
+            _deleteStop = null;
+            _deleteBusy.IsVisible = false;
+        }
         if (changed.Count > 0)
         {
             string names = string.Join("\n", changed.Take(4).Select(node => Strings.Format("Delete_Changed", node.FullPath)));
@@ -1577,14 +1651,18 @@ public partial class MainWindow : Window
             allSent = false;
         }
 
-        await AfterDeletionAsync(items, measure, allSent, error, removed => removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size));
+        int gone = await AfterDeletionAsync(items, measure, allSent, error, removed => removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size));
+        if (knownSafe && gone > 0)
+        {
+            Store.Unlock(Achievement.Housekeeper);
+        }
     }
 
     /// <summary>Deletes for good, skipping the Recycle Bin, with the long-path form that reaches folders Explorer cannot open; asks first.</summary>
     /// <param name="nodes">The items; folders take their contents, and an item inside another selected folder goes with that folder.</param>
     private async Task DeletePermanentlyAsync(IReadOnlyList<FsNode> nodes)
     {
-        if (_scanCts is not null)
+        if (_scanCts is not null || _deleteStop is not null)
         {
             return;
         }
@@ -1600,29 +1678,46 @@ public partial class MainWindow : Window
         string what = items.Count == 1
             ? items[0].IsDirectory ? Strings.Format("Delete_WhatFolder", items[0].Name, items[0].FileCount, size) : Strings.Format("Delete_WhatFile", items[0].Name, size)
             : Strings.Format("Delete_WhatMany", items.Count, items.Sum(node => node.FileCount), size);
-        string list = string.Join("\n", items.Take(8).Select(node => PathLoops.Compact(node.FullPath, 160)));
+        int inProgramPlaces = items.Count(EmptyFolders.IsProgramPlace);
         bool confirmed = await Dialog.Confirm(this,
             Strings.Get("Delete_PermanentTitle"),
-            Strings.Format("Delete_PermanentQuestion", what, list),
+            Strings.Format("Delete_PermanentQuestion", what, string.Empty).TrimEnd(),
+            DeleteConfirmBody(inProgramPlaces > 0 ? Strings.Format("Delete_ProgramForGood", inProgramPlaces) : null, items, measure),
             Strings.Get("Delete_PermanentButton"),
             danger: true);
         if (!confirmed)
         {
+            if (inProgramPlaces > 0)
+            {
+                Store.Unlock(Achievement.SecondThoughts);
+            }
             return;
         }
 
-        // Off the UI thread: a loop hundreds of levels deep takes a while to walk and delete.
+        // Off the UI thread, with progress and Stop: a loop hundreds of levels deep takes a while to walk and delete. Stop ends it between items.
+        _deleteStop = new CancellationTokenSource();
+        CancellationToken token = _deleteStop.Token;
+        _deleteBusy.Start(Strings.Get("Main_Deleting"), items.Count, Strings.Get("Main_DeleteProgress"));
+        IProgress<int> progress = new Progress<int>(done => _deleteBusy.Report(done));
         var errors = new List<string>();
         await Task.Run(() =>
         {
+            int done = 0;
             foreach (FsNode node in items)
             {
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
                 if (!DeepDelete.TryDelete(node.FullPath, out string? itemError) && itemError is not null)
                 {
                     errors.Add($"{PathLoops.Compact(node.FullPath, 160)}: {itemError}");
                 }
+                progress.Report(++done);
             }
         });
+        _deleteStop = null;
+        _deleteBusy.IsVisible = false;
         await AfterDeletionAsync(items, measure, errors.Count == 0, errors.Count == 0 ? null : string.Join("\n", errors), removed => Strings.Format("Status_DeletedForGood", removed, size));
     }
 
@@ -1654,7 +1749,8 @@ public partial class MainWindow : Window
     /// <param name="allSent">False shows the error dialog with <paramref name="error"/>.</param>
     /// <param name="error">What was refused and why; shown in the dialog's card.</param>
     /// <param name="status">The status line for the number of items that are gone.</param>
-    private async Task AfterDeletionAsync(List<FsNode> items, SizeMeasure measure, bool allSent, string? error, Func<int, string> status)
+    /// <returns>How many of the items are gone from disk.</returns>
+    private async Task<int> AfterDeletionAsync(List<FsNode> items, SizeMeasure measure, bool allSent, string? error, Func<int, string> status)
     {
         // Only what is really gone leaves the tree; the shell may have refused some items.
         long freed = 0;
@@ -1689,34 +1785,50 @@ public partial class MainWindow : Window
             await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
         }
         StatusText.Text = status(removed);
+        return removed;
     }
 
-    /// <summary>Asks before moving the items to the recycle bin; the question names the one item or counts the many.</summary>
+    /// <summary>Asks before moving the items to the recycle bin; the question names the one item or counts the many, and says how many sit in a program place.</summary>
     /// <param name="items">The items that would be deleted, at least one; the first eight paths are listed.</param>
     /// <param name="size">Their total size, already formatted for display.</param>
+    /// <param name="inProgramPlaces">How many of the items sit inside Windows, a program, an app or a game folder; 0 adds no warning.</param>
     /// <returns>True when the user confirmed.</returns>
-    private async Task<bool> ConfirmDeleteAsync(List<FsNode> items, string size)
+    private async Task<bool> ConfirmDeleteAsync(List<FsNode> items, string size, int inProgramPlaces)
     {
         string what;
-        string list;
         if (items.Count == 1)
         {
             FsNode item = items[0];
             what = item.IsDirectory
                 ? Strings.Format("Delete_WhatFolder", item.Name, item.FileCount, size)
                 : Strings.Format("Delete_WhatFile", item.Name, size);
-            list = item.FullPath;
         }
         else
         {
             what = Strings.Format("Delete_WhatMany", items.Count, items.Sum(node => node.FileCount), size);
-            list = string.Join("\n", items.Take(8).Select(node => node.FullPath));
-            if (items.Count > 8)
-            {
-                list += Strings.Format("Delete_AndMore", items.Count - 8);
-            }
         }
-        return await Dialog.Confirm(this, Strings.Get("Delete_Title"), Strings.Format("Delete_Question", what, list), Strings.Get("Delete_Title"), danger: true);
+        return await Dialog.Confirm(this,
+            Strings.Get("Delete_Title"),
+            Strings.Format("Delete_Question", what, string.Empty).TrimEnd(),
+            DeleteConfirmBody(inProgramPlaces > 0 ? Strings.Format("Delete_Program", inProgramPlaces) : null, items, Treemap.SizeMode),
+            Strings.Get("Delete_Title"),
+            danger: true);
+    }
+
+    /// <summary>The body of a delete question: a red note when items sit in program places, then the items as a list card.</summary>
+    /// <param name="warning">The note's text, or null for none.</param>
+    /// <param name="items">The items about to be deleted.</param>
+    /// <param name="measure">The size each row shows.</param>
+    /// <returns>The control for the dialog.</returns>
+    private Control DeleteConfirmBody(string? warning, List<FsNode> items, SizeMeasure measure)
+    {
+        var body = new StackPanel { Spacing = 10 };
+        if (warning is not null)
+        {
+            body.Children.Add(Dialog.WarningCard(this, warning));
+        }
+        body.Children.Add(DeleteList.Build(this, items, measure));
+        return body;
     }
 
     /// <summary>True when the file on disk still matches the size and write time the scan recorded.</summary>
@@ -1852,10 +1964,18 @@ public partial class MainWindow : Window
         }
     }
 
-    /// <summary>Rebuilds the side panel's largest-items list for the current kind: hint, legend, header and up to 60 rows.</summary>
+    /// <summary>Rebuilds the side panel's largest-items list for the current kind: hint, legend, header and up to 60 rows. Before a scan the
+    /// whole section stays hidden and the drive list takes the panel.</summary>
     private void RefreshTopList()
     {
         TopList.Children.Clear();
+        bool hasScan = _root is not null;
+        DriveResizeHandle.IsVisible = hasScan;
+        ListsTitle.IsVisible = hasScan;
+        ListSwitch.IsVisible = hasScan;
+        ListHint.IsVisible = hasScan;
+        TopListScroller.IsVisible = hasScan;
+        DriveScroller.MaxHeight = hasScan ? Math.Max(72, _settings.DriveListHeight) : double.PositiveInfinity;
         if (_root is null)
         {
             ListHint.Text = Strings.Get("List_HintNoScan");
@@ -2150,7 +2270,7 @@ public partial class MainWindow : Window
 
     private void Theme_Click(object? sender, RoutedEventArgs e)
     {
-        bool dark = !App.IsDark;
+        bool dark = !App.IsDark;   // Gold counts as dark, so the toggle leaves it for Light
         _settings.Theme = dark ? "Dark" : "Light";
         _settings.Save();
         App.ApplyTheme();

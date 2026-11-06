@@ -56,6 +56,7 @@ public partial class MainWindow
             return;
         }
         await Settle(900);
+        await FrameDialogAsync(dialog);
         try
         {
             await CaptureAsync(shotFile, dialog);
@@ -67,6 +68,37 @@ public partial class MainWindow
             Console.Error.WriteLine($"Screenshot failed: {ex.Message}");
         }
         (Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+    }
+
+    /// <summary>Grows the main window around a dialog taller than it, such as Inspect, so the shot shows the dialog on the app and not on the
+    /// desktop; both stay centered on the screen. A screen shorter than the dialog still cuts it: pose on a tall enough screen.</summary>
+    /// <param name="dialog">The scene's dialog, or null for none.</param>
+    private async Task FrameDialogAsync(Window? dialog)
+    {
+        if (dialog is null || Screens.ScreenFromWindow(this) is not { } screen)
+        {
+            return;
+        }
+        double wantedHeight = dialog.Bounds.Height + 80;
+        double wantedWidth = dialog.Bounds.Width + 160;
+        double maxHeight = screen.WorkingArea.Height / RenderScaling - 16;
+        double maxWidth = screen.WorkingArea.Width / RenderScaling - 16;
+        double height = Math.Min(Math.Max(Bounds.Height, wantedHeight), maxHeight);
+        double width = Math.Min(Math.Max(Bounds.Width, wantedWidth), maxWidth);
+        if (Math.Abs(height - Bounds.Height) < 1 && Math.Abs(width - Bounds.Width) < 1)
+        {
+            return;
+        }
+        Width = width;
+        Height = height;
+        Position = new PixelPoint(
+            screen.WorkingArea.X + (int)((screen.WorkingArea.Width - width * RenderScaling) / 2),
+            screen.WorkingArea.Y + (int)((screen.WorkingArea.Height - height * RenderScaling) / 2));
+        await Settle();
+        dialog.Position = new PixelPoint(
+            Position.X + (int)((Bounds.Width - dialog.Bounds.Width) * RenderScaling / 2),
+            Position.Y + (int)((Bounds.Height - dialog.Bounds.Height) * RenderScaling / 2));
+        await Settle();
     }
 
     /// <summary>Puts the window in a scene's state on the pretend PC and returns the dialog it opened, if any.</summary>

@@ -494,7 +494,7 @@
   <data name="Settings_ColorBy" xml:space="preserve"><value>Colorir por</value></data>
   <data name="Settings_ColorBy_Desc" xml:space="preserve"><value>Pasta principal: uma matiz por pasta de nível superior, mais clara a cada nível interno. Profundidade da pasta: uma cor diferente por nível. Tipo de arquivo: arquivos coloridos por tipo.</value></data>
   <data name="Settings_ConfirmDelete" xml:space="preserve"><value>Confirmar antes de mover para a Lixeira</value></data>
-  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Perguntar antes de excluir. Itens excluídos sempre podem ser restaurados da Lixeira.</value></data>
+  <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Perguntar antes de eliminar. Os itens eliminados podem sempre ser restaurados da Lixeira. Os itens dentro de pastas do Windows, de programas, de apps e de jogos perguntam sempre.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar pastas vazias inseguras</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista só as pastas vazias que são claramente suas. As que estão em Windows, Program Files, ProgramData, AppData e pastas de jogos ou de compilação, com que os programas costumam contar, ficam fora da lista. Desligado, lista-as desmarcadas, com um aviso quando marca uma.</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
@@ -696,6 +696,7 @@
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 verificação</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} verificações</value></data>
   <data name="Start_NewestFirst" xml:space="preserve"><value>Mais recentes primeiro</value></data>
+  <data name="Start_MapRest" xml:space="preserve"><value>Todo o resto</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% usado · {1} livres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Pasta · {0} ficheiros</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>A unidade encheu {0} desde esta análise. Analise de novo para ver para onde foi.</value></data>
@@ -748,8 +749,7 @@
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Este ano</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 a 3 anos</value></data>
   <data name="Inspect_Age_Older" xml:space="preserve"><value>Mais antigos</value></data>
-  <data name="Inspect_OldestChange" xml:space="preserve"><value>Alteração mais antiga: {0}</value></data>
-  <data name="Inspect_Remainder" xml:space="preserve"><value>Estes {0} são {1} da pasta. Os outros {2:N0} arquivos dividem {3}.</value></data>
+  <data name="Inspect_OldestChange" xml:space="preserve"><value>Alteração mais antiga {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} desta pasta é uma única coisa: {1} com {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} em disco</value></data>
   <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} de {1}, sua única pasta</value></data>
@@ -761,10 +761,8 @@
   <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Principalmente {0} ({1})</value></data>
   <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Principalmente {0} ({1}) e {2} ({3})</value></data>
   <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Uma mistura de {0} ({1}), {2} ({3}) e {4} ({5})</value></data>
-  <data name="Inspect_Ctx_Median" xml:space="preserve"><value>arquivo mediano {0}</value></data>
   <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Última alteração {0}</value></data>
   <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Modificado {0}</value></data>
-  <data name="Inspect_Ctx_Untouched" xml:space="preserve"><value>{0} sem alteração há mais de um ano</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>sem alteração desde a última verificação</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>cresceu {0} desde a última verificação</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>diminuiu {0} desde a última verificação</value></data>
@@ -1163,7 +1161,7 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Ach_Locked" xml:space="preserve"><value>Bloqueada</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Bloqueada. Como se consegue fica em segredo até a ter.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Todas as conquistas desbloqueadas</value></data>
-  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Eram todas. A aplicação já não tem mais nada para dar, por isso daqui em diante limita-se a mostrar-lhe o disco.</value></data>
+  <data name="Ach_CollectorMessage" xml:space="preserve"><value>Foram todas. A app não tem mais nada para dar, por isso a partir de agora limita-se a mostrar-lhe o seu disco. Bem, uma coisa: Definições › Aspeto tem agora um tema Ouro.</value></data>
   <data name="Ach_MirrorMirror_Name" xml:space="preserve"><value>Espelho, espelho meu</value></data>
   <data name="Ach_MirrorMirror_Hint" xml:space="preserve"><value>Perguntou à unidade o que tinha mudado desde ela própria. A unidade, sendo uma unidade, não disse nada.</value></data>
   <data name="Ach_Speedrun_Name" xml:space="preserve"><value>Speedrun</value></data>
@@ -1207,4 +1205,52 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Ach_Collector_Name" xml:space="preserve"><value>Colecionador</value></data>
   <data name="Ach_Collector_Hint" xml:space="preserve"><value>Todas as outras conquistas desbloqueadas. Não resta nada por encontrar, que é o objetivo da aplicação.</value></data>
   <data name="Changes_MadeDifferently" xml:space="preserve"><value>Feitas de formas diferentes ({0} vs {1}): as diferenças incluem arquivos que só um método vê.</value></data>
+  <data name="Delete_Program" xml:space="preserve"><value>Numa pasta de programa: {0:N0} deles, dentro de Windows, Program Files, ProgramData, AppData ou de uma pasta de jogo ou de build. Um programa que precise deles deixará de funcionar até serem restaurados da Lixeira.</value></data>
+  <data name="Delete_ProgramForGood" xml:space="preserve"><value>Numa pasta de programa: {0:N0} deles, dentro de Windows, Program Files, ProgramData, AppData ou de uma pasta de jogo ou de build. Um programa que precise deles deixará de funcionar, e não há Lixeira de onde restaurá-los.</value></data>
+  <data name="Dup_Warning" xml:space="preserve"><value>Numa pasta de programa: {0:N0} das cópias marcadas, dentro de Windows, Program Files, ProgramData, AppData ou de uma pasta de jogo ou de build. Um programa que precise da sua cópia deixará de funcionar. Mantenha essas e marque as cópias noutros locais.</value></data>
+  <data name="Dup_CheckedRisky" xml:space="preserve"><value>{0:N0} marcados · {1} · {2:N0} em pastas de programas</value></data>
+  <data name="Dup_KeepTip" xml:space="preserve"><value>Marca as outras cópias de cada conjunto. As cópias dentro de pastas do Windows, de programas, de apps e de jogos ficam por marcar.</value></data>
+  <data name="Dup_InProgram" xml:space="preserve"><value>pasta de programa</value></data>
+  <data name="Main_Deleting" xml:space="preserve"><value>A eliminar definitivamente…</value></data>
+  <data name="Main_DeleteProgress" xml:space="preserve"><value>{0:N0} de {1:N0} itens</value></data>
+  <data name="Cleanup_EmptyBinQuestion" xml:space="preserve"><value>Esvaziar a Lixeira em {1}? Os {0} nela serão eliminados definitivamente; depois nada poderá ser restaurado.</value></data>
+  <data name="Cleanup_EmptyBinButton" xml:space="preserve"><value>Esvaziar a Lixeira</value></data>
+  <data name="Delete_ListHead" xml:space="preserve"><value>Item</value></data>
+  <data name="Delete_ShowRest" xml:space="preserve"><value>Mostrar os outros {0:N0} ({1})</value></data>
+  <data name="Ach_Twins_Name" xml:space="preserve"><value>Gémeos</value></data>
+  <data name="Ach_Twins_Hint" xml:space="preserve"><value>Uma pesquisa de duplicados cujas cópias a mais somam mais de um gigabyte. O mesmo ficheiro, vezes sem conta.</value></data>
+  <data name="Ach_Tidy_Name" xml:space="preserve"><value>Arrumado</value></data>
+  <data name="Ach_Tidy_Hint" xml:space="preserve"><value>Mil ou mais pastas vazias eliminadas de uma vez. Não tinham nada, e agora não têm nada noutro sítio.</value></data>
+  <data name="Ach_SecondThoughts_Name" xml:space="preserve"><value>Hesitação</value></data>
+  <data name="Ach_SecondThoughts_Hint" xml:space="preserve"><value>Carregou em Cancelar numa eliminação depois da nota sobre pastas de programas. A nota fez o seu trabalho.</value></data>
+  <data name="Ach_Housekeeper_Name" xml:space="preserve"><value>Governanta</value></data>
+  <data name="Ach_Housekeeper_Hint" xml:space="preserve"><value>Limpou algo de Seguro para limpar. As caches voltam, mas foi bom enquanto durou.</value></data>
+  <data name="Ach_Painter_Name" xml:space="preserve"><value>Pintor</value></data>
+  <data name="Ach_Painter_Hint" xml:space="preserve"><value>Guardou uma paleta sua. As incluídas não chegavam, e é justo.</value></data>
+  <data name="Theme_GoldName" xml:space="preserve"><value>Ouro</value></data>
+  <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Seguir a definição do Windows, ou usar sempre claro ou escuro. Ouro é seu: todas as conquistas desbloqueadas, e a app vestida a condizer, com a sua própria paleta de mapa.</value></data>
+  <data name="PaletteAbout_Gold" xml:space="preserve"><value>Doze metais do latão ao ouro rosa, para o tema Ouro</value></data>
+  <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} tipos</value></data>
+  <data name="Inspect_S_Folder" xml:space="preserve"><value>Uma pasta com {0:N0} ficheiros em {1:N0} pastas, {2:N0} deles diretamente dentro.</value></data>
+  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Uma pasta com {0:N0} ficheiros, todos diretamente dentro.</value></data>
+  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
+  <data name="Inspect_S_Takes" xml:space="preserve"><value>Ocupa {0}, e {1} de {2}.</value></data>
+  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Ocupa {0}.</value></data>
+  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Outros {0:N0} tipos partilham {1}.</value></data>
+  <data name="Inspect_S_Median" xml:space="preserve"><value>Ficheiro mediano {0}.</value></data>
+  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} mudou este mês; {1} está intocado há mais de um ano.</value></data>
+  <data name="Inspect_Col_Item" xml:space="preserve"><value>Pasta ou ficheiro</value></data>
+  <data name="Inspect_Col_Size" xml:space="preserve"><value>Tamanho</value></data>
+  <data name="Inspect_Col_Share" xml:space="preserve"><value>Parte</value></data>
+  <data name="Inspect_Col_Files" xml:space="preserve"><value>Ficheiros</value></data>
+  <data name="Inspect_Col_Changed" xml:space="preserve"><value>Alterado</value></data>
+  <data name="Inspect_Col_Kind" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Inspect_Col_File" xml:space="preserve"><value>Ficheiro</value></data>
+  <data name="Inspect_Col_In" xml:space="preserve"><value>Em</value></data>
+  <data name="Inspect_LargestFiles" xml:space="preserve"><value>Maiores ficheiros</value></data>
+  <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} de {1:N0}</value></data>
+  <data name="Inspect_OtherFiles" xml:space="preserve"><value>Os outros {0:N0} ficheiros</value></data>
+  <data name="Inspect_More" xml:space="preserve"><value>Mais {0:N0}</value></data>
+  <data name="Inspect_These" xml:space="preserve"><value>estes {0:N0} são {1} da pasta</value></data>
+  <data name="Inspect_OneThing" xml:space="preserve"><value>{0} da pasta é uma única coisa</value></data>
 </root>

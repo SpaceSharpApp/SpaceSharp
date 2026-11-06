@@ -3,7 +3,7 @@
         xmlns:controls="using:SpaceSharp.Controls"
         x:Class="SpaceSharp.MainWindow"
         Title="SpaceSharp"
-        Width="1400" Height="880" MinWidth="1040" MinHeight="460"
+        Width="1500" Height="1200" MinWidth="1040" MinHeight="460"
         WindowStartupLocation="CenterScreen"
         Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
@@ -50,11 +50,16 @@
     </Border>
 
     <!-- ============================================================ protected folders notice -->
-    <Border x:Name="AccessBar" DockPanel.Dock="Top" IsVisible="False" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="4,0,0,1" Padding="12,6">
+    <!-- an inset notice card: a badge with the shield, the sentence, an outlined action and a quiet close -->
+    <Border x:Name="AccessBar" DockPanel.Dock="Top" IsVisible="False" Margin="12,10,12,0" Padding="10,8,8,8" CornerRadius="10"
+            Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
       <DockPanel>
-        <Button x:Name="AccessCloseButton" DockPanel.Dock="Right" Classes="tool" Height="28" Click="CloseAccessBar_Click"><controls:Icon Glyph="{StaticResource Icon.Close}" Width="15" Height="15" /></Button>
-        <Button x:Name="AccessRestartButton" DockPanel.Dock="Right" Classes="primary" Height="28" Margin="12,0,6,0" Click="RestartElevated_Click" />
-        <TextBlock x:Name="AccessText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        <Button x:Name="AccessCloseButton" DockPanel.Dock="Right" Classes="tool" Width="30" Height="30" MinWidth="30" Padding="0" Margin="4,0,0,0" Click="CloseAccessBar_Click"><controls:Icon Glyph="{StaticResource Icon.Close}" Width="14" Height="14" /></Button>
+        <Button x:Name="AccessRestartButton" DockPanel.Dock="Right" Classes="outline" Height="30" Padding="12,0" Margin="14,0,0,0" Click="RestartElevated_Click" />
+        <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="8" Background="{DynamicResource AccentFaint}" Margin="0,0,12,0">
+          <controls:Icon Glyph="{StaticResource Icon.Shield}" Width="16" Height="16" StrokeWidth="2" Foreground="{DynamicResource Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <TextBlock x:Name="AccessText" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
       </DockPanel>
     </Border>
 
@@ -98,13 +103,14 @@
         <!-- one segmented control across the panel: the three parts share the width, the chosen one is filled amber -->
         <Border x:Name="ListSwitch" Grid.Row="5" Classes="segments" Height="32" Margin="14,4,14,6" SizeChanged="ListSwitch_SizeChanged">
           <Grid ColumnDefinitions="*,*,*">
-            <Button x:Name="ListFilesButton" Classes="segment-part" Click="ListKind_Click" Tag="Files" />
+            <!-- the end parts round their outer corners one pixel tighter than the frame, so the amber fill follows the outline -->
+            <Button x:Name="ListFilesButton" Classes="segment-part" CornerRadius="5,0,0,5" Click="ListKind_Click" Tag="Files" />
             <Button x:Name="ListFoldersButton" Grid.Column="1" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Folders" />
-            <Button x:Name="ListTypesButton" Grid.Column="2" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Types" />
+            <Button x:Name="ListTypesButton" Grid.Column="2" Classes="segment-part" BorderThickness="1,0,0,0" CornerRadius="0,5,5,0" Click="ListKind_Click" Tag="Types" />
           </Grid>
         </Border>
         <TextBlock x:Name="ListHint" Grid.Row="6" Classes="dim" FontSize="12" Margin="14,0,14,6" TextTrimming="CharacterEllipsis" />
-        <ScrollViewer Grid.Row="7">
+        <ScrollViewer x:Name="TopListScroller" Grid.Row="7">
           <StackPanel x:Name="TopList" Margin="8,0,8,8" Spacing="1" />
         </ScrollViewer>
         <!-- the panel's edge: drag to set its width -->
@@ -180,7 +186,8 @@
               Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" CornerRadius="10" ClipToBounds="True"
               BoxShadow="0 6 24 0 #80000000" Cursor="Hand">
         <StackPanel>
-          <Border Background="{DynamicResource Accent}" Padding="14,6">
+          <!-- the banner rounds its top corners itself: the frame's clip is rectangular -->
+          <Border Background="{DynamicResource Accent}" Padding="14,6" CornerRadius="9,9,0,0">
             <TextBlock x:Name="ToastKicker" FontSize="11" FontWeight="Bold" LetterSpacing="1.2" Foreground="{DynamicResource AccentText}" TextTrimming="CharacterEllipsis" />
           </Border>
           <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Margin="14,10,14,12">
@@ -224,7 +231,7 @@
             <TextBlock FontSize="13.5" TextWrapping="Wrap" LineHeight="19"><Run x:Name="SampleTitle" FontWeight="Bold" /><Run Text="  " /><Run x:Name="SampleText" Foreground="{DynamicResource TextDim}" /></TextBlock>
           </DockPanel>
         </Border>
-        <Border x:Name="ScanPanel" Width="372" Padding="18,16,18,14" CornerRadius="12" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
+        <Border x:Name="ScanPanel" Width="460" Padding="18,16,18,14" CornerRadius="12" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="18" BoxShadow="0 12 40 0 #99000000">
           <StackPanel Spacing="12">
             <!-- title row: spinner, drive, what is in use, percent, Cancel -->

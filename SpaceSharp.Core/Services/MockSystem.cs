@@ -56,9 +56,17 @@ public static class MockSystem
     {
         DateTime now = DateTime.UtcNow;
 
-        // filledSince is how much the drive filled after the scan, so the start screen's nudge has something to say.
-        RecentScan DriveScan(Drive drive, TimeSpan ago, int files, long filledSince = 0)
+        // filledSince is how much the drive filled after the scan, so the start screen's nudge has something to say; withTop gives the
+        // newest scan the mock tree's largest top-level items, so the card's small map has something to draw.
+        RecentScan DriveScan(Drive drive, TimeSpan ago, int files, long filledSince = 0, bool withTop = false)
         {
+            List<ScanTopItem>? top = null;
+            if (withTop)
+            {
+                FsNode tree = new Builder(now).Tree(drive.Root);
+                top = tree.Children.Where(child => child.IsReal && child.Size > 0).OrderByDescending(child => child.Size).Take(16)
+                    .Select(child => new ScanTopItem(child.Name, child.IsDirectory, child.Size, child.Allocated)).ToList();
+            }
             var info = new ScanFileInfo(
                 drive.Root,
                 now - ago,
@@ -66,7 +74,8 @@ public static class MockSystem
                 drive.Total - drive.Used + filledSince,
                 files,
                 drive.Used - filledSince,
-                string.Empty);
+                string.Empty,
+                top);
             return new RecentScan(info, true, drive.Label, drive.Total - drive.Used, drive.Total);
         }
 
@@ -75,7 +84,7 @@ public static class MockSystem
 
         return new[]
         {
-            DriveScan(Drives[0], TimeSpan.FromHours(13), 2_133, (long)(14.2 * GB)),
+            DriveScan(Drives[0], TimeSpan.FromHours(13), 2_133, (long)(14.2 * GB), withTop: true),
             DriveScan(Drives[3], TimeSpan.FromDays(3), 48_211),
             DriveScan(Drives[2], TimeSpan.FromDays(7), 612_904, (long)(61.5 * GB)),
             new RecentScan(folderScanInfo, false, null, 0, 0)
