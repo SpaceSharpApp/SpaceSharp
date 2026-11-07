@@ -168,6 +168,15 @@ internal sealed class AppSettings
     public string FileTextColor { get; set; } = "#000000";
     /// <summary>The font family for map labels; an unavailable family falls back to the system default.</summary>
     public string MapFont { get; set; } = "Segoe UI Variable Text";
+    /// <summary>"Classic" for square boxes and the grid, "Modern" for rounded boxes with file icons and labels that shrink with the box.</summary>
+    public string MapStyle { get; set; } = "Modern";
+    /// <summary>True draws each file's icon in the Modern map style and in Inspect; false leaves the icons out everywhere.</summary>
+    public bool FileIcons { get; set; } = true;
+    /// <summary>True writes sizes on the map as exact bytes ("534,312 bytes") instead of rounded units.</summary>
+    public bool SizesAsBytes
+    {
+        get; set;
+    }
     /// <summary>True centers a file's name and size in its box; false puts them in the top-left corner.</summary>
     public bool FileCenterNames { get; set; } = true;
     /// <summary>True writes the size under a file's name when the box has room.</summary>
@@ -254,6 +263,9 @@ internal sealed class AppSettings
         BorderThickness = defaults.BorderThickness;
         MapFont = defaults.MapFont;
         ResetShading();
+        MapStyle = defaults.MapStyle;
+        FileIcons = defaults.FileIcons;
+        SizesAsBytes = defaults.SizesAsBytes;
         FileCenterNames = defaults.FileCenterNames;
         FileShowSizes = defaults.FileShowSizes;
         FolderCenterNames = defaults.FolderCenterNames;

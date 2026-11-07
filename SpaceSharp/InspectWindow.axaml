@@ -27,6 +27,8 @@
           <Grid ColumnDefinitions="*,16,Auto">
             <DockPanel VerticalAlignment="Center">
               <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="18" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
+              <!-- a file's own icon, as Windows shows it, in place of the glyph -->
+              <Image x:Name="IconImage" DockPanel.Dock="Left" Width="28" Height="28" VerticalAlignment="Center" Margin="0,0,10,0" IsVisible="False" RenderOptions.BitmapInterpolationMode="HighQuality" />
               <TextBlock x:Name="NameText" FontSize="24" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
             </DockPanel>
             <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">

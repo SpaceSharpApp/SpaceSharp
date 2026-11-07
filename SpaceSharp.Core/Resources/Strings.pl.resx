@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Pomiń</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Nazwy do pominięcia wraz z całą zawartością. Dopasowywane do nazw plików i folderów, nie do ścieżek; * i ? to symbole wieloznaczne.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Mapa</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Styl mapy</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klasyczny to mapa jaka była zawsze: kwadratowe pola, siatka, nazwa z rozmiarem pod spodem. Nowoczesny zaokrągla pola, daje każdemu plikowi jego ikonę i zmniejsza etykiety wraz z polem, dodając dokładny rozmiar i datę, gdy jest miejsce.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klasyczny</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Nowoczesny</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Ikony plików</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Ikona systemu Windows dla każdego rodzaju pliku w nowoczesnym stylu mapy i w Sprawdź. Wyłączone pomija ikony.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Rozmiary w bajtach</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Zapisuje każdy rozmiar na mapie jako dokładną liczbę bajtów, „534 312 bajtów”, zamiast „521,8 KB”.</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} bajtów</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Scalaj łańcuchy pojedynczych folderów</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Rysuj foldery zawierające tylko jeden folder (Users › Ty › AppData › Local) jako jedno pole ze wspólnym tytułem.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Etykiety z obrysem</value></data>

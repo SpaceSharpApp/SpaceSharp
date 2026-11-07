@@ -72,6 +72,7 @@ A sample map at the top of the page follows every change.
 | Font | The typeface for every label on the map. | Segoe UI Variable Text |
 | Folder names, File names and sizes | Text colors; Auto picks dark or light per box. | Auto |
 | Outlined labels | A thin contrasting outline around every label, for readability on any color. | Off |
+| Sizes as bytes | Every size on the map as the exact number of bytes, "534,312 bytes", instead of "521.8 KB". | Off |
 | Title bar padding | Space above and below a folder name. | |
 | Title bar tint | How far the bar is shaded from the folder's own color; 0 is the same color. | 0 |
 | Files, Folders | What a file box and a folder title show: center names, sizes, file counts. | Sizes on; counts in folder titles on |
@@ -99,6 +100,8 @@ A sample map at the top of the page follows every change.
 
 | Setting | What it does | Default |
 |---|---|---|
+| Map style | Classic is the map as it has always been: square boxes, the grid, a name with the size under it. Modern rounds the boxes with a gap around each, gives every file Windows' own icon for its kind, audio, video, picture, archive or document, not the icon of the program that opens it (a program's own icon arrives a moment later), and shrinks the labels with the box, adding the exact size and the date when there is room. | Modern |
+| File icons | Windows' icon for each kind of file in the Modern map style and in Inspect. Off leaves them out. | On |
 | Size measure | File size, or Size on disk (whole clusters, compressed size for compressed, sparse and cloud files, like Explorer's "Size on disk"). | File size |
 | Show free space | A gray block for the unused space in a whole-drive scan. | Off |
 | Merge single-folder chains | Draw folders that only contain one folder as one box with a combined title. | On |

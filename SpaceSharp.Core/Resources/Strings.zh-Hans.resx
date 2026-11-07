@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>排除</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>要跳过的名称，连同其中的全部内容。按文件和文件夹名称匹配，而非路径；* 和 ? 为通配符。</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>地图</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>地图样式</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>经典是一贯的地图：方形框、网格、名称下方显示大小。现代会把框变圆角，为每个文件配上自己的图标，标签随框缩小，有空间时再加上精确大小和日期。</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>经典</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>现代</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>文件图标</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>在现代地图样式和"检查"中显示每类文件的 Windows 图标。关闭后不显示图标。</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>以字节显示大小</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>地图上的每个大小都以精确字节数显示，如"534,312 字节"，而不是"521.8 KB"。</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} 字节</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>合并单文件夹链</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>将只包含一个文件夹的文件夹（Users › 您 › AppData › Local）绘制为一个带合并标题的方块。</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>描边标签</value></data>

@@ -1,6 +1,8 @@
 using System.Globalization;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Media.Immutable;
 using SpaceSharp.Models;
 using SpaceSharp.Util;
@@ -12,6 +14,11 @@ public sealed partial class TreemapControl
 {
     private Typeface _normalFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.Normal);
     private Typeface _headerFace = new(MapFont("Segoe UI"), FontStyle.Normal, FontWeight.SemiBold);
+
+    /// <summary>A size as the map writes it: rounded units, or exact bytes when <see cref="SizesAsBytes"/> is on.</summary>
+    /// <param name="bytes">The size.</param>
+    /// <returns>"521.8 KB" or "534,312 bytes".</returns>
+    private string SizeLabel(long bytes) => _sizesAsBytes ? Strings.Format("Size_Bytes", bytes) : SizeFormatter.Format(bytes);
 
     /// <summary>Resolves the map font, falling back to the platform default for Segoe names off Windows.</summary>
     /// <param name="name">A font family name as the user typed or picked it; not checked for existence.</param>
@@ -239,7 +246,16 @@ public sealed partial class TreemapControl
         IBrush textBrush = dimmed ? DimText : _fileText ?? _scheme.LabelFor(fill);
 
         // ---- body
-        dc.DrawRectangle(fill, null, box);
+        bool modern = _style == MapStyle.Modern;
+        double radius = modern ? Math.Min(6, Math.Min(box.Width, box.Height) / 4) : 0;
+        if (modern)
+        {
+            dc.DrawRectangle(fill, null, new RoundedRect(box, radius));
+        }
+        else
+        {
+            dc.DrawRectangle(fill, null, box);
+        }
 
         if (_cushionEnabled && !dimmed && !node.IsDirectory && !node.IsFreeSpace)
         {
@@ -248,16 +264,21 @@ public sealed partial class TreemapControl
             IBrush? cushion = cushionSet[Math.Min(item.Depth, CushionLevels - 1)];
             if (cushion is not null)
             {
-                dc.DrawRectangle(cushion, null, box);
+                dc.DrawRectangle(cushion, null, new RoundedRect(box, radius));
             }
         }
 
         if (node.IsGroup)
         {
-            dc.DrawRectangle(GroupShade, null, box);
+            dc.DrawRectangle(GroupShade, null, new RoundedRect(box, radius));
         }
 
-        // ---- grid strips
+        // ---- grid strips (the Modern style has gaps instead)
+        if (modern)
+        {
+            stripRight = 0;
+            stripBottom = 0;
+        }
         if (stripRight > 0)
         {
             Rect strip = Rects.Intersect(new Rect(full.Right - stripRight, full.Y, stripRight, full.Height), _drawClip);
@@ -291,9 +312,16 @@ public sealed partial class TreemapControl
             // A header clipped at the left edge keeps its text at the visible edge.
             double headerLeft = Math.Max(header.X, 0);
             IBrush barFill = dimmed ? fill : HeaderFill(fill);
-            dc.DrawRectangle(barFill, null, header);
+            if (modern)
+            {
+                dc.DrawRectangle(barFill, null, new RoundedRect(header, radius, radius, 0, 0));
+            }
+            else
+            {
+                dc.DrawRectangle(barFill, null, header);
+            }
 
-            if (_showGrid)
+            if (_showGrid && !modern)
             {
                 Rect rule = Rects.Intersect(new Rect(inner.X, inner.Y + HeaderHeight - 1, inner.Width, 1), _drawClip);
                 if (!rule.IsBlank())
@@ -319,6 +347,11 @@ public sealed partial class TreemapControl
         {
             return;
         }
+        if (modern)
+        {
+            DrawModernLabel(dc, item, box, textBrush, dimmed);
+            return;
+        }
 
         double lineHeight = 15 * _labelScale;
         if (box.Width < 44 * _labelScale || box.Height < lineHeight + 1)
@@ -332,7 +365,7 @@ public sealed partial class TreemapControl
         if (_fileShowSizes && box.Height >= lineHeight * 2 + 4)
         {
             double nameTop = _fileCenterNames ? box.Y + (box.Height - lineHeight * 2) / 2 : box.Y + 2;
-            string sizeText = SizeFormatter.Format(node.SizeFor(_measure));
+            string sizeText = SizeLabel(node.SizeFor(_measure));
             DrawLabel(dc, node.Name, _normalFace, textBrush, textLeft, nameTop, textWidth, align);
             DrawLabel(dc, sizeText, _normalFace, textBrush, textLeft, nameTop + lineHeight, textWidth, align);
         }
@@ -340,6 +373,113 @@ public sealed partial class TreemapControl
         {
             double nameTop = _fileCenterNames ? box.Y + (box.Height - lineHeight) / 2 : box.Y + 2;
             DrawLabel(dc, node.Name, _normalFace, textBrush, textLeft, nameTop, textWidth, align);
+        }
+    }
+
+    private const double MinModernScale = 0.76;
+    private static readonly ImmutableSolidColorBrush GlyphBrushDark = new(Color.FromArgb(0xC8, 0x14, 0x14, 0x18));
+    private static readonly ImmutableSolidColorBrush GlyphBrushLight = new(Color.FromArgb(0xD8, 0xFF, 0xFF, 0xFF));
+    private static Geometry? _fileGlyph;
+
+    /// <summary>The Modern file label: the file's icon, its name, and its size and date, centered, each line dropped as the box runs out of
+    /// room, and the text shrinking with the box down to three quarters of the label size.</summary>
+    /// <param name="dc">The map layer's drawing context.</param>
+    /// <param name="item">The file box.</param>
+    /// <param name="box">The box's visible rectangle.</param>
+    /// <param name="textBrush">The label color.</param>
+    /// <param name="dimmed">True when the box fails the filter; the icon fades with the text.</param>
+    private void DrawModernLabel(DrawingContext dc, TreemapItem item, Rect box, IBrush textBrush, bool dimmed)
+    {
+        FsNode node = item.Node;
+        double side = Math.Min(box.Width, box.Height);
+        // Full size at 110 px and up, shrinking to the floor by 40 px.
+        double scale = Math.Clamp(MinModernScale + (side - 40) / 70 * (1 - MinModernScale), MinModernScale, 1) * _labelScale;
+        double fontSize = TextSize * scale;
+        double lineHeight = Math.Round(15 * scale);
+        if (box.Width < 30 * scale || box.Height < lineHeight + 2)
+        {
+            return;
+        }
+
+        double iconSize = Math.Clamp(Math.Round(side / 4), 16, FileIcons.PixelSize);
+        string sizeText = SizeLabel(node.SizeFor(_measure));
+        string? dateText = node.LastWriteUtc > DateTime.MinValue ? node.LastWriteUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture) : null;
+        string? facts = _fileShowSizes ? dateText is null ? sizeText : sizeText + "  ·  " + dateText : null;
+
+        // What fits, from the top: icon, name, facts on one line, facts on two lines.
+        bool showIcon = _showFileIcons && !node.IsGroup && box.Height >= iconSize + lineHeight * 2 + 10 && box.Width >= 56 * scale;
+        bool showFacts = facts is not null && box.Height >= lineHeight * 2 + 4 + (showIcon ? iconSize + 4 : 0);
+        bool twoFactLines = showFacts && dateText is not null && box.Height >= lineHeight * 3 + 6 + (showIcon ? iconSize + 4 : 0)
+            && MeasureWidth(facts!, fontSize) > box.Width - 8;
+        int lines = 1 + (showFacts ? twoFactLines ? 2 : 1 : 0);
+        double stackHeight = lines * lineHeight + (showIcon ? iconSize + 4 : 0);
+        double top = box.Y + (box.Height - stackHeight) / 2;
+        double textLeft = box.X + 4;
+        double textWidth = box.Width - 8;
+
+        if (showIcon)
+        {
+            double iconLeft = Math.Round(box.X + (box.Width - iconSize) / 2);
+            var iconRect = new Rect(iconLeft, Math.Round(top), iconSize, iconSize);
+            Bitmap? icon = FileIcons.For(node);
+            using (dc.PushOpacity(dimmed ? 0.3 : 1))
+            {
+                if (icon is not null)
+                {
+                    dc.DrawImage(icon, iconRect);
+                }
+                else
+                {
+                    DrawFileGlyph(dc, iconRect, textBrush);
+                }
+            }
+            top += iconSize + 4;
+        }
+
+        Typeface nameFace = node.IsGroup ? _normalFace : _headerFace;
+        DrawLabel(dc, node.Name, nameFace, textBrush, textLeft, top, textWidth, TextAlignment.Center, fontSize / _labelScale);
+        top += lineHeight;
+        if (!showFacts)
+        {
+            return;
+        }
+        if (twoFactLines)
+        {
+            DrawLabel(dc, sizeText, _normalFace, textBrush, textLeft, top, textWidth, TextAlignment.Center, fontSize / _labelScale);
+            DrawLabel(dc, dateText!, _normalFace, textBrush, textLeft, top + lineHeight, textWidth, TextAlignment.Center, fontSize / _labelScale);
+        }
+        else
+        {
+            DrawLabel(dc, facts!, _normalFace, textBrush, textLeft, top, textWidth, TextAlignment.Center, fontSize / _labelScale);
+        }
+    }
+
+    /// <summary>The width of a line of label text at a given font size.</summary>
+    /// <param name="text">The text.</param>
+    /// <param name="fontSize">The font size in points, scale already applied.</param>
+    /// <returns>Width in device-independent pixels.</returns>
+    private double MeasureWidth(string text, double fontSize) =>
+        new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, _normalFace, fontSize, TextBrush).WidthIncludingTrailingWhitespace;
+
+    /// <summary>Draws the app's own file glyph where the platform has no icon to give: the Lucide file outline, stroked in the label's tone.</summary>
+    /// <param name="dc">The map layer's drawing context.</param>
+    /// <param name="rect">Where the icon goes.</param>
+    /// <param name="textBrush">The label color, which picks the dark or light pen.</param>
+    private void DrawFileGlyph(DrawingContext dc, Rect rect, IBrush textBrush)
+    {
+        _fileGlyph ??= Application.Current?.FindResource("Icon.File") as Geometry;
+        if (_fileGlyph is null)
+        {
+            return;
+        }
+        Color color = ColorOf(textBrush);
+        bool dark = 0.299 * color.R + 0.587 * color.G + 0.114 * color.B < 128;
+        double unit = rect.Width / 24;
+        using (dc.PushTransform(Matrix.CreateScale(unit, unit) * Matrix.CreateTranslation(rect.X, rect.Y)))
+        {
+            // The pen is in icon units, so it stays 1.8 px at every size.
+            var pen = new ImmutablePen(dark ? GlyphBrushDark : GlyphBrushLight, 1.8 / unit, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
+            dc.DrawGeometry(null, pen, _fileGlyph);
         }
     }
 
@@ -366,7 +506,7 @@ public sealed partial class TreemapControl
     private string HeaderText(TreemapItem item, double maxWidth, string separator = "  —  ")
     {
         FsNode node = item.Node;
-        string size = SizeFormatter.Format(node.SizeFor(_measure));
+        string size = SizeLabel(node.SizeFor(_measure));
         string Tail()
         {
             string tail = _folderShowSizes ? separator + size : string.Empty;

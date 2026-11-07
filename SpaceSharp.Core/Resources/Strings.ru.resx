@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Исключить</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Имена, которые нужно пропускать вместе со всем содержимым. Сопоставляются с именами файлов и папок, а не с путями; * и ? — подстановочные знаки.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Карта</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Стиль карты</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Классический: карта как всегда, квадратные блоки, сетка, имя и размер под ним. Современный скругляет блоки, даёт каждому файлу его значок и уменьшает подписи вместе с блоком, добавляя точный размер и дату, когда есть место.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Классический</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Современный</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Значки файлов</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Значок Windows для каждого типа файла в современном стиле карты и в окне Изучить. Выключено: без значков.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Размеры в байтах</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Пишет каждый размер на карте точным числом байтов, «534 312 байт», вместо «521,8 КБ».</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} байт</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Объединять цепочки одиночных папок</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Рисовать папки, содержащие лишь одну папку (Users › вы › AppData › Local), как один блок с общим заголовком.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Подписи с обводкой</value></data>

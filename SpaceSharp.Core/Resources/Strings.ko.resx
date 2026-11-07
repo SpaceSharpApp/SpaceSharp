@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>제외</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>건너뛸 이름으로, 그 안의 모든 항목도 함께 제외됩니다. 경로가 아닌 파일 및 폴더 이름과 비교하며 *와 ?는 와일드카드입니다.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>맵</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>지도 스타일</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>클래식은 늘 그랬던 지도입니다. 네모난 상자, 격자, 이름과 그 아래 크기. 모던은 상자를 둥글게 하고 파일마다 고유 아이콘을 붙이며 상자에 맞춰 라벨을 줄이고, 여유가 있으면 정확한 크기와 날짜를 더합니다.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>클래식</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>모던</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>파일 아이콘</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>모던 지도 스타일과 검사 창에서 파일 종류별 Windows 아이콘을 표시합니다. 끄면 아이콘을 생략합니다.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>크기를 바이트로</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>지도의 모든 크기를 "521.8 KB" 대신 정확한 바이트 수 "534,312바이트"로 씁니다.</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0}바이트</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>단일 폴더 체인 병합</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>폴더 하나만 들어 있는 폴더(Users › 사용자 › AppData › Local)를 합쳐진 제목의 상자 하나로 그립니다.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>윤곽선 레이블</value></data>

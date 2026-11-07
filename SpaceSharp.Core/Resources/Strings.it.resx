@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Escludi</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Nomi da saltare, con tutto il loro contenuto. Confrontati con i nomi di file e cartelle, non con i percorsi; * e ? sono caratteri jolly.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Mappa</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Stile della mappa</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Classico è la mappa di sempre: riquadri squadrati, la griglia, un nome con la dimensione sotto. Moderno arrotonda i riquadri, dà a ogni file la sua icona e rimpicciolisce le etichette con il riquadro, aggiungendo dimensione esatta e data quando c'è spazio.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Classico</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Moderno</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Icone dei file</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>L'icona di Windows per ogni tipo di file nello stile mappa moderno e in Ispeziona. Disattivato omette le icone.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Dimensioni in byte</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Scrive ogni dimensione sulla mappa come numero esatto di byte, "534.312 byte", invece di "521,8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} byte</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Unisci catene di cartelle singole</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Disegna le cartelle che contengono una sola cartella (Utenti › tu › AppData › Local) come un unico riquadro con titolo combinato.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Etichette con contorno</value></data>

@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Dışarıda bırak</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>İçindekilerle birlikte atlanacak adlar. Yollarla değil, dosya ve klasör adlarıyla eşleştirilir; * ve ? joker karakterlerdir.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Harita</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Harita stili</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klasik, haritanın her zamanki hali: köşeli kutular, ızgara, altında boyutuyla ad. Modern kutuları yuvarlar, her dosyaya kendi simgesini verir ve etiketleri kutuyla küçültür; yer varsa tam boyut ve tarihi ekler.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klasik</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Dosya simgeleri</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Modern harita stilinde ve İncele'de her dosya türü için Windows simgesi. Kapalıyken simgeler gösterilmez.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Boyutlar bayt olarak</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Haritadaki her boyutu "521,8 KB" yerine tam bayt sayısıyla, "534.312 bayt", yazar.</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} bayt</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Tek klasörlü zincirleri birleştir</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Yalnızca tek bir klasör içeren klasörleri (Users › siz › AppData › Local) birleşik başlıklı tek bir kutu olarak çizer.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Çerçeveli etiketler</value></data>

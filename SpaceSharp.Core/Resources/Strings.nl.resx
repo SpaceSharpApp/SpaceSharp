@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Weglaten</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namen om over te slaan, met alles erin. Vergeleken met bestands- en mapnamen, niet met paden; * en ? zijn jokertekens.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Kaart</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Kaartstijl</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassiek is de kaart zoals altijd: vierkante vakken, het raster, een naam met de grootte eronder. Modern rondt de vakken af, geeft elk bestand zijn eigen pictogram en verkleint de labels met het vak, met exacte grootte en datum als er ruimte is.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klassiek</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Bestandspictogrammen</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Het Windows-pictogram voor elk soort bestand in de moderne kaartstijl en in Inspecteren. Uit laat de pictogrammen weg.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Groottes in bytes</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Schrijft elke grootte op de kaart als het exacte aantal bytes, "534.312 bytes", in plaats van "521,8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} bytes</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Ketens van enkele mappen samenvoegen</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Teken mappen die maar één map bevatten (Gebruikers › u › AppData › Local) als één vak met een gecombineerde titel.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Labels met omtrek</value></data>

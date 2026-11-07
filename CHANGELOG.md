@@ -2,6 +2,13 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.7.1 (unreleased)
+
+### Map
+- A new map style, Modern, the default from now on, with the old one kept as Classic in Settings › Map. Rounded boxes with a gap around each instead of the grid, every file with Windows' own icon for its kind (the audio, video, picture, archive and document icons, not the icon of whatever program opens it; programs, shortcuts and icon files get their own, fetched in the background), and labels that shrink with the box, from full size at 110 px down to three quarters at 40 px: the icon, the name, then the size and the date on one line or two, each dropped as the box runs out of room. Classic is unchanged; pick it to get the map back as it was.
+- Inspect shows Windows' icon for the file's kind beside its name. Settings › Map › File icons turns the icons off, on the map and in Inspect.
+- Settings › Appearance › Text gains Sizes as bytes: every size on the map as the exact number of bytes instead of rounded units, in both styles.
+
 ## 2.7.0
 
 Every way of deleting now follows the rules written down after the 2.6.0 empty folder incident, not only the empty folder list.

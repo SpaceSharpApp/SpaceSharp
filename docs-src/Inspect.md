@@ -15,7 +15,7 @@ The window opens at 1000 × 1120 and scrolls when the screen is shorter; it reme
 
 ## For one file
 
-The type and extension, size and size on disk, when it was modified, its rank among its folder's files, and its change since the compared scan. Hard-linked files say they are already counted elsewhere.
+Windows' icon for the file's kind beside the name (a program shows its own); the type and extension, size and size on disk, when it was modified, its rank among its folder's files, and its change since the compared scan. Hard-linked files say they are already counted elsewhere.
 
 ## For a selection
 

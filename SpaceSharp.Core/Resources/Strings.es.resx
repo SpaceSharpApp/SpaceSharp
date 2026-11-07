@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Excluir</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Nombres que se omiten, con todo su contenido. Se comparan con nombres de archivos y carpetas, no con rutas; * y ? son comodines.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Mapa</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Estilo del mapa</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Clásico es el mapa de siempre: cajas cuadradas, la cuadrícula, un nombre con el tamaño debajo. Moderno redondea las cajas, da a cada archivo su propio icono y reduce las etiquetas con la caja, añadiendo el tamaño exacto y la fecha cuando hay sitio.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Clásico</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Moderno</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Iconos de archivo</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>El icono de Windows de cada tipo de archivo en el estilo de mapa moderno y en Inspeccionar. Desactivado omite los iconos.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Tamaños en bytes</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Escribe cada tamaño del mapa como el número exacto de bytes, "534.312 bytes", en lugar de "521,8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} bytes</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Combinar cadenas de carpetas únicas</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Dibujar las carpetas que solo contienen una carpeta (Users › usted › AppData › Local) como un único cuadro con un título combinado.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Etiquetas con contorno</value></data>

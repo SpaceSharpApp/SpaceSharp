@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>除外</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>スキップする名前。その中身もすべて除外されます。パスではなくファイル名とフォルダー名に対して照合します。* と ? はワイルドカードです。</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>マップ</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>マップのスタイル</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>クラシックは従来どおりのマップです。四角いボックス、グリッド、名前とその下のサイズ。モダンはボックスを角丸にし、各ファイルに固有のアイコンを付け、ボックスに合わせてラベルを縮小し、余裕があれば正確なサイズと日付を加えます。</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>クラシック</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>モダン</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>ファイルアイコン</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>モダンなマップスタイルと「調べる」で、ファイルの種類ごとに Windows のアイコンを表示します。オフにするとアイコンは表示されません。</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>サイズをバイトで表示</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>マップ上のサイズを「521.8 KB」ではなく正確なバイト数「534,312 バイト」で表示します。</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} バイト</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>単一フォルダーの連鎖を結合</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>フォルダーを 1 つだけ含むフォルダー（Users › あなた › AppData › Local）を、結合したタイトルの 1 つのボックスとして描画します。</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>ラベルの縁取り</value></data>

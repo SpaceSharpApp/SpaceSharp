@@ -14,6 +14,15 @@ public enum ColorMode
     ByFileType
 }
 
+/// <summary>How the map draws its boxes.</summary>
+public enum MapStyle
+{
+    /// <summary>Square boxes, the grid, and a name with the size under it: the map as it has always been.</summary>
+    Classic,
+    /// <summary>Rounded boxes with a gap around each, the file's own icon, and labels that shrink with the box: name, then size and date.</summary>
+    Modern
+}
+
 /// <summary>How many small items the map draws before grouping or hiding them; each step scales the size thresholds in <see
 /// cref="TreemapControl"/>.</summary>
 public enum MapDensity

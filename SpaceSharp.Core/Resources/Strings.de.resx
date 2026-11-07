@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Auslassen</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namen, die samt Inhalt übersprungen werden. Wird mit Datei- und Ordnernamen verglichen, nicht mit Pfaden; * und ? sind Platzhalter.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Karte</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Kartenstil</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassisch ist die Karte wie immer: eckige Kästen, das Raster, ein Name mit der Größe darunter. Modern rundet die Kästen, gibt jeder Datei ihr eigenes Symbol und verkleinert die Beschriftung mit dem Kasten, mit genauer Größe und Datum, wenn Platz ist.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klassisch</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Dateisymbole</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Das Windows-Symbol für jede Dateiart im modernen Kartenstil und in Untersuchen. Aus lässt die Symbole weg.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Größen in Bytes</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Schreibt jede Größe auf der Karte als genaue Bytezahl, „534.312 Bytes“, statt „521,8 KB“.</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} Bytes</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Ketten einzelner Ordner zusammenfassen</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Ordner, die nur einen Ordner enthalten (Benutzer › Sie › AppData › Local), als ein Feld mit kombiniertem Titel zeichnen.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Beschriftungen mit Kontur</value></data>

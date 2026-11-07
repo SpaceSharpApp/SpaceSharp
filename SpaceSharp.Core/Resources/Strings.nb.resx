@@ -514,6 +514,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Utelat</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Navn som skal hoppes over, med alt innhold. Matches mot fil- og mappenavn, ikke stier; * og ? er jokertegn.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Kart</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Kartstil</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassisk er kartet slik det alltid har vært: firkantede bokser, rutenettet, et navn med størrelsen under. Moderne runder boksene, gir hver fil sitt eget ikon og krymper etikettene med boksen, med nøyaktig størrelse og dato når det er plass.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klassisk</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Moderne</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Filikoner</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Windows-ikonet for hver filtype i den moderne kartstilen og i Inspiser. Av utelater ikonene.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Størrelser i byte</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Skriver hver størrelse på kartet som nøyaktig antall byte, «534 312 byte», i stedet for «521,8 KB».</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} byte</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Slå sammen enkeltmappe-kjeder</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Tegn mapper som bare inneholder én mappe (Users › deg › AppData › Local) som én boks med samlet tittel.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Tekst med kontur</value></data>

@@ -516,6 +516,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Leave out</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Names to skip, with everything inside them. Matched against file and folder names, not paths; * and ? are wildcards.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Map</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Map style</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Classic is the map as it has always been: square boxes, the grid, a name with the size under it. Modern rounds the boxes, gives every file its own icon, and shrinks the labels with the box, adding the exact size and the date when there is room.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Classic</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>File icons</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Windows' icon for each kind of file in the Modern map style and in Inspect. Off leaves the icons out.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Sizes as bytes</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Writes every size on the map as the exact number of bytes, "534,312 bytes", instead of "521.8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} bytes</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Merge single-folder chains</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Draw folders that only contain one folder (Users › you › AppData › Local) as one box with a combined title.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Outlined labels</value></data>

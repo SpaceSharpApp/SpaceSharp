@@ -515,6 +515,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>استبعاد</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>أسماء تُتخطى مع كل ما بداخلها. تُطابَق مع أسماء الملفات والمجلدات لا المسارات؛ * و? حرفا بدل.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>الخريطة</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>نمط الخريطة</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>الكلاسيكي هو الخريطة كما كانت دائمًا: مربعات حادة الزوايا والشبكة والاسم وتحته الحجم. الحديث يدوّر المربعات ويعطي كل ملف أيقونته ويصغّر التسميات مع المربع، مضيفًا الحجم الدقيق والتاريخ عند توفر المساحة.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>كلاسيكي</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>حديث</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>أيقونات الملفات</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>أيقونة Windows لكل نوع ملف في نمط الخريطة الحديث وفي الفحص. الإيقاف يحذف الأيقونات.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>الأحجام بالبايت</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>يكتب كل حجم على الخريطة بعدد البايتات الدقيق، "534,312 بايت"، بدلًا من "521.8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} بايت</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>دمج سلاسل المجلدات المفردة</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>رسم المجلدات التي لا تحتوي إلا على مجلد واحد (Users › أنت › AppData › Local) كمربع واحد بعنوان مدمج.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>تسميات بحدود</value></data>

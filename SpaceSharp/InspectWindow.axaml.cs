@@ -118,6 +118,10 @@ public partial class InspectWindow : Window
         {
             Title = Strings.Format("Inspect_TitleOne", item.FullPath);
             Glyph.Text = item.IsDirectory ? "▣" : "▤";
+            if (!item.IsDirectory && _settings.FileIcons)
+            {
+                ShowFileIcon(item);
+            }
             NameText.Text = item.Name;
             ToolTip.SetTip(NameText, item.FullPath);
             BuildCrumbs(item);
@@ -148,6 +152,26 @@ public partial class InspectWindow : Window
         {
             OnDiskText.IsVisible = false;
         }
+    }
+
+    /// <summary>Puts the file's own icon where the glyph was, when the platform has one; a program's icon may arrive a moment later and
+    /// replaces the generic one then.</summary>
+    /// <param name="file">The inspected file.</param>
+    private void ShowFileIcon(FsNode file)
+    {
+        void Apply()
+        {
+            if (FileIcons.For(file) is { } icon)
+            {
+                IconImage.Source = icon;
+                IconImage.IsVisible = true;
+                Glyph.IsVisible = false;
+            }
+        }
+        Apply();
+        Action refresh = () => Dispatcher.UIThread.Post(Apply);
+        FileIcons.Loaded += refresh;
+        Closed += (_, _) => FileIcons.Loaded -= refresh;
     }
 
     // ---------------------------------------------------------------- the story

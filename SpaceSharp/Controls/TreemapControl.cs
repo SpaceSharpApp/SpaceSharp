@@ -99,6 +99,15 @@ public sealed partial class TreemapControl : Panel
             RenderOptions.SetEdgeMode(layer, EdgeMode.Antialias);
             TextOptions.SetTextRenderingMode(layer, TextRenderingMode.SubpixelAntialias);
         }
+        RenderOptions.SetBitmapInterpolationMode(_mapLayer, Avalonia.Media.Imaging.BitmapInterpolationMode.HighQuality);
+        // A program's own icon arrives after its box was drawn with the generic one.
+        FileIcons.Loaded += () => Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (_style == MapStyle.Modern)
+            {
+                Invalidate();
+            }
+        });
         Background = Brushes.Transparent;
         ClipToBounds = true;
         Focusable = true;
@@ -402,7 +411,55 @@ public sealed partial class TreemapControl : Panel
     /// <returns>2 px for boxes at least 40 px on their shorter side, else 1 px.</returns>
     private static double InsetFor(Rect bounds) => Math.Min(bounds.Width, bounds.Height) >= 40 ? 2 : 1;
 
-    private double Gap => _padding;
+    /// <summary>The gap between boxes: the padding setting, and in the Modern style never under 3 px, since the rounded boxes need air.</summary>
+    private double Gap => _style == MapStyle.Modern ? Math.Max(_padding, 3) : _padding;
+
+    private MapStyle _style = MapStyle.Modern;
+    private bool _sizesAsBytes;
+    private bool _showFileIcons = true;
+
+    /// <summary>True draws each file's icon in the Modern style; Classic never draws icons.</summary>
+    public bool ShowFileIcons
+    {
+        get => _showFileIcons; set
+        {
+            if (_showFileIcons == value)
+            {
+                return;
+            }
+            _showFileIcons = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>Classic draws square boxes with the grid and a name over a size; Modern draws rounded boxes with a gap around each, the
+    /// file's own icon, and labels that shrink with the box.</summary>
+    public MapStyle Style
+    {
+        get => _style; set
+        {
+            if (_style == value)
+            {
+                return;
+            }
+            _style = value;
+            Invalidate();
+        }
+    }
+
+    /// <summary>True writes sizes as exact bytes instead of rounded units, in file labels and folder titles alike.</summary>
+    public bool SizesAsBytes
+    {
+        get => _sizesAsBytes; set
+        {
+            if (_sizesAsBytes == value)
+            {
+                return;
+            }
+            _sizesAsBytes = value;
+            Invalidate();
+        }
+    }
 
     // ---- layout options
     private MapDensity _density = MapDensity.Normal;

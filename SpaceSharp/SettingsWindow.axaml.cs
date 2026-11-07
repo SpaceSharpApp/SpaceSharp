@@ -295,6 +295,8 @@ public partial class SettingsWindow : Window
             TextColorChoice(_settings.FileTextColor, color => _settings.FileTextColor = color));
         Row(Strings.Get("Settings_OutlinedLabels"), Strings.Get("Settings_OutlinedLabels_Desc"),
             Switch(_settings.LabelHalo, enabled => _settings.LabelHalo = enabled));
+        Row(Strings.Get("Settings_SizesAsBytes"), Strings.Get("Settings_SizesAsBytes_Desc"),
+            Switch(_settings.SizesAsBytes, enabled => _settings.SizesAsBytes = enabled));
         Row(Strings.Get("Text_TitlePadding"), Strings.Get("Text_TitlePadding_Desc"),
             PixelSlider(_settings.TitlePadding, 0, 8, pixels => _settings.TitlePadding = pixels));
         Row(Strings.Get("Text_TitleTint"), Strings.Get("Text_TitleTint_Desc"),
@@ -347,6 +349,13 @@ public partial class SettingsWindow : Window
     private void BuildMapTab()
     {
         Section(Strings.Get("Settings_Map"));
+
+        string[] styleNames = { Strings.Get("MapStyle_Classic"), Strings.Get("MapStyle_Modern") };
+        int styleIndex = string.Equals(_settings.MapStyle, "Classic", StringComparison.OrdinalIgnoreCase) ? 0 : 1;
+        Row(Strings.Get("Settings_MapStyle"), Strings.Get("Settings_MapStyle_Desc"),
+            Combo(styleNames, styleIndex, index => _settings.MapStyle = index == 1 ? "Modern" : "Classic"));
+        Row(Strings.Get("Settings_FileIcons"), Strings.Get("Settings_FileIcons_Desc"),
+            Switch(_settings.FileIcons, enabled => _settings.FileIcons = enabled));
 
         string[] sizeMeasureNames = { Strings.Get("SizeMeasure_FileSize"), Strings.Get("SizeMeasure_OnDisk") };
         Row(Strings.Get("Settings_SizeMeasure"), Strings.Get("Settings_SizeMeasure_Desc"),

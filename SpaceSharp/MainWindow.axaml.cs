@@ -528,6 +528,9 @@ public partial class MainWindow : Window
         map.Bias = settings.Bias;
         map.Padding = settings.Padding;
         map.FontFamilyName = settings.MapFont;
+        map.Style = Enum.TryParse<MapStyle>(settings.MapStyle, out MapStyle style) ? style : MapStyle.Modern;
+        map.SizesAsBytes = settings.SizesAsBytes;
+        map.ShowFileIcons = settings.FileIcons;
         map.FileCenterNames = settings.FileCenterNames;
         map.FileShowSizes = settings.FileShowSizes;
         map.FolderCenterNames = settings.FolderCenterNames;

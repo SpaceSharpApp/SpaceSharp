@@ -513,6 +513,15 @@
   <data name="Settings_LeaveOut" xml:space="preserve"><value>Utelämna</value></data>
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namn som ska hoppas över, med allt de innehåller. Matchas mot fil- och mappnamn, inte sökvägar; * och ? är jokertecken.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Karta</value></data>
+  <data name="Settings_MapStyle" xml:space="preserve"><value>Kartstil</value></data>
+  <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassisk är kartan som den alltid varit: fyrkantiga rutor, rutnätet, ett namn med storleken under. Modern rundar rutorna, ger varje fil sin egen ikon och krymper etiketterna med rutan, med exakt storlek och datum när det finns plats.</value></data>
+  <data name="MapStyle_Classic" xml:space="preserve"><value>Klassisk</value></data>
+  <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
+  <data name="Settings_FileIcons" xml:space="preserve"><value>Filikoner</value></data>
+  <data name="Settings_FileIcons_Desc" xml:space="preserve"><value>Windows ikon för varje filtyp i den moderna kartstilen och i Inspektera. Av utelämnar ikonerna.</value></data>
+  <data name="Settings_SizesAsBytes" xml:space="preserve"><value>Storlekar i byte</value></data>
+  <data name="Settings_SizesAsBytes_Desc" xml:space="preserve"><value>Skriver varje storlek på kartan som exakt antal byte, "534 312 byte", i stället för "521,8 KB".</value></data>
+  <data name="Size_Bytes" xml:space="preserve"><value>{0:N0} byte</value></data>
   <data name="Settings_MergeChains" xml:space="preserve"><value>Slå ihop kedjor av enskilda mappar</value></data>
   <data name="Settings_MergeChains_Desc" xml:space="preserve"><value>Rita mappar som bara innehåller en mapp (Users › du › AppData › Local) som en ruta med en sammanslagen titel.</value></data>
   <data name="Settings_OutlinedLabels" xml:space="preserve"><value>Konturerade etiketter</value></data>
