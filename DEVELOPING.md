@@ -67,7 +67,7 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 ├── Util/                         palettes, custom palettes, the palette draft, color text, dialogs, rich text, trash, platform files, title bar, crash log
 ├── Themes/                       Styles.axaml, Icons.axaml
 └── Properties/PublishProfiles/   Portable, Portable-x86, Small, Velopack, Velopack-x86 (Windows; the Mac and Linux builds are plain publishes)
-tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots at 1200 px for the website's phone gallery
+tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots at 1800 px for the website's phone gallery
 docs-src/                         the pages of docs.spacesharp.app as Markdown, _Sidebar.md, _Footer.md, images/
 installer/                        wizard pages, dialog images, release.ps1, sign-test.ps1, brand-msi.ps1
 ```
