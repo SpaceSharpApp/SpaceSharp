@@ -53,10 +53,12 @@ public sealed class DuplicatesWindow : Window
     /// <param name="main">The main window, told what was deleted and handed the result to show in Insights.</param>
     /// <param name="root">The scan root to search.</param>
     /// <param name="earlier">A result from an earlier search of the same scan, shown at once; null starts empty.</param>
-    public DuplicatesWindow(MainWindow main, FsNode root, DuplicateResult? earlier)
+    /// <param name="highlight">A file to pick out: the search runs at once at the largest minimum the file clears, and its set is selected; null for the plain window.</param>
+    public DuplicatesWindow(MainWindow main, FsNode root, DuplicateResult? earlier, FsNode? highlight = null)
     {
         _main = main;
         _root = root;
+        _highlight = highlight;
         Title = Strings.Get("Dup_Title");
         TitleBarTheme.Attach(this);
         Width = 760;
@@ -138,7 +140,14 @@ public sealed class DuplicatesWindow : Window
             _search?.Cancel();
             e.Cancel = _stop is not null;
         };
-        if (earlier is not null)
+        if (highlight is not null)
+        {
+            // The minimum must let the file through, else its copies can never show.
+            int fits = Array.FindLastIndex(MinimumSizes, minimum => minimum.Bytes <= highlight.Size);
+            _minimum.SelectedIndex = Math.Max(0, fits);
+            _ = FindAsync();
+        }
+        else if (earlier is not null)
         {
             Show(earlier);
         }
@@ -147,6 +156,8 @@ public sealed class DuplicatesWindow : Window
             UpdateChecked();
         }
     }
+
+    private readonly FsNode? _highlight;
 
     /// <summary>Ticks every copy but the first of each set, for the screenshot scene.</summary>
     internal void PoseKeepFirst() => KeepOne(files => files[0]);
@@ -297,6 +308,20 @@ public sealed class DuplicatesWindow : Window
         }
         PickList.Refresh(_list, _lines);
         UpdateChecked();
+
+        if (_highlight is not null)
+        {
+            int index = _lines.FindIndex(line => ReferenceEquals(line.File, _highlight));
+            if (index >= 0)
+            {
+                _list.SelectedIndex = index;
+                _list.ScrollIntoView(index);
+            }
+            else
+            {
+                _status.Text = Strings.Format("Dup_NoCopiesOf", _highlight.Name);
+            }
+        }
     }
 
     /// <summary>The file lines of each set.</summary>

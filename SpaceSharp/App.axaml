@@ -71,6 +71,15 @@
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#2B3139" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#2B3139" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FFC94D" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#D99F1C" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="#FFC94D" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#D99F1C" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="#1C1500" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="#1C1500" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPressed" Color="#1C1500" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#FFC94D" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="#D99F1C" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="#F5B82E" />
@@ -166,6 +175,15 @@
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#E2E2E9" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#E2E2E9" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FFC94D" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#D99F1C" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#F5B82E" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="#FFC94D" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#D99F1C" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="#1C1500" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="#1C1500" />
+          <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPressed" Color="#1C1500" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#FFC94D" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="#D99F1C" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="#F5B82E" />

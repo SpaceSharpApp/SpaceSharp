@@ -27,18 +27,26 @@ About › **Keyboard shortcuts** (or F1 › Shortcuts) draws this list on your o
 | Alt+Enter | Windows Properties for the selected item |
 | Enter | Open the selected item |
 
-## View
+## Map
 
 | Key | Does |
 |---|---|
 | Ctrl+F | Filter the map |
 | K | Next color mode |
+| M | Switch between the Classic and Modern map styles |
+| U | Physical or Uniform map |
+| G | Show or hide free space |
 | B | Switch between the map, Insights and Changes |
 | L | Drives and largest items panel |
+
+## Scans and windows
+
+| Key | Does |
+|---|---|
 | Ctrl+S | Save the scan to a file |
 | Ctrl+O | Open a saved scan |
-| T | Achievements |
 | Ctrl+, | Settings |
+| T | Achievements |
 | F1 | About, with the shortcuts window and the crash logs |
 
 In the Changes view, **Enter** and the **Right** arrow open a folder in place, **Left** closes it or goes to its parent, and **Enter** on a file goes to it on the map.

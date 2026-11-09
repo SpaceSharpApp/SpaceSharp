@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>最初の一つを残し、その下に入れ子になった {0:N0} 個を {1} から削除します。</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows がスキップしました (使用中、またはごみ箱には大きすぎます)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>パスがごみ箱には長すぎます</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>ごみ箱が受け付けませんでした。中の何かがプログラムで開かれている可能性があります</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>アクセスが拒否されました</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>他のプログラムが使用中です</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>もう存在しません</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>スキャンを開けませんでした</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>再起動できませんでした</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>CSV にエクスポート</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>保存したスキャンを開く</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>再スキャンに失敗しました</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>スキャンを保存</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>拡大中に移動</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>最大のファイル、フォルダー、種類のパネル</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>実績</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>空き領域の表示切り替え</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>マップスタイル（クラシック／モダン）</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>空き領域を表示</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>空き領域を非表示</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>マップスタイル: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>選択した項目の Windows プロパティ</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>再スキャン</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>スキャンを閉じてスタート画面に戻る</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc でもキャンセルできます</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>一致しないものはマップ上で暗く表示されます。</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>CSV にエクスポート</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>ファイルの種類</value></data>
   <data name="Main_Files" xml:space="preserve"><value>ファイル</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{1} 中 {0}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>スキャン全体の {0}</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>タスク マネージャーの数え方での、SpaceSharp が現在使用しているメモリです。スキャンはすべてのファイルをメモリに保持するため、大きなドライブほど多く必要です。</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>フィルター</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>フィルターの一致</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>フィルターオプション</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>フォルダー</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>詳細</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>インストールして再起動</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>最大の項目</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>ドライブ全体を数秒でマップ化</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>ごみ箱に移動</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>スキャンを閉じる</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>管理者として再起動</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>名前を付けてスキャンを保存…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>スキャンファイル</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>フォルダーをスキャン</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>一致するすべてのファイルを選択 (Ctrl+A) し、Del でごみ箱に移動</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>このフォルダー内のすべてを選択</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>設定 (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>エクスプローラーで表示</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>このファイルの種類のみ表示</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>マップ全体を表示</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>マップ全体を表示 (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp は、すべてのフォルダーをたどる代わりにドライブのファイルテーブルを直接読み取ることができます。これには管理者権限が必要なため、アプリを一度再起動する必要があります。フォルダーやその他のファイルシステムは、いずれの場合も通常の方法でスキャンされます。</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>比較を終了</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>テーマ</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>このフォルダー</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>最上位フォルダー</value></data>
   <data name="Main_Types" xml:space="preserve"><value>種類</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>1 つ上のフォルダーへ</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>1 つ上のフォルダーへ (Backspace / マウスの戻るボタン)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>拡大 (マウスホイール / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>マップを画像として保存</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>縮小 (マウスホイール / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>フォルダーに拡大</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} の内容</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>ごみ箱に移動</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} 個の項目をごみ箱に移動</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>小さすぎて表示できないファイル</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>マップ上のまとまりは検査できません。ズームしてファイルかフォルダーを選んでください</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>空き領域は検査できません</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>フォルダー、{0:N0} ファイル</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>{0} ファイル</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>ファイル</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>詳細</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} 個の項目の詳細</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>書き出す…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>書き出し</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>表を書き出す</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>形式</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV、カンマ</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>ほとんどのツールが読める形式。英語版 Excel。</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV、セミコロン</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>小数点がカンマの地域の Excel（ノルウェーなど）。</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV、タブ</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>そのままシートに貼り付け可能。コピーがクリップボードに置く形式でもあります。</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>列</value></data>
+  <data name="Export_All" xml:space="preserve"><value>すべて</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>行</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>最大</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>すべて（{0:N0}）</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>フォルダーを含める</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>見出し行</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>区切り付きのバイト数</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15,562,073,417。シートで合計できる数値にするにはオフ。</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>{1:N0} 行中の先頭 {0:N0} 行 · 大きい順</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>プレビューはここまで · ファイルにはあと {0:N0} 行</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · 約 {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>コピー</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>保存…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>表をコピーしました: {0:N0} 行</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} 項目 · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>{0} 内の項目</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>{0} 以下のすべて</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>ドライブ内の最大のファイル</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>フィルター一致</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>比較したスキャン以降の変化</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>パス</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>名前</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>フォルダー</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>種類</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>サイズ（バイト）</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>ディスク上のサイズ（バイト）</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>サイズ</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>スキャン内の割合</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>更新日時</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>変化</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>その他</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>ここで変わったもの</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>今後のスキャンから除外</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>「{0}」という名前のファイルとフォルダーは次回以降のスキャンで除外されます。一覧は設定 › スキャン › 除外にあります。</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>除外</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>「{0}」は今後のスキャンから除外されます</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>このファイルのコピーを探す</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>このフォルダー内の *{0} をすべて選択</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>{0} にズーム</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} 項目</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} ファイル</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} フォルダー</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>{0}に変更</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{1} の {0}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>ここの {0:N0} 個の *{1} 中で最大</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>ここの {1:N0} 個の *{2} 中 {0:N0} 位</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>{0} 未満</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>{0} のコピーは見つかりませんでした。</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>{0} を再スキャン</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>このフォルダーを再スキャン</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>{0} 内のすべてを選択</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>スキップする名前。その中身もすべて除外されます。パスではなくファイル名とフォルダー名に対して照合します。* と ? はワイルドカードです。</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>マップ</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>マップのスタイル</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>マップ</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>物理は各ボックスを使用ディスク容量に応じた大きさにします。均一はフォルダーはそのままに、フォルダー内の各ファイルを同じ大きさで描くため、小さなファイルが千個あるフォルダーは細い帯ではなく千個のファイルとして見えます。ショートカット: U。</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>物理</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>均一</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>マップ: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>物理／均一マップ</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>スタイル</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>まずスタイルを選びます。下では、一方のスタイルが使わない設定は薄く表示され、その旨が書かれます。</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>モダンスタイルのみ。</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>クラシックスタイルのみ。</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>モダンスタイルではグリッドの代わりにボックス間に隙間があるため、ハイライト色だけが有効です。</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>マップが何を測り何を表示するか。見た目は「{0}」にあります。</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>クラシックは従来どおりのマップです。四角いボックス、グリッド、名前とその下のサイズ。モダンはボックスを角丸にし、各ファイルに固有のアイコンを付け、ボックスに合わせてラベルを縮小し、余裕があれば正確なサイズと日付を加えます。</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>クラシック</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>モダン</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>{0} のスキャンと比較しています。作成方法が異なる（{1} と {2}）ため、一部の差異はディスクではなくその違いによるものです。</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>{1} の {0} のスキャンと比較しています。名前はフォルダーごとに照合されます。</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>比較を解除しました。</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} 行を {1} にエクスポートしました（基本的な CSV：固定列、オプションは今後追加予定）</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} 行を {1} に書き出しました</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · ファイルテーブル</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} 個の項目（{1}）をごみ箱に移動しました</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} をごみ箱に移動しました</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>一部の内容を読み取れませんでした</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>同じドライブまたはフォルダーを 2 回スキャンするか、保存したスキャンを開いて比較してください。</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>空き領域</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {2} の {1}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>拡大するとこれらの項目が表示されます</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0}（ハードリンク、別の場所で計上済み）</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>ファイル</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>フォルダー</value></data>
   <data name="Group_Items" xml:space="preserve"><value>項目</value></data>
+  <data name="Group_More" xml:space="preserve"><value>他 {0:N0} 件</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>リムーバブル</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>ネットワーク</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>光学ドライブ</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>フォルダーのタイトルに表示する内容。</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>名前を中央揃え</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>サイズを表示</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>日付を表示</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>ファイル数を表示</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} ファイル</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>すべて（グループ化なし）</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>MIT ライセンス</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>移動</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>選択と操作</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>表示とファイル</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>マップ</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>スキャンとウィンドウ</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>選択した項目を開く</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>SpaceSharp が使うキー</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>キーボード配列</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>{0} 配列として描いています。違う場合は別の配列を選んでください。</value></data>

@@ -23,6 +23,15 @@ public enum MapStyle
     Modern
 }
 
+/// <summary>How a folder's children share its area.</summary>
+public enum MapLayout
+{
+    /// <summary>The treemap: each child's box is as large as its share of the bytes.</summary>
+    BySize,
+    /// <summary>Folders keep their share, but the files in a folder split theirs evenly, so every file is drawn the same size.</summary>
+    Uniform
+}
+
 /// <summary>How many small items the map draws before grouping or hiding them; each step scales the size thresholds in <see
 /// cref="TreemapControl"/>.</summary>
 public enum MapDensity

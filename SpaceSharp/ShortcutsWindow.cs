@@ -35,8 +35,14 @@ public sealed class ShortcutsWindow : Window
         ["K"] = (Strings.Get("Key_NextColor"), false),
         ["B"] = (Strings.Get("Key_BottomPanel"), false),
         ["L"] = (Strings.Get("Key_Panel"), false),
+        ["G"] = (Strings.Get("Key_FreeSpace"), false),
+        ["M"] = (Strings.Get("Key_MapStyle"), false),
+        ["U"] = (Strings.Get("Key_MapLayout"), false),
         ["T"] = (Strings.Get("Key_Achievements"), false),
         ["F5"] = (Strings.Get("Key_Rescan"), false),
+        ["F1"] = (Strings.Get("Key_About"), false),
+        ["Enter"] = (Strings.Get("Key_Open"), false),
+        ["return"] = (Strings.Get("Key_Open"), false),
         ["Esc"] = (Strings.Get("Key_CancelScan"), false),
         ["esc"] = (Strings.Get("Key_CancelScan"), false),
         ["Backspace"] = (Strings.Get("Key_Up"), false),
@@ -137,12 +143,18 @@ public sealed class ShortcutsWindow : Window
     /// <returns>A three-column grid (Navigate, Select, View) with gutters between, each row a key chip and its action.</returns>
     private static Grid BuildLegend()
     {
-        var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("0.8*,18,1.1*,18,1.1*") };
-        int column = 0;
+        // Four groups as two rows of two, so each column has the same shape: a heading, five or six rows, a heading, five or six rows.
+        var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("*,28,*"), RowDefinitions = new RowDefinitions("Auto,Auto") };
+        int index = 0;
         foreach ((string group, (string Key, string What)[] rows) in Groups())
         {
             var list = new StackPanel();
-            list.Children.Add(new TextBlock { Text = group, FontSize = 11.5, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 4, 0, 4), Classes = { "dim" } });
+            // A heading in full-strength text with a hairline under it, so the four groups read as four at a glance.
+            var heading = new DockPanel { Margin = new Thickness(0, index < 2 ? 4 : 18, 0, 8) };
+            var title = new TextBlock { Text = group, FontSize = 13, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
+            heading.Children.Add(title);
+            heading.Children.Add(new Border { Height = 1, VerticalAlignment = VerticalAlignment.Center, Classes = { "rule" } });
+            list.Children.Add(heading);
             foreach ((string key, string what) in rows)
             {
                 var row = new DockPanel { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
@@ -153,9 +165,10 @@ public sealed class ShortcutsWindow : Window
                 list.Children.Add(row);
             }
 
-            // Every other grid column is an 18 px gutter.
-            Grid.SetColumn(list, column);
-            column += 2;
+            // The middle grid column is the gutter.
+            Grid.SetColumn(list, index % 2 * 2);
+            Grid.SetRow(list, index / 2);
+            index++;
             legend.Children.Add(list);
         }
         return legend;
@@ -186,7 +199,7 @@ public sealed class ShortcutsWindow : Window
     }
 
     /// <summary>The legend's content, in display order, with Mac key names when running on macOS.</summary>
-    /// <returns>Three groups, each a localized heading and its (key label, action) rows.</returns>
+    /// <returns>Four groups, each a localized heading and its (key label, action) rows.</returns>
     private static (string Group, (string Key, string What)[] Rows)[] Groups()
     {
         string WithCtrl(string key) => Ctrl + "+" + key;
@@ -198,13 +211,18 @@ public sealed class ShortcutsWindow : Window
             }),
             (Strings.Get("Keys_Select"), new[]
             {
-                (WithCtrl("A"), Strings.Get("Key_SelectMatches")), (WithCtrl("I"), Strings.Get("Key_Inspect")), (Mac ? "⌘⌫" : "Del", Strings.Get("Key_Delete")), (WithCtrl("C"), Strings.Get("Key_Copy"))
+                (WithCtrl("A"), Strings.Get("Key_SelectMatches")), (WithCtrl("I"), Strings.Get("Key_Inspect")), (Mac ? "return" : "Enter", Strings.Get("Key_Open")),
+                (Mac ? "⌥return" : "Alt+Enter", Strings.Get("Key_Properties")), (Mac ? "⌘⌫" : "Del", Strings.Get("Key_Delete")), (WithCtrl("C"), Strings.Get("Key_Copy"))
             }),
-            (Strings.Get("Keys_View"), new[]
+            (Strings.Get("Keys_Map"), new[]
             {
-                (WithCtrl("F"), Strings.Get("Key_Filter")), ("K", Strings.Get("Key_NextColor")), ("B", Strings.Get("Key_BottomPanel")), ("L", Strings.Get("Key_Panel")),
+                (WithCtrl("F"), Strings.Get("Key_Filter")), ("K", Strings.Get("Key_NextColor")), ("M", Strings.Get("Key_MapStyle")), ("U", Strings.Get("Key_MapLayout")), ("G", Strings.Get("Key_FreeSpace")),
+                ("B", Strings.Get("Key_BottomPanel")), ("L", Strings.Get("Key_Panel"))
+            }),
+            (Strings.Get("Keys_Scans"), new[]
+            {
                 (WithCtrl("S"), Strings.Get("Key_SaveScan")), (WithCtrl("O"), Strings.Get("Key_OpenScan")), (WithCtrl(","), Strings.Get("Key_Settings")),
-                ("T", Strings.Get("Key_Achievements"))
+                ("T", Strings.Get("Key_Achievements")), ("F1", Strings.Get("Key_About"))
             })
         };
     }

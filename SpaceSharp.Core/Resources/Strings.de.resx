@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Behält die erste Kopie und löscht die {0:N0} darunter verschachtelten, ab {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows hat es übersprungen (in Benutzung oder zu groß für den Papierkorb)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>der Pfad ist zu lang für den Papierkorb</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>der Papierkorb hat es nicht angenommen; etwas darin ist vermutlich in einem Programm geöffnet</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>Zugriff verweigert</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>von einem anderen Programm benutzt</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>es existiert nicht mehr</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Der Scan konnte nicht geöffnet werden</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Neustart nicht möglich</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Als CSV exportieren</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>Gespeicherten Scan öffnen</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>Erneuter Scan fehlgeschlagen</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>Scan speichern</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>Verschieben bei Vergrößerung</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Bereich mit den größten Dateien, Ordnern und Typen</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>Erfolge</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>Freien Speicher ein- oder ausblenden</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>Kartenstil Klassisch oder Modern</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>Freier Speicher eingeblendet</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>Freier Speicher ausgeblendet</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>Kartenstil: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-Eigenschaften des ausgewählten Elements</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Erneut scannen</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Den Scan schließen und zum Startbildschirm zurückkehren</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Eingabe</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc bricht ebenfalls ab</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Alles, was nicht passt, wird auf der Karte abgedunkelt.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>Als CSV exportieren</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Dateityp</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Dateien</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{0} von {1}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} des Scans</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>Der Arbeitsspeicher, den SpaceSharp gerade belegt, wie der Task-Manager ihn zählt. Ein Scan hält jede Datei im Speicher; ein größeres Laufwerk braucht mehr.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>Filtertreffer</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Filteroptionen</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Ordner</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Pos1</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>Untersuchen</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>Installieren und neu starten</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>Größte Dateien</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>Größte Elemente</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Ein ganzes Laufwerk in Sekunden abbilden</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>Scan schließen</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Als Administrator neu starten</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Scan speichern unter…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>Scandatei</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>Ordner scannen</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Alle passenden Dateien auswählen (Strg+A), dann Entf, um sie in den Papierkorb zu verschieben</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Alles in diesem Ordner auswählen</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>Einstellungen (Strg+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>Im Explorer anzeigen</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Nur diesen Dateityp anzeigen</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Gesamte Karte anzeigen</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Gesamte Karte anzeigen (Pos1 / Strg+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp kann die Dateitabelle des Laufwerks direkt lesen, statt jeden Ordner zu durchlaufen. Dafür sind Administratorrechte nötig, daher muss die App einmal neu gestartet werden. Ordner und andere Dateisysteme werden in jedem Fall auf normalem Weg gescannt.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>Vergleich beenden</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>Design</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>Dieser Ordner</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>Oberster Ordner</value></data>
   <data name="Main_Types" xml:space="preserve"><value>Typen</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>Einen Ordner nach oben</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Einen Ordner nach oben (Rücktaste / Maus-Zurück)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Vergrößern (Mausrad / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>Karte als Bild speichern</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Verkleinern (Mausrad / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Auf Ordner zoomen</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Inhalt von {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>In den Papierkorb verschieben</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>{0:N0} Elemente in den Papierkorb verschieben</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>Dateien, zu klein zum Anzeigen</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Gruppen auf der Karte lassen sich nicht untersuchen: hineinzoomen und eine Datei oder einen Ordner wählen</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Freier Speicher lässt sich nicht untersuchen</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>Ordner, {0:N0} Dateien</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>{0}-Datei</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>Datei</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>Untersuchen</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>{0:N0} Elemente untersuchen</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>Exportieren …</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Exportieren</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>Eine Tabelle exportieren</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV, Komma</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>Was die meisten Programme lesen. Excel auf Englisch.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV, Semikolon</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>Excel dort, wo das Dezimalzeichen ein Komma ist, etwa in Deutschland.</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV, Tabulator</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>Lässt sich direkt in ein Tabellenblatt einfügen; auch das, was Kopieren in die Zwischenablage legt.</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>Spalten</value></data>
+  <data name="Export_All" xml:space="preserve"><value>Alle</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>Zeilen</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>Höchstens</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>Alle {0:N0}</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>Ordner einschließen</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>Kopfzeile</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>Bytes mit Trennzeichen</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15.562.073.417. Aus für Zahlen, die ein Tabellenblatt summieren kann.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>Vorschau</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>die ersten {0:N0} von {1:N0} Zeilen · größte zuerst</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>Die Vorschau endet hier · {0:N0} weitere Zeilen in der Datei</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · etwa {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>Kopieren</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>Speichern …</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>Tabelle kopiert: {0:N0} Zeilen</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} Elemente · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>Elemente in {0}</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>Alles unter {0}</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>Die größten Dateien des Laufwerks</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>Die Filtertreffer</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>Was sich seit dem verglichenen Scan geändert hat</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Pfad</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>Ordner</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>Größe (Bytes)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>Größe auf Datenträger (Bytes)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Größe</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>Anteil am Scan</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Geändert</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>Änderung</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>Mehr</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Was sich hier geändert hat</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>Aus künftigen Scans auslassen</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Jede Datei und jeder Ordner namens „{0}“ wird ab dem nächsten Scan übersprungen. Die Liste steht unter Einstellungen › Scannen › Auslassen.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Auslassen</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>„{0}“ wird aus künftigen Scans ausgelassen</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>Kopien dieser Datei finden</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>Alle *{0} in diesem Ordner auswählen</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>Auf {0} zoomen</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} Elemente</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} Dateien</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} Ordner</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>geändert {0}</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>größte von {0:N0} *{1} hier</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>Nr. {0:N0} von {1:N0} *{2} hier</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>unter {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>Keine Kopien von {0} gefunden.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>{0} erneut scannen</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>Diesen Ordner erneut scannen</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>Alles in {0} auswählen</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Namen, die samt Inhalt übersprungen werden. Wird mit Datei- und Ordnernamen verglichen, nicht mit Pfaden; * und ? sind Platzhalter.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Karte</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>Kartenstil</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>Karte</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>Physisch bemisst jeden Kasten nach dem belegten Speicherplatz. Einheitlich lässt Ordner so, zeichnet aber jede Datei eines Ordners gleich groß, sodass ein Ordner mit tausend kleinen Dateien als tausend Dateien zu lesen ist und nicht als Streifen. Tastenkürzel: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>Physisch</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>Einheitlich</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>Karte: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>Physische oder einheitliche Karte</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>Stil</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>Zuerst den Stil wählen. Darunter sind Einstellungen, die ein Stil nicht nutzt, abgeblendet und so beschriftet.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>Nur im Stil Modern.</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>Nur im Stil Klassisch.</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>Der Stil Modern hat Lücken zwischen den Kästen statt eines Rasters, daher gilt nur die Hervorhebungsfarbe.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>Was die Karte misst und zeigt. Ihr Aussehen steht unter {0}.</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassisch ist die Karte wie immer: eckige Kästen, das Raster, ein Name mit der Größe darunter. Modern rundet die Kästen, gibt jeder Datei ihr eigenes Symbol und verkleinert die Beschriftung mit dem Kasten, mit genauer Größe und Datum, wenn Platz ist.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>Klassisch</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>Modern</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Vergleich mit dem Scan vom {0}. Er wurde anders erstellt ({1} statt {2}), daher gehen manche Unterschiede darauf zurück und nicht auf den Datenträger.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Vergleich mit einem Scan von {0} vom {1}; Namen werden Ordner für Ordner zugeordnet.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>Vergleich aufgehoben.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} Zeilen nach {1} exportiert (einfache CSV: feste Spalten, mehr Optionen später)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} Zeilen nach {1} exportiert</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · Dateitabelle</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} Elemente, {1}, in den Papierkorb verschoben</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} in den Papierkorb verschoben</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Einige Inhalte konnten nicht gelesen werden</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Scannen Sie dasselbe Laufwerk oder denselben Ordner zweimal, oder öffnen Sie einen gespeicherten Scan zum Vergleich.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Freier Speicher</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {1} von {2}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Hineinzoomen, um diese Elemente zu sehen</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (feste Verknüpfung, an anderer Stelle gezählt)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>Dateien</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>Ordner</value></data>
   <data name="Group_Items" xml:space="preserve"><value>Elemente</value></data>
+  <data name="Group_More" xml:space="preserve"><value>{0:N0} weitere</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>Wechseldatenträger</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>Netzwerk</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>Optisch</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Was ein Ordnertitel anzeigt.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>Namen zentrieren</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>Größen anzeigen</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>Daten anzeigen</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>Dateianzahl anzeigen</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} Dateien</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>Alles (keine Gruppierung)</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-Lizenz</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navigieren</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Auswählen und handeln</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>Ansicht und Dateien</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>Karte</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>Scans und Fenster</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>Ausgewähltes Element öffnen</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>Tasten, die SpaceSharp nutzt</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>Tastaturbelegung</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Gezeichnet für eine {0}-Tastatur; wählen Sie eine andere, wenn das nicht stimmt.</value></data>

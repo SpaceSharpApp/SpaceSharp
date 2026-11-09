@@ -8,6 +8,7 @@
 - [Insights](Insights)
 - [Duplicates and empty folders](Duplicates-and-Empty-Folders)
 - [Changes](Changes)
+- [Exporting](Exporting)
 - [Inspect](Inspect)
 - [Cleaning up](Cleaning-Up)
 - [Saved scans and the start screen](Saved-Scans-and-the-Start-Screen)

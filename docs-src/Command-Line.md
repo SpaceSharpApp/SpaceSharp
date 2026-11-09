@@ -14,4 +14,4 @@
 
 **The Explorer entry.** Settings › General › "Scan with SpaceSharp" in Explorer adds the command to the right-click menu of folders, drives and the folder background, for the current user only.
 
-**For developers.** `--mock` starts on a pretend PC with a sample drive and a comparison from yesterday, so every screen has something to show without scanning anything; `--scene <name> --shot <file.png> --size 1600x1200` poses one of the screenshot scenes and writes it ([Building from source](Building-from-Source#the-pretend-pc)).
+**For developers.** `--mock` starts on a pretend PC with a sample drive and a comparison from yesterday, so every screen has something to show without scanning anything; `--scene <name> --shot <file.png> --size 1920x1080` poses one of the screenshot scenes and writes it ([Building from source](Building-from-Source#the-pretend-pc)).

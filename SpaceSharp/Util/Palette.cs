@@ -309,8 +309,9 @@ public static class Palette
             FromList("Prism",
                 new[] { "#D94848", "#E07A2E", "#D4A41E", "#78B22E", "#2FA862", "#2AA8A8", "#3B8FE0", "#5B62E0", "#9C4FD9", "#D44FB0", "#E0567A", "#8FA81E" }, 0.42),
 
+            // One even ramp from dark to light across the twelve depths, so the strip reads as a ramp and no two depths collide.
             new("Monochrome",
-                depth => FromHsl(230, 0.06, 0.36 + (depth % 6) * 0.06),
+                depth => FromHsl(230, 0.06, Math.Min(0.70, 0.30 + depth * 0.036)),
                 depth => FromHsl(230, 0.05, 0.72 + (depth % 4) * 0.05),
                 Hex("#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"),
                 depth => FromHsl(230, 0.06, 0.34 + depth * 0.05)),

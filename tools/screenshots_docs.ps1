@@ -7,12 +7,12 @@
 #   .\tools\screenshots_docs.ps1 -Out C:\path\to\images   somewhere else
 #   .\tools\screenshots_docs.ps1 wiki-palettes,changes    just those
 #
-# Windows only (the capture is GDI). Run it on a monitor with room for a 1600 x 1200 window (the window is this tall so the Inspect window fits inside it); the screen's scaling decides
+# Windows only (the capture is GDI). Run it on a monitor with room for a 1920 x 1080 window, and at least 1200 px tall for the Inspect scenes, where the window grows around the Inspect window; the screen's scaling decides
 # the pixel size of the PNGs. Afterwards commit docs-src\images.
 param(
     [string[]] $Scenes = @(),
     [string] $Out = "",
-    [string] $Size = "1600x1200",
+    [string] $Size = "1920x1080",
     [string] $Configuration = "Release"
 )
 
@@ -27,7 +27,7 @@ $files = [ordered]@{
     none = "screenshot.png"; start = "shot-start.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; menu = "shot-menu.png"; settings = "shot-settings.png"; about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
     duplicates = "shot-duplicates.png"
-    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"
+    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"; "wiki-free-space" = "free-space.png"; "wiki-uniform" = "uniform.png"; "wiki-classic" = "classic.png"
     "wiki-rail" = "filter-rail.png"; "wiki-filtered" = "filtered.png"; "wiki-palette-picker" = "palette-picker.png"; "wiki-shortcuts" = "shortcuts.png"
     "wiki-changes-everything" = "changes-everything.png"; "wiki-inspect-selection" = "inspect-selection.png"
     "wiki-palettes" = "palettes.png"; "wiki-palette-editor" = "palette-editor.png"
@@ -35,7 +35,7 @@ $files = [ordered]@{
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"
     "wiki-rtl" = "rtl.png"
     "wiki-achievements" = "achievements.png"; "wiki-achievement-toast" = "achievement-toast.png"
-    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"
+    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"; "wiki-export" = "export.png"
 }
 if ($Scenes.Count -eq 0) { $Scenes = @($files.Keys) }
 
@@ -51,7 +51,9 @@ foreach ($scene in $Scenes) {
     Write-Host "  $scene -> $target"
     # a running SpaceSharp would take the arguments instead of letting a second window open, so the scene waits for it
     while (Get-Process SpaceSharp -ErrorAction SilentlyContinue) { Start-Sleep -Milliseconds 300 }
-    & $exe.FullName --scene $scene --shot $target --size $Size | Out-Null
+    # The mirrored window is shown in Arabic, the language that mirrors it, not as mirrored English.
+    $lang = if ($scene -eq "wiki-rtl") { @("--lang", "ar") } else { @() }
+    & $exe.FullName --scene $scene --shot $target --size $Size @lang | Out-Null
     $proc = Get-Process SpaceSharp -ErrorAction SilentlyContinue
     if ($proc) { $proc | Wait-Process -Timeout 60 }
     if (-not (Test-Path $target)) { Write-Warning "  nothing written for $scene" }

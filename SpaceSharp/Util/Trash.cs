@@ -188,7 +188,7 @@ internal static class Trash
 
         /// <summary>Win32 SHFileOperationW: copies, moves, renames or deletes files the way Explorer does.</summary>
         /// <param name="lpFileOp">The operation; fAnyOperationsAborted is set on return when the user or the shell skipped something.</param>
-        /// <returns>0 on success, otherwise a shell error code (DE_ values such as 0x7C for a path too long), not an HRESULT.</returns>
+        /// <returns>0 on success, otherwise a shell error code (DE_ values such as 0x7C when it refuses a path), not an HRESULT.</returns>
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         private static extern int SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
 
@@ -318,7 +318,18 @@ internal static class Trash
             }
             if (remaining.Count == 1)
             {
-                failed.Add((originals[remaining[0]], result));
+                string single = originals[remaining[0]];
+                if (result == InvalidFiles && Directory.Exists(single))
+                {
+                    // The shell refuses a whole folder when one thing inside it cannot go (open by a program, usually). Its contents go
+                    // one level at a time instead, so everything that can be binned is, and the report names the real culprit.
+                    SendContents(single, failed);
+                    if (!Directory.Exists(single) || Send(new List<string> { ShellPath(single) }, out _, quiet: true) == 0)
+                    {
+                        return;
+                    }
+                }
+                failed.Add((single, result));
                 return;
             }
             int half = remaining.Count / 2;
@@ -326,6 +337,30 @@ internal static class Trash
             {
                 Bisect(part.Select(i => originals[i]).ToList(), part.Select(i => shellPaths[i]).ToList(), failed);
             }
+        }
+
+        /// <summary>The shell's DE_INVALIDFILES: it would not take the path as given, which for a folder means something inside it.</summary>
+        private const int InvalidFiles = 0x7C;
+
+        /// <summary>Sends a folder's direct children to the bin through <see cref="Bisect"/>, so a refused folder loses everything that can go.</summary>
+        /// <param name="folder">A folder the shell refused whole.</param>
+        /// <param name="failed">Collects the items inside that still failed, with their codes.</param>
+        private static void SendContents(string folder, List<(string Path, int Code)> failed)
+        {
+            List<string> children;
+            try
+            {
+                children = Directory.EnumerateFileSystemEntries(folder).ToList();
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                return;
+            }
+            if (children.Count == 0)
+            {
+                return;
+            }
+            Bisect(children, children.Select(ShellPath).ToList(), failed);
         }
 
         /// <summary>The shell's result when the user cancelled its dialog (ERROR_CANCELLED).</summary>
@@ -399,7 +434,8 @@ internal static class Trash
         private static string Describe(int code) => code switch
         {
             Skipped => Strings.Get("Trash_Skipped"),
-            0x7C => Strings.Get("Trash_TooLong"),
+            InvalidFiles => Strings.Get("Trash_Refused"),
+            0x79 or 0x81 => Strings.Get("Trash_TooLong"),
             0x78 or 0x5 => Strings.Get("Trash_AccessDenied"),
             0x20 => Strings.Get("Trash_InUse"),
             0x2 or 0x3 or 0x402 => Strings.Get("Trash_Gone"),

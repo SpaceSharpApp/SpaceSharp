@@ -38,7 +38,14 @@
 
 ## Treemap
 
-A sample map at the top of the page follows every change.
+A sample map at the top of the page follows every change. Pick the style first: a setting that only one style uses says so in its description and is dimmed under the other.
+
+**Style**
+
+| Setting | What it does | Default |
+|---|---|---|
+| Map style | Classic is the map as it has always been: square boxes, the grid, a name with the size under it. Modern rounds the boxes with a gap around each, gives every file Windows' own icon for its kind, audio, video, picture, archive or document, not the icon of the program that opens it (a program's own icon arrives a moment later), and shrinks the labels with the box, adding the exact size and the date when there is room. Shortcut: M. | Modern |
+| File icons | Windows' icon for each kind of file on the map and in Inspect. Off leaves them out. Modern only. | On |
 
 **Colors**
 
@@ -73,37 +80,40 @@ A sample map at the top of the page follows every change.
 | Folder names, File names and sizes | Text colors; Auto picks dark or light per box. | Auto |
 | Outlined labels | A thin contrasting outline around every label, for readability on any color. | Off |
 | Sizes as bytes | Every size on the map as the exact number of bytes, "534,312 bytes", instead of "521.8 KB". | Off |
+| Files, Folders | What a file box and a folder title show: sizes and file counts, in Modern whether a file's date follows its size, and in Classic whether file names are centered (Modern always centers them). | Sizes and dates on; counts in folder titles on |
 | Title bar padding | Space above and below a folder name. | |
 | Title bar tint | How far the bar is shaded from the folder's own color; 0 is the same color. | 0 |
-| Files, Folders | What a file box and a folder title show: center names, sizes, file counts. | Sizes on; counts in folder titles on |
 
 **Grid and highlight**
 
+The Modern style has gaps between the boxes instead of a grid, so there only the highlight frame applies.
+
 | Setting | What it does | Default |
 |---|---|---|
-| Grid lines | A line between every box. | Off |
-| Grid line width | How thick, when on: 1 to 3. | 1 |
-| Grid color | Dark suits most palettes; light works on the darkest. | |
 | Highlight frame | The frame around selected boxes. | |
+| Grid lines | A line between every box. Classic only. | Off |
+| Grid line width | How thick, when on: 1 to 3. Classic only. | 1 |
+| Grid color | Dark suits most palettes; light works on the darkest. Classic only. | |
 
 **Layout**
 
 | Setting | What it does | Default |
 |---|---|---|
+| Map | Physical sizes every box by the disk space it uses. Uniform keeps folders that way but draws every file in a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver. Shortcut: U. | Physical |
 | Density | How many small items are drawn before they are grouped into one "312 files" box: Sparse, Normal, Dense, Maximum, Everything (no grouping). | Dense |
 | Bias | Whether the layout favors wide boxes or tall ones; Equal is the plain squarified layout. | Equal |
-| Padding | Extra space around every box. | 0 |
+| Padding | Extra space around every box, on top of the 3 px gap the Modern style always keeps. | 0 |
 
 ## Map
 
 <p align="center"><img src="images/settings-map.png" width="900" alt="Settings, Map"></p>
 
+What the map measures and shows; how it looks is under Treemap.
+
 | Setting | What it does | Default |
 |---|---|---|
-| Map style | Classic is the map as it has always been: square boxes, the grid, a name with the size under it. Modern rounds the boxes with a gap around each, gives every file Windows' own icon for its kind, audio, video, picture, archive or document, not the icon of the program that opens it (a program's own icon arrives a moment later), and shrinks the labels with the box, adding the exact size and the date when there is room. | Modern |
-| File icons | Windows' icon for each kind of file in the Modern map style and in Inspect. Off leaves them out. | On |
 | Size measure | File size, or Size on disk (whole clusters, compressed size for compressed, sparse and cloud files, like Explorer's "Size on disk"). | File size |
-| Show free space | A gray block for the unused space in a whole-drive scan. | Off |
+| Show free space | The unused space in a whole-drive scan as a block of its own: in Modern a quiet panel with a ring showing the free share, in Classic a gray block. Shortcut: G. | Off |
 | Merge single-folder chains | Draw folders that only contain one folder as one box with a combined title. | On |
 | Filter layout | Drawer over the map, or Rail under the path. | Drawer |
 | Show side panel | The drives and largest items panel. Shortcut: L. | On |

@@ -3,7 +3,7 @@
         xmlns:controls="using:SpaceSharp.Controls"
         x:Class="SpaceSharp.MainWindow"
         Title="SpaceSharp"
-        Width="1500" Height="1200" MinWidth="1040" MinHeight="460"
+        Width="1920" Height="1080" MinWidth="1040" MinHeight="460"
         WindowStartupLocation="CenterScreen"
         Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
@@ -45,6 +45,8 @@
           <Button x:Name="ZoomOutButton" Classes="tool" Margin="0,0,6,0" Click="ZoomOut_Click"><controls:Icon Glyph="{StaticResource Icon.ZoomOut}" Width="15" Height="15" /></Button>
           <TextBlock x:Name="ZoomLabel" Width="64" TextAlignment="Center" VerticalAlignment="Center" Classes="dim" Text="—" Margin="0,0,6,0" />
           <Button x:Name="ZoomInButton" Classes="tool" Margin="0,0,6,0" Click="ZoomIn_Click"><controls:Icon Glyph="{StaticResource Icon.ZoomIn}" Width="15" Height="15" /></Button>
+          <Border Classes="divider" />
+          <Button x:Name="PictureButton" Classes="tool" Margin="0,0,6,0" Click="SavePicture_Click"><controls:Icon Glyph="{StaticResource Icon.Picture}" Width="15" Height="15" /></Button>
         </StackPanel>
       </DockPanel>
     </Border>

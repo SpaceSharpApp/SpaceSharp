@@ -11,7 +11,7 @@ The interface comes in eighteen languages. English and Norwegian Bokmål are wri
 
 **Choosing.** Settings › General › App language. "Same as Windows" follows the system language and falls back to English. A change takes effect after a restart, which the app offers at once.
 
-<p align="center"><img src="images/rtl.png" width="900" alt="The window mirrored for a right-to-left language"></p>
+<p align="center"><img src="images/rtl.png" width="900" alt="The window in Arabic, mirrored right to left"></p>
 
 **Right to left.** Arabic mirrors the whole window: the side panel moves to the right, the map's layout runs right to left, text aligns right. Developers can preview it in any language with `--rtl` ([Building from source](Building-from-Source#testing-right-to-left-and-clipped-text)).
 

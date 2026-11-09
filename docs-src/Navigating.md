@@ -1,4 +1,4 @@
-<p align="center"><img src="images/shot-menu.png" width="900" alt="The right-click menu"></p>
+<p align="center"><img src="images/shot-menu.png" width="900" alt="The right-click menu on a file, with More open"></p>
 
 ## Moving around the map
 
@@ -14,6 +14,12 @@
 | Back to the start screen | **Ctrl+W**, the × next to Rescan, or Close the scan in the right-click menu |
 
 Zoom animates by default (Settings › Behavior › Animate zoom).
+
+Zooming in opens the groups of small files where there is room, and zooming back out closes them again, so the overview looks the same as before you went in.
+
+## Saving the map as a picture
+
+The picture button at the right of the zoom buttons saves the map as you see it, zoom and all, to a PNG at twice the screen's pixels. The side panel, toolbar and path row are not in it.
 
 ## The path row
 
@@ -32,16 +38,16 @@ The toolbar switches what fills the map's place: **Map**, **Insights** ([Insight
 
 ## The right-click menu
 
-On any box:
+The menu shows only the rows that apply to what you clicked. At the top, the item itself: name, size, file and folder counts, when it last changed, and a bar for its share of its folder, with its share of the drive beside it (for a file, where it ranks among files of its type in that folder). Click that header for **Inspect** (Ctrl+I, [Inspect](Inspect)).
 
-- **Inspect** (Ctrl+I): the item in depth ([Inspect](Inspect)).
-- **Zoom to folder**, **Up one folder**, **Show whole map**.
-- **Open**, **Show in Explorer**, **Properties** (Alt+Enter), **Copy path** (Ctrl+C), **Copy name**.
-- **Show only this file type**: filters the map to files with this extension.
-- **Select everything in this folder**, **Rescan this folder** (F5 rescans the whole scan), **Close the scan** (Ctrl+W).
-- **Scan file**: Save scan as… (Ctrl+S), Open saved scan… (Ctrl+O), Compare with a saved scan…, Stop comparing.
-- **Export to CSV**: Largest files, This folder, or Filter matches.
-- **Move to Recycle Bin** (Del), and **Delete permanently** for the folders Explorer cannot open ([Cleaning up](Cleaning-Up)).
+- **Zoom to folder** (on a file: Zoom to its folder, by name), **Open** (Enter), **Show in Explorer**, **Copy path** (Ctrl+C).
+- **Select everything in this folder**. On a file also **Show only *.ext files**, **Select all *.ext in this folder**, and **Find copies of this file**, which opens Duplicates with the file picked out ([Duplicates and empty folders](Duplicates-and-Empty-Folders)).
+- **What changed here** (when a compared scan is loaded): opens Changes at this folder ([Changes](Changes)).
+- **Leave out of future scans**: adds the item's name to Settings › Scanning › Leave out, after telling you that every item of that name will be skipped.
+- **More**: Properties (Alt+Enter), Copy name; Rescan this folder (F5), Save scan as… (Ctrl+S), Open saved scan… (Ctrl+O), Compare with a saved scan…, Stop comparing; **Export…** ([Exporting](Exporting)); and **Delete permanently** for the folders Explorer cannot open ([Cleaning up](Cleaning-Up)).
+- **Move to Recycle Bin** (Del), on its own at the foot.
+
+Up one folder, Show whole map and Close the scan left the menu; the toolbar, Backspace, Home and Ctrl+W do those.
 
 ## The status bar
 

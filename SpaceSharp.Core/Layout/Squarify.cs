@@ -12,13 +12,22 @@ public static class Squarify
     /// <param name="measure">Which size of a node (file size or allocated size) decides its area.</param>
     /// <param name="emit">Called once per laid-out node, in row order from the first row, with a rectangle inside <paramref name="bounds"/>; the call is synchronous on the caller's thread.</param>
     /// <param name="orientationBias">1 is the plain algorithm; above 1 favors vertical strips, below 1 horizontal.</param>
-    public static void Layout(IReadOnlyList<FsNode> nodes, LayoutRect bounds, SizeMeasure measure, Action<FsNode, LayoutRect> emit, double orientationBias = 1)
+    public static void Layout(IReadOnlyList<FsNode> nodes, LayoutRect bounds, SizeMeasure measure, Action<FsNode, LayoutRect> emit, double orientationBias = 1) =>
+        Layout(nodes, bounds, node => node.SizeFor(measure), emit, orientationBias);
+
+    /// <summary>Lays the nodes out as rows of boxes whose areas are proportional to a weight of the caller's choosing.</summary>
+    /// <param name="nodes">Sorted largest first by <paramref name="weight"/>; the run of nodes before the first zero-weight one is laid out, the rest are ignored.</param>
+    /// <param name="bounds">The rectangle to fill; nothing is emitted when its width or height is zero or negative.</param>
+    /// <param name="weight">A node's share of the area; zero or less ends the run.</param>
+    /// <param name="emit">Called once per laid-out node, in row order, with a rectangle inside <paramref name="bounds"/>.</param>
+    /// <param name="orientationBias">1 is the plain algorithm; above 1 favors vertical strips, below 1 horizontal.</param>
+    public static void Layout(IReadOnlyList<FsNode> nodes, LayoutRect bounds, Func<FsNode, double> weight, Action<FsNode, LayoutRect> emit, double orientationBias = 1)
     {
         int count = 0;
         double total = 0;
-        while (count < nodes.Count && nodes[count].SizeFor(measure) > 0)
+        while (count < nodes.Count && weight(nodes[count]) > 0)
         {
-            total += nodes[count].SizeFor(measure);
+            total += weight(nodes[count]);
             count++;
         }
 
@@ -47,12 +56,12 @@ public static class Squarify
             // Grow the row while the worst aspect ratio keeps improving.
             double rowArea = 0;
             double worst = double.MaxValue;
-            double largestArea = nodes[rowStart].SizeFor(measure) * scale;
+            double largestArea = weight(nodes[rowStart]) * scale;
             int rowEnd = rowStart;
 
             while (rowEnd < count)
             {
-                double area = nodes[rowEnd].SizeFor(measure) * scale;
+                double area = weight(nodes[rowEnd]) * scale;
                 double candidateArea = rowArea + area;
                 double candidateWorst = Worst(largestArea, area, candidateArea, side);
                 if (rowEnd > rowStart && candidateWorst > worst)
@@ -72,7 +81,7 @@ public static class Squarify
                 double cursorY = freeY;
                 for (int k = rowStart; k < rowEnd; k++)
                 {
-                    double itemHeight = nodes[k].SizeFor(measure) * scale / thickness;
+                    double itemHeight = weight(nodes[k]) * scale / thickness;
                     emit(nodes[k], new LayoutRect(freeX, cursorY, thickness, itemHeight));
                     cursorY += itemHeight;
                 }
@@ -87,7 +96,7 @@ public static class Squarify
                 double cursorX = freeX;
                 for (int k = rowStart; k < rowEnd; k++)
                 {
-                    double itemWidth = nodes[k].SizeFor(measure) * scale / thickness;
+                    double itemWidth = weight(nodes[k]) * scale / thickness;
                     emit(nodes[k], new LayoutRect(cursorX, freeY, itemWidth, thickness));
                     cursorX += itemWidth;
                 }

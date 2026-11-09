@@ -32,7 +32,7 @@ Three tags appear in the Folder column: **New** for files and folders that were 
 
 - A folder opens in place with its chevron, **Enter**, or the **Right** arrow; **Left** closes it or goes to its parent. A folder with more than three hundred changed lines shows them a page at a time, with a "… more" line for the next page.
 - **Double-click** a row, or select it and press **Show on map**, to go there on the map.
-- **Export to CSV** writes the changed files and folders, biggest change first. Gone items have no file to point at and are not in the export.
+- **Export…** opens the Export window on the changed files and folders, biggest change first ([Exporting](Exporting)). Gone items have no file to point at and are not in the export.
 - The footer counts what changed and how many unchanged rows are hidden.
 
 ## How comparisons happen

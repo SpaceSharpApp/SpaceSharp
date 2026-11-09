@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Beholder den første kopi og sletter de {0:N0} indlejrede nedenunder, fra {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows sprang den over (i brug, eller for stor til papirkurven)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>stien er for lang til papirkurven</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>papirkurven ville ikke tage den; noget indeni er nok åbent i et program</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>adgang nægtet</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>i brug af et andet program</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>den findes ikke længere</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Scanningen kunne ikke åbnes</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Kunne ikke genstarte</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Eksportér til CSV</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>Åbn en gemt scanning</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>Ny scanning mislykkedes</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>Gem scanning</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>Panorer, mens der er zoomet ind</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Panel med største filer, mapper og typer</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>Præstationer</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>Vis eller skjul ledig plads</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>Kortstil Klassisk eller Moderne</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>Ledig plads vises</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>Ledig plads skjult</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>Kortstil: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Windows-egenskaber for det valgte element</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Scan igen</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Luk scanningen og gå tilbage til startskærmen</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc annullerer også</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Alt, der ikke matcher, nedtones på kortet.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>Eksportér til CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Filtype</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Filer</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{0} af {1}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} af scanningen</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>Hukommelsen SpaceSharp bruger lige nu, som Jobliste tæller den. En scanning holder hver fil i hukommelsen; et større drev kræver mere.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filter</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>Filtermatch</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Filterindstillinger</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Mapper</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>Undersøg</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>Installér, og genstart</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>Største filer</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>Største elementer</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Kortlæg et helt drev på få sekunder</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>Flyt til Papirkurv</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>Luk scanningen</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Genstart som administrator</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Gem scanning som…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>Scanningsfil</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>Scan mappe</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Vælg alle matchende filer (Ctrl+A), og tryk derefter på Delete for at flytte dem til Papirkurven</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Vælg alt i denne mappe</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>Indstillinger (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>Vis i Stifinder</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Vis kun denne filtype</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Vis hele kortet</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Vis hele kortet (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp kan læse drevets filtabel direkte i stedet for at gennemgå hver mappe. Det kræver administratorrettigheder, så appen skal genstartes én gang. Mapper og andre filsystemer scannes på normal vis under alle omstændigheder.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>Stop sammenligning</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>Tema</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>Denne mappe</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>Øverste mappe</value></data>
   <data name="Main_Types" xml:space="preserve"><value>Typer</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>Én mappe op</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Én mappe op (Tilbage / musens tilbageknap)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Zoom ind (musehjul / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>Gem kortet som billede</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Zoom ud (musehjul / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Zoom til mappe</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Indholdet af {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>Flyt til Papirkurv</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Flyt {0:N0} elementer til Papirkurven</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>filer, der er for små til at vise</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Klynger på kortet kan ikke inspiceres: zoom ind og vælg en fil eller mappe</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Ledig plads kan ikke inspiceres</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>mappe, {0:N0} filer</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>{0}-fil</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>fil</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>Undersøg</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>Undersøg {0:N0} elementer</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>Eksportér …</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Eksportér</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>Eksportér en tabel</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>Format</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV, komma</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>Det de fleste værktøjer læser. Excel på engelsk.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV, semikolon</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>Excel hvor decimaltegnet er komma, som i Danmark.</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV, tabulator</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>Indsættes direkte i et regneark; også det Kopiér lægger i udklipsholderen.</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>Kolonner</value></data>
+  <data name="Export_All" xml:space="preserve"><value>Alle</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>Rækker</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>Højst</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>Alle {0:N0}</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>Medtag mapper</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>Overskriftsrække</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>Bytes med skilletegn</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15.562.073.417. Fra for tal et regneark kan summere.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>Forhåndsvisning</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>de første {0:N0} af {1:N0} rækker · størst først</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>Forhåndsvisningen slutter her · {0:N0} rækker mere i filen</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · cirka {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>Kopiér</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>Gem …</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>Tabel kopieret: {0:N0} rækker</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} elementer · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>Elementer i {0}</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>Alt under {0}</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>De største filer på drevet</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>Filtermatchene</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>Hvad der ændrede sig siden den sammenlignede scanning</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Sti</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Navn</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>Mappe</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>Type</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>Størrelse (bytes)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>Størrelse på disk (bytes)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Størrelse</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>Andel af scanningen</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Ændret</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>Ændring</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>Mere</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Hvad der ændrede sig her</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>Udelad fra fremtidige scanninger</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Alle filer og mapper med navnet "{0}" springes over fra næste scanning. Listen findes under Indstillinger › Scanning › Udelad.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Udelad</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>"{0}" udelades fra fremtidige scanninger</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>Find kopier af denne fil</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>Vælg alle *{0} i denne mappe</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>Zoom til {0}</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} elementer</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} filer</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} mapper</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>ændret {0}</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{0} af {1}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>størst af {0:N0} *{1} her</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>nr. {0:N0} af {1:N0} *{2} her</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>under {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>Ingen kopier af {0} fundet.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>Scan {0} igen</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>Scan denne mappe igen</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>Vælg alt i {0}</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Navne, der springes over, med alt deres indhold. Matches mod fil- og mappenavne, ikke stier; * og ? er jokertegn.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Kort</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>Kortstil</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>Kort</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>Fysisk giver hver boks størrelse efter den diskplads, den bruger. Ensartet beholder mapperne sådan, men tegner hver fil i en mappe lige stor, så en mappe med tusind små filer læses som tusind filer og ikke som en strimmel. Genvej: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>Fysisk</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>Ensartet</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>Kort: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>Fysisk eller ensartet kort</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>Stil</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>Vælg stilen først. Nedenfor er indstillinger, som den ene stil ikke bruger, nedtonede og markeret.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>Kun i stilen Moderne.</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>Kun i stilen Klassisk.</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>Stilen Moderne har mellemrum mellem boksene i stedet for et gitter, så kun fremhævningsfarven gælder.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>Hvad kortet måler og viser. Hvordan det ser ud, findes under {0}.</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Klassisk er kortet som det altid har været: firkantede bokse, gitteret, et navn med størrelsen under. Moderne runder boksene, giver hver fil sit eget ikon og krymper etiketterne med boksen, med nøjagtig størrelse og dato når der er plads.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>Klassisk</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>Moderne</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Sammenligner med scanningen fra {0}. Den blev lavet på en anden måde ({1} mod {2}), så nogle forskelle skyldes det og ikke disken.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Sammenligner med en scanning af {0} fra {1}; navne matches mappe for mappe.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>Sammenligningen er ryddet.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>Eksporterede {0:N0} rækker til {1} (en enkel CSV: faste kolonner, flere muligheder senere)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>Eksporterede {0:N0} rækker til {1}</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · filtabel</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>Flyttede {0:N0} elementer, {1}, til Papirkurven</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>Flyttede {0} til Papirkurven</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Noget indhold kunne ikke læses</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Scan det samme drev eller den samme mappe to gange, eller åbn en gemt scanning at sammenligne med.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Ledig plads</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {1} af {2}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Zoom ind for at se disse elementer</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (hardlink, talt med andetsteds)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>filer</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>mapper</value></data>
   <data name="Group_Items" xml:space="preserve"><value>elementer</value></data>
+  <data name="Group_More" xml:space="preserve"><value>{0:N0} mere</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>Flytbar</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>Netværk</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>Optisk</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Hvad en mappetitel viser.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>Centrér navne</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>Vis størrelser</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>Vis datoer</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>Vis antal filer</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} filer</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>Alt (ingen gruppering)</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>MIT-licens</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Naviger</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Vælg og handl</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>Visning og filer</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>Kort</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>Scanninger og vinduer</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>Åbn det valgte element</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>Tasterne SpaceSharp bruger</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>Tastaturlayout</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Tegnet til et {0}-tastatur; vælg et andet, hvis det er forkert.</value></data>

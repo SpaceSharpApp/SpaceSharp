@@ -150,7 +150,10 @@ public sealed partial class TreemapControl
         }
 
         bool container = shown.IsDirectory || shown.GroupMembers is not null;
-        bool hasHeader = container && !(shown.IsGroup && sole)
+        // A group has no title bar: closed, it says what it holds in its middle; open, its largest members get boxes and the remainder
+        // inside it (a group inside a group) draws no box of its own, only how much is left.
+        bool innerGroup = shown.IsGroup && groupLevel > 0;
+        bool hasHeader = container && !shown.IsGroup
             && bounds.Width >= MinHeaderWidth * _labelScale && bounds.Height >= HeaderHeight + MinHeaderBody;
         int ownLevel = shown.IsGroup ? groupLevel + 1 : 0;
         var item = new TreemapItem(shown, bounds, depth, hasHeader, chainTop, branch, flushRight, flushBottom, ownLevel);
@@ -171,7 +174,7 @@ public sealed partial class TreemapControl
             return;
         }
 
-        double inset = InsetFor(bounds);
+        double inset = innerGroup ? 0 : InsetFor(bounds);
         double top = hasHeader ? HeaderHeight : inset;
         double contentWidth = bounds.Width - 2 * inset;
         double contentHeight = bounds.Height - top - inset;
@@ -217,7 +220,8 @@ public sealed partial class TreemapControl
             bool childFlushRight = normalized.X + normalized.Width >= 0.999;
             bool childFlushBottom = normalized.Y + normalized.Height >= 0.999;
             LayoutNode(
-                layout.Children[i], childBounds, depth + 1, childBranch, soleChild, childFlushRight, childFlushBottom, ownLevel);
+                // A group's members are the folder's own children, so they keep the group's depth and color; only a real folder goes a level down.
+                layout.Children[i], childBounds, shown.IsGroup ? depth : depth + 1, childBranch, soleChild, childFlushRight, childFlushBottom, ownLevel);
         }
     }
 
@@ -227,7 +231,10 @@ public sealed partial class TreemapControl
     private static IReadOnlyList<FsNode> ChildrenOf(FsNode node) => node.GroupMembers ?? node.Children;
 
     /// <summary>Returns the container's cached child layout, computing it on first use.</summary>
-    /// <remarks>Grouping is decided from each child's share of the whole scan, independent of zoom.</remarks>
+    /// <remarks>Grouping is decided from each child's share of the whole scan, independent of zoom. Where that groups everything (a folder
+    /// of nothing but small items, or a group itself), the on-screen size decides how many members get a box, and that decision sticks once
+    /// made: zooming in never re-lays the members that already have boxes, it only lets the remainder group subdivide in its own rectangle,
+    /// so nothing hops while you zoom.</remarks>
     /// <param name="folder">The folder or group whose children are laid out.</param>
     /// <param name="content">The area inside the folder's frame and title bar, in control pixels at the current zoom; only its aspect ratio
     /// and on-screen size matter, the result is normalized.</param>
@@ -246,8 +253,27 @@ public sealed partial class TreemapControl
             cutoff = folder.IsGroup ? 0 : GroupCutoff(allChildren);
             if (cutoff == 0)
             {
-                cutoff = Grouping.CutoffOnScreen(
-                    allChildren, _measure, folder.SizeFor(_measure), content.Width, content.Height, VisibleArea);
+                if (folder.IsGroup)
+                {
+                    // Inside a group a member needs room to be read, not just seen, and the area is taken exactly: the remainder has
+                    // the same pixels per byte as the group it is in, so at one zoom it stays closed instead of opening level after
+                    // level on rounding luck.
+                    double pixelsPerByte = content.Width * content.Height / Math.Max(1, folder.SizeFor(_measure));
+                    cutoff = Grouping.Cutoff(allChildren, _measure, pixelsPerByte, Math.Max(VisibleArea, GroupMemberArea));
+                }
+                else
+                {
+                    cutoff = Grouping.CutoffOnScreen(
+                        allChildren, _measure, folder.SizeFor(_measure), content.Width, content.Height, VisibleArea);
+                }
+
+                // Screen-based, so sticky on the way in: a layout already made with boxes keeps its cutoff while the zoom would only
+                // add more, and the remainder does the adding inside its own rectangle. Zooming back out below it lays out afresh, which
+                // lands on the same picture as before, since the same zoom gives the same cutoff.
+                if (_layoutCache.TryGetValue(folder, out CachedChildLayout? sticky) && sticky.Cutoff > 0 && cutoff >= sticky.Cutoff)
+                {
+                    cutoff = sticky.Cutoff;
+                }
             }
 
             // A group whose members are all too small to show lays out nothing; -1 keeps that cached.
@@ -294,24 +320,60 @@ public sealed partial class TreemapControl
 
         // Squarify reports the rectangles in child order; store them relative to the content box.
         var normalized = new Rect[children.Count];
-        int index = 0;
         var contentBox = new LayoutRect(0, 0, content.Width, content.Height);
-        Squarify.Layout(children, contentBox, _measure, (_, rect) =>
+        Func<FsNode, double> weight = Weights(children);
+        IReadOnlyList<FsNode> ordered = children;
+        if (_layout == MapLayout.Uniform)
         {
-            normalized[index++] = new Rect(rect.X / content.Width, rect.Y / content.Height,
+            // Equal files sort among the folders by their shared weight; the order stays stable within each kind.
+            ordered = children.OrderByDescending(weight).ToList();
+        }
+        var placed = new Dictionary<FsNode, Rect>(ReferenceEqualityComparer.Instance);
+        Squarify.Layout(ordered, contentBox, weight, (node, rect) =>
+        {
+            placed[node] = new Rect(rect.X / content.Width, rect.Y / content.Height,
                 rect.Width / content.Width, rect.Height / content.Height);
         }, OrientationBias);
 
         // Children squarify did not place (zero size, or no room left) get an empty rectangle.
-        for (; index < normalized.Length; index++)
+        for (int i = 0; i < children.Count; i++)
         {
-            normalized[index] = Rects.Empty;
+            normalized[i] = placed.TryGetValue(children[i], out Rect rect) ? rect : Rects.Empty;
         }
 
         cached = new CachedChildLayout(cutoff, children, normalized, group, groupMatched);
         _layoutCache[folder] = cached;
         return cached;
     }
+
+    /// <summary>What decides each child's share of the area: its size, or in the Uniform layout its size for a folder and, for every file
+    /// and the group of small ones, the files' bytes divided evenly, so the files together still take what they truly use while each gets
+    /// the same box.</summary>
+    /// <param name="children">The children about to be laid out, largest first.</param>
+    /// <returns>A weight function; zero or less for a child with no size.</returns>
+    private Func<FsNode, double> Weights(IReadOnlyList<FsNode> children)
+    {
+        if (_layout != MapLayout.Uniform)
+        {
+            return node => node.SizeFor(_measure);
+        }
+
+        long fileBytes = 0;
+        int fileCount = 0;
+        foreach (FsNode child in children)
+        {
+            if (!child.IsDirectory && !child.IsFreeSpace && child.SizeFor(_measure) > 0)
+            {
+                fileBytes += child.SizeFor(_measure);
+                fileCount++;
+            }
+        }
+        double unit = fileCount == 0 ? 0 : (double)fileBytes / fileCount;
+        return node => node.SizeFor(_measure) <= 0 ? 0 : node.IsDirectory || node.IsFreeSpace ? node.SizeFor(_measure) : unit;
+    }
+
+    /// <summary>The smallest on-screen area, in square pixels, a group member gets a box of its own for: 18 by 18.</summary>
+    private const double GroupMemberArea = 18 * 18;
 
     /// <summary>Reference map area that grouping is judged against.</summary>
     private const double ReferenceArea = 1200.0 * 760.0;
@@ -412,7 +474,7 @@ public sealed partial class TreemapControl
             }
         }
 
-        // The group takes its place in size order among the children it replaces.
+        // The group takes its place in size order among the children it replaces; squarify wants largest first.
         var withGroup = new List<FsNode>(cutoff + 1);
         for (int i = 0; i < cutoff; i++)
         {

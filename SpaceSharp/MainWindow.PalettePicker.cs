@@ -139,13 +139,7 @@ public partial class MainWindow
         newLink.Click += async (_, _) =>
         {
             _paletteFlyout?.Hide();
-            bool isDarkTheme = App.IsDark;
-            var draft = new PaletteDraft
-            {
-                Theme = isDarkTheme ? PaletteTheme.Dark : PaletteTheme.Light,
-                Folders = PaletteDraft.Generate(Color.FromRgb(0x4F, 0x7C, 0xAC), PaletteSpread.Rainbow)
-            };
-            var editor = new PaletteEditorWindow(this, draft);
+            var editor = new PaletteEditorWindow(this, PaletteDraft.Fresh(App.IsDark));
             await editor.ShowModal(this);
         };
         DockPanel.SetDock(newLink, Dock.Right);

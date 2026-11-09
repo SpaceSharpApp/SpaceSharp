@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>첫 번째 사본은 남기고 그 아래 중첩된 {0:N0}개를 {1}부터 삭제합니다.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows가 건너뛰었습니다(사용 중이거나 휴지통에 넣기에 너무 큼)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>경로가 휴지통에 넣기에 너무 깁니다</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>휴지통이 받지 않았습니다. 안의 무언가가 프로그램에서 열려 있는 듯합니다</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>접근이 거부되었습니다</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>다른 프로그램이 사용 중입니다</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>더 이상 존재하지 않습니다</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>검사를 열 수 없습니다</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>다시 시작할 수 없습니다</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>CSV로 내보내기</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>저장된 검사 열기</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>다시 검사 실패</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>검사 저장</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>확대 상태에서 이동</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>가장 큰 파일, 폴더, 형식 패널</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>업적</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>여유 공간 표시/숨기기</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>클래식/모던 지도 스타일</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>여유 공간 표시됨</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>여유 공간 숨김</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>지도 스타일: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>선택한 항목의 Windows 속성</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>다시 검사</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>검사를 닫고 시작 화면으로 돌아가기</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc로도 취소할 수 있습니다</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>일치하지 않는 항목은 맵에서 흐리게 표시됩니다.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>CSV로 내보내기</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>파일 형식</value></data>
   <data name="Main_Files" xml:space="preserve"><value>파일</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{1} 중 {0}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>검사의 {0}</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>작업 관리자가 세는 방식으로 본, SpaceSharp가 지금 사용 중인 메모리입니다. 검사는 모든 파일을 메모리에 유지하므로 드라이브가 클수록 더 필요합니다.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>필터</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>필터 일치 항목</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>필터 옵션</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>폴더</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>검사</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>설치 후 다시 시작</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>가장 큰 파일</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>가장 큰 항목</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>드라이브 전체를 몇 초 만에 맵으로</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>휴지통으로 이동</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>검사 닫기</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>관리자 권한으로 다시 시작</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>다른 이름으로 검사 저장…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>검사 파일</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>폴더 검사</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>일치하는 모든 파일을 선택(Ctrl+A)한 다음 Del 키로 휴지통에 넣습니다</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>이 폴더의 모든 항목 선택</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>설정(Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>파일 탐색기에서 표시</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>이 파일 형식만 표시</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>전체 맵 표시</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>전체 맵 표시(Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp은(는) 모든 폴더를 순회하는 대신 드라이브의 파일 테이블을 직접 읽을 수 있습니다. 이 작업에는 관리자 권한이 필요하므로 앱을 한 번 다시 시작해야 합니다. 폴더와 다른 파일 시스템은 어느 경우든 일반 방식으로 검사합니다.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>비교 중지</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>테마</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>이 폴더</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>최상위 폴더</value></data>
   <data name="Main_Types" xml:space="preserve"><value>형식</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>상위 폴더로</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>상위 폴더로(Backspace / 마우스 뒤로)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>확대(마우스 휠 / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>지도를 그림으로 저장</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>축소(마우스 휠 / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>폴더로 확대</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0}의 내용</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>휴지통으로 이동</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>항목 {0:N0}개를 휴지통으로 이동</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>너무 작아 표시할 수 없는 파일</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>맵의 묶음은 검사할 수 없습니다. 확대해서 파일이나 폴더를 고르세요</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>여유 공간은 검사할 수 없습니다</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>폴더, 파일 {0:N0}개</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>{0} 파일</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>파일</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>검사</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>항목 {0:N0}개 검사</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>내보내기…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>내보내기</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>표 내보내기</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>형식</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV, 쉼표</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>대부분의 도구가 읽는 형식. 영어 Excel.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV, 세미콜론</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>소수점이 쉼표인 지역의 Excel(노르웨이 등).</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV, 탭</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>시트에 바로 붙여 넣을 수 있습니다. 복사가 클립보드에 넣는 형식이기도 합니다.</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>열</value></data>
+  <data name="Export_All" xml:space="preserve"><value>모두</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>행</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>최대</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>모두({0:N0})</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>폴더 포함</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>머리글 행</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>구분 기호가 있는 바이트</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15,562,073,417. 시트에서 합산할 수 있는 숫자로 하려면 끄세요.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>미리 보기</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>{1:N0}행 중 처음 {0:N0}행 · 큰 순서</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>미리 보기는 여기까지 · 파일에 {0:N0}행 더 있음</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · 약 {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>복사</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>저장…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>표 복사됨: {0:N0}행</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0}개 항목 · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>{0}의 항목</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>{0} 아래의 모든 항목</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>드라이브에서 가장 큰 파일</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>필터 일치 항목</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>비교한 스캔 이후 바뀐 것</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>경로</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>이름</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>폴더</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>종류</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>크기(바이트)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>디스크 크기(바이트)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>크기</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>스캔 내 비율</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>수정일</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>변화</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>더 보기</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>여기서 바뀐 것</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>앞으로의 스캔에서 제외</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>이름이 "{0}"인 모든 파일과 폴더는 다음 스캔부터 건너뜁니다. 목록은 설정 › 스캔 › 제외에 있습니다.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>제외</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>"{0}"은(는) 앞으로의 스캔에서 제외됩니다</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>이 파일의 사본 찾기</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>이 폴더의 모든 *{0} 선택</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>{0}(으)로 확대</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0}개 항목</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>파일 {0:N0}개</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>폴더 {0:N0}개</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>{0} 변경됨</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{1}의 {0}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>여기 *{1} {0:N0}개 중 가장 큼</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>여기 *{2} {1:N0}개 중 {0:N0}번째</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>{0} 미만</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>{0}의 사본을 찾지 못했습니다.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>{0} 다시 검사</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>이 폴더 다시 검사</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>{0}의 모든 항목 선택</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>건너뛸 이름으로, 그 안의 모든 항목도 함께 제외됩니다. 경로가 아닌 파일 및 폴더 이름과 비교하며 *와 ?는 와일드카드입니다.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>맵</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>지도 스타일</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>지도</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>물리는 각 상자를 사용 디스크 공간에 맞게 그립니다. 균일은 폴더는 그대로 두고 폴더 안의 모든 파일을 같은 크기로 그려서, 작은 파일 천 개가 든 폴더가 가느다란 조각이 아니라 파일 천 개로 보입니다. 단축키: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>물리</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>균일</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>지도: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>물리/균일 지도</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>스타일</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>먼저 스타일을 고르세요. 아래에서 한 스타일이 쓰지 않는 설정은 흐리게 표시되고 그렇게 적혀 있습니다.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>모던 스타일에서만.</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>클래식 스타일에서만.</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>모던 스타일은 격자 대신 상자 사이에 간격을 두므로 강조 색만 적용됩니다.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>지도가 무엇을 재고 보여 주는지. 모양은 {0}에 있습니다.</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>클래식은 늘 그랬던 지도입니다. 네모난 상자, 격자, 이름과 그 아래 크기. 모던은 상자를 둥글게 하고 파일마다 고유 아이콘을 붙이며 상자에 맞춰 라벨을 줄이고, 여유가 있으면 정확한 크기와 날짜를 더합니다.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>클래식</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>모던</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>{0}의 검사와 비교하는 중입니다. 검사 방식이 다르므로({1}과(와) {2}) 일부 차이는 디스크가 아닌 방식 때문입니다.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>{1}의 {0} 검사와 비교하는 중입니다. 이름을 폴더별로 대조합니다.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>비교를 해제했습니다.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>{1}에 {0:N0}행을 내보냈습니다(기본 CSV: 고정 열, 추가 옵션은 추후 제공)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>{0:N0}행을 {1}에 내보냈습니다</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · 파일 테이블</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>항목 {0:N0}개({1})를 휴지통으로 이동했습니다</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>{0}을(를) 휴지통으로 이동했습니다</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>일부 내용을 읽을 수 없습니다</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>같은 드라이브나 폴더를 두 번 검사하거나, 비교할 저장된 검사를 여세요.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>여유 공간</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {2}의 {1}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>확대하면 이 항목들을 볼 수 있습니다</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0}(하드 링크, 다른 곳에서 계산됨)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>파일</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>폴더</value></data>
   <data name="Group_Items" xml:space="preserve"><value>항목</value></data>
+  <data name="Group_More" xml:space="preserve"><value>{0:N0}개 더</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>이동식</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>네트워크</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>광학</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>폴더 제목에 표시할 내용입니다.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>이름 가운데 정렬</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>크기 표시</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>날짜 표시</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>파일 수 표시</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>파일 {0:N0}개</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>전체(그룹화 없음)</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>MIT 라이선스</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>탐색</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>선택 및 동작</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>보기 및 파일</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>지도</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>스캔과 창</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>선택한 항목 열기</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>SpaceSharp가 쓰는 키</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>키보드 배열</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>{0} 키보드 기준으로 그렸습니다. 다르면 다른 배열을 고르세요.</value></data>

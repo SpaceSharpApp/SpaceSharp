@@ -1,14 +1,12 @@
 using System.Diagnostics;
 using System.Globalization;
 using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using SpaceSharp.Controls;
@@ -264,6 +262,7 @@ public partial class MainWindow : Window
         ToolTip.SetTip(HomeButton, Strings.Get("Main_ShowWholeMapHome"));
         ToolTip.SetTip(PanelButton, Strings.Get("Main_DrivesAndLargestItems"));
         ToolTip.SetTip(ZoomInButton, Strings.Get("Main_ZoomInMouseWheel"));
+        ToolTip.SetTip(PictureButton, Strings.Get("Main_SavePicture"));
         ToolTip.SetTip(ZoomOutButton, Strings.Get("Main_ZoomOutMouseWheel"));
         ToolTip.SetTip(ThemeButton, Strings.Get("Main_Theme"));
         ToolTip.SetTip(SettingsButton, Strings.Get("Main_SettingsCtrl"));
@@ -359,8 +358,8 @@ public partial class MainWindow : Window
 
     private int _dimDepth;
 
-    /// <summary>Shrinks the window to the screen's working area when the default size is taller or wider than the screen, keeping it centered.
-    /// The default is tall enough to hold the Inspect window with room around it, which a 1080p screen is not.</summary>
+    /// <summary>Shrinks the window to the screen's working area when the default size is taller or wider than the screen, keeping its 16:9
+    /// shape and keeping it centered.</summary>
     private void FitToScreen()
     {
         if (WindowState != WindowState.Normal || Screens.ScreenFromWindow(this) is not { } screen)
@@ -369,8 +368,9 @@ public partial class MainWindow : Window
         }
         double maxWidth = screen.WorkingArea.Width / RenderScaling - 32;
         double maxHeight = screen.WorkingArea.Height / RenderScaling - 32;
-        double width = Math.Max(MinWidth, Math.Min(Bounds.Width, maxWidth));
-        double height = Math.Max(MinHeight, Math.Min(Bounds.Height, maxHeight));
+        double scale = Math.Min(1, Math.Min(maxWidth / Bounds.Width, maxHeight / Bounds.Height));
+        double width = Math.Max(MinWidth, Math.Round(Bounds.Width * scale));
+        double height = Math.Max(MinHeight, Math.Round(Bounds.Height * scale));
         if (Math.Abs(width - Bounds.Width) < 1 && Math.Abs(height - Bounds.Height) < 1)
         {
             return;
@@ -529,10 +529,12 @@ public partial class MainWindow : Window
         map.Padding = settings.Padding;
         map.FontFamilyName = settings.MapFont;
         map.Style = Enum.TryParse<MapStyle>(settings.MapStyle, out MapStyle style) ? style : MapStyle.Modern;
+        map.Layout = Enum.TryParse<MapLayout>(settings.MapLayout, out MapLayout layout) ? layout : MapLayout.BySize;
         map.SizesAsBytes = settings.SizesAsBytes;
         map.ShowFileIcons = settings.FileIcons;
         map.FileCenterNames = settings.FileCenterNames;
         map.FileShowSizes = settings.FileShowSizes;
+        map.FileShowDates = settings.FileShowDates;
         map.FolderCenterNames = settings.FolderCenterNames;
         map.FolderShowSizes = settings.FolderShowSizes;
         map.FolderShowCounts = settings.FolderShowCounts;
@@ -558,679 +560,6 @@ public partial class MainWindow : Window
     private static Color? ParseColor(string? hex) =>
         !string.IsNullOrWhiteSpace(hex) && Color.TryParse(hex, out Color color) ? color : null;
 
-    // ------------------------------------------------------------------ drives
-
-    /// <summary>Rebuilds the side panel's drive list: the pretend PC's drives in mock mode, otherwise every ready drive that reports a size.</summary>
-    private void BuildDrives()
-    {
-        DriveList.Children.Clear();
-        if (_mock)
-        {
-            foreach (MockSystem.Drive mockDrive in MockSystem.Drives)
-            {
-                DriveKind kind = Enum.TryParse<DriveKind>(mockDrive.Kind, out DriveKind parsedKind) ? parsedKind : DriveKind.Unknown;
-                AddDriveRow(
-                    mockDrive.Root,
-                    mockDrive.Root.TrimEnd('\\'),
-                    mockDrive.Label,
-                    kind,
-                    mockDrive.Format,
-                    mockDrive.Total,
-                    mockDrive.Total - mockDrive.Used);
-            }
-            return;
-        }
-
-        foreach (DriveInfo drive in DriveInfo.GetDrives())
-        {
-            if (!drive.IsReady)
-            {
-                continue;
-            }
-            if (drive.DriveType is DriveType.Unknown or DriveType.NoRootDirectory)
-            {
-                continue;
-            }
-
-            long total;
-            long free;
-            try
-            {
-                total = drive.TotalSize;
-                free = drive.AvailableFreeSpace;
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                // A drive that refuses its sizes (ejected media, a dead network share) is left off the list.
-                continue;
-            }
-            if (total <= 0)
-            {
-                continue;
-            }
-
-            string name = OperatingSystem.IsWindows() ? drive.Name.TrimEnd('\\') : drive.Name;
-            AddDriveRow(drive.RootDirectory.FullName, name, drive.VolumeLabel, DriveKinds.Detect(drive), drive.DriveFormat, total, free);
-        }
-    }
-
-    /// <summary>Adds one drive to the side panel: letter tile, label and kind, capacity bar, used and free figures; clicking it scans the drive.</summary>
-    /// <param name="rootPath">The drive root to scan when clicked (for example <c>C:\</c>).</param>
-    /// <param name="name">The drive's short name as shown in the tile and tooltip; on Windows the letter with its colon.</param>
-    /// <param name="volumeLabel">The volume label; null or blank shows the localized "no label" text instead.</param>
-    /// <param name="kind">The detected drive kind, which picks the tile's tint and symbol.</param>
-    /// <param name="format">The file system name (NTFS, exFAT, ...) shown after the kind.</param>
-    /// <param name="total">The drive's size in bytes; must be above 0.</param>
-    /// <param name="free">Free bytes; the bar turns Warn at 85% used and Danger at 92%.</param>
-    private void AddDriveRow(string rootPath, string name, string? volumeLabel, DriveKind kind, string format, long total, long free)
-    {
-        string letter = OperatingSystem.IsWindows() || _mock ? name.TrimEnd(':') : name;
-        string title = string.IsNullOrWhiteSpace(volumeLabel) ? Strings.Get("Drive_NoLabel") : volumeLabel;
-        string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {format}" : format;
-        double fraction = (double)(total - free) / total;
-
-        Grid tile = DriveTile(letter, kind);
-
-        var top = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
-        var nameText = new TextBlock
-        {
-            Text = title,
-            FontWeight = FontWeight.SemiBold,
-            FontSize = 14,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            VerticalAlignment = VerticalAlignment.Bottom
-        };
-        // The kind's symbol before its name: the glyph Windows draws for that kind, or a silhouette of the device elsewhere.
-        var kindLabel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Bottom };
-        kindLabel.Children.Add(DriveKindIcon(kind, 14));
-        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
-        Grid.SetColumn(kindLabel, 1);
-        top.Children.Add(nameText);
-        top.Children.Add(kindLabel);
-
-        string? fillBrush = fraction >= 0.92 ? "Danger" : fraction >= 0.85 ? "Warn" : null;
-        Grid bar = CapacityBar(fraction, 5, fillBrush);
-        bar.Margin = new Thickness(0, 6, 0, 5);
-
-        var bottom = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
-        var usedText = new TextBlock
-        {
-            Text = Strings.Format("Drive_UsedOfShort", SizeFormatter.Format(total - free), SizeFormatter.Format(total)),
-            Classes = { "dim" },
-            FontSize = 12,
-            TextTrimming = TextTrimming.CharacterEllipsis
-        };
-        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = 12, FontWeight = FontWeight.Medium };
-        Grid.SetColumn(freeText, 1);
-        bottom.Children.Add(usedText);
-        bottom.Children.Add(freeText);
-        var body = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Children = { top, bar, bottom } };
-
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 12 };
-        Grid.SetColumn(body, 1);
-        grid.Children.Add(tile);
-        grid.Children.Add(body);
-        string usedOf = Strings.Format("Drive_UsedOf", SizeFormatter.Format(total - free), SizeFormatter.Format(total), kindText);
-        ToolTip.SetTip(grid, $"{name}  {title}\n{usedOf}");
-
-        var button = new Button { Classes = { "drive" }, Content = grid, Tag = rootPath };
-        button.Click += (_, _) => _ = ScanAsync((string)button.Tag!);
-        DriveList.Children.Add(button);
-    }
-
-    /// <summary>The kind's icon: on Windows the glyph the system itself uses, from its icon font; elsewhere the app's own silhouette.</summary>
-    /// <param name="kind">The detected kind.</param>
-    /// <param name="size">The glyph's height in device-independent pixels.</param>
-    /// <returns>A text block or an icon, in the dim text color, vertically centered.</returns>
-    private Control DriveKindIcon(DriveKind kind, double size)
-    {
-        if (!OperatingSystem.IsWindows())
-        {
-            return Icons.Make(DriveKinds.IconName(kind), size, "TextDim", filled: true);
-        }
-        var glyph = new TextBlock
-        {
-            Text = DriveKinds.SystemGlyph(kind),
-            FontFamily = new FontFamily(DriveKinds.SystemIconFont),
-            FontSize = size,
-            VerticalAlignment = VerticalAlignment.Center,
-            Classes = { "dim" }
-        };
-        return glyph;
-    }
-
-    /// <summary>The drive tile: a square tinted by the drive kind with the letter in dark on it; the kind's symbol sits by the kind text instead, where it has room.</summary>
-    /// <param name="letter">The text in the square; three or more characters are drawn smaller.</param>
-    /// <param name="kind">Picks the tint: amber NVMe, green SSD, grey HDD, blue USB, purple network, orange optical.</param>
-    /// <returns>A 46 px grid holding the 40 px square.</returns>
-    private static Grid DriveTile(string letter, DriveKind kind)
-    {
-        var ink = new ImmutableSolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17));
-        var square = new Border
-        {
-            Width = 40,
-            Height = 40,
-            CornerRadius = new CornerRadius(8),
-            Background = new ImmutableSolidColorBrush(DriveKinds.TintColor(kind)),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top
-        };
-        var letterText = new TextBlock
-        {
-            Text = letter,
-            FontWeight = FontWeight.Bold,
-            FontSize = letter.Length > 2 ? 11 : 18,
-            Foreground = ink,
-            MaxWidth = 36,
-            TextAlignment = TextAlignment.Center,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        square.Child = letterText;
-
-        var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
-        tile.Children.Add(square);
-        return tile;
-    }
-
-    // ------------------------------------------------------------------ mock system
-
-    private bool _mock;
-
-    /// <summary>Opens a mock drive as a freshly compared scan (--mock or Ctrl+Shift+Alt+M).</summary>
-    /// <param name="rootPath">A root from <see cref="MockSystem.Drives"/>; nothing happens while a real scan runs.</param>
-    private void LoadMock(string rootPath)
-    {
-        if (_scanCts is not null)
-        {
-            return;
-        }
-        EnterMock();
-        (FsNode? root, ScanFileInfo? info, ScanFileInfo? baseline, ScanComparison? comparison) = MockSystem.Build(rootPath);
-        ShowLoadedScan(root, info, baseline, comparison, Strings.Get("Status_OpenedVerb"));
-    }
-
-    /// <summary>Switches the drives and recent scans to the mock system.</summary>
-    private void EnterMock()
-    {
-        if (_mock)
-        {
-            return;
-        }
-        _mock = true;
-        Achievements.UseForSession(MockSystem.Achievements());
-        BuildDrives();
-        BuildRecentScans();
-    }
-
-    /// <summary>A thin rounded bar filled to a fraction, used for drive capacity and list shares.</summary>
-    /// <param name="fraction">Filled share, 0..1; clamped, and 0 keeps a hairline so the rounded ends still draw.</param>
-    /// <param name="height">Bar height in device-independent pixels; the corner radius is half of it.</param>
-    /// <param name="fillBrush">A theme resource key for the fill; null uses the accent-fill class. Callers may recolor the fill, the grid's second child, afterwards.</param>
-    /// <returns>A two-column grid whose star widths carry the fraction, track behind and fill in front.</returns>
-    private Grid CapacityBar(double fraction, double height, string? fillBrush = null)
-    {
-        fraction = Math.Clamp(fraction, 0, 1);
-        var grid = new Grid { Height = height };
-        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(fraction, 0.001), GridUnitType.Star));
-        grid.ColumnDefinitions.Add(new ColumnDefinition(Math.Max(1 - fraction, 0.001), GridUnitType.Star));
-        var track = new Border { CornerRadius = new CornerRadius(height / 2), Classes = { "track" } };
-        Grid.SetColumnSpan(track, 2);
-        var fill = new Border { CornerRadius = new CornerRadius(height / 2), Opacity = 0.9 };
-        if (fillBrush is null)
-        {
-            fill.Classes.Add("accent-fill");
-        }
-        else
-        {
-            fill.Bind(Border.BackgroundProperty, this.GetResourceObservable(fillBrush));
-        }
-        grid.Children.Add(track);
-        grid.Children.Add(fill);
-        return grid;
-    }
-
-    // ------------------------------------------------------------------ scanning
-
-    /// <summary>
-    /// Scans a drive or folder and shows the result: picks the method (file table, elevated helper or folder walk), runs the scanning
-    /// card, then compares with and saves the autosave.
-    /// </summary>
-    /// <param name="path">A drive root or any folder; in mock mode it is a pretend drive instead. Nothing happens while another scan runs.</param>
-    private async Task ScanAsync(string path)
-    {
-        if (_scanCts is not null)
-        {
-            return;
-        }
-        if (_mock)
-        {
-            LoadMock(path);
-            return;
-        }
-        _scanCts = new CancellationTokenSource();
-        _scanRoot = path;
-        _scanExpectedBytes = null;
-        UpdateNavigation();
-
-        // The Changes table would be of the scan being replaced.
-        if (_changesShowing)
-        {
-            _changesShowing = false;
-            ApplyView();
-        }
-
-        try
-        {
-            var drive = new DriveInfo(path);
-            if (PlatformFiles.Current.IsVolumeRoot(path) && drive.IsReady)
-            {
-                _scanExpectedBytes = drive.TotalSize - drive.AvailableFreeSpace;
-            }
-        }
-        catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
-        {
-            // Without the drive's used size the progress is shown as a sweep instead of a percentage.
-        }
-
-        ScanCard.IsVisible = true;
-        ApplyView();
-        if (InsightsShowing)
-        {
-            RefreshInsights();
-        }
-        ScanTitle.Text = Strings.Format("Scan_Title", DisplayName(path));
-
-        bool fastScanWanted = OperatingSystem.IsWindows() && _settings.FastNtfsScan && _scanExpectedBytes is not null;
-        bool readFileTable = fastScanWanted && FileTableSupported(path);
-        // Without elevation, a helper process reads the file table.
-        bool useElevatedHelper = fastScanWanted && !readFileTable && !IsElevated && !_declinedElevation && IsNtfs(path);
-        if (useElevatedHelper)
-        {
-            readFileTable = true;
-        }
-        _scanMethod = readFileTable ? "MFT" : "folder walk";
-        _mftProgress = new WalkProgress(0, 0, 0, 0, path);
-
-        ResetScanCard(readFileTable);
-        _scanClock.Restart();
-        _scanStartedLocal = DateTime.Now;
-        _progressTimer.Start();
-        StatusText.Text = string.Empty;
-        AccessBar.IsVisible = false;
-
-        try
-        {
-            var options = new WalkOptions
-            {
-                IncludeHidden = _settings.IncludeHidden,
-                DetectHardLinks = _settings.DetectHardLinks,
-                Exclude = NamePatterns.Parse(_settings.ExcludePatterns),
-                Live = _settings.LiveMap
-            };
-            _liveShown = false;
-            // A file-table scan has nothing to draw live; say so where the live map would be.
-            SampleBanner.IsVisible = readFileTable && _settings.LiveMap;
-            SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
-            SampleText.Text = Strings.Get("Scan_NoLiveText");
-
-            FsNode root;
-            if (readFileTable && OperatingSystem.IsWindows())
-            {
-                root = await ReadTreeFromFileTableAsync(path, options, useElevatedHelper, _scanCts.Token);
-            }
-            else
-            {
-                root = await _scanner.ScanAsync(path, options, _scanCts.Token);
-            }
-
-            SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
-            SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: false, done: true);
-            SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: true);
-            _baselineInfo = null;
-            _comparison = null;
-            ShowTree(root);
-            _settings.Save();
-            StatusText.Text = Strings.Format("Status_Rescanned", DisplayName(path), root.FileCount, SizeFormatter.Format(root.Size));
-            if (_scanMethod != "MFT")
-            {
-                ShowAccessBar(_scanner.GetProgress().DeniedFolders);
-            }
-            _ = SaveAndCompareAsync(root, path);
-            _ = JudgeScanAsync(root, path, readFileTable);
-        }
-        catch (OperationCanceledException)
-        {
-            StatusText.Text = Strings.Get("Status_ScanCancelled");
-            if (_liveShown)
-            {
-                Treemap.Root = _root;   // back to the last finished map
-            }
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            StatusText.Text = ex.Message;
-            if (_liveShown)
-            {
-                Treemap.Root = _root;
-            }
-        }
-        finally
-        {
-            _progressTimer.Stop();
-            ScanCard.IsVisible = false;
-            _scanCts.Dispose();
-            _scanCts = null;
-            UpdateNavigation();
-            ApplyView();
-        }
-    }
-
-    /// <summary>Puts the scanning card back to its starting state for a new scan.</summary>
-    /// <param name="readFileTable">
-    /// True when the scan reads the NTFS file table, which changes the subtitle, the first stage's name, and keeps the card centered
-    /// since there is no live map behind it.
-    /// </param>
-    private void ResetScanCard(bool readFileTable)
-    {
-        // The card sits in the map's corner with the last map (or the map being drawn) behind it; with nothing behind, it is centered.
-        bool hasMap = _root is not null || (_settings.LiveMap && !readFileTable);
-        ScanPanel.HorizontalAlignment = hasMap ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-        ScanPanel.VerticalAlignment = hasMap ? VerticalAlignment.Bottom : VerticalAlignment.Center;
-
-        ScanSubtitle.Text = ScanSubtitleText(readFileTable ? "Scan_MethodMft" : "Scan_MethodWalk");
-        ScanSizeLabel.Text = _scanExpectedBytes is { } expectedBytes
-            ? Strings.Format("Scan_FoundOf", SizeFormatter.Format(expectedBytes))
-            : Strings.Get("Scan_FoundSoFar");
-        ScanPercent.Text = string.Empty;
-        StageFindText.Text = Strings.Get(readFileTable ? "Scan_StageRead" : "Scan_StageFind");
-        StageFindDetail.Text = string.Empty;
-        StageBuildDetail.Text = string.Empty;
-
-        SetStage(StageFindIcon, StageFindFill, StageFindBar, running: true, done: false);
-        SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: false, done: false);
-        SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: false);
-        _buildStageShown = false;
-        _readRate = 0;
-    }
-
-    /// <summary>The card's subtitle: the drive's used size, when known, and the scan method.</summary>
-    /// <param name="methodKey">The resource key of the method's name, "Scan_MethodMft" or "Scan_MethodWalk".</param>
-    /// <returns>"Used x · method" when the drive's used size is known, otherwise the method alone.</returns>
-    private string ScanSubtitleText(string methodKey)
-    {
-        string usedPrefix = _scanExpectedBytes is { } expectedBytes
-            ? Strings.Format("Scan_Used", SizeFormatter.Format(expectedBytes)) + " · "
-            : string.Empty;
-        return usedPrefix + Strings.Get(methodKey);
-    }
-
-    /// <summary>Reads the tree from the NTFS file table, falling back to a folder walk when that is declined or fails.</summary>
-    /// <param name="path">The drive root to read; the file table scan supports only volume roots.</param>
-    /// <param name="options">Hidden files, exclusions and the live flag, passed on to whichever scanner runs.</param>
-    /// <param name="useElevatedHelper">True runs the read in an elevated helper process (UAC prompt); false reads directly, which needs this process to be elevated.</param>
-    /// <param name="token">Cancels the read and any fallback walk.</param>
-    /// <returns>The finished tree, from the file table or from the folder walk the card was switched to; the status fields are updated on the way.</returns>
-    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private async Task<FsNode> ReadTreeFromFileTableAsync(string path, WalkOptions options, bool useElevatedHelper, CancellationToken token)
-    {
-        try
-        {
-            return useElevatedHelper
-                ? await ScanElevatedAsync(path, options, token)
-                : await ScanWithFileTableAsync(path, options, token);
-        }
-        catch (ElevatedScan.DeclinedException)
-        {
-            _declinedElevation = true;
-            _scanMethod = "folder walk";
-            SampleBanner.IsVisible = false;
-            ScanSubtitle.Text = ScanSubtitleText("Scan_MethodWalk");
-            StageFindText.Text = Strings.Get("Scan_StageFind");
-            return await _scanner.ScanAsync(path, options, token);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
-        {
-            _scanMethod = "folder walk";
-            SampleBanner.IsVisible = false;
-            ScanSubtitle.Text = ScanSubtitleText("Scan_MethodWalk") + " · " + ex.Message;
-            return await _scanner.ScanAsync(path, options, token);
-        }
-    }
-
-    /// <summary>True when the file table of the drive can be read by this process right now (NTFS root and the volume opens, which needs elevation).</summary>
-    /// <param name="path">A drive root; any other path gives false.</param>
-    /// <returns>True when a direct file table scan would work.</returns>
-    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private static bool FileTableSupported(string path) => MftScanner.IsSupported(path, out _);
-
-    /// <summary>True when the path's drive is NTFS, whether or not it can be opened.</summary>
-    /// <param name="path">A drive root; an unreadable drive gives false.</param>
-    /// <returns>True for NTFS.</returns>
-    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private static bool IsNtfs(string path) => MftScanner.IsNtfsDrive(path);
-
-    /// <summary>Reads the file table through an elevated helper process.</summary>
-    /// <param name="path">The drive root the helper scans.</param>
-    /// <param name="options">Hidden files and exclusions for the helper; the live flag has no effect on a file table scan.</param>
-    /// <param name="token">Cancels the wait and kills the helper.</param>
-    /// <returns>The tree with the free-space box added; progress arrives in <c>_mftProgress</c> from a worker thread and is read by the progress timer.</returns>
-    /// <exception cref="ElevatedScan.DeclinedException">The UAC prompt was declined.</exception>
-    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private Task<FsNode> ScanElevatedAsync(string path, WalkOptions options, CancellationToken token) => Task.Run(() =>
-    {
-        FsNode tree = ElevatedScan.Run(path, options, (files, dirs, bytes, current) => _mftProgress = new WalkProgress(files, dirs, bytes, 0, current), token);
-        tree.AddFreeSpace(PlatformFiles.Current.FreeBytes(path));
-        return tree;
-    }, token);
-
-    /// <summary>Reads the NTFS file table directly; requires administrator rights.</summary>
-    /// <param name="path">The drive root to read.</param>
-    /// <param name="options">Hidden files and exclusions; the live flag has no effect on a file table scan.</param>
-    /// <param name="token">Cancels the read between records.</param>
-    /// <returns>The tree with the free-space box added; progress arrives in <c>_mftProgress</c> from the worker thread.</returns>
-    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-    private Task<FsNode> ScanWithFileTableAsync(string path, WalkOptions options, CancellationToken token) => Task.Run(() =>
-    {
-        var scanner = new MftScanner(path, options.IncludeHidden, options.Exclude, (files, dirs, bytes, current) => _mftProgress = new WalkProgress(files, dirs, bytes, 0, current));
-        FsNode tree = scanner.Scan(token);
-        tree.AddFreeSpace(PlatformFiles.Current.FreeBytes(path));
-        return tree;
-    }, token);
-
-    /// <summary>The drive letter or folder name of a path.</summary>
-    /// <param name="path">Any path, with or without a trailing separator.</param>
-    /// <returns>"C:" for a Windows drive root, the last segment for a folder, or the path itself when it has no name (such as "/").</returns>
-    internal static string DisplayName(string path)
-    {
-        string trimmed = path.TrimEnd('\\', '/');
-        if (trimmed.Length == 0)
-        {
-            return path;
-        }
-        if (OperatingSystem.IsWindows() && trimmed.Length == 2 && trimmed[1] == ':')
-        {
-            return trimmed;
-        }
-        string name = Path.GetFileName(trimmed);
-        return name.Length > 0 ? name : trimmed;
-    }
-
-    private bool _liveShown;                 // the map shows a live snapshot of the running walk
-    private bool _liveBusy;                  // a snapshot is being built off the UI thread
-    private TimeSpan _lastLiveDraw;
-
-    /// <summary>Puts the walk's latest snapshot on the map, a few times a second at most; the snapshot is built off the UI thread.</summary>
-    private void DrawLiveMap()
-    {
-        if (_liveBusy || _scanMethod == "MFT" || _scanner.Live is not { } live || !live.Changed)
-        {
-            return;
-        }
-        if (_liveShown && _scanClock.Elapsed - _lastLiveDraw < TimeSpan.FromMilliseconds(600))
-        {
-            return;
-        }
-        _liveBusy = true;
-        _lastLiveDraw = _scanClock.Elapsed;
-        CancellationTokenSource? scanAtRequest = _scanCts;
-        // The snapshot shares the walk's finished folders, so it is sorted on the UI thread (in ShowLive), never here.
-        _ = Task.Run(() => live.Snapshot()).ContinueWith(task => Dispatcher.UIThread.Post(() =>
-        {
-            _liveBusy = false;
-            // The scan it belongs to must still be running.
-            bool sameScan = ReferenceEquals(scanAtRequest, _scanCts) && _scanCts is not null;
-            if (task.Status != TaskStatus.RanToCompletion || task.Result is not { } snapshot || !sameScan)
-            {
-                return;
-            }
-            Treemap.ShowLive(snapshot);   // eases the boxes from where they are; Root would reset the map
-            if (!_liveShown)
-            {
-                SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: true, done: false);
-            }
-            _liveShown = true;
-        }));
-    }
-
-    /// <summary>A scan's elapsed time as people read it: hundredths under ten seconds ("5.32 s"), tenths under a minute ("41.7 s"), minutes and seconds from there ("2:08").</summary>
-    /// <param name="elapsed">The time since the scan started.</param>
-    /// <returns>The text for the scan card.</returns>
-    private static string ElapsedText(TimeSpan elapsed)
-    {
-        double seconds = elapsed.TotalSeconds;
-        if (seconds < 10)
-        {
-            return seconds.ToString("0.00", CultureInfo.CurrentCulture) + " s";
-        }
-        if (seconds < 60)
-        {
-            return seconds.ToString("0.0", CultureInfo.CurrentCulture) + " s";
-        }
-        return elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
-    }
-
-    /// <summary>
-    /// Timer tick during a scan: updates the live map, the size, rate, elapsed and path fields, and the stage bars; the first bar fills
-    /// by bytes when the drive's used size is known, otherwise it sweeps.
-    /// </summary>
-    private void UpdateProgress()
-    {
-        DrawLiveMap();
-        WalkProgress progress = _scanMethod == "MFT" ? _mftProgress : _scanner.GetProgress();
-        double seconds = Math.Max(0.001, _scanClock.Elapsed.TotalSeconds);
-        ScanSize.Text = SizeFormatter.Format(progress.Bytes);
-        ScanElapsed.Text = ElapsedText(_scanClock.Elapsed);
-
-        bool handover = OperatingSystem.IsWindows() && progress.CurrentPath == ElevatedScan.HandoverMarker;
-        bool building = _scanMethod == "MFT" && (progress.CurrentPath == MftBuildingMarker || handover);
-        // The rate is frozen once the build stage starts.
-        if (!building)
-        {
-            _readRate = progress.Files / seconds;
-        }
-        double rate = _readRate;
-        ScanRate.Text = rate >= 1000 ? Strings.Format("Scan_RateK", rate / 1000) : Strings.Format("Scan_Rate", rate);
-        ScanPath.Text = progress.CurrentPath;
-
-        if (building)
-        {
-            if (!_buildStageShown)
-            {
-                _buildStageShown = true;
-                SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
-                SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: true, done: false);
-                StageFindDetail.Text = ElapsedText(_scanClock.Elapsed);
-            }
-            string soFar = Strings.Format("Scan_SoFar", progress.Files, progress.Directories);
-            StageBuildDetail.Text = handover ? Strings.Get("Scan_Handover") : soFar;
-            if (handover)
-            {
-                ScanPath.Text = string.Empty;
-            }
-            ScanPercent.Text = string.Empty;
-            return;
-        }
-
-        StageFindDetail.Text = Strings.Format("Tip_FilesInGroup", progress.Files);
-        if (_scanExpectedBytes is { } expected && expected > 0)
-        {
-            double fraction = Math.Clamp((double)progress.Bytes / expected, 0, 1);
-            StageFindFill.Width = Math.Max(4, StageFindBar.Bounds.Width * fraction);
-            StageFindFill.IsVisible = true;
-            ScanPercent.Text = $"{fraction * 100:0}%";
-        }
-        else
-        {
-            // Nothing to measure against: a short bar sweeps the track every 1.6 s.
-            double barWidth = StageFindBar.Bounds.Width;
-            double sweepPhase = _scanClock.Elapsed.TotalSeconds % 1.6 / 1.6;
-            double sweepWidth = barWidth * 0.3;
-            StageFindFill.Width = Math.Max(4, sweepWidth);
-            StageFindFill.IsVisible = true;
-            StageFindFill.Margin = new Thickness(Math.Max(0, (barWidth - sweepWidth) * sweepPhase), 0, 0, 0);
-        }
-    }
-
-    private bool _buildStageShown;
-    private double _readRate;        // files per second
-
-    /// <summary>The path text the MFT scanner reports while it builds the tree; empty off Windows so nothing matches.</summary>
-    private static string MftBuildingMarker => OperatingSystem.IsWindows() ? MftScanner.BuildingMarker : string.Empty;
-
-    /// <summary>Sets one stage row of the scanning card: a check when done, a spinner while running, an empty circle before; the bar is full, a nub, or empty.</summary>
-    /// <param name="icon">The stage's icon control.</param>
-    /// <param name="fill">The bar's filled part; its margin is reset so a sweep leaves no offset behind.</param>
-    /// <param name="bar">The bar's track, whose width a done stage fills.</param>
-    /// <param name="running">True while the stage is in progress.</param>
-    /// <param name="done">True when the stage finished; wins over <paramref name="running"/>.</param>
-    private void SetStage(Controls.Icon icon, Border fill, Grid bar, bool running, bool done)
-    {
-        icon.Glyph = Icons.Get(done ? "Check" : running ? "Loader" : "Circle");
-        icon.Bind(Controls.Icon.ForegroundProperty, this.GetResourceObservable(running || done ? "Accent" : "TextDim"));
-        fill.Margin = new Thickness(0);
-        // a running stage's fill grows with its progress; until there is any, nothing shows (a 4 px starter read as a stray dot)
-        fill.Width = done ? bar.Bounds.Width : 0;
-        fill.IsVisible = done;
-    }
-
-    /// <summary>Makes a finished tree the current scan and refreshes everything that shows it; a live-drawn scan eases into the final map.</summary>
-    /// <param name="root">The scan root; its free-space box is shown or hidden per the setting.</param>
-    private void ShowTree(FsNode root)
-    {
-        if (!ReferenceEquals(root, _duplicateRoot))
-        {
-            // the old search's tree would otherwise stay in memory beside the new one
-            _duplicateRoot = null;
-            _duplicateResult = null;
-        }
-        _root = root;
-        root.SetFreeSpaceVisible(_settings.ShowFreeSpace, _settings.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize);
-        // a scan that was drawn live eases into its finished tree instead of snapping to it
-        if (_liveShown)
-        {
-            root.SortBy(Treemap.SizeMode);
-            Treemap.ShowLive(root, finishing: true);
-        }
-        else
-        {
-            Treemap.Root = root;
-        }
-        _liveShown = false;
-        EmptyHint.IsVisible = false;
-        UpdateScanStatus();
-        UpdateNavigation();
-        UpdateCompareUi();
-        InvalidateInsights();
-        InvalidateChanges();
-        ApplyFilter();
-        RefreshTopList();
-        ApplyView();
-        RefreshInsights();
-        RefreshChanges();
-    }
-
     // ------------------------------------------------------------------ path row and status
 
     /// <summary>Enables the Up, Rescan and Close buttons for the current state and rebuilds the breadcrumbs and zoom controls.</summary>
@@ -1253,6 +582,7 @@ public partial class MainWindow : Window
         ZoomInButton.IsEnabled = hasMap && zoom < TreemapControl.MaxZoom;
         ZoomOutButton.IsEnabled = hasMap && zoom > 1.0001;
         HomeButton.IsEnabled = hasMap && zoom > 1.0001;
+        PictureButton.IsEnabled = hasMap;
     }
 
     /// <summary>Rebuilds the path row: one button per ancestor from the root to the focused folder, with the folder's size and file count beside it.</summary>
@@ -1295,568 +625,6 @@ public partial class MainWindow : Window
                     Margin = new Thickness(2, 0)
                 });
             }
-        }
-    }
-
-    // ------------------------------------------------------------------ right-click menu
-
-    private MenuItem _menuExportMatches = null!, _menuCompare = null!, _menuStopCompare = null!, _menuInspect = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuUp = null!, _menuFit = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuRescan = null!, _menuClose = null!, _menuDelete = null!, _menuDeleteForever = null!;
-
-    private TextBlock _menuInspectTitle = null!, _menuInspectSub = null!;
-
-    /// <summary>Builds the map's right-click menu once; the items are kept in fields so <see cref="UpdateContextMenu"/> can enable them per selection.</summary>
-    /// <returns>The menu, which refreshes itself on opening.</returns>
-    private ContextMenu BuildMenu()
-    {
-        // One menu item with a localized header, an optional shortcut and icon.
-        // key: The resource key of the header text.
-        // gesture: A key gesture such as "Ctrl+S" shown at the right, or null for none; it is display only, the key handler does the work.
-        // action: Run on click.
-        // icon: An icon name from Icons.axaml, or null for no icon.
-        // iconKey: The theme brush the icon is drawn in.
-        // Returns: The item, not yet added to a menu.
-        MenuItem Item(string key, string? gesture, Action action, string? icon = null, string? iconKey = "TextDim")
-        {
-            var item = new MenuItem { Header = Strings.Get(key), InputGesture = null };
-            if (gesture is not null)
-            {
-                item.InputGesture = KeyGesture.Parse(gesture);
-            }
-            if (icon is not null)
-            {
-                item.Icon = Icons.Make(icon, 14, iconKey);
-            }
-            item.Click += (_, _) => action();
-            return item;
-        }
-        var inspectHeader = new StackPanel();
-        _menuInspectTitle = new TextBlock { Text = Strings.Get("Menu_Inspect"), FontWeight = FontWeight.SemiBold };
-        _menuInspectSub = new TextBlock { FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 260, Classes = { "dim" } };
-        inspectHeader.Children.Add(_menuInspectTitle);
-        inspectHeader.Children.Add(_menuInspectSub);
-        _menuInspect = new MenuItem { Header = inspectHeader, InputGesture = KeyGesture.Parse("Ctrl+I"), Icon = Icons.Make("Info", 14, "Accent") };
-        _menuInspect.Click += (_, _) => ShowInspect();
-        _menuInspect.Classes.Add("strong");
-        _menuFocus = Item("Main_ZoomToFolder", null, FocusSelected, "ZoomIn");
-        _menuUp = Item("Main_UpOneFolder", "Back", () => Up_Click(null, new RoutedEventArgs()), "Up");
-        _menuFit = Item("Main_ShowWholeMap", "Home", Treemap.ShowAll, "Home");
-        _menuOpen = Item("Main_Open", "Enter", OpenSelected, "Open");
-        _menuReveal = Item("Main_ShowInExplorer", null, RevealSelected, "ScanFolder");
-        _menuProperties = Item("Main_Properties", "Alt+Enter", ShowProperties, "Properties");
-        _menuProperties.IsVisible = OperatingSystem.IsWindows();
-        _menuCopy = Item("Main_CopyPath", "Ctrl+C", () => CopyToClipboard(Treemap.SelectedNode?.FullPath), "Copy");
-        _menuCopyName = Item("Main_CopyName", null, () => CopyToClipboard(Treemap.SelectedNode?.Name), "Copy");
-        _menuFilterType = Item("Main_ShowOnlyThisFile", null, FilterToSelectedType, "Filter");
-        _menuSelectFolder = Item("Main_SelectEverythingInThis", null, SelectSiblingsOfSelected, "Selection");
-        _menuRescan = Item("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
-        _menuDelete = Item("Main_MoveToRecycleBin", "Delete", () => _ = DeleteNodes(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
-        _menuDelete.Classes.Add("danger");
-        _menuDeleteForever = Item("Main_DeletePermanently", null, () => _ = DeletePermanentlyAsync(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
-        _menuDeleteForever.Classes.Add("danger");
-        ToolTip.SetTip(_menuDeleteForever, Strings.Get("Main_DeletePermanentlyTip"));
-
-        var menu = new ContextMenu();
-        menu.Items.Add(_menuInspect);
-        menu.Items.Add(new Separator());
-        menu.Items.Add(_menuFocus);
-        menu.Items.Add(_menuUp);
-        menu.Items.Add(_menuFit);
-        menu.Items.Add(new Separator());
-        menu.Items.Add(_menuOpen);
-        menu.Items.Add(_menuReveal);
-        menu.Items.Add(_menuProperties);
-        menu.Items.Add(_menuCopy);
-        menu.Items.Add(_menuCopyName);
-        menu.Items.Add(new Separator());
-        menu.Items.Add(_menuFilterType);
-        menu.Items.Add(_menuSelectFolder);
-        menu.Items.Add(_menuRescan);
-        _menuClose = Item("Main_CloseScan", "Ctrl+W", CloseScan, "Close");
-        menu.Items.Add(_menuClose);
-        menu.Items.Add(new Separator());
-        var scanMenu = new MenuItem { Header = Strings.Get("Main_ScanFile"), Icon = Icons.Make("Open", 14, "TextDim") };
-        scanMenu.Items.Add(Item("Main_SaveScanAs", "Ctrl+S", () => _ = SaveScanAsAsync()));
-        scanMenu.Items.Add(Item("Main_OpenSavedScan", "Ctrl+O", () => _ = OpenScanAsync()));
-        _menuCompare = Item("Main_CompareWithASaved", null, () => _ = CompareWithAsync());
-        _menuStopCompare = Item("Main_StopComparing", null, StopComparing);
-        scanMenu.Items.Add(_menuCompare);
-        scanMenu.Items.Add(_menuStopCompare);
-        menu.Items.Add(scanMenu);
-        var export = new MenuItem { Header = Strings.Get("Main_ExportToCSV"), Icon = Icons.Make("Export", 14, "TextDim") };
-        export.Items.Add(Item("Main_LargestFiles", null, ExportFiles));
-        export.Items.Add(Item("Main_ThisFolder", null, ExportFolder));
-        _menuExportMatches = Item("Main_FilterMatches", null, ExportMatches);
-        export.Items.Add(_menuExportMatches);
-        menu.Items.Add(export);
-        menu.Items.Add(new Separator());
-        menu.Items.Add(_menuDelete);
-        menu.Items.Add(_menuDeleteForever);
-        menu.Opening += (_, _) => UpdateContextMenu();
-        return menu;
-    }
-
-    /// <summary>Enables the menu items for the current selection and fills the Inspect header.</summary>
-    private void UpdateContextMenu()
-    {
-        FsNode? node = Treemap.SelectedNode;
-        bool real = node is { IsReal: true };
-        bool scanning = _scanCts is not null;
-        int selectedCount = Treemap.SelectedNodes.Count;
-
-        bool canInspect = Treemap.SelectedNodes.Any(selected => selected.IsReal)
-            || (Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is not null);
-        _menuInspect.IsEnabled = canInspect;
-        _menuInspectTitle.Text = selectedCount > 1 ? Strings.Format("Menu_InspectMany", selectedCount) : Strings.Get("Menu_Inspect");
-        _menuInspectSub.TextWrapping = !canInspect && node is not null ? TextWrapping.Wrap : TextWrapping.NoWrap;
-        _menuInspectSub.Text = InspectSubtitle(node, canInspect, selectedCount);
-        _menuInspectSub.IsVisible = _menuInspectSub.Text.Length > 0;
-
-        _menuUp.IsEnabled = !scanning && Treemap.FocusedFolder?.Parent is not null;
-        _menuFit.IsEnabled = !scanning && Treemap.Root is not null && Treemap.Zoom > 1.0001;
-        _menuFilterType.Header = node is { IsDirectory: false, Extension.Length: > 0 }
-            ? Strings.Format("Menu_ShowOnlyExt", node.Extension)
-            : Strings.Get("Menu_ShowOnlyType");
-        _menuCompare.IsEnabled = _root is not null && _scanCts is null;
-        _menuStopCompare.IsEnabled = HasBaseline;
-        _menuExportMatches.IsEnabled = _filterResult is not null;
-        _menuFocus.IsEnabled = node is not null;
-        _menuOpen.IsEnabled = _menuReveal.IsEnabled = _menuProperties.IsEnabled = _menuCopy.IsEnabled = _menuCopyName.IsEnabled = real;
-        _menuFilterType.IsEnabled = node is { IsDirectory: false, Extension.Length: > 0 };
-        _menuSelectFolder.IsEnabled = node is not null;
-        _menuRescan.IsEnabled = _scanRoot is not null && _scanCts is null;
-        _menuClose.IsEnabled = _root is not null && _scanCts is null;
-        _menuDelete.IsEnabled = Treemap.SelectedNodes.Any(selected => selected.IsReal && selected.Parent is not null) && _scanCts is null;
-        _menuDeleteForever.IsEnabled = _menuDelete.IsEnabled;
-    }
-
-    /// <summary>The line under "Inspect": why it is unavailable, the selection's total, or the one node's name, size and kind.</summary>
-    /// <param name="node">The primary selected node, or null when nothing is selected.</param>
-    /// <param name="canInspect">Whether Inspect is enabled; false with a node gives the reason (a cluster or the free-space box).</param>
-    /// <param name="selectedCount">How many nodes are selected; above 1 the line is their total size.</param>
-    /// <returns>The subtitle, or an empty string when there is nothing to say.</returns>
-    private string InspectSubtitle(FsNode? node, bool canInspect, int selectedCount)
-    {
-        if (!canInspect && node is not null)
-        {
-            return Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");
-        }
-        if (selectedCount > 1)
-        {
-            return SizeFormatter.Format(Treemap.SelectedNodes.Sum(selected => selected.SizeFor(Treemap.SizeMode)));
-        }
-        if (node is null)
-        {
-            return string.Empty;
-        }
-
-        string kind;
-        if (node.IsGroup)
-        {
-            kind = Strings.Get("Menu_KindGroup");
-        }
-        else if (node.IsDirectory)
-        {
-            kind = Strings.Format("Menu_KindFolder", node.FileCount);
-        }
-        else if (node.Extension.Length > 0)
-        {
-            kind = Strings.Format("Menu_KindFile", node.Extension.TrimStart('.').ToUpperInvariant());
-        }
-        else
-        {
-            kind = Strings.Get("Menu_KindFileNoExt");
-        }
-        return $"{node.Name}  ·  {SizeFormatter.Format(node.SizeFor(Treemap.SizeMode))}  ·  {kind}";
-    }
-
-    /// <summary>Zooms the map to the selected node, if any.</summary>
-    private void FocusSelected()
-    {
-        if (Treemap.SelectedNode is { } node)
-        {
-            Treemap.FocusOn(node);
-        }
-    }
-
-    /// <summary>Sets the filter to the selected file's extension ("*.ext"); nothing for a folder or a file without one.</summary>
-    private void FilterToSelectedType()
-    {
-        if (Treemap.SelectedNode is { Extension.Length: > 0 } node)
-        {
-            FilterBox.Text = "*" + node.Extension;
-        }
-    }
-
-    /// <summary>Selects everything in the selected folder, or in the selected file's folder.</summary>
-    private void SelectSiblingsOfSelected()
-    {
-        if (Treemap.SelectedNode is not { } node)
-        {
-            return;
-        }
-        FsNode folder = node.IsDirectory ? node : node.Parent ?? node;
-        Treemap.SelectMany(folder.Children);
-    }
-
-    /// <summary>Opens the Inspect window for the real selected nodes, or for the focused folder when nothing is selected.</summary>
-    private void ShowInspect()
-    {
-        var nodes = Treemap.SelectedNodes.Where(selected => selected.IsReal).ToList();
-        if (nodes.Count == 0 && Treemap.SelectedNodes.Count == 0 && Treemap.FocusedFolder is { } focus)
-        {
-            nodes.Add(focus);
-        }
-        if (nodes.Count == 0)
-        {
-            return;
-        }
-
-        void FocusOnMap(FsNode node)
-        {
-            ShowView(insights: false);
-            Treemap.FocusOn(node);
-        }
-        _ = new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, FocusOnMap).ShowModal(this);
-    }
-
-    /// <summary>Opens the selected file or folder with the shell's default handler; errors go to the status bar.</summary>
-    private void OpenSelected()
-    {
-        if (Treemap.SelectedNode is not { IsReal: true } node)
-        {
-            return;
-        }
-        try
-        {
-            Trash.Open(node.FullPath);
-        }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
-        {
-            StatusText.Text = ex.Message;
-        }
-    }
-
-    /// <summary>Shows the Windows Properties dialog for the selected item; nothing elsewhere.</summary>
-    private void ShowProperties()
-    {
-        if (!OperatingSystem.IsWindows())
-        {
-            return;
-        }
-        if (Treemap.SelectedNode is { IsReal: true } node)
-        {
-            ShellProperties.Show(node.FullPath);
-        }
-    }
-
-    /// <summary>Shows the selected item in Explorer (or the platform's file manager); errors go to the status bar.</summary>
-    private void RevealSelected()
-    {
-        if (Treemap.SelectedNode is not { IsReal: true } node)
-        {
-            return;
-        }
-        try
-        {
-            Trash.Reveal(node.FullPath);
-        }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
-        {
-            StatusText.Text = ex.Message;
-        }
-    }
-
-    /// <summary>Puts text on the clipboard.</summary>
-    /// <param name="text">The text to copy; null does nothing.</param>
-    private async void CopyToClipboard(string? text)
-    {
-        if (text is null || Clipboard is null)
-        {
-            return;
-        }
-        await ClipboardText.SetAsync(Clipboard, text);
-    }
-
-    private readonly BusyPanel _deleteBusy = new();   // progress and Stop over the map's corner while a delete runs
-    private CancellationTokenSource? _deleteStop;      // set while a delete runs; Stop cancels it between items
-
-    /// <summary>Moves nodes to the recycle bin after confirmation, skipping files that changed since the scan, and removes from the tree only what is really gone.</summary>
-    /// <remarks>The confirmation is skipped by Settings › Behavior › Confirm before moving to the Recycle Bin, except when an item sits in a program place: those always ask, and the question says so.</remarks>
-    /// <param name="nodes">The selection; clusters, the free-space box, the scan root and anything inside another selected folder are left out. Nothing happens during a scan or another delete.</param>
-    /// <param name="knownSafe">True for the Safe to clear places, which are caches and temp folders chosen by name: no program-place warning, since the warning would name the very folders the row exists to clear.</param>
-    private async Task DeleteNodes(IReadOnlyList<FsNode> nodes, bool knownSafe = false)
-    {
-        if (_scanCts is not null || _deleteStop is not null)
-        {
-            return;
-        }
-        var candidates = nodes
-            .Where(node => node.IsReal && node.Parent is not null && !ReferenceEquals(node, Treemap.Root))
-            .ToList();
-        // A selected item inside another selected folder goes with that folder.
-        var items = candidates
-            .Where(node => !candidates.Any(other => !ReferenceEquals(other, node) && other.IsAncestorOf(node)))
-            .ToList();
-        if (items.Count == 0)
-        {
-            return;
-        }
-
-        SizeMeasure measure = Treemap.SizeMode;
-        long total = items.Sum(node => node.SizeFor(measure));
-        string size = SizeFormatter.Format(total);
-        int inProgramPlaces = knownSafe ? 0 : items.Count(EmptyFolders.IsProgramPlace);
-        if ((_settings.ConfirmDelete || inProgramPlaces > 0) && !await ConfirmDeleteAsync(items, size, inProgramPlaces))
-        {
-            if (inProgramPlaces > 0)
-            {
-                Store.Unlock(Achievement.SecondThoughts);
-            }
-            return;
-        }
-
-        // Files changed since the scan are skipped and reported.
-        var changed = items.Where(node => !node.IsDirectory && !MatchesScan(node)).ToList();
-        var toSend = items.Except(changed).ToList();
-        string? error = null;
-        bool allSent = true;
-        if (toSend.Count > 0)
-        {
-            // Off the UI thread, with the panel's progress and Stop; a stop keeps what was already sent and is not an error.
-            _deleteStop = new CancellationTokenSource();
-            CancellationToken token = _deleteStop.Token;
-            _deleteBusy.Start(Strings.Get("Dup_Moving"), toSend.Count, Strings.Get("Main_DeleteProgress"));
-            IProgress<int> progress = new Progress<int>(done => _deleteBusy.Report(done));
-            var paths = toSend.Select(node => node.FullPath).ToList();
-            string? sendError = null;
-            try
-            {
-                allSent = await Task.Run(() => Trash.TrySend(paths, out sendError, progress, token));
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
-            {
-                sendError = ex.Message;
-                allSent = false;
-            }
-            error = sendError;
-            allSent |= token.IsCancellationRequested && error is null;
-            _deleteStop = null;
-            _deleteBusy.IsVisible = false;
-        }
-        if (changed.Count > 0)
-        {
-            string names = string.Join("\n", changed.Take(4).Select(node => Strings.Format("Delete_Changed", node.FullPath)));
-            if (changed.Count > 4)
-            {
-                names += Strings.Format("Delete_AndMore", changed.Count - 4);
-            }
-            error = error is null ? names : error + "\n" + names;
-            allSent = false;
-        }
-
-        int gone = await AfterDeletionAsync(items, measure, allSent, error, removed => removed == 1 ? Strings.Format("Status_MovedOne", size) : Strings.Format("Status_MovedMany", removed, size));
-        if (knownSafe && gone > 0)
-        {
-            Store.Unlock(Achievement.Housekeeper);
-        }
-    }
-
-    /// <summary>Deletes for good, skipping the Recycle Bin, with the long-path form that reaches folders Explorer cannot open; asks first.</summary>
-    /// <param name="nodes">The items; folders take their contents, and an item inside another selected folder goes with that folder.</param>
-    private async Task DeletePermanentlyAsync(IReadOnlyList<FsNode> nodes)
-    {
-        if (_scanCts is not null || _deleteStop is not null)
-        {
-            return;
-        }
-        var candidates = nodes.Where(node => node.IsReal && node.Parent is not null && !ReferenceEquals(node, Treemap.Root)).ToList();
-        var items = candidates.Where(node => !candidates.Any(other => !ReferenceEquals(other, node) && other.IsAncestorOf(node))).ToList();
-        if (items.Count == 0)
-        {
-            return;
-        }
-
-        SizeMeasure measure = Treemap.SizeMode;
-        string size = SizeFormatter.Format(items.Sum(node => node.SizeFor(measure)));
-        string what = items.Count == 1
-            ? items[0].IsDirectory ? Strings.Format("Delete_WhatFolder", items[0].Name, items[0].FileCount, size) : Strings.Format("Delete_WhatFile", items[0].Name, size)
-            : Strings.Format("Delete_WhatMany", items.Count, items.Sum(node => node.FileCount), size);
-        int inProgramPlaces = items.Count(EmptyFolders.IsProgramPlace);
-        bool confirmed = await Dialog.Confirm(this,
-            Strings.Get("Delete_PermanentTitle"),
-            Strings.Format("Delete_PermanentQuestion", what, string.Empty).TrimEnd(),
-            DeleteConfirmBody(inProgramPlaces > 0 ? Strings.Format("Delete_ProgramForGood", inProgramPlaces) : null, items, measure),
-            Strings.Get("Delete_PermanentButton"),
-            danger: true);
-        if (!confirmed)
-        {
-            if (inProgramPlaces > 0)
-            {
-                Store.Unlock(Achievement.SecondThoughts);
-            }
-            return;
-        }
-
-        // Off the UI thread, with progress and Stop: a loop hundreds of levels deep takes a while to walk and delete. Stop ends it between items.
-        _deleteStop = new CancellationTokenSource();
-        CancellationToken token = _deleteStop.Token;
-        _deleteBusy.Start(Strings.Get("Main_Deleting"), items.Count, Strings.Get("Main_DeleteProgress"));
-        IProgress<int> progress = new Progress<int>(done => _deleteBusy.Report(done));
-        var errors = new List<string>();
-        await Task.Run(() =>
-        {
-            int done = 0;
-            foreach (FsNode node in items)
-            {
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
-                if (!DeepDelete.TryDelete(node.FullPath, out string? itemError) && itemError is not null)
-                {
-                    errors.Add($"{PathLoops.Compact(node.FullPath, 160)}: {itemError}");
-                }
-                progress.Report(++done);
-            }
-        });
-        _deleteStop = null;
-        _deleteBusy.IsVisible = false;
-        await AfterDeletionAsync(items, measure, errors.Count == 0, errors.Count == 0 ? null : string.Join("\n", errors), removed => Strings.Format("Status_DeletedForGood", removed, size));
-    }
-
-    /// <summary>Lets a tool window report items it moved to the Recycle Bin itself, so the tree, map and lists follow.</summary>
-    /// <param name="items">The items that were sent; only those no longer on disk leave the tree.</param>
-    /// <param name="statusText">The status line to show afterward.</param>
-    internal Task RemovedFromDiskAsync(List<FsNode> items, string statusText) => AfterDeletionAsync(items, Treemap.SizeMode, true, null, _ => statusText);
-
-    /// <summary>Keeps a duplicate search's result for the Insights row, as long as the same scan is open.</summary>
-    /// <param name="root">The root that was searched.</param>
-    /// <param name="result">What was found.</param>
-    internal void DuplicatesFound(FsNode root, DuplicateResult result)
-    {
-        _duplicateRoot = root;
-        _duplicateResult = result;
-        InvalidateInsights();
-        RefreshInsights();
-    }
-
-    private FsNode? _duplicateRoot;
-    private DuplicateResult? _duplicateResult;
-
-    /// <summary>The last duplicate search of the open scan, or null when it was never searched or another scan is open.</summary>
-    private DuplicateResult? DuplicatesForScan => _duplicateRoot is not null && ReferenceEquals(_duplicateRoot, _root) ? _duplicateResult : null;
-
-    /// <summary>After a delete of either kind: drops what is really gone from the tree, refreshes every view, reports what was refused.</summary>
-    /// <param name="items">The items that were sent for deletion.</param>
-    /// <param name="measure">The size measure the freed bytes are counted in.</param>
-    /// <param name="allSent">False shows the error dialog with <paramref name="error"/>.</param>
-    /// <param name="error">What was refused and why; shown in the dialog's card.</param>
-    /// <param name="status">The status line for the number of items that are gone.</param>
-    /// <returns>How many of the items are gone from disk.</returns>
-    private async Task<int> AfterDeletionAsync(List<FsNode> items, SizeMeasure measure, bool allSent, string? error, Func<int, string> status)
-    {
-        // Only what is really gone leaves the tree; the shell may have refused some items.
-        long freed = 0;
-        int removed = 0;
-        foreach (FsNode node in items)
-        {
-            if (File.Exists(node.FullPath) || Directory.Exists(node.FullPath))
-            {
-                continue;
-            }
-            freed += node.Allocated;
-            node.RemoveFromTree(measure);
-            removed++;
-        }
-        _root?.RegisterFreedSpace(freed, measure);
-
-        Treemap.ClearSelection();
-        Treemap.Refresh();
-        BuildCrumbs();
-        if (_filter is not null && !_filter.IsEmpty)
-        {
-            ApplyFilter();
-        }
-        RefreshTopList();
-        BuildDrives();
-        InvalidateInsights();
-        RefreshInsights();
-        UpdateScanStatus();
-
-        if (!allSent)
-        {
-            await Dialog.Error(this, Strings.Get("Delete_ErrorTitle"), Strings.Get("Delete_Partial"), error);
-        }
-        StatusText.Text = status(removed);
-        return removed;
-    }
-
-    /// <summary>Asks before moving the items to the recycle bin; the question names the one item or counts the many, and says how many sit in a program place.</summary>
-    /// <param name="items">The items that would be deleted, at least one; the first eight paths are listed.</param>
-    /// <param name="size">Their total size, already formatted for display.</param>
-    /// <param name="inProgramPlaces">How many of the items sit inside Windows, a program, an app or a game folder; 0 adds no warning.</param>
-    /// <returns>True when the user confirmed.</returns>
-    private async Task<bool> ConfirmDeleteAsync(List<FsNode> items, string size, int inProgramPlaces)
-    {
-        string what;
-        if (items.Count == 1)
-        {
-            FsNode item = items[0];
-            what = item.IsDirectory
-                ? Strings.Format("Delete_WhatFolder", item.Name, item.FileCount, size)
-                : Strings.Format("Delete_WhatFile", item.Name, size);
-        }
-        else
-        {
-            what = Strings.Format("Delete_WhatMany", items.Count, items.Sum(node => node.FileCount), size);
-        }
-        return await Dialog.Confirm(this,
-            Strings.Get("Delete_Title"),
-            Strings.Format("Delete_Question", what, string.Empty).TrimEnd(),
-            DeleteConfirmBody(inProgramPlaces > 0 ? Strings.Format("Delete_Program", inProgramPlaces) : null, items, Treemap.SizeMode),
-            Strings.Get("Delete_Title"),
-            danger: true);
-    }
-
-    /// <summary>The body of a delete question: a red note when items sit in program places, then the items as a list card.</summary>
-    /// <param name="warning">The note's text, or null for none.</param>
-    /// <param name="items">The items about to be deleted.</param>
-    /// <param name="measure">The size each row shows.</param>
-    /// <returns>The control for the dialog.</returns>
-    private Control DeleteConfirmBody(string? warning, List<FsNode> items, SizeMeasure measure)
-    {
-        var body = new StackPanel { Spacing = 10 };
-        if (warning is not null)
-        {
-            body.Children.Add(Dialog.WarningCard(this, warning));
-        }
-        body.Children.Add(DeleteList.Build(this, items, measure));
-        return body;
-    }
-
-    /// <summary>True when the file on disk still matches the size and write time the scan recorded.</summary>
-    /// <param name="node">A file node; a hard link duplicate is compared by its linked size.</param>
-    /// <returns>False only when the file exists and differs; a missing or unreadable file counts as matching so the shell reports it instead. Write times within 2 s match.</returns>
-    private static bool MatchesScan(FsNode node)
-    {
-        try
-        {
-            var info = new FileInfo(node.FullPath);
-            if (!info.Exists)
-            {
-                return true;   // TrySend treats it as already gone
-            }
-            long size = node.IsHardLinkDuplicate ? node.LinkedSize : node.Size;
-            if (info.Length != size)
-            {
-                return false;
-            }
-            // 2 s tolerance for FAT-style timestamp rounding
-            return node.LastWriteUtc == DateTime.MinValue || Math.Abs((info.LastWriteTimeUtc - node.LastWriteUtc).Ticks) <= TimeSpan.TicksPerSecond * 2;
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
-        {
-            return true;   // let the shell report the error
         }
     }
 
@@ -2219,6 +987,39 @@ public partial class MainWindow : Window
 
     private void Fit_Click(object? sender, RoutedEventArgs e) => Treemap.ShowAll();
     private void ZoomIn_Click(object? sender, RoutedEventArgs e) => Treemap.ZoomBy(1.25);
+    private async void SavePicture_Click(object? sender, RoutedEventArgs e) => await SavePictureAsync();
+
+    /// <summary>Saves the map as it is on screen to a PNG the user names, at twice the screen's pixels so it prints and zooms well.</summary>
+    private async Task SavePictureAsync()
+    {
+        if (_root is null || Treemap.Bounds.Width < 1 || Treemap.Bounds.Height < 1)
+        {
+            return;
+        }
+        string suggestedName = DisplayName(_root.FullPath).Replace(':', ' ').Trim();
+        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = Strings.Get("Main_SavePicture"),
+            SuggestedFileName = $"SpaceSharp {suggestedName} {DateTime.Now:yyyy-MM-dd HH.mm}.png",
+            DefaultExtension = "png",
+            FileTypeChoices = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" }, MimeTypes = new[] { "image/png" } } }
+        });
+        string? path = file?.TryGetLocalPath();
+        if (path is null)
+        {
+            return;
+        }
+        try
+        {
+            using Avalonia.Media.Imaging.RenderTargetBitmap bitmap = Treemap.Snapshot(Math.Max(2, RenderScaling));
+            bitmap.Save(path, Avalonia.Media.Imaging.PngBitmapEncoderOptions.Default);
+            StatusText.Text = Strings.Format("Status_Saved", path);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        {
+            await Dialog.Error(this, Strings.Get("Main_SavePicture"), ex.Message);
+        }
+    }
     private void ZoomOut_Click(object? sender, RoutedEventArgs e) => Treemap.ZoomBy(1 / 1.25);
     private void Cancel_Click(object? sender, RoutedEventArgs e) => _scanCts?.Cancel();
 
@@ -2374,6 +1175,29 @@ public partial class MainWindow : Window
                 break;
             case Key.L when !FilterHasFocus:
                 Panel_Click(null, new RoutedEventArgs());
+                e.Handled = true;
+                break;
+            case Key.G when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
+                _settings.ShowFreeSpace = !_settings.ShowFreeSpace;
+                _settings.Save();
+                ApplySettings();
+                StatusText.Text = Strings.Get(_settings.ShowFreeSpace ? "Status_FreeSpaceShown" : "Status_FreeSpaceHidden");
+                e.Handled = true;
+                break;
+            case Key.U when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
+                bool uniform = string.Equals(_settings.MapLayout, "Uniform", StringComparison.OrdinalIgnoreCase);
+                _settings.MapLayout = uniform ? "BySize" : "Uniform";
+                _settings.Save();
+                ApplySettings();
+                StatusText.Text = Strings.Format("Status_MapLayout", Strings.Get(uniform ? "MapLayout_BySize" : "MapLayout_Uniform"));
+                e.Handled = true;
+                break;
+            case Key.M when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
+                bool classic = string.Equals(_settings.MapStyle, "Classic", StringComparison.OrdinalIgnoreCase);
+                _settings.MapStyle = classic ? "Modern" : "Classic";
+                _settings.Save();
+                ApplySettings();
+                StatusText.Text = Strings.Format("Status_MapStyle", Strings.Get(classic ? "MapStyle_Modern" : "MapStyle_Classic"));
                 e.Handled = true;
                 break;
             case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Control):

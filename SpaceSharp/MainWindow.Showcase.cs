@@ -21,10 +21,10 @@ public partial class MainWindow
     /// <summary>The docs site's pictures (tools/screenshots_docs.ps1): one screen or state each, on top of the README scenes.</summary>
     public static readonly string[] WikiScenes =
     {
-        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
+        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-free-space", "wiki-uniform", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
         "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl",
-        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates"
+        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export"
     };
 
     /// <summary>Runs one <c>--scene</c>: sizes the window, poses the scene, and with <c>--shot</c> captures it to a PNG and exits.</summary>
@@ -34,11 +34,18 @@ public partial class MainWindow
         AppSettings.Frozen = true;
         if (App.Args.Size is { } size)
         {
+            // The asked size exactly, centered: the fit-to-screen on opening may have shrunk the default window, and must not shrink this.
             Width = size.Width;
             Height = size.Height;
+            if (Screens.ScreenFromWindow(this) is { } screen)
+            {
+                Position = new PixelPoint(
+                    screen.WorkingArea.X + (int)((screen.WorkingArea.Width - size.Width * RenderScaling) / 2),
+                    screen.WorkingArea.Y + (int)((screen.WorkingArea.Height - size.Height * RenderScaling) / 2));
+            }
         }
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        // The mirrored window, as Arabic has it.
+        // The mirrored window, as Arabic has it; the docs script also starts this scene with --lang ar, so the text is Arabic too.
         if (scene == "wiki-rtl")
         {
             AppLanguages.IsRightToLeft = true;
@@ -160,7 +167,7 @@ public partial class MainWindow
                 break;
             case "settings":
                 var settings = new SettingsWindow(this);
-                settings.ShowSection("Treemap", Strings.Get("Settings_Shading"));
+                settings.ShowSection("Treemap", Strings.Get("Settings_Style"));   // the top of the page: the preview, Style and Colors, nothing cut off
                 _ = settings.ShowModal(this);
                 dialog = settings;
                 break;
@@ -186,6 +193,18 @@ public partial class MainWindow
                 _settings.CushionHeight = 60;
                 _settings.Brightness = 45;
                 _settings.ShadingScale = 85;   // the Deep preset
+                ApplySettings();
+                break;
+            case "wiki-free-space":
+                _settings.ShowFreeSpace = true;
+                ApplySettings();
+                break;
+            case "wiki-uniform":
+                _settings.MapLayout = "Uniform";
+                ApplySettings();
+                break;
+            case "wiki-classic":
+                _settings.MapStyle = "Classic";
                 ApplySettings();
                 break;
             case "wiki-zoomed":
@@ -222,6 +241,14 @@ public partial class MainWindow
             case "wiki-empty-folders":
                 dialog = new EmptyFoldersWindow(this, _root!);
                 _ = dialog.ShowDialog(this);
+                break;
+            case "wiki-export":
+                if (_root is not null)
+                {
+                    FsNode? programFiles = _root.Children.FirstOrDefault(child => child.IsDirectory && child.Name.StartsWith("Program Files", StringComparison.Ordinal)) ?? _root;
+                    _ = OpenExportAsync(programFiles);
+                    dialog = LastOwned();
+                }
                 break;
             case "duplicates":
             case "wiki-duplicates":
@@ -326,16 +353,17 @@ public partial class MainWindow
         await Settle(150);
     }
 
-    /// <summary>Opens the right-click menu on the largest file that has room for the menu inside the window.</summary>
-    /// <param name="root">The scan root whose descendant files are candidates; nothing happens when no file's box is at least 120 by 60 px with room for the menu below and to the right.</param>
+    /// <summary>Opens the right-click menu on the largest file that has room for the menu and its More submenu inside the window, then
+    /// opens More so the picture shows both.</summary>
+    /// <param name="root">The scan root whose descendant files are candidates; nothing happens when no file's box is at least 120 by 60 px with room for the menu below and the submenu to the right.</param>
     private async Task PoseContextMenuAsync(FsNode root)
     {
         Size mapSize = Treemap.Bounds.Size;
         FsNode? target = root.DescendantFiles()
             .OrderByDescending(file => file.Size)
             .FirstOrDefault(file => Treemap.BoundsOf(file) is { Width: > 120, Height: > 60 } box
-                && box.Center.X + 320 < mapSize.Width
-                && box.Center.Y + 560 < mapSize.Height);
+                && box.Center.X + 700 < mapSize.Width
+                && box.Center.Y + 600 < mapSize.Height);
         if (target is null || Treemap.BoundsOf(target) is not { } targetBox)
         {
             return;
@@ -358,6 +386,13 @@ public partial class MainWindow
             menu.PlacementGravity = Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.BottomRight;
             menu.PlacementRect = new Rect(clickPoint, new Size(1, 1));
             menu.Open(Treemap);
+        }
+
+        // More opens once the menu is up, so the long tail is in the picture too.
+        await Settle(350);
+        if (Treemap.ContextMenu is { IsOpen: true })
+        {
+            _menuMore.IsSubMenuOpen = true;
         }
     }
 

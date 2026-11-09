@@ -447,6 +447,23 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
+    private MapLayout _layout = MapLayout.BySize;
+
+    /// <summary>Physical is the treemap, every box as large as its bytes; Uniform keeps folders that way but draws every file in a folder
+    /// the same size.</summary>
+    public MapLayout Layout
+    {
+        get => _layout; set
+        {
+            if (_layout == value)
+            {
+                return;
+            }
+            _layout = value;
+            InvalidateLayout();
+        }
+    }
+
     /// <summary>True writes sizes as exact bytes instead of rounded units, in file labels and folder titles alike.</summary>
     public bool SizesAsBytes
     {
@@ -560,6 +577,22 @@ public sealed partial class TreemapControl : Panel
             Invalidate();
         }
     }
+    private bool _fileShowDates = true;
+
+    /// <summary>Adds the last-changed date after the size on Modern file labels when there is room; Classic shows no dates.</summary>
+    public bool FileShowDates
+    {
+        get => _fileShowDates; set
+        {
+            if (_fileShowDates == value)
+            {
+                return;
+            }
+            _fileShowDates = value;
+            Invalidate();
+        }
+    }
+
     /// <summary>Centers the title bar text; false left-aligns it.</summary>
     public bool FolderCenterNames
     {

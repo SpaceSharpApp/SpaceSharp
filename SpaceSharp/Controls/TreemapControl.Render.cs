@@ -53,6 +53,30 @@ public sealed partial class TreemapControl
     }
 
     private static readonly IBrush GroupShade = new ImmutableSolidColorBrush(Color.FromArgb(0x24, 0x00, 0x00, 0x00));
+    /// <summary>"n more" and the size, centered in a group's closed remainder, dim, in the label size the box allows.</summary>
+    /// <param name="dc">The map layer's drawing context.</param>
+    /// <param name="node">The remainder group.</param>
+    /// <param name="box">Its visible rectangle.</param>
+    /// <param name="textBrush">The label color of the group it sits in.</param>
+    /// <param name="modern">True scales the text with the box as the Modern labels do.</param>
+    private void DrawRemainderLabel(DrawingContext dc, FsNode node, Rect box, IBrush textBrush, bool modern)
+    {
+        double side = Math.Min(box.Width, box.Height);
+        double scale = (modern ? Math.Clamp(MinModernScale + (side - 40) / 70 * (1 - MinModernScale), MinModernScale, 1) : 1) * _labelScale;
+        double lineHeight = Math.Round(15 * scale);
+        if (box.Width < 60 * scale || box.Height < lineHeight * 2 + 6)
+        {
+            return;
+        }
+        string more = Strings.Format("Group_More", node.GroupMembers?.Count ?? 0);
+        string size = SizeLabel(node.SizeFor(_measure));
+        double top = box.Y + (box.Height - lineHeight * 2) / 2;
+        using (dc.PushOpacity(0.72))
+        {
+            DrawLabel(dc, more, _headerFace, textBrush, box.X + 4, top, box.Width - 8, TextAlignment.Center, TextSize * scale / _labelScale);
+            DrawLabel(dc, size, _normalFace, textBrush, box.X + 4, top + lineHeight, box.Width - 8, TextAlignment.Center, TextSize * scale / _labelScale);
+        }
+    }
 
     // title bar fill per folder fill; light fills tint toward black, dark fills toward white
     private readonly Dictionary<IBrush, IBrush> _headerFills = new();
@@ -205,7 +229,19 @@ public sealed partial class TreemapControl
     /// <param name="item">The box to draw; its bounds may be a live-tween position rather than the laid-out one.</param>
     private void DrawItem(DrawingContext dc, TreemapItem item)
     {
+        // The remainder inside a group has no box of its own: its members draw themselves, and when it is still closed it only says how
+        // much is left, centered in the room it has.
+        bool remainder = item.Node.IsGroup && item.GroupLevel > 1;
+        if (remainder && _subdivided.Contains(item.Node))
+        {
+            return;
+        }
         FsNode node = item.Node;
+        // A group member that zooming out has shrunk to a speck is left to the group's own fill; its layout stays for zooming back in.
+        if (item.GroupLevel > 0 && !node.IsGroup && Math.Min(item.Bounds.Width, item.Bounds.Height) < MinGroupMemberSide)
+        {
+            return;
+        }
         double gap = GapFor(item);
         Rect full = item.Bounds;
         if (gap > 0)
@@ -236,6 +272,11 @@ public sealed partial class TreemapControl
         }
 
         // ---- fill
+        if (node.IsFreeSpace && _style == MapStyle.Modern)
+        {
+            DrawFreeSpacePanel(dc, item, box);
+            return;
+        }
         IBrush fill = node.IsFreeSpace ? FreeSpaceBrush : _scheme.Fill(node, item.Depth, item.Branch, _colorMode);
 
         bool dimmed = _filterMatches is not null && !_filterMatches.Contains(node) && !_matchedGroups.Contains(node);
@@ -245,8 +286,14 @@ public sealed partial class TreemapControl
         }
         IBrush textBrush = dimmed ? DimText : _fileText ?? _scheme.LabelFor(fill);
 
-        // ---- body
         bool modern = _style == MapStyle.Modern;
+        if (remainder)
+        {
+            DrawRemainderLabel(dc, node, box, textBrush, modern);
+            return;
+        }
+
+        // ---- body
         double radius = modern ? Math.Min(6, Math.Min(box.Width, box.Height) / 4) : 0;
         if (modern)
         {
@@ -377,6 +424,7 @@ public sealed partial class TreemapControl
     }
 
     private const double MinModernScale = 0.76;
+    private const double MinGroupMemberSide = 9;
     private static readonly ImmutableSolidColorBrush GlyphBrushDark = new(Color.FromArgb(0xC8, 0x14, 0x14, 0x18));
     private static readonly ImmutableSolidColorBrush GlyphBrushLight = new(Color.FromArgb(0xD8, 0xFF, 0xFF, 0xFF));
     private static Geometry? _fileGlyph;
@@ -403,14 +451,20 @@ public sealed partial class TreemapControl
 
         double iconSize = Math.Clamp(Math.Round(side / 4), 16, FileIcons.PixelSize);
         string sizeText = SizeLabel(node.SizeFor(_measure));
-        string? dateText = node.LastWriteUtc > DateTime.MinValue ? node.LastWriteUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture) : null;
+        string? dateText = node.IsGroup ? node.FileCount > 0 ? Strings.Format("Group_FilesCount", node.FileCount) : null
+            : _fileShowDates && node.LastWriteUtc > DateTime.MinValue ? node.LastWriteUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture) : null;
         string? facts = _fileShowSizes ? dateText is null ? sizeText : sizeText + "  ·  " + dateText : null;
 
         // What fits, from the top: icon, name, facts on one line, facts on two lines.
         bool showIcon = _showFileIcons && !node.IsGroup && box.Height >= iconSize + lineHeight * 2 + 10 && box.Width >= 56 * scale;
         bool showFacts = facts is not null && box.Height >= lineHeight * 2 + 4 + (showIcon ? iconSize + 4 : 0);
-        bool twoFactLines = showFacts && dateText is not null && box.Height >= lineHeight * 3 + 6 + (showIcon ? iconSize + 4 : 0)
-            && MeasureWidth(facts!, fontSize) > box.Width - 8;
+        bool factsFit = facts is null || MeasureWidth(facts, fontSize) <= box.Width - 8;
+        bool twoFactLines = showFacts && dateText is not null && !factsFit && box.Height >= lineHeight * 3 + 6 + (showIcon ? iconSize + 4 : 0);
+        if (showFacts && dateText is not null && !factsFit && !twoFactLines)
+        {
+            // No room for the date beside or under the size: the size alone, whole, beats a date cut in half.
+            facts = sizeText;
+        }
         int lines = 1 + (showFacts ? twoFactLines ? 2 : 1 : 0);
         double stackHeight = lines * lineHeight + (showIcon ? iconSize + 4 : 0);
         double top = box.Y + (box.Height - stackHeight) / 2;
@@ -480,6 +534,80 @@ public sealed partial class TreemapControl
             // The pen is in icon units, so it stays 1.8 px at every size.
             var pen = new ImmutablePen(dark ? GlyphBrushDark : GlyphBrushLight, 1.8 / unit, lineCap: PenLineCap.Round, lineJoin: PenLineJoin.Round);
             dc.DrawGeometry(null, pen, _fileGlyph);
+        }
+    }
+
+    /// <summary>The Modern free-space block: a quiet wash of the window color over the drive's frame, a ring in the drive's color showing
+    /// the free share with the percentage inside, and the facts under it; each part dropped as the box runs out of room.</summary>
+    /// <param name="dc">The map layer's drawing context.</param>
+    /// <param name="item">The free-space node's layout.</param>
+    /// <param name="box">Its box, clipped to the view.</param>
+    private void DrawFreeSpacePanel(DrawingContext dc, TreemapItem item, Rect box)
+    {
+        FsNode node = item.Node;
+        Color background = ColorOf(MapBackground ?? BackgroundBrush);
+        bool darkTheme = 0.299 * background.R + 0.587 * background.G + 0.114 * background.B < 128;
+        double radius = Math.Min(6, Math.Min(box.Width, box.Height) / 4);
+        dc.DrawRectangle(new ImmutableSolidColorBrush(Color.FromArgb(darkTheme ? (byte)0x8C : (byte)0x99, background.R, background.G, background.B)), null, new RoundedRect(box, radius));
+
+        double side = Math.Min(box.Width, box.Height);
+        double scale = Math.Clamp(MinModernScale + (side - 40) / 70 * (1 - MinModernScale), MinModernScale, 1) * _labelScale;
+        double lineHeight = Math.Round(15 * scale);
+        if (box.Width < 44 * scale || box.Height < lineHeight + 2)
+        {
+            return;
+        }
+
+        FsNode? drive = node.Parent;
+        long total = drive?.SizeFor(_measure) ?? 0;
+        double share = total > 0 ? Math.Clamp((double)node.SizeFor(_measure) / total, 0, 1) : 0;
+        string percent = share.ToString("P0", CultureInfo.CurrentCulture);
+        string sizeText = SizeLabel(node.SizeFor(_measure));
+        string facts = drive is null ? sizeText : Strings.Format("Free_Facts", sizeText, percent, drive.Name);
+
+        var text = new ImmutableSolidColorBrush(darkTheme ? Color.FromRgb(0xC9, 0xCE, 0xD8) : Color.FromRgb(0x4A, 0x51, 0x60));
+        double ring = Math.Clamp(Math.Round(side / 4), 44, 84) * _labelScale;
+        bool showRing = box.Height >= ring + lineHeight * 2 + 16 && box.Width >= ring + 16;
+        bool showFacts = box.Height >= lineHeight * 2 + 6 + (showRing ? ring + 8 : 0) && MeasureWidth(facts, TextSize * scale) <= box.Width - 8;
+        int lines = 1 + (showFacts ? 1 : 0);
+        double stackHeight = lines * lineHeight + (showRing ? ring + 8 : 0);
+        double top = box.Y + (box.Height - stackHeight) / 2;
+
+        if (showRing)
+        {
+            IBrush driveFill = drive is not null && _index.TryGetValue(drive, out TreemapItem driveItem)
+                ? _scheme.Fill(drive, driveItem.Depth, driveItem.Branch, _colorMode)
+                : FreeSpaceBrush;
+            Color arc = ColorOf(driveFill);
+            var track = Color.FromArgb(0x30, text.Color.R, text.Color.G, text.Color.B);
+            var gauge = new ConicGradientBrush
+            {
+                Center = RelativePoint.Center,
+                GradientStops =
+                {
+                    new GradientStop(arc, 0),
+                    new GradientStop(arc, share),
+                    new GradientStop(track, share),
+                    new GradientStop(track, 1)
+                }
+            };
+            var outer = new Rect(Math.Round(box.X + (box.Width - ring) / 2), Math.Round(top), ring, ring);
+            double thickness = Math.Max(5, Math.Round(ring * 0.11));
+            dc.DrawEllipse(gauge, null, outer.Center, ring / 2, ring / 2);
+            dc.DrawEllipse(new ImmutableSolidColorBrush(background), null, outer.Center, ring / 2 - thickness, ring / 2 - thickness);
+
+            double percentSize = Math.Round(ring * 0.24);
+            var formatted = new FormattedText(percent, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, _headerFace, percentSize, text);
+            dc.DrawText(formatted, new Point(outer.Center.X - formatted.Width / 2, outer.Center.Y - formatted.Height / 2));
+            top += ring + 8;
+        }
+
+        double textLeft = box.X + 4;
+        double textWidth = box.Width - 8;
+        DrawLabel(dc, node.Name, _headerFace, text, textLeft, top, textWidth, TextAlignment.Center, TextSize * scale / _labelScale);
+        if (showFacts)
+        {
+            DrawLabel(dc, facts, _normalFace, text, textLeft, top + lineHeight, textWidth, TextAlignment.Center, TextSize * scale / _labelScale);
         }
     }
 
@@ -629,19 +757,44 @@ public sealed partial class TreemapControl
     /// <summary>Schedules a repaint of the hover and selection frames only; the boxes underneath are left alone.</summary>
     private void DrawOverlay() => _overlayLayer.InvalidateVisual();
 
+    /// <summary>True while <see cref="Snapshot"/> renders, so the hover frame stays out of the picture.</summary>
+    private bool _snapshotting;
+
+    /// <summary>Renders the map as it is on screen, selection included but without the hover frame, to a bitmap.</summary>
+    /// <param name="scale">Device pixels per control pixel; 2 gives a picture at twice the screen's size.</param>
+    /// <returns>A new bitmap the caller disposes.</returns>
+    public Avalonia.Media.Imaging.RenderTargetBitmap Snapshot(double scale)
+    {
+        var size = new PixelSize((int)Math.Ceiling(Bounds.Width * scale), (int)Math.Ceiling(Bounds.Height * scale));
+        var bitmap = new Avalonia.Media.Imaging.RenderTargetBitmap(size, new Vector(96 * scale, 96 * scale));
+        _snapshotting = true;
+        try
+        {
+            bitmap.Render(this);
+        }
+        finally
+        {
+            _snapshotting = false;
+            DrawOverlay();
+        }
+
+        return bitmap;
+    }
+
     /// <summary>Paints the overlay layer: a white frame with a dark outline around the hovered box (unless it is selected) and a <see
     /// cref="HighlightColor"/> frame around every selected box that is laid out.</summary>
     /// <param name="dc">The overlay layer's drawing context.</param>
     private void DrawOverlayLayer(DrawingContext dc)
     {
-        if (_hoveredNode is not null && !_selection.Contains(_hoveredNode) &&
+        if (!_snapshotting && _hoveredNode is not null && !_selection.Contains(_hoveredNode) &&
             _index.TryGetValue(_hoveredNode, out TreemapItem hovered))
         {
             Rect hoverFrame = FrameRect(hovered.Bounds, HoverOutlinePen.Thickness / 2);
             if (!hoverFrame.IsBlank())
             {
-                dc.DrawRectangle(HoverFill, HoverOutlinePen, hoverFrame);
-                dc.DrawRectangle(null, HoverPen, hoverFrame);
+                double radius = FrameRadius(hoverFrame);
+                dc.DrawRectangle(HoverFill, HoverOutlinePen, new RoundedRect(hoverFrame, radius));
+                dc.DrawRectangle(null, HoverPen, new RoundedRect(hoverFrame, radius));
             }
         }
 
@@ -655,11 +808,16 @@ public sealed partial class TreemapControl
             Rect selectionFrame = FrameRect(selected.Bounds, _selectionPen.Thickness / 2);
             if (!selectionFrame.IsBlank())
             {
-                dc.DrawRectangle(null, _selectionPen, selectionFrame);
+                dc.DrawRectangle(null, _selectionPen, new RoundedRect(selectionFrame, FrameRadius(selectionFrame)));
             }
         }
         DrawPulse(dc);
     }
+
+    /// <summary>The corner radius a hover or selection frame follows: the Modern box's rounding, nothing in Classic.</summary>
+    /// <param name="frame">The frame rectangle.</param>
+    /// <returns>Up to 6 px, less on a small box.</returns>
+    private double FrameRadius(Rect frame) => _style == MapStyle.Modern ? Math.Min(6, Math.Min(frame.Width, frame.Height) / 4) : 0;
 
     /// <summary>Returns the frame rectangle for a box, inset so the stroke stays inside it.</summary>
     /// <param name="bounds">The box's laid-out bounds in control pixels.</param>

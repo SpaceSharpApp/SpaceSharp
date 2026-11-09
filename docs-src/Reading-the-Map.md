@@ -7,8 +7,25 @@ The map is a treemap: a rectangle for the whole scan, divided into rectangles fo
 - **Folders are frames** with a title bar: the name, the size and, if Settings › Treemap › Folders says so, the file count. Everything inside the frame is inside the folder.
 - **Files are boxes** inside their folder's frame, with the name and size when there is room.
 - **Small things are grouped.** Below a certain size the map draws one box labeled "312 files" instead of 312 slivers. Settings › Treemap › Layout › Density sets how early that happens; Everything turns grouping off.
-- **Free space** can be drawn as a gray block at the top level of a whole-drive scan (Settings › Map › Show free space, off by default). It grows when you delete.
 - **Single-folder chains** such as `Users › you › AppData › Local` are drawn as one frame with a combined title unless Settings › Map › Merge single-folder chains is off.
+
+## Two styles
+
+<p align="center"><img src="images/classic.png" width="900" alt="The Classic style: square boxes and the grid"></p>
+
+Settings › Treemap › Style, or **M**, switches between **Modern** (rounded boxes with a gap around each, the file's icon, labels that shrink with the box) and **Classic** (square boxes, the grid, a name with the size under it: the map as it was before 2.8).
+
+## Physical or Uniform
+
+<p align="center"><img src="images/uniform.png" width="900" alt="The Uniform map: every file in a folder the same size"></p>
+
+Settings › Treemap › Layout › Map, or **U**. Physical is the treemap: every box as large as the disk space it uses. Uniform keeps folders that way but draws every file inside a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver next to one big one. The files together still take exactly the room their bytes earn; only the split among them is even.
+
+## Free space
+
+<p align="center"><img src="images/free-space.png" width="900" alt="A drive with the free space shown as a panel with a ring"></p>
+
+Settings › Map › Show free space, or **G**, draws the unused space of a whole-drive scan at the top level: in the Modern style a quiet panel with a ring showing how much of the drive is free, in Classic a gray block. It grows when you delete.
 
 ## Colors
 

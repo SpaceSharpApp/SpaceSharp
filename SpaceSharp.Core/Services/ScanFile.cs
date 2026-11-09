@@ -278,7 +278,9 @@ public static class ScanFile
                 writer.Write(item.Allocated);
             }
 
-            foreach (FsNode child in root.Children)
+            // The save runs in the background while the window may still re-sort the tree (free space toggled, measure changed), so
+            // each list is copied before it is walked. Order does not matter: Load sorts again.
+            foreach (FsNode child in root.Children.ToArray())
             {
                 WriteNode(writer, child);
             }
@@ -304,7 +306,7 @@ public static class ScanFile
             writer.Write(node.Name);
             writer.Write(node.LastWriteUtc.Ticks);
             writer.Write(node.AccessDenied);
-            foreach (FsNode child in node.Children)
+            foreach (FsNode child in node.Children.ToArray())
             {
                 WriteNode(writer, child);
             }

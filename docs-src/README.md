@@ -42,6 +42,7 @@ Links between pages use the file name without `.md`: `[The filter](The-Filter)`.
 | `colorby-top.png`, `colorby-type.png` | `wiki-colorby-top`, `wiki-colorby-type` | the Color by modes |
 | `shading.png` | `wiki-shading` | cushion shading at the Deep preset |
 | `zoomed.png` | `wiki-zoomed` | the map zoomed three folders down |
+| `free-space.png`, `uniform.png`, `classic.png` | `wiki-free-space`, `wiki-uniform`, `wiki-classic` | the free-space panel, the Uniform map, the Classic style |
 | `filter-rail.png`, `filtered.png` | `wiki-rail`, `wiki-filtered` | the rail layout; a filtered map without the drawer |
 | `palette-picker.png`, `palettes.png`, `palette-editor.png` | `wiki-palette-picker`, `wiki-palettes`, `wiki-palette-editor` | the picker open; the sheet of all 24 palettes (drawn by the app, not a window capture); the palette editor |
 | `shortcuts.png` | `wiki-shortcuts` | the Shortcuts window |
@@ -49,7 +50,8 @@ Links between pages use the file name without `.md`: `[The filter](The-Filter)`.
 | `inspect-selection.png` | `wiki-inspect-selection` | Inspect for several selected files |
 | `achievements.png`, `achievement-toast.png` | `wiki-achievements`, `wiki-achievement-toast` | the Achievements window; a toast over the map |
 | `empty-folders.png`, `duplicates.png` | `wiki-empty-folders`, `wiki-duplicates` | the two windows behind the Small and empty and Duplicates rows |
+| `export.png` | `wiki-export` | the Export window on Program Files |
 | `settings-*.png` | `wiki-settings-*` | one per Settings page |
-| `rtl.png` | `wiki-rtl` | the window mirrored for a right-to-left language |
+| `rtl.png` | `wiki-rtl` | the window in Arabic, mirrored (the script passes `--lang ar`) |
 
 The [Settings reference](Settings-Reference), [Keyboard shortcuts](Keyboard-Shortcuts), [Command line](Command-Line), [Palettes and looks](Palettes-and-Looks) and [Custom palettes](Custom-Palettes) pages mirror code (`SettingsWindow.axaml.cs`, `ShortcutsWindow.cs`, `CommandLine.cs`, `Palette.cs`). A pull request that changes one of those should change the page too; the PR template asks.

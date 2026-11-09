@@ -38,7 +38,7 @@ Settings › Map › Filter layout swaps the drawer for a **rail** under the pat
 
 - The side panel and Insights keep showing the whole scan; the filter only affects the map.
 - **Ctrl+A** (Select matches) selects every matching file. Then **Del** sends them to the Recycle Bin, **Ctrl+I** inspects them together, **Ctrl+C** copies their paths.
-- Right-click › Export to CSV › Filter matches writes them to a file.
+- Right-click › More › Export… with "The filter's matches" picked writes them to a file ([Exporting](Exporting)).
 - **Esc** clears the filter when the filter box is not focused; a second Esc closes the drawer.
 
 ## Tips

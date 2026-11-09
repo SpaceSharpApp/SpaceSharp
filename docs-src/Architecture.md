@@ -42,7 +42,7 @@ scan ─────▶ FsNode tree ─────▶ Squarify + Grouping ─�
 
 | To add | Touch |
 |---|---|
-| A setting | A property with a default in `AppSettings` (and `ResetToDefaults`), a row in `SettingsWindow.Build()`, its effect in `MainWindow.ApplySettings()` or `ApplyLook()`, the [Settings reference](Settings-Reference) |
+| A setting | A property with a default in `AppSettings` (and `ResetToDefaults`), a row in the tab's builder in `SettingsWindow.axaml.cs`, its effect in `MainWindow.ApplySettings()` or `ApplyLook()`, the [Settings reference](Settings-Reference) |
 | A shortcut | `MainWindow.OnKeyDown`, the `Uses` list and the legend in `ShortcutsWindow.cs`, the README table, the [Keyboard shortcuts](Keyboard-Shortcuts) page |
 | UI text | A key in `Strings.resx` and the same key in all seventeen translation files |
 | A built-in palette | `BuildSchemes()` in `Util/Palette.cs` with twelve folder colors and a `PaletteAbout_` string |

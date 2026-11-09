@@ -1030,77 +1030,74 @@ public partial class MainWindow
 
     private void OpenScan_Click(object? sender, RoutedEventArgs e) => _ = OpenScanAsync();
 
-    // ---------------------------------------------------------------- CSV
+    // ---------------------------------------------------------------- export
 
-    /// <summary>Asks for a CSV file name and writes the given nodes to it off the UI thread; nothing for an empty list.</summary>
-    /// <param name="suggestedName">The start of the suggested file name; today's date and .csv are appended.</param>
-    /// <param name="nodes">The rows to export, in the order they are written; sizes use the map's current measure.</param>
-    private async Task ExportCsvAsync(string suggestedName, IEnumerable<FsNode> nodes)
+    /// <summary>What the Export window can write, given the current scan: the picked folder's items, everything under it, the largest
+    /// files, the filter's matches when a filter is on, and the changes when a compared scan is loaded.</summary>
+    /// <param name="folder">The folder the menu was opened on (a file's folder for a file), or null for the focused folder or the root.</param>
+    /// <returns>The sources in picker order; empty without a scan.</returns>
+    private List<ExportSource> ExportSources(FsNode? folder)
     {
-        var rows = nodes.ToList();
-        if (rows.Count == 0)
-        {
-            return;
-        }
-        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = Strings.Get("Dialog_ExportCsv"),
-            SuggestedFileName = $"{suggestedName} {DateTime.Now:yyyy-MM-dd}.csv",
-            DefaultExtension = "csv",
-            FileTypeChoices = new[] { new FilePickerFileType("CSV") { Patterns = new[] { "*.csv" } } }
-        });
-        string? csvPath = file?.TryGetLocalPath();
-        if (csvPath is null)
-        {
-            return;
-        }
-
-        SizeMeasure measure = Treemap.SizeMode;
-        try
-        {
-            await Task.Run(() => CsvExport.Write(csvPath, rows, measure));
-            StatusText.Text = Strings.Format("Status_Exported", rows.Count, csvPath);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            await Dialog.Error(this, Strings.Get("Dialog_ExportCsv"), ex.Message);
-        }
-    }
-
-    /// <summary>Exports the 1000 largest files of the scan.</summary>
-    private void ExportFiles()
-    {
+        var sources = new List<ExportSource>();
         if (_root is null)
         {
-            return;
+            return sources;
         }
-        IEnumerable<FsNode> largestFiles = _root.DescendantFiles()
-            .OrderByDescending(file => file.SizeFor(Treemap.SizeMode))
-            .Take(1000);
-        _ = ExportCsvAsync("largest-files", largestFiles);
+        FsNode root = _root;
+        FsNode home = folder ?? Treemap.FocusedFolder ?? root;
+        SizeMeasure measure = Treemap.SizeMode;
+        string homeName = DisplayName(home.FullPath);
+
+        sources.Add(new ExportSource(Strings.Format("Export_Source_Folder", homeName), homeName,
+            () => home.Children.Where(child => child.IsReal).OrderByDescending(child => child.SizeFor(measure)).ToList()));
+        sources.Add(new ExportSource(Strings.Format("Export_Source_Under", homeName), homeName + " all",
+            () => home.DescendantDirectories().Where(directory => !ReferenceEquals(directory, home))
+                .Concat(home.DescendantFiles()).OrderByDescending(node => node.SizeFor(measure)).ToList()));
+        sources.Add(new ExportSource(Strings.Get("Export_Source_Largest"), "largest-files",
+            () => root.DescendantFiles().OrderByDescending(file => file.SizeFor(measure)).Take(1000).ToList()));
+        if (_filterResult is not null && _filter is { } filter)
+        {
+            FilterResult result = _filterResult;
+            sources.Add(new ExportSource(Strings.Get("Export_Source_Matches"), "filter-matches",
+                () => result.Matches.Where(match => !match.IsDirectory && filter.Matches(match)).OrderByDescending(match => match.SizeFor(measure)).ToList()));
+        }
+        if (HasBaseline && root.HasBaseline)
+        {
+            sources.Add(new ExportSource(Strings.Get("Export_Source_Changes"), "changes",
+                () => root.DescendantDirectories().Where(directory => !ReferenceEquals(directory, root))
+                    .Concat(root.DescendantFiles())
+                    .Where(node => node.BaselineSize is null || node.ChangeFor(measure) != 0)
+                    .OrderByDescending(node => Math.Abs(node.ChangeFor(measure))).Take(5000).ToList()));
+        }
+        return sources;
     }
 
-    /// <summary>Exports the direct children of the selected folder (or the selected file's folder, the focused folder, or the root).</summary>
-    private void ExportFolder()
+    /// <summary>Opens the Export window on one of its sources.</summary>
+    /// <param name="folder">The folder the request is about, or null.</param>
+    /// <param name="initial">The source to start on: 0 for the folder's items, or the index <see cref="ExportSources"/> gives the one wanted.</param>
+    private async Task OpenExportAsync(FsNode? folder, int initial = 0)
     {
-        FsNode? node = Treemap.SelectedNode ?? Treemap.FocusedFolder ?? _root;
-        FsNode? folder = node is null ? null : node.IsDirectory ? node : node.Parent;
-        if (folder is not null)
-        {
-            _ = ExportCsvAsync(DisplayName(folder.FullPath), folder.Children.Where(child => child.IsReal));
-        }
-    }
-
-    /// <summary>Exports the files the current filter matches, largest first; nothing without an active filter.</summary>
-    private void ExportMatches()
-    {
-        if (_filterResult is null || _filter is null)
+        List<ExportSource> sources = ExportSources(folder);
+        if (sources.Count == 0 || _root is null)
         {
             return;
         }
-        IEnumerable<FsNode> matchingFiles = _filterResult.Matches
-            .Where(match => !match.IsDirectory && _filter.Matches(match))
-            .OrderByDescending(match => match.SizeFor(Treemap.SizeMode));
-        _ = ExportCsvAsync("filter-matches", matchingFiles);
+        long scanBytes = _root.SizeFor(Treemap.SizeMode) - (_root.FreeSpaceNode?.SizeFor(Treemap.SizeMode) ?? 0);
+        await new ExportWindow(this, sources, initial, Treemap.SizeMode, scanBytes).ShowModal(this);
     }
+
+    /// <summary>Opens Export on the changes, from the Changes view's button.</summary>
+    private void ExportChanges()
+    {
+        List<ExportSource> sources = ExportSources(null);
+        int index = sources.FindIndex(source => source.FileStem == "changes");
+        if (index >= 0)
+        {
+            _ = OpenExportAsync(null, index);
+        }
+    }
+
+    /// <summary>Puts a line in the status bar, for windows that report back to the main one.</summary>
+    /// <param name="text">The line.</param>
+    internal void ShowStatus(string text) => StatusText.Text = text;
 }

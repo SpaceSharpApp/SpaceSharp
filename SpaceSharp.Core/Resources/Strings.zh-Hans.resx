@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>保留第一份，从 {1} 开始删除其下嵌套的 {0:N0} 份。</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows 跳过了它（正在使用，或对回收站来说太大）</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>路径对回收站来说太长</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>回收站未接受；其中可能有文件正被某个程序打开</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>访问被拒绝</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>正被另一个程序使用</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>它已不存在</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>无法打开扫描</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>无法重启</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>导出为 CSV</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>打开已保存的扫描</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>重新扫描失败</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>保存扫描</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>放大时平移</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>最大文件、文件夹和类型面板</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>成就</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>显示或隐藏可用空间</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>经典或现代地图样式</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>已显示可用空间</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>已隐藏可用空间</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>地图样式：{0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>所选项目的 Windows 属性</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>重新扫描</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>关闭扫描并返回开始屏幕</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>按 Esc 也可取消</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>不匹配的内容在地图上会变暗。</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>导出为 CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>文件类型</value></data>
   <data name="Main_Files" xml:space="preserve"><value>文件</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{1} 中的 {0}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>占本次扫描的 {0}</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>SpaceSharp 当前占用的内存，按任务管理器的计法。扫描会把每个文件保存在内存中；驱动器越大，需要的内存越多。</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>筛选</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>筛选匹配项</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>筛选选项</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>文件夹</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>检查</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>安装并重启</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>最大的文件</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>最大的项目</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>几秒内绘制整个驱动器</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>移至回收站</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>关闭扫描</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>以管理员身份重启</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>扫描另存为…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>扫描文件</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>扫描文件夹</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>选择所有匹配的文件 (Ctrl+A)，然后按 Del 将其移至回收站</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>选择此文件夹中的全部内容</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>设置 (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>在文件资源管理器中显示</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>仅显示此文件类型</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>显示整个地图</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>显示整个地图 (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp 可以直接读取驱动器的文件表，而不必逐个遍历文件夹。这需要管理员权限，因此应用必须重启一次。无论如何，文件夹和其他文件系统都按常规方式扫描。</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>停止比较</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>主题</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>此文件夹</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>顶层文件夹</value></data>
   <data name="Main_Types" xml:space="preserve"><value>类型</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>上一级文件夹</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>上一级文件夹 (Backspace / 鼠标后退键)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>放大 (鼠标滚轮 / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>将地图保存为图片</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>缩小 (鼠标滚轮 / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>缩放到文件夹</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} 的内容</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>移至回收站</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>将 {0:N0} 个项目移至回收站</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>太小而无法显示的文件</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>地图上的聚合块无法检查：放大后选择一个文件或文件夹</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>可用空间无法检查</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>文件夹，{0:N0} 个文件</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>{0} 文件</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>文件</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>检查</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>检查 {0:N0} 个项目</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>导出…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>导出</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>导出表格</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>格式</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV，逗号</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>大多数工具都能读取。英文版 Excel。</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV，分号</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>小数点为逗号的地区的 Excel（如挪威）。</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV，制表符</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>可直接粘贴到表格中；也是“复制”放入剪贴板的格式。</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>列</value></data>
+  <data name="Export_All" xml:space="preserve"><value>全部</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>行</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>最多</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>全部（{0:N0}）</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>包含文件夹</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>标题行</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>带分隔符的字节数</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15,562,073,417。要让表格能求和，请关闭。</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>预览</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>{1:N0} 行中的前 {0:N0} 行 · 按大小降序</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>预览到此为止 · 文件中还有 {0:N0} 行</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · 约 {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>复制</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>保存…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>已复制表格：{0:N0} 行</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} 项 · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>{0} 中的项目</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>{0} 下的全部内容</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>驱动器上最大的文件</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>筛选匹配项</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>自比较扫描以来的变化</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>路径</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>名称</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>文件夹</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>类型</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>大小（字节）</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>占用空间（字节）</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>大小</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>占扫描比例</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>修改时间</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>变化</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>更多</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>此处的变化</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>从以后的扫描中排除</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>所有名为“{0}”的文件和文件夹将从下次扫描起被跳过。列表在设置 › 扫描 › 排除中。</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>排除</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>“{0}”将从以后的扫描中排除</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>查找此文件的副本</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>选择此文件夹中所有 *{0}</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>缩放到 {0}</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} 项</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} 个文件</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} 个文件夹</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>{0}更改</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>占 {1} 的 {0}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>此处 {0:N0} 个 *{1} 中最大</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>此处 {1:N0} 个 *{2} 中第 {0:N0}</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>低于 {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>未找到 {0} 的副本。</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>重新扫描 {0}</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>重新扫描此文件夹</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>选择 {0} 中的全部内容</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>要跳过的名称，连同其中的全部内容。按文件和文件夹名称匹配，而非路径；* 和 ? 为通配符。</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>地图</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>地图样式</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>地图</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>物理按占用的磁盘空间决定每个方块的大小。均匀保持文件夹不变，但把同一文件夹内的每个文件画成同样大小，这样一个有一千个小文件的文件夹看起来是一千个文件，而不是一条细缝。快捷键：U。</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>物理</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>均匀</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>地图：{0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>物理或均匀地图</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>样式</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>先选择样式。下方某一样式不使用的设置会变暗并注明。</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>仅现代样式。</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>仅经典样式。</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>现代样式用方块间距代替网格，因此只有高亮颜色生效。</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>地图度量和显示的内容。外观在“{0}”下。</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>经典是一贯的地图：方形框、网格、名称下方显示大小。现代会把框变圆角，为每个文件配上自己的图标，标签随框缩小，有空间时再加上精确大小和日期。</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>经典</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>现代</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>正在与 {0} 的扫描比较。两者扫描方式不同（{1} 与 {2}），因此部分差异源于此，而非磁盘本身。</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>正在与 {1} 对 {0} 的扫描比较；名称按文件夹逐一匹配。</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>已清除比较。</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>已将 {0:N0} 行导出到 {1}（基础 CSV：固定列，更多选项稍后推出）</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>已将 {0:N0} 行导出到 {1}</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · 文件表</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>已将 {0:N0} 个项目（{1}）移至回收站</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>已将 {0} 移至回收站</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>部分内容无法读取</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>对同一驱动器或文件夹扫描两次，或打开已保存的扫描进行比较。</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>可用空间</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · 占 {2} 的 {1}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>放大即可查看这些项目</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0}（硬链接，已在别处计入）</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>个文件</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>个文件夹</value></data>
   <data name="Group_Items" xml:space="preserve"><value>个项目</value></data>
+  <data name="Group_More" xml:space="preserve"><value>还有 {0:N0} 个</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>可移动</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>网络</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>光盘</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>文件夹标题显示的内容。</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>名称居中</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>显示大小</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>显示日期</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>显示文件数</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} 个文件</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>全部（不分组）</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>MIT 许可证</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>导航</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>选择和操作</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>视图和文件</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>地图</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>扫描与窗口</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>打开所选项目</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>SpaceSharp 使用的按键</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>键盘布局</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>按 {0} 键盘绘制；如果不对，请另选一种。</value></data>

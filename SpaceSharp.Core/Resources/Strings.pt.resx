@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Mantém a primeira cópia e elimina as {0:N0} aninhadas abaixo, a partir de {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>O Windows o ignorou (em uso, ou grande demais para a Lixeira)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>o caminho é longo demais para a Lixeira</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>a Reciclagem não o aceitou; algo lá dentro está provavelmente aberto num programa</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>acesso negado</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>em uso por outro programa</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>não existe mais</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Não foi possível abrir a verificação</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Não foi possível reiniciar</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Exportar para CSV</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>Abrir uma verificação salva</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>Falha ao verificar novamente</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>Salvar verificação</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>Deslocar o mapa com zoom aplicado</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Painel de maiores arquivos, pastas e tipos</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>Conquistas</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>Mostrar ou ocultar o espaço livre</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>Estilo de mapa Clássico ou Moderno</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>Espaço livre mostrado</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>Espaço livre oculto</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>Estilo de mapa: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Propriedades do Windows do item selecionado</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Verificar novamente</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Fechar a análise e voltar ao ecrã inicial</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc também cancela</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Tudo o que não corresponde fica esmaecido no mapa.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>Exportar para CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Tipo de arquivo</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Arquivos</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{0} de {1}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} da análise</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>A memória que o SpaceSharp usa neste momento, tal como o Gestor de Tarefas a conta. Uma análise mantém cada ficheiro em memória; uma unidade maior precisa de mais.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Filtro</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>Correspondências do filtro</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Opções de filtro</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Pastas</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>Inspecionar</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>Instalar e reiniciar</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>Maiores arquivos</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>Maiores itens</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Mapeie uma unidade inteira em segundos</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>Mover para a Lixeira</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>Fechar a análise</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Reiniciar como administrador</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Salvar verificação como…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>Arquivo de verificação</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>Verificar pasta</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Selecionar todos os arquivos correspondentes (Ctrl+A) e depois Del para enviá-los à Lixeira</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Selecionar tudo nesta pasta</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>Configurações (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>Mostrar no Explorador de Arquivos</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Mostrar somente este tipo de arquivo</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Mostrar mapa inteiro</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Mostrar mapa inteiro (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>O SpaceSharp pode ler a tabela de arquivos da unidade diretamente em vez de percorrer cada pasta. Isso exige direitos de administrador, então o aplicativo precisa reiniciar uma vez. Pastas e outros sistemas de arquivos são verificados da forma normal de qualquer maneira.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>Parar de comparar</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>Tema</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>Esta pasta</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>Pasta principal</value></data>
   <data name="Main_Types" xml:space="preserve"><value>Tipos</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>Uma pasta acima</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Uma pasta acima (Backspace / botão voltar do mouse)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Ampliar (roda do mouse / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>Guardar o mapa como imagem</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Reduzir (roda do mouse / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Ampliar até a pasta</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Conteúdo de {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>Mover para a Lixeira</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Mover {0:N0} itens para a Lixeira</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>arquivos pequenos demais para exibir</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Os grupos no mapa não podem ser inspecionados: amplie e escolha um ficheiro ou pasta</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>O espaço livre não pode ser inspecionado</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>pasta, {0:N0} arquivos</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>arquivo {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>arquivo</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>Inspecionar</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>Inspecionar {0:N0} itens</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>Exportar…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Exportar</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>Exportar uma tabela</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>Formato</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV, vírgula</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>O que a maioria das ferramentas lê. Excel em inglês.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV, ponto e vírgula</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>Excel onde o separador decimal é a vírgula, como em Portugal.</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV, tabulação</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>Cola-se diretamente numa folha; também o que Copiar põe na área de transferência.</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>Colunas</value></data>
+  <data name="Export_All" xml:space="preserve"><value>Todas</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>Linhas</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>No máximo</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>Todas ({0:N0})</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>Incluir pastas</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>Linha de cabeçalho</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>Bytes com separadores</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15 562 073 417. Desligado para números que uma folha consiga somar.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>Pré-visualização</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>primeiras {0:N0} de {1:N0} linhas · maiores primeiro</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>A pré-visualização termina aqui · mais {0:N0} linhas no ficheiro</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · cerca de {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>Copiar</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>Guardar…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>Tabela copiada: {0:N0} linhas</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} itens · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>Itens em {0}</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>Tudo sob {0}</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>Os maiores ficheiros da unidade</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>As correspondências do filtro</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>O que mudou desde a análise comparada</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Caminho</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Nome</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>Pasta</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>Tipo</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>Tamanho (bytes)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>Tamanho em disco (bytes)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Tamanho</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>Parte da análise</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Alterado</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>Alteração</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>Mais</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>O que mudou aqui</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>Excluir das próximas análises</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Todos os ficheiros e pastas chamados "{0}" serão ignorados a partir da próxima análise. A lista está em Definições › Análise › Excluir.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Excluir</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>"{0}" será excluído das próximas análises</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>Encontrar cópias deste ficheiro</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>Selecionar todos os *{0} nesta pasta</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>Ampliar {0}</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} itens</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} ficheiros</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} pastas</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>alterado {0}</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{0} de {1}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>o maior de {0:N0} *{1} aqui</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>{0:N0}.º de {1:N0} *{2} aqui</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>menos de {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>Não foram encontradas cópias de {0}.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>Verificar {0} novamente</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>Verificar esta pasta novamente</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>Selecionar tudo em {0}</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Nomes a ignorar, com tudo o que há dentro deles. Comparados com nomes de arquivos e pastas, não caminhos; * e ? são curingas.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Mapa</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>Estilo do mapa</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>Mapa</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>Físico dá a cada caixa o tamanho do espaço em disco que usa. Uniforme mantém as pastas assim, mas desenha cada ficheiro de uma pasta com o mesmo tamanho, para que uma pasta com mil ficheiros pequenos se leia como mil ficheiros e não como uma lasca. Atalho: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>Físico</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>Uniforme</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>Mapa: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>Mapa físico ou uniforme</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>Estilo</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>Escolha primeiro o estilo. Abaixo, uma definição que um estilo não usa fica esbatida e diz isso.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>Só no estilo Moderno.</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>Só no estilo Clássico.</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>O estilo Moderno separa as caixas com espaços em vez de uma grelha, por isso só a cor de realce se aplica.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>O que o mapa mede e mostra. O aspeto fica em {0}.</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Clássico é o mapa de sempre: caixas quadradas, a grelha, um nome com o tamanho por baixo. Moderno arredonda as caixas, dá a cada ficheiro o seu ícone e encolhe as etiquetas com a caixa, juntando o tamanho exato e a data quando há espaço.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>Clássico</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>Moderno</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Comparando com a verificação de {0}. Ela foi feita de outra forma ({1} vs {2}), então algumas diferenças se devem a isso, não ao disco.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Comparando com uma verificação de {0} de {1}; os nomes são correspondidos pasta por pasta.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>Comparação removida.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>{0:N0} linhas exportadas para {1} (um CSV básico: colunas fixas, mais opções em breve)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>Exportadas {0:N0} linhas para {1}</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · tabela de arquivos</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>{0:N0} itens, {1}, movidos para a Lixeira</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} movido para a Lixeira</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Parte do conteúdo não pôde ser lida</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Verifique a mesma unidade ou pasta duas vezes, ou abra uma verificação salva para comparar.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Espaço livre</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {1} de {2}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Amplie para ver estes itens</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (link físico, contado em outro lugar)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>arquivos</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>pastas</value></data>
   <data name="Group_Items" xml:space="preserve"><value>itens</value></data>
+  <data name="Group_More" xml:space="preserve"><value>Mais {0:N0}</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>Removível</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>Rede</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>Óptica</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>O que o título de uma pasta mostra.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>Centralizar nomes</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>Mostrar tamanhos</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>Mostrar datas</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>Mostrar número de arquivos</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} arquivos</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>Tudo (sem agrupamento)</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>Licença MIT</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Navegar</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Selecionar e agir</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>Exibição e arquivos</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>Mapa</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>Análises e janelas</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>Abrir o item selecionado</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>Teclas que o SpaceSharp usa</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>Esquema do teclado</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Desenhado para um teclado {0}; escolha outro se não for o seu.</value></data>

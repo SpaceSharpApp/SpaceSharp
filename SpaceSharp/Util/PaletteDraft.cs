@@ -198,6 +198,23 @@ public sealed class PaletteDraft
 
     // ------------------------------------------------------------------ generating
 
+    /// <summary>A fresh draft to start a new palette from: a random base hue at a sensible saturation and lightness, spread a random way,
+    /// so New palette never opens on the same colors twice.</summary>
+    /// <param name="dark">True for a palette meant for the dark theme.</param>
+    /// <returns>A draft with no name and twelve generated folder colors.</returns>
+    public static PaletteDraft Fresh(bool dark)
+    {
+        double hue = Random.Shared.NextDouble() * 360;
+        double saturation = 0.35 + Random.Shared.NextDouble() * 0.4;
+        double lightness = dark ? 0.42 + Random.Shared.NextDouble() * 0.16 : 0.5 + Random.Shared.NextDouble() * 0.16;
+        var spread = (PaletteSpread)Random.Shared.Next(Enum.GetValues<PaletteSpread>().Length);
+        return new PaletteDraft
+        {
+            Theme = dark ? PaletteTheme.Dark : PaletteTheme.Light,
+            Folders = Generate(Palette.FromHsl(hue, saturation, lightness), spread)
+        };
+    }
+
     /// <summary>Generates twelve folder colors from a base color and a spread.</summary>
     /// <param name="baseColor">The hue to build on; its saturation is clamped to 0.15..0.9 and its lightness to 0.3..0.7 first.</param>
     /// <param name="spread">How the hues are distributed around the base.</param>

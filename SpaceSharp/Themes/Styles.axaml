@@ -511,8 +511,14 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="{DynamicResource AccentPressed}" />
   </Style>
+  <!-- disabled (Checking…, You're up to date): still no box, just the dim text -->
   <Style Selector="Button.textlink:disabled">
-    <Setter Property="Opacity" Value="0.6" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="Button.textlink:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource TextDim}" />
   </Style>
 
   <Style Selector="Button.danger">
@@ -667,7 +673,8 @@
     <Setter Property="Opacity" Value="0.35" />
   </Style>
   <Style Selector="MenuItem.strong">
-    <Setter Property="Height" Value="44" />
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="Padding" Value="10,8" />
     <Setter Property="Background" Value="{DynamicResource Control}" />
   </Style>
   <Style Selector="MenuItem.danger">

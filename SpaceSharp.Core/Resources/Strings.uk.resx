@@ -134,6 +134,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>Залишає першу копію та видаляє {0:N0} вкладених нижче, починаючи з {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>Windows пропустив його (використовується або завеликий для кошика)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>шлях задовгий для кошика</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>кошик не прийняв це; щось усередині, ймовірно, відкрито в програмі</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>доступ заборонено</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>використовується іншою програмою</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>більше не існує</value></data>
@@ -158,7 +159,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>Не вдалося відкрити сканування</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>Не вдалося перезапустити</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>Експортувати до CSV</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>Відкрити збережене сканування</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>Не вдалося повторно сканувати</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>Зберегти сканування</value></data>
@@ -233,6 +233,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>Панорамувати в збільшеному вигляді</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>Панель найбільших файлів, папок і типів</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>Досягнення</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>Показати або сховати вільне місце</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>Стиль мапи: класичний або сучасний</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>Вільне місце показано</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>Вільне місце сховано</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>Стиль мапи: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>Властивості Windows для вибраного елемента</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>Сканувати повторно</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>Закрити сканування й повернутися на початковий екран</value></data>
@@ -289,20 +294,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc також скасовує</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>Усе, що не відповідає, затемнено на карті.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>Експортувати до CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>Тип файлу</value></data>
   <data name="Main_Files" xml:space="preserve"><value>Файли</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{0} з {1}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} від сканування</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>Пам'ять, яку SpaceSharp займає зараз, як її рахує Диспетчер завдань. Сканування тримає кожен файл у пам'яті; більшому диску потрібно більше.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>Фільтр</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>Відповідають фільтру</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>Параметри фільтра</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>Папки</value></data>
   <data name="Main_Home" xml:space="preserve"><value>Home</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>Переглянути</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>Інсталювати й перезапустити</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>Найбільші файли</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>Найбільші елементи</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>Карта всього диска за лічені секунди</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>Перемістити до Кошика</value></data>
@@ -317,7 +319,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>Закрити сканування</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>Перезапустити від імені адміністратора</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>Зберегти сканування як…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>Файл сканування</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>Сканувати папку</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>Вибрати всі відповідні файли (Ctrl+A), потім Del, щоб перемістити їх до Кошика</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>Вибрати все в цій папці</value></data>
@@ -325,30 +326,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>Параметри (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>Показати в Провіднику</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>Показувати лише цей тип файлів</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>Показати всю карту</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>Показати всю карту (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>SpaceSharp може читати таблицю файлів диска напряму замість обходу кожної папки. Для цього потрібні права адміністратора, тому програму доведеться один раз перезапустити. Папки та інші файлові системи в будь-якому разі скануються звичайним способом.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>Припинити порівняння</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>Тема</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>Ця папка</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>Папка верхнього рівня</value></data>
   <data name="Main_Types" xml:space="preserve"><value>Типи</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>На одну папку вгору</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>На одну папку вгору (Backspace / кнопка «Назад» миші)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Збільшити (коліщатко миші / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>Зберегти мапу як зображення</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Зменшити (коліщатко миші / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Збільшити до папки</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Вміст {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>Перемістити до Кошика</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>Перемістити елементи ({0:N0}) до Кошика</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>файли, замалі для показу</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>Групи на карті не можна переглянути: наблизьте й виберіть файл або папку</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>Вільне місце не можна переглянути</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>папка, файлів: {0:N0}</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>файл {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>файл</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>Переглянути</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>Переглянути елементи ({0:N0})</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>Експорт…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>Експорт</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>Експорт таблиці</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>Формат</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV, кома</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>Те, що читає більшість програм. Excel англійською.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV, крапка з комою</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>Excel там, де десятковий знак — кома, як в Україні.</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV, табуляція</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>Вставляється просто в таблицю; те саме кладе в буфер кнопка «Копіювати».</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>Стовпці</value></data>
+  <data name="Export_All" xml:space="preserve"><value>Усі</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>Рядки</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>Не більше</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>Усі ({0:N0})</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>Включно з папками</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>Рядок заголовків</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>Байти з роздільниками</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15 562 073 417. Вимкніть для чисел, які таблиця зможе підсумувати.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>Попередній перегляд</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>перші {0:N0} з {1:N0} рядків · спершу найбільші</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>Попередній перегляд закінчується тут · ще {0:N0} рядків у файлі</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · близько {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>Копіювати</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>Зберегти…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>Таблицю скопійовано: {0:N0} рядків</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} елементів · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>Елементи в {0}</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>Усе всередині {0}</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>Найбільші файли на диску</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>Збіги фільтра</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>Що змінилося від порівнюваного скану</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>Шлях</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>Ім'я</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>Папка</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>Тип</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>Розмір (байти)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>На диску (байти)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>Розмір</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>Частка скану</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>Змінено</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>Зміна</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>Ще</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Що тут змінилося</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>Виключити з майбутніх сканів</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Кожен файл чи папку з ім'ям «{0}» буде пропущено починаючи з наступного скану. Список у Налаштуваннях › Сканування › Виключити.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Виключити</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>«{0}» виключатиметься з майбутніх сканів</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>Знайти копії цього файлу</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>Вибрати всі *{0} у цій папці</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>Збільшити {0}</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} елементів</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} файлів</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} папок</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>змінено {0}</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{0} від {1}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>найбільший із {0:N0} *{1} тут</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>{0:N0}-й із {1:N0} *{2} тут</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>менше {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>Копій {0} не знайдено.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>Повторно сканувати {0}</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>Повторно сканувати цю папку</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>Вибрати все в {0}</value></data>
@@ -514,6 +570,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>Імена, які слід пропускати разом з усім умістом. Зіставляються з іменами файлів і папок, а не зі шляхами; * і ? — символи підстановки.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>Карта</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>Стиль мапи</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>Мапа</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>Фізичний задає кожному блоку розмір за зайнятим місцем на диску. Рівномірний лишає папки такими, але малює кожен файл у папці одного розміру, тож папка з тисячею дрібних файлів читається як тисяча файлів, а не як смужка. Клавіша: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>Фізичний</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>Рівномірно</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>Мапа: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>Фізична або рівномірна мапа</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>Стиль</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>Спочатку виберіть стиль. Нижче налаштування, яке один зі стилів не використовує, затемнене й позначене.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>Лише у стилі «Сучасний».</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>Лише у стилі «Класичний».</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>У стилі «Сучасний» між блоками проміжки замість сітки, тому діє лише колір виділення.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>Що мапа вимірює й показує. Її вигляд налаштовується на вкладці «{0}».</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>Класичний: мапа як завжди, квадратні блоки, сітка, ім'я з розміром під ним. Сучасний заокруглює блоки, дає кожному файлу його значок і зменшує підписи разом із блоком, додаючи точний розмір і дату, коли є місце.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>Класичний</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>Сучасний</value></data>
@@ -552,7 +620,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>Порівняння зі скануванням від {0}. Його зроблено іншим способом ({1} і {2}), тому частина відмінностей зумовлена цим, а не диском.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>Порівняння зі скануванням {0} від {1}; імена зіставляються папка за папкою.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>Порівняння скасовано.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>Експортовано рядків: {0:N0} до {1} (простий CSV: фіксовані стовпці, більше параметрів згодом)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>Експортовано {0:N0} рядків у {1}</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · таблиця файлів</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>Переміщено до Кошика елементів: {0:N0}, {1}</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} переміщено до Кошика</value></data>
@@ -578,6 +646,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>Частину вмісту не вдалося прочитати</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>Проскануйте той самий диск або папку двічі або відкрийте збережене сканування для порівняння.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>Вільне місце</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {1} від {2}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>Збільште, щоб побачити ці елементи</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (жорстке посилання, враховано в іншому місці)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -605,6 +674,7 @@
   <data name="Group_Files" xml:space="preserve"><value>файли</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>папки</value></data>
   <data name="Group_Items" xml:space="preserve"><value>елементи</value></data>
+  <data name="Group_More" xml:space="preserve"><value>Ще {0:N0}</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>Знімний</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>Мережевий</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>Оптичний</value></data>
@@ -657,6 +727,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>Що показує заголовок папки.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>Імена по центру</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>Показувати розміри</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>Показувати дати</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>Показувати кількість файлів</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>файлів: {0:N0}</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>Усе (без групування)</value></data>
@@ -684,7 +755,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>Ліцензія MIT</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>Навігація</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>Вибір і дії</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>Вигляд і файли</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>Мапа</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>Скани та вікна</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>Відкрити вибраний елемент</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>Клавіші SpaceSharp</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>Розкладка клавіатури</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>Намальовано для клавіатури {0}; виберіть іншу, якщо це не так.</value></data>

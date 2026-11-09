@@ -136,6 +136,7 @@
   <data name="Insights_DeleteRepeatsTip" xml:space="preserve"><value>يحتفظ بالنسخة الأولى ويحذف {0:N0} نسخة متداخلة تحتها، بدءًا من {1}.</value></data>
   <data name="Trash_Skipped" xml:space="preserve"><value>تخطّاه Windows (قيد الاستخدام أو أكبر من أن تستوعبه سلة المحذوفات)</value></data>
   <data name="Trash_TooLong" xml:space="preserve"><value>المسار أطول مما تسمح به سلة المحذوفات</value></data>
+  <data name="Trash_Refused" xml:space="preserve"><value>لم تقبلها سلة المحذوفات؛ على الأرجح شيء بداخلها مفتوح في برنامج</value></data>
   <data name="Trash_AccessDenied" xml:space="preserve"><value>الوصول مرفوض</value></data>
   <data name="Trash_InUse" xml:space="preserve"><value>قيد الاستخدام من برنامج آخر</value></data>
   <data name="Trash_Gone" xml:space="preserve"><value>لم يعد موجودًا</value></data>
@@ -160,7 +161,6 @@
   <data name="Dialog_CouldNotOpenScan" xml:space="preserve"><value>تعذر فتح الفحص</value></data>
   <data name="Dialog_CouldNotRestart" xml:space="preserve"><value>تعذرت إعادة التشغيل</value></data>
   <data name="Dialog_CsvFilter" xml:space="preserve"><value>CSV (*.csv)|*.csv</value></data>
-  <data name="Dialog_ExportCsv" xml:space="preserve"><value>تصدير إلى CSV</value></data>
   <data name="Dialog_OpenScan" xml:space="preserve"><value>فتح فحص محفوظ</value></data>
   <data name="Dialog_RescanFailed" xml:space="preserve"><value>فشلت إعادة الفحص</value></data>
   <data name="Dialog_SaveScan" xml:space="preserve"><value>حفظ الفحص</value></data>
@@ -235,6 +235,11 @@
   <data name="Key_Pan" xml:space="preserve"><value>التحريك أثناء التكبير</value></data>
   <data name="Key_Panel" xml:space="preserve"><value>لوحة أكبر الملفات والمجلدات والأنواع</value></data>
   <data name="Key_Achievements" xml:space="preserve"><value>الإنجازات</value></data>
+  <data name="Key_FreeSpace" xml:space="preserve"><value>إظهار المساحة الحرة أو إخفاؤها</value></data>
+  <data name="Key_MapStyle" xml:space="preserve"><value>نمط الخريطة الكلاسيكي أو الحديث</value></data>
+  <data name="Status_FreeSpaceShown" xml:space="preserve"><value>المساحة الحرة ظاهرة</value></data>
+  <data name="Status_FreeSpaceHidden" xml:space="preserve"><value>المساحة الحرة مخفية</value></data>
+  <data name="Status_MapStyle" xml:space="preserve"><value>نمط الخريطة: {0}</value></data>
   <data name="Key_Properties" xml:space="preserve"><value>خصائص Windows للعنصر المحدد</value></data>
   <data name="Key_Rescan" xml:space="preserve"><value>إعادة الفحص</value></data>
   <data name="Key_CloseScan" xml:space="preserve"><value>إغلاق الفحص والعودة إلى شاشة البدء</value></data>
@@ -291,20 +296,17 @@
   <data name="Main_Enter" xml:space="preserve"><value>Enter</value></data>
   <data name="Main_EscAlsoCancels" xml:space="preserve"><value>Esc يلغي أيضًا</value></data>
   <data name="Main_EverythingThatDoesnT" xml:space="preserve"><value>كل ما لا يطابق يُعتَّم على الخريطة.</value></data>
-  <data name="Main_ExportToCSV" xml:space="preserve"><value>تصدير إلى CSV</value></data>
   <data name="Main_FileType" xml:space="preserve"><value>نوع الملف</value></data>
   <data name="Main_Files" xml:space="preserve"><value>الملفات</value></data>
   <data name="Status_UsedOf" xml:space="preserve"><value>{0} من {1}</value></data>
   <data name="Status_ShareOfScan" xml:space="preserve"><value>{0} من الفحص</value></data>
   <data name="Status_MemoryTip" xml:space="preserve"><value>الذاكرة التي يستخدمها SpaceSharp الآن كما يحسبها مدير المهام. يحتفظ الفحص بكل ملف في الذاكرة؛ والقرص الأكبر يحتاج أكثر.</value></data>
   <data name="Main_Filter" xml:space="preserve"><value>تصفية</value></data>
-  <data name="Main_FilterMatches" xml:space="preserve"><value>نتائج التصفية</value></data>
   <data name="Main_FilterOptions" xml:space="preserve"><value>خيارات التصفية</value></data>
   <data name="Main_Folders" xml:space="preserve"><value>المجلدات</value></data>
   <data name="Main_Home" xml:space="preserve"><value>البداية</value></data>
   <data name="Main_Inspect" xml:space="preserve"><value>فحص</value></data>
   <data name="Main_InstallAndRestart" xml:space="preserve"><value>تثبيت وإعادة التشغيل</value></data>
-  <data name="Main_LargestFiles" xml:space="preserve"><value>أكبر الملفات</value></data>
   <data name="Main_LargestItems" xml:space="preserve"><value>أكبر العناصر</value></data>
   <data name="Main_MapAWholeDrive" xml:space="preserve"><value>ارسم خريطة قرص كامل في ثوانٍ</value></data>
   <data name="Main_MoveToRecycleBin" xml:space="preserve"><value>نقل إلى سلة المحذوفات</value></data>
@@ -319,7 +321,6 @@
   <data name="Main_CloseScan" xml:space="preserve"><value>إغلاق الفحص</value></data>
   <data name="Main_RestartAsAdministrator" xml:space="preserve"><value>إعادة التشغيل كمسؤول</value></data>
   <data name="Main_SaveScanAs" xml:space="preserve"><value>حفظ الفحص باسم…</value></data>
-  <data name="Main_ScanFile" xml:space="preserve"><value>ملف الفحص</value></data>
   <data name="Main_ScanFolder" xml:space="preserve"><value>فحص مجلد</value></data>
   <data name="Main_SelectEveryMatchingFile" xml:space="preserve"><value>حدد كل ملف مطابق (Ctrl+A)، ثم Del لنقلها إلى سلة المحذوفات</value></data>
   <data name="Main_SelectEverythingInThis" xml:space="preserve"><value>تحديد كل شيء في هذا المجلد</value></data>
@@ -327,30 +328,85 @@
   <data name="Main_SettingsCtrl" xml:space="preserve"><value>الإعدادات (Ctrl+,)</value></data>
   <data name="Main_ShowInExplorer" xml:space="preserve"><value>إظهار في مستكشف الملفات</value></data>
   <data name="Main_ShowOnlyThisFile" xml:space="preserve"><value>إظهار هذا النوع من الملفات فقط</value></data>
-  <data name="Main_ShowWholeMap" xml:space="preserve"><value>إظهار الخريطة كاملة</value></data>
   <data name="Main_ShowWholeMapHome" xml:space="preserve"><value>إظهار الخريطة كاملة (Home / Ctrl+0)</value></data>
   <data name="Main_SpaceSharpCanReadThe" xml:space="preserve"><value>يستطيع SpaceSharp قراءة جدول ملفات القرص مباشرة بدلًا من المرور على كل مجلد. يتطلب ذلك صلاحيات المسؤول، لذا يجب إعادة تشغيل التطبيق مرة واحدة. تُفحص المجلدات وأنظمة الملفات الأخرى بالطريقة العادية في كل الأحوال.</value></data>
   <data name="Main_StopComparing" xml:space="preserve"><value>إيقاف المقارنة</value></data>
   <data name="Main_Theme" xml:space="preserve"><value>السمة</value></data>
-  <data name="Main_ThisFolder" xml:space="preserve"><value>هذا المجلد</value></data>
   <data name="Main_TopFolder" xml:space="preserve"><value>المجلد الأعلى</value></data>
   <data name="Main_Types" xml:space="preserve"><value>الأنواع</value></data>
-  <data name="Main_UpOneFolder" xml:space="preserve"><value>مجلد واحد لأعلى</value></data>
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>مجلد واحد لأعلى (Backspace / زر الرجوع في الفأرة)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>تكبير (عجلة الفأرة / +)</value></data>
+  <data name="Main_SavePicture" xml:space="preserve"><value>حفظ الخريطة كصورة</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>تصغير (عجلة الفأرة / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>تكبير إلى المجلد</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>محتويات {0}</value></data>
   <data name="Menu_Delete" xml:space="preserve"><value>نقل إلى سلة المحذوفات</value></data>
   <data name="Menu_DeleteMany" xml:space="preserve"><value>نقل {0:N0} عنصر إلى سلة المحذوفات</value></data>
-  <data name="Menu_KindGroup" xml:space="preserve"><value>ملفات أصغر من أن تُعرض</value></data>
   <data name="Menu_InspectNoCluster" xml:space="preserve"><value>لا يمكن فحص التجمعات على الخريطة: كبّر واختر ملفًا أو مجلدًا</value></data>
   <data name="Menu_InspectNoFreeSpace" xml:space="preserve"><value>لا يمكن فحص المساحة الحرة</value></data>
-  <data name="Menu_KindFolder" xml:space="preserve"><value>مجلد، {0:N0} ملف</value></data>
-  <data name="Menu_KindFile" xml:space="preserve"><value>ملف {0}</value></data>
   <data name="Menu_KindFileNoExt" xml:space="preserve"><value>ملف</value></data>
   <data name="Menu_Inspect" xml:space="preserve"><value>فحص</value></data>
   <data name="Menu_InspectMany" xml:space="preserve"><value>فحص {0:N0} عنصر</value></data>
+  <data name="Menu_Export" xml:space="preserve"><value>تصدير…</value></data>
+  <data name="Export_Title" xml:space="preserve"><value>تصدير</value></data>
+  <data name="Export_Heading" xml:space="preserve"><value>تصدير جدول</value></data>
+  <data name="Export_Format" xml:space="preserve"><value>التنسيق</value></data>
+  <data name="Export_Comma" xml:space="preserve"><value>CSV، فاصلة</value></data>
+  <data name="Export_Comma_Desc" xml:space="preserve"><value>ما تقرؤه معظم الأدوات. Excel بالإنجليزية.</value></data>
+  <data name="Export_Semicolon" xml:space="preserve"><value>CSV، فاصلة منقوطة</value></data>
+  <data name="Export_Semicolon_Desc" xml:space="preserve"><value>Excel حيث علامة العشرية فاصلة، كما في النرويج.</value></data>
+  <data name="Export_Tab" xml:space="preserve"><value>TSV، جدولة</value></data>
+  <data name="Export_Tab_Desc" xml:space="preserve"><value>يُلصق مباشرة في جدول؛ وهو أيضاً ما يضعه زر النسخ في الحافظة.</value></data>
+  <data name="Export_Columns" xml:space="preserve"><value>الأعمدة</value></data>
+  <data name="Export_All" xml:space="preserve"><value>الكل</value></data>
+  <data name="Export_Rows" xml:space="preserve"><value>الصفوف</value></data>
+  <data name="Export_AtMost" xml:space="preserve"><value>على الأكثر</value></data>
+  <data name="Export_AllRows" xml:space="preserve"><value>الكل ({0:N0})</value></data>
+  <data name="Export_IncludeFolders" xml:space="preserve"><value>تضمين المجلدات</value></data>
+  <data name="Export_HeaderRow" xml:space="preserve"><value>صف العناوين</value></data>
+  <data name="Export_Separators" xml:space="preserve"><value>البايتات بفواصل</value></data>
+  <data name="Export_Separators_Desc" xml:space="preserve"><value>15,562,073,417. أوقفه للحصول على أرقام يمكن للجدول جمعها.</value></data>
+  <data name="Export_Preview" xml:space="preserve"><value>معاينة</value></data>
+  <data name="Export_PreviewCount" xml:space="preserve"><value>أول {0:N0} من {1:N0} صفاً · الأكبر أولاً</value></data>
+  <data name="Export_PreviewEnds" xml:space="preserve"><value>تنتهي المعاينة هنا · {0:N0} صفاً إضافياً في الملف</value></data>
+  <data name="Export_Encoding" xml:space="preserve"><value>UTF-8 · نحو {0}</value></data>
+  <data name="Export_Copy" xml:space="preserve"><value>نسخ</value></data>
+  <data name="Export_Save" xml:space="preserve"><value>حفظ…</value></data>
+  <data name="Export_Copied" xml:space="preserve"><value>تم نسخ الجدول: {0:N0} صفاً</value></data>
+  <data name="Export_Items" xml:space="preserve"><value>{0:N0} عنصر · {1}</value></data>
+  <data name="Export_Source_Folder" xml:space="preserve"><value>العناصر في {0}</value></data>
+  <data name="Export_Source_Under" xml:space="preserve"><value>كل ما تحت {0}</value></data>
+  <data name="Export_Source_Largest" xml:space="preserve"><value>أكبر الملفات على القرص</value></data>
+  <data name="Export_Source_Matches" xml:space="preserve"><value>نتائج عامل التصفية</value></data>
+  <data name="Export_Source_Changes" xml:space="preserve"><value>ما تغيّر منذ الفحص المقارن</value></data>
+  <data name="Col_Path" xml:space="preserve"><value>المسار</value></data>
+  <data name="Col_Name" xml:space="preserve"><value>الاسم</value></data>
+  <data name="Col_Folder" xml:space="preserve"><value>المجلد</value></data>
+  <data name="Col_Type" xml:space="preserve"><value>النوع</value></data>
+  <data name="Col_SizeBytes" xml:space="preserve"><value>الحجم (بايت)</value></data>
+  <data name="Col_AllocatedBytes" xml:space="preserve"><value>الحجم على القرص (بايت)</value></data>
+  <data name="Col_Size" xml:space="preserve"><value>الحجم</value></data>
+  <data name="Col_Share" xml:space="preserve"><value>الحصة من الفحص</value></data>
+  <data name="Col_Modified" xml:space="preserve"><value>تاريخ التعديل</value></data>
+  <data name="Col_Change" xml:space="preserve"><value>التغيير</value></data>
+  <data name="Menu_More" xml:space="preserve"><value>المزيد</value></data>
+  <data name="Menu_WhatChangedHere" xml:space="preserve"><value>ما الذي تغيّر هنا</value></data>
+  <data name="Menu_LeaveOut" xml:space="preserve"><value>استبعاد من الفحوصات القادمة</value></data>
+  <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>سيتم تخطي كل ملف أو مجلد باسم "{0}" بدءاً من الفحص التالي. القائمة في الإعدادات › الفحص › استبعاد.</value></data>
+  <data name="Menu_LeaveOutButton" xml:space="preserve"><value>استبعاد</value></data>
+  <data name="Status_LeftOut" xml:space="preserve"><value>سيُستبعد "{0}" من الفحوصات القادمة</value></data>
+  <data name="Menu_FindCopies" xml:space="preserve"><value>البحث عن نسخ هذا الملف</value></data>
+  <data name="Menu_SelectAllExt" xml:space="preserve"><value>تحديد كل *{0} في هذا المجلد</value></data>
+  <data name="Menu_ZoomToParent" xml:space="preserve"><value>تكبير {0}</value></data>
+  <data name="Menu_Items" xml:space="preserve"><value>{0:N0} عنصر</value></data>
+  <data name="Menu_Files" xml:space="preserve"><value>{0:N0} ملف</value></data>
+  <data name="Menu_Folders" xml:space="preserve"><value>{0:N0} مجلد</value></data>
+  <data name="Menu_Changed" xml:space="preserve"><value>تغيّر {0}</value></data>
+  <data name="Menu_ShareOf" xml:space="preserve"><value>{0} من {1}</value></data>
+  <data name="Menu_LargestOfExt" xml:space="preserve"><value>الأكبر بين {0:N0} *{1} هنا</value></data>
+  <data name="Menu_RankOfExt" xml:space="preserve"><value>الرقم {0:N0} من {1:N0} *{2} هنا</value></data>
+  <data name="Menu_UnderPercent" xml:space="preserve"><value>أقل من {0}</value></data>
+  <data name="Dup_NoCopiesOf" xml:space="preserve"><value>لم يُعثر على نسخ من {0}.</value></data>
   <data name="Menu_RescanName" xml:space="preserve"><value>إعادة فحص {0}</value></data>
   <data name="Menu_RescanThis" xml:space="preserve"><value>إعادة فحص هذا المجلد</value></data>
   <data name="Menu_SelectIn" xml:space="preserve"><value>تحديد كل شيء في {0}</value></data>
@@ -516,6 +572,18 @@
   <data name="Settings_LeaveOut_Desc" xml:space="preserve"><value>أسماء تُتخطى مع كل ما بداخلها. تُطابَق مع أسماء الملفات والمجلدات لا المسارات؛ * و? حرفا بدل.</value></data>
   <data name="Settings_Map" xml:space="preserve"><value>الخريطة</value></data>
   <data name="Settings_MapStyle" xml:space="preserve"><value>نمط الخريطة</value></data>
+  <data name="Settings_MapLayout" xml:space="preserve"><value>الخريطة</value></data>
+  <data name="Settings_MapLayout_Desc" xml:space="preserve"><value>الفيزيائي يحدد حجم كل صندوق بمساحة القرص التي يستخدمها. المنتظم يبقي المجلدات كذلك لكنه يرسم كل ملف في المجلد بالحجم نفسه، فيُقرأ مجلد فيه ألف ملف صغير كألف ملف لا كشريحة رفيعة. الاختصار: U.</value></data>
+  <data name="MapLayout_BySize" xml:space="preserve"><value>فيزيائي</value></data>
+  <data name="MapLayout_Uniform" xml:space="preserve"><value>منتظم</value></data>
+  <data name="Status_MapLayout" xml:space="preserve"><value>الخريطة: {0}</value></data>
+  <data name="Key_MapLayout" xml:space="preserve"><value>خريطة فيزيائية أو منتظمة</value></data>
+  <data name="Settings_Style" xml:space="preserve"><value>النمط</value></data>
+  <data name="Settings_Style_Desc" xml:space="preserve"><value>اختر النمط أولاً. في الأسفل، أي إعداد لا يستخدمه أحد النمطين يظهر باهتاً مع ملاحظة.</value></data>
+  <data name="Settings_ModernOnly" xml:space="preserve"><value>في النمط الحديث فقط.</value></data>
+  <data name="Settings_ClassicOnly" xml:space="preserve"><value>في النمط الكلاسيكي فقط.</value></data>
+  <data name="Settings_Grid_ModernNote" xml:space="preserve"><value>النمط الحديث يفصل الصناديق بفراغات بدل الشبكة، لذا لا يسري سوى لون التمييز.</value></data>
+  <data name="Settings_Map_Desc" xml:space="preserve"><value>ما تقيسه الخريطة وتعرضه. أما مظهرها ففي تبويب {0}.</value></data>
   <data name="Settings_MapStyle_Desc" xml:space="preserve"><value>الكلاسيكي هو الخريطة كما كانت دائمًا: مربعات حادة الزوايا والشبكة والاسم وتحته الحجم. الحديث يدوّر المربعات ويعطي كل ملف أيقونته ويصغّر التسميات مع المربع، مضيفًا الحجم الدقيق والتاريخ عند توفر المساحة.</value></data>
   <data name="MapStyle_Classic" xml:space="preserve"><value>كلاسيكي</value></data>
   <data name="MapStyle_Modern" xml:space="preserve"><value>حديث</value></data>
@@ -554,7 +622,7 @@
   <data name="Status_ComparingDifferentMethod" xml:space="preserve"><value>جارٍ المقارنة بفحص {0}. أُجري بطريقة مختلفة ({1} مقابل {2})، لذا بعض الفروق سببها ذلك لا القرص.</value></data>
   <data name="Status_ComparingOtherRoot" xml:space="preserve"><value>جارٍ المقارنة بفحص {0} من {1}؛ تُطابَق الأسماء مجلدًا بمجلد.</value></data>
   <data name="Status_ComparisonCleared" xml:space="preserve"><value>أُلغيت المقارنة.</value></data>
-  <data name="Status_Exported" xml:space="preserve"><value>صُدِّر {0:N0} صف إلى {1} (ملف CSV بسيط: أعمدة ثابتة، خيارات أكثر لاحقًا)</value></data>
+  <data name="Status_Exported" xml:space="preserve"><value>تم تصدير {0:N0} صفاً إلى {1}</value></data>
   <data name="Status_FileTableSuffix" xml:space="preserve"><value> · جدول الملفات</value></data>
   <data name="Status_MovedMany" xml:space="preserve"><value>نُقل {0:N0} عنصر، {1}، إلى سلة المحذوفات</value></data>
   <data name="Status_MovedOne" xml:space="preserve"><value>نُقل {0} إلى سلة المحذوفات</value></data>
@@ -580,6 +648,7 @@
   <data name="Tip_AccessDenied" xml:space="preserve"><value>تعذرت قراءة بعض المحتوى</value></data>
   <data name="Tip_ChangeModeNeedsBaseline" xml:space="preserve"><value>افحص القرص أو المجلد نفسه مرتين، أو افتح فحصًا محفوظًا للمقارنة به.</value></data>
   <data name="Tip_FreeSpace" xml:space="preserve"><value>المساحة المتاحة</value></data>
+  <data name="Free_Facts" xml:space="preserve"><value>{0} · {1} من {2}</value></data>
   <data name="Tip_HintGroup" xml:space="preserve"><value>كبِّر لرؤية هذه العناصر</value></data>
   <data name="Tip_SizeHardLink" xml:space="preserve"><value>{0} (رابط صلب، محسوب في مكان آخر)</value></data>
   <data name="Toggle_State" xml:space="preserve"><value>{0} {1}</value></data>
@@ -607,6 +676,7 @@
   <data name="Group_Files" xml:space="preserve"><value>ملفات</value></data>
   <data name="Group_Folders" xml:space="preserve"><value>مجلدات</value></data>
   <data name="Group_Items" xml:space="preserve"><value>عناصر</value></data>
+  <data name="Group_More" xml:space="preserve"><value>{0:N0} أخرى</value></data>
   <data name="Drive_Removable" xml:space="preserve"><value>قابل للإزالة</value></data>
   <data name="Drive_Network" xml:space="preserve"><value>شبكة</value></data>
   <data name="Drive_Optical" xml:space="preserve"><value>قرص ضوئي</value></data>
@@ -659,6 +729,7 @@
   <data name="Treemap_Folders_Desc" xml:space="preserve"><value>ما يعرضه عنوان المجلد.</value></data>
   <data name="Treemap_CenterNames" xml:space="preserve"><value>توسيط الأسماء</value></data>
   <data name="Treemap_ShowSizes" xml:space="preserve"><value>إظهار الأحجام</value></data>
+  <data name="Treemap_ShowDates" xml:space="preserve"><value>إظهار التواريخ</value></data>
   <data name="Treemap_ShowCounts" xml:space="preserve"><value>إظهار عدد الملفات</value></data>
   <data name="Group_FilesCount" xml:space="preserve"><value>{0:N0} ملف</value></data>
   <data name="Density_Everything" xml:space="preserve"><value>كل شيء (بلا تجميع)</value></data>
@@ -686,7 +757,9 @@
   <data name="About_SourceSub" xml:space="preserve"><value>رخصة MIT</value></data>
   <data name="Keys_Navigate" xml:space="preserve"><value>التنقل</value></data>
   <data name="Keys_Select" xml:space="preserve"><value>التحديد والإجراءات</value></data>
-  <data name="Keys_View" xml:space="preserve"><value>العرض والملفات</value></data>
+  <data name="Keys_Map" xml:space="preserve"><value>الخريطة</value></data>
+  <data name="Keys_Scans" xml:space="preserve"><value>الفحوصات والنوافذ</value></data>
+  <data name="Key_Open" xml:space="preserve"><value>فتح العنصر المحدد</value></data>
   <data name="Keys_Title" xml:space="preserve"><value>المفاتيح التي يستخدمها SpaceSharp</value></data>
   <data name="Keys_Layout" xml:space="preserve"><value>تخطيط لوحة المفاتيح</value></data>
   <data name="Keys_LayoutNote" xml:space="preserve"><value>مرسوم للوحة مفاتيح {0}؛ اختر تخطيطًا آخر إن كان خاطئًا.</value></data>

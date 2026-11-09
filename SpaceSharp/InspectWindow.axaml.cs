@@ -372,10 +372,10 @@ public partial class InspectWindow : Window
         return parts;
     }
 
-    /// <summary>A bold run in the normal text color.</summary>
+    /// <summary>A bold amber run, the way the old context lines marked their figures.</summary>
     /// <param name="text">The run's text.</param>
     /// <returns>The part.</returns>
-    private static RichText.Part Strong(string text) => new(text, "Text", null, true);
+    private static RichText.Part Strong(string text) => RichText.Accent(text);
 
     /// <summary>A whole number with the culture's thousands separators, as a bold run.</summary>
     /// <param name="value">The number.</param>

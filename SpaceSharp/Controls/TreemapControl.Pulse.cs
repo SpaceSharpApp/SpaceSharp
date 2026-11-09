@@ -58,8 +58,9 @@ public sealed partial class TreemapControl
             {
                 continue;
             }
-            dc.DrawRectangle(fill, null, selected.Bounds);
-            dc.DrawRectangle(null, ring, selected.Bounds.Inflate(spread));
+            double radius = FrameRadius(selected.Bounds);
+            dc.DrawRectangle(fill, null, new RoundedRect(selected.Bounds, radius));
+            dc.DrawRectangle(null, ring, new RoundedRect(selected.Bounds.Inflate(spread), radius > 0 ? radius + spread : 0));
         }
     }
 

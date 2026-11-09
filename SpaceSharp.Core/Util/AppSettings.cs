@@ -170,6 +170,20 @@ internal sealed class AppSettings
     public string MapFont { get; set; } = "Segoe UI Variable Text";
     /// <summary>"Classic" for square boxes and the grid, "Modern" for rounded boxes with file icons and labels that shrink with the box.</summary>
     public string MapStyle { get; set; } = "Modern";
+    /// <summary>"BySize" (Physical) for the treemap, "Uniform" for folders by size but every file in a folder drawn the same.</summary>
+    public string MapLayout { get; set; } = "BySize";
+    /// <summary>The Export window's last delimiter: "Comma", "Semicolon" or "Tab".</summary>
+    public string ExportDelimiter { get; set; } = "Comma";
+    /// <summary>The Export window's last columns, as the flags enum's names.</summary>
+    public string ExportColumns { get; set; } = "Path, Name, Type, SizeBytes, Size, Modified";
+    /// <summary>True keeps folders among the exported rows.</summary>
+    public bool ExportFolders { get; set; } = true;
+    /// <summary>True writes the column names as the first line.</summary>
+    public bool ExportHeader { get; set; } = true;
+    /// <summary>True groups the digits of the byte columns.</summary>
+    public bool ExportSeparators { get; set; } = true;
+    /// <summary>The most rows an export writes; 0 for all.</summary>
+    public int ExportLimit { get; set; }
     /// <summary>True draws each file's icon in the Modern map style and in Inspect; false leaves the icons out everywhere.</summary>
     public bool FileIcons { get; set; } = true;
     /// <summary>True writes sizes on the map as exact bytes ("534,312 bytes") instead of rounded units.</summary>
@@ -181,6 +195,8 @@ internal sealed class AppSettings
     public bool FileCenterNames { get; set; } = true;
     /// <summary>True writes the size under a file's name when the box has room.</summary>
     public bool FileShowSizes { get; set; } = true;
+    /// <summary>True adds the last-changed date to Modern file labels when there is room.</summary>
+    public bool FileShowDates { get; set; } = true;
     /// <summary>True centers folder titles; false left-aligns them.</summary>
     public bool FolderCenterNames
     {
@@ -264,10 +280,12 @@ internal sealed class AppSettings
         MapFont = defaults.MapFont;
         ResetShading();
         MapStyle = defaults.MapStyle;
+        MapLayout = defaults.MapLayout;
         FileIcons = defaults.FileIcons;
         SizesAsBytes = defaults.SizesAsBytes;
         FileCenterNames = defaults.FileCenterNames;
         FileShowSizes = defaults.FileShowSizes;
+        FileShowDates = defaults.FileShowDates;
         FolderCenterNames = defaults.FolderCenterNames;
         FolderShowSizes = defaults.FolderShowSizes;
         FolderShowCounts = defaults.FolderShowCounts;

@@ -54,6 +54,7 @@ public partial class MainWindow
     }
 
     private ScanComparison? _comparison;
+    private FsNode? _changesFocus;   // a folder to open the table at on the next refresh, from the map's menu
     private readonly ObservableCollection<ChangeRow> _changeRows = new();
     private ListBox _changeTable = null!;
     private TextBlock _changesTitle = null!, _changesThenNow = null!, _changesShrank = null!, _changesGrew = null!, _changesFooter = null!, _changesPickerText = null!;
@@ -208,7 +209,7 @@ public partial class MainWindow
         tools.Children.Add(left);
 
         var right = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 6 };
-        var exportButton = new Button { Content = Icons.WithText("Export", Strings.Get("Main_ExportToCSV"), 14), Classes = { "tool" }, Height = 28 };
+        var exportButton = new Button { Content = Icons.WithText("Export", Strings.Get("Menu_Export"), 14), Classes = { "tool" }, Height = 28 };
         exportButton.Click += (_, _) => ExportChanges();
         _changesShowButton = new Button { Content = Icons.WithText("Treemap", Strings.Get("Changes_ShowOnMap"), 14), Classes = { "tool" }, Height = 28, IsEnabled = false };
         _changesShowButton.Click += (_, _) => ShowSelectedChangeOnMap();
@@ -1064,7 +1065,58 @@ public partial class MainWindow
             _changeTable.SelectedItem = selectedAgain;
         }
 
+        if (_changesFocus is { } focus)
+        {
+            _changesFocus = null;
+            OpenChangesAt(focus, root);
+        }
+
         _changesFooter.Text = ChangesFooterText(root, measure);
+    }
+
+    /// <summary>Opens every folder on the way from the root to one folder and selects its row, so "What changed here" lands on it; a folder
+    /// hidden by the changes-only filter turns the filter off first.</summary>
+    /// <param name="folder">The folder to land on, inside the scan.</param>
+    /// <param name="root">The scan root.</param>
+    private void OpenChangesAt(FsNode folder, FsNode root)
+    {
+        var path = new List<FsNode>();
+        for (FsNode? step = folder; step is not null && !ReferenceEquals(step, root); step = step.Parent)
+        {
+            path.Add(step);
+        }
+        path.Reverse();
+
+        foreach (FsNode step in path)
+        {
+            int index = _changeRows.ToList().FindIndex(changeRow => ReferenceEquals(changeRow.Node, step) && !changeRow.IsMore);
+            if (index < 0)
+            {
+                if (_changesOnly)
+                {
+                    _changesOnly = false;
+                    _changesFocus = folder;
+                    RefreshChanges();
+                }
+                return;
+            }
+            ChangeRow row = _changeRows[index];
+            if (ReferenceEquals(step, folder))
+            {
+                _changeTable.SelectedItem = row;
+                _changeTable.ScrollIntoView(row);
+                return;
+            }
+            if (row.CanOpen && !row.Expanded)
+            {
+                row.Expanded = true;
+                InsertChangeRows(index + 1, row.Node!, row.Depth + 1, 0);
+                if (row.Chevron is not null)
+                {
+                    row.Chevron.Glyph = Icons.Get("ChevronDown");
+                }
+            }
+        }
     }
 
     /// <summary>The bars are scaled to the biggest top-level change, gone items included.</summary>
@@ -1226,24 +1278,5 @@ public partial class MainWindow
         menu.Items.Add(stopItem);
 
         menu.ShowAt(anchor);
-    }
-
-    /// <summary>Exports the changed files and folders, biggest change first; gone items have no node and are not in the file.</summary>
-    private void ExportChanges()
-    {
-        if (_root is null || !HasBaseline)
-        {
-            return;
-        }
-
-        SizeMeasure measure = Treemap.SizeMode;
-        FsNode root = _root;
-        IEnumerable<FsNode> changedNodes = root.DescendantDirectories()
-            .Where(directory => !ReferenceEquals(directory, root))
-            .Concat(root.DescendantFiles())
-            .Where(node => node.BaselineSize is null || node.ChangeFor(measure) != 0)
-            .OrderByDescending(node => Math.Abs(node.ChangeFor(measure)))
-            .Take(5000);
-        _ = ExportCsvAsync("changes", changedNodes);
     }
 }
