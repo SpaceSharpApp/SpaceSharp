@@ -24,7 +24,7 @@ For an NTFS drive, SpaceSharp asks for **administrator permission** through the 
 
 Say **No** and nothing breaks: SpaceSharp walks the folders instead, which takes longer, and the map draws itself as it goes. Folders, external drives and non-NTFS drives always use the walk.
 
-While a scan runs, a small card in the map's corner shows the stage, the file count, the current path and a clock (in hundredths of a second for the first ten seconds, since the file-table scan is often done by then). **Esc** cancels.
+While a scan runs, a small card in the map's corner shows the stage, the file count, the current path and a clock (in tenths of a second for the first minute). **Stop** on the card, or **Esc**, stops the scan and takes you back to the start page: what was read so far is dropped (it was only in memory, nothing is written until a scan finishes), and the scans you saved earlier are still in the recent list.
 
 ## What you see afterwards
 

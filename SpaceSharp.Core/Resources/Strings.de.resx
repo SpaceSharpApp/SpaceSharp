@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Einen Ordner nach oben (Rücktaste / Maus-Zurück)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Vergrößern (Mausrad / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>Karte als Bild speichern</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>Bild</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Verkleinern (Mausrad / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Auf Ordner zoomen</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Inhalt von {0}</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Auslassen</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>„{0}“ wird aus künftigen Scans ausgelassen</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>Kopien dieser Datei finden</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>Doppelte Dateien suchen</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>Duplikate in diesem Ordner suchen</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>Es wird nur in {0} gesucht</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>Alle *{0} in diesem Ordner auswählen</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>Auf {0} zoomen</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} Elemente</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} in den Papierkorb verschoben</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} Dateien · {3}. F5 scannt erneut.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Geöffnet: Scan vom</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>Scan wird geöffnet…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Der vorherige Scan wurde anders erstellt ({0} statt {1}) und wird daher nicht verglichen. Der nächste Scan derselben Art wird es.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Erneuter Scan abgebrochen</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} erneut gescannt · {1:N0} Dateien · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} wird erneut gescannt…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} gespeichert</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan abgebrochen</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan gestoppt</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} Dateien · {1:N0} Ordner · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} s</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>{0:N0} Elemente ausgewählt · {1} · {2:N0} Dateien    Entf verschiebt sie in den Papierkorb</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Derselbe sichere Satz, aufgehellt für helle Flächen</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Die Palette für das Design {0}. Jedes Design merkt sich seine eigene; die Karte wechselt mit dem Design.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · für das Design {1} gemacht</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Zwischen Karte, Einblicke und Änderungen wechseln</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Zwischen Karte, Einblicke, Statistik und Änderungen wechseln</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Nach Typ</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Gefahrlos löschbar</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Wann geändert</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Empty_Moving" xml:space="preserve"><value>Leere Ordner werden gelöscht…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} von {1:N0} Ordnern</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Doppelte Dateien</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>Dateien mit exakt gleichem Inhalt, egal wo sie liegen. Erst die Größe, dann die ersten Bytes, dann die ganze Datei, sodass nur wahrscheinliche Treffer gelesen werden.</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Dateien mit exakt gleichem Inhalt, egal wo sie liegen. Erst die Größe, dann Stichproben vom Anfang, aus der Mitte und vom Ende, dann die ganze Datei, sodass nur wahrscheinliche Treffer gelesen werden.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Dateien ignorieren unter</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>Duplikate suchen</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>Nach Größe gruppieren…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>Erste Bytes vergleichen: {0:N0} von {1:N0} · {2} gelesen</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Stichproben vergleichen: {0:N0} von {1:N0} · {2} gelesen</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Ganze Dateien lesen: {0:N0} von {1:N0} · {2} gelesen</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} Gruppen · {1:N0} zusätzliche Kopien · {2} könnten weg</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Keine Duplikate unter den Dateien über {0}.</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} weitere</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>diese {0:N0} sind {1} des Ordners</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>{0} des Ordners sind eine einzige Sache</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>Statistik</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>Der Scan in Zahlen: Größen, Arten, Alter und Dateiendungen</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>Statistik</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>Welchen Ordner die Zahlen abdecken</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>Ganzer Scan ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>Verglichen mit dem Scan vom {0}</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{0} seit {1}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} Ordner</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>Durchschnittliche Datei</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>Median {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>Größte Datei</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>Außer Reichweite</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>auf {0} belegt, nicht in diesem Scan</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} leer</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>Tiefster Ordner</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} Ebenen</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>Dateien nach Größe</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>Eine Zeile pro Verdopplung, gestapelt nach Art. Eine Zeile anklicken zeigt diese Dateien auf der Karte.</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>Die Marke zeigt, wo der Balken des verglichenen Scans endete; die farbige Spalte ist die Änderung seitdem.</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>Platz</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>Anzahl</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>verglichener Scan</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ gewachsen</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− geschrumpft</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>Nach Art</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>Eine Art anklicken zeigt ihre Dateien auf der Karte.</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>Arten</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>Nach Alter</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>Wann die Dateien zuletzt geändert wurden. Eine Zeile anklicken zeigt sie auf der Karte.</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>Heute</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>Diese Woche</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>Diesen Monat</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>Dieses Jahr</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 Jahre</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 Jahre</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>Älter</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>Einen Blick wert</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>Platz, der leicht zurückzugewinnen ist. Zeigen öffnet die Karte danach gefiltert.</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>Verschnitt</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>belegt über die Dateigrößen hinaus</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>Dateien unter 4 KB</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>{0} der Dateien, {1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>Leere Ordner</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>Dateien mit null Byte</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>Seit 2+ Jahren unberührt</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>{0} des Scans</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>Temporäres und Cache</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>was die Aufräumliste in Einblicke enthält</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>Die größten Dateien und Ordner im Bereich. Klicken Sie auf einen Eintrag, um ihn auf der Karte zu sehen.</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>suchen, um zu sehen, was die Kopien kosten</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>Neu erzeugbar</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>keine Projekte gefunden</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules, .git und Build-Ausgabe</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} Dateien mit null Byte</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>Dateitypen, Dateialter und die größten Dateien und Ordner stehen in der Statistik.</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>Statistik öffnen</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>Zeigen</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>Dateiendungen</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>Top {0} von {1:N0} nach Platz. Export speichert alle.</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>Endung</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>Art</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>Platz</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>Durchschnitt</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>Anteil</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>Änderung</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(ohne Endung)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>Zum hellen Design wechseln</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>Zum dunklen Design wechseln</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>Aus einem Bild…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>Ausgehen von</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>Farben</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>Schema</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>Triade</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>drei Farbtöne, je ein Drittel des Kreises auseinander</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>Tiefe und Dateien</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>Jede Ebene</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0} % heller</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0} % dunkler</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>gleiche Helligkeit</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>Wie der Ordner</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>Getönt {0} %</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>Getönt</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>Eigene Farben</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>Beheben</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>Erweitert: jede Ordner- und Dateitypfarbe, Hex-Eingabe, JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>Einfach: Farbton, Schema, Tiefe</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>eine je Ordner oberster Ebene, nach unten wiederholt; anklicken zum Bearbeiten</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>die Dateifarbe unter jeder Ordnerfarbe</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>folgen den Ordnern, bis eine gesetzt wird</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>Ausgewählt</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>auch {0}-Dateien</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>Datei exportieren…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>Ein Kästchen in der Vorschau anklicken wählt seine Farbe aus.</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>Änderungen erscheinen sofort in der Vorschau; gespeichert wird erst mit Speichern.</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>Das Bild konnte nicht gelesen werden.</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>Farbtöne aus {0} übernommen.</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>Bilder</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>Gespeichert: {0}</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>Stopp</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>Scan stoppen und zur Startseite zurückkehren; das bisher Gelesene wird verworfen (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>Scan-Karte</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Wo die Fortschrittskarte während eines Scans liegt.</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>Minikarte</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Solange hineingezoomt ist: ein kleines, schlichtes Bild der größten Ordner des Scans in einer Ecke der Karte, mit einem Feld an Ihrer Position. Klicken oder ziehen Sie darin, um den Ausschnitt zu verschieben. Oder Randmarkierungen: zwei schmale Balken an den Rändern der Karte, die nichts verdecken. Ein Rechtsklick auf das Bild blendet es aus.</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>Aus</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>Randmarkierungen</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>Minikarte ausblenden</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>Minikarte ausgeblendet. Einstellungen › Verhalten › Minikarte bringt sie zurück.</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>Unten rechts</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>Unten links</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>Oben rechts</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>Oben links</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>Mitte</value></data>
 </root>

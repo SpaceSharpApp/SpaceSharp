@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>На папку вверх (Backspace / кнопка «Назад» мыши)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Увеличить (колесо мыши / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>Сохранить карту как изображение</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>Снимок</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Уменьшить (колесо мыши / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Увеличить до папки</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Содержимое {0}</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Исключить</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>«{0}» будет исключаться из будущих сканов</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>Найти копии этого файла</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>Найти дубликаты файлов</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>Найти дубликаты в этой папке</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>Поиск только в {0}</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>Выбрать все *{0} в этой папке</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>Увеличить {0}</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} элементов</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} перемещено в корзину</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: файлов {2:N0} · {3}. F5 сканирует заново.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Открыто сканирование от</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>Открытие сканирования…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Предыдущее сканирование выполнено иначе ({0} и {1}), поэтому не сравнивается. Следующее сканирование того же вида будет сравнено.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Повторное сканирование отменено</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>Заново просканировано {0} · файлов {1:N0} · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>Повторное сканирование {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>Сохранено {0}</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>Сканирование отменено</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Сканирование остановлено</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>файлов: {0:N0} · папок: {1:N0} · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} с</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>Выбрано элементов: {0:N0} · {1} · файлов: {2:N0}    Del переместит их в корзину</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Тот же безопасный набор, осветлённый для светлых поверхностей</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Палитра для темы «{0}». Каждая тема помнит свою; карта переключается вместе с темой.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · для темы «{1}»</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Переключение между картой, Обзором и Изменениями</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Переключение между картой, Обзором, Статистикой и Изменениями</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>По типу</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Можно очистить</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Когда изменено</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Empty_Moving" xml:space="preserve"><value>Удаление пустых папок…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} из {1:N0} папок</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Файлы-дубликаты</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>Файлы с полностью одинаковым содержимым, где бы они ни лежали. Сначала размер, затем первые байты, затем весь файл, так что читаются только вероятные совпадения.</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Файлы с полностью одинаковым содержимым, где бы они ни лежали. Сначала размер, затем образцы из начала, середины и конца, затем весь файл, так что читаются только вероятные совпадения.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Пропускать файлы меньше</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>Найти дубликаты</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>Группировка по размеру…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>Сравнение первых байтов: {0:N0} из {1:N0} · прочитано {2}</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Сравнение образцов: {0:N0} из {1:N0} · прочитано {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Чтение файлов целиком: {0:N0} из {1:N0} · прочитано {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>Наборов: {0:N0} · лишних копий: {1:N0} · можно освободить {2}</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Среди файлов больше {0} дубликатов нет.</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Inspect_More" xml:space="preserve"><value>Ещё {0:N0}</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>эти {0:N0} составляют {1} папки</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>{0} папки — одна вещь</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>Статистика</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>Скан в цифрах: размеры, типы, возраст и расширения</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>Статистика</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>Какую папку охватывают цифры</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>Весь скан ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>По сравнению со сканом от {0}</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{0} с {1}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{0} из {1}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} папок</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>Средний файл</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>медиана {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>Самый большой файл</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>Вне досягаемости</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>занято на {0}, но не в этом скане</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} пустых</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{0} из {1}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>Самая глубокая папка</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} уровней</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>Файлы по размеру</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>Одна строка на удвоение, с разбивкой по типам. Щёлкните строку, чтобы увидеть эти файлы на карте.</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>Метка показывает, где кончалась полоса сравниваемого скана; цветной столбец показывает изменение с тех пор.</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>Место</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>Число</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>сравниваемый скан</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ выросло</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− уменьшилось</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>По типу</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>Щёлкните тип, чтобы увидеть его файлы на карте.</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>типов</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>По возрасту</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>Когда файлы менялись в последний раз. Щёлкните строку, чтобы увидеть их на карте.</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>Сегодня</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>На этой неделе</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>В этом месяце</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>В этом году</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 года</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 лет</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>Старше</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>Стоит взглянуть</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>Место, которое легко вернуть. «Показать» открывает карту с этим фильтром.</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>Потери на кластерах</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>выделено сверх размера файлов</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>Файлы меньше 4 КБ</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>{0} файлов, {1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>Пустые папки</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>Файлы нулевого размера</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>Не трогали 2+ года</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>{0} скана</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>Временные файлы и кэш</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>то, что содержит список очистки в Обзоре</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>Самые большие файлы и папки в области. Щелкните, чтобы увидеть на карте.</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>выполните поиск, чтобы узнать, сколько занимают копии</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>Можно восстановить</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>проекты не найдены</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules, .git и результаты сборки</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} файлов нулевого размера</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>Типы файлов, возраст файлов и самые большие файлы и папки находятся в разделе «Статистика».</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>Открыть статистику</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>Показать</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>Расширения</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>Первые {0} из {1:N0} по месту. Экспорт сохраняет все.</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>Расширение</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>Тип</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>Место</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>Среднее</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>Доля</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>Изменение</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(без расширения)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>Переключить на светлую тему</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>Переключить на тёмную тему</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>Из картинки…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>Начать с</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>Цвета</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>Схема</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>Триада</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>три оттенка через треть круга</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>Глубина и файлы</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>Каждый уровень</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0}% светлее</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0}% темнее</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>та же светлота</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>Как папка</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>Оттенок {0}%</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>С оттенком</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>Свои цвета</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>Исправить</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>Дополнительно: каждый цвет папки и типа файла, hex, JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>Просто: оттенок, схема, глубина</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>по одному на папку верхнего уровня, повторяются вглубь; щёлкните, чтобы изменить</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>цвет файлов под каждым цветом папки</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>следуют за папками, пока вы не зададите свой</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>Выбрано</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>а также файлы {0}</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>Экспорт файла…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>Щёлкните любой блок на предпросмотре, чтобы выбрать его цвет.</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>Изменения сразу видны на предпросмотре; ничего не сохраняется, пока вы не нажмёте «Сохранить».</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>Не удалось прочитать картинку.</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>Оттенки взяты из {0}.</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>Картинки</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>Сохранено: {0}</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>Стоп</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>Остановить сканирование и вернуться на стартовую страницу; прочитанное отбрасывается (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>Карточка сканирования</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Где лежит карточка хода во время сканирования.</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>Мини-карта</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>При увеличении: небольшое простое изображение самых больших папок сканирования в углу карты с рамкой там, где вы находитесь. Щелкните или перетащите в нем, чтобы переместиться. Или метки по краям: две тонкие полоски у краев карты, которые ничего не закрывают. Щелкните изображение правой кнопкой мыши, чтобы скрыть его.</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>Выкл.</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>Метки по краям</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>Скрыть мини-карту</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>Мини-карта скрыта. Вернуть ее можно в разделе Настройки › Поведение › Мини-карта.</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>Справа внизу</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>Слева внизу</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>Справа вверху</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>Слева вверху</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>По центру</value></data>
 </root>

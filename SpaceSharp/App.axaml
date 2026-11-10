@@ -71,6 +71,8 @@
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#2B3139" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#2B3139" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#F5B82E" />
+          <SolidColorBrush x:Key="ScrollThumb" Color="#3A414C" />
+          <SolidColorBrush x:Key="ScrollThumbHover" Color="#5A6270" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#F5B82E" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FFC94D" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#D99F1C" />
@@ -175,6 +177,8 @@
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPointerOver" Color="#E2E2E9" />
           <SolidColorBrush x:Key="ComboBoxItemBackgroundSelectedPressed" Color="#E2E2E9" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#F5B82E" />
+          <SolidColorBrush x:Key="ScrollThumb" Color="#C4C8D0" />
+          <SolidColorBrush x:Key="ScrollThumbHover" Color="#9AA0AA" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#F5B82E" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FFC94D" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#D99F1C" />

@@ -337,6 +337,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>مجلد واحد لأعلى (Backspace / زر الرجوع في الفأرة)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>تكبير (عجلة الفأرة / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>حفظ الخريطة كصورة</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>لقطة</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>تصغير (عجلة الفأرة / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>تكبير إلى المجلد</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>محتويات {0}</value></data>
@@ -396,6 +397,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>استبعاد</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>سيُستبعد "{0}" من الفحوصات القادمة</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>البحث عن نسخ هذا الملف</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>البحث عن الملفات المكررة</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>البحث عن المكررات في هذا المجلد</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>البحث فقط في {0}</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>تحديد كل *{0} في هذا المجلد</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>تكبير {0}</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} عنصر</value></data>
@@ -628,12 +632,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>نُقل {0} إلى سلة المحذوفات</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} ملف · {3}. F5 يعيد الفحص.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>فُتح الفحص من</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>جارٍ فتح الفحص…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>أُجري الفحص السابق بطريقة مختلفة ({0} مقابل {1})، لذا لا تتم المقارنة. سيُقارَن الفحص التالي من النوع نفسه.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>أُلغيت إعادة الفحص</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>أُعيد فحص {0} · {1:N0} ملف · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>جارٍ إعادة فحص {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>حُفظ {0}</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>أُلغي الفحص</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>أُوقف الفحص</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} ملف · {1:N0} مجلد · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} ث</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>{0:N0} عنصر محدد · {1} · {2:N0} ملف    Del ينقلها إلى سلة المحذوفات</value></data>
@@ -960,7 +965,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>المجموعة الآمنة نفسها، مُفتَّحة للأسطح الفاتحة</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>لوحة الألوان للسمة {0}. تتذكر كل سمة لوحتها؛ وتتبدل الخريطة مع السمة.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · مصممة للسمة {1}</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>التبديل بين الخريطة والرؤى والتغييرات</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>التبديل بين الخريطة والرؤى والإحصاءات والتغييرات</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>حسب النوع</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>آمن للتفريغ</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>وقت التغيير</value></data>
@@ -1181,11 +1186,11 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Empty_Moving" xml:space="preserve"><value>جارٍ حذف المجلدات الفارغة…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} من {1:N0} مجلدات</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>الملفات المكررة</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>ملفات بمحتوى متطابق تمامًا أينما كانت. الحجم أولًا، ثم البايتات الأولى، ثم الملف كاملًا، فلا يُقرأ إلا ما يُرجّح تطابقه.</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>ملفات بمحتوى متطابق تمامًا أينما كانت. الحجم أولًا، ثم عيّنات من البداية والوسط والنهاية، ثم الملف كاملًا، فلا يُقرأ إلا ما يُرجّح تطابقه.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>تجاهل الملفات الأصغر من</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>البحث عن المكررات</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>التجميع حسب الحجم…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>مقارنة البايتات الأولى: {0:N0} من {1:N0} · قُرئ {2}</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>مقارنة عيّنات: {0:N0} من {1:N0} · قُرئ {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>قراءة الملفات كاملة: {0:N0} من {1:N0} · قُرئ {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} مجموعات · {1:N0} نسخ زائدة · يمكن تحرير {2}</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>لا مكررات بين الملفات الأكبر من {0}.</value></data>
@@ -1336,4 +1341,119 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} أخرى</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>هذه الـ{0:N0} تشكّل {1} من المجلد</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>{0} من المجلد شيء واحد</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>الإحصاءات</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>الفحص بالأرقام: الأحجام والأنواع والأعمار والامتدادات</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>الإحصاءات</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>المجلد الذي تغطيه الأرقام</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>الفحص كاملاً ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>مقارنةً بفحص {0}</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{0} منذ {1}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{0} من {1}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} مجلدات</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>متوسط الملف</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>الوسيط {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>أكبر ملف</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>خارج المتناول</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>مستخدم على {0} وليس في هذا الفحص</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} فارغة</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{0} من {1}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>أعمق مجلد</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} مستويات</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>الملفات حسب الحجم</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>صف لكل مضاعفة، مكدّس حسب النوع. انقر صفاً لرؤية تلك الملفات على الخريطة.</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>العلامة حيث انتهى شريط الفحص المقارَن، والعمود الملوّن هو التغيّر منذ ذلك الحين.</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>المساحة</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>العدد</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>الفحص المقارَن</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ زاد</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− نقص</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>حسب النوع</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>انقر نوعاً لرؤية ملفاته على الخريطة.</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>أنواع</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>حسب العمر</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>آخر تغيير للملفات. انقر سطراً لرؤيتها على الخريطة.</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>اليوم</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>هذا الأسبوع</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>هذا الشهر</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>هذه السنة</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>سنة إلى سنتين</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>سنتان إلى خمس سنوات</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>أقدم</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>يستحق النظر</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>مساحة يسهل استعادتها. «إظهار» يفتح الخريطة مرشّحة إليها.</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>الفاقد العنقودي</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>مخصَّص فوق أحجام الملفات</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>ملفات أقل من 4 ك.ب</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>{0} من الملفات، {1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>مجلدات فارغة</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>ملفات بحجم صفر</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>لم تُمس منذ سنتين أو أكثر</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>{0} من الفحص</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>المؤقتة وذاكرة التخزين</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>ما تحويه قائمة التنظيف في الرؤى</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>أكبر الملفات والمجلدات في النطاق. انقر على أحدها لعرضه على الخريطة.</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>ابحث لمعرفة تكلفة النسخ</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>قابل لإعادة الإنشاء</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>لم يُعثر على مشاريع</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules و‎.git ومخرجات البناء</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} ملف بحجم صفر</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>أنواع الملفات وأعمارها وأكبر الملفات والمجلدات موجودة في الإحصاءات.</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>فتح الإحصاءات</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>إظهار</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>الامتدادات</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>أكبر {0} من {1:N0} حسب المساحة. التصدير يحفظها كلها.</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>الامتداد</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>النوع</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>المساحة</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>المتوسط</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>الحصة</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>التغيّر</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(بلا امتداد)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>التبديل إلى السمة الفاتحة</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>التبديل إلى السمة الداكنة</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>من صورة…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>ابدأ من</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>الألوان</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>المخطط</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>ثلاثي</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>ثلاث درجات تفصل بينها ثلث العجلة</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>العمق والملفات</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>كل مستوى</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0}٪ أفتح</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0}٪ أغمق</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>الإضاءة نفسها</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>مثل المجلد</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>مخفف {0}٪</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>مخفف</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>ألوان خاصة</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>أصلحها</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>متقدم: لون كل مجلد ونوع ملف، إدخال سداسي عشري، JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>بسيط: الدرجة، المخطط، العمق</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>واحد لكل مجلد رئيسي، يتكرر نزولاً؛ انقر أحدها لتحريره</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>لون الملفات تحت كل لون مجلد</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>تتبع المجلدات حتى تحدد واحداً</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>المحدد</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>وملفات {0} أيضاً</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>تصدير ملف…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>انقر أي مربع في المعاينة لتحديد لونه.</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>تظهر التغييرات في المعاينة فور إجرائها؛ لا يُحفظ شيء حتى تختار حفظ.</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>تعذّرت قراءة الصورة.</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>أُخذت الدرجات من {0}.</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>الصور</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>حُفظ {0}</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>إيقاف</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>إيقاف الفحص والعودة إلى صفحة البدء؛ يُهمل ما قُرئ حتى الآن (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>بطاقة الفحص</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>موضع بطاقة التقدم أثناء الفحص.</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>الخريطة المصغّرة</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>أثناء التكبير: صورة صغيرة مبسّطة لأكبر مجلدات الفحص في إحدى زوايا الخريطة، مع مربع يبيّن موضعك. انقر أو اسحب داخلها للتنقل. أو علامات الحواف: شريطان رفيعان على حافتي الخريطة لا يغطيان شيئًا. انقر بالزر الأيمن على الصورة لإخفائها.</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>إيقاف</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>علامات الحواف</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>إخفاء الخريطة المصغّرة</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>أُخفيت الخريطة المصغّرة. يمكن إعادتها من الإعدادات › السلوك › الخريطة المصغّرة.</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>أسفل اليمين</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>أسفل اليسار</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>أعلى اليمين</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>أعلى اليسار</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>الوسط</value></data>
 </root>

@@ -24,7 +24,7 @@ Files go to the Recycle Bin and the map updates to show the space as free. A fil
 
 ## Can it find duplicate files?
 
-Yes. The Duplicates row in Insights opens a finder that groups files by size, compares the first 16 KB, and only then hashes whole files, so it reads little and is quick on most drives. The sets come back biggest waste first; Keep the first of each or Keep the newest of each ticks the rest, and the delete goes to the Recycle Bin. Hard links are the same file and are not counted. [Duplicates and empty folders](Duplicates-and-Empty-Folders).
+Yes. The Duplicates row in Insights opens a finder that groups files by size, compares three small samples of each, and only then reads whole files, stopping at the first difference, so it reads little and is quick on most drives. The sets come back biggest waste first; Keep the first of each or Keep the newest of each ticks the rest, and the delete goes to the Recycle Bin. Hard links are the same file and are not counted. [Duplicates and empty folders](Duplicates-and-Empty-Folders).
 
 ## Explorer crashes on a folder and cannot delete it. Can SpaceSharp?
 

@@ -19,6 +19,7 @@ namespace SpaceSharp;
 /// <summary>The map's right-click menu and the actions behind it: Inspect, Open, Show in Explorer, Properties, Copy, Delete.</summary>
 public partial class MainWindow
 {
+    private MenuItem _menuDuplicatesIn = null!;
     private MenuItem _menuCompare = null!, _menuStopCompare = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuSelectType = null!, _menuCopies = null!, _menuChangedHere = null!, _menuLeaveOut = null!, _menuRescan = null!, _menuExport = null!, _menuMore = null!, _menuDelete = null!, _menuDeleteForever = null!;
 
     /// <summary>The right-click menu's width cap: the header's facts wrap inside it, and every row fits with its shortcut.</summary>
@@ -120,6 +121,7 @@ public partial class MainWindow
         _menuFilterType = Item("Main_ShowOnlyThisFile", null, FilterToSelectedType, "Filter");
         _menuSelectType = Item("Menu_SelectAllExt", null, SelectSameTypeInFolder, "Selection");
         _menuCopies = Item("Menu_FindCopies", null, () => _ = FindCopiesOfSelectedAsync(), "Composition");
+        _menuDuplicatesIn = Item("Menu_FindDuplicatesIn", null, () => _ = OpenDuplicatesAsync(Treemap.SelectedNode), "Composition");
         _menuChangedHere = Item("Menu_WhatChangedHere", null, ShowChangesForSelected, "Sync");
         _menuLeaveOut = Item("Menu_LeaveOut", null, () => _ = LeaveOutSelectedAsync(), "Close");
         _menuDelete = Item("Main_MoveToRecycleBin", "Delete", () => _ = DeleteNodes(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
@@ -181,6 +183,7 @@ public partial class MainWindow
         menu.Items.Add(_menuFilterType);
         menu.Items.Add(_menuSelectType);
         menu.Items.Add(_menuCopies);
+        menu.Items.Add(_menuDuplicatesIn);
         menu.Items.Add(_menuChangedHere);
         menu.Items.Add(_menuLeaveOut);
         menu.Items.Add(new Separator());
@@ -227,6 +230,8 @@ public partial class MainWindow
         }
         _menuCopies.IsVisible = file;
         _menuCopies.IsEnabled = !scanning;
+        _menuDuplicatesIn.IsVisible = folder && real;
+        _menuDuplicatesIn.IsEnabled = !scanning;
         _menuChangedHere.IsVisible = HasBaseline && home is not null && !home.IsGroup;
         _menuLeaveOut.IsVisible = real && one && node!.Parent is not null;
         _menuLeaveOut.IsEnabled = !scanning;
@@ -372,6 +377,25 @@ public partial class MainWindow
         Treemap.SelectMany(node.Parent.Children
             .Where(sibling => sibling.IsReal && !sibling.IsDirectory && string.Equals(sibling.Extension, node.Extension, StringComparison.OrdinalIgnoreCase))
             .ToList());
+    }
+
+    /// <summary>Opens the duplicate finder for the whole scan, or for one folder of it. Does nothing without a finished scan.</summary>
+    /// <param name="folder">A folder of the scan to search alone; null, the scan root or anything that is not a real folder searches the
+    /// whole scan.</param>
+    /// <returns>Completes when the window is closed.</returns>
+    private async Task OpenDuplicatesAsync(FsNode? folder = null)
+    {
+        if (_root is null || _scanCts is not null)
+        {
+            return;
+        }
+
+        if (folder is { IsReal: true, IsDirectory: true } && !ReferenceEquals(folder, _root))
+        {
+            await new DuplicatesWindow(this, folder, null).ShowDialog(this);
+            return;
+        }
+        await new DuplicatesWindow(this, _root, DuplicatesForScan).ShowDialog(this);
     }
 
     /// <summary>Opens Duplicates with the selected file picked out: the search runs at once, at the largest minimum the file clears.</summary>
@@ -682,10 +706,15 @@ public partial class MainWindow
     internal Task RemovedFromDiskAsync(List<FsNode> items, string statusText) => AfterDeletionAsync(items, Treemap.SizeMode, true, null, _ => statusText);
 
     /// <summary>Keeps a duplicate search's result for the Insights row, as long as the same scan is open.</summary>
-    /// <param name="root">The root that was searched.</param>
+    /// <param name="root">The root that was searched; a result for a folder inside the scan is not kept.</param>
     /// <param name="result">What was found.</param>
     internal void DuplicatesFound(FsNode root, DuplicateResult result)
     {
+        // A search of one folder says nothing about the scan as a whole, so it does not replace the scan's result.
+        if (!ReferenceEquals(root, _root))
+        {
+            return;
+        }
         _duplicateRoot = root;
         _duplicateResult = result;
         InvalidateInsights();

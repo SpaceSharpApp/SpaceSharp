@@ -4,7 +4,7 @@ The map is a treemap: a rectangle for the whole scan, divided into rectangles fo
 
 ## Frames and boxes
 
-- **Folders are frames** with a title bar: the name, the size and, if Settings › Treemap › Folders says so, the file count. Everything inside the frame is inside the folder.
+- **Folders are frames** with a title bar: the name at the left and, if Settings › Treemap › Folders says so, the size and file count at the right. A bar too narrow for both keeps the name. Everything inside the frame is inside the folder.
 - **Files are boxes** inside their folder's frame, with the name and size when there is room.
 - **Small things are grouped.** Below a certain size the map draws one box labeled "312 files" instead of 312 slivers. Settings › Treemap › Layout › Density sets how early that happens; Everything turns grouping off.
 - **Single-folder chains** such as `Users › you › AppData › Local` are drawn as one frame with a combined title unless Settings › Map › Merge single-folder chains is off.
@@ -17,9 +17,9 @@ Settings › Treemap › Style, or **M**, switches between **Modern** (rounded b
 
 ## Physical or Uniform
 
-<p align="center"><img src="images/uniform.png" width="900" alt="The Uniform map: every file in a folder the same size"></p>
+<p align="center"><img src="images/physical.png" width="900" alt="The Physical map: every box as large as its bytes"></p>
 
-Settings › Treemap › Layout › Map, or **U**. Physical is the treemap: every box as large as the disk space it uses. Uniform keeps folders that way but draws every file inside a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver next to one big one. The files together still take exactly the room their bytes earn; only the split among them is even.
+Settings › Treemap › Layout › Map, or **U**. Physical is the treemap: every box as large as the disk space it uses. Uniform keeps folders that way but draws every file inside a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver next to one big one. The files together still take exactly the room their bytes earn; only the split among them is even. Uniform is the default, since it keeps a map readable; switch to Physical when you want the biggest file to stand out at a glance.
 
 ## Free space
 

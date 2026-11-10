@@ -6,6 +6,7 @@
 - [Navigating](Navigating)
 - [The filter](The-Filter)
 - [Insights](Insights)
+- [Statistics](Statistics)
 - [Duplicates and empty folders](Duplicates-and-Empty-Folders)
 - [Changes](Changes)
 - [Exporting](Exporting)

@@ -381,10 +381,26 @@ public sealed partial class TreemapControl
             double headerTextWidth = header.Width - 8;
             if (headerTextWidth >= MinHeaderTextWidth)
             {
-                string headerText = HeaderText(item, headerTextWidth, "  ·  ");
+                // The name sits at the left, the size and count at the right; the facts go first when the name would be left with too
+                // little, so a narrow bar still names its folder.
+                double nameWidth = headerTextWidth;
+                string facts = HeaderFacts(node);
+                if (facts.Length > 0)
+                {
+                    double factsWidth = Math.Ceiling(MeasureWidth(facts, _normalFace)) + 1;
+                    double nameNeeded = Math.Min(MeasureWidth(node.Name), MinHeaderNameWidth);
+                    if (headerTextWidth - factsWidth - HeaderFactsGap >= nameNeeded)
+                    {
+                        nameWidth = headerTextWidth - factsWidth - HeaderFactsGap;
+                        DrawLabel(
+                            dc, facts, _normalFace, barText,
+                            headerLeft + 4 + headerTextWidth - factsWidth, inner.Y + _titlePadding, factsWidth, TextAlignment.Right);
+                    }
+                }
+                string headerText = HeaderText(item, nameWidth);
                 DrawLabel(
                     dc, headerText, _headerFace, barText,
-                    headerLeft + 4, inner.Y + _titlePadding, headerTextWidth, HeaderAlign);
+                    headerLeft + 4, inner.Y + _titlePadding, nameWidth, HeaderAlign);
             }
             return;
         }
@@ -424,13 +440,16 @@ public sealed partial class TreemapControl
     }
 
     private const double MinModernScale = 0.76;
+    private const double MaxModernGrowth = 1.9;   // how much larger than the label size a file label gets in a box that fills the window
     private const double MinGroupMemberSide = 9;
     private static readonly ImmutableSolidColorBrush GlyphBrushDark = new(Color.FromArgb(0xC8, 0x14, 0x14, 0x18));
     private static readonly ImmutableSolidColorBrush GlyphBrushLight = new(Color.FromArgb(0xD8, 0xFF, 0xFF, 0xFF));
     private static Geometry? _fileGlyph;
 
     /// <summary>The Modern file label: the file's icon, its name, and its size and date, centered, each line dropped as the box runs out of
-    /// room, and the text shrinking with the box down to three quarters of the label size.</summary>
+    /// room. The text follows the box: three quarters of the label size in a small box, the label size from 110 px, and growing again
+    /// from 220 px to almost twice the size in a box that fills the window, so zooming in makes the labels larger and zooming out
+    /// brings them back.</summary>
     /// <param name="dc">The map layer's drawing context.</param>
     /// <param name="item">The file box.</param>
     /// <param name="box">The box's visible rectangle.</param>
@@ -440,8 +459,9 @@ public sealed partial class TreemapControl
     {
         FsNode node = item.Node;
         double side = Math.Min(box.Width, box.Height);
-        // Full size at 110 px and up, shrinking to the floor by 40 px.
-        double scale = Math.Clamp(MinModernScale + (side - 40) / 70 * (1 - MinModernScale), MinModernScale, 1) * _labelScale;
+        // Full size at 110 px, shrinking to the floor by 40 px; past 220 px the label grows with the box, to MaxModernGrowth at 920 px.
+        double growth = Math.Clamp((side - 220) / 700, 0, 1);
+        double scale = Math.Clamp(MinModernScale + (side - 40) / 70 * (1 - MinModernScale), MinModernScale, 1) * (1 + growth * (MaxModernGrowth - 1)) * _labelScale;
         double fontSize = TextSize * scale;
         double lineHeight = Math.Round(15 * scale);
         if (box.Width < 30 * scale || box.Height < lineHeight + 2)
@@ -449,10 +469,11 @@ public sealed partial class TreemapControl
             return;
         }
 
-        double iconSize = Math.Clamp(Math.Round(side / 4), 16, FileIcons.PixelSize);
+        // The icon grows less than the text: Windows hands out 32 px icons, and past half again that size they blur.
+        double iconSize = Math.Clamp(Math.Round(side / 4), 16, Math.Round(FileIcons.PixelSize * (1 + growth * 0.5)));
         string sizeText = SizeLabel(node.SizeFor(_measure));
         string? dateText = node.IsGroup ? node.FileCount > 0 ? Strings.Format("Group_FilesCount", node.FileCount) : null
-            : _fileShowDates && node.LastWriteUtc > DateTime.MinValue ? node.LastWriteUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture) : null;
+            : _fileShowDates && node.LastWriteUtc > DateTime.MinValue ? node.LastWriteUtc.ToLocalTime().ToString("g", CultureInfo.CurrentCulture) : null;   // date and time to the minute
         string? facts = _fileShowSizes ? dateText is null ? sizeText : sizeText + "  ·  " + dateText : null;
 
         // What fits, from the top: icon, name, facts on one line, facts on two lines.
@@ -512,8 +533,7 @@ public sealed partial class TreemapControl
     /// <param name="text">The text.</param>
     /// <param name="fontSize">The font size in points, scale already applied.</param>
     /// <returns>Width in device-independent pixels.</returns>
-    private double MeasureWidth(string text, double fontSize) =>
-        new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, _normalFace, fontSize, TextBrush).WidthIncludingTrailingWhitespace;
+    private double MeasureWidth(string text, double fontSize) => TextWidth(text, _normalFace, fontSize);
 
     /// <summary>Draws the app's own file glyph where the platform has no icon to give: the Lucide file outline, stroked in the label's tone.</summary>
     /// <param name="dc">The map layer's drawing context.</param>
@@ -623,38 +643,52 @@ public sealed partial class TreemapControl
         return right <= left || bottom <= top ? Rects.Empty : new Rect(left, top, right - left, bottom - top);
     }
 
-    /// <summary>Builds the title bar text, dropping leading chain folders until it fits.</summary>
+    private const double MinHeaderNameWidth = 48;   // the least a title bar keeps for its name before the facts give way
+    private const double HeaderFactsGap = 12;       // between the name and the right-aligned facts
+
+    /// <summary>The right side of a title bar: the size and the file count that <see cref="FolderShowSizes"/> and <see
+    /// cref="FolderShowCounts"/> add, joined with "·".</summary>
+    /// <param name="node">The folder or group.</param>
+    /// <returns>"1.2 GB  ·  348 files", either part alone, or empty when both are off.</returns>
+    private string HeaderFacts(FsNode node)
+    {
+        string facts = _folderShowSizes ? SizeLabel(node.SizeFor(_measure)) : string.Empty;
+        if (_folderShowCounts && node.FileCount > 0)
+        {
+            string count = Strings.Format("Group_FilesCount", node.FileCount);
+            facts = facts.Length > 0 ? facts + "  ·  " + count : count;
+        }
+        return facts;
+    }
+
+    /// <summary>A folder's name as a title bar shows it: a drive root without its trailing separator ("C:" for "C:\").</summary>
+    /// <param name="node">Any folder.</param>
+    /// <returns>The name, trimmed of a trailing "\" or "/" unless that is all there is.</returns>
+    private static string BarName(FsNode node)
+    {
+        string trimmed = node.Name.TrimEnd('\\', '/');
+        return trimmed.Length > 0 ? trimmed : node.Name;
+    }
+
+    /// <summary>Builds the title bar name, dropping leading chain folders until it fits.</summary>
     /// <param name="item">The folder or group box; a collapsed chain lists its folders from <see cref="TreemapItem.ChainTop"/> down, joined
     /// with "›".</param>
     /// <param name="maxWidth">The room for text in device-independent pixels; only a chain is shortened to it, a plain name is returned
     /// whole and ellipsized when drawn.</param>
-    /// <param name="separator">Put between the name and the size and file count that <see cref="FolderShowSizes"/> and <see
-    /// cref="FolderShowCounts"/> add.</param>
     /// <returns>The text to draw; a chain too long for the width keeps at least its last folder, prefixed with "…".</returns>
-    private string HeaderText(TreemapItem item, double maxWidth, string separator = "  —  ")
+    private string HeaderText(TreemapItem item, double maxWidth)
     {
         FsNode node = item.Node;
-        string size = SizeLabel(node.SizeFor(_measure));
-        string Tail()
-        {
-            string tail = _folderShowSizes ? separator + size : string.Empty;
-            if (_folderShowCounts && node.FileCount > 0)
-            {
-                tail += separator + Strings.Format("Group_FilesCount", node.FileCount);
-            }
-            return tail;
-        }
-
         if (item.ChainTop is null)
         {
-            return $"{node.Name}{Tail()}";
+            return BarName(node);
         }
 
         // Collect the chain from the top folder down to this one.
         var names = new List<string>();
         for (FsNode? ancestor = node; ancestor is not null; ancestor = ancestor.Parent)
         {
-            names.Add(ancestor.Name);
+            names.Add(BarName(ancestor));
             if (ReferenceEquals(ancestor, item.ChainTop))
             {
                 break;
@@ -666,24 +700,54 @@ public sealed partial class TreemapControl
         for (int skip = 0; skip < names.Count; skip++)
         {
             string path = string.Join("  ›  ", names.Skip(skip));
-            string text = (skip > 0 ? "…  ›  " : "") + $"{path}{Tail()}";
+            string text = (skip > 0 ? "…  ›  " : "") + path;
             if (skip == names.Count - 1 || MeasureWidth(text) <= maxWidth)
             {
                 return text;
             }
         }
 
-        return $"{node.Name}{Tail()}";
+        return BarName(node);
     }
 
     private TextAlignment HeaderAlign => _folderCenterNames ? TextAlignment.Center : TextAlignment.Left;
 
     /// <summary>The width a title bar text would take at the current label scale.</summary>
     /// <param name="text">The candidate title text.</param>
+    /// <param name="face">The typeface it is drawn in; the semibold title face when not given.</param>
     /// <returns>Width in device-independent pixels, trailing spaces included.</returns>
-    private double MeasureWidth(string text) =>
-        new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
-            _headerFace, TextSize * _labelScale, TextBrush).WidthIncludingTrailingWhitespace;
+    private double MeasureWidth(string text, Typeface? face = null) => TextWidth(text, face ?? _headerFace, TextSize * _labelScale);
+
+    private const int MaxCachedTexts = 40000;   // both caches start over past this; a map shows far fewer labels at once
+
+    /// <summary>Measured line widths by text, typeface and font size. Shaping a line is the costly part of drawing the map, and a moving
+    /// map draws the same lines every frame.</summary>
+    private readonly Dictionary<(string Text, Typeface Face, double Size), double> _textWidths = new();
+
+    /// <summary>Shaped label lines ready to draw, with the halo outline when one was needed; the width is 0 for a line that fits whole.</summary>
+    private readonly Dictionary<(string Text, Typeface Face, double Size, IBrush Brush, double Width), (FormattedText Line, Geometry? Halo)> _texts = new();
+
+    /// <summary>The width of one line of text, measured once per text, typeface and size.</summary>
+    /// <param name="text">The text.</param>
+    /// <param name="face">The typeface it is drawn in.</param>
+    /// <param name="fontSize">The font size in points, scale already applied.</param>
+    /// <returns>Width in device-independent pixels, trailing spaces included.</returns>
+    private double TextWidth(string text, Typeface face, double fontSize)
+    {
+        (string, Typeface, double) key = (text, face, fontSize);
+        if (_textWidths.TryGetValue(key, out double width))
+        {
+            return width;
+        }
+
+        if (_textWidths.Count >= MaxCachedTexts)
+        {
+            _textWidths.Clear();
+        }
+        width = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, fontSize, TextBrush).WidthIncludingTrailingWhitespace;
+        _textWidths[key] = width;
+        return width;
+    }
 
     /// <summary>Draws one line of label text, ellipsized to the width, with the optional halo behind it.</summary>
     /// <param name="dc">The map layer's drawing context.</param>
@@ -703,28 +767,63 @@ public sealed partial class TreemapControl
             return;
         }
 
-        var formatted = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight,
-            face, size * _labelScale, brush)
+        // The shaped line is kept and only its place changes, so a map in motion does not shape every label again each frame: the
+        // font size goes in quarter points, a line that fits is aligned here instead of by the text layout, and a line that needs
+        // its ellipsis is shaped for the width in 4 px steps.
+        double fontSize = Math.Round(size * _labelScale * 4) / 4;
+        double fullWidth = TextWidth(text, face, fontSize);
+        bool fits = fullWidth <= maxWidth;
+        double trimWidth = fits ? 0 : Math.Max(8, Math.Floor(maxWidth / 4) * 4);
+        (string, Typeface, double, IBrush, double) key = (text, face, fontSize, brush, trimWidth);
+        if (!_texts.TryGetValue(key, out (FormattedText Line, Geometry? Halo) cached))
         {
-            MaxTextWidth = maxWidth,
-            MaxLineCount = 1,
-            Trimming = TextTrimming.CharacterEllipsis,
-            TextAlignment = alignment
-        };
-        var origin = new Point(x, y);
+            if (_texts.Count >= MaxCachedTexts)
+            {
+                _texts.Clear();
+            }
+            var line = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, face, fontSize, brush)
+            {
+                MaxLineCount = 1
+            };
+            if (!fits)
+            {
+                line.MaxTextWidth = trimWidth;
+                line.Trimming = TextTrimming.CharacterEllipsis;
+            }
+            cached = (line, null);
+            _texts[key] = cached;
+        }
+
+        double left = x;
+        if (fits && alignment == TextAlignment.Center)
+        {
+            left += (maxWidth - fullWidth) / 2;
+        }
+        else if (fits && alignment == TextAlignment.Right)
+        {
+            left += maxWidth - fullWidth;
+        }
+        var origin = new Point(Math.Round(left), y);
 
         if (_labelHalo)
         {
-            // The halo takes the opposite tone of the text so it reads on any fill.
-            Color textColor = ColorOf(brush);
-            bool darkText = 0.299 * textColor.R + 0.587 * textColor.G + 0.114 * textColor.B < 128;
-            Geometry? geometry = formatted.BuildGeometry(origin);
-            if (geometry is not null)
+            // The halo takes the opposite tone of the text so it reads on any fill; its outline is built once, at the origin.
+            if (cached.Halo is null)
             {
-                dc.DrawGeometry(null, darkText ? LightHaloPen : DarkHaloPen, geometry);
+                cached = (cached.Line, cached.Line.BuildGeometry(default));
+                _texts[key] = cached;
+            }
+            if (cached.Halo is not null)
+            {
+                Color textColor = ColorOf(brush);
+                bool darkText = 0.299 * textColor.R + 0.587 * textColor.G + 0.114 * textColor.B < 128;
+                using (dc.PushTransform(Matrix.CreateTranslation(origin.X, origin.Y)))
+                {
+                    dc.DrawGeometry(null, darkText ? LightHaloPen : DarkHaloPen, cached.Halo);
+                }
             }
         }
-        dc.DrawText(formatted, origin);
+        dc.DrawText(cached.Line, origin);
     }
 
     private static readonly IBrush DimText = new ImmutableSolidColorBrush(Color.FromArgb(0x70, 0x80, 0x80, 0x88));

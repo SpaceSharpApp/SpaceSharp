@@ -4,13 +4,20 @@ Two rows in [Insights](Insights) open a window of their own: **Duplicates** find
 
 ## Duplicates
 
-**Find duplicates…** on the Duplicates row opens the finder. Pick a minimum size and press **Find duplicates**.
+There are four ways into the finder:
 
-**How it searches.** Files are grouped by size first, since only a size shared by two or more files can hold a duplicate. The files that share a size have their first 16 KB hashed, which splits most groups apart. Only the files that still match are hashed in full (SHA-256). So on most drives very little is read, and the reads run on several threads at once because opening a file costs more than reading its start. Hard links are the same file and are not counted; a file the search cannot read is left out of its set.
+- **Ctrl+D** anywhere in the window.
+- The **Duplicates** tile at the top of Insights, or **Find duplicates…** on the Duplicates row under it.
+- Right-click a folder on the map, **Find duplicates in this folder**: the search covers that folder alone, and the window says which. Its result does not replace the whole scan's in Insights.
+- Right-click a file, **Find copies of this file**: the search runs at once and picks out that file's set.
+
+Pick a minimum size and press **Find duplicates**.
+
+**How it searches.** Files are grouped by size first, since only a size shared by two or more files can hold a duplicate. The files that share a size have three samples hashed: the first, middle and last 16 KB. That splits nearly every group apart, including files that only start alike, such as archives and game data with a common header. Only the files that still match are read in full (SHA-256), and big ones are read side by side a few megabytes at a time: a file is dropped the moment its contents so far match no other, so only true copies are read to the end. On most drives very little is read, and the reads run on several threads at once. Hard links are the same file and are not counted. A file the search cannot read, or whose size is no longer what the scan recorded, is left out of its set; rescan to include it.
 
 **The minimum size.** 64 KB, 1 MB (the default), 10 MB, 100 MB or 1 GB. Tiny files are many and rarely worth the time; raise the limit on a slow drive, lower it when you are hunting small things.
 
-**While it runs.** A progress bar and a line that says which stage it is in (grouping by size, comparing the first bytes, reading whole files), how many files are done and how much has been read. **Cancel** stops it between files.
+**While it runs.** A progress bar and a line that says which stage it is in (grouping by size, comparing samples, reading whole files), how many files are done and how much has been read. **Cancel** stops it between files.
 
 **The result.** Sets sorted by what deleting the extra copies would free, each with its copies, their folders and ages, and the hash in the tooltip of the size. Nothing is ticked to start with:
 

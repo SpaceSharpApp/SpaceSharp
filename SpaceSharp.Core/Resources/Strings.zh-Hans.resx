@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>上一级文件夹 (Backspace / 鼠标后退键)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>放大 (鼠标滚轮 / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>将地图保存为图片</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>图片</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>缩小 (鼠标滚轮 / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>缩放到文件夹</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} 的内容</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>排除</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>“{0}”将从以后的扫描中排除</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>查找此文件的副本</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>查找重复文件</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>在此文件夹中查找重复项</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>仅在 {0} 中搜索</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>选择此文件夹中所有 *{0}</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>缩放到 {0}</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} 项</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>已将 {0} 移至回收站</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}：{2:N0} 个文件 · {3}。按 F5 重新扫描。</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>已打开扫描，来自</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>正在打开扫描…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>上次扫描的方式不同（{0} 与 {1}），因此不进行比较。下次同类扫描将会比较。</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>已取消重新扫描</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>已重新扫描 {0} · {1:N0} 个文件 · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>正在重新扫描 {0}…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>已保存 {0}</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>已取消扫描</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>扫描已停止</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} 个文件 · {1:N0} 个文件夹 · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} 秒</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>已选择 {0:N0} 个项目 · {1} · {2:N0} 个文件    按 Del 移至回收站</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>同一安全配色，为浅色表面提亮</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}主题的配色。每个主题各自记住自己的配色；地图随主题切换。</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · 为{1}主题设计</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图、洞察和变更之间切换</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图、洞察、统计和变更之间切换</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>按类型</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>可安全清理</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>更改时间</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Empty_Moving" xml:space="preserve"><value>正在删除空文件夹…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} 个文件夹</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>重复文件</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>内容完全相同的文件，无论位于何处。先比大小，再比开头字节，最后比整个文件，因此只读取可能匹配的文件。</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>内容完全相同的文件，无论位于何处。先比大小，再比开头、中间和结尾的采样，最后比整个文件，因此只读取可能匹配的文件。</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>忽略小于以下大小的文件</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>查找重复</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>按大小分组…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>比较开头字节：{0:N0} / {1:N0} · 已读 {2}</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>比较采样：{0:N0} / {1:N0} · 已读 {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>读取整个文件：{0:N0} / {1:N0} · 已读 {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 组 · {1:N0} 个多余副本 · 可释放 {2}</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>大于 {0} 的文件中没有重复。</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Inspect_More" xml:space="preserve"><value>还有 {0:N0} 个</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>这 {0:N0} 项占文件夹的 {1}</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>文件夹的 {0} 是单个项目</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>统计</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>用数字看扫描：大小、种类、年龄和扩展名</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>统计</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>数字覆盖的文件夹</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>整个扫描 ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>与 {0} 的扫描相比</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>自 {1} 起 {0}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{1} 中的 {0}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} 个文件夹</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>平均文件</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>中位数 {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>最大文件</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>无法触及</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>{0} 上已使用，但不在此次扫描中</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} 个为空</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{1} 中的 {0}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>最深的文件夹</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} 层</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>按大小的文件</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>每翻一倍一行，按种类堆叠。点击一行即可在地图上查看这些文件。</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>标记是对比扫描的条形结束处，彩色列是此后的变化。</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>空间</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>数量</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>对比扫描</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ 增长</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− 缩减</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>按种类</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>点击一个种类即可在地图上查看其文件。</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>种</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>按年龄</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>文件最后一次更改的时间。点击一行即可在地图上查看。</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>今天</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>本周</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>本月</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 年</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 年</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>更早</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>值得一看</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>容易收回的空间。“显示”会打开按此筛选的地图。</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>簇浪费</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>超出文件大小的分配</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>小于 4 KB 的文件</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>占文件的 {0}，{1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>空文件夹</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>零字节文件</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>2 年以上未动</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>占扫描的 {0}</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>临时文件和缓存</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>洞察中清理列表所含的内容</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>范围内最大的文件和文件夹。单击其中一项可在地图上查看。</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>搜索后可查看副本占用的空间</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>可重新生成</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>未找到项目</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules、.git 和生成输出</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} 个零字节文件</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>文件类型、文件时间以及最大的文件和文件夹都在“统计”中。</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>打开统计</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>显示</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>扩展名</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>按空间排名前 {0} 个（共 {1:N0} 个）。导出会保存全部。</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>扩展名</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>种类</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>空间</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>平均</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>占比</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>变化</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>（无扩展名）</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>切换到浅色主题</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>切换到深色主题</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>来自图片…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>起点</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>颜色</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>配色</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>三色</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>色环上相隔三分之一的三个色相</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>层级与文件</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>每一层</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0}% 更亮</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0}% 更暗</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>相同亮度</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>与文件夹相同</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>淡化 {0}%</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>淡化</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>单独颜色</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>修正</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>高级：每个文件夹和文件类型的颜色、十六进制输入、JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>简单：色相、配色、层级</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>每个顶层文件夹一种，向下循环；点击可编辑</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>每种文件夹颜色下的文件颜色</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>在你设定之前跟随文件夹</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>已选</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>也用于 {0} 文件</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>导出文件…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>点击预览中的任意方块即可选中其颜色。</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>更改会立即显示在预览中；选择保存之前不会保存任何内容。</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>无法读取该图片。</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>已从 {0} 提取色相。</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>图片</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>已保存 {0}</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>停止扫描并返回起始页；已读取的内容将被丢弃 (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>扫描卡片</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>扫描时进度卡片所在的位置。</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>小地图</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>放大时显示：在地图一角用简洁的色块画出扫描中最大的文件夹，并用方框标出当前位置。在其中单击或拖动即可移动。也可选择边缘标记：地图边缘的两条细条，不遮挡任何内容。右键单击该图可将其隐藏。</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>关闭</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>边缘标记</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>隐藏小地图</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>小地图已隐藏。可在“设置 › 行为 › 小地图”中重新打开。</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>右下</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>左下</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>右上</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>左上</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>居中</value></data>
 </root>

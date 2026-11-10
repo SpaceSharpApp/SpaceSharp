@@ -38,6 +38,7 @@
     <StreamGeometry x:Key="Icon.Reset">M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5</StreamGeometry>
     <StreamGeometry x:Key="Icon.Add">M5 12h14 M12 5v14</StreamGeometry>
     <StreamGeometry x:Key="Icon.Picture">M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z M21 15l-3.09-3.09a2 2 0 0 0-2.82 0L6 21</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Camera">M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z M9 13a3 3 0 1 0 6 0a3 3 0 1 0-6 0Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Warning">M21.73 18 l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3 M12 9v4 M12 17h.01</StreamGeometry>
     <StreamGeometry x:Key="Icon.Share">M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z M21.21 15.89A10 10 0 1 1 8 2.83</StreamGeometry>
     <StreamGeometry x:Key="Icon.Composition">M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12 M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17</StreamGeometry>
@@ -70,5 +71,6 @@
     <StreamGeometry x:Key="Icon.Disc">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M10,12 A2,2 0 1 0 14,12 A2,2 0 1 0 10,12 Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Ssd">M5,4 h14 a2,2 0 0 1 2,2 v12 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 Z M13 8l-3.5 4.5H14L10.5 17</StreamGeometry>
     <StreamGeometry x:Key="Icon.Treemap">M5,3 h14 a2,2 0 0 1 2,2 v14 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-14 a2,2 0 0 1 2,-2 Z M3 12h11 M14 3v18 M14 15h7</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Statistics">M4 20V10 M10 20V4 M16 20v-7 M22 20H2</StreamGeometry>
     <StreamGeometry x:Key="Icon.UsbStick">M4,7 h9 a2,2 0 0 1 2,2 v6 a2,2 0 0 1 -2,2 h-9 a2,2 0 0 1 -2,-2 v-6 a2,2 0 0 1 2,-2 Z M15 10h5v4h-5 M17 12h1</StreamGeometry>
 </ResourceDictionary>

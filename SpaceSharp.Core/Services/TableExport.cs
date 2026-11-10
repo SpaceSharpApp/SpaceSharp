@@ -147,6 +147,31 @@ public static class TableExport
         return table.ToString();
     }
 
+    /// <summary>Builds any table as text: a header and rows of ready-made cells, quoted as the node export quotes them.</summary>
+    /// <param name="delimiter">The field separator.</param>
+    /// <param name="header">The column names; null writes no header line.</param>
+    /// <param name="rows">The rows, each one cell per column.</param>
+    /// <returns>The whole table, lines ending in the platform's newline.</returns>
+    public static string RenderCells(ExportDelimiter delimiter, IReadOnlyList<string>? header, IEnumerable<IReadOnlyList<string>> rows)
+    {
+        char separator = delimiter switch
+        {
+            ExportDelimiter.Semicolon => ';',
+            ExportDelimiter.Tab => '\t',
+            _ => ','
+        };
+        var table = new StringBuilder();
+        if (header is not null)
+        {
+            table.AppendLine(string.Join(separator, header.Select(cell => Field(cell, separator))));
+        }
+        foreach (IReadOnlyList<string> row in rows)
+        {
+            table.AppendLine(string.Join(separator, row.Select(cell => Field(cell, separator))));
+        }
+        return table.ToString();
+    }
+
     /// <summary>One cell's text.</summary>
     /// <param name="node">The row's node.</param>
     /// <param name="column">The column.</param>

@@ -62,17 +62,19 @@ public partial class MainWindow : Window
 
         Treemap.FocusChanged += (_, _) => UpdateNavigation();
         Treemap.ZoomChanged += (_, _) => UpdateZoomControls();
+        BuildMinimap();
         Treemap.HoveredNodeChanged += (_, node) => ShowStatus(node);
         WireTooltip();
         Treemap.SelectionChanged += (_, node) => ShowStatus(node ?? Treemap.HoveredNode);
         Treemap.NodeActivated += (_, node) => Treemap.FocusOn(node);
         _progressTimer.Tick += (_, _) => UpdateProgress();
+        _liveTimer.Tick += (_, _) => DrawLiveMap();
         _filterTimer.Tick += (_, _) => { _filterTimer.Stop(); ApplyFilter(); };
         _memoryTimer.Tick += (_, _) => UpdateMemory();
         _memoryTimer.Start();
         Treemap.ContextMenu = BuildMenu();
         ApplyView();
-        ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
+        ShowThemeButton();
 
         HookResizeHandles();
         HookAchievements();
@@ -251,10 +253,11 @@ public partial class MainWindow : Window
     private void Build()
     {
         _building = true;
-        Title = $"SpaceSharp {AppInfo.Version}";
+        UpdateTitle();
         ScanFolderButton.Content = Icons.WithText("ScanFolder", Strings.Get("Main_ScanFolder"));
         MapViewButton.Content = Icons.WithText("Treemap", Strings.Get("Main_ViewMap"));
         InsightsButton.Content = Icons.WithText("Info", Strings.Get("Main_ViewInsights"));
+        StatisticsButton.Content = Icons.WithText("Statistics", Strings.Get("Main_ViewStatistics"));
         ChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_ViewChanges"));
         ToolTip.SetTip(RescanButton, Strings.Get("Main_RescanThisFolder"));
         ToolTip.SetTip(CloseScanButton, Strings.Get("Main_CloseScan") + " (Ctrl+W)");
@@ -262,9 +265,9 @@ public partial class MainWindow : Window
         ToolTip.SetTip(HomeButton, Strings.Get("Main_ShowWholeMapHome"));
         ToolTip.SetTip(PanelButton, Strings.Get("Main_DrivesAndLargestItems"));
         ToolTip.SetTip(ZoomInButton, Strings.Get("Main_ZoomInMouseWheel"));
+        PictureButton.Content = Icons.WithText("Camera", Strings.Get("Main_Snapshot"));
         ToolTip.SetTip(PictureButton, Strings.Get("Main_SavePicture"));
         ToolTip.SetTip(ZoomOutButton, Strings.Get("Main_ZoomOutMouseWheel"));
-        ToolTip.SetTip(ThemeButton, Strings.Get("Main_Theme"));
         ToolTip.SetTip(SettingsButton, Strings.Get("Main_SettingsCtrl"));
         ToolTip.SetTip(AboutButton, Strings.Get("About_AboutSpaceSharp"));
         ColorLabel.Text = Strings.Get("Main_ColorBy");
@@ -274,7 +277,8 @@ public partial class MainWindow : Window
         ScanSizeLabel.Text = Strings.Get("Scan_FoundSoFar");
         ScanRateLabel.Text = Strings.Get("Scan_FilesPerSecond");
         ScanElapsedLabel.Text = Strings.Get("Scan_Elapsed");
-        ToolTip.SetTip(CancelButton, Strings.Get("Main_Cancel") + " · " + Strings.Get("Main_EscAlsoCancels"));
+        CancelButton.Content = Icons.WithText("Close", Strings.Get("Scan_Stop"), 13);
+        ToolTip.SetTip(CancelButton, Strings.Get("Scan_StopTip"));
         StageFindText.Text = Strings.Get("Scan_StageFind");
         StageBuildText.Text = Strings.Get("Scan_StageBuild");
         StageDrawText.Text = Strings.Get("Scan_StageDraw");
@@ -298,6 +302,7 @@ public partial class MainWindow : Window
         RefreshTopList();   // hides the section until a scan loads
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
+        ToolTip.SetTip(StatisticsButton, Strings.Get("Main_ViewStatisticsTip"));
         ToolTip.SetTip(ChangesButton, Strings.Get("Main_ViewChangesTip"));
 
         FillPalettes();
@@ -345,6 +350,7 @@ public partial class MainWindow : Window
         bool showViewText = stage < 2;
         MapViewButton.Content = showViewText ? Icons.WithText("Treemap", Strings.Get("Main_ViewMap")) : Icons.Make("Treemap", 15);
         InsightsButton.Content = showViewText ? Icons.WithText("Info", Strings.Get("Main_ViewInsights")) : Icons.Make("Info", 15);
+        StatisticsButton.Content = showViewText ? Icons.WithText("Statistics", Strings.Get("Main_ViewStatistics")) : Icons.Make("Statistics", 15);
         ChangesButton.Content = showViewText ? Icons.WithText("Sync", Strings.Get("Main_ViewChanges")) : Icons.Make("Sync", 15);
 
         if (_paletteName is not null)
@@ -394,6 +400,7 @@ public partial class MainWindow : Window
     /// <summary>Re-reads every setting that shows on screen after the Settings window changed one: palettes, toolbar, map look, free space, lists and views.</summary>
     public void ApplySettings()
     {
+        UpdateMinimap();
         _building = true;
         FillPalettes();
         _building = false;
@@ -405,7 +412,7 @@ public partial class MainWindow : Window
         RefreshTopList();
         RefreshInsights();
         RefreshChanges();
-        ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Moon" : "Sun");
+        ShowThemeButton();
         if (_dimDepth > 0)
         {
             DimOverlay.Opacity = Math.Clamp(_settings.DialogDim, 0, 90) / 100.0;
@@ -529,7 +536,7 @@ public partial class MainWindow : Window
         map.Padding = settings.Padding;
         map.FontFamilyName = settings.MapFont;
         map.Style = Enum.TryParse<MapStyle>(settings.MapStyle, out MapStyle style) ? style : MapStyle.Modern;
-        map.Layout = Enum.TryParse<MapLayout>(settings.MapLayout, out MapLayout layout) ? layout : MapLayout.BySize;
+        map.Layout = Enum.TryParse<MapLayout>(settings.MapLayout, out MapLayout layout) ? layout : MapLayout.Uniform;
         map.SizesAsBytes = settings.SizesAsBytes;
         map.ShowFileIcons = settings.FileIcons;
         map.FileCenterNames = settings.FileCenterNames;
@@ -571,6 +578,27 @@ public partial class MainWindow : Window
         CloseScanButton.IsEnabled = !scanning && _root is not null;
         BuildCrumbs();
         UpdateZoomControls();
+        UpdateTitle();
+    }
+
+    /// <summary>The theme button's icon and tip name what a click gives you: the sun and "light" in the dark theme, the moon and "dark" in the light one.</summary>
+    private void ShowThemeButton()
+    {
+        ThemeIcon.Glyph = Icons.Get(App.IsDark ? "Sun" : "Moon");
+        ToolTip.SetTip(ThemeButton, Strings.Get(App.IsDark ? "Main_ThemeToLight" : "Main_ThemeToDark"));
+    }
+
+    /// <summary>The window title: the focused folder's path before the app name and version ("C: - SpaceSharp 2.9.0"), or the app alone without a map.</summary>
+    private void UpdateTitle()
+    {
+        string app = $"SpaceSharp {AppInfo.Version}";
+        string? path = Treemap.FocusedFolder?.FullPath;
+        if (!string.IsNullOrEmpty(path))
+        {
+            string trimmed = path.TrimEnd('\\', '/');   // "C:\" reads as "C:"
+            path = trimmed.Length > 0 ? trimmed : path;
+        }
+        Title = string.IsNullOrEmpty(path) ? app : $"{path} - {app}";
     }
 
     /// <summary>The zoom label ("75%" below 1, "3×" above) and the zoom in, out and home buttons; all disabled without a map or during a scan.</summary>
@@ -1202,6 +1230,10 @@ public partial class MainWindow : Window
                 break;
             case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Control):
                 FocusFilter();
+                e.Handled = true;
+                break;
+            case Key.D when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus:
+                _ = OpenDuplicatesAsync();
                 e.Handled = true;
                 break;
             case Key.A when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus:

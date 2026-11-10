@@ -27,7 +27,7 @@ $files = [ordered]@{
     none = "screenshot.png"; start = "shot-start.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; menu = "shot-menu.png"; settings = "shot-settings.png"; about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
     duplicates = "shot-duplicates.png"
-    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"; "wiki-free-space" = "free-space.png"; "wiki-uniform" = "uniform.png"; "wiki-classic" = "classic.png"
+    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"; "wiki-free-space" = "free-space.png"; "wiki-physical" = "physical.png"; "wiki-classic" = "classic.png"
     "wiki-rail" = "filter-rail.png"; "wiki-filtered" = "filtered.png"; "wiki-palette-picker" = "palette-picker.png"; "wiki-shortcuts" = "shortcuts.png"
     "wiki-changes-everything" = "changes-everything.png"; "wiki-inspect-selection" = "inspect-selection.png"
     "wiki-palettes" = "palettes.png"; "wiki-palette-editor" = "palette-editor.png"
@@ -35,7 +35,7 @@ $files = [ordered]@{
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"
     "wiki-rtl" = "rtl.png"
     "wiki-achievements" = "achievements.png"; "wiki-achievement-toast" = "achievement-toast.png"
-    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"; "wiki-export" = "export.png"
+    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"; "wiki-export" = "export.png"; statistics = "shot-statistics.png"
 }
 if ($Scenes.Count -eq 0) { $Scenes = @($files.Keys) }
 

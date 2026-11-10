@@ -11,6 +11,7 @@
 - [Navigating](Navigating): zoom, pan, the path row, the side panel
 - [The filter](The-Filter): plain words, the drawer, quick filters, Select matches
 - [Insights](Insights): the numbers behind the map, row by row, and Safe to clear
+- [Statistics](Statistics): the scan as a report: files by size, kind and age, the biggest extensions, what is worth a look
 - [Duplicates and empty folders](Duplicates-and-Empty-Folders): files kept twice, folders with nothing in them
 - [Changes](Changes): what grew, shrank, appeared and disappeared since the last scan
 - [Inspect](Inspect): one item in depth
@@ -37,21 +38,19 @@
 - [Architecture](Architecture)
 - [Translating](Translating)
 
-## New in 2.7
+## New in 2.9
 
-- **Every delete follows the same rules now.** The map's Move to Recycle Bin and Delete permanently run with a progress panel and a Stop button; a selection that touches Windows, Program Files, ProgramData, AppData or a game folder gets a red note that says so and always asks; the duplicates window never ticks a program-folder copy by itself; emptying the Recycle Bin asks with the size ([Cleaning up](Cleaning-Up)).
-- **Delete questions you can read**: a row per item with its name, folder and size, largest first, the rest behind "Show the other n".
-- **The live map stops flickering**: boxes that were already there no longer fade in again as the walk finds more.
-- **Five new achievements**, twenty-six in all, and a **Gold theme** for whoever collects every one ([Achievements](Achievements), [Palettes and looks](Palettes-and-Looks#looks)).
-- **Inspect rewritten** as a wider window: a card of sentences about the folder over tables for where the space is, by type, by age and the largest files ([Inspect](Inspect)); the start screen's last-scan card has a strip of the drive's largest folders along its foot ([Saved scans](Saved-Scans-and-the-Start-Screen)).
-- Show on a Safe to clear place flashes the selection on the map; rounded corners fixed on the Files / Folders / Types switch and the achievement cards.
+- **A Statistics view**: the scan as a report, SpaceMonger style and then some: files by size class stacked by kind, kinds, ages, the biggest extensions, and the space that is easy to get back, every figure a click back to the map, with deltas against the compared scan ([Statistics](Statistics)).
+- **The palette editor rebuilt** around a few decisions: hue, saturation, lightness, a scheme, a step per level and how files are tinted, with a readability guard that fixes itself, Random, From a picture and Start from any palette; the preview is live and clickable, and the color-by-color grids live under Advanced ([Custom palettes](Custom-Palettes)).
+- **The map**: title bars with the name left and the facts right, Uniform as the default, live loading that keeps up with the walk, the folder in the window title, slim scrollbars, and a theme button that shows what a click gives you.
 
-## New in 2.6
+## New in 2.8
 
-- **Insights rebuilt** as one column of rows that open one at a time, with eight new rows: games, media, developer leftovers, Downloads, hard links, small and empty, deep and long, duplicates ([Insights](Insights)).
-- A **duplicate finder** that compares file contents, and an **empty folder** list that by default only offers folders that are plainly yours ([Duplicates and empty folders](Duplicates-and-Empty-Folders)).
-- **Delete permanently** for the folders Explorer crashes on ([Cleaning up](Cleaning-Up#deleting-what-explorer-cannot)).
-- **Achievements**, twenty-one of them then, twenty-six since 2.7 ([Achievements](Achievements)).
-- A compare that no longer invents change between two scans a minute apart, a start screen that says what to do first, drive tiles tinted by kind, hard links counted once by default, 987 file types.
+- **A Modern map style**, now the default: rounded boxes with a gap around each, Windows' icon for each kind of file, labels that shrink with the box and add the size and date when there is room. Classic, the map as it was, is one setting or the **M** key away ([Reading the map](Reading-the-Map#two-styles)).
+- **A Uniform map** beside the Physical one: folders keep their share, every file in a folder is drawn the same size (**U**) ([Reading the map](Reading-the-Map#physical-or-uniform)).
+- **Export** is a window: pick the rows, CSV or TSV, the columns, a row limit, and see the file before you save it, or copy it straight to a spreadsheet ([Exporting](Exporting)).
+- **The right-click menu redone**: the item's facts and its share up top, only the rows that apply, the long tail under More, and new rows for selecting all files of a type, finding copies of a file, opening Changes at a folder and leaving a folder out of future scans ([Navigating](Navigating#the-right-click-menu)).
+- **Free space** as a quiet panel with a ring for the free share (**G** shows or hides it), sizes as exact bytes, a date toggle, and a Snapshot button that saves the map as a picture ([Navigating](Navigating#saving-the-map-as-a-picture)).
+- Settings › Treemap sorted by style, the shortcuts window regrouped, a crash in the autosave fixed, and a Recycle Bin report that names the file in use instead of calling a folder too long.
 
-2.6.1 and 2.6.2 made the empty folder list safe and fast: Settings › Behavior › **Hide unsafe empty folders** (on by default), a direct delete instead of the Recycle Bin, progress with a Stop button, and Select safe. The scanning card's clock now shows hundredths. The [changelog](https://github.com/SpaceSharpApp/SpaceSharp/blob/main/CHANGELOG.md) has all of it.
+Earlier releases are in the [changelog](https://github.com/SpaceSharpApp/SpaceSharp/blob/main/CHANGELOG.md).

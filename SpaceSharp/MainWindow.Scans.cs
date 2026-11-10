@@ -228,14 +228,17 @@ public partial class MainWindow
         return picked.Count > 0 ? picked[0].TryGetLocalPath() : null;
     }
 
-    /// <summary>Loads a scan file off the UI thread and shows it, with a dialog when it cannot be read; nothing while a scan runs.</summary>
+    /// <summary>Loads a scan file off the UI thread and shows it, with a card saying so while it loads and a dialog when it cannot be
+    /// read; nothing while a scan runs or another scan is being opened.</summary>
     /// <param name="scanFilePath">A scan file, from the picker or the command line.</param>
     private async Task OpenScanFileAsync(string scanFilePath)
     {
-        if (_scanCts is not null)
+        if (_scanCts is not null || _opening)
         {
             return;
         }
+        string? problem = null;
+        ShowOpening(true);
         try
         {
             (FsNode root, ScanFileInfo info) = await Task.Run(() => ScanFile.Load(scanFilePath));
@@ -243,7 +246,57 @@ public partial class MainWindow
         }
         catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
         {
-            await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
+            problem = ex.Message;
+        }
+        finally
+        {
+            ShowOpening(false);
+        }
+        if (problem is not null)
+        {
+            await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), problem);
+        }
+    }
+
+    private Border? _openBusy;   // the card over the window while a saved scan is read
+    private bool _opening;
+
+    /// <summary>Shows or hides the card that says a saved scan is being opened. Reading a big scan takes seconds, and without the card
+    /// the window looks frozen after the click.</summary>
+    /// <param name="on">True shows the card and a wait cursor and refuses a second open; false puts things back.</param>
+    private void ShowOpening(bool on)
+    {
+        if (_openBusy is null)
+        {
+            var text = new TextBlock { Text = Strings.Get("Scan_Opening"), FontSize = 13.5, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap };
+            var bar = new ProgressBar { IsIndeterminate = true, Height = 6, Minimum = 0, Maximum = 1, Margin = new Thickness(0, 12, 0, 0) };
+            var stack = new StackPanel();
+            stack.Children.Add(text);
+            stack.Children.Add(bar);
+            _openBusy = new Border
+            {
+                Child = stack,
+                Width = 360,
+                Padding = new Thickness(18, 16, 18, 16),
+                CornerRadius = new CornerRadius(12),
+                BorderThickness = new Thickness(1),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 12, Blur = 40, Color = Color.FromArgb(0x99, 0, 0, 0) }),
+                ZIndex = 50,
+                IsVisible = false
+            };
+            _openBusy.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+            _openBusy.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+            MapHost.Children.Add(_openBusy);
+        }
+
+        _opening = on;
+        _openBusy.IsVisible = on;
+        Cursor = on ? new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Wait) : null;
+        if (on)
+        {
+            StatusText.Text = Strings.Get("Scan_Opening");
         }
     }
 
@@ -973,15 +1026,7 @@ public partial class MainWindow
             LoadMock(info.RootPath);
             return;
         }
-        try
-        {
-            (FsNode root, ScanFileInfo loaded) = await Task.Run(() => ScanFile.Load(info.Path));
-            ShowLoadedScan(root, loaded, null, null, Strings.Get("Status_OpenedVerb"));
-        }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
-        {
-            await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
-        }
+        await OpenScanFileAsync(info.Path);
     }
 
     /// <summary>The drive usage ring, or an icon for folders and missing drives.</summary>

@@ -181,8 +181,9 @@ public sealed class FolderWalker
             Interlocked.Increment(ref _denied);
         }
 
-        // The direct files are all in and will not change; the folder itself follows when it finishes.
-        if (Live is { } live && depth <= LiveTree.MaxDepth)
+        // The direct files are all in and will not change; the folder itself follows when it finishes. Below the depth limit the
+        // files are only counted, into the ancestor at the limit.
+        if (Live is { } live)
         {
             live.RecordFiles(Relative(directory.FullName), depth, node.Children);
         }
@@ -204,7 +205,7 @@ public sealed class FolderWalker
         node.Children.AddRange(subNodes);
         node.FinishDirectory();
 
-        if (Live is { } liveAfterWalk && depth <= LiveTree.MaxDepth)
+        if (Live is { } liveAfterWalk)
         {
             liveAfterWalk.RecordFinished(Relative(directory.FullName), depth, node);
         }

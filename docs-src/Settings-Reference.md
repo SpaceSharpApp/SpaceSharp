@@ -20,8 +20,10 @@
 |---|---|---|
 | Check for updates on startup | Looks for a new release on GitHub a few seconds after start and offers to install it. Installed copies only; the portable exe does not update itself. | On |
 | Draw the map as the scan goes | During a folder walk the map fills in as folders are placed, and what is drawn becomes the finished map. Off keeps the last map until the new one is ready. File-table scans arrive whole either way. | On |
+| Scanning card | Where the progress card sits while a scan runs: bottom right, bottom left, top right, top left or center. | Bottom right |
 | Keep saved scans for | Automatic saves older than this are deleted at startup: 7 days, 30 days, 3 months, 6 months, 1 year or forever. **Delete all saved scans** sits under it, asks with a table of what goes, and closes a comparison whose scan went with them. | 3 months |
 | Animate zoom | Fly into folders instead of jumping. | On |
+| Minimap | Shown while you are zoomed in. A corner (bottom left, bottom right, top left, top right) puts a small plain picture of the scan's biggest folders there, with a box where you are; click or drag in it to move. Edge markers puts two thin bars on the map's bottom and right edges instead, which cover nothing and drag like scrollbars. Off shows neither. | Bottom left |
 | Confirm before moving to the Recycle Bin | Ask before deleting. Items inside Windows, program, app and game folders always ask, setting or not. | On |
 | Hide unsafe empty folders | The empty folder list shows only folders that are plainly yours; the ones inside Windows, Program Files, ProgramData, AppData and game or build folders, which programs often expect to exist, are left out. Off lists them unticked, with a warning when you tick one ([Duplicates and empty folders](Duplicates-and-Empty-Folders#empty-folders)). | On |
 
@@ -99,7 +101,7 @@ The Modern style has gaps between the boxes instead of a grid, so there only the
 
 | Setting | What it does | Default |
 |---|---|---|
-| Map | Physical sizes every box by the disk space it uses. Uniform keeps folders that way but draws every file in a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver. Shortcut: U. | Physical |
+| Map | Physical sizes every box by the disk space it uses. Uniform keeps folders that way but draws every file in a folder the same size, so a folder of a thousand small files reads as a thousand files rather than a sliver. Shortcut: U. | Uniform |
 | Density | How many small items are drawn before they are grouped into one "312 files" box: Sparse, Normal, Dense, Maximum, Everything (no grouping). | Dense |
 | Bias | Whether the layout favors wide boxes or tall ones; Equal is the plain squarified layout. | Equal |
 | Padding | Extra space around every box, on top of the 3 px gap the Modern style always keeps. | 0 |

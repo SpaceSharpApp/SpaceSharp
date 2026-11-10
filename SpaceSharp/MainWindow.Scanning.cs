@@ -33,6 +33,8 @@ public partial class MainWindow
         _scanCts = new CancellationTokenSource();
         _scanRoot = path;
         _scanExpectedBytes = null;
+        _liveFreeBytes = -1;
+        bool stopped = false;
         UpdateNavigation();
 
         // The Changes table would be of the scan being replaced.
@@ -48,6 +50,7 @@ public partial class MainWindow
             if (PlatformFiles.Current.IsVolumeRoot(path) && drive.IsReady)
             {
                 _scanExpectedBytes = drive.TotalSize - drive.AvailableFreeSpace;
+                _liveFreeBytes = PlatformFiles.Current.FreeBytes(path);   // the live map carries the free-space box the finished one will have
             }
         }
         catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
@@ -74,10 +77,16 @@ public partial class MainWindow
         _scanMethod = readFileTable ? "MFT" : "folder walk";
         _mftProgress = new WalkProgress(0, 0, 0, 0, path);
 
+        // A scan makes millions of objects; a blocking full collection in the middle of it freezes the window, so they are put off
+        // while it runs. This costs memory for the length of the scan and nothing afterwards.
+        System.Runtime.GCLatencyMode latencyBefore = System.Runtime.GCSettings.LatencyMode;
+        System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.SustainedLowLatency;
+
         ResetScanCard(readFileTable);
         _scanClock.Restart();
         _scanStartedLocal = DateTime.Now;
         _progressTimer.Start();
+        _liveTimer.Start();
         StatusText.Text = string.Empty;
         AccessBar.IsVisible = false;
 
@@ -91,6 +100,11 @@ public partial class MainWindow
                 Live = _settings.LiveMap
             };
             _liveShown = false;
+            _liveGuide = null;
+            if (_settings.LiveMap)
+            {
+                PrepareLiveGuide(path);
+            }
             // A file-table scan has nothing to draw live; say so where the live map would be.
             SampleBanner.IsVisible = readFileTable && _settings.LiveMap;
             SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
@@ -123,11 +137,7 @@ public partial class MainWindow
         }
         catch (OperationCanceledException)
         {
-            StatusText.Text = Strings.Get("Status_ScanCancelled");
-            if (_liveShown)
-            {
-                Treemap.Root = _root;   // back to the last finished map
-            }
+            stopped = true;   // handled once the scan is torn down, below
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -140,25 +150,33 @@ public partial class MainWindow
         finally
         {
             _progressTimer.Stop();
+            _liveTimer.Stop();
+            System.Runtime.GCSettings.LatencyMode = latencyBefore;
+            _liveGuide = null;
             ScanCard.IsVisible = false;
             _scanCts.Dispose();
             _scanCts = null;
             UpdateNavigation();
             ApplyView();
         }
+
+        if (stopped)
+        {
+            // A stopped scan leaves nothing behind: what was read so far lived only in memory and goes with the map, nothing was
+            // written to disk, and the window is back at the start page. The scans saved earlier are still in the recent list.
+            _liveShown = false;
+            CloseScan(evenWithoutScan: true);
+            StatusText.Text = Strings.Get("Status_ScanCancelled");
+        }
     }
 
     /// <summary>Puts the scanning card back to its starting state for a new scan.</summary>
     /// <param name="readFileTable">
-    /// True when the scan reads the NTFS file table, which changes the subtitle, the first stage's name, and keeps the card centered
-    /// since there is no live map behind it.
+    /// True when the scan reads the NTFS file table, which changes the subtitle and the first stage's name.
     /// </param>
     private void ResetScanCard(bool readFileTable)
     {
-        // The card sits in the map's corner with the last map (or the map being drawn) behind it; with nothing behind, it is centered.
-        bool hasMap = _root is not null || (_settings.LiveMap && !readFileTable);
-        ScanPanel.HorizontalAlignment = hasMap ? HorizontalAlignment.Right : HorizontalAlignment.Center;
-        ScanPanel.VerticalAlignment = hasMap ? VerticalAlignment.Bottom : VerticalAlignment.Center;
+        PlaceScanCard();
 
         ScanSubtitle.Text = ScanSubtitleText(readFileTable ? "Scan_MethodMft" : "Scan_MethodWalk");
         ScanSizeLabel.Text = _scanExpectedBytes is { } expectedBytes
@@ -174,6 +192,24 @@ public partial class MainWindow
         SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: false);
         _buildStageShown = false;
         _readRate = 0;
+    }
+
+    /// <summary>Puts the scanning card where Settings › Behavior › While scanning says, map behind it or not.</summary>
+    private void PlaceScanCard()
+    {
+        string place = _settings.ScanCardPlace;
+        ScanPanel.HorizontalAlignment = place switch
+        {
+            "BottomLeft" or "TopLeft" => HorizontalAlignment.Left,
+            "Center" => HorizontalAlignment.Center,
+            _ => HorizontalAlignment.Right
+        };
+        ScanPanel.VerticalAlignment = place switch
+        {
+            "TopLeft" or "TopRight" => VerticalAlignment.Top,
+            "Center" => VerticalAlignment.Center,
+            _ => VerticalAlignment.Bottom
+        };
     }
 
     /// <summary>The card's subtitle: the drive's used size, when known, and the scan method.</summary>
@@ -281,64 +317,138 @@ public partial class MainWindow
     private bool _liveShown;                 // the map shows a live snapshot of the running walk
     private bool _liveBusy;                  // a snapshot is being built off the UI thread
     private TimeSpan _lastLiveDraw;
+    private TimeSpan _lastLiveBuild;         // how long the window took to lay out the latest snapshot, which paces the next
+    private long _liveFreeBytes = -1;        // the scanned drive's free bytes, for the live map's free-space box; -1 on a folder scan
+
+    /// <summary>Ticks the live map on its own, faster than the scan card's figures need: an update lands within a frame or two of
+    /// being due instead of waiting for the card's next tick.</summary>
+    private readonly DispatcherTimer _liveTimer = new() { Interval = TimeSpan.FromMilliseconds(16) };
+
+    private FsNode? _liveGuide;              // an earlier scan of the folder being walked, until the live tree has taken it
+
+    /// <summary>Finds an earlier scan of the folder about to be walked, for the live map to go by: the tree on screen when it is of the
+    /// same folder, else the scan saved last time, read off the UI thread. With neither, the live map grows from nothing.</summary>
+    /// <param name="path">The folder or drive being scanned.</param>
+    private void PrepareLiveGuide(string path)
+    {
+        static string Bare(string folder) => folder.TrimEnd('\\', '/');
+
+        if (_root is { } shown && string.Equals(Bare(shown.FullPath), Bare(path), StringComparison.OrdinalIgnoreCase))
+        {
+            _liveGuide = shown;
+            return;
+        }
+
+        CancellationTokenSource? scanAtRequest = _scanCts;
+        string saved = ScanFile.AutoPathFor(path);
+        _ = Task.Factory.StartNew(() =>
+        {
+            try
+            {
+                return File.Exists(saved) ? ScanFile.Load(saved, addFreeSpace: false).Root : null;
+            }
+            catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+            {
+                return null;
+            }
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default).ContinueWith(task => Dispatcher.UIThread.Post(() =>
+        {
+            bool sameScan = ReferenceEquals(scanAtRequest, _scanCts) && _scanCts is not null;
+            if (task.Status == TaskStatus.RanToCompletion && task.Result is { } previous && sameScan)
+            {
+                _liveGuide = previous;
+            }
+        }), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+    }
 
     /// <summary>Puts the walk's latest snapshot on the map, a few times a second at most; the snapshot is built off the UI thread.</summary>
     private void DrawLiveMap()
     {
+        if (_scanMethod != "MFT" && _scanner.Live is { } guided)
+        {
+            guided.ExpectedBytes = _scanExpectedBytes ?? -1;   // the drive's used space: what is not read yet shows as one box
+            if (_liveGuide is { } guide)
+            {
+                guided.SetGuide(guide);
+                _liveGuide = null;
+            }
+        }
+
         if (_liveBusy || _scanMethod == "MFT" || _scanner.Live is not { } live || !live.Changed)
         {
             return;
         }
-        if (_liveShown && _scanClock.Elapsed - _lastLiveDraw < TimeSpan.FromMilliseconds(600))
+        // Many times a second. Only the time the window itself spent laying a snapshot out and painting it paces the next one: it gets
+        // at least as long idle as that took, so a huge tree never ties it up. Building the snapshot happens off the window's thread and costs it
+        // nothing.
+        var interval = TimeSpan.FromMilliseconds(Math.Max(TreemapControl.LiveIntervalMs, _lastLiveBuild.TotalMilliseconds + Treemap.LastDrawMilliseconds));
+        if (_liveShown && _scanClock.Elapsed - _lastLiveDraw < interval)
         {
             return;
         }
         _liveBusy = true;
-        _lastLiveDraw = _scanClock.Elapsed;
         CancellationTokenSource? scanAtRequest = _scanCts;
         // The snapshot shares the walk's finished folders, so it is sorted on the UI thread (in ShowLive), never here.
-        _ = Task.Run(() => live.Snapshot()).ContinueWith(task => Dispatcher.UIThread.Post(() =>
-        {
-            _liveBusy = false;
-            // The scan it belongs to must still be running.
-            bool sameScan = ReferenceEquals(scanAtRequest, _scanCts) && _scanCts is not null;
-            if (task.Status != TaskStatus.RanToCompletion || task.Result is not { } snapshot || !sameScan)
+        long freeBytes = _liveFreeBytes;
+        bool freeVisible = _settings.ShowFreeSpace;
+        SizeMeasure measure = Treemap.SizeMode;
+        // On a thread of its own, with the hand-over run on that same thread: the walk keeps every pool thread busy reading the disk,
+        // so a pool task would wait its turn behind them, and its continuation again, and the map would update every second or two.
+        TimeSpan requested = _scanClock.Elapsed;
+        double buildMilliseconds = 0;
+        _ = Task.Factory.StartNew(() =>
             {
-                return;
-            }
-            Treemap.ShowLive(snapshot);   // eases the boxes from where they are; Root would reset the map
-            if (!_liveShown)
+                long buildStarted = System.Diagnostics.Stopwatch.GetTimestamp();
+                FsNode? built = live.Snapshot(freeBytes, freeVisible, measure);
+                buildMilliseconds = System.Diagnostics.Stopwatch.GetElapsedTime(buildStarted).TotalMilliseconds;
+                return built;
+            }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default)
+            .ContinueWith(task => Dispatcher.UIThread.Post(() =>
             {
-                SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: true, done: false);
-            }
-            _liveShown = true;
-        }));
+                _liveBusy = false;
+                // The scan it belongs to must still be running.
+                bool sameScan = ReferenceEquals(scanAtRequest, _scanCts) && _scanCts is not null;
+                if (task.Status != TaskStatus.RanToCompletion || task.Result is not { } snapshot || !sameScan)
+                {
+                    return;
+                }
+                TimeSpan started = _scanClock.Elapsed;
+                Treemap.ShowLive(snapshot);   // drawn at once; Root would reset the map
+                _lastLiveDraw = _scanClock.Elapsed;
+                _lastLiveBuild = _lastLiveDraw - started;
+#if DEBUG
+                // Where a live update's time goes, in debug builds only: from the request to the window getting the snapshot, of which
+                // building it; laying it out; the last paint; and how many boxes that was.
+                StatusText.Text = string.Create(CultureInfo.InvariantCulture,
+                    $"live map: wait {(started - requested).TotalMilliseconds:0} ms (build {buildMilliseconds:0}) · layout {_lastLiveBuild.TotalMilliseconds:0} ms · draw {Treemap.LastDrawMilliseconds:0} ms · {Treemap.BoxCount:N0} boxes");
+#endif
+                if (!_liveShown)
+                {
+                    SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: true, done: false);
+                }
+                _liveShown = true;
+            }), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
     }
 
-    /// <summary>A scan's elapsed time as people read it: hundredths under ten seconds ("5.32 s"), tenths under a minute ("41.7 s"), minutes and seconds from there ("2:08").</summary>
+    /// <summary>A scan's elapsed time as people read it: tenths under a minute ("9.2 s", "41.7 s"), minutes and seconds from there ("2:08").</summary>
     /// <param name="elapsed">The time since the scan started.</param>
-    /// <returns>The text for the scan card.</returns>
+    /// <returns>The text for the scan card; the tenths are cut, not rounded, so the figure never runs ahead of the clock.</returns>
     private static string ElapsedText(TimeSpan elapsed)
     {
         double seconds = elapsed.TotalSeconds;
-        if (seconds < 10)
-        {
-            return seconds.ToString("0.00", CultureInfo.CurrentCulture) + " s";
-        }
         if (seconds < 60)
         {
-            return seconds.ToString("0.0", CultureInfo.CurrentCulture) + " s";
+            return (Math.Floor(seconds * 10) / 10).ToString("0.0", CultureInfo.CurrentCulture) + " s";
         }
         return elapsed.ToString(@"m\:ss", CultureInfo.InvariantCulture);
     }
 
     /// <summary>
-    /// Timer tick during a scan: updates the live map, the size, rate, elapsed and path fields, and the stage bars; the first bar fills
+    /// Timer tick during a scan: updates the size, rate, elapsed and path fields, and the stage bars; the first bar fills
     /// by bytes when the drive's used size is known, otherwise it sweeps.
     /// </summary>
     private void UpdateProgress()
     {
-        DrawLiveMap();
         WalkProgress progress = _scanMethod == "MFT" ? _mftProgress : _scanner.GetProgress();
         double seconds = Math.Max(0.001, _scanClock.Elapsed.TotalSeconds);
         ScanSize.Text = SizeFormatter.Format(progress.Bytes);
@@ -428,11 +538,11 @@ public partial class MainWindow
         }
         _root = root;
         root.SetFreeSpaceVisible(_settings.ShowFreeSpace, _settings.SizeOnDisk ? SizeMeasure.SizeOnDisk : SizeMeasure.FileSize);
-        // a scan that was drawn live eases into its finished tree instead of snapping to it
+        // a scan that was drawn live is followed by its finished tree the way one snapshot follows another
         if (_liveShown)
         {
             root.SortBy(Treemap.SizeMode);
-            Treemap.ShowLive(root, finishing: true);
+            Treemap.ShowLive(root);
         }
         else
         {

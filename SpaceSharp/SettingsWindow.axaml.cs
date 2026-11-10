@@ -174,11 +174,23 @@ public partial class SettingsWindow : Window
         Section(Strings.Get("Settings_WhileScanning"));
         Row(Strings.Get("Settings_LiveMap"), Strings.Get("Settings_LiveMap_Desc"),
             Switch(_settings.LiveMap, enabled => _settings.LiveMap = enabled));
+        string[] placeKeys = { "BottomRight", "BottomLeft", "TopRight", "TopLeft", "Center" };
+        string[] placeNames = placeKeys.Select(key => Strings.Get("ScanCard_" + key)).ToArray();
+        Row(Strings.Get("Settings_ScanCard"), Strings.Get("Settings_ScanCard_Desc"),
+            Combo(placeNames, Math.Max(0, Array.IndexOf(placeKeys, _settings.ScanCardPlace)), index => _settings.ScanCardPlace = placeKeys[index]));
         Row(Strings.Get("Settings_KeepScans"), Strings.Get("Settings_KeepScans_Desc"), KeepScansSlider());
 
         Section(Strings.Get("Settings_Map"));
         Row(Strings.Get("Settings_AnimateZoom"), Strings.Get("Settings_AnimateZoom_Desc"),
             Switch(_settings.AnimateZoom, enabled => _settings.AnimateZoom = enabled));
+        string[] minimapKeys = { "BottomLeft", "BottomRight", "TopLeft", "TopRight", "Edges", "Off" };
+        string[] minimapNames = minimapKeys.Select(key => Strings.Get(key is "Off" or "Edges" ? "Minimap_" + key : "ScanCard_" + key)).ToArray();
+        Row(Strings.Get("Settings_Minimap"), Strings.Get("Settings_Minimap_Desc"),
+            Combo(minimapNames, Math.Max(0, Array.IndexOf(minimapKeys, _settings.MinimapPlace)), index =>
+            {
+                _settings.MinimapPlace = minimapKeys[index];
+                _main?.UpdateMinimap();
+            }));
 
         Section(Strings.Get("Settings_Safety"));
         Row(Strings.Get("Settings_ConfirmDelete"), Strings.Get("Settings_ConfirmDelete_Desc"),

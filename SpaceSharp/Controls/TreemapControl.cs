@@ -198,15 +198,14 @@ public sealed partial class TreemapControl : Panel
     /// <summary>Raised on the UI thread whenever the camera moves: wheel, pan, every animation frame, a new root or live snapshot.</summary>
     public event EventHandler? ZoomChanged;
 
-    /// <summary>The scanned tree; setting it sorts the tree by the current size measure, resets the camera to zoom 1 and ends any live
-    /// tween. Null clears the map.</summary>
+    /// <summary>The scanned tree; setting it sorts the tree by the current size measure, resets the camera to zoom 1. Null
+    /// clears the map.</summary>
     public FsNode? Root
     {
         get => _root;
         set
         {
             StopAnimation();
-            StopLive();
             _root = value;
             _root?.SortBy(_measure);
             _hoveredNode = null;
@@ -447,7 +446,7 @@ public sealed partial class TreemapControl : Panel
         }
     }
 
-    private MapLayout _layout = MapLayout.BySize;
+    private MapLayout _layout = MapLayout.Uniform;
 
     /// <summary>Physical is the treemap, every box as large as its bytes; Uniform keeps folders that way but draws every file in a folder
     /// the same size.</summary>

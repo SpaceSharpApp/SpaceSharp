@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Bir klasör yukarı (Backspace / fare geri düğmesi)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Yakınlaştır (fare tekerleği / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>Haritayı resim olarak kaydet</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>Görüntü</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Uzaklaştır (fare tekerleği / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Klasöre yakınlaştır</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} içeriği</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Çıkar</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>"{0}" gelecek taramalardan çıkarılacak</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>Bu dosyanın kopyalarını bul</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>Yinelenen dosyaları bul</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>Bu klasördeki yinelenenleri bul</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>Yalnızca {0} içinde aranıyor</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>Bu klasördeki tüm *{0} dosyalarını seç</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>{0} klasörüne yakınlaş</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} öğe</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} Geri Dönüşüm Kutusu'na taşındı</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} dosya · {3}. F5 yeniden tarar.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Açılan tarama:</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>Tarama açılıyor…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>Önceki tarama farklı bir yöntemle yapılmış ({0} ve {1}); bu yüzden karşılaştırılmıyor. Aynı türdeki bir sonraki tarama karşılaştırılacak.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Yeniden tarama iptal edildi</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} yeniden tarandı · {1:N0} dosya · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} yeniden taranıyor…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} kaydedildi</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>Tarama iptal edildi</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Tarama durduruldu</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} dosya · {1:N0} klasör · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} sn</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>{0:N0} öğe seçildi · {1} · {2:N0} dosya    Del tuşu Geri Dönüşüm Kutusu'na taşır</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Aynı güvenli küme, açık yüzeyler için aydınlatılmış</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0} tema için palet. Her tema kendininkini anımsar; harita temayla birlikte değişir.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1} tema için yapıldı</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Harita, Öngörüler ve Değişiklikler arasında geçiş</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Harita, Öngörüler, İstatistikler ve Değişiklikler arasında geçiş</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Türe göre</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Güvenle temizlenebilir</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Değişiklik zamanı</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Empty_Moving" xml:space="preserve"><value>Boş klasörler siliniyor…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} / {1:N0} klasör</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Yinelenen dosyalar</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>Nerede olursa olsun içeriği birebir aynı olan dosyalar. Önce boyut, sonra ilk baytlar, sonra dosyanın tamamı; böylece yalnızca olası eşleşmeler okunur.</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Nerede olursa olsun içeriği birebir aynı olan dosyalar. Önce boyut, sonra baştan, ortadan ve sondan örnekler, sonra dosyanın tamamı; böylece yalnızca olası eşleşmeler okunur.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Şundan küçük dosyaları yok say</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>Yinelenenleri bul</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>Boyuta göre gruplanıyor…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>İlk baytlar karşılaştırılıyor: {0:N0} / {1:N0} · {2} okundu</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Örnekler karşılaştırılıyor: {0:N0} / {1:N0} · {2} okundu</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Dosyalar tamamen okunuyor: {0:N0} / {1:N0} · {2} okundu</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} küme · {1:N0} fazla kopya · {2} gidebilir</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>{0} üzerindeki dosyalar arasında yinelenen yok.</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} tane daha</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>bu {0:N0} öğe klasörün {1} kadarı</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>klasörün {0} kadarı tek bir öğe</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>İstatistikler</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>Tarama sayılarla: boyutlar, türler, yaşlar ve uzantılar</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>İstatistikler</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>Sayıların hangi klasörü kapsadığı</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>Tüm tarama ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>{0} tarihli taramayla karşılaştırıldı</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{1} tarihinden beri {0}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{1} içinde {0}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} klasör</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>Ortalama dosya</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>ortanca {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>En büyük dosya</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>Erişim dışı</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>{0} üzerinde kullanılan, bu taramada olmayan</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} boş</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{1} içinde {0}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>En derin klasör</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} düzey</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>Boyuta göre dosyalar</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>Her ikiye katlanma için bir satır, türe göre yığılmış. Dosyaları haritada görmek için bir satıra tıklayın.</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>İşaret, karşılaştırılan taramanın çubuğunun bittiği yerdir; renkli sütun o zamandan beri olan değişimdir.</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>Alan</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>Sayı</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>karşılaştırılan tarama</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ büyüdü</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− küçüldü</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>Türe göre</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>Dosyalarını haritada görmek için bir türe tıklayın.</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>tür</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>Yaşa göre</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>Dosyaların en son ne zaman değiştiği. Haritada görmek için bir satıra tıklayın.</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>Bugün</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>Bu hafta</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>Bu ay</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>Bu yıl</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 yıl</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 yıl</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>Daha eski</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>Göz atmaya değer</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>Kolayca geri kazanılabilecek alan. Göster, haritayı buna göre filtrelenmiş açar.</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>Boşa giden alan</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>dosya boyutlarının ötesinde ayrılan</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>4 KB altındaki dosyalar</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>dosyaların {0}'i, {1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>Boş klasörler</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>Sıfır baytlık dosyalar</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>2+ yıldır dokunulmamış</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>taramanın {0}'i</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>Geçici ve önbellek</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>Öngörüler'deki temizlik listesinin içerdiği</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>Kapsamdaki en büyük dosya ve klasörler. Haritada görmek için birine tıklayın.</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>kopyaların ne kadar yer kapladığını görmek için arayın</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>Yeniden oluşturulabilir</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>proje bulunamadı</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules, .git ve derleme çıktısı</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} sıfır baytlık dosya</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>Dosya türleri, dosya yaşları ve en büyük dosya ve klasörler İstatistikler'de.</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>İstatistikler'i aç</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>Göster</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>Uzantılar</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>Alana göre {1:N0} uzantının ilk {0} tanesi. Dışa aktar hepsini kaydeder.</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>Uzantı</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>Tür</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>Alan</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>Ortalama</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>Pay</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>Değişim</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(uzantısız)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>Açık temaya geç</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>Koyu temaya geç</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>Bir resimden…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>Şuradan başla</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>Renkler</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>Düzen</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>Üçlü</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>çemberin üçte biri arayla üç ton</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>Derinlik ve dosyalar</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>Her düzey</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+%{0} daha açık</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−%{0} daha koyu</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>aynı açıklık</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>Klasörle aynı</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>%{0} tonlu</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>Tonlu</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>Kendi renkleri</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>Düzelt</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>Gelişmiş: her klasör ve dosya türü rengi, hex girişi, JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>Basit: ton, düzen, derinlik</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>üst düzey klasör başına bir tane, aşağı doğru yinelenir; düzenlemek için tıklayın</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>her klasör renginin altındaki dosya rengi</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>siz birini ayarlayana kadar klasörleri izler</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>Seçili</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>{0} dosyaları da</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>Dosyayı dışa aktar…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>Rengini seçmek için önizlemede bir kutuya tıklayın.</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>Değişiklikler yaptıkça önizlemede görünür; Kaydet'i seçene kadar hiçbir şey kaydedilmez.</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>Resim okunamadı.</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>Tonlar {0} dosyasından alındı.</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>Resimler</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>{0} kaydedildi</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>Durdur</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>Taramayı durdur ve başlangıç sayfasına dön; şimdiye kadar okunanlar atılır (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>Tarama kartı</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Tarama sürerken ilerleme kartının durduğu yer.</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>Mini harita</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Yakınlaştırılmışken: haritanın bir köşesinde, taramadaki en büyük klasörlerin küçük ve sade bir görüntüsü ve bulunduğunuz yeri gösteren bir kutu. Taşımak için içine tıklayın veya sürükleyin. Ya da kenar işaretleri: haritanın kenarlarında hiçbir şeyi örtmeyen iki ince çubuk. Gizlemek için görüntüye sağ tıklayın.</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>Kapalı</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>Kenar işaretleri</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>Mini haritayı gizle</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>Mini harita gizlendi. Ayarlar › Davranış › Mini harita ile geri getirilebilir.</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>Sağ alt</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>Sol alt</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>Sağ üst</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>Sol üst</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>Orta</value></data>
 </root>

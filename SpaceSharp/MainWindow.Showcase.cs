@@ -21,10 +21,10 @@ public partial class MainWindow
     /// <summary>The docs site's pictures (tools/screenshots_docs.ps1): one screen or state each, on top of the README scenes.</summary>
     public static readonly string[] WikiScenes =
     {
-        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-free-space", "wiki-uniform", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
+        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-free-space", "wiki-physical", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
         "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl",
-        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export"
+        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export", "statistics"
     };
 
     /// <summary>Runs one <c>--scene</c>: sizes the window, poses the scene, and with <c>--shot</c> captures it to a PNG and exits.</summary>
@@ -134,6 +134,9 @@ public partial class MainWindow
                 break;
             case "insights":
                 break;
+            case "statistics":
+                ShowView(MainView.Statistics);
+                break;
             case "changes":
                 ShowView(MainView.Changes);
                 await Settle();
@@ -199,8 +202,8 @@ public partial class MainWindow
                 _settings.ShowFreeSpace = true;
                 ApplySettings();
                 break;
-            case "wiki-uniform":
-                _settings.MapLayout = "Uniform";
+            case "wiki-physical":   // the non-default layout, Uniform being the default
+                _settings.MapLayout = "BySize";
                 ApplySettings();
                 break;
             case "wiki-classic":

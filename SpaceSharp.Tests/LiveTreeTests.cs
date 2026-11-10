@@ -85,7 +85,7 @@ public class LiveTreeTests
         FsNode d = Finished(c, "d", 50 * GB, 0);
         FsNode aFile = TestTree.File(a, "a.txt", GB);
 
-        var live = new LiveTree(@"C:\");
+        var live = new LiveTree(@"C:\", maxDepth: 3);
         live.RecordFiles("a", 1, new[] { aFile });
         live.RecordFiles(@"a\b\c\d", 4, d.Children);
         live.RecordFinished(@"a\b\c\d", 4, d);                             // beyond the limit: ignored
@@ -98,6 +98,97 @@ public class LiveTreeTests
         live.RecordFinished(@"a\b\c", 3, c);                               // at the limit: in whole, d inside it
         snap = live.Snapshot()!;
         Assert.Equal(51 * GB, snap.Size);
+    }
+
+    [Fact]
+    public void FilesBelowTheDepthLimitCountIntoTheStandInAtTheLimit()
+    {
+        FsNode realRoot = TestTree.Dir(@"C:\");
+        FsNode a = TestTree.Dir("a", realRoot);
+        FsNode b = TestTree.Dir("b", a);
+        FsNode c = TestTree.Dir("c", b);
+        FsNode cFile = TestTree.File(c, "c.bin", 2 * GB);
+        FsNode d = TestTree.Dir("d", c);
+        FsNode dFile = TestTree.File(d, "d.bin", 30 * GB);
+        FsNode e = TestTree.Dir("e", d);
+        FsNode eFile = TestTree.File(e, "e.bin", 8 * GB);
+
+        var live = new LiveTree(@"C:\", maxDepth: 3);
+        live.RecordFiles("a", 1, Array.Empty<FsNode>());
+        live.RecordFiles(@"a\b", 2, Array.Empty<FsNode>());
+        live.RecordFiles(@"a\b\c", 3, new[] { cFile });
+        live.RecordFiles(@"a\b\c\d", 4, new[] { dFile });
+        live.RecordFiles(@"a\b\c\d\e", 5, new[] { eFile });
+
+        FsNode snap = live.Snapshot()!;
+        Assert.Equal(40 * GB, snap.Size);                                  // the size so far, not just the top three levels
+        Assert.Equal(3, snap.FileCount);
+        FsNode standIn = snap.Children.Single().Children.Single().Children.Single();
+        Assert.Equal("c", standIn.Name);
+        FsNode reading = standIn.Children.Single(child => child.IsGroup);
+        Assert.Equal(LiveTree.StillReadingName, reading.Name);
+        Assert.Equal(38 * GB, reading.Size);
+        Assert.Equal(2, reading.FileCount);
+        Assert.Same(cFile, standIn.Children.Single(child => !child.IsGroup));
+
+        TestTree.Finish(c);
+        live.RecordFinished(@"a\b\c", 3, c);                               // the real folder replaces the stand-in and its box
+        snap = live.Snapshot()!;
+        Assert.Equal(40 * GB, snap.Size);
+        Assert.Same(c, snap.Children.Single().Children.Single().Children.Single());
+    }
+
+    [Fact]
+    public void AnEarlierScanGivesFoldersStillBeingWalkedTheirSize()
+    {
+        FsNode before = TestTree.Dir(@"C:\");
+        FsNode beforeUsers = TestTree.Dir("Users", before);
+        TestTree.File(beforeUsers, "big.bin", 60 * GB);
+        FsNode beforeWindows = TestTree.Dir("Windows", before);
+        TestTree.File(beforeWindows, "win.bin", 20 * GB);
+        TestTree.Finish(before);
+
+        FsNode realRoot = TestTree.Dir(@"C:\");
+        FsNode users = TestTree.Dir("Users", realRoot);
+        FsNode usersFile = TestTree.File(users, "big.bin", 70 * GB);
+        FsNode windows = TestTree.Dir("Windows", realRoot);
+        TestTree.File(windows, "win.bin", 20 * GB);
+        TestTree.Finish(windows);
+
+        var live = new LiveTree(@"C:\");
+        live.SetGuide(before);
+        live.RecordFiles("", 0, Array.Empty<FsNode>());
+        FsNode snap = live.Snapshot()!;
+        Assert.Equal(80 * GB, snap.Size);                                  // nothing read yet: the whole earlier scan as one box
+        Assert.Equal(LiveTree.StillReadingName, snap.Children.Single().Name);
+
+        live.RecordFiles("Users", 1, Array.Empty<FsNode>());
+        live.RecordFinished("Windows", 1, windows);
+        snap = live.Snapshot()!;
+        Assert.Equal(80 * GB, snap.Size);
+        Assert.Equal(60 * GB, snap.Children.Single(child => child.Name == "Users").Size);   // its earlier size while it is walked
+        Assert.Same(windows, snap.Children.Single(child => child.Name == "Windows"));
+        Assert.DoesNotContain(snap.Children, child => child.IsGroup);       // nothing left over at the root
+
+        live.RecordFiles("Users", 1, new[] { usersFile });                 // more than last time: the real figure wins
+        snap = live.Snapshot()!;
+        Assert.Equal(70 * GB, snap.Children.Single(child => child.Name == "Users").Size);
+        Assert.Equal(90 * GB, snap.Size);
+    }
+
+    [Fact]
+    public void TheExpectedTotalShowsWhatIsNotReadYetAsOneBox()
+    {
+        FsNode realRoot = TestTree.Dir(@"C:\");
+        FsNode rootFile = TestTree.File(realRoot, "pagefile.sys", 4 * GB);
+
+        var live = new LiveTree(@"C:\") { ExpectedBytes = 100 * GB };
+        live.RecordFiles("", 0, new[] { rootFile });
+        FsNode snap = live.Snapshot()!;
+        Assert.Equal(100 * GB, snap.Size);
+        FsNode unread = snap.Children.Single(child => child.IsGroup);
+        Assert.Equal(LiveTree.StillReadingName, unread.Name);
+        Assert.Equal(96 * GB, unread.Size);
     }
 
     [Fact]

@@ -189,9 +189,11 @@ public partial class MainWindow
     // ------------------------------------------------------------------ closing a scan
 
     /// <summary>Drops the current scan and returns to the start screen; the autosave stays.</summary>
-    private void CloseScan()
+    /// <param name="evenWithoutScan">True runs the reset with no scan loaded too, for a scan stopped before it finished, whose live map
+    /// has to go.</param>
+    private void CloseScan(bool evenWithoutScan = false)
     {
-        if (_root is null || _scanCts is not null)
+        if ((_root is null && !evenWithoutScan) || _scanCts is not null)
         {
             return;
         }

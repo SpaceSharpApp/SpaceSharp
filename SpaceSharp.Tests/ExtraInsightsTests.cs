@@ -125,6 +125,7 @@ public class ExtraInsightsTests
         Assert.True(facts.SmallAndEmpty.TinyFiles >= 10);
         Assert.True(facts.SmallAndEmpty.SlackBytes >= 10 * (4096 - 100));
         Assert.Equal(1, facts.SmallAndEmpty.EmptyFolders);
+        Assert.True(facts.SmallAndEmpty.ZeroByteFiles <= facts.SmallAndEmpty.TinyFiles);   // every empty file is also a tiny one
         Assert.Equal(7, facts.SmallAndEmpty.SingleFileFolders);   // Screenshots, photos, bin, node_modules, .git, lonely and the deepest folder
 
         Assert.Equal(25, facts.DeepAndLong.MaxDepth);

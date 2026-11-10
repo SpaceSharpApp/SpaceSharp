@@ -25,6 +25,9 @@ The filter text is parsed into conditions (`FilterSpec`). The whole tree is eval
 **Themes** (`App.axaml(.cs)`, `Themes/Styles.axaml`)
 All control styles are in `Styles.axaml` and reference colors through `DynamicResource`. The dark and light colors are theme dictionaries in `App.axaml`; `App.ApplyTheme` picks the variant (light, dark, or the system's) and lays the chosen look (`UiLooks` in Core) over it, and every open window recolors. On Windows `TitleBarTheme` paints the caption in the same colors. Palettes are per theme (`PaletteTheme`); `AppSettings` keeps one choice for dark and one for light.
 
+**The Statistics view** (`Services/Statistics.cs`, `MainWindow.Statistics.cs`)
+`StatisticsReport.Compute` is one pass over a folder: files per size class (one class per doubling, `ClassOf`), each class split by file category, the kinds, seven age classes, the biggest extensions, and the slack, tiny, zero-byte, empty and untouched counts. With a comparison it also sums each file's baseline size and the gone files into previous figures per class and extension (files inside a folder that is gone entirely are a count only). `MainWindow.Statistics.cs` draws it in the map's place with a scope picker (the scan or a folder); every row calls `FilterScopeOnMap`, which sets the filter text, switches to the map and focuses the scope. `ClassFilter` and `AgeFilter` write the filter terms.
+
 **Top lists** (`Services/TopLists.cs`)
 The largest files and folders are found with a priority queue in one pass, so the side panel is instant on millions of files.
 
@@ -40,7 +43,7 @@ The map is a snapshot, so before anything is sent each selected file is checked 
 SpaceSharp.Core/                  the half that knows nothing about a window or an OS (plain net10.0)
 ├── Models/FsNode.cs              the file and folder tree
 ├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
-├── Services/                     saved scans (ScanFile), compare, the table export (TableExport), the filter (FileFilter), insights (DriveInsights), inspect (InspectSummary)
+├── Services/                     saved scans (ScanFile), compare, the table export (TableExport), the filter (FileFilter), insights (DriveInsights), statistics (Statistics), inspect (InspectSummary)
 ├── Scanning/                     FolderWalker (the System.IO scan every platform has), IPlatformFiles (what it asks the OS)
 ├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings, the looks
 └── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
@@ -52,6 +55,7 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 ├── MainWindow.ContextMenu.cs     the map's right-click menu and its actions
 ├── MainWindow.FilterPanel.cs     the filter drawer and rail
 ├── MainWindow.Insights.cs        the Insights view in the map's place
+├── MainWindow.Statistics.cs      the Statistics view: tiles, files by size, kinds, ages, worth a look, extensions
 ├── MainWindow.Changes.cs         the Changes view: the compared scan as a folder table (then, now, the difference)
 ├── MainWindow.Scans.cs           saved scans, compare, the start screen's tiles, the Export window's sources
 ├── ExportWindow.cs               the Export window: delimiter, columns, options, preview, Copy and Save
@@ -80,7 +84,7 @@ The rule when adding code: if it would work the same on every platform, it goes 
 
 Until 2.3.0 the Windows app was a separate WPF project; git history has it. Next is mobile: an Android or iOS head means turning `SpaceSharp` into a library with a desktop head beside it, a layout for a phone (one panel at a time), and the Android and iOS workloads; nothing in Core needs to change.
 
-**Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`, over a `PaletteDraft`: the pure model with the derivations, the generator, the checks and the JSON) or as JSON by hand; `CustomPalettes` reads and writes the files.
+**Add a built-in palette.** Add an entry to `BuildSchemes()` in `Util/Palette.cs` with `FromList(name, theme, colors)`: twelve folder colors as `#RRGGBB`. File colors and file-type colors are derived unless you pass them. Users make their own in the palette editor (`PaletteEditorWindow`) or as JSON by hand; `CustomPalettes` reads and writes the files. The editor sits on two window-free classes meant to move into a stand-alone palette tool one day: `PaletteDraft` (the model: the twelve folder colors, the file tint or colors, the type colors, the derivations, the checks and the JSON) and `PaletteRecipe` (the decisions a palette is generated from: hue, saturation, lightness, spread, level step; `Apply` writes the draft, `Fix` makes every label readable, `FromPixels` takes the hues of a picture). Both use the color math in `Util/Palette.cs` and nothing else of the app.
 
 **Add a file type.** Extensions and their categories are in `SpaceSharp.Core/Resources/FileTypes.txt`, a plain text table embedded in Core: put the extension, with its dot, under its `[Category]` heading. The file's header has the rules, and `FileTypesTests` fails on a duplicate or a missing dot. The cleanup patterns the panel uses are `CachePatterns` in `Services/DriveInsights.cs`.
 

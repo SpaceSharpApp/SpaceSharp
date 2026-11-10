@@ -1,4 +1,4 @@
-<p align="center"><img src="images/palette-editor.png" width="900" alt="The palette editor: twelve folder colors, the file tint, the type colors and a sample map"></p>
+<p align="center"><img src="images/palette-editor.png" width="900" alt="The palette editor: hue, scheme and depth on the left, the sample map on the right"></p>
 
 A custom palette is a JSON file in your palettes folder. The **palette editor** writes one for you; a text editor works too. Either way the palette appears in the picker's Custom tab next to the built-in ones, and the map uses it like any other.
 
@@ -9,23 +9,23 @@ A custom palette is a JSON file in your palettes folder. The **palette editor** 
 
 ## What is in it
 
-The window is three lists and a preview.
+The window is a short list of decisions on the left and a live sample map on the right. A palette is generated from the decisions and then touched up color by color if you want; most palettes never need the second part.
 
-**Folders.** Twelve rows, one per top-level folder color (and every twelfth level down in Depth mode). Each row has the swatch, the hex you can type into, a sample, and a readability note: which text color labels get on it and the contrast ratio, in red when it falls under 4.5:1. The **Fill folders** menu starts you off from Folder 1's color with a spread: **Rainbow** (twelve hues evenly around the wheel), **Neighbors** (hues close to Folder 1), **Two-tone** (Folder 1 and its opposite, alternating) or **One hue** (shades of Folder 1 only). **Random** picks a base color and a spread; press it until something looks right, then adjust. **Paste 12 hexes** takes the codes on your clipboard in order.
+**Name and theme.** What the picker will call it (built-in names are refused), and which theme it is **for**: Dark, Light or Both, which decides which tab lists it.
 
-**Files.** By default the folder color lifted toward white by one tint; the slider sets how far. **Set each file color yourself** turns the list into twelve editable rows instead, and **Use one tint instead** goes back.
+**Random, From a picture…, Start from.** Random picks a base color and a scheme; press it until something looks right, then adjust. From a picture takes the dominant hues of any image file and makes the twelve folder colors from them, at the lightness you have set. Start from lists every palette, built-in and custom, and copies its colors in.
 
-**File types.** One color per type for Color by file type, prefilled from the folder colors. Click one to set it; a type you set stays set when the folders change, one you did not follows them. **Back to derived** forgets your choice for that type.
+**Colors.** Hue, Saturation and Lightness sliders move the whole palette at once. **Scheme** decides how the twelve folder hues spread from the base: **One hue** (shades of it), **Neighbors** (hues close to it), **Two-tone** (the hue and its opposite, alternating), **Triad** (three hues a third of the wheel apart) or **Rainbow** (twelve hues around the wheel). Each card shows four of the colors it would make from the current base.
 
-**Preview.** A sample map on the right, drawn with your shading settings, in the Color by mode the map is in. It follows every edit.
+**Depth and files.** **Each level** steps the lightness per depth, from 4% darker to 4% lighter per level, so deep folders can read darker or lighter than the drive. **Files** are drawn the same as their folder, tinted toward white by a slider's amount (the default), or in own colors you set per depth under Advanced.
 
-The header has the palette's **name** (what the picker will call it; built-in names are refused), which theme it is **for** (Dark, Light or Both; decides which tab lists it), and a readability summary: "Labels read on every folder color, and no two are too alike", or which folders are too close to tell apart.
+**The guard.** One line under the controls: "Labels read on every folder color, and no two are too alike", or which folders fail, in which case **Fix them** moves the failing colors in lightness until their labels read and nudges the hue of any pair too alike.
 
-**Save and use** writes the file and switches the map to it. **Copy JSON** puts the file's text on the clipboard instead, for sharing or for a palette you keep somewhere else. Saving over an existing custom palette asks first.
+**The preview.** The sample map, drawn with your shading settings, in the Color by mode you pick above it. It follows every change, and a click on any box selects that box's color for editing, which opens Advanced.
 
-## Opening the picker on a color
+**Advanced.** Swatch grids for the twelve folder colors, the twelve file colors when they are your own, and the file-type colors (prefilled from the folders; a type you set stays set when the folders change, one you did not follows them). Click a swatch and the editor under the grids shows it: the hex you can type into, hue, saturation and lightness sliders, which text color labels get on it and the contrast ratio, and who else uses it. **Back to derived** forgets your choice for a type. The row at the bottom has **Copy JSON** (the file's text on the clipboard), **Paste 12 hexes** (the codes on your clipboard become the folder colors, in order) and **Export file…** (the file anywhere you choose, without installing it).
 
-Each row's swatch opens a picker: hue, saturation and lightness sliders, the hex, and a strip of suggested shades. Under it the same readability line for that color alone.
+**Save and use** writes the file to your palettes folder and switches the map to it. Saving over an existing custom palette asks first.
 
 ## The files
 

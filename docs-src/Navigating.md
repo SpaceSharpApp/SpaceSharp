@@ -17,9 +17,15 @@ Zoom animates by default (Settings › Behavior › Animate zoom).
 
 Zooming in opens the groups of small files where there is room, and zooming back out closes them again, so the overview looks the same as before you went in.
 
+## The minimap
+
+Once you zoom in, a small card appears over a corner of the map: the scan's biggest folders as plain blocks with their names, laid out as on the map, and a box in the accent color where the map's window is. Click anywhere in it to put that spot in the middle of the map, or hold the button and drag to carry the view along. Right-click it to hide it. When the scan is mostly one folder inside another, the minimap shows the first level that has something to tell apart.
+
+Settings › Behavior › Minimap picks the corner (bottom left by default), turns it off, or swaps it for **edge markers**: two thin bars on the map's bottom and right edges that show which part of the width and height you are on. They cover nothing and drag like scrollbars. At zoom 1 neither is shown, since there is nothing to locate.
+
 ## Saving the map as a picture
 
-The picture button at the right of the zoom buttons saves the map as you see it, zoom and all, to a PNG at twice the screen's pixels. The side panel, toolbar and path row are not in it.
+The **Snapshot** button in the path row, beside Filter, saves the map as you see it, zoom and all, to a PNG at twice the screen's pixels. The side panel, toolbar and path row are not in it.
 
 ## The path row
 
@@ -34,7 +40,7 @@ On the left; **L** or the panel button hides and shows it, and its edge drags to
 
 ## The three views
 
-The toolbar switches what fills the map's place: **Map**, **Insights** ([Insights](Insights)) and **Changes** ([Changes](Changes)); **B** cycles them. Zoom and the path row belong to the map; the other two have their own controls.
+The toolbar switches what fills the map's place: **Map**, **Insights** ([Insights](Insights)), **Statistics** ([Statistics](Statistics)) and **Changes** ([Changes](Changes)); **B** cycles them. Zoom and the path row belong to the map; the other two have their own controls.
 
 ## The right-click menu
 

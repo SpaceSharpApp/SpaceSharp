@@ -42,10 +42,11 @@ Links between pages use the file name without `.md`: `[The filter](The-Filter)`.
 | `colorby-top.png`, `colorby-type.png` | `wiki-colorby-top`, `wiki-colorby-type` | the Color by modes |
 | `shading.png` | `wiki-shading` | cushion shading at the Deep preset |
 | `zoomed.png` | `wiki-zoomed` | the map zoomed three folders down |
-| `free-space.png`, `uniform.png`, `classic.png` | `wiki-free-space`, `wiki-uniform`, `wiki-classic` | the free-space panel, the Uniform map, the Classic style |
+| `free-space.png`, `physical.png`, `classic.png` | `wiki-free-space`, `wiki-physical`, `wiki-classic` | the free-space panel, the Physical map, the Classic style |
 | `filter-rail.png`, `filtered.png` | `wiki-rail`, `wiki-filtered` | the rail layout; a filtered map without the drawer |
 | `palette-picker.png`, `palettes.png`, `palette-editor.png` | `wiki-palette-picker`, `wiki-palettes`, `wiki-palette-editor` | the picker open; the sheet of all 24 palettes (drawn by the app, not a window capture); the palette editor |
 | `shortcuts.png` | `wiki-shortcuts` | the Shortcuts window |
+| `shot-statistics.png` | `statistics` | the Statistics view of the pretend drive |
 | `changes-everything.png` | `wiki-changes-everything` | Changes with Everything shown, sorted by size now, two folders open |
 | `inspect-selection.png` | `wiki-inspect-selection` | Inspect for several selected files |
 | `achievements.png`, `achievement-toast.png` | `wiki-achievements`, `wiki-achievement-toast` | the Achievements window; a toast over the map |

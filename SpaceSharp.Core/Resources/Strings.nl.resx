@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>Eén map omhoog (Backspace / muisknop terug)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>Inzoomen (muiswiel / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>Kaart opslaan als afbeelding</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>Afbeelding</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>Uitzoomen (muiswiel / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>Zoomen naar map</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>Inhoud van {0}</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Weglaten</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>"{0}" wordt uit toekomstige scans weggelaten</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>Kopieën van dit bestand zoeken</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>Dubbele bestanden zoeken</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>Duplicaten zoeken in deze map</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>Er wordt alleen gezocht in {0}</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>Alle *{0} in deze map selecteren</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>Zoomen naar {0}</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} items</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} naar de Prullenbak verplaatst</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}: {2:N0} bestanden · {3}. F5 scant opnieuw.</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>Scan geopend van</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>Scan wordt geopend…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>De vorige scan is anders gemaakt ({0} vs {1}), dus wordt die niet vergeleken. De volgende scan van dezelfde soort wel.</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>Opnieuw scannen geannuleerd</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} opnieuw gescand · {1:N0} bestanden · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} wordt opnieuw gescand…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} opgeslagen</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan geannuleerd</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>Scan gestopt</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} bestanden · {1:N0} mappen · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} s</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>{0:N0} items geselecteerd · {1} · {2:N0} bestanden    Delete verplaatst ze naar de Prullenbak</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Dezelfde veilige set, opgelicht voor lichte vlakken</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Het palet voor het {0} thema. Elk thema onthoudt zijn eigen palet; de kaart wisselt mee met het thema.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · gemaakt voor het {1} thema</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Wisselen tussen de kaart, Inzichten en Wijzigingen</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Wisselen tussen de kaart, Inzichten, Statistieken en Wijzigingen</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Per type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Veilig op te ruimen</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Wanneer gewijzigd</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Empty_Moving" xml:space="preserve"><value>Lege mappen verwijderen…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{0:N0} van {1:N0} mappen</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>Dubbele bestanden</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>Bestanden met precies dezelfde inhoud, waar ze ook staan. Eerst de grootte, dan de eerste bytes, dan het hele bestand, zodat alleen waarschijnlijke treffers worden gelezen.</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>Bestanden met precies dezelfde inhoud, waar ze ook staan. Eerst de grootte, dan steekproeven van het begin, het midden en het einde, dan het hele bestand, zodat alleen waarschijnlijke treffers worden gelezen.</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>Bestanden negeren onder</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>Dubbele zoeken</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>Groeperen op grootte…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>Eerste bytes vergelijken: {0:N0} van {1:N0} · {2} gelezen</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>Steekproeven vergelijken: {0:N0} van {1:N0} · {2} gelezen</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Hele bestanden lezen: {0:N0} van {1:N0} · {2} gelezen</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sets · {1:N0} extra kopieën · {2} kan weg</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Geen dubbele onder de bestanden boven {0}.</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} meer</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>deze {0:N0} zijn {1} van de map</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>{0} van de map is één ding</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>Statistieken</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>De scan in cijfers: groottes, soorten, leeftijden en extensies</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>Statistieken</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>Welke map de cijfers dekken</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>Hele scan ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>Vergeleken met de scan van {0}</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{0} sinds {1}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{0} van {1}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} mappen</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>Gemiddeld bestand</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>mediaan {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>Grootste bestand</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>Buiten bereik</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>in gebruik op {0}, niet in deze scan</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} leeg</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{0} van {1}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>Diepste map</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} niveaus</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>Bestanden op grootte</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>Eén rij per verdubbeling, gestapeld per soort. Klik op een rij om die bestanden op de kaart te zien.</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>Het streepje is waar de balk van de vergeleken scan eindigde; de gekleurde kolom is de verandering sindsdien.</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>Ruimte</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>Aantal</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>vergeleken scan</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ gegroeid</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− gekrompen</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>Per soort</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>Klik op een soort om de bestanden op de kaart te zien.</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>soorten</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>Op leeftijd</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>Wanneer de bestanden het laatst zijn gewijzigd. Klik op een regel om ze op de kaart te zien.</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>Vandaag</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>Deze week</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>Deze maand</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 jaar</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 jaar</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>Ouder</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>Het bekijken waard</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>Ruimte die makkelijk terug te winnen is. Tonen opent de kaart erop gefilterd.</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>Verloren ruimte</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>toegewezen boven de bestandsgroottes</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>Bestanden onder 4 KB</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>{0} van de bestanden, {1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>Lege mappen</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>Bestanden van nul byte</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>2+ jaar onaangeroerd</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>{0} van de scan</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>Tijdelijk en cache</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>wat de opruimlijst in Inzichten bevat</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>De grootste bestanden en mappen in het bereik. Klik op een om het op de kaart te zien.</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>zoek om te zien wat de kopieën kosten</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>Opnieuw te maken</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>geen projecten gevonden</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules, .git en build-uitvoer</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>{0:N0} bestanden van nul byte</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>Bestandstypen, bestandsleeftijd en de grootste bestanden en mappen staan in Statistieken.</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>Statistieken openen</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>Tonen</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>Extensies</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>Top {0} van {1:N0} op ruimte. Exporteren bewaart ze allemaal.</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>Extensie</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>Soort</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>Ruimte</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>Gemiddeld</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>Aandeel</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>Verandering</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(geen extensie)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>Naar het lichte thema</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>Naar het donkere thema</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>Uit een afbeelding…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>Beginnen met</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>Kleuren</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>Schema</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>Triade</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>drie tinten een derde van de cirkel uit elkaar</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>Diepte en bestanden</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>Elk niveau</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0}% lichter</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0}% donkerder</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>zelfde lichtheid</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>Als de map</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>Getint {0}%</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>Getint</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>Eigen kleuren</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>Herstellen</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>Geavanceerd: elke map- en bestandstypekleur, hex, JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>Eenvoudig: tint, schema, diepte</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>één per map op het hoogste niveau, herhaald naar beneden; klik om te bewerken</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>de bestandskleur onder elke mapkleur</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>volgen de mappen tot je er een instelt</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>Geselecteerd</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>ook {0}-bestanden</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>Bestand exporteren…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>Klik op een vak in het voorbeeld om zijn kleur te selecteren.</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>Wijzigingen verschijnen meteen in het voorbeeld; er wordt niets opgeslagen tot je Opslaan kiest.</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>Kon die afbeelding niet lezen.</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>Tinten overgenomen uit {0}.</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>Afbeeldingen</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>Opgeslagen {0}</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>Stoppen</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>De scan stoppen en terug naar de startpagina; wat tot nu toe is gelezen vervalt (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>Scankaart</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Waar de voortgangskaart ligt terwijl een scan loopt.</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>Minikaart</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Zolang je bent ingezoomd: een kleine, eenvoudige afbeelding van de grootste mappen van de scan in een hoek van de kaart, met een vak waar je bent. Klik of sleep erin om te verplaatsen. Of randmarkeringen: twee dunne balken langs de randen van de kaart, die niets bedekken. Klik met de rechtermuisknop op de afbeelding om hem te verbergen.</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>Uit</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>Randmarkeringen</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>Minikaart verbergen</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>Minikaart verborgen. Instellingen › Gedrag › Minikaart haalt hem terug.</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>Rechtsonder</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>Linksonder</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>Rechtsboven</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>Linksboven</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>Midden</value></data>
 </root>

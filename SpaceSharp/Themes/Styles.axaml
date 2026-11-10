@@ -9,6 +9,66 @@
     <Setter Property="FontSize" Value="13" />
   </Style>
 
+  <!-- Scrollbars: Fluent's bar with its arrows and track is replaced by a bare thumb, 4 px wide with 1 px corners (no pill), kept
+       off the ends of its track, dim until the pointer is on it; the page buttons stay (a click in the empty length still pages). -->
+  <Style Selector="ScrollBar">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Cursor" Value="Arrow" />
+  </Style>
+  <Style Selector="ScrollBar:vertical">
+    <Setter Property="Width" Value="10" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Track x:Name="PART_Track" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}"
+               ViewportSize="{TemplateBinding ViewportSize}" Orientation="Vertical" IsDirectionReversed="True" Margin="0,6">
+          <Track.DecreaseButton>
+            <RepeatButton x:Name="PART_PageUpButton" Classes="scrollpage" Focusable="False" />
+          </Track.DecreaseButton>
+          <Track.IncreaseButton>
+            <RepeatButton x:Name="PART_PageDownButton" Classes="scrollpage" Focusable="False" />
+          </Track.IncreaseButton>
+          <Thumb Classes="scrollthumb" />
+        </Track>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="ScrollBar:horizontal">
+    <Setter Property="Height" Value="10" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Track x:Name="PART_Track" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value, Mode=TwoWay}"
+               ViewportSize="{TemplateBinding ViewportSize}" Orientation="Horizontal" Margin="6,0">
+          <Track.DecreaseButton>
+            <RepeatButton x:Name="PART_PageUpButton" Classes="scrollpage" Focusable="False" />
+          </Track.DecreaseButton>
+          <Track.IncreaseButton>
+            <RepeatButton x:Name="PART_PageDownButton" Classes="scrollpage" Focusable="False" />
+          </Track.IncreaseButton>
+          <Thumb Classes="scrollthumb" />
+        </Track>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="RepeatButton.scrollpage">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="Transparent" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="Thumb.scrollthumb">
+    <Setter Property="Background" Value="{DynamicResource ScrollThumb}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" CornerRadius="1" Margin="3" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="Thumb.scrollthumb:pointerover, Thumb.scrollthumb:pressed">
+    <Setter Property="Background" Value="{DynamicResource ScrollThumbHover}" />
+  </Style>
+
   <!-- TextBlocks inherit the window's Text color; no TextBlock setter here, since it would also win over a
        button's own Foreground (the dark label on the amber buttons). Popups get it on their presenters. -->
   <Style Selector="TextBlock.dim">

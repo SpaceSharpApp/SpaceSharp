@@ -40,6 +40,7 @@ One portable `.exe` or a self-updating installer. Free, open source, code-signed
 - **One map, two ways to draw it.** Classic (square boxes and a grid) or Modern (rounded cards with file icons and labels that shrink with the box); Physical sizing by bytes or Uniform, where every file in a folder is drawn the same. Twenty-four palettes, cushion shading, and an editor for your own colors.
 - **Filters in plain words.** `videos over 1GB older than a year` dims everything else and keeps the layout. A drawer writes the same filter from tiles and scales.
 - **Tells you what is safe to clear.** Insights lists the usual suspects with the space they hold, finds empty folders and duplicate files, and every row is a click back to the map.
+- **Shows the scan as a report.** Statistics lays out the files by size class, kind and age, the biggest extensions and the space that is easy to get back, SpaceMonger style; every figure opens the map filtered to it, and with a compared scan every figure carries its change.
 - **Remembers every scan.** Yesterday's map is one click away, and Changes lays two scans side by side, folder by folder.
 - **Cleans up without surprises.** Everything goes to the Recycle Bin and the map updates in place; anything touching Windows, program or app folders always asks first. Delete permanently reaches the folders Explorer cannot open.
 - **Exports a table.** Any folder, the largest files, the filter's matches or the changes, as CSV or TSV with the columns you pick, or straight to the clipboard.
@@ -102,6 +103,7 @@ Found a vulnerability? [SECURITY.md](SECURITY.md) explains private reporting and
 | Says what is safe to clear | Yes | No | No | No |
 | Saves scans and shows what changed | Yes | Export only | No | No |
 | Finds duplicate files by contents | Yes | No | Yes | No |
+| Statistics page: files by size, kind and age | Yes, every figure opens the map | By extension | By extension | Yes |
 | Open source | Yes, MIT | No | Yes, GPL | No, abandoned |
 | Price | Free | Free for home use | Free | Was paid |
 

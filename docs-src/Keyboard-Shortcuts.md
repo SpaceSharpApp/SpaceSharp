@@ -13,7 +13,7 @@ About › **Keyboard shortcuts** (or F1 › Shortcuts) draws this list on your o
 | Drag | Pan while zoomed in |
 | F5 | Rescan |
 | Ctrl+W | Close the scan and go back to the start screen |
-| Esc | Cancel a scan; clear the filter; close the drawer |
+| Esc | Stop a scan and go back to the start page; clear the filter; close the drawer |
 
 ## Select and act
 
@@ -32,11 +32,12 @@ About › **Keyboard shortcuts** (or F1 › Shortcuts) draws this list on your o
 | Key | Does |
 |---|---|
 | Ctrl+F | Filter the map |
+| Ctrl+D | Find duplicate files in the scan |
 | K | Next color mode |
 | M | Switch between the Classic and Modern map styles |
 | U | Physical or Uniform map |
 | G | Show or hide free space |
-| B | Switch between the map, Insights and Changes |
+| B | Switch between the map, Insights, Statistics and Changes |
 | L | Drives and largest items panel |
 
 ## Scans and windows

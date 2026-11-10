@@ -35,7 +35,7 @@ public sealed class AchievementsWindow : Window
         titleStack.Children.Add(new TextBlock { Text = Strings.Get("Ach_Intro"), FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         header.Children.Add(titleStack);
 
-        var rows = new StackPanel();
+        var rows = new StackPanel { Margin = new Thickness(0, 0, 14, 0) };   // clear of the scrollbar
         for (int i = 0; i < all.Length; i++)
         {
             if (i > 0)
@@ -63,13 +63,22 @@ public sealed class AchievementsWindow : Window
             }
             rows.Children.Add(row);
         }
-        var list = new Border { Child = rows, CornerRadius = new CornerRadius(10), Classes = { "start-panel" } };
-        var scroller = new ScrollViewer { Content = list, MaxHeight = 520, HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled };
+        // The scroller sits inside the frame, so the bar hugs the list's rounded edge instead of lying over the dates; the rows keep
+        // clear of it with a right padding, and the bar stays a thin line until the pointer comes near.
+        var scroller = new ScrollViewer
+        {
+            Content = rows,
+            MaxHeight = 520,
+            HorizontalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled,
+            VerticalScrollBarVisibility = Avalonia.Controls.Primitives.ScrollBarVisibility.Auto,
+            AllowAutoHide = true
+        };
+        var list = new Border { Child = scroller, CornerRadius = new CornerRadius(10), ClipToBounds = true, Classes = { "start-panel" } };
 
         var closeButton = new Button { Content = Strings.Get("Main_Close"), Classes = { "primary" }, IsDefault = true, IsCancel = true, MinWidth = 88, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 16, 0, 0) };
         closeButton.Click += (_, _) => Close();
 
-        Content = new StackPanel { Margin = new Thickness(22, 20, 22, 18), Children = { header, scroller, closeButton } };
+        Content = new StackPanel { Margin = new Thickness(22, 20, 22, 18), Children = { header, list, closeButton } };
     }
 
     /// <summary>One achievement as a row: trophy badge, name and hint, and the unlock date or "Locked" at the right.</summary>

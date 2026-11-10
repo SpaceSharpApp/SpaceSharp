@@ -11,7 +11,9 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>The Insights view's shape: four tiles, then rows that open one at a time. The row contents are built in MainWindow.Insights.cs.</summary>
+/// <summary>The Insights view's shape: four tiles, then rows that open one at a time. Insights holds what can be acted on (freed, fixed,
+/// reviewed); the breakdowns of the scan (kinds, ages, sizes, extensions, the largest files and folders) are the Statistics view's. The
+/// row contents are built in MainWindow.Insights.cs.</summary>
 public partial class MainWindow
 {
     private const double RowTitleWidth = 170;
@@ -46,7 +48,8 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>The headline strip: scanned, free space, safe to clear, and untouched or, once a scan is compared, since last scan.</summary>
+    /// <summary>The headline strip, each tile something that could be freed or looked at: safe to clear, duplicates, what can be rebuilt,
+    /// and untouched or, once a scan is compared, since last scan.</summary>
     /// <returns>A four-column grid; <see cref="ArrangeInsights"/> drops it to two columns when narrow.</returns>
     private UniformGrid BuildTiles()
     {
@@ -54,11 +57,11 @@ public partial class MainWindow
         FsNode root = _root!;
         long scannedBytes = root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0);
         var grid = new UniformGrid { Columns = 4, Margin = new Thickness(-5) };
-        grid.Children.Add(ScannedTile(root, scannedBytes));
-        grid.Children.Add(FreeSpaceTile(root));
         Border clearable = ClearableTile(scannedBytes);
         clearable.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Accent"));
         grid.Children.Add(clearable);
+        grid.Children.Add(DuplicatesTile(scannedBytes));
+        grid.Children.Add(RebuildableTile(scannedBytes));
         grid.Children.Add(HasBaseline ? SinceLastTile(root, measure, scannedBytes) : UntouchedTile(scannedBytes));
         return grid;
     }
@@ -68,18 +71,15 @@ public partial class MainWindow
     private List<InsightRow> BuildRows()
     {
         _rowList = new List<InsightRow>();
-        BuildTypeRow();
         BuildCleanupRow();
-        BuildTimelineRow();
-        BuildLargestRow();
-        BuildGamesRow();
-        BuildMediaRow();
+        BuildDuplicatesRow();
         BuildDeveloperRow();
         BuildDownloadsRow();
-        BuildHardLinksRow();
+        BuildGamesRow();
+        BuildMediaRow();
         BuildSmallAndEmptyRow();
         BuildDeepAndLongRow();
-        BuildDuplicatesRow();
+        BuildHardLinksRow();
         BuildChangesRow();
         return _rowList;
     }
@@ -124,8 +124,22 @@ public partial class MainWindow
             InsightsHost.Children.Clear();
             InsightsHost.Children.Add(_tiles);
             InsightsHost.Children.Add(_rowsBox);
+            InsightsHost.Children.Add(BuildStatisticsPointer());
             OpenRow(_settings.InsightsOpenRow, save: false);
         }
+    }
+
+    /// <summary>The line under the rows saying where the breakdowns went, with a button that opens the Statistics view.</summary>
+    /// <returns>The line.</returns>
+    private DockPanel BuildStatisticsPointer()
+    {
+        var line = new DockPanel { Margin = new Thickness(4, 12, 0, 0) };
+        var open = new Button { Content = Strings.Get("Insights_OpenStatistics"), Classes = { "tool" }, Height = 28, Padding = new Thickness(10, 0), FontSize = 12 };
+        open.Click += (_, _) => ShowView(MainView.Statistics);
+        DockPanel.SetDock(open, Dock.Right);
+        line.Children.Add(open);
+        line.Children.Add(new TextBlock { Text = Strings.Get("Insights_InStatistics"), FontSize = 12, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 12, 0), Classes = { "dim" } });
+        return line;
     }
 
     /// <summary>Opens one row and closes the others; opening the open row closes it.</summary>
@@ -283,79 +297,6 @@ public partial class MainWindow
     private static string Facts(params string?[] facts) => string.Join(" · ", facts.Where(fact => !string.IsNullOrEmpty(fact)));
 
     // ---------------------------------------------------------------- largest: files, folders and extensions in one row
-
-    /// <summary>The Largest row: the biggest folder as its number, and a body with a Files / Folders / Extensions switch over the three lists.</summary>
-    private void BuildLargestRow()
-    {
-        SizeMeasure measure = Treemap.SizeMode;
-        FsNode root = _root!;
-        long scannedBytes = Math.Max(1, root.SizeFor(measure) - (root.FreeSpaceNode?.SizeFor(measure) ?? 0));
-        FsNode? biggestFolder = root.DescendantDirectories().Where(directory => !ReferenceEquals(directory, root)).OrderByDescending(directory => directory.SizeFor(measure)).FirstOrDefault();
-        FsNode? biggestFile = root.DescendantFiles().OrderByDescending(file => file.SizeFor(measure)).FirstOrDefault();
-        ExtensionHome? biggestExtension = DriveInsights.ExtensionHomes(root, measure, 1).FirstOrDefault();
-
-        string number = biggestFolder is null ? SizeFormatter.Format(scannedBytes) : PathWithin(biggestFolder);
-        Control? visual = biggestFolder is null ? null : VisualText($"{SizeFormatter.Format(biggestFolder.SizeFor(measure))} · {InspectSummary.Percent((double)biggestFolder.SizeFor(measure) / scannedBytes)}");
-        string facts = Facts(
-            biggestFile is null ? null : $"{biggestFile.Name} {SizeFormatter.Format(biggestFile.SizeFor(measure))}",
-            biggestExtension is null ? null : $"{biggestExtension.Extension} {SizeFormatter.Format(biggestExtension.Bytes)}",
-            Strings.Get("Insights_AnywhereInScan"));
-        Row("Largest", Strings.Get("Insights_RowLargest"), number, visual, facts, out StackPanel body);
-
-        // The switch and the list it shows; the lists are built on first use.
-        var host = new ContentControl { Margin = new Thickness(0, 10, 0, 0) };
-        var parts = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*,*") };
-        var switchBox = new Border { Child = parts, Height = 30, Width = 320, HorizontalAlignment = HorizontalAlignment.Left, Classes = { "segments" } };
-        var buttons = new List<Button>();
-        var lists = new Control?[3];
-        void Show(int index)
-        {
-            for (int i = 0; i < buttons.Count; i++)
-            {
-                buttons[i].Classes.Set("active", i == index);
-            }
-            lists[index] ??= BuildLargestList(index);
-            host.Content = lists[index];
-        }
-        string[] labels = { Strings.Get("Main_Files"), Strings.Get("Main_Folders"), Strings.Get("Insights_SegExtensions") };
-        for (int i = 0; i < labels.Length; i++)
-        {
-            var button = new Button { Content = labels[i], Classes = { "segment-part" }, FontSize = 12.5 };
-            if (i > 0)
-            {
-                button.BorderThickness = new Thickness(1, 0, 0, 0);
-            }
-            int index = i;
-            button.Click += (_, _) => Show(index);
-            Grid.SetColumn(button, i);
-            parts.Children.Add(button);
-            buttons.Add(button);
-        }
-        body.Children.Add(switchBox);
-        body.Children.Add(host);
-        Show(0);
-    }
-
-    /// <summary>One of the Largest row's lists.</summary>
-    /// <param name="index">0 files, 1 folders, 2 extensions.</param>
-    /// <returns>The list in a panel.</returns>
-    private StackPanel BuildLargestList(int index)
-    {
-        var body = new StackPanel();
-        switch (index)
-        {
-            case 0:
-                FillFilesBody(body);
-                break;
-            case 1:
-                FillFoldersBody(body);
-                break;
-            default:
-                FillExtensionsBody(body);
-                break;
-        }
-        return body;
-    }
 
     // ---------------------------------------------------------------- the extra rows
 
@@ -535,6 +476,7 @@ public partial class MainWindow
         SmallAndEmptyFacts small = Extra.SmallAndEmpty;
         string facts = Facts(
             Strings.Format("Insights_FactTiny", small.TinyFiles),
+            Strings.Format("Insights_FactZeroByte", small.ZeroByteFiles),
             Strings.Format("Insights_FactEmpty", small.EmptyFolders),
             Strings.Format("Insights_FactSingle", small.SingleFileFolders));
         Button? review = null;
@@ -553,6 +495,18 @@ public partial class MainWindow
             LineHeight = 17,
             Classes = { "dim" }
         });
+
+        // What the row counts, each with a way to see it on the map.
+        FsNode root = _root!;
+        var lines = new StackPanel { Margin = new Thickness(0, 8, 0, 0) };
+        lines.Children.Add(FactLine(Strings.Get("Stats_Slack"), Strings.Get("Stats_SlackDetail"), SizeFormatter.Format(small.SlackBytes), null));
+        lines.Children.Add(FactLine(Strings.Get("Stats_Tiny"), SizeFormatter.Format(small.TinyBytes), small.TinyFiles.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+            small.TinyFiles > 0 ? () => FilterScopeOnMap(root, $"is:file <{StatisticsReport.TinyLimit - 1}B") : null));
+        lines.Children.Add(FactLine(Strings.Get("Stats_ZeroByte"), string.Empty, small.ZeroByteFiles.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+            small.ZeroByteFiles > 0 ? () => FilterScopeOnMap(root, "is:file <0B") : null));
+        lines.Children.Add(FactLine(Strings.Get("Stats_EmptyFolders"), string.Empty, small.EmptyFolders.ToString("N0", System.Globalization.CultureInfo.CurrentCulture),
+            small.EmptyFolders > 0 ? () => _ = new EmptyFoldersWindow(this, root).ShowDialog(this) : null));
+        body.Children.Add(lines);
     }
 
     /// <summary>The Duplicates row: a button to search until a search ran, then the sets found and what deleting the extra copies would free.</summary>
@@ -560,7 +514,7 @@ public partial class MainWindow
     {
         DuplicateResult? found = DuplicatesForScan;
         var findButton = new Button { Content = Strings.Get("Insights_FindDuplicates"), Classes = { "tool" }, Height = 26, Padding = new Thickness(8, 0), FontSize = 12 };
-        findButton.Click += async (_, _) => await new DuplicatesWindow(this, _root!, DuplicatesForScan).ShowDialog(this);
+        findButton.Click += async (_, _) => await OpenDuplicatesAsync();
         if (found is null)
         {
             Row("Duplicates", Strings.Get("Insights_RowDuplicates"), Strings.Get("Insights_DupNotSearched"), null, Strings.Get("Insights_DupFacts"), out StackPanel emptyBody, findButton, dim: true);

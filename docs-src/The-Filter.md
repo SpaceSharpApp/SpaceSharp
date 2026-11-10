@@ -44,5 +44,5 @@ Settings › Map › Filter layout swaps the drawer for a **rail** under the pat
 ## Tips
 
 - Right-click a file › **Show only this type** writes `*.ext` for you.
-- Every row in Insights › By type is a click that filters the map to that type.
+- Every line in Statistics › By kind is a click that filters the map to that kind.
 - A filter stays on while you zoom, so `older than 2 years` plus a dive into Downloads is a fast way to find forgotten installers.

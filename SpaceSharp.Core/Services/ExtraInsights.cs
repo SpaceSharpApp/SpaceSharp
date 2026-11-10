@@ -16,7 +16,8 @@ public sealed record HardLinkFacts(long BytesSaved, int LinkCount, FsNode? TopFo
 /// <param name="TinyBytes">What those files hold.</param>
 /// <param name="EmptyFolders">Folders with no entries at all.</param>
 /// <param name="SingleFileFolders">Folders holding exactly one file and nothing else.</param>
-public sealed record SmallAndEmptyFacts(long SlackBytes, int TinyFiles, long TinyBytes, int EmptyFolders, int SingleFileFolders);
+/// <param name="ZeroByteFiles">Files of size zero.</param>
+public sealed record SmallAndEmptyFacts(long SlackBytes, int TinyFiles, long TinyBytes, int EmptyFolders, int SingleFileFolders, int ZeroByteFiles);
 
 /// <summary>The deepest folder and the paths that exceed the classic Windows limit.</summary>
 /// <param name="MaxDepth">Folders below the root on the deepest path.</param>
@@ -101,7 +102,7 @@ public static class ExtraInsights
 
         return new ExtraFacts(
             walk.LinkCount == 0 ? null : new HardLinkFacts(walk.LinkBytes, walk.LinkCount, walk.TopLinkFolder, walk.TopLinkFolderBytes),
-            new SmallAndEmptyFacts(walk.Slack, walk.TinyFiles, walk.TinyBytes, walk.EmptyFolders, walk.SingleFileFolders),
+            new SmallAndEmptyFacts(walk.Slack, walk.TinyFiles, walk.TinyBytes, walk.EmptyFolders, walk.SingleFileFolders, walk.ZeroByteFiles),
             new DeepAndLongFacts(walk.MaxDepth, walk.Deepest, walk.LongPaths, walk.Longest.OrderByDescending(pair => pair.Length).Select(pair => pair.Node).ToList()),
             downloadFacts,
             walk.Stores(),
@@ -167,6 +168,7 @@ public static class ExtraInsights
         public long Slack;
         public int TinyFiles;
         public long TinyBytes;
+        public int ZeroByteFiles;
         public int EmptyFolders;
         public int SingleFileFolders;
         public int MaxDepth;
@@ -254,6 +256,10 @@ public static class ExtraInsights
             {
                 TinyFiles++;
                 TinyBytes += size;
+            }
+            if (file.Size == 0)
+            {
+                ZeroByteFiles++;
             }
             NotePathLength(file, pathLength);
 

@@ -335,6 +335,7 @@
   <data name="Main_UpOneFolderBackspace" xml:space="preserve"><value>1 つ上のフォルダーへ (Backspace / マウスの戻るボタン)</value></data>
   <data name="Main_ZoomInMouseWheel" xml:space="preserve"><value>拡大 (マウスホイール / +)</value></data>
   <data name="Main_SavePicture" xml:space="preserve"><value>マップを画像として保存</value></data>
+  <data name="Main_Snapshot" xml:space="preserve"><value>画像</value></data>
   <data name="Main_ZoomOutMouseWheel" xml:space="preserve"><value>縮小 (マウスホイール / −)</value></data>
   <data name="Main_ZoomToFolder" xml:space="preserve"><value>フォルダーに拡大</value></data>
   <data name="Menu_ContentsOf" xml:space="preserve"><value>{0} の内容</value></data>
@@ -394,6 +395,9 @@
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>除外</value></data>
   <data name="Status_LeftOut" xml:space="preserve"><value>「{0}」は今後のスキャンから除外されます</value></data>
   <data name="Menu_FindCopies" xml:space="preserve"><value>このファイルのコピーを探す</value></data>
+  <data name="Key_Duplicates" xml:space="preserve"><value>重複ファイルを検索</value></data>
+  <data name="Menu_FindDuplicatesIn" xml:space="preserve"><value>このフォルダー内の重複を検索</value></data>
+  <data name="Dup_InFolder" xml:space="preserve"><value>{0} 内のみを検索</value></data>
   <data name="Menu_SelectAllExt" xml:space="preserve"><value>このフォルダー内の *{0} をすべて選択</value></data>
   <data name="Menu_ZoomToParent" xml:space="preserve"><value>{0} にズーム</value></data>
   <data name="Menu_Items" xml:space="preserve"><value>{0:N0} 項目</value></data>
@@ -626,12 +630,13 @@
   <data name="Status_MovedOne" xml:space="preserve"><value>{0} をごみ箱に移動しました</value></data>
   <data name="Status_OpenedScan" xml:space="preserve"><value>{0} {1}：{2:N0} ファイル · {3}。F5 で再スキャンします。</value></data>
   <data name="Status_OpenedVerb" xml:space="preserve"><value>次のスキャンを開きました：</value></data>
+  <data name="Scan_Opening" xml:space="preserve"><value>スキャンを開いています…</value></data>
   <data name="Status_PreviousScanDifferent" xml:space="preserve"><value>前回のスキャンは作成方法が異なる（{0} と {1}）ため、比較されません。次回の同じ種類のスキャンから比較されます。</value></data>
   <data name="Status_RescanCancelled" xml:space="preserve"><value>再スキャンをキャンセルしました</value></data>
   <data name="Status_Rescanned" xml:space="preserve"><value>{0} を再スキャンしました · {1:N0} ファイル · {2}</value></data>
   <data name="Status_Rescanning" xml:space="preserve"><value>{0} を再スキャン中…</value></data>
   <data name="Status_Saved" xml:space="preserve"><value>{0} を保存しました</value></data>
-  <data name="Status_ScanCancelled" xml:space="preserve"><value>スキャンをキャンセルしました</value></data>
+  <data name="Status_ScanCancelled" xml:space="preserve"><value>スキャンを停止しました</value></data>
   <data name="Status_ScanSummary1" xml:space="preserve"><value>{0:N0} ファイル · {1:N0} フォルダー · </value></data>
   <data name="Status_ScanSummary2" xml:space="preserve"><value>{0} · {1:0.0} 秒</value></data>
   <data name="Status_Selection" xml:space="preserve"><value>{0:N0} 個の項目を選択中 · {1} · {2:N0} ファイル    Del でごみ箱に移動</value></data>
@@ -958,7 +963,7 @@
   <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>同じ安全な配色を明るい面向けに明るく</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}テーマのパレット。テーマごとに個別に記憶され、マップはテーマに合わせて切り替わります。</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1}テーマ用</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>マップ、インサイト、変更を切り替え</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>マップ、インサイト、統計、変更を切り替え</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>種類別</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>安全に削除可能</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>変更時期</value></data>
@@ -1179,11 +1184,11 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Empty_Moving" xml:space="preserve"><value>空のフォルダーを削除しています…</value></data>
   <data name="Empty_Progress" xml:space="preserve"><value>{1:N0} 個中 {0:N0} 個のフォルダー</value></data>
   <data name="Dup_Title" xml:space="preserve"><value>重複ファイル</value></data>
-  <data name="Dup_Intro" xml:space="preserve"><value>場所を問わず中身が完全に同じファイルです。まずサイズ、次に先頭バイト、最後にファイル全体を比べるので、候補になるものだけを読みます。</value></data>
+  <data name="Dup_Intro" xml:space="preserve"><value>場所を問わず中身が完全に同じファイルです。まずサイズ、次に先頭・中間・末尾のサンプル、最後にファイル全体を比べるので、候補になるものだけを読みます。</value></data>
   <data name="Dup_MinSize" xml:space="preserve"><value>無視するファイルの下限</value></data>
   <data name="Dup_Find" xml:space="preserve"><value>重複を探す</value></data>
   <data name="Dup_Stage1" xml:space="preserve"><value>サイズでグループ化中…</value></data>
-  <data name="Dup_Stage2" xml:space="preserve"><value>先頭バイトを比較中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
+  <data name="Dup_Stage2" xml:space="preserve"><value>サンプルを比較中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>ファイル全体を読み取り中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 組 · 余分なコピー {1:N0} 個 · {2} を空けられます</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>{0} を超えるファイルに重複はありません。</value></data>
@@ -1335,4 +1340,119 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Inspect_More" xml:space="preserve"><value>他 {0:N0} 件</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>この {0:N0} 件でフォルダーの {1}</value></data>
   <data name="Inspect_OneThing" xml:space="preserve"><value>フォルダーの {0} は 1 つの項目</value></data>
+  <data name="Main_ViewStatistics" xml:space="preserve"><value>統計</value></data>
+  <data name="Main_ViewStatisticsTip" xml:space="preserve"><value>スキャンを数字で見る: サイズ、種類、更新時期、拡張子</value></data>
+  <data name="Stats_Title" xml:space="preserve"><value>統計</value></data>
+  <data name="Stats_ScopeTip" xml:space="preserve"><value>数字が対象とするフォルダー</value></data>
+  <data name="Stats_WholeScan" xml:space="preserve"><value>スキャン全体 ({0})</value></data>
+  <data name="Stats_Compared" xml:space="preserve"><value>{0}のスキャンと比較</value></data>
+  <data name="Stats_SinceCompared" xml:space="preserve"><value>{1}以降 {0}</value></data>
+  <data name="Stats_ShareOfDrive" xml:space="preserve"><value>{1}中の{0}</value></data>
+  <data name="Stats_FoldersCount" xml:space="preserve"><value>{0:N0} フォルダー</value></data>
+  <data name="Stats_AverageFile" xml:space="preserve"><value>平均ファイル</value></data>
+  <data name="Stats_Median" xml:space="preserve"><value>中央値 {0}</value></data>
+  <data name="Stats_LargestFile" xml:space="preserve"><value>最大のファイル</value></data>
+  <data name="Stats_OutOfReach" xml:space="preserve"><value>対象外</value></data>
+  <data name="Stats_OutOfReachDetail" xml:space="preserve"><value>{0} 上で使用中、このスキャンには含まれない</value></data>
+  <data name="Stats_EmptyCount" xml:space="preserve"><value>{0:N0} 個が空</value></data>
+  <data name="Stats_FreeDetail" xml:space="preserve"><value>{1}中の{0}</value></data>
+  <data name="Stats_Deepest" xml:space="preserve"><value>最も深いフォルダー</value></data>
+  <data name="Stats_Levels" xml:space="preserve"><value>{0} 階層</value></data>
+  <data name="Stats_BySize" xml:space="preserve"><value>サイズ別のファイル</value></data>
+  <data name="Stats_BySizeSub" xml:space="preserve"><value>倍ごとに 1 行、種類ごとに積み上げ。行をクリックするとそのファイルをマップで表示します。</value></data>
+  <data name="Stats_BySizeCompared" xml:space="preserve"><value>目印は比較したスキャンのバーの終わり、色付きの列はそれ以降の変化です。</value></data>
+  <data name="Stats_Space" xml:space="preserve"><value>容量</value></data>
+  <data name="Stats_Count" xml:space="preserve"><value>個数</value></data>
+  <data name="Stats_ComparedMark" xml:space="preserve"><value>比較したスキャン</value></data>
+  <data name="Stats_LegendGrew" xml:space="preserve"><value>+ 増加</value></data>
+  <data name="Stats_LegendShrank" xml:space="preserve"><value>− 減少</value></data>
+  <data name="Stats_ByKind" xml:space="preserve"><value>種類別</value></data>
+  <data name="Stats_ByKindSub" xml:space="preserve"><value>種類をクリックするとそのファイルをマップで表示します。</value></data>
+  <data name="Stats_KindsCaption" xml:space="preserve"><value>種類</value></data>
+  <data name="Stats_ByAge" xml:space="preserve"><value>更新時期別</value></data>
+  <data name="Stats_ByAgeSub" xml:space="preserve"><value>ファイルが最後に変更された時期。行をクリックするとマップで表示します。</value></data>
+  <data name="Stats_Age_Today" xml:space="preserve"><value>今日</value></data>
+  <data name="Stats_Age_ThisWeek" xml:space="preserve"><value>今週</value></data>
+  <data name="Stats_Age_ThisMonth" xml:space="preserve"><value>今月</value></data>
+  <data name="Stats_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
+  <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1〜2 年</value></data>
+  <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2〜5 年</value></data>
+  <data name="Stats_Age_Older" xml:space="preserve"><value>それ以前</value></data>
+  <data name="Stats_Worth" xml:space="preserve"><value>注目</value></data>
+  <data name="Stats_WorthSub" xml:space="preserve"><value>取り戻しやすい容量。「表示」でその条件のマップを開きます。</value></data>
+  <data name="Stats_Slack" xml:space="preserve"><value>クラスターの無駄</value></data>
+  <data name="Stats_SlackDetail" xml:space="preserve"><value>ファイルサイズを超えて割り当て</value></data>
+  <data name="Stats_Tiny" xml:space="preserve"><value>4 KB 未満のファイル</value></data>
+  <data name="Stats_TinyDetail" xml:space="preserve"><value>ファイルの {0}、{1}</value></data>
+  <data name="Stats_EmptyFolders" xml:space="preserve"><value>空のフォルダー</value></data>
+  <data name="Stats_ZeroByte" xml:space="preserve"><value>0 バイトのファイル</value></data>
+  <data name="Stats_Untouched" xml:space="preserve"><value>2 年以上未変更</value></data>
+  <data name="Stats_UntouchedDetail" xml:space="preserve"><value>スキャンの {0}</value></data>
+  <data name="Stats_Cleanup" xml:space="preserve"><value>一時ファイルとキャッシュ</value></data>
+  <data name="Stats_CleanupDetail" xml:space="preserve"><value>インサイトのクリーンアップ一覧の内容</value></data>
+  <data name="Stats_LargestSub" xml:space="preserve"><value>範囲内で最も大きいファイルとフォルダー。クリックするとマップに表示します。</value></data>
+  <data name="Insights_TileDupHint" xml:space="preserve"><value>検索すると重複分のサイズがわかります</value></data>
+  <data name="Insights_TileRebuild" xml:space="preserve"><value>再生成可能</value></data>
+  <data name="Insights_TileRebuildNone" xml:space="preserve"><value>プロジェクトは見つかりませんでした</value></data>
+  <data name="Insights_TileRebuildDetail" xml:space="preserve"><value>node_modules、.git、ビルド出力</value></data>
+  <data name="Insights_FactZeroByte" xml:space="preserve"><value>0 バイトのファイル {0:N0} 個</value></data>
+  <data name="Insights_InStatistics" xml:space="preserve"><value>ファイルの種類、経過期間、最大のファイルとフォルダーは「統計」にあります。</value></data>
+  <data name="Insights_OpenStatistics" xml:space="preserve"><value>統計を開く</value></data>
+  <data name="Stats_Show" xml:space="preserve"><value>表示</value></data>
+  <data name="Stats_Extensions" xml:space="preserve"><value>拡張子</value></data>
+  <data name="Stats_ExtensionsSub" xml:space="preserve"><value>容量順の上位 {0} 件 (全 {1:N0} 件)。エクスポートはすべて保存します。</value></data>
+  <data name="Stats_Col_Extension" xml:space="preserve"><value>拡張子</value></data>
+  <data name="Stats_Col_Kind" xml:space="preserve"><value>種類</value></data>
+  <data name="Stats_Col_Space" xml:space="preserve"><value>容量</value></data>
+  <data name="Stats_Col_Average" xml:space="preserve"><value>平均</value></data>
+  <data name="Stats_Col_Share" xml:space="preserve"><value>割合</value></data>
+  <data name="Stats_Col_Change" xml:space="preserve"><value>変化</value></data>
+  <data name="Stats_NoExtension" xml:space="preserve"><value>(拡張子なし)</value></data>
+  <data name="Main_ThemeToLight" xml:space="preserve"><value>ライトテーマに切り替え</value></data>
+  <data name="Main_ThemeToDark" xml:space="preserve"><value>ダークテーマに切り替え</value></data>
+  <data name="PaletteEd_FromPicture" xml:space="preserve"><value>画像から…</value></data>
+  <data name="PaletteEd_StartFrom" xml:space="preserve"><value>開始元</value></data>
+  <data name="PaletteEd_Colors" xml:space="preserve"><value>色</value></data>
+  <data name="PaletteEd_Scheme" xml:space="preserve"><value>配色</value></data>
+  <data name="PaletteEd_Triad" xml:space="preserve"><value>トライアド</value></data>
+  <data name="PaletteEd_TriadDesc" xml:space="preserve"><value>色相環を三等分した 3 色</value></data>
+  <data name="PaletteEd_DepthFiles" xml:space="preserve"><value>階層とファイル</value></data>
+  <data name="PaletteEd_EachLevel" xml:space="preserve"><value>階層ごと</value></data>
+  <data name="PaletteEd_LevelLighter" xml:space="preserve"><value>+{0}% 明るく</value></data>
+  <data name="PaletteEd_LevelDarker" xml:space="preserve"><value>−{0}% 暗く</value></data>
+  <data name="PaletteEd_LevelSame" xml:space="preserve"><value>同じ明るさ</value></data>
+  <data name="PaletteEd_FilesSame" xml:space="preserve"><value>フォルダーと同じ</value></data>
+  <data name="PaletteEd_FilesTinted" xml:space="preserve"><value>{0}% 薄く</value></data>
+  <data name="PaletteEd_FilesTintedShort" xml:space="preserve"><value>薄く</value></data>
+  <data name="PaletteEd_FilesOwnShort" xml:space="preserve"><value>個別の色</value></data>
+  <data name="PaletteEd_Fix" xml:space="preserve"><value>修正</value></data>
+  <data name="PaletteEd_Advanced" xml:space="preserve"><value>詳細: フォルダーと種類ごとの色、16 進入力、JSON</value></data>
+  <data name="PaletteEd_Simple" xml:space="preserve"><value>シンプル: 色相、配色、階層</value></data>
+  <data name="PaletteEd_FoldersGridSub" xml:space="preserve"><value>最上位フォルダーごとに 1 色、下の階層で繰り返し。クリックで編集</value></data>
+  <data name="PaletteEd_FilesGridSub" xml:space="preserve"><value>各フォルダー色の下のファイル色</value></data>
+  <data name="PaletteEd_TypesGridSub" xml:space="preserve"><value>設定するまでフォルダーに従います</value></data>
+  <data name="PaletteEd_Selected" xml:space="preserve"><value>選択中</value></data>
+  <data name="PaletteEd_AlsoTypes" xml:space="preserve"><value>{0} ファイルにも</value></data>
+  <data name="PaletteEd_ExportFile" xml:space="preserve"><value>ファイルを書き出す…</value></data>
+  <data name="PaletteEd_ClickPreview" xml:space="preserve"><value>プレビューの箱をクリックすると、その色を選択できます。</value></data>
+  <data name="PaletteEd_LiveNote" xml:space="preserve"><value>変更はすぐプレビューに反映されます。保存を選ぶまで何も保存されません。</value></data>
+  <data name="PaletteEd_PictureFailed" xml:space="preserve"><value>その画像を読み取れませんでした。</value></data>
+  <data name="PaletteEd_PictureTaken" xml:space="preserve"><value>{0} から色相を取り込みました。</value></data>
+  <data name="PaletteEd_Pictures" xml:space="preserve"><value>画像</value></data>
+  <data name="PaletteEd_SavedFile" xml:space="preserve"><value>{0} に保存しました</value></data>
+  <data name="Scan_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="Scan_StopTip" xml:space="preserve"><value>スキャンを停止してスタートページに戻ります。ここまで読み取った内容は破棄されます (Esc)</value></data>
+  <data name="Settings_ScanCard" xml:space="preserve"><value>スキャンカード</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>スキャン中に進行状況カードを置く位置。</value></data>
+  <data name="Settings_Minimap" xml:space="preserve"><value>ミニマップ</value></data>
+  <data name="Settings_Minimap_Desc" xml:space="preserve"><value>拡大中に表示されます。マップの隅に、スキャン内の大きなフォルダーを簡略に描いた小さな画像と現在位置を示す枠を表示します。クリックまたはドラッグで移動できます。「端のマーカー」は、マップの端に細いバーを 2 本表示するだけで、何も隠しません。画像を右クリックすると隠せます。</value></data>
+  <data name="Minimap_Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="Minimap_Edges" xml:space="preserve"><value>端のマーカー</value></data>
+  <data name="Minimap_Hide" xml:space="preserve"><value>ミニマップを隠す</value></data>
+  <data name="Status_MinimapHidden" xml:space="preserve"><value>ミニマップを隠しました。[設定] › [動作] › [ミニマップ] で戻せます。</value></data>
+  <data name="ScanCard_BottomRight" xml:space="preserve"><value>右下</value></data>
+  <data name="ScanCard_BottomLeft" xml:space="preserve"><value>左下</value></data>
+  <data name="ScanCard_TopRight" xml:space="preserve"><value>右上</value></data>
+  <data name="ScanCard_TopLeft" xml:space="preserve"><value>左上</value></data>
+  <data name="ScanCard_Center" xml:space="preserve"><value>中央</value></data>
 </root>

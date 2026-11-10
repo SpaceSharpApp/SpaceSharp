@@ -68,6 +68,7 @@ public sealed partial class TreemapControl
     private void SetView(double zoom, Point center)
     {
         (double baseWidth, double baseHeight) = BaseSize();
+        BeforeZoom(zoom);
         _zoom = Math.Clamp(zoom, 1, MaxZoom);
         center = ClampCenter(center, _zoom);
         _offset = new Vector(
@@ -355,6 +356,7 @@ public sealed partial class TreemapControl
             return;
         }
 
+        BeforeZoom(newZoom);
         double canvasX = (anchor.X + _offset.X) / _zoom;
         double canvasY = (anchor.Y + _offset.Y) / _zoom;
         _zoom = newZoom;

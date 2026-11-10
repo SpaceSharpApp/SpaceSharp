@@ -14,7 +14,9 @@ public enum PaletteSpread
     /// <summary>The base and its complement, alternating.</summary>
     TwoTone,
     /// <summary>One hue in steps of lightness and saturation.</summary>
-    OneHue
+    OneHue,
+    /// <summary>The base and the two hues a third of the wheel away, cycling.</summary>
+    Triad
 }
 
 /// <summary>An editable palette, as the palette editor shows it and a custom palette file holds it.</summary>
@@ -257,6 +259,18 @@ public sealed class PaletteDraft
                     double toneLightness = lightness + ((i / 2) % 3 - 1) * 0.1;
                     double toneSaturation = saturation - ((i / 6) % 2) * 0.2;
                     result.Add(Palette.FromHsl(toneHue + (i / 6) * 15, Math.Clamp(toneSaturation, 0.1, 1), toneLightness));
+                }
+                break;
+
+            case PaletteSpread.Triad:
+                for (int i = 0; i < FolderCount; i++)
+                {
+                    // the three hues cycle; each round of three is a little lighter and a little less saturated
+                    int round = i / 3;
+                    result.Add(Palette.FromHsl(
+                        hue + (i % 3) * 120 + round * 8,
+                        Math.Clamp(saturation - round * 0.06, 0.1, 1),
+                        Math.Clamp(lightness + (round - 1.5) * 0.06, 0.2, 0.8)));
                 }
                 break;
 

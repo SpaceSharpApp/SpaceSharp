@@ -23,7 +23,36 @@ public sealed partial class TreemapControl
     /// <see cref="Rects.Empty"/> for a child squarify did not place.</param>
     /// <param name="Group">The group node standing in for the small children, or null when none were grouped.</param>
     /// <param name="GroupMatched">True when at least one grouped child passes the current filter, so the group box is drawn undimmed.</param>
-    private sealed record CachedChildLayout(int Cutoff, IReadOnlyList<FsNode> Children, Rect[] Normalized, FsNode? Group, bool GroupMatched);
+    /// <param name="Aspect">Width over height of the content box the layout was made for; a live scan reuses a layout only for the same shape.</param>
+    private sealed record CachedChildLayout(int Cutoff, IReadOnlyList<FsNode> Children, Rect[] Normalized, FsNode? Group, bool GroupMatched, double Aspect);
+
+    /// <summary>True while a live scan's snapshot is laid out with the layouts of the snapshot before it still cached. A finished folder
+    /// is the same node in every snapshot, so its layout is reused when its box has the same shape, and only the folders still being
+    /// walked are laid out again. A cached layout made for another shape is laid out afresh, and the zoom's sticky cutoff is off, so the
+    /// result is what a layout from nothing would give.</summary>
+    private bool _liveKeepLayouts;
+
+    /// <summary>Drops the cached layouts of folders the latest layout did not show, such as the stand-ins of the snapshot before.</summary>
+    private void PruneLayoutCache()
+    {
+        List<FsNode>? stale = null;
+        foreach (FsNode folder in _layoutCache.Keys)
+        {
+            if (!_index.ContainsKey(folder))
+            {
+                (stale ??= new List<FsNode>()).Add(folder);
+            }
+        }
+
+        if (stale is null)
+        {
+            return;
+        }
+        foreach (FsNode folder in stale)
+        {
+            _layoutCache.Remove(folder);
+        }
+    }
 
     // ================================================================ layout
 
@@ -65,7 +94,6 @@ public sealed partial class TreemapControl
     {
         _rebuildPending = false;
         _items.Clear();
-        _liveKeys = null;
         _index.Clear();
         _matchedGroups.Clear();
         _subdivided.Clear();
@@ -93,20 +121,30 @@ public sealed partial class TreemapControl
 
         DrawOverlay();
         UpdateFocus();
+        AfterLayout();
     }
 
-    /// <summary>Paints the map layer: the background, then any boxes fading out, then every laid-out box in layout order (parents before
-    /// children).</summary>
+    /// <summary>Paints the map layer: the background, then every laid-out box in layout order (parents before children).</summary>
     /// <param name="dc">The map layer's drawing context for this render pass.</param>
     private void DrawMap(DrawingContext dc)
     {
+        long started = System.Diagnostics.Stopwatch.GetTimestamp();
         dc.DrawRectangle(MapBackground ?? BackgroundBrush, null, _viewport);
-        DrawLiveLeaving(dc);
         for (int i = 0; i < _items.Count; i++)
         {
-            DrawLiveItem(dc, i);
+            DrawItem(dc, _items[i]);
         }
+        LastDrawMilliseconds = System.Diagnostics.Stopwatch.GetElapsedTime(started).TotalMilliseconds;
     }
+
+    /// <summary>How long the latest paint of the map layer took to issue its drawing, in milliseconds; for diagnostics.</summary>
+    public double LastDrawMilliseconds
+    {
+        get; private set;
+    }
+
+    /// <summary>How many boxes the current layout holds; for diagnostics.</summary>
+    public int BoxCount => _items.Count;
 
     /// <summary>Containers whose children were laid out this pass; a group in this set draws no label, its members do.</summary>
     private readonly HashSet<FsNode> _subdivided = new();
@@ -270,7 +308,7 @@ public sealed partial class TreemapControl
                 // Screen-based, so sticky on the way in: a layout already made with boxes keeps its cutoff while the zoom would only
                 // add more, and the remainder does the adding inside its own rectangle. Zooming back out below it lays out afresh, which
                 // lands on the same picture as before, since the same zoom gives the same cutoff.
-                if (_layoutCache.TryGetValue(folder, out CachedChildLayout? sticky) && sticky.Cutoff > 0 && cutoff >= sticky.Cutoff)
+                if (!_liveKeepLayouts && _layoutCache.TryGetValue(folder, out CachedChildLayout? sticky) && sticky.Cutoff > 0 && cutoff >= sticky.Cutoff)
                 {
                     cutoff = sticky.Cutoff;
                 }
@@ -283,9 +321,10 @@ public sealed partial class TreemapControl
             }
         }
 
+        double aspect = content.Height > 0 ? content.Width / content.Height : 0;
         if (_layoutCache.TryGetValue(folder, out CachedChildLayout? cached))
         {
-            if (cached.Cutoff == cutoff)
+            if (cached.Cutoff == cutoff && (!_liveKeepLayouts || Math.Abs(cached.Aspect - aspect) <= 0.002 * aspect))
             {
                 return cached;
             }
@@ -300,7 +339,7 @@ public sealed partial class TreemapControl
 
         if (cutoff < 0)
         {
-            cached = new CachedChildLayout(cutoff, Array.Empty<FsNode>(), Array.Empty<Rect>(), null, false);
+            cached = new CachedChildLayout(cutoff, Array.Empty<FsNode>(), Array.Empty<Rect>(), null, false, aspect);
             _layoutCache[folder] = cached;
             return cached;
         }
@@ -341,7 +380,7 @@ public sealed partial class TreemapControl
             normalized[i] = placed.TryGetValue(children[i], out Rect rect) ? rect : Rects.Empty;
         }
 
-        cached = new CachedChildLayout(cutoff, children, normalized, group, groupMatched);
+        cached = new CachedChildLayout(cutoff, children, normalized, group, groupMatched, aspect);
         _layoutCache[folder] = cached;
         return cached;
     }
@@ -362,15 +401,21 @@ public sealed partial class TreemapControl
         int fileCount = 0;
         foreach (FsNode child in children)
         {
-            if (!child.IsDirectory && !child.IsFreeSpace && child.SizeFor(_measure) > 0)
+            if (!child.IsDirectory && !child.IsFreeSpace && !StillReading(child) && child.SizeFor(_measure) > 0)
             {
                 fileBytes += child.SizeFor(_measure);
                 fileCount++;
             }
         }
         double unit = fileCount == 0 ? 0 : (double)fileBytes / fileCount;
-        return node => node.SizeFor(_measure) <= 0 ? 0 : node.IsDirectory || node.IsFreeSpace ? node.SizeFor(_measure) : unit;
+        return node => node.SizeFor(_measure) <= 0 ? 0 : node.IsDirectory || node.IsFreeSpace || StillReading(node) ? node.SizeFor(_measure) : unit;
     }
+
+    /// <summary>True for the box a live scan puts in a folder for what is not read yet: a group with no members. It keeps its true
+    /// size in the Uniform layout, as a folder does.</summary>
+    /// <param name="node">Any node.</param>
+    /// <returns>True for a live scan's "still reading" box.</returns>
+    private static bool StillReading(FsNode node) => node.IsGroup && node.GroupMembers is { Count: 0 };
 
     /// <summary>The smallest on-screen area, in square pixels, a group member gets a box of its own for: 18 by 18.</summary>
     private const double GroupMemberArea = 18 * 18;

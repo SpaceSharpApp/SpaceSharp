@@ -89,6 +89,11 @@ internal sealed class AppSettings
     public bool AnimateZoom { get; set; } = true;
     /// <summary>True draws the map while a folder walk runs; file-table scans never draw live.</summary>
     public bool LiveMap { get; set; } = true;
+    /// <summary>Where the scanning card sits over the map: "BottomRight", "BottomLeft", "TopRight", "TopLeft" or "Center".</summary>
+    public string ScanCardPlace { get; set; } = "BottomRight";
+    /// <summary>The minimap shown while the map is zoomed in: a card in a corner ("BottomLeft", "BottomRight", "TopLeft", "TopRight"),
+    /// thin markers on the map's edges ("Edges"), or nothing ("Off").</summary>
+    public string MinimapPlace { get; set; } = "BottomLeft";
     /// <summary>True allows a palette made for the other theme without switching the theme.</summary>
     public bool PaletteAnyTheme
     {
@@ -171,7 +176,7 @@ internal sealed class AppSettings
     /// <summary>"Classic" for square boxes and the grid, "Modern" for rounded boxes with file icons and labels that shrink with the box.</summary>
     public string MapStyle { get; set; } = "Modern";
     /// <summary>"BySize" (Physical) for the treemap, "Uniform" for folders by size but every file in a folder drawn the same.</summary>
-    public string MapLayout { get; set; } = "BySize";
+    public string MapLayout { get; set; } = "Uniform";
     /// <summary>The Export window's last delimiter: "Comma", "Semicolon" or "Tab".</summary>
     public string ExportDelimiter { get; set; } = "Comma";
     /// <summary>The Export window's last columns, as the flags enum's names.</summary>
@@ -264,6 +269,8 @@ internal sealed class AppSettings
         MergeChains = defaults.MergeChains;
         AnimateZoom = defaults.AnimateZoom;
         LiveMap = defaults.LiveMap;
+        ScanCardPlace = defaults.ScanCardPlace;
+        MinimapPlace = defaults.MinimapPlace;
         PaletteAnyTheme = defaults.PaletteAnyTheme;
         IncludeHidden = defaults.IncludeHidden;
         FastNtfsScan = defaults.FastNtfsScan;

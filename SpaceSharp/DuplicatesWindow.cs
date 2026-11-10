@@ -51,7 +51,7 @@ public sealed class DuplicatesWindow : Window
 
     /// <summary>Builds the window; the search starts when the user asks for it.</summary>
     /// <param name="main">The main window, told what was deleted and handed the result to show in Insights.</param>
-    /// <param name="root">The scan root to search.</param>
+    /// <param name="root">What to search: the scan root, or a folder of the scan to search alone, which the header then names.</param>
     /// <param name="earlier">A result from an earlier search of the same scan, shown at once; null starts empty.</param>
     /// <param name="highlight">A file to pick out: the search runs at once at the largest minimum the file clears, and its set is selected; null for the plain window.</param>
     public DuplicatesWindow(MainWindow main, FsNode root, DuplicateResult? earlier, FsNode? highlight = null)
@@ -71,6 +71,11 @@ public sealed class DuplicatesWindow : Window
         var header = new StackPanel();
         header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold });
         header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Intro"), FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
+        if (root.Parent is not null)
+        {
+            // one folder of the scan, not all of it: say which, so a short list is not read as the whole drive's
+            header.Children.Add(new TextBlock { Text = Strings.Format("Dup_InFolder", root.FullPath), FontSize = 12.5, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap });
+        }
 
         var controls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 12, 0, 0) };
         controls.Children.Add(new TextBlock { Text = Strings.Get("Dup_MinSize"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center });

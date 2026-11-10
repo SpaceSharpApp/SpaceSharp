@@ -28,6 +28,7 @@ public sealed class ShortcutsWindow : Window
         ["I"] = (Strings.Get("Key_Inspect"), true),
         ["C"] = (Strings.Get("Key_Copy"), true),
         ["F"] = (Strings.Get("Key_Filter"), true),
+        ["D"] = (Strings.Get("Key_Duplicates"), true),
         ["S"] = (Strings.Get("Key_SaveScan"), true),
         ["O"] = (Strings.Get("Key_OpenScan"), true),
         ["W"] = (Strings.Get("Key_CloseScan"), true),
@@ -221,7 +222,7 @@ public sealed class ShortcutsWindow : Window
             }),
             (Strings.Get("Keys_Scans"), new[]
             {
-                (WithCtrl("S"), Strings.Get("Key_SaveScan")), (WithCtrl("O"), Strings.Get("Key_OpenScan")), (WithCtrl(","), Strings.Get("Key_Settings")),
+                (WithCtrl("S"), Strings.Get("Key_SaveScan")), (WithCtrl("O"), Strings.Get("Key_OpenScan")), (WithCtrl("D"), Strings.Get("Key_Duplicates")), (WithCtrl(","), Strings.Get("Key_Settings")),
                 ("T", Strings.Get("Key_Achievements")), ("F1", Strings.Get("Key_About"))
             })
         };

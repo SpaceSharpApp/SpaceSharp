@@ -40,28 +40,13 @@
           <Border Classes="divider" />
           <Button x:Name="MapViewButton" Classes="primary" Margin="0,0,2,0" Padding="10,0" Click="MapView_Click" />
           <Button x:Name="InsightsButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="InsightsView_Click" />
+          <Button x:Name="StatisticsButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="StatisticsView_Click" />
           <Button x:Name="ChangesButton" Classes="tool" Margin="0,0,6,0" Padding="10,0" Click="ChangesView_Click" />
           <Border Classes="divider" />
           <Button x:Name="ZoomOutButton" Classes="tool" Margin="0,0,6,0" Click="ZoomOut_Click"><controls:Icon Glyph="{StaticResource Icon.ZoomOut}" Width="15" Height="15" /></Button>
           <TextBlock x:Name="ZoomLabel" Width="64" TextAlignment="Center" VerticalAlignment="Center" Classes="dim" Text="—" Margin="0,0,6,0" />
           <Button x:Name="ZoomInButton" Classes="tool" Margin="0,0,6,0" Click="ZoomIn_Click"><controls:Icon Glyph="{StaticResource Icon.ZoomIn}" Width="15" Height="15" /></Button>
-          <Border Classes="divider" />
-          <Button x:Name="PictureButton" Classes="tool" Margin="0,0,6,0" Click="SavePicture_Click"><controls:Icon Glyph="{StaticResource Icon.Picture}" Width="15" Height="15" /></Button>
         </StackPanel>
-      </DockPanel>
-    </Border>
-
-    <!-- ============================================================ protected folders notice -->
-    <!-- an inset notice card: a badge with the shield, the sentence, an outlined action and a quiet close -->
-    <Border x:Name="AccessBar" DockPanel.Dock="Top" IsVisible="False" Margin="12,10,12,0" Padding="10,8,8,8" CornerRadius="10"
-            Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
-      <DockPanel>
-        <Button x:Name="AccessCloseButton" DockPanel.Dock="Right" Classes="tool" Width="30" Height="30" MinWidth="30" Padding="0" Margin="4,0,0,0" Click="CloseAccessBar_Click"><controls:Icon Glyph="{StaticResource Icon.Close}" Width="14" Height="14" /></Button>
-        <Button x:Name="AccessRestartButton" DockPanel.Dock="Right" Classes="outline" Height="30" Padding="12,0" Margin="14,0,0,0" Click="RestartElevated_Click" />
-        <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="8" Background="{DynamicResource AccentFaint}" Margin="0,0,12,0">
-          <controls:Icon Glyph="{StaticResource Icon.Shield}" Width="16" Height="16" StrokeWidth="2" Foreground="{DynamicResource Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        </Border>
-        <TextBlock x:Name="AccessText" FontSize="13" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
       </DockPanel>
     </Border>
 
@@ -70,7 +55,9 @@
       <DockPanel>
         <!-- The filter text lives here, hidden: shortcuts, presets and both filter faces all write to it. -->
         <TextBox x:Name="FilterBox" IsVisible="False" Width="0" TextChanged="FilterBox_TextChanged" />
-        <Button x:Name="FilterToggleButton" DockPanel.Dock="Right" Classes="tool" Height="28" Margin="12,0,4,0" Click="FilterToggle_Click" />
+        <Button x:Name="FilterToggleButton" DockPanel.Dock="Right" Classes="tool" Height="28" Margin="6,0,4,0" Click="FilterToggle_Click" />
+        <!-- beside the map it takes a picture of, with a label: a lone icon at the end of the toolbar said nothing -->
+        <Button x:Name="PictureButton" DockPanel.Dock="Right" Classes="tool" Height="28" Padding="8,0,10,0" Margin="12,0,0,0" Click="SavePicture_Click" />
         <TextBlock x:Name="BreadcrumbInfo" DockPanel.Dock="Right" Classes="dim" VerticalAlignment="Center" Margin="12,0,4,0" />
         <StackPanel x:Name="Crumbs" Orientation="Horizontal" ClipToBounds="True" VerticalAlignment="Center" />
       </DockPanel>
@@ -127,6 +114,11 @@
       <!-- the Insights view, in the map's place -->
       <ScrollViewer x:Name="InsightsView" IsVisible="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{DynamicResource Window}" SizeChanged="InsightsView_SizeChanged">
         <StackPanel x:Name="InsightsHost" Margin="18,16,22,18" />
+      </ScrollViewer>
+
+      <!-- the Statistics view, in the map's place: built by RefreshStatistics -->
+      <ScrollViewer x:Name="StatisticsView" IsVisible="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{DynamicResource Window}" SizeChanged="StatisticsView_SizeChanged">
+        <StackPanel x:Name="StatisticsHost" Margin="18,16,22,18" />
       </ScrollViewer>
 
       <!-- the Changes view, in the map's place: built by BuildChangesView -->
@@ -223,6 +215,19 @@
         </DockPanel>
       </Border>
 
+      <!-- protected folders notice: floats over the top of the map, so showing or closing it never resizes the map -->
+      <Border x:Name="AccessBar" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="18,14,18,0" MaxWidth="760" Padding="10,8,8,8" CornerRadius="10"
+              Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" BoxShadow="0 8 28 0 #80000000">
+        <DockPanel>
+          <Button x:Name="AccessCloseButton" DockPanel.Dock="Right" Classes="tool" Width="30" Height="30" MinWidth="30" Padding="0" Margin="4,0,0,0" VerticalAlignment="Center" Click="CloseAccessBar_Click"><controls:Icon Glyph="{StaticResource Icon.Close}" Width="14" Height="14" /></Button>
+          <Button x:Name="AccessRestartButton" DockPanel.Dock="Right" Classes="outline" Height="30" Padding="12,0" Margin="14,0,0,0" VerticalAlignment="Center" Click="RestartElevated_Click" />
+          <Border DockPanel.Dock="Left" Width="30" Height="30" CornerRadius="8" Background="{DynamicResource AccentFaint}" Margin="0,0,12,0" VerticalAlignment="Center">
+            <controls:Icon Glyph="{StaticResource Icon.Shield}" Width="16" Height="16" StrokeWidth="2" Foreground="{DynamicResource Accent}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <TextBlock x:Name="AccessText" FontSize="13" VerticalAlignment="Center" TextWrapping="Wrap" />
+        </DockPanel>
+      </Border>
+
       <!-- while scanning: a card in the map's corner; the last map stays in view behind it (centered when there is none) -->
       <Grid x:Name="ScanCard" IsVisible="False" Background="Transparent">
         <!-- over the map during a file-table scan: says why there is no live drawing -->
@@ -238,9 +243,7 @@
           <StackPanel Spacing="12">
             <!-- title row: spinner, drive, what is in use, percent, Cancel -->
             <DockPanel>
-              <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Width="28" Height="28" MinWidth="28" Padding="0" Margin="8,0,0,0" Click="Cancel_Click">
-                <controls:Icon Glyph="{StaticResource Icon.Close}" Width="13" Height="13" />
-              </Button>
+              <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Height="28" MinHeight="28" Padding="10,0" Margin="8,0,0,0" Click="Cancel_Click" />
               <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="8,0,0,0" />
               <controls:Icon x:Name="ScanSpinner" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="16" Height="16" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
               <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="ScanTitle" FontSize="15" FontWeight="Bold" /><Run Text="  " /><Run x:Name="ScanSubtitle" FontSize="12.5" Foreground="{DynamicResource TextDim}" /></TextBlock>

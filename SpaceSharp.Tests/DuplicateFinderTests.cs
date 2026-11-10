@@ -91,6 +91,56 @@ public class DuplicateFinderTests : IDisposable
     }
 
     [Fact]
+    public void FilesThatOnlyDifferBetweenTheSamplesAreToldApart()
+    {
+        // The samples are the first, middle and last 16 KB; byte 50,000 of 200,000 is in none of them, so only the whole read sees it.
+        byte[] first = Bytes(200_000, 7);
+        byte[] second = (byte[])first.Clone();
+        second[50_000] ^= 0xFF;
+        Add("s1.bin", first);
+        Add("s2.bin", second);
+        TestTree.Finish(_root);
+
+        DuplicateResult result = DuplicateFinder.Find(_root, 0, null, CancellationToken.None);
+
+        Assert.Empty(result.Groups);
+    }
+
+    [Fact]
+    public void BigFilesAreReadSideBySideAndOnlyTrueCopiesFormASet()
+    {
+        // Over the 4 MB chunk, so the set is read side by side; the odd one differs in the second chunk, outside every sample.
+        byte[] same = Bytes(9_000_000, 8);
+        byte[] odd = (byte[])same.Clone();
+        odd[6_000_000] ^= 0xFF;
+        FsNode a = Add("big-a.bin", same);
+        FsNode b = Add("big-b.bin", same);
+        Add("big-c.bin", odd);
+        TestTree.Finish(_root);
+
+        DuplicateResult result = DuplicateFinder.Find(_root, 0, null, CancellationToken.None);
+
+        DuplicateGroup group = Assert.Single(result.Groups);
+        Assert.Equal(new[] { a, b }, group.Files);
+        Assert.Equal(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(same)).ToLowerInvariant(), group.Hash);
+        Assert.True(result.BytesRead < 3L * same.Length);   // the odd file was dropped before its end
+    }
+
+    [Fact]
+    public void AFileThatChangedSizeSinceTheScanIsLeftOut()
+    {
+        byte[] same = Bytes(120_000, 9);
+        Add("k1.bin", same);
+        FsNode changed = Add("k2.bin", same);
+        File.WriteAllBytes(changed.FullPath, Bytes(130_000, 9));   // longer now than the scan recorded
+        TestTree.Finish(_root);
+
+        DuplicateResult result = DuplicateFinder.Find(_root, 0, null, CancellationToken.None);
+
+        Assert.Empty(result.Groups);
+    }
+
+    [Fact]
     public void SmallFilesAndHardLinkDuplicatesAreSkipped()
     {
         byte[] tiny = Bytes(100, 4);
