@@ -35,7 +35,7 @@ On Windows the scanner, the Recycle Bin, the title bar colors and the drive dete
 ### Algorithms and data
 
 - The treemap layout is the squarified algorithm from "Squarified Treemaps" by Mark Bruls, Kees Huizing and Jarke J. van Wijk (2000). Algorithms are not copyrightable; the implementation is SpaceSharp's own.
-- The color-blind safe palettes use the eight colors proposed by Masataka Okabe and Kei Ito ("Color Universal Design", 2002, https://jfly.uni-koeln.de/color/), which are free to use.
+- The color-blind safe palettes use the eight colors proposed by Masataka Okabe and Kei Ito ("Color Universal Design", 2002, https://jfly.uni-koeln.de/color/) and four from Paul Tol's bright scheme (https://tol-colors.readthedocs.io/en/latest/); both sets are free to use.
 - The Insights view's "safe to clear" places (Windows.old, caches, the Recycle Bin and so on) are a list SpaceSharp maintains; it is not taken from another tool.
 - The idea of a zoomable treemap of a drive goes back to Ben Shneiderman's work at the University of Maryland (1991) and, as a Windows app, to SpaceMonger by Sean Werkema, now at https://www.stardock.com/products/spacemonger/. SpaceSharp shares no code with it. SpaceMonger, WizTree and WinDirStat are the property of their respective owners and are mentioned only for comparison.
 

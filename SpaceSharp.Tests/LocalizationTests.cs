@@ -83,9 +83,10 @@ public class LocalizationTests
             Assert.Contains("Ach_" + a + "_Name", keys);
             Assert.Contains("Ach_" + a + "_Hint", keys);
         }
-        foreach (string? p in new[] { "Soft", "Classic", "Deep" })
+        foreach (string look in Enum.GetNames<SpaceSharp.Controls.ShadingLook>())
         {
-            Assert.Contains("Preset_" + p, keys);
+            Assert.Contains("ShadingLook_" + look, keys);
+            Assert.Contains("ShadingLook_" + look + "_Desc", keys);
         }
         foreach (string k in SpaceSharp.Services.DriveInsights.SuggestionKeys)
         {

@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Tamaño</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspeccionar: {0:N0} elementos</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspeccionar: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Abrir esta ventana</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Acerca de SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Añadir a la selección</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Cancelar un análisis</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Copiar las rutas seleccionadas</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Marco de resaltado</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>El marco alrededor de los cuadros seleccionados. Los cuadros bajo el mouse mantienen un marco blanco.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Diseño</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Sombreado acolchado</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Sombreado de claro a oscuro en cada archivo, como los dibujaba SpaceMonger. Desactivado da colores planos y los ajustes de abajo no hacen nada.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Preajustes</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Un punto de partida. Los controles de abajo lo afinan.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Suave</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Clásico</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Profundo</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Profundidad</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Qué tan marcado es el sombreado, de un brillo tenue a un cojín profundo.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Extensión</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Archivos más claros o más oscuros en general. Las carpetas conservan su color.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Atenuar dentro de las carpetas</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Cuánto sombreado conservan los archivos anidados. Un valor bajo calma los niveles profundos para que destaquen las carpetas superiores.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Desactivado</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Aspecto</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Bordes</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Almohadilla</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Brillo</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Capas</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Luz lateral</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Colores planos, sin sombreado.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Un borde iluminado en cada caja, como baldosas en relieve. Los colores siguen planos.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Los archivos son más claros en el centro y se oscurecen suavemente hacia los bordes.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>La luz cae desde la parte superior de cada archivo y se desvanece al bajar.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Los archivos descansan sobre su carpeta con una pequeña sombra debajo.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Una pendiente uniforme de luz sobre cada archivo, del lado iluminado al oscuro.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Intensidad</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Qué fuerza tiene el efecto, de casi imperceptible a marcado.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Suavidad</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Hasta dónde entra la sombra desde el borde.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Hundir carpetas</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Dibuja cada carpeta como una bandeja poco profunda.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>También marcos de carpeta</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>El mismo borde en las carpetas, a media intensidad.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Luz desde este lado</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Luz de frente</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Arriba a la izquierda</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp se apoya en trabajo abierto</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Gracias a las personas que están detrás.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>El mapa</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>La disposición es el treemap cuadrado de [Bruls, Huizing y van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publicado en 2000. La idea de mostrar un disco como un mapa viene de [SpaceMonger](https://www.stardock.com/products/spacemonger/) de Sean Werkema, y los treemaps en sí de Ben Shneiderman (1991). La paleta apta para daltónicos usa los ocho colores de [Okabe e Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>La disposición es el treemap cuadrado de [Bruls, Huizing y van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publicado en 2000. La idea de mostrar un disco como un mapa viene de [SpaceMonger](https://www.stardock.com/products/spacemonger/) de Sean Werkema, y los treemaps en sí de Ben Shneiderman (1991). La paleta apta para daltónicos usa los ocho colores de [Okabe e Ito](https://jfly.uni-koeln.de/color/) (2002). Otros cuatro colores proceden del esquema brillante de [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Escrito en C# sobre [.NET 10](https://dotnet.microsoft.com). La interfaz es [Avalonia UI](https://avaloniaui.net), dibujada con [SkiaSharp](https://github.com/mono/SkiaSharp), con la tipografía [Inter](https://rsms.me/inter/) de Rasmus Andersson. Los iconos son de [Lucide](https://lucide.dev), continuación de Feather de Cole Bemis. El instalador y las actualizaciones en Windows vienen de [Velopack](https://velopack.io) de Caelan Sayler. Todos tienen licencia MIT, salvo Lucide (ISC) e Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Idiomas</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Ach_Intro" xml:space="preserve"><value>Algunos cuestan un análisis, otros un año. Ninguno vale nada, que es la gracia.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} de {1} desbloqueados</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Bloqueado</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Los más recientes primero</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Aún por descubrir</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Haga clic en uno para ver una pista. El último, {0}, viene con el tema {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Ninguno todavía. Aparecen mientras usa la aplicación.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>No queda nada por encontrar.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Bloqueado. Cómo se consigue es secreto hasta que lo tengas.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Todos los logros desbloqueados</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Ese era el último. La app no tiene nada más que repartir, así que a partir de ahora solo le mostrará su disco. Bueno, una cosa: Ajustes › Apariencia tiene ahora un tema Oro.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 años</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 años</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Más antiguos</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Vale la pena mirar</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Espacio fácil de recuperar. Mostrar abre el mapa filtrado a ello.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Espacio desaprovechado</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>asignado más allá del tamaño de los archivos</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Archivos de menos de 4 KB</value></data>

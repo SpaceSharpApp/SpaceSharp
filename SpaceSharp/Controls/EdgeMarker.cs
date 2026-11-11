@@ -50,7 +50,7 @@ public sealed class EdgeMarker : Control
         double length = Vertical ? area.Height : area.Width;
         double size = Math.Min(length, Math.Max(MinThumb, (Vertical ? view.Height : view.Width) * length));
         double start = Math.Clamp((Vertical ? view.Y : view.X) * length, 0, length - size);
-        IBrush accent = this.FindResource("Accent") as IBrush ?? Brushes.Orange;
+        IBrush accent = this.TryFindResource("Accent", ActualThemeVariant, out object? found) && found is IBrush brush ? brush : Brushes.Orange;
         context.DrawRectangle(accent, null, Vertical ? new Rect(0, start, area.Width, size) : new Rect(start, 0, size, area.Height));
     }
 

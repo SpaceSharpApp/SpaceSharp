@@ -121,109 +121,14 @@ public sealed partial class TreemapControl
     private static readonly IPen LightHaloPen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0xB8, 0xFF, 0xFF, 0xFF)), 3, lineJoin: PenLineJoin.Round);
     private static readonly IPen DarkHaloPen = new ImmutablePen(new ImmutableSolidColorBrush(Color.FromArgb(0xB8, 0x00, 0x00, 0x00)), 3, lineJoin: PenLineJoin.Round);
 
-    // ---- cushions (one relative gradient per depth level)
-    private const int CushionLevels = 16;
-    private readonly IBrush?[] _cushions = new IBrush?[CushionLevels];
-    private readonly IBrush?[] _cushionsSmall = new IBrush?[CushionLevels];
-
-    /// <summary>Rebuilds the two gradient brushes per depth (normal and small-box) from the shading, brightness and light settings.</summary>
-    private void RebuildCushions()
-    {
-        for (int depth = 0; depth < CushionLevels; depth++)
-        {
-            double keep = Math.Pow(_shadingScale / 100.0, depth);
-            double strength = _cushion / 100.0 * keep;
-            _cushions[depth] = MakeCushion(strength);
-            _cushionsSmall[depth] = MakeCushion(strength * 0.55);
-        }
-    }
-
-    /// <summary>One translucent gradient drawn over a file box: a highlight at the lit edge, a shadow at the far edge, and a brightness
-    /// wash in between.</summary>
-    /// <param name="strength">Shading strength 0..1 for this depth, already scaled down per level; 0 gives a wash alone.</param>
-    /// <returns>A linear gradient along the light direction, a radial one for light from straight ahead, or null when there is nothing
-    /// visible to draw.</returns>
-    private IBrush? MakeCushion(double strength)
-    {
-        // Brightness 0..100 maps to a bias of -1..1 that tilts the highlight and shadow alphas.
-        double brightnessBias = (_brightness - 50) / 50.0;
-        if (strength <= 0.002 && Math.Abs(brightnessBias) < 0.005)
-        {
-            return null;
-        }
-
-        double highlightAlpha = Math.Clamp(0.55 * strength * (1 + 0.8 * brightnessBias), 0, 1);
-        double shadowAlpha = Math.Clamp(0.60 * strength * (1 - 0.8 * brightnessBias), 0, 1);
-        double washAlpha = Math.Abs(brightnessBias) * 0.35;
-        Color wash = brightnessBias >= 0
-            ? Color.FromArgb(A(washAlpha), 0xFF, 0xFF, 0xFF)
-            : Color.FromArgb(A(washAlpha), 0x00, 0x00, 0x00);
-        double midStop = 0.25 + _cushionHeight / 100.0 * 0.55;
-        var stops = new GradientStops
-        {
-            new GradientStop(Blend(Color.FromArgb(A(highlightAlpha), 0xFF, 0xFF, 0xFF), wash), 0.0),
-            new GradientStop(wash, midStop),
-            new GradientStop(Blend(Color.FromArgb(A(shadowAlpha), 0x00, 0x00, 0x00), wash), 1.0)
-        };
-
-        double lightLength = Math.Sqrt(_lightX * _lightX + _lightY * _lightY);
-        if (lightLength < 0.12)
-        {
-            // light from straight ahead
-            return new RadialGradientBrush
-            {
-                GradientStops = stops,
-                Center = RelativePoint.Center,
-                GradientOrigin = RelativePoint.Center,
-                RadiusX = new RelativeScalar(0.75, RelativeUnit.Relative),
-                RadiusY = new RelativeScalar(0.75, RelativeUnit.Relative)
-            };
-        }
-
-        double lightDirectionX = _lightX / lightLength;
-        double lightDirectionY = _lightY / lightLength;
-        return new LinearGradientBrush
-        {
-            GradientStops = stops,
-            StartPoint = new RelativePoint(
-                0.5 + 0.5 * lightDirectionX, 0.5 + 0.5 * lightDirectionY, RelativeUnit.Relative),
-            EndPoint = new RelativePoint(
-                0.5 - 0.5 * lightDirectionX, 0.5 - 0.5 * lightDirectionY, RelativeUnit.Relative)
-        };
-    }
-
     /// <summary>An alpha fraction as a color channel byte.</summary>
     /// <param name="alpha">Opacity 0..1; values outside are clamped.</param>
     /// <returns>0..255, rounded.</returns>
     private static byte A(double alpha) => (byte)Math.Round(255 * Math.Clamp(alpha, 0, 1));
 
-    /// <summary>Composites <paramref name="over"/> onto <paramref name="under"/> (source-over).</summary>
-    /// <param name="over">The color on top, with its alpha.</param>
-    /// <param name="under">The color beneath, with its alpha.</param>
-    /// <returns>The combined color with the combined alpha; transparent when both are fully transparent.</returns>
-    private static Color Blend(Color over, Color under)
-    {
-        double overAlpha = over.A / 255.0;
-        double underAlpha = under.A / 255.0;
-        double combinedAlpha = overAlpha + underAlpha * (1 - overAlpha);
-        if (combinedAlpha <= 0)
-        {
-            return Colors.Transparent;
-        }
-
-        byte Channel(byte overChannel, byte underChannel) =>
-            (byte)Math.Round((overChannel * overAlpha + underChannel * underAlpha * (1 - overAlpha)) / combinedAlpha);
-
-        return Color.FromArgb(
-            A(combinedAlpha),
-            Channel(over.R, under.R),
-            Channel(over.G, under.G),
-            Channel(over.B, under.B));
-    }
-
     // =============================================================== drawing
 
-    /// <summary>Draws one box: the padding gap, fill, cushion, group shade, grid strips, and then either a folder title bar or a file
+    /// <summary>Draws one box: the padding gap, fill, shading, group shade, grid strips, and then either a folder title bar or a file
     /// label.</summary>
     /// <param name="dc">The map layer's drawing context.</param>
     /// <param name="item">The box to draw; its bounds may be a live-tween position rather than the laid-out one.</param>
@@ -295,6 +200,10 @@ public sealed partial class TreemapControl
 
         // ---- body
         double radius = modern ? Math.Min(6, Math.Min(box.Width, box.Height) / 4) : 0;
+        if (!dimmed)
+        {
+            ShadeUnder(dc, item, box, radius);
+        }
         if (modern)
         {
             dc.DrawRectangle(fill, null, new RoundedRect(box, radius));
@@ -304,15 +213,9 @@ public sealed partial class TreemapControl
             dc.DrawRectangle(fill, null, box);
         }
 
-        if (_cushionEnabled && !dimmed && !node.IsDirectory && !node.IsFreeSpace)
+        if (!dimmed && !node.IsDirectory && !node.IsFreeSpace)
         {
-            // Small boxes get the weaker gradient so they do not read as noise.
-            IBrush?[] cushionSet = Math.Min(box.Width, box.Height) < 28 ? _cushionsSmall : _cushions;
-            IBrush? cushion = cushionSet[Math.Min(item.Depth, CushionLevels - 1)];
-            if (cushion is not null)
-            {
-                dc.DrawRectangle(cushion, null, new RoundedRect(box, radius));
-            }
+            ShadeFile(dc, item, box, radius);
         }
 
         if (node.IsGroup)
@@ -348,11 +251,19 @@ public sealed partial class TreemapControl
         {
             if (!item.HasHeader)
             {
+                if (!dimmed)
+                {
+                    ShadeFolder(dc, item, box, radius);
+                }
                 return;
             }
             Rect header = Rects.Intersect(new Rect(inner.X, inner.Y, inner.Width, HeaderHeight), _drawClip);
             if (header.IsBlank())
             {
+                if (!dimmed)
+                {
+                    ShadeFolder(dc, item, box, radius);
+                }
                 return;
             }
 
@@ -366,6 +277,12 @@ public sealed partial class TreemapControl
             else
             {
                 dc.DrawRectangle(barFill, null, header);
+            }
+
+            // The folder's rim goes over the title bar's fill and under its text.
+            if (!dimmed)
+            {
+                ShadeFolder(dc, item, box, radius);
             }
 
             if (_showGrid && !modern)

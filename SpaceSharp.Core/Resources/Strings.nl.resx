@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Grootte</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspecteren: {0:N0} items</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspecteren: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Dit venster openen</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Over SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Toevoegen aan selectie</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Een scan annuleren</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>De geselecteerde paden kopiëren</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Markeringskader</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Het kader rond geselecteerde vakken. Aangewezen vakken houden een wit kader.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Indeling</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Kussenschaduw</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Licht-naar-donker schaduw op elk bestand, zoals SpaceMonger ze tekende. Uit geeft vlakke kleuren, en de instellingen hieronder doen niets.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Voorinstellingen</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Een uitgangspunt. De schuifregelaars hieronder verfijnen het.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Zacht</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Klassiek</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Diep</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Diepte</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Hoe uitgesproken de schaduw is, van een vage glans tot een diep kussen.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Spreiding</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Lichtere of donkerdere bestanden in het algemeen. Mappen houden hun kleur.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Vervagen in mappen</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hoeveel schaduw geneste bestanden behouden. Laag maakt diepe niveaus rustiger zodat de hoofdmappen opvallen.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Uit</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Uiterlijk</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Randen</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Kussen</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Glans</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Lagen</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Zijlicht</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Vlakke kleuren, geen schaduw.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Een verlichte rand om elk vak, als verhoogde tegels. De kleuren blijven vlak.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Bestanden zijn in het midden het lichtst en worden naar de randen toe zacht donkerder.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Het licht valt van boven op elk bestand en vervaagt naar beneden.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Bestanden liggen op hun map, met een kleine schaduw eronder.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Eén gelijkmatig verloop van licht over elk bestand, van de verlichte naar de donkere kant.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Sterkte</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Hoe sterk het effect is, van nauwelijks zichtbaar tot uitgesproken.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Zachtheid</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Hoe ver de schaduw vanaf de rand naar binnen reikt.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Mappen verzinken</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Tekent elke map als een ondiepe bak.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Ook mapkaders</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Dezelfde rand om mappen, op halve sterkte.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Licht van deze kant</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Licht recht van voren</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Linksboven</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp is gebouwd op open werk</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Dank aan de mensen erachter.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>De kaart</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>De indeling is de squarified treemap van [Bruls, Huizing en van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), gepubliceerd in 2000. Het idee om een schijf als kaart te tonen komt van [SpaceMonger](https://www.stardock.com/products/spacemonger/) van Sean Werkema, en treemaps zelf van Ben Shneiderman (1991). Het kleurenblindvriendelijke palet gebruikt de acht kleuren van [Okabe en Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>De indeling is de squarified treemap van [Bruls, Huizing en van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), gepubliceerd in 2000. Het idee om een schijf als kaart te tonen komt van [SpaceMonger](https://www.stardock.com/products/spacemonger/) van Sean Werkema, en treemaps zelf van Ben Shneiderman (1991). Het kleurenblindvriendelijke palet gebruikt de acht kleuren van [Okabe en Ito](https://jfly.uni-koeln.de/color/) (2002). Nog vier kleuren erin komen uit het heldere kleurenschema van [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschreven in C# op [.NET 10](https://dotnet.microsoft.com). De interface is [Avalonia UI](https://avaloniaui.net), getekend met [SkiaSharp](https://github.com/mono/SkiaSharp), in het lettertype [Inter](https://rsms.me/inter/) van Rasmus Andersson. De pictogrammen komen van [Lucide](https://lucide.dev), een voortzetting van Feather van Cole Bemis. Het installatieprogramma en de updates op Windows komen van [Velopack](https://velopack.io) van Caelan Sayler. Alles valt onder de MIT-licentie, behalve Lucide (ISC) en Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Talen</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Ach_Intro" xml:space="preserve"><value>Sommige kosten een scan, andere een jaar. Geen enkele is iets waard, en dat is precies de bedoeling.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} van {1} ontgrendeld</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Vergrendeld</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Nieuwste eerst</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Nog te vinden</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Klik op een ervan voor een hint. De laatste, {0}, komt met het thema {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Nog geen. Ze duiken op terwijl je de app gebruikt.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Er valt niets meer te vinden.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Vergrendeld. Hoe je hem verdient blijft geheim tot je hem hebt.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle prestaties ontgrendeld</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Dat waren ze allemaal. De app heeft niets meer uit te delen, dus vanaf nu laat hij u gewoon uw schijf zien. Nou ja, één ding: Instellingen › Uiterlijk heeft nu een Goud-thema.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 jaar</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 jaar</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Ouder</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Het bekijken waard</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Ruimte die makkelijk terug te winnen is. Tonen opent de kaart erop gefilterd.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Verloren ruimte</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>toegewezen boven de bestandsgroottes</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Bestanden onder 4 KB</value></data>

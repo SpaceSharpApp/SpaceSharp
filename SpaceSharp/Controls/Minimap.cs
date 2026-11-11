@@ -79,7 +79,7 @@ public sealed class Minimap : Control
         double top = Math.Clamp(view.Y * area.Height, 0, area.Height - height);
         var frame = new Rect(left, top, width, height);
 
-        Color accent = (this.FindResource("Accent") as ISolidColorBrush)?.Color ?? Colors.Orange;
+        Color accent = this.TryFindResource("Accent", ActualThemeVariant, out object? found) && found is ISolidColorBrush brush ? brush.Color : Colors.Orange;
         context.DrawRectangle(
             new ImmutableSolidColorBrush(accent, 0.22),
             new Pen(new ImmutableSolidColorBrush(accent), 2),

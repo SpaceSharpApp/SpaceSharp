@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>大小</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>检查：{0:N0} 个项目</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>检查：{0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>打开此窗口</value></data>
+  <data name="Key_About" xml:space="preserve"><value>关于 SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>添加到选择</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>取消扫描</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>复制所选路径</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>高亮边框</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>所选方块周围的边框。悬停的方块保持白色边框。</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>布局</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>垫状阴影</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>每个文件上由亮到暗的阴影，与 SpaceMonger 的绘制方式相同。关闭后为纯色，下面的设置不起作用。</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>预设</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>一个起点。下面的滑块用于微调。</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>柔和</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>经典</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>深邃</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>深度</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>阴影的明显程度，从淡淡的光泽到深深的垫状。</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>扩散</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>文件整体更亮或更暗。文件夹保持原色。</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>文件夹内淡化</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>嵌套文件保留多少阴影。调低可使深层更平静，让顶层文件夹更突出。</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>关闭</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>外观</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>边缘</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>枕形</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>光泽</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>分层</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>侧光</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>纯色，无阴影。</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>每个方块都有一圈受光的边，像凸起的瓷砖。颜色保持纯色。</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>文件中间最亮，向边缘柔和变暗。</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>光从每个文件的顶部落下，向下逐渐淡出。</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>文件叠在所属文件夹之上，下方有一小片阴影。</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>每个文件上有一道均匀的光照坡度，从受光一侧到背光一侧。</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>强度</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>效果的强弱，从几乎看不出到很明显。</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>柔和度</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>阴影从边缘向内延伸多远。</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>下沉文件夹</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>把每个文件夹画成浅盘。</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>文件夹边框也加</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>文件夹也加同样的边，强度减半。</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>光从此侧照来</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>光从正前方照来</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>左上</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp 建立在开放成果之上</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>感谢这些成果背后的人们。</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>地图</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>布局采用 [Bruls、Huizing 和 van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) 于 2000 年发表的 squarified treemap 算法。把磁盘显示为地图的想法来自 Sean Werkema 的 [SpaceMonger](https://www.stardock.com/products/spacemonger/)，treemap 本身则来自 Ben Shneiderman（1991 年）。色觉友好调色板使用 [Okabe 和 Ito](https://jfly.uni-koeln.de/color/) 的八种颜色（2002 年）。</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>布局采用 [Bruls、Huizing 和 van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) 于 2000 年发表的 squarified treemap 算法。把磁盘显示为地图的想法来自 Sean Werkema 的 [SpaceMonger](https://www.stardock.com/products/spacemonger/)，treemap 本身则来自 Ben Shneiderman（1991 年）。色觉友好调色板使用 [Okabe 和 Ito](https://jfly.uni-koeln.de/color/) 的八种颜色（2002 年）。另外四种颜色来自 [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) 的明亮配色。</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>软件</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>以 C# 编写，运行于 [.NET 10](https://dotnet.microsoft.com)。界面使用 [Avalonia UI](https://avaloniaui.net)，由 [SkiaSharp](https://github.com/mono/SkiaSharp) 绘制，字体为 Rasmus Andersson 的 [Inter](https://rsms.me/inter/)。图标来自 [Lucide](https://lucide.dev)，它延续了 Cole Bemis 的 Feather。Windows 安装程序和更新由 Caelan Sayler 的 [Velopack](https://velopack.io) 提供。除 Lucide（ISC）和 Inter（SIL Open Font License）外，均为 MIT 许可。</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>语言</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Ach_Intro" xml:space="preserve"><value>有的一次扫描就能拿到，有的要一年。它们都一文不值，这正是重点。</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>已解锁 {0} / {1}</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>未解锁</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>最新的在前</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>还没找到的</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>单击其中一个可查看提示。最后一个“{0}”会带来“{1}”主题。</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>还没有。用着用着就会出现。</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>没有可找的了。</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>未解锁。怎么拿到它，拿到之前是个秘密。</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>全部成就已解锁</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>这就是全部了。应用没有什么可以再发的了，从现在起它只会给你看你的磁盘。好吧，还有一件事：设置 › 外观 现在有了金色主题。</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 年</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 年</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>更早</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>值得一看</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>容易收回的空间。“显示”会打开按此筛选的地图。</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>簇浪费</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>超出文件大小的分配</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>小于 4 KB 的文件</value></data>

@@ -2,7 +2,7 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.9.0 (unreleased)
+## 2.9.0
 
 ### Views
 
@@ -17,6 +17,8 @@ What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x relea
 
 ### Map
 
+- Shading is redone. Cushion shading, with its presets and its hot spot in one corner, is replaced by a Look picker in Settings › Treemap › Shading with five looks: Edges (a one-pixel lit rim on every box, like raised tiles), Pillow (bright in the middle, darker toward the edges), Sheen (light from the top of each file), Layers (files lifted off their folder with a small shadow, folders as shallow trays) and Side light (one even slope across each file). Each has two or three settings of its own and keeps them when you switch. A fresh install starts with a light Sheen. Settings from an earlier version keep what they had: a flat map stays flat, and a map that had cushion shading on comes up in Side light, the nearest to it.
+- Scan again and compare on the start page scans the drive the way the saved scan was made: by the file table or folder by folder, with hidden files, hard links and exclusions as they were then, whatever Settings say now. Scans made differently cannot be compared, so the button used to end in "the previous scan was made differently" after a setting had changed. When the scan is done it opens Changes.
 - The live map goes by the last scan of the same drive or folder: a folder still being walked is drawn at the size it had then, with the part not yet read as one "…" box, until the walk has read more than that. The map therefore starts out close to the finished one and fills in, instead of reordering itself each time a growing folder overtakes another. The tree on screen is used when it is of the same folder, else the scan saved last time; a first scan has nothing to go by and grows from nothing.
 - The live map is redrawn in one step, up to fifteen times a second, with no slide and no fade between snapshots (a big tree paces them: the next one waits at least as long as the window took to lay out the last, and the snapshot is built on a thread of its own, since the walk keeps every pool thread busy and a pool task waited a second or two for its turn), with icons and labels as the finished map has them. Every folder shows its size so far and its own structure as it is read, ten levels down instead of three: the live map used to hold a folder still being walked back until its ancestor three levels under the root had finished, so a big folder that finished late (Users, with everything under AppData) stayed small until the end, then reordered the whole map and opened into its folders all at once. Folders and files now appear where they belong as the walk reads them, so a folder finishing changes little. On a drive, the used space not read yet is one "…" box at the top level that shrinks as the walk goes, so the first folders do not fill the whole map, and the free-space box is there from the first snapshot. Together that leaves nothing to shift when the walk ends. A folder the walk has finished keeps its layout from one snapshot to the next, so only the folders still being walked are laid out again. A snapshot of the walk is one pass down the folders still being walked, with no copying or sorting of everything recorded so far, which took most of each update's time on a big drive. While a scan runs, the runtime puts off blocking full garbage collections, which froze the window for a moment now and then; this costs memory for the length of the scan only. Label text is shaped once and reused instead of being shaped again for every box on every redraw, which also makes zooming and panning lighter.
 - The "protected folders couldn't be read" notice is a floating notice over the top of the map, with a close button, instead of a bar above it. It used to take a row of its own when a walk ended, which made the map a little shorter and so laid the whole map out anew the moment the scan finished, and again when the notice was closed.
@@ -30,9 +32,16 @@ What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x relea
 
 ### Window
 
+- The Achievements window is a journal now: what you unlocked down a dated line, newest first, each with what earned it, and a Still out there panel beside it with the locked ones by name. A click on a locked one shows its hint under the panel. It replaces the single list of twenty-six rows that all looked alike.
 - The Explorer menu entry "Scan with SpaceSharp" shows the app icon: the icon file stored its small sizes as PNG, which the classic context menu cannot draw, so they are bitmaps now (256 px stays PNG).
 - The theme button shows what a click gives you: a sun in the dark theme, a moon in the light one.
 - Scrollbars are a bare rounded thumb over the edge of the content, no track and no arrows, in every list and page; the one in the Achievements window sits inside its frame instead of over the dates.
+- The right-click menu on free space, or on a cluster of small files, no longer shows a stack of empty rules and grayed-out rows. What cannot be done to the thing clicked (Properties, Copy name, Move to Recycle Bin, Delete permanently) is left out, a rule is only drawn between two groups that both have something in them, the free space card says how much is free, and when More would be the only row left its actions (Rescan, Save scan as, Open saved scan, Compare, Export) stand in the menu itself.
+- What's new is set as a page instead of one block of text: section headings as small labels, each change as its own item with the opening sentence standing out and the detail after it dimmed, in a wider window whose scrollbar no longer lies over the ends of the lines.
+- The text on the amber buttons (OK, Close, Install) is centered when the button is wider than its word.
+- The Shortcuts list lines up: every action starts at the same place in its half of the window, whatever the width of its key. F1 is listed as what it does, About SpaceSharp, instead of "Open this window".
+- About is tidied. Each entry is a full row that lights up under the pointer; rows that open the browser carry a small arrow, Achievements shows its T key as a key, and Crash logs ends in how many there are (0 on a machine where nothing has gone wrong). The .NET and Windows line moved under the version it belongs to.
+- Built on .NET 10.0.15, up from 10.0.14 (the installers and the portable exe carry the runtime, so nothing to install).
 
 ## 2.8.0
 

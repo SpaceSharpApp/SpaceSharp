@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SpaceSharp.Util;
 
@@ -140,19 +141,40 @@ internal sealed class AppSettings
     /// <summary>The gap between a folder's edge and its children, in pixels from 0 to 6.</summary>
     public int Padding { get; set; } = 2;
     // Shading
-    /// <summary>True shades every file box with a cushion gradient; false draws flat fills and ignores the cushion settings.</summary>
-    public bool CushionEnabled { get; set; } = false;
-    /// <summary>The brightness of file cushions in percent, 0 to 100, where 50 leaves the palette color unchanged; folder colors are never affected.</summary>
-    public int Brightness { get; set; } = 55;
-    /// <summary>The strength of the cushion's light-to-dark gradient in percent, 0 (flat) to 100.</summary>
-    public int CushionShading { get; set; } = 30;
-    /// <summary>How steeply the cushion curves toward its edges, in percent from 0 to 100.</summary>
-    public int CushionHeight { get; set; } = 35;
-    /// <summary>How far the cushion effect reaches into large boxes, in percent from 0 to 100.</summary>
-    public int ShadingScale { get; set; } = 60;
-    /// <summary>The horizontal position of the cushion light, -1 (left) to 1 (right).</summary>
+    /// <summary>How files are shaded: "Off" (flat), "Edges", "Pillow", "Sheen", "Layers" or "SideLight". Each look keeps its own
+    /// settings below, so switching between them loses nothing.</summary>
+    public string ShadingLook { get; set; } = "Sheen";
+    /// <summary>Edges: the strength of the rim in percent, 0 to 100.</summary>
+    public int EdgeStrength { get; set; } = 55;
+    /// <summary>Edges: true draws the rim on folder frames too, at half strength.</summary>
+    public bool EdgeFolders { get; set; } = true;
+    /// <summary>Pillow: how dark the edges get, in percent from 0 to 100.</summary>
+    public int PillowDepth { get; set; } = 60;
+    /// <summary>Pillow: how far the shadow reaches in from the edge, in percent from 0 to 100.</summary>
+    public int PillowSoftness { get; set; } = 45;
+    /// <summary>Sheen: the strength of the light in percent, 0 to 100.</summary>
+    public int SheenStrength { get; set; } = 44;
+    /// <summary>Sheen: how far down a file the light reaches, in percent from 0 to 100.</summary>
+    public int SheenSpread { get; set; } = 78;
+    /// <summary>Layers: how far files stand off their folder, in percent from 0 to 100.</summary>
+    public int LayerLift { get; set; } = 50;
+    /// <summary>Layers: true draws each folder as a shallow tray.</summary>
+    public bool LayerSinkFolders { get; set; } = true;
+    /// <summary>Side light: the strength of the slope in percent, 0 to 100.</summary>
+    public int SideStrength { get; set; } = 55;
+    /// <summary>The tone of shaded files in percent, 0 to 100, where 50 leaves the palette color unchanged; folder colors are never affected.</summary>
+    public int Brightness { get; set; } = 52;
+    /// <summary>How much shading survives each nesting level, in percent from 0 to 100.</summary>
+    public int ShadingScale { get; set; } = 68;
+    /// <summary>The cushion switch of versions before 2.9, read once so that a map that was shaded stays shaded; never written.</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool CushionEnabled
+    {
+        get; set;
+    }
+    /// <summary>The horizontal position of the light for Edges and Side light, -1 (left) to 1 (right).</summary>
     public double LightX { get; set; } = -0.5;
-    /// <summary>The vertical position of the cushion light, -1 (top) to 1 (bottom).</summary>
+    /// <summary>The vertical position of the light for Edges and Side light, -1 (top) to 1 (bottom).</summary>
     public double LightY { get; set; } = -0.5;
     /// <summary>True draws a line of <see cref="GridColor"/> between neighboring boxes.</summary>
     public bool ShowGrid { get; set; } = false;
@@ -312,10 +334,17 @@ internal sealed class AppSettings
     public void ResetShading()
     {
         var defaults = new AppSettings();
-        CushionEnabled = defaults.CushionEnabled;
+        ShadingLook = defaults.ShadingLook;
+        EdgeStrength = defaults.EdgeStrength;
+        EdgeFolders = defaults.EdgeFolders;
+        PillowDepth = defaults.PillowDepth;
+        PillowSoftness = defaults.PillowSoftness;
+        SheenStrength = defaults.SheenStrength;
+        SheenSpread = defaults.SheenSpread;
+        LayerLift = defaults.LayerLift;
+        LayerSinkFolders = defaults.LayerSinkFolders;
+        SideStrength = defaults.SideStrength;
         Brightness = defaults.Brightness;
-        CushionShading = defaults.CushionShading;
-        CushionHeight = defaults.CushionHeight;
         ShadingScale = defaults.ShadingScale;
         LightX = defaults.LightX;
         LightY = defaults.LightY;
@@ -337,11 +366,19 @@ internal sealed class AppSettings
         {
             if (File.Exists(FilePath))
             {
-                AppSettings loaded = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath)) ?? new AppSettings();
+                string json = File.ReadAllText(FilePath);
+                AppSettings loaded = JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
                 if (loaded.ColorMode == "ByChange")
                 {
                     loaded.ColorMode = "ByBranch";   // the change color mode became the Changes view in 2.5
                 }
+                if (!json.Contains("\"ShadingLook\"", StringComparison.Ordinal))
+                {
+                    // Settings from before 2.9, when cushion shading became five looks: the map keeps what it had, flat or shaded
+                    // (Side light is the look nearest the cushion). Only a first run gets the new default look.
+                    loaded.ShadingLook = loaded.CushionEnabled ? "SideLight" : "Off";
+                }
+                loaded.CushionEnabled = false;
 
                 return loaded;
             }

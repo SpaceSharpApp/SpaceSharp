@@ -1,11 +1,11 @@
-<p align="center"><img src="images/achievements.png" width="900" alt="The Achievements window with four unlocked"></p>
+<p align="center"><img src="images/achievements.png" width="900" alt="The Achievements window: the unlocked ones as a dated journal, the locked ones in a panel beside it"></p>
 
 SpaceSharp has achievements, twenty-six of them, since 2.6 (five came with 2.7). They change nothing about how the app works; they are there for the people who notice that their drive was read in four seconds, or that they have a file nobody has touched since 2014.
 
 ## Where they show up
 
 - **A toast** in the corner of the map announces a new one for seven seconds, with its name and what earned it.
-- **About › Achievements**, or the **T** key, lists them all: the ones you have, with their hint, and the ones you do not, with only their name. Click a locked row to peek at its hint; click again to hide it.
+- **About › Achievements**, or the **T** key, opens them as a journal: the ones you have down a dated line, newest first, each with what earned it, and beside it a **Still out there** panel with the names of the ones you do not have. Click a locked one to peek at its hint under the panel; click again to hide it.
 - **Collector**, the last one, opens a small window instead of a toast, and unlocks the **Gold** theme in Settings › Appearance ([Palettes and looks](Palettes-and-Looks#looks)).
 
 <p align="center"><img src="images/achievement-toast.png" width="900" alt="A toast announcing an achievement"></p>

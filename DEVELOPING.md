@@ -14,7 +14,7 @@ On Windows, size on disk comes from `GetCompressedFileSizeW` for compressed, spa
 Boxes are placed with the squarified treemap algorithm (Bruls, Huizing and van Wijk). Items are added to a row along the shorter side of the remaining space for as long as that improves the worst aspect ratio in the row. `Grouping` decides which children of a folder get a box of their own and which merge into one "312 files" block: first against a reference window so the large structure of the map is stable, then against the pixels the folder actually has on screen, quantized to powers of two so a smooth zoom does not shuffle the boxes.
 
 **Rendering and zoom** (`Controls/TreemapControl*.cs`, one partial class in five files)
-The map is a custom Avalonia control that draws its boxes in two `Render` passes (the map and an overlay) instead of creating a control per box, so tens of thousands of boxes stay fast. Zooming does not scale a picture: the map is laid out again on a virtual canvas that is the window size times the zoom level, and only boxes that intersect the window are laid out and drawn. Boxes snap to whole pixels and each leaves one grid-colored strip on its right and bottom, none where the folder's own line already is. Files get a cushion gradient per depth from the shading settings (`MakeCushion`); folder title bars are a tint of the folder's color. Zooming to a folder is an animated camera move that interpolates the zoom level logarithmically and refines the target every frame, since title bars have a fixed pixel height. Hover and selection outlines live on a separate overlay.
+The map is a custom Avalonia control that draws its boxes in two `Render` passes (the map and an overlay) instead of creating a control per box, so tens of thousands of boxes stay fast. Zooming does not scale a picture: the map is laid out again on a virtual canvas that is the window size times the zoom level, and only boxes that intersect the window are laid out and drawn. Boxes snap to whole pixels and each leaves one grid-colored strip on its right and bottom, none where the folder's own line already is. Files are shaded in one of five looks from the shading settings, with brushes and pens made once per depth (`TreemapControl.Shading.cs`); folder title bars are a tint of the folder's color. Zooming to a folder is an animated camera move that interpolates the zoom level logarithmically and refines the target every frame, since title bars have a fixed pixel height. Hover and selection outlines live on a separate overlay.
 
 **Filtering** (`Services/FileFilter.cs`, `MainWindow.FilterPanel.cs`)
 The filter text is parsed into conditions (`FilterSpec`). The whole tree is evaluated once per change; files match on their own and a folder stays lit when anything inside it matches, so the path to every hit stays visible. Non-matching boxes are blended toward the background without changing the layout. The hidden filter box is the single source of truth: the drawer and the rail both read and write its text, so anything that sets a filter works with either face. `SetFilterMatches` can dim the map to any set of nodes without touching the real filter (used by Show in Insights).
@@ -44,7 +44,7 @@ SpaceSharp.Core/                  the half that knows nothing about a window or 
 ├── Models/FsNode.cs              the file and folder tree
 ├── Layout/                       Squarify.cs, Grouping.cs, LayoutRect.cs (a Rect with no UI framework behind it)
 ├── Services/                     saved scans (ScanFile), compare, the table export (TableExport), the filter (FileFilter), insights (DriveInsights), statistics (Statistics), inspect (InspectSummary)
-├── Scanning/                     FolderWalker (the System.IO scan every platform has), IPlatformFiles (what it asks the OS)
+├── Scanning/                     FolderWalker (the System.IO scan every platform has), LiveTree (the tree so far, for the live map), IPlatformFiles (what it asks the OS)
 ├── Util/                         strings, languages, sizes, name patterns, command line, app info, settings, the looks
 └── Resources/Strings*.resx       UI text: English, Norwegian bokmål and sixteen machine-made translations
 SpaceSharp/                       the app (Avalonia, Skia), references SpaceSharp.Core
@@ -55,15 +55,17 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 ├── MainWindow.ContextMenu.cs     the map's right-click menu and its actions
 ├── MainWindow.FilterPanel.cs     the filter drawer and rail
 ├── MainWindow.Insights.cs        the Insights view in the map's place
-├── MainWindow.Statistics.cs      the Statistics view: tiles, files by size, kinds, ages, worth a look, extensions
+├── MainWindow.Statistics.cs      the Statistics view: tiles, files by size, kinds, ages, largest files and folders, extensions
 ├── MainWindow.Changes.cs         the Changes view: the compared scan as a folder table (then, now, the difference)
 ├── MainWindow.Scans.cs           saved scans, compare, the start screen's tiles, the Export window's sources
 ├── ExportWindow.cs               the Export window: delimiter, columns, options, preview, Copy and Save
 ├── MainWindow.Tooltip.cs         the hover tooltip on the map
+├── MainWindow.Minimap.cs         the minimap card and the edge markers shown while the map is zoomed in
 ├── SettingsWindow*.cs            the pages (axaml.cs), the row and picker builders (Controls), sliders and color choices (Editors), the sample map (Preview)
 ├── AboutWindow, InspectWindow, UpdateWindow, ShortcutsWindow, PaletteEditorWindow
 ├── Controls/
-│   ├── TreemapControl*.cs        fields, camera, layout, render, input
+│   ├── TreemapControl*.cs        fields, camera, layout, render, input, the shading looks (Shading), the live map (Live), what a minimap needs (Overview)
+│   ├── Minimap.cs, EdgeMarker.cs the two minimap looks: the scan's biggest folders as blocks, or thin bars on the map's edges
 │   ├── DonutChart.cs             the donuts in Inspect
 │   ├── Icon.cs                   the icon control and the Icons helper
 │   └── MapEnums.cs               ColorMode, TreemapItem

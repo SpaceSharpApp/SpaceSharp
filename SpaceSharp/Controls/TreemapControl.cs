@@ -112,7 +112,7 @@ public sealed partial class TreemapControl : Panel
         ClipToBounds = true;
         Focusable = true;
         RebuildPens();
-        RebuildCushions();
+        RebuildShading();
     }
 
     /// <summary>A child control that renders via a delegate.</summary>
@@ -635,10 +635,11 @@ public sealed partial class TreemapControl : Panel
     private double OrientationBias => Math.Pow(3, _bias);
 
     // ---- shading (0..100; light is -1..1 per axis)
-    private bool _cushionEnabled = true;
+    private ShadingLook _shadingLook = ShadingLook.Off;
     private int _brightness = DefaultBrightness;
-    private int _cushion = DefaultCushion;
-    private int _cushionHeight = DefaultCushionHeight;
+    private int _shadingStrength = 55;
+    private int _shadingDetail = 50;
+    private bool _shadingFolders = true;
     private int _shadingScale = DefaultShadingScale;
     private double _lightX = DefaultLightX;
     private double _lightY = DefaultLightY;
@@ -647,12 +648,8 @@ public sealed partial class TreemapControl : Panel
     private Color _gridColor = DefaultGridColor;
     private Color _highlightColor = DefaultHighlightColor;
 
-    /// <summary>Neutral <see cref="Brightness"/>: no wash over the file cushions.</summary>
+    /// <summary>Neutral <see cref="Brightness"/>: no wash over the files.</summary>
     public const int DefaultBrightness = 50;
-    /// <summary>Default <see cref="CushionShading"/> in percent.</summary>
-    public const int DefaultCushion = 55;
-    /// <summary>Default <see cref="CushionHeight"/> in percent.</summary>
-    public const int DefaultCushionHeight = 45;
     /// <summary>Default <see cref="ShadingScale"/> in percent.</summary>
     public const int DefaultShadingScale = 70;
     /// <summary>Default light direction: from the top left.</summary>
@@ -664,20 +661,69 @@ public sealed partial class TreemapControl : Panel
     /// <summary>Default selection frame color, the brand amber.</summary>
     public static readonly Color DefaultHighlightColor = Color.FromRgb(0xF5, 0xB8, 0x2E);
 
-    /// <summary>Master switch for the gradient on file boxes; folders and free space are never shaded.</summary>
-    public bool CushionEnabled
+    /// <summary>How file boxes are shaded; <see cref="Controls.ShadingLook.Off"/> draws flat fills and ignores the other shading settings.</summary>
+    public ShadingLook ShadingLook
     {
-        get => _cushionEnabled; set
+        get => _shadingLook; set
         {
-            if (_cushionEnabled == value)
+            if (_shadingLook == value)
             {
                 return;
             }
-            _cushionEnabled = value;
+            _shadingLook = value;
+            RebuildShading();
             Invalidate();
         }
     }
-    /// <summary>Percent 0..100: below 50 washes the file cushions toward black, above 50 toward white; 50 leaves the palette color as is.
+
+    /// <summary>How strong the look is, percent 0..100; 0 is flat.</summary>
+    public int ShadingStrength
+    {
+        get => _shadingStrength; set
+        {
+            value = Math.Clamp(value, 0, 100);
+            if (_shadingStrength == value)
+            {
+                return;
+            }
+            _shadingStrength = value;
+            RebuildShading();
+            Invalidate();
+        }
+    }
+
+    /// <summary>The look's second setting, percent 0..100: Pillow's softness, Sheen's spread; the other looks ignore it.</summary>
+    public int ShadingDetail
+    {
+        get => _shadingDetail; set
+        {
+            value = Math.Clamp(value, 0, 100);
+            if (_shadingDetail == value)
+            {
+                return;
+            }
+            _shadingDetail = value;
+            RebuildShading();
+            Invalidate();
+        }
+    }
+
+    /// <summary>True shades folder frames too: the Edges rim at half strength, or the Layers tray; the other looks ignore it.</summary>
+    public bool ShadingFolders
+    {
+        get => _shadingFolders; set
+        {
+            if (_shadingFolders == value)
+            {
+                return;
+            }
+            _shadingFolders = value;
+            RebuildShading();
+            Invalidate();
+        }
+    }
+
+    /// <summary>Percent 0..100: below 50 washes shaded files toward black, above 50 toward white; 50 leaves the palette color as is.
     /// Folder colors never change.</summary>
     public int Brightness
     {
@@ -689,38 +735,7 @@ public sealed partial class TreemapControl : Panel
                 return;
             }
             _brightness = value;
-            RebuildCushions();
-            Invalidate();
-        }
-    }
-    /// <summary>Strength of the highlight and shadow on file boxes, percent 0..100; 0 is flat.</summary>
-    public int CushionShading
-    {
-        get => _cushion; set
-        {
-            value = Math.Clamp(value, 0, 100);
-            if (_cushion == value)
-            {
-                return;
-            }
-            _cushion = value;
-            RebuildCushions();
-            Invalidate();
-        }
-    }
-    /// <summary>Where the gradient's middle stop sits, percent 0..100: low keeps the highlight tight at the lit edge, high spreads it
-    /// toward the shadow.</summary>
-    public int CushionHeight
-    {
-        get => _cushionHeight; set
-        {
-            value = Math.Clamp(value, 0, 100);
-            if (_cushionHeight == value)
-            {
-                return;
-            }
-            _cushionHeight = value;
-            RebuildCushions();
+            RebuildShading();
             Invalidate();
         }
     }
@@ -736,15 +751,15 @@ public sealed partial class TreemapControl : Panel
                 return;
             }
             _shadingScale = value;
-            RebuildCushions();
+            RebuildShading();
             Invalidate();
         }
     }
 
     /// <summary>Sets the light direction; (-1, -1) is top-left, (0, 0) straight ahead.</summary>
     /// <param name="x">Horizontal direction the light comes from, -1 (left) to 1 (right); values outside are clamped.</param>
-    /// <param name="y">Vertical direction, -1 (top) to 1 (bottom). A vector shorter than 0.12 counts as straight ahead and gives a radial
-    /// gradient.</param>
+    /// <param name="y">Vertical direction, -1 (top) to 1 (bottom). A vector shorter than 0.12 counts as straight ahead, which the looks
+    /// that need a side read as top left.</param>
     public void SetLight(double x, double y)
     {
         x = Math.Clamp(x, -1, 1);
@@ -755,7 +770,7 @@ public sealed partial class TreemapControl : Panel
         }
         _lightX = x;
         _lightY = y;
-        RebuildCushions();
+        RebuildShading();
         Invalidate();
     }
 

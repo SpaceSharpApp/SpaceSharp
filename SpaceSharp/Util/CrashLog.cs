@@ -132,6 +132,21 @@ public static class CrashLog
 
     /// <summary>One of the bug form's "How it was installed" options, so the prefill selects it.</summary>
     /// <returns>The option text exactly as the issue form lists it.</returns>
+    /// <summary>How many crash logs are in <see cref="Folder"/> now; at most the twenty that are kept.</summary>
+    /// <returns>The number of crash-*.log files, or 0 when the folder cannot be read.</returns>
+    public static int Count()
+    {
+        try
+        {
+            return Directory.GetFiles(Folder, "crash-*.log").Length;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        {
+            // A folder that cannot be read has no logs anyone could attach; the link still opens it.
+            return 0;
+        }
+    }
+
     private static string InstallKind() => Updater.Instance.IsInstalled ? "Installer (Setup.exe or MSI)" : "Portable exe";
 
     /// <summary>Flattens a message to one line and cuts it for an issue title.</summary>

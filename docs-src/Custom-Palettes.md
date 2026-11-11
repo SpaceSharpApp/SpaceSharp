@@ -55,4 +55,6 @@ The window is a short list of decisions on the left and a live sample map on the
 
 ## Sharing one
 
+The same generator runs in a browser at [palette.spacesharp.app](https://palette.spacesharp.app/), with nothing to install: it makes the same file, and **Copy a link to this palette** gives an address that opens the page with your colors in it.
+
 Send the `.json`, or the **Copy JSON** text. The other person drops it in their palettes folder and presses Reload. A palette worth having in the app itself can be proposed as a pull request: built-in palettes live in `BuildSchemes()` in `SpaceSharp/Util/Palette.cs` with a one-line description ([Architecture](Architecture#where-to-add-things)).

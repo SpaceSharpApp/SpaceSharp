@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Größe</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Untersuchen: {0:N0} Elemente</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Untersuchen: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Dieses Fenster öffnen</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Info über SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Zur Auswahl hinzufügen</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Scan abbrechen</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Ausgewählte Pfade kopieren</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Hervorhebungsrahmen</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Der Rahmen um ausgewählte Felder. Felder unter der Maus behalten einen weißen Rahmen.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Kissenschattierung</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Hell-dunkel-Schattierung auf jeder Datei, so wie SpaceMonger sie gezeichnet hat. Aus ergibt flache Farben, und die Einstellungen darunter haben keine Wirkung.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Voreinstellungen</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Ein Ausgangspunkt. Die Regler darunter verfeinern ihn.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Weich</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Klassisch</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Tief</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Tiefe</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Wie ausgeprägt die Schattierung ist, von einem leichten Schimmer bis zu einem tiefen Kissen.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Ausbreitung</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Hellere oder dunklere Dateien insgesamt. Ordner behalten ihre Farbe.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Abschwächung in Ordnern</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Wie viel Schattierung verschachtelte Dateien behalten. Niedrig beruhigt tiefe Ebenen, damit die obersten Ordner hervorstechen.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Aus</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Aussehen</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Kanten</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Kissen</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Glanz</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Ebenen</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Seitenlicht</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Flache Farben, keine Schattierung.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Ein heller Rand an jedem Feld, wie erhabene Kacheln. Die Farben bleiben flach.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Dateien sind in der Mitte am hellsten und werden zu den Rändern hin sanft dunkler.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Licht fällt von oben auf jede Datei und läuft nach unten aus.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Dateien liegen auf ihrem Ordner, mit einem kleinen Schatten darunter.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Ein gleichmäßiger Lichtverlauf über jede Datei, von der hellen zur dunklen Seite.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Stärke</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Wie stark der Effekt ist, von kaum sichtbar bis deutlich.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Weichheit</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Wie weit der Schatten vom Rand nach innen reicht.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Ordner absenken</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Zeichnet jeden Ordner als flache Schale.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Auch Ordnerrahmen</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Derselbe Rand an Ordnern, mit halber Stärke.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Licht von dieser Seite</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Licht direkt von vorn</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Oben links</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp baut auf offener Arbeit auf</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Danke an die Menschen dahinter.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Die Karte</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Das Layout ist die quadrierte Treemap von [Bruls, Huizing und van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), veröffentlicht im Jahr 2000. Die Idee, ein Laufwerk als Karte zu zeigen, stammt von [SpaceMonger](https://www.stardock.com/products/spacemonger/) von Sean Werkema, Treemaps selbst von Ben Shneiderman (1991). Die farbenblindfreundliche Palette verwendet die acht Farben von [Okabe und Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Das Layout ist die quadrierte Treemap von [Bruls, Huizing und van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), veröffentlicht im Jahr 2000. Die Idee, ein Laufwerk als Karte zu zeigen, stammt von [SpaceMonger](https://www.stardock.com/products/spacemonger/) von Sean Werkema, Treemaps selbst von Ben Shneiderman (1991). Die farbenblindfreundliche Palette verwendet die acht Farben von [Okabe und Ito](https://jfly.uni-koeln.de/color/) (2002). Vier weitere Farben darin stammen aus dem hellen Farbschema von [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschrieben in C# auf [.NET 10](https://dotnet.microsoft.com). Die Oberfläche ist [Avalonia UI](https://avaloniaui.net), gezeichnet mit [SkiaSharp](https://github.com/mono/SkiaSharp), in der Schrift [Inter](https://rsms.me/inter/) von Rasmus Andersson. Die Symbole stammen von [Lucide](https://lucide.dev), der Fortführung von Feather von Cole Bemis. Das Installationsprogramm und die Updates unter Windows kommen von [Velopack](https://velopack.io) von Caelan Sayler. Alle stehen unter MIT-Lizenz, außer Lucide (ISC) und Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprachen</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Ach_Intro" xml:space="preserve"><value>Manche brauchen einen Scan, manche ein Jahr. Keiner ist etwas wert, und genau darum geht es.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} von {1} freigeschaltet</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Gesperrt</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Neueste zuerst</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Noch zu finden</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Klicken Sie auf einen für einen Hinweis. Der letzte, {0}, bringt das Design {1} mit.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Noch keiner. Sie tauchen auf, während Sie die App benutzen.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Es gibt nichts mehr zu finden.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Gesperrt. Wie man ihn bekommt, bleibt geheim, bis man ihn hat.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle Erfolge freigeschaltet</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Das waren alle. Die App hat nichts mehr zu vergeben und zeigt Ihnen von jetzt an einfach nur Ihre Festplatte. Na gut, eines noch: Einstellungen › Darstellung hat jetzt ein Gold-Thema.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 Jahre</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 Jahre</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Älter</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Einen Blick wert</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Platz, der leicht zurückzugewinnen ist. Zeigen öffnet die Karte danach gefiltert.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Verschnitt</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>belegt über die Dateigrößen hinaus</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Dateien unter 4 KB</value></data>

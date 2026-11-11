@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>크기</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>검사: 항목 {0:N0}개</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>검사: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>이 창 열기</value></data>
+  <data name="Key_About" xml:space="preserve"><value>SpaceSharp 정보</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>선택 항목에 추가</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>검사 취소</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>선택한 경로 복사</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>강조 프레임</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>선택한 상자 주위의 프레임입니다. 마우스를 올린 상자는 흰색 프레임을 유지합니다.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>레이아웃</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>쿠션 음영</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>SpaceMonger가 그리던 방식대로 모든 파일에 밝은 곳에서 어두운 곳으로 음영을 넣습니다. 끄면 단색이 되고 아래 설정은 적용되지 않습니다.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>사전 설정</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>시작점입니다. 아래 슬라이더로 세부 조정합니다.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>부드럽게</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>클래식</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>깊게</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>깊이</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>음영의 강도로, 은은한 광택부터 깊은 쿠션까지 조절합니다.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>퍼짐</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>파일 전체를 더 밝게 또는 더 어둡게 합니다. 폴더 색상은 유지됩니다.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>폴더 안쪽 감쇠</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>중첩된 파일이 음영을 얼마나 유지할지 정합니다. 낮게 하면 깊은 단계가 차분해져 최상위 폴더가 돋보입니다.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>끄기</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>모양</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>가장자리</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>쿠션</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>광택</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>레이어</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>측면 조명</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>음영 없이 단색으로 표시합니다.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>모든 상자에 밝은 테두리를 넣어 도드라진 타일처럼 보이게 합니다. 색은 단색 그대로입니다.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>파일은 가운데가 가장 밝고 가장자리로 갈수록 부드럽게 어두워집니다.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>각 파일의 위쪽에서 빛이 내려오며 아래로 갈수록 옅어집니다.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>파일이 폴더 위에 놓이고 아래에 작은 그림자가 생깁니다.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>각 파일에 밝은 쪽에서 어두운 쪽으로 고른 빛의 기울기를 넣습니다.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>강도</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>효과의 세기. 거의 보이지 않는 정도부터 뚜렷한 정도까지.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>부드러움</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>그림자가 가장자리에서 안쪽으로 얼마나 들어오는지.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>폴더 가라앉히기</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>각 폴더를 얕은 쟁반처럼 그립니다.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>폴더 테두리에도</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>폴더에도 같은 테두리를 절반 강도로 넣습니다.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>이쪽에서 빛이 비침</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>정면에서 빛이 비침</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>왼쪽 위</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp는 열린 작업 위에 세워졌습니다</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>그 뒤에 있는 분들께 감사드립니다.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>지도</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>레이아웃은 [Bruls, Huizing, van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)가 2000년에 발표한 squarified treemap입니다. 디스크를 지도로 보여주는 아이디어는 Sean Werkema의 [SpaceMonger](https://www.stardock.com/products/spacemonger/)에서, treemap 자체는 Ben Shneiderman(1991)에서 왔습니다. 색약 친화 팔레트는 [Okabe와 Ito](https://jfly.uni-koeln.de/color/)의 여덟 가지 색(2002)을 사용합니다.</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>레이아웃은 [Bruls, Huizing, van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)가 2000년에 발표한 squarified treemap입니다. 디스크를 지도로 보여주는 아이디어는 Sean Werkema의 [SpaceMonger](https://www.stardock.com/products/spacemonger/)에서, treemap 자체는 Ben Shneiderman(1991)에서 왔습니다. 색약 친화 팔레트는 [Okabe와 Ito](https://jfly.uni-koeln.de/color/)의 여덟 가지 색(2002)을 사용합니다. 나머지 네 가지 색은 [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)의 밝은 색 구성에서 가져왔습니다.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>소프트웨어</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 위에서 C#으로 작성되었습니다. 인터페이스는 [Avalonia UI](https://avaloniaui.net)이며 [SkiaSharp](https://github.com/mono/SkiaSharp)로 그리고, 글꼴은 Rasmus Andersson의 [Inter](https://rsms.me/inter/)입니다. 아이콘은 Cole Bemis의 Feather를 이어받은 [Lucide](https://lucide.dev)에서 가져왔습니다. Windows 설치 프로그램과 업데이트는 Caelan Sayler의 [Velopack](https://velopack.io)에서 제공합니다. Lucide(ISC)와 Inter(SIL Open Font License)를 제외하면 모두 MIT 라이선스입니다.</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>언어</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Ach_Intro" xml:space="preserve"><value>어떤 것은 스캔 한 번, 어떤 것은 일 년이 걸립니다. 아무 가치도 없다는 게 핵심입니다.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{1}개 중 {0}개 달성</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>잠김</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>최신순</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>아직 남은 것</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>하나를 클릭하면 힌트가 표시됩니다. 마지막인 {0}을(를) 얻으면 {1} 테마가 열립니다.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>아직 없습니다. 앱을 쓰다 보면 나타납니다.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>더 찾을 것이 없습니다.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>잠김. 얻는 방법은 얻을 때까지 비밀입니다.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>모든 업적 달성</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>이것으로 전부입니다. 앱에는 더 나눠줄 것이 없으니, 이제부터는 그저 디스크를 보여줄 뿐입니다. 아, 하나 있습니다: 설정 › 모양에 골드 테마가 생겼습니다.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1~2년</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2~5년</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>그 이전</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>살펴볼 만한 것</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>쉽게 되찾을 수 있는 용량. 표시를 누르면 그 조건으로 지도가 열립니다.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>클러스터 낭비</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>파일 크기를 넘어 할당됨</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>4 KB 미만 파일</value></data>

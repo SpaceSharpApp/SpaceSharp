@@ -33,11 +33,19 @@ public partial class MainWindow
 
     /// <summary>The scan method signature; scans are only compared when it matches.</summary>
     /// <returns>A short text such as "MFT, links once, no hidden" from the method and the settings that change what a scan counts; stored in the scan file.</returns>
-    private string ScanSignature() =>
-        (_scanMethod == "MFT" ? "MFT" : "folder walk") +
-        (_scanMethod == "MFT" || _settings.DetectHardLinks ? ", links once" : string.Empty) +
-        (_settings.IncludeHidden ? string.Empty : ", no hidden") +
-        (string.IsNullOrWhiteSpace(_settings.ExcludePatterns) ? string.Empty : ", exclusions");
+    private string ScanSignature()
+    {
+        (bool linksOnce, bool includeHidden, bool useExclusions) = _scanHow
+            ?? (_settings.DetectHardLinks, _settings.IncludeHidden, !string.IsNullOrWhiteSpace(_settings.ExcludePatterns));
+        return (_scanMethod == "MFT" ? "MFT" : "folder walk") +
+            (_scanMethod == "MFT" || linksOnce ? ", links once" : string.Empty) +
+            (includeHidden ? string.Empty : ", no hidden") +
+            (useExclusions ? ", exclusions" : string.Empty);
+    }
+
+    /// <summary>What the last scan started counted: hard links once, hidden files, exclusions. Settings at its start, or the saved
+    /// scan it repeated; null before the first scan of the session, when Settings stand in.</summary>
+    private (bool LinksOnce, bool IncludeHidden, bool UseExclusions)? _scanHow;
 
     /// <summary>Whether two scans were made the same way, so their sizes mean the same thing.</summary>
     /// <param name="firstSignature">A signature as <see cref="ScanSignature"/> builds it.</param>
@@ -49,7 +57,8 @@ public partial class MainWindow
     /// <summary>Compares a finished scan with the previous autosave, then saves it.</summary>
     /// <param name="root">The finished tree; the result is dropped if another scan has replaced it by the time the comparison ends.</param>
     /// <param name="rootPath">The scanned path, which names the autosave file.</param>
-    private async Task SaveAndCompareAsync(FsNode root, string rootPath)
+    /// <param name="openChanges">True opens the Changes view when there was an earlier scan to compare with.</param>
+    private async Task SaveAndCompareAsync(FsNode root, string rootPath, bool openChanges = false)
     {
         string autoSavePath = ScanFile.AutoPathFor(rootPath);
         string previousSavePath = ScanFile.PreviousPathFor(rootPath);
@@ -85,6 +94,10 @@ public partial class MainWindow
                 RefreshInsights();
                 InvalidateChanges();
                 RefreshChanges();
+                if (openChanges && comparison is not null)
+                {
+                    ShowView(MainView.Changes);
+                }
             }
             else if (skippedReason is not null)
             {
@@ -825,7 +838,8 @@ public partial class MainWindow
         buttons.Children.Add(openButton);
         var scanAgainButton = new Button { Content = Icons.WithText("Refresh", Strings.Get("Start_ScanAgainCompare")), Classes = { "action" }, Height = 36 };
         ToolTip.SetTip(scanAgainButton, Strings.Get("Start_RecentHint"));
-        scanAgainButton.Click += (_, _) => _ = ScanAsync(scan.Info.RootPath);
+        // Made the way that scan was, so the two can be compared, and straight to what changed.
+        scanAgainButton.Click += (_, _) => _ = ScanAsync(scan.Info.RootPath, scan.Info.Method, openChanges: true);
         buttons.Children.Add(scanAgainButton);
         grid.Children.Add(buttons);
 

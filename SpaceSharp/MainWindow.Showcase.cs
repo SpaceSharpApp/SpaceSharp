@@ -21,7 +21,8 @@ public partial class MainWindow
     /// <summary>The docs site's pictures (tools/screenshots_docs.ps1): one screen or state each, on top of the README scenes.</summary>
     public static readonly string[] WikiScenes =
     {
-        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading", "wiki-zoomed", "wiki-free-space", "wiki-physical", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
+        "wiki-colorby-top", "wiki-colorby-type", "wiki-shading-sheen", "wiki-shading-edges", "wiki-shading-pillow", "wiki-shading-layers",
+        "wiki-shading-sidelight", "wiki-shading-off", "wiki-zoomed", "wiki-free-space", "wiki-physical", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
         "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl",
         "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export", "statistics"
@@ -190,12 +191,22 @@ public partial class MainWindow
             case "wiki-colorby-type":
                 ColorCombo.SelectedIndex = 2;
                 break;
-            case "wiki-shading":
-                _settings.CushionEnabled = true;
-                _settings.CushionShading = 85;
-                _settings.CushionHeight = 60;
-                _settings.Brightness = 45;
-                _settings.ShadingScale = 85;   // the Deep preset
+            // One picture per shading look, each at the settings it ships with; Sheen is the look a first run has.
+            case "wiki-shading-sheen":
+            case "wiki-shading-edges":
+            case "wiki-shading-pillow":
+            case "wiki-shading-layers":
+            case "wiki-shading-sidelight":
+            case "wiki-shading-off":
+                _settings.ShadingLook = scene switch
+                {
+                    "wiki-shading-edges" => "Edges",
+                    "wiki-shading-pillow" => "Pillow",
+                    "wiki-shading-layers" => "Layers",
+                    "wiki-shading-sidelight" => "SideLight",
+                    "wiki-shading-off" => "Off",
+                    _ => "Sheen"
+                };
                 ApplySettings();
                 break;
             case "wiki-free-space":
@@ -347,7 +358,23 @@ public partial class MainWindow
             App.ApplyTheme();
         }
         _settings.ColorMode = "ByDepth";
-        _settings.CushionEnabled = false;
+        // The screenshots show the map as a first run has it: every look at the settings it ships with, Sheen chosen. The grid and
+        // highlight settings, which ResetShading would also put back, are left as the scene's machine has them.
+        var shadingDefaults = new AppSettings();
+        _settings.ShadingLook = shadingDefaults.ShadingLook;
+        _settings.EdgeStrength = shadingDefaults.EdgeStrength;
+        _settings.EdgeFolders = shadingDefaults.EdgeFolders;
+        _settings.PillowDepth = shadingDefaults.PillowDepth;
+        _settings.PillowSoftness = shadingDefaults.PillowSoftness;
+        _settings.SheenStrength = shadingDefaults.SheenStrength;
+        _settings.SheenSpread = shadingDefaults.SheenSpread;
+        _settings.LayerLift = shadingDefaults.LayerLift;
+        _settings.LayerSinkFolders = shadingDefaults.LayerSinkFolders;
+        _settings.SideStrength = shadingDefaults.SideStrength;
+        _settings.ShadingScale = shadingDefaults.ShadingScale;
+        _settings.Brightness = shadingDefaults.Brightness;
+        _settings.LightX = shadingDefaults.LightX;
+        _settings.LightY = shadingDefaults.LightY;
         _listKind = TopListKind.Files;
         MarkListKind();
         ApplySettings();

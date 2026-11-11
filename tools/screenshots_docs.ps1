@@ -27,7 +27,7 @@ $files = [ordered]@{
     none = "screenshot.png"; start = "shot-start.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; menu = "shot-menu.png"; settings = "shot-settings.png"; about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"
     duplicates = "shot-duplicates.png"
-    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading" = "shading.png"; "wiki-zoomed" = "zoomed.png"; "wiki-free-space" = "free-space.png"; "wiki-physical" = "physical.png"; "wiki-classic" = "classic.png"
+    "wiki-colorby-top" = "colorby-top.png"; "wiki-colorby-type" = "colorby-type.png"; "wiki-shading-sheen" = "shading-sheen.png"; "wiki-shading-edges" = "shading-edges.png"; "wiki-shading-pillow" = "shading-pillow.png"; "wiki-shading-layers" = "shading-layers.png"; "wiki-shading-sidelight" = "shading-sidelight.png"; "wiki-shading-off" = "shading-off.png"; "wiki-zoomed" = "zoomed.png"; "wiki-free-space" = "free-space.png"; "wiki-physical" = "physical.png"; "wiki-classic" = "classic.png"
     "wiki-rail" = "filter-rail.png"; "wiki-filtered" = "filtered.png"; "wiki-palette-picker" = "palette-picker.png"; "wiki-shortcuts" = "shortcuts.png"
     "wiki-changes-everything" = "changes-everything.png"; "wiki-inspect-selection" = "inspect-selection.png"
     "wiki-palettes" = "palettes.png"; "wiki-palette-editor" = "palette-editor.png"

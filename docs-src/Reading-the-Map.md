@@ -47,9 +47,31 @@ The filter dims everything that does not match and leaves the layout alone, so y
 
 ## Shading
 
-<p align="center"><img src="images/shading.png" width="900" alt="Cushion shading at the Deep preset"></p>
+<p align="center"><img src="images/shading-sheen.png" width="900" alt="The map with the Sheen look, as a first run has it"></p>
 
-By default files are flat. Settings › Treemap › Shading turns on **cushion shading**, light-to-dark across each box the way SpaceMonger drew them, with presets (Soft, Classic, Deep) and sliders for depth, spread, tone, fade inside folders and the light's direction. The sample map at the top of that page follows every change.
+Files come with a light **Sheen**: light from the top of each box that fades out on the way down. Settings › Treemap › Shading has a **Look** picker with four other ways to shade them, and Off for flat colors. Each look has two or three settings of its own, which it keeps when you try another, and the sample map at the top of that page follows every change.
+
+**Edges** puts a one-pixel rim on every box, light on the side the light comes from and dark opposite, so boxes read as raised tiles and the colors stay flat. Its settings are Strength, Light from, and Folder frames too.
+
+<p align="center"><img src="images/shading-edges.png" width="900" alt="The map with the Edges look: a lit rim on every box"></p>
+
+**Pillow** makes files brightest in the middle and darker toward their edges. Depth is how dark the edges get, Softness how far the shadow reaches in.
+
+<p align="center"><img src="images/shading-pillow.png" width="900" alt="The map with the Pillow look: files bright in the middle, darker toward the edges"></p>
+
+**Layers** uses no gradient at all: files lie on their folder with a small shadow under them, and Sink folders draws each folder as a shallow tray. It shows best in the Modern style, where boxes have gaps between them.
+
+<p align="center"><img src="images/shading-layers.png" width="900" alt="The map with the Layers look: files lifted off their folder"></p>
+
+**Side light** lays one even slope of light across every file, from the lit side to the dark one, with the direction yours to pick.
+
+<p align="center"><img src="images/shading-sidelight.png" width="900" alt="The map with the Side light look: one slope of light across each file"></p>
+
+**Off** draws every box in its flat palette color.
+
+<p align="center"><img src="images/shading-off.png" width="900" alt="The map with shading off: flat colors"></p>
+
+Sheen has Strength and Spread (how far down the light reaches). Every look but Edges also has Fade inside folders, which weakens the shading level by level so the top folders stand out, and every look has Tone, which makes shaded files lighter or darker overall without touching folder colors.
 
 ## Hover and select
 

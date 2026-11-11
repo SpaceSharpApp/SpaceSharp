@@ -62,13 +62,14 @@ A sample map at the top of the page follows every change. Pick the style first: 
 
 | Setting | What it does | Default |
 |---|---|---|
-| Cushion shading | Light-to-dark shading on every file, the way SpaceMonger drew them. Off gives flat colors. | Off |
-| Presets | Soft, Classic, Deep: a starting point for the sliders. | Soft |
-| Depth | How pronounced the shading is. | |
-| Spread | How far the light reaches across a file before the shadow takes over. | |
-| Tone | Lighter or darker files overall. | |
-| Fade inside folders | How much shading nested files keep; low calms deep levels. | |
-| Light from | Which side the light comes from; the middle is straight ahead. | Straight ahead |
+| Look | How files are shaded: Off (flat colors), Edges, Pillow, Sheen, Layers or Side light. Each look has its own settings, shown under the picker, and keeps them when you switch away. | Sheen |
+| Edges: Strength, Light from, Folder frames too | A one-pixel rim on every box, light on the lit side and dark opposite, like raised tiles; the colors stay flat. Folder frames can get the same rim at half strength. | 55%, top left, on |
+| Pillow: Depth, Softness | Files are brightest in the middle and darken toward their edges. Depth is how dark the edges get, Softness how far the shadow reaches in. | 60%, 45% |
+| Sheen: Strength, Spread | Light from the top of every file that fades out on the way down. Spread is how far down it reaches. | 44%, 78% |
+| Layers: Strength, Sink folders | Files lie on their folder with a small shadow under them; Sink folders draws each folder as a shallow tray. Shows best in the Modern style, where boxes have gaps between them. | 50%, on |
+| Side light: Strength, Light from | One even slope of light across every file, from the lit side to the dark one. | 55%, top left |
+| Fade inside folders | How much shading nested files keep; low calms deep levels. Every look but Edges has it. | 68% |
+| Tone | Lighter or darker shaded files overall; folders keep their color. | 52% |
 | Reset shading | Shading, grid and highlight back to how they ship. | |
 
 **Text and title bars**

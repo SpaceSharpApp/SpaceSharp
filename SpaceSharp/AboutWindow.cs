@@ -24,7 +24,7 @@ public sealed class AboutWindow : Window
     public AboutWindow()
     {
         Title = Strings.Get("About_AboutSpaceSharp");
-        Width = 520;
+        Width = 540;
         SizeToContent = SizeToContent.Height;
         CanResize = false;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -34,7 +34,7 @@ public sealed class AboutWindow : Window
         bool installed = Updater.Instance.IsInstalled;
 
         var root = new Grid { RowDefinitions = new RowDefinitions("*,Auto") };
-        var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("200,*") };
+        var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("220,*") };
         columns.Children.Add(BuildLeftColumn(installed));
 
         StackPanel right = BuildRightColumn(installed);
@@ -58,18 +58,21 @@ public sealed class AboutWindow : Window
         left.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
 
         var leftStack = new DockPanel();
-        var legal = new TextBlock { Text = $"{Copyright()}\n{Strings.Get("About_SourceSub")}", Classes = { "dim" }, FontSize = 11.5, LineHeight = 16, TextWrapping = TextWrapping.Wrap };
+        // The system line sits with the version it belongs to; Copy version info copies both.
+        var legal = new StackPanel { Spacing = 10 };
+        legal.Children.Add(new TextBlock { Text = SystemDescription(), Classes = { "dim" }, FontSize = 11.5, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
+        legal.Children.Add(new TextBlock { Text = $"{Copyright()}\n{Strings.Get("About_SourceSub")}", Classes = { "dim" }, FontSize = 11.5, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
         DockPanel.SetDock(legal, Dock.Bottom);
         leftStack.Children.Add(legal);
 
         var intro = new StackPanel { Spacing = 8 };
-        var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 56, Height = 56, HorizontalAlignment = HorizontalAlignment.Left };
+        var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 64, Height = 64, HorizontalAlignment = HorizontalAlignment.Left };
         RenderOptions.SetBitmapInterpolationMode(logo, BitmapInterpolationMode.HighQuality);
         intro.Children.Add(logo);
         intro.Children.Add(new TextBlock { Text = "SpaceSharp", FontSize = 20, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 10, 0, 0) });
         string buildKind = Strings.Get(installed ? "About_BuildInstalled" : "About_BuildPortable");
-        intro.Children.Add(new TextBlock { Text = $"{Strings.Format("About_Version", _version)}\n{buildKind}", Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap });
-        intro.Children.Add(new TextBlock { Text = Strings.Get("About_Tagline"), Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 4, 0, 0) });
+        intro.Children.Add(new TextBlock { Text = Strings.Get("About_Tagline"), LineHeight = 19, TextWrapping = TextWrapping.Wrap });
+        intro.Children.Add(new TextBlock { Text = $"{Strings.Format("About_Version", _version)}\n{buildKind}", Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 24) });
         leftStack.Children.Add(intro);
 
         left.Child = leftStack;
@@ -81,12 +84,12 @@ public sealed class AboutWindow : Window
     /// <returns>The right column: Version, Help and Project groups followed by the runtime and OS line.</returns>
     private StackPanel BuildRightColumn(bool installed)
     {
-        var right = new StackPanel { Margin = new Thickness(28, 30, 28, 24), Spacing = 22 };
+        var right = new StackPanel { Margin = new Thickness(18, 26, 18, 20), Spacing = 18 };
 
         StackPanel version = Group(Strings.Get("About_GroupVersion"));
         version.Children.Add(Link("Notes", Strings.Format("Update_WhatsNewIn", UpdateWindow.ShortVersion(_version)), () => _ = UpdateWindow.ShowWhatsNew(this, _version)));
         version.Children.Add(Link("Keyboard", Strings.Get("About_Shortcuts"), () => new ShortcutsWindow().ShowDialog(this)));
-        version.Children.Add(Link("Trophy", Strings.Get("Ach_Title") + " (T)", () => new AchievementsWindow().ShowDialog(this)));
+        version.Children.Add(Link("Trophy", Strings.Get("Ach_Title"), () => new AchievementsWindow().ShowDialog(this), KeyCap("T")));
         if (installed)
         {
             _checkButton = Link("Sync", Strings.Get("About_CheckForUpdates"), null);
@@ -96,17 +99,17 @@ public sealed class AboutWindow : Window
         right.Children.Add(version);
 
         StackPanel help = Group(Strings.Get("About_GroupHelp"));
-        help.Children.Add(Link("Bug", Strings.Get("About_ReportABug"), ReportBug));
-        help.Children.Add(Link("Idea", Strings.Get("About_SuggestAFeature"), () => OpenUrl($"{Repository}/issues/new?template=feature_request.yml")));
-        help.Children.Add(Link("ScanFolder", Strings.Get("About_CrashLogs"), () => OpenFolder(CrashLog.Folder)));
+        help.Children.Add(Link("Bug", Strings.Get("About_ReportABug"), ReportBug, OpensBrowser()));
+        help.Children.Add(Link("Idea", Strings.Get("About_SuggestAFeature"), () => OpenUrl($"{Repository}/issues/new?template=feature_request.yml"), OpensBrowser()));
+        // The number of logs sits at the end of the row, so a clean run reads 0 without opening the folder.
+        var crashCount = new TextBlock { Text = CrashLog.Count().ToString(System.Globalization.CultureInfo.CurrentCulture), FontSize = 12.5, Classes = { "dim" } };
+        help.Children.Add(Link("ScanFolder", Strings.Get("About_CrashLogs"), () => OpenFolder(CrashLog.Folder), crashCount));
         right.Children.Add(help);
 
         StackPanel project = Group(Strings.Get("About_GroupProject"));
-        project.Children.Add(Link("Globe", Strings.Get("About_Source"), () => OpenUrl(Repository)));
+        project.Children.Add(Link("Globe", Strings.Get("About_Source"), () => OpenUrl(Repository), OpensBrowser()));
         project.Children.Add(Link("Book", Strings.Get("About_Credits"), () => new CreditsWindow().ShowDialog(this)));
         right.Children.Add(project);
-
-        right.Children.Add(new TextBlock { Text = SystemDescription(), Classes = { "dim" }, FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
         return right;
     }
 
@@ -138,27 +141,57 @@ public sealed class AboutWindow : Window
     /// <returns>A stack holding only the heading so far.</returns>
     private static StackPanel Group(string heading)
     {
-        var group = new StackPanel { Spacing = 4 };
-        group.Children.Add(new TextBlock { Text = heading.ToUpperInvariant(), FontSize = 11, FontWeight = FontWeight.SemiBold, LetterSpacing = 1, Classes = { "dim" }, Margin = new Thickness(0, 0, 0, 6) });
+        var group = new StackPanel { Spacing = 1 };
+        // Indented to the rows' own padding, so the heading stands over their icons.
+        group.Children.Add(new TextBlock { Text = heading.ToUpperInvariant(), FontSize = 11, FontWeight = FontWeight.SemiBold, LetterSpacing = 1, Classes = { "dim" }, Margin = new Thickness(10, 0, 0, 5) });
         return group;
     }
 
-    /// <summary>A text-link button with an icon in front.</summary>
-    /// <param name="glyph">Icon name as known to <see cref="Icons"/>, drawn at 16 px in the dim text color.</param>
-    /// <param name="text">Label after the icon, already localized.</param>
-    /// <param name="onClick">Runs on the UI thread when the link is clicked; null leaves the Click event for the caller to wire.</param>
-    /// <returns>The button, left-aligned, styled as a text link.</returns>
-    private static Button Link(string glyph, string text, Action? onClick)
+    /// <summary>One row of the right column: an icon, a label and, at the far end, what the row has to add. The whole row lights
+    /// up under the pointer.</summary>
+    /// <param name="glyph">The icon's name.</param>
+    /// <param name="text">The label.</param>
+    /// <param name="onClick">What a click does; null when the caller wires the click itself.</param>
+    /// <param name="trailing">A key cap, a count or the opens-in-browser mark for the row's end; null for none.</param>
+    /// <returns>The row as a button.</returns>
+    private static Button Link(string glyph, string text, Action? onClick, Control? trailing = null)
     {
-        var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12 };
-        row.Children.Add(Icons.Make(glyph, 16, "TextDim"));
-        row.Children.Add(new TextBlock { Text = text, VerticalAlignment = VerticalAlignment.Center });
-        var button = new Button { Classes = { "textlink" }, Content = row, HorizontalAlignment = HorizontalAlignment.Left };
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), ColumnSpacing = 12 };
+        Icon icon = Icons.Make(glyph, 16, "TextDim");
+        icon.VerticalAlignment = VerticalAlignment.Center;
+        row.Children.Add(icon);
+        var label = new TextBlock { Text = text, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap };
+        Grid.SetColumn(label, 1);
+        row.Children.Add(label);
+        if (trailing is not null)
+        {
+            trailing.VerticalAlignment = VerticalAlignment.Center;
+            Grid.SetColumn(trailing, 2);
+            row.Children.Add(trailing);
+        }
+
+        var button = new Button { Classes = { "row" }, Content = row, Height = double.NaN, MinHeight = 34, Padding = new Thickness(10, 6), CornerRadius = new CornerRadius(6) };
         if (onClick is not null)
         {
             button.Click += (_, _) => onClick();
         }
         return button;
+    }
+
+    /// <summary>The mark at the end of a row that leaves the app for the browser.</summary>
+    /// <returns>A small dim arrow.</returns>
+    private static Icon OpensBrowser() => Icons.Make("External", 13, "TextDim");
+
+    /// <summary>A key drawn as a key, for the row that has a shortcut.</summary>
+    /// <param name="key">The key's letter.</param>
+    /// <returns>The letter in a small framed box.</returns>
+    private Border KeyCap(string key)
+    {
+        var cap = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(1, 1, 1, 2), Padding = new Thickness(6, 0), MinWidth = 22 };
+        cap.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        cap.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+        cap.Child = new TextBlock { Text = key, FontSize = 11.5, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
+        return cap;
     }
 
     private Button? _checkButton;
@@ -191,7 +224,7 @@ public sealed class AboutWindow : Window
     /// <param name="text">New label text.</param>
     private static void SetLinkText(Button link, string text)
     {
-        if (link.Content is StackPanel row && row.Children.Count > 1 && row.Children[1] is TextBlock label)
+        if (link.Content is Grid row && row.Children.Count > 1 && row.Children[1] is TextBlock label)
         {
             label.Text = text;
         }

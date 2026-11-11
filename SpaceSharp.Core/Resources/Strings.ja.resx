@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>サイズ</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>詳細：{0:N0} 個の項目</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>詳細：{0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>このウィンドウを開く</value></data>
+  <data name="Key_About" xml:space="preserve"><value>SpaceSharp について</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>選択範囲に追加</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>スキャンをキャンセル</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>選択したパスをコピー</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>ハイライトの枠</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>選択したボックスの周囲の枠。ホバー中のボックスは白い枠のままです。</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>レイアウト</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>クッションシェーディング</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>SpaceMonger と同じように、すべてのファイルに明から暗へのシェーディングを付けます。オフにするとフラットな色になり、以下の設定は無効になります。</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>プリセット</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>出発点です。下のスライダーで微調整します。</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>ソフト</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>クラシック</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>ディープ</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>深さ</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>シェーディングの強さ。かすかな光沢から深い膨らみまで。</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>広がり</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>ファイル全体を明るくまたは暗くします。フォルダーの色は変わりません。</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>フォルダー内でのフェード</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>入れ子になったファイルにどれだけシェーディングを残すか。低くすると深い階層が落ち着き、最上位フォルダーが目立ちます。</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>見た目</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>エッジ</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>ピロー</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>光沢</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>レイヤー</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>サイドライト</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>フラットな色で、陰影はありません。</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>各ボックスに光の縁を付け、浮き出たタイルのように見せます。色はフラットのままです。</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>ファイルは中央が最も明るく、端に向かってやわらかく暗くなります。</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>各ファイルの上から光が差し、下に向かって薄れます。</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>ファイルがフォルダーの上に載り、下に小さな影が付きます。</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>各ファイルに、明るい側から暗い側へ均一な光の傾きを付けます。</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>強さ</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>効果の強さ。ほとんど見えない程度から、はっきりした程度まで。</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>やわらかさ</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>影が端からどこまで内側に届くか。</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>フォルダーを沈める</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>各フォルダーを浅いトレイのように描きます。</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>フォルダーの枠にも</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>フォルダーにも同じ縁を半分の強さで付けます。</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>この側から光が当たります</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>正面から光が当たります</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>左上</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp はオープンな成果の上に築かれています</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>その背後にいる人々に感謝します。</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>マップ</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>レイアウトは [Bruls、Huizing、van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) が 2000 年に発表した squarified treemap です。ディスクをマップとして表示する発想は Sean Werkema の [SpaceMonger](https://www.stardock.com/products/spacemonger/) から、treemap そのものは Ben Shneiderman (1991) から来ています。色覚多様性に配慮したパレットは [岡部・伊藤](https://jfly.uni-koeln.de/color/) の 8 色 (2002) を使っています。</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>レイアウトは [Bruls、Huizing、van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) が 2000 年に発表した squarified treemap です。ディスクをマップとして表示する発想は Sean Werkema の [SpaceMonger](https://www.stardock.com/products/spacemonger/) から、treemap そのものは Ben Shneiderman (1991) から来ています。色覚多様性に配慮したパレットは [岡部・伊藤](https://jfly.uni-koeln.de/color/) の 8 色 (2002) を使っています。 さらに 4 色は [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) の明るい配色から取っています。</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>ソフトウェア</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 上で C# で書かれています。インターフェースは [Avalonia UI](https://avaloniaui.net) で、[SkiaSharp](https://github.com/mono/SkiaSharp) で描画し、書体は Rasmus Andersson の [Inter](https://rsms.me/inter/) です。アイコンは Cole Bemis の Feather を受け継ぐ [Lucide](https://lucide.dev) のものです。Windows のインストーラーと更新は Caelan Sayler の [Velopack](https://velopack.io) によるものです。Lucide (ISC) と Inter (SIL Open Font License) を除き、すべて MIT ライセンスです。</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>言語</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Ach_Intro" xml:space="preserve"><value>スキャン一回で取れるものも、一年かかるものもあります。どれも何の価値もありません。それが肝心です。</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} / {1} 解除</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>未解除</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>新しい順</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>まだ見つかっていないもの</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>クリックするとヒントが表示されます。最後の「{0}」を取ると、テーマ「{1}」が使えるようになります。</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>まだありません。アプリを使っているうちに出てきます。</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>もう見つけるものはありません。</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>未解除。取り方は、取るまで秘密です。</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>すべての実績を解除</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>これで全部です。アプリにはもう配るものがないので、これからはただディスクを見せるだけです。いや、ひとつだけ: 設定 › 外観にゴールドテーマが加わりました。</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1〜2 年</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2〜5 年</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>それ以前</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>注目</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>取り戻しやすい容量。「表示」でその条件のマップを開きます。</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>クラスターの無駄</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>ファイルサイズを超えて割り当て</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>4 KB 未満のファイル</value></data>

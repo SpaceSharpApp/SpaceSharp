@@ -146,6 +146,8 @@ public sealed class ShortcutsWindow : Window
     {
         // Four groups as two rows of two, so each column has the same shape: a heading, five or six rows, a heading, five or six rows.
         var legend = new Grid { ColumnDefinitions = new ColumnDefinitions("*,28,*"), RowDefinitions = new RowDefinitions("Auto,Auto") };
+        // The key column is as wide as the widest key in its half of the window, so every action starts on one line down the page.
+        Grid.SetIsSharedSizeScope(legend, true);
         int index = 0;
         foreach ((string group, (string Key, string What)[] rows) in Groups())
         {
@@ -158,11 +160,16 @@ public sealed class ShortcutsWindow : Window
             list.Children.Add(heading);
             foreach ((string key, string what) in rows)
             {
-                var row = new DockPanel { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
+                var row = new Grid { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
+                row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = index % 2 == 0 ? "KeysLeft" : "KeysRight" });
+                row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Top, Child = new TextBlock { Text = key, FontSize = 10.5, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
-                chip.Margin = new Thickness(0, 2, 8, 0);
+                chip.Margin = new Thickness(0, 2, 12, 0);
+                chip.HorizontalAlignment = HorizontalAlignment.Left;
                 row.Children.Add(chip);
-                row.Children.Add(new TextBlock { Text = what, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 17 });
+                var action = new TextBlock { Text = what, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+                Grid.SetColumn(action, 1);
+                row.Children.Add(action);
                 list.Children.Add(row);
             }
 

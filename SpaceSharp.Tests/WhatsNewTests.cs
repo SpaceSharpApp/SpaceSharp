@@ -44,6 +44,46 @@ public class WhatsNewTests
     }
 
     [Fact]
+    public void NotesAreSplitIntoHeadingsBulletsAndText()
+    {
+        IReadOnlyList<UpdateWindow.NoteBlock> blocks = UpdateWindow.NoteBlocks(UpdateWindow.Abridge(Notes));
+        Assert.Equal(UpdateWindow.NoteKind.Text, blocks[0].Kind);
+        Assert.Contains(blocks, block => block.Kind == UpdateWindow.NoteKind.Heading && block.Lead == "WHAT'S NEW");
+        Assert.Contains(blocks, block => block.Kind == UpdateWindow.NoteKind.Bullet && block.Lead == "Export to CSV.");
+        Assert.DoesNotContain(blocks, block => block.Lead.Length == 0);
+    }
+
+    [Fact]
+    public void ABulletLeadsWithItsFirstSentence()
+    {
+        IReadOnlyList<UpdateWindow.NoteBlock> blocks = UpdateWindow.NoteBlocks("•  A minimap: shown while zoomed in. Click to jump.\n•  One sentence only.\n2.9.0\n…");
+        Assert.Equal(("A minimap:", "shown while zoomed in. Click to jump."), (blocks[0].Lead, blocks[0].Rest));
+        Assert.Equal(("One sentence only.", string.Empty), (blocks[1].Lead, blocks[1].Rest));
+        Assert.Equal(UpdateWindow.NoteKind.Release, blocks[2].Kind);
+        Assert.Equal(string.Empty, UpdateWindow.NoteBlocks("•  The title names the folder (\"C: - SpaceSharp\") and follows the view.")[0].Rest);
+        Assert.Equal(UpdateWindow.NoteKind.More, blocks[3].Kind);
+    }
+
+    [Fact]
+    public void ALongOneSentenceBulletLeadsWithItsFirstClause()
+    {
+        string item = "The live map is redrawn in one step, up to fifteen times a second, with no slide and no fade between snapshots and with icons and labels as the finished map has them";
+        UpdateWindow.NoteBlock block = UpdateWindow.NoteBlocks("•  " + item)[0];
+        Assert.Equal("The live map is redrawn in one step", block.Lead);
+        Assert.StartsWith(", up to fifteen times a second", block.Rest);
+
+        // A short one-sentence bullet stays whole.
+        Assert.Equal(string.Empty, UpdateWindow.NoteBlocks("•  Small fixes, and polish across the app.")[0].Rest);
+    }
+
+    [Fact]
+    public void NoNotesGiveNoBlocks()
+    {
+        Assert.Empty(UpdateWindow.NoteBlocks(null));
+        Assert.Empty(UpdateWindow.NoteBlocks("  "));
+    }
+
+    [Fact]
     public void EmptyNotesGiveNull()
     {
         Assert.Null(UpdateWindow.Abridge(null));

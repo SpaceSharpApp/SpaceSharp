@@ -40,7 +40,7 @@ Links between pages use the file name without `.md`: `[The filter](The-Filter)`.
 |---|---|---|
 | `screenshot.png`, `shot-start.png`, `shot-filter.png`, `shot-insights.png`, `shot-changes.png`, `shot-inspect.png`, `shot-menu.png`, `shot-settings.png`, `shot-about.png`, `shot-update.png`, `shot-light.png`, `shot-duplicates.png` | the README's scenes | the same pictures the README shows |
 | `colorby-top.png`, `colorby-type.png` | `wiki-colorby-top`, `wiki-colorby-type` | the Color by modes |
-| `shading.png` | `wiki-shading` | cushion shading at the Deep preset |
+| `shading-sheen.png`, `shading-edges.png`, `shading-pillow.png`, `shading-layers.png`, `shading-sidelight.png`, `shading-off.png` | `wiki-shading-sheen`, `-edges`, `-pillow`, `-layers`, `-sidelight`, `-off` | the five shading looks at the settings they ship with, and the flat map |
 | `zoomed.png` | `wiki-zoomed` | the map zoomed three folders down |
 | `free-space.png`, `physical.png`, `classic.png` | `wiki-free-space`, `wiki-physical`, `wiki-classic` | the free-space panel, the Physical map, the Classic style |
 | `filter-rail.png`, `filtered.png` | `wiki-rail`, `wiki-filtered` | the rail layout; a filtered map without the drawer |

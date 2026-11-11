@@ -61,7 +61,7 @@ public static class UpdateWindow
             await Task.Delay(900);
             throw new InvalidOperationException("Preview only: nothing was installed.");
         }
-        return Show(owner, version, current, Task.FromResult<string?>(PreviewMarkdown(version)), Install);
+        return Show(owner, version, current, Task.FromResult<string?>(PreviewMarkdown), Install);
     }
 
     /// <summary>The release before <paramref name="version"/>, one patch or one minor down, for a preview without PreviousVersion.</summary>
@@ -83,11 +83,19 @@ public static class UpdateWindow
     /// <summary>The version the preview offers; its notes are canned.</summary>
     private static string? _previewNotes;
 
-    /// <summary>Canned release notes for the preview prompt, in the changelog's markdown shape.</summary>
-    /// <param name="version">Version written into the "##" heading.</param>
-    /// <returns>Markdown with a version heading and several "###" sections.</returns>
-    private static string PreviewMarkdown(string version) =>
-        $"## {version}\n\n### Start screen\n- The start screen is laid out for any number of saved scans; the last one is a panel with a ring, the earlier ones are rows.\n\n### Filter drawer\n- One stacked bar shows how the scan divides between the file types; size and age are scales with seven ticks each.\n\n### Drives\n- Each drive is a letter tile with the bar, used of total and free under the name.\n\n### Largest items\n- The list is a small table with a color per file type, a share column and a legend.\n\n### Fixes\n- Zoom to folder on a merged cluster fills the window with the cluster.\n- This is a preview of the update prompt; nothing is downloaded.";
+    /// <summary>Canned release notes for the preview prompt and the screenshots, in the changelog's markdown shape. They name no
+    /// version and no feature of one release, so a picture taken with them does not go out of date.</summary>
+    private const string PreviewMarkdown =
+        "### The map\n"
+        + "- Sharper at every zoom. Names, icons and title bars are drawn to fit the box they are in.\n"
+        + "- Easier to find your way: the path row and the window title follow the folder you are looking at.\n\n"
+        + "### Scanning\n"
+        + "- Quicker on big drives. The map fills in while the drive is read, and stays put when the scan ends.\n\n"
+        + "### Cleaning up\n"
+        + "- Clearer about what is safe. Every delete names what it removes and how much space comes back.\n\n"
+        + "### Fixes\n"
+        + "- Small fixes and polish across the app.\n"
+        + "- This is a preview of the update prompt; nothing is downloaded.";
 
     /// <summary>The prompt itself: icon, versions, a hidden progress bar, Install and restart, Remind me later and a What's new link.</summary>
     /// <param name="owner">Window the modal prompt centers on and blocks.</param>
@@ -246,10 +254,12 @@ public static class UpdateWindow
     {
         bool spansReleases = SpansReleases(sinceVersion, version);
         string titleKey = spansReleases ? "WhatsNew_TitleSince" : "WhatsNew_Title";
-        Window window = CreateWindow(Strings.Format(titleKey, version, sinceVersion ?? string.Empty), 560);
-        var body = new DockPanel { Margin = new Thickness(24, 20, 24, 16) };
-        var notes = new TextBlock { Text = Strings.Get("WhatsNew_Loading"), TextWrapping = TextWrapping.Wrap, LineHeight = 21 };
-        var scroll = new ScrollViewer { Content = notes, MaxHeight = 380, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
+        Window window = CreateWindow(Strings.Format(titleKey, version, sinceVersion ?? string.Empty), 640);
+        var body = new DockPanel { Margin = new Thickness(24, 20, 10, 16) };
+        // The right margin keeps the text clear of the scrollbar, which lies over the content's edge.
+        var notes = new StackPanel { Margin = new Thickness(0, 0, 18, 0) };
+        notes.Children.Add(new TextBlock { Text = Strings.Get("WhatsNew_Loading"), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        var scroll = new ScrollViewer { Content = notes, MaxHeight = 460, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
 
         // "See all" opens the full changelog when several releases are shown, else that release's page.
         var seeAll = new Button { Content = Icons.WithText("External", Strings.Get("WhatsNew_SeeAll")), Classes = { "tool" }, Height = 32 };
@@ -268,7 +278,7 @@ public static class UpdateWindow
         var close = new Button { Content = Strings.Get("Dialog_Ok"), Classes = { "primary" }, Height = 32, MinWidth = 84, IsDefault = true, IsCancel = true };
         close.Click += (_, _) => window.Close();
 
-        var footer = new DockPanel { Margin = new Thickness(0, 16, 0, 0) };
+        var footer = new DockPanel { Margin = new Thickness(0, 16, 14, 0) };
         DockPanel.SetDock(seeAll, Dock.Left);
         var right = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right };
         right.Children.Add(close);
@@ -282,7 +292,7 @@ public static class UpdateWindow
         Task<string?> notesTask;
         if (version == _previewNotes)
         {
-            notesTask = Task.FromResult<string?>(PreviewMarkdown(version));
+            notesTask = Task.FromResult<string?>(PreviewMarkdown);
         }
         else if (spansReleases)
         {
@@ -293,8 +303,180 @@ public static class UpdateWindow
             notesTask = LoadNotesAsync(version);
         }
         int maxLines = spansReleases ? 40 : 14;
-        window.Opened += async (_, _) => notes.Text = Abridge(await notesTask, maxLines) ?? Strings.Get("WhatsNew_Unavailable");
+        window.Opened += async (_, _) => FillNotes(window, notes, Abridge(await notesTask, maxLines));
         await window.ShowModal(owner);
+    }
+
+    /// <summary>What one line of the abridged notes is, which decides how the What's new window sets it.</summary>
+    internal enum NoteKind
+    {
+        /// <summary>A release's version number, where the notes span several releases.</summary>
+        Release,
+        /// <summary>A section heading.</summary>
+        Heading,
+        /// <summary>A list item.</summary>
+        Bullet,
+        /// <summary>A plain paragraph.</summary>
+        Text,
+        /// <summary>The line that says the notes go on.</summary>
+        More
+    }
+
+    /// <summary>One line of the notes, split for display.</summary>
+    /// <param name="Kind">What the line is.</param>
+    /// <param name="Lead">The whole line, or for a bullet its opening sentence.</param>
+    /// <param name="Rest">What follows a bullet's opening sentence; empty otherwise.</param>
+    internal sealed record NoteBlock(NoteKind Kind, string Lead, string Rest);
+
+    /// <summary>Splits the text <see cref="Abridge"/> made into the blocks the What's new window draws.</summary>
+    /// <param name="abridged">The abridged notes; null or blank gives no blocks.</param>
+    /// <returns>The lines in order, blank ones dropped. A bullet's first sentence is its lead when it ends within the first 110
+    /// characters and more follows; a longer bullet that is one sentence leads with its first clause, the rest starting at the comma,
+    /// semicolon or bracket; a line in capitals is a heading; a line that is only a version number is a release.</returns>
+    internal static IReadOnlyList<NoteBlock> NoteBlocks(string? abridged)
+    {
+        var blocks = new List<NoteBlock>();
+        if (string.IsNullOrWhiteSpace(abridged))
+        {
+            return blocks;
+        }
+        foreach (string line in abridged.Split('\n'))
+        {
+            if (line.Length == 0)
+            {
+                continue;
+            }
+            if (line == "…")
+            {
+                blocks.Add(new NoteBlock(NoteKind.More, line, string.Empty));
+            }
+            else if (line.StartsWith('•'))
+            {
+                string item = line[1..].TrimStart();
+                int stop = item.IndexOf(". ", StringComparison.Ordinal);
+                int colon = item.IndexOf(": ", StringComparison.Ordinal);
+                if (colon >= 0 && (stop < 0 || colon < stop))
+                {
+                    stop = colon;
+                }
+                // A stop inside brackets or quotes ("C: ...") is not the end of the opening sentence.
+                string opening = stop > 0 ? item[..stop] : string.Empty;
+                bool closed = opening.Count(character => character == '(') == opening.Count(character => character == ')')
+                    && opening.Count(character => character == '"') % 2 == 0;
+                bool split = stop is > 0 and < 110 && stop + 2 < item.Length && closed;
+                if (split)
+                {
+                    blocks.Add(new NoteBlock(NoteKind.Bullet, item[..(stop + 1)], item[(stop + 2)..]));
+                    continue;
+                }
+
+                // A long item that is one sentence leads with its first clause instead, so it does not stand as a bright block.
+                int clause = item.Length > LongItem ? ClauseEnd(item) : -1;
+                blocks.Add(clause > 0
+                    ? new NoteBlock(NoteKind.Bullet, item[..clause], item[clause..].TrimStart())
+                    : new NoteBlock(NoteKind.Bullet, item, string.Empty));
+            }
+            else if (Regex.IsMatch(line, @"^v?\d+(\.\d+)+\b[^a-z]*$", RegexOptions.IgnoreCase))
+            {
+                blocks.Add(new NoteBlock(NoteKind.Release, line, string.Empty));
+            }
+            else if (line.Any(char.IsLetter) && !line.Any(char.IsLower))
+            {
+                blocks.Add(new NoteBlock(NoteKind.Heading, line, string.Empty));
+            }
+            else
+            {
+                blocks.Add(new NoteBlock(NoteKind.Text, line, string.Empty));
+            }
+        }
+        return blocks;
+    }
+
+    /// <summary>An item longer than this is detail more than headline: it gets a lead of its own, or is dimmed whole.</summary>
+    private const int LongItem = 110;
+
+    /// <summary>Where the first clause of a one-sentence item ends: at its first comma, semicolon or opening bracket.</summary>
+    /// <param name="item">The item's text.</param>
+    /// <returns>The index of that comma, semicolon or bracket when it lies between 12 and <see cref="LongItem"/> characters in; else -1.</returns>
+    private static int ClauseEnd(string item)
+    {
+        int best = -1;
+        foreach (string mark in new[] { ", ", "; ", " (" })
+        {
+            int at = item.IndexOf(mark, StringComparison.Ordinal);
+            if (at >= 12 && at < LongItem && (best < 0 || at < best))
+            {
+                best = at;
+            }
+        }
+        return best;
+    }
+
+    /// <summary>Puts the notes into the What's new window: headings as small labels, each bullet as a marker beside its text with
+    /// the opening sentence standing out and the detail after it dimmed.</summary>
+    /// <param name="window">The window, for its theme colors.</param>
+    /// <param name="notes">The panel to fill; what it held is replaced.</param>
+    /// <param name="abridged">The abridged notes, or null when they could not be loaded.</param>
+    private static void FillNotes(Window window, StackPanel notes, string? abridged)
+    {
+        notes.Children.Clear();
+        IReadOnlyList<NoteBlock> blocks = NoteBlocks(abridged);
+        if (blocks.Count == 0)
+        {
+            notes.Children.Add(new TextBlock { Text = Strings.Get("WhatsNew_Unavailable"), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            return;
+        }
+
+        // Theme colors live in the theme dictionaries, which only a lookup that names the window's theme reaches.
+        IBrush? dim = window.TryFindResource("TextDim", window.ActualThemeVariant, out object? found) ? found as IBrush : null;
+        foreach (NoteBlock block in blocks)
+        {
+            double above = notes.Children.Count == 0 ? 0 : 1;   // nothing above the first block
+            switch (block.Kind)
+            {
+                case NoteKind.Release:
+                    notes.Children.Add(new TextBlock { Text = block.Lead, FontSize = 17, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 18 * above, 0, 6), TextWrapping = TextWrapping.Wrap });
+                    break;
+
+                case NoteKind.Heading:
+                    var heading = new TextBlock { Text = block.Lead, FontSize = 12, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.8, Margin = new Thickness(0, 16 * above, 0, 8), TextWrapping = TextWrapping.Wrap };
+                    heading.Bind(TextBlock.ForegroundProperty, window.GetResourceObservable("Accent"));
+                    notes.Children.Add(heading);
+                    break;
+
+                case NoteKind.Bullet:
+                    var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 10, Margin = new Thickness(0, 0, 0, 10) };
+                    var marker = new Border { Width = 5, Height = 5, CornerRadius = new CornerRadius(1.5), Margin = new Thickness(2, 8, 0, 0), VerticalAlignment = VerticalAlignment.Top };
+                    marker.Bind(Border.BackgroundProperty, window.GetResourceObservable("Accent"));
+                    row.Children.Add(marker);
+                    var text = new TextBlock { TextWrapping = TextWrapping.Wrap, LineHeight = 20, FontSize = 13.5 };
+                    var lead = new Avalonia.Controls.Documents.Run(block.Lead) { FontWeight = block.Rest.Length > 0 ? FontWeight.SemiBold : FontWeight.Normal };
+                    if (block.Rest.Length == 0 && block.Lead.Length > LongItem && dim is not null)
+                    {
+                        lead.Foreground = dim;   // a long item with nowhere to split reads as detail
+                    }
+                    text.Inlines!.Add(lead);
+                    if (block.Rest.Length > 0)
+                    {
+                        // A clause's rest starts with its comma or semicolon, which sits against the lead.
+                        string gap = block.Rest[0] is ',' or ';' ? string.Empty : " ";
+                        var rest = new Avalonia.Controls.Documents.Run(gap + block.Rest);
+                        if (dim is not null)
+                        {
+                            rest.Foreground = dim;   // a null brush would draw the detail invisibly
+                        }
+                        text.Inlines.Add(rest);
+                    }
+                    Grid.SetColumn(text, 1);
+                    row.Children.Add(text);
+                    notes.Children.Add(row);
+                    break;
+
+                default:
+                    notes.Children.Add(new TextBlock { Text = block.Lead, FontSize = 13.5, LineHeight = 20, Margin = new Thickness(0, 0, 0, 10), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+                    break;
+            }
+        }
     }
 
     /// <summary>True when the installed version is at least two releases behind the target.</summary>

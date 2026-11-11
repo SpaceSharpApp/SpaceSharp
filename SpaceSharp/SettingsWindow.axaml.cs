@@ -289,33 +289,79 @@ public partial class SettingsWindow : Window
             Switch(_settings.FileIcons, enabled => _settings.FileIcons = enabled));
     }
 
-    /// <summary>Cushion shading: the master switch, presets, four percent sliders and the light compass, with the dependent rows grayed while off.</summary>
+    private static readonly string[] ShadingLooks = { "Off", "Edges", "Pillow", "Sheen", "Layers", "SideLight" };
+
+    /// <summary>Shading: the look picker, then only the chosen look's own settings, the tone shared by all looks, and the reset.</summary>
     private void BuildShadingSection()
     {
         Section(Strings.Get("Settings_Shading"), Strings.Get("Settings_Shading_Desc"));
 
-        // The dependent rows gray out while the master switch is off.
-        var cushionRows = new List<Control>();
-        Row(Strings.Get("Shading_Enable"), Strings.Get("Shading_Enable_Desc"),
-            Switch(_settings.CushionEnabled, enabled =>
+        int lookIndex = Math.Max(0, Array.IndexOf(ShadingLooks, _settings.ShadingLook));
+        string look = ShadingLooks[lookIndex];
+        // The row's description is the chosen look's, so the picker says what it picked.
+        Row(Strings.Get("Shading_Look"), Strings.Get($"ShadingLook_{look}_Desc"),
+            Combo(ShadingLooks.Select(name => Strings.Get("ShadingLook_" + name)).ToArray(), lookIndex, index =>
             {
-                _settings.CushionEnabled = enabled;
-                SetEnabled(cushionRows, enabled);
+                _settings.ShadingLook = ShadingLooks[index];
+                Dispatcher.UIThread.Post(Build);
             }));
-        cushionRows.Add(Row(Strings.Get("Shading_Presets"), Strings.Get("Shading_Presets_Desc"), PresetChips()));
-        cushionRows.Add(Row(Strings.Get("Shading_Depth"), Strings.Get("Shading_Depth_Desc"),
-            PercentSlider(_settings.CushionShading, percent => _settings.CushionShading = percent)));
-        cushionRows.Add(Row(Strings.Get("Shading_Spread"), Strings.Get("Shading_Spread_Desc"),
-            PercentSlider(_settings.CushionHeight, percent => _settings.CushionHeight = percent)));
-        cushionRows.Add(Row(Strings.Get("Shading_Tone"), Strings.Get("Shading_Tone_Desc"),
-            PercentSlider(_settings.Brightness, percent => _settings.Brightness = percent)));
-        cushionRows.Add(Row(Strings.Get("Shading_Fade"), Strings.Get("Shading_Fade_Desc"),
-            PercentSlider(_settings.ShadingScale, percent => _settings.ShadingScale = percent)));
-        cushionRows.Add(Row(Strings.Get("Shading_Light"), Strings.Get("Shading_Light_Desc"), LightCompass()));
-        SetEnabled(cushionRows, _settings.CushionEnabled);
 
+        switch (look)
+        {
+            case "Edges":
+                StrengthRow(_settings.EdgeStrength, percent => _settings.EdgeStrength = percent);
+                Row(Strings.Get("Shading_Light"), Strings.Get("Shading_Light_Desc"), LightCompass());
+                Row(Strings.Get("Shading_EdgeFolders"), Strings.Get("Shading_EdgeFolders_Desc"),
+                    Switch(_settings.EdgeFolders, enabled => _settings.EdgeFolders = enabled));
+                break;
+
+            case "Pillow":
+                Row(Strings.Get("Shading_Depth"), Strings.Get("Shading_Depth_Desc"),
+                    PercentSlider(_settings.PillowDepth, percent => _settings.PillowDepth = percent));
+                Row(Strings.Get("Shading_Softness"), Strings.Get("Shading_Softness_Desc"),
+                    PercentSlider(_settings.PillowSoftness, percent => _settings.PillowSoftness = percent));
+                FadeRow();
+                break;
+
+            case "Sheen":
+                StrengthRow(_settings.SheenStrength, percent => _settings.SheenStrength = percent);
+                Row(Strings.Get("Shading_Spread"), Strings.Get("Shading_Spread_Desc"),
+                    PercentSlider(_settings.SheenSpread, percent => _settings.SheenSpread = percent));
+                FadeRow();
+                break;
+
+            case "Layers":
+                StrengthRow(_settings.LayerLift, percent => _settings.LayerLift = percent);
+                Row(Strings.Get("Shading_SinkFolders"), Strings.Get("Shading_SinkFolders_Desc"),
+                    Switch(_settings.LayerSinkFolders, enabled => _settings.LayerSinkFolders = enabled));
+                FadeRow();
+                break;
+
+            case "SideLight":
+                StrengthRow(_settings.SideStrength, percent => _settings.SideStrength = percent);
+                Row(Strings.Get("Shading_Light"), Strings.Get("Shading_Light_Desc"), LightCompass());
+                FadeRow();
+                break;
+        }
+
+        if (look != "Off")
+        {
+            Row(Strings.Get("Shading_Tone"), Strings.Get("Shading_Tone_Desc"),
+                PercentSlider(_settings.Brightness, percent => _settings.Brightness = percent));
+        }
         Row(Strings.Get("Shading_Reset"), Strings.Get("Shading_Reset_Desc"), ResetShadingButton());
     }
+
+    /// <summary>The Strength row every look but Pillow has, on that look's own setting.</summary>
+    /// <param name="value">The look's strength now, 0 to 100.</param>
+    /// <param name="onChanged">Stores a new strength in the look's setting.</param>
+    private void StrengthRow(int value, Action<int> onChanged) =>
+        Row(Strings.Get("Shading_Strength"), Strings.Get("Shading_Strength_Desc"), PercentSlider(value, onChanged));
+
+    /// <summary>The Fade inside folders row, shared by the looks that weaken with depth.</summary>
+    private void FadeRow() =>
+        Row(Strings.Get("Shading_Fade"), Strings.Get("Shading_Fade_Desc"),
+            PercentSlider(_settings.ShadingScale, percent => _settings.ShadingScale = percent));
 
     /// <summary>Label size, font, folder and file text colors, halo, title padding and tint, and what file and folder labels show.</summary>
     private void BuildTextSection()

@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Undersøg: {0:N0} elementer</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Undersøg: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Åbn dette vindue</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Om SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Føj til markeringen</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Annuller en scanning</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Kopiér de valgte stier</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Fremhævningsramme</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Rammen om valgte bokse. Bokse under markøren beholder en hvid ramme.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Pudeskygning</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Skygning fra lys til mørk på hver fil, sådan som SpaceMonger tegnede dem. Fra giver flade farver, og indstillingerne nedenfor gør ingenting.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Forudindstillinger</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Et udgangspunkt. Skyderne nedenfor finjusterer det.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Blød</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Klassisk</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Dyb</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Dybde</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Hvor markant skygningen er, fra et svagt skær til en dyb pude.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Spredning</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Lysere eller mørkere filer generelt. Mapper beholder deres farve.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Udtoning i mapper</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hvor meget skygning indlejrede filer beholder. Lav dæmper de dybe niveauer, så de øverste mapper skiller sig ud.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Fra</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Udseende</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Kanter</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Pude</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Skær</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Lag</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Sidelys</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Flade farver, ingen skygge.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>En oplyst kant på hver boks, som hævede fliser. Farverne forbliver flade.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Filer er lysest i midten og bliver blødt mørkere mod kanterne.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Lyset falder fra toppen af hver fil og toner ud på vej ned.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Filer ligger oven på deres mappe med en lille skygge under sig.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Én jævn hældning af lys hen over hver fil, fra den oplyste side til den mørke.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Styrke</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Hvor kraftig effekten er, fra næsten usynlig til tydelig.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Blødhed</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Hvor langt skyggen når ind fra kanten.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Sænk mapper</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Tegner hver mappe som en lav bakke.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Også mapperammer</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Den samme kant på mapper, med halv styrke.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Lys fra denne side</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Lys lige forfra</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Øverst til venstre</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp er bygget på åbent arbejde</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Tak til menneskene bag det.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Kortet</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Layoutet er det kvadrerede trækort fra [Bruls, Huizing og van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), udgivet i 2000. Ideen om at vise en disk som et kort kommer fra [SpaceMonger](https://www.stardock.com/products/spacemonger/) af Sean Werkema, og trækort i sig selv fra Ben Shneiderman (1991). Den farveblindvenlige palet bruger de otte [Okabe og Ito](https://jfly.uni-koeln.de/color/)-farver (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Layoutet er det kvadrerede trækort fra [Bruls, Huizing og van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), udgivet i 2000. Ideen om at vise en disk som et kort kommer fra [SpaceMonger](https://www.stardock.com/products/spacemonger/) af Sean Werkema, og trækort i sig selv fra Ben Shneiderman (1991). Den farveblindvenlige palet bruger de otte [Okabe og Ito](https://jfly.uni-koeln.de/color/)-farver (2002). Fire farver mere i den er fra [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)s lyse farveskema.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Skrevet i C# på [.NET 10](https://dotnet.microsoft.com). Brugerfladen er [Avalonia UI](https://avaloniaui.net), tegnet med [SkiaSharp](https://github.com/mono/SkiaSharp), i skrifttypen [Inter](https://rsms.me/inter/) af Rasmus Andersson. Ikonerne er fra [Lucide](https://lucide.dev), en videreførelse af Feather af Cole Bemis. Installationsprogrammet og opdateringerne på Windows kommer fra [Velopack](https://velopack.io) af Caelan Sayler. Alle er MIT-licenseret, undtagen Lucide (ISC) og Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprog</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Ach_Intro" xml:space="preserve"><value>Nogle kræver én scanning, andre et år. Ingen af dem er noget værd, og det er hele pointen.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} af {1} låst op</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Låst</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Nyeste først</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Stadig derude</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Klik på en for at få et hint. Den sidste, {0}, kommer med temaet {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Ingen endnu. De dukker op, mens du bruger appen.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Der er ikke mere at finde.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Låst. Hvordan du får den, er hemmeligt, indtil du har den.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alle præstationer låst op</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Det var dem alle. Appen har ikke mere at dele ud, så fra nu af viser den dig bare din disk. Nå ja, én ting: Indstillinger › Udseende har nu et Guld-tema.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys og swapfile.sys er virtuel hukommelse. Deres størrelse indstilles 
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 år</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 år</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Ældre</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Værd at se på</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Plads, der er let at få tilbage. Vis åbner kortet filtreret til det.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Spildplads</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>tildelt ud over filernes størrelse</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Filer under 4 KB</value></data>

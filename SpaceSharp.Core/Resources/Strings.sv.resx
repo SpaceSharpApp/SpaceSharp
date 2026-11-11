@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Storlek</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Granska: {0:N0} objekt</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Granska: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Öppna det här fönstret</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Om SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Lägg till i markeringen</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Avbryt en skanning</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Kopiera de markerade sökvägarna</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Markeringsram</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Ramen runt markerade rutor. Rutor under muspekaren behåller en vit ram.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Kuddskuggning</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Skuggning från ljust till mörkt på varje fil, så som SpaceMonger ritade dem. Av ger platta färger, och inställningarna nedan gör ingenting.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Förinställningar</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>En utgångspunkt. Reglagen nedan finjusterar den.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Mjuk</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Klassisk</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Djup</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Djup</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Hur tydlig skuggningen är, från en svag glans till en djup kudde.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Spridning</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Ljusare eller mörkare filer överlag. Mappar behåller sin färg.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Tona ned inuti mappar</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Hur mycket skuggning nästlade filer behåller. Lågt lugnar djupa nivåer så att toppmapparna sticker ut.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Av</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Utseende</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Kanter</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Kudde</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Glans</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Lager</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Sidoljus</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Platta färger, ingen skuggning.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>En upplyst kant på varje ruta, som upphöjda plattor. Färgerna förblir platta.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Filer är ljusast i mitten och blir mjukt mörkare mot kanterna.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Ljuset faller från toppen av varje fil och tonar ut nedåt.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Filer ligger ovanpå sin mapp med en liten skugga under.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>En jämn lutning av ljus över varje fil, från den upplysta sidan till den mörka.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Styrka</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Hur stark effekten är, från knappt synlig till tydlig.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Mjukhet</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Hur långt skuggan når in från kanten.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Sänk mappar</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Ritar varje mapp som en grund bricka.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Även mappramar</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Samma kant på mappar, med halv styrka.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Ljus från den här sidan</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Ljus rakt framifrån</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Uppe till vänster</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp bygger på öppet arbete</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Tack till människorna bakom det.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Kartan</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Layouten är den kvadrerade trädkartan från [Bruls, Huizing och van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publicerad 2000. Idén att visa en disk som en karta kommer från [SpaceMonger](https://www.stardock.com/products/spacemonger/) av Sean Werkema, och trädkartor i sig från Ben Shneiderman (1991). Den färgblindvänliga paletten använder de åtta [Okabe och Ito](https://jfly.uni-koeln.de/color/)-färgerna (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Layouten är den kvadrerade trädkartan från [Bruls, Huizing och van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publicerad 2000. Idén att visa en disk som en karta kommer från [SpaceMonger](https://www.stardock.com/products/spacemonger/) av Sean Werkema, och trädkartor i sig från Ben Shneiderman (1991). Den färgblindvänliga paletten använder de åtta [Okabe och Ito](https://jfly.uni-koeln.de/color/)-färgerna (2002). Fyra färger till i den är från [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)s ljusa färgschema.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Programvara</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Skrivet i C# på [.NET 10](https://dotnet.microsoft.com). Gränssnittet är [Avalonia UI](https://avaloniaui.net), ritat med [SkiaSharp](https://github.com/mono/SkiaSharp), i typsnittet [Inter](https://rsms.me/inter/) av Rasmus Andersson. Ikonerna kommer från [Lucide](https://lucide.dev), en fortsättning på Feather av Cole Bemis. Installationsprogrammet och uppdateringarna på Windows kommer från [Velopack](https://velopack.io) av Caelan Sayler. Allt är MIT-licensierat utom Lucide (ISC) och Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Språk</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Ach_Intro" xml:space="preserve"><value>Vissa tar en skanning, andra ett år. Ingen är värd något, vilket är poängen.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} av {1} upplåsta</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Låst</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Nyaste först</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Fortfarande där ute</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Klicka på en för att få en ledtråd. Den sista, {0}, kommer med temat {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Inga ännu. De dyker upp medan du använder appen.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Det finns inget mer att hitta.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Låst. Hur du får den är hemligt tills du har den.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Alla prestationer upplåsta</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Det var alla. Appen har inget mer att dela ut, så från och med nu visar den bara din disk. Nåja, en sak: Inställningar › Utseende har nu ett Guld-tema.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys och swapfile.sys är virtuellt minne. Deras storlek anges under Sys
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 år</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 år</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Äldre</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Värt en titt</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Utrymme som är lätt att få tillbaka. Visa öppnar kartan filtrerad till det.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Spillutrymme</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>tilldelat utöver filernas storlek</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Filer under 4 KB</value></data>

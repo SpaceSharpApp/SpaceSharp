@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Boyut</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>İncele: {0:N0} öğe</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>İncele: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Bu pencereyi aç</value></data>
+  <data name="Key_About" xml:space="preserve"><value>SpaceSharp hakkında</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Seçime ekle</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Taramayı iptal et</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Seçili yolları kopyala</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Vurgu çerçevesi</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Seçili kutuların çevresindeki çerçeve. Üzerine gelinen kutular beyaz çerçevesini korur.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Düzen</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Yastık gölgelendirmesi</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Her dosyada, SpaceMonger'ın çizdiği gibi açıktan koyuya gölgelendirme. Kapalıyken renkler düz olur ve aşağıdaki ayarlar işe yaramaz.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Hazır ayarlar</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Bir başlangıç noktası. Aşağıdaki kaydırıcılar ince ayar yapar.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Yumuşak</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Klasik</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Derin</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Derinlik</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Gölgelendirmenin ne kadar belirgin olduğu; hafif bir parıltıdan derin bir yastığa.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Yayılım</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Dosyalar genel olarak daha açık veya daha koyu. Klasörler rengini korur.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Klasör içinde solma</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>İç içe dosyaların ne kadar gölgelendirme koruduğu. Düşük değer derin düzeyleri sakinleştirir, böylece üst klasörler öne çıkar.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Kapalı</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Görünüm</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Kenarlar</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Yastık</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Parıltı</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Katmanlar</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Yan ışık</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Düz renkler, gölgelendirme yok.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Her kutuda kabartma karolar gibi aydınlık bir kenar. Renkler düz kalır.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Dosyalar ortada en parlaktır ve kenarlara doğru yumuşakça koyulaşır.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Işık her dosyanın üstünden düşer ve aşağı indikçe söner.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Dosyalar klasörlerinin üstünde durur, altlarında küçük bir gölge olur.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Her dosyada aydınlık taraftan karanlık tarafa tek ve düzgün bir ışık eğimi.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Güç</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Etkinin ne kadar güçlü olduğu, neredeyse görünmezden belirgine.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Yumuşaklık</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Gölgenin kenardan içeri ne kadar uzandığı.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Klasörleri göm</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Her klasörü sığ bir tepsi gibi çizer.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Klasör çerçeveleri de</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Aynı kenar klasörlerde yarı güçte.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Işık bu taraftan</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Işık tam karşıdan</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Sol üst</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp açık çalışmaların üzerine kuruludur</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Arkasındaki insanlara teşekkürler.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Harita</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Yerleşim, [Bruls, Huizing ve van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) tarafından 2000'de yayımlanan squarified treemap'tir. Bir diski harita olarak gösterme fikri Sean Werkema'nın [SpaceMonger](https://www.stardock.com/products/spacemonger/) programından, treemap'in kendisi ise Ben Shneiderman'dan (1991) gelir. Renk körlüğüne uygun palet [Okabe ve Ito](https://jfly.uni-koeln.de/color/)'nun sekiz rengini (2002) kullanır.</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Yerleşim, [Bruls, Huizing ve van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) tarafından 2000'de yayımlanan squarified treemap'tir. Bir diski harita olarak gösterme fikri Sean Werkema'nın [SpaceMonger](https://www.stardock.com/products/spacemonger/) programından, treemap'in kendisi ise Ben Shneiderman'dan (1991) gelir. Renk körlüğüne uygun palet [Okabe ve Ito](https://jfly.uni-koeln.de/color/)'nun sekiz rengini (2002) kullanır. Diğer dört renk [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) tarafından hazırlanan parlak şemadan alınmıştır.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Yazılım</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) üzerinde C# ile yazıldı. Arayüz [Avalonia UI](https://avaloniaui.net), çizim [SkiaSharp](https://github.com/mono/SkiaSharp) ile, yazı tipi Rasmus Andersson'un [Inter](https://rsms.me/inter/) fontudur. Simgeler, Cole Bemis'in Feather'ını sürdüren [Lucide](https://lucide.dev)'dan gelir. Windows yükleyicisi ve güncellemeler Caelan Sayler'ın [Velopack](https://velopack.io) aracından gelir. Lucide (ISC) ve Inter (SIL Open Font License) dışında hepsi MIT lisanslıdır.</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Diller</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Ach_Intro" xml:space="preserve"><value>Bazıları bir tarama, bazıları bir yıl ister. Hiçbirinin bir değeri yok; olay da bu.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} / {1} açıldı</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Kilitli</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>En yeniler önce</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Hâlâ bulunmayı bekleyenler</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>İpucu için birine tıklayın. Sonuncusu olan {0}, {1} temasıyla birlikte gelir.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Henüz yok. Uygulamayı kullandıkça ortaya çıkarlar.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Bulunacak bir şey kalmadı.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Kilitli. Nasıl kazanıldığı, kazanana kadar sır olarak kalır.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tüm başarımlar açıldı</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Hepsi buydu. Uygulamanın dağıtacak bir şeyi kalmadı, bundan sonra size yalnızca diskinizi gösterecek. Şey, bir şey var: Ayarlar › Görünüm'de artık bir Altın teması var.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 yıl</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 yıl</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Daha eski</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Göz atmaya değer</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Kolayca geri kazanılabilecek alan. Göster, haritayı buna göre filtrelenmiş açar.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Boşa giden alan</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>dosya boyutlarının ötesinde ayrılan</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>4 KB altındaki dosyalar</value></data>

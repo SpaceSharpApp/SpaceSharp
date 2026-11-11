@@ -123,7 +123,7 @@ public partial class SettingsWindow
         ("↙", "Light_BottomLeft", -0.5, 0.5), ("↓", "Light_Bottom", 0, 0.7),  ("↘", "Light_BottomRight", 0.5, 0.5)
     };
 
-    /// <summary>A 3x3 pad of arrows for the cushion light direction, with the nearest saved direction lit and named beside it.</summary>
+    /// <summary>A 3x3 pad of arrows for the light direction, with the nearest saved direction lit and named beside it.</summary>
     /// <returns>The pad and its label; picking a tile saves LightX/LightY in -1..1 space and rebuilds the page.</returns>
     private Control LightCompass()
     {
@@ -191,39 +191,6 @@ public partial class SettingsWindow
 
         var label = new TextBlock { Text = Strings.Get(Compass[currentIndex].Name), Classes = { "dim" }, FontSize = 12.5, MinWidth = 76, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
         return new StackPanel { Orientation = Orientation.Horizontal, Spacing = 14, HorizontalAlignment = HorizontalAlignment.Right, Children = { pad, label } };
-    }
-
-    private static readonly (string Key, int Depth, int Spread, int Tone, int Fade)[] Presets =
-    {
-        ("Preset_Soft", 30, 35, 55, 60), ("Preset_Classic", 55, 45, 50, 70), ("Preset_Deep", 85, 60, 45, 85)
-    };
-
-    /// <summary>Soft, Classic and Deep chips that set all four shading sliders at once; the chip matching the current values is checked.</summary>
-    /// <returns>A wrap panel of toggle chips; picking one saves and rebuilds the page.</returns>
-    private Control PresetChips()
-    {
-        var panel = new WrapPanel { Width = 220, HorizontalAlignment = HorizontalAlignment.Right };
-        foreach ((string nameKey, int depth, int spread, int tone, int fade) in Presets)
-        {
-            bool active = _settings.CushionShading == depth
-                && _settings.CushionHeight == spread
-                && _settings.Brightness == tone
-                && _settings.ShadingScale == fade;
-            var chip = new ToggleButton { Content = Strings.Get(nameKey), Classes = { "chip" }, IsChecked = active };
-            chip.Click += (_, _) =>
-            {
-                Change(() =>
-                {
-                    _settings.CushionShading = depth;
-                    _settings.CushionHeight = spread;
-                    _settings.Brightness = tone;
-                    _settings.ShadingScale = fade;
-                });
-                Build();
-            };
-            panel.Children.Add(chip);
-        }
-        return panel;
     }
 
     /// <summary>The button that puts every shading setting back to its default.</summary>

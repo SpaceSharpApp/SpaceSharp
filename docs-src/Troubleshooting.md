@@ -27,7 +27,7 @@ To put things back: open the **Recycle Bin**, sort by **Date deleted**, select t
 
 ## The app is slow or uses a lot of memory
 
-A million files is a million tree nodes; that is normal and shows in the status bar's memory meter. Things that make it worse: Density set to Everything (no grouping) on a huge folder, cushion shading at Maximum density, and the hover card over a folder with hundreds of thousands of files. Close the scan with Ctrl+W when you are done with it.
+A million files is a million tree nodes; that is normal and shows in the status bar's memory meter. Things that make it worse: Density set to Everything (no grouping) on a huge folder, shading at Maximum density, and the hover card over a folder with hundreds of thousands of files. Close the scan with Ctrl+W when you are done with it.
 
 ## The map looks wrong after a Windows scaling change
 
@@ -36,7 +36,7 @@ Avalonia handles 125% and 150% scaling, but a scaling change while the app runs 
 ## The app does not open
 
 1. If it shows an **Unexpected error** dialog: press **Report on GitHub**; the bug form opens with the version, your Windows and the error filled in, and the crash log can be attached.
-2. If it shows nothing: look in `%LocalAppData%\SpaceSharp\logs` for the newest `crash-*.log` and attach it to a [bug report](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=bug_report.yml). About › Crash logs opens the folder when the app does start.
+2. If it shows nothing: About (F1) shows how many crash logs there are, as a number at the end of the **Crash logs** row, and a click opens the folder. Or look in `%LocalAppData%\SpaceSharp\logs` for the newest `crash-*.log` and attach it to a [bug report](https://github.com/SpaceSharpApp/SpaceSharp/issues/new?template=bug_report.yml). About › Crash logs opens the folder when the app does start.
 3. A corrupt `settings.json` (`%AppData%\SpaceSharp`) is skipped and replaced with defaults, so settings are rarely the cause; a corrupt autosave in `%LocalAppData%\SpaceSharp\scans` is reported in the status bar, not fatal. Deleting either folder is safe if you want a clean start.
 
 ## The update prompt keeps appearing, or never does

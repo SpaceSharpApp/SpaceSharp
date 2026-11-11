@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Taille</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspecter : {0:N0} éléments</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspecter : {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Ouvrir cette fenêtre</value></data>
+  <data name="Key_About" xml:space="preserve"><value>À propos de SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Ajouter à la sélection</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Annuler une analyse</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Copier les chemins sélectionnés</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Cadre de surbrillance</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Le cadre autour des boîtes sélectionnées. Les boîtes survolées gardent un cadre blanc.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Disposition</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Ombrage en coussin</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Un dégradé du clair au sombre sur chaque fichier, comme SpaceMonger les dessinait. Désactivé, les couleurs sont plates et les paramètres ci-dessous sont sans effet.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Préréglages</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Un point de départ. Les curseurs ci-dessous l'affinent.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Doux</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Classique</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Profond</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Profondeur</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>À quel point l'ombrage est marqué, d'un léger reflet à un coussin profond.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Étendue</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Fichiers globalement plus clairs ou plus sombres. Les dossiers gardent leur couleur.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Atténuation dans les dossiers</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Combien d'ombrage conservent les fichiers imbriqués. Une valeur basse apaise les niveaux profonds pour faire ressortir les dossiers de premier niveau.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Désactivée</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Aspect</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Bords</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Coussin</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Reflet</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Couches</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Lumière latérale</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Couleurs à plat, sans ombrage.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Un liseré éclairé sur chaque case, comme des carreaux en relief. Les couleurs restent à plat.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Les fichiers sont plus clairs au centre et s'assombrissent doucement vers les bords.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>La lumière tombe du haut de chaque fichier et s'estompe en descendant.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Les fichiers reposent sur leur dossier, avec une petite ombre dessous.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Une pente de lumière régulière sur chaque fichier, du côté éclairé au côté sombre.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Intensité</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>La force de l'effet, d'à peine visible à marqué.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Douceur</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Jusqu'où l'ombre avance depuis le bord.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Creuser les dossiers</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Dessine chaque dossier comme un plateau peu profond.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Cadres de dossier aussi</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Le même liseré sur les dossiers, à moitié de l'intensité.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Lumière de ce côté</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Lumière de face</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>En haut à gauche</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp repose sur du travail ouvert</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Merci aux personnes qui en sont à l'origine.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>La carte</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>La disposition est le treemap « squarified » de [Bruls, Huizing et van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publié en 2000. L'idée de montrer un disque sous forme de carte vient de [SpaceMonger](https://www.stardock.com/products/spacemonger/) de Sean Werkema, et les treemaps eux-mêmes de Ben Shneiderman (1991). La palette adaptée au daltonisme utilise les huit couleurs d'[Okabe et Ito](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>La disposition est le treemap « squarified » de [Bruls, Huizing et van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publié en 2000. L'idée de montrer un disque sous forme de carte vient de [SpaceMonger](https://www.stardock.com/products/spacemonger/) de Sean Werkema, et les treemaps eux-mêmes de Ben Shneiderman (1991). La palette adaptée au daltonisme utilise les huit couleurs d'[Okabe et Ito](https://jfly.uni-koeln.de/color/) (2002). Quatre autres couleurs viennent du jeu de couleurs vives de [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Logiciels</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Écrit en C# sur [.NET 10](https://dotnet.microsoft.com). L'interface est [Avalonia UI](https://avaloniaui.net), dessinée avec [SkiaSharp](https://github.com/mono/SkiaSharp), dans la police [Inter](https://rsms.me/inter/) de Rasmus Andersson. Les icônes viennent de [Lucide](https://lucide.dev), qui poursuit Feather de Cole Bemis. L'installateur et les mises à jour sous Windows viennent de [Velopack](https://velopack.io) de Caelan Sayler. Tous sont sous licence MIT, sauf Lucide (ISC) et Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Langues</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Ach_Intro" xml:space="preserve"><value>Certains demandent une analyse, d'autres une année. Aucun ne vaut rien, et c'est le but.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} sur {1} débloqués</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Verrouillé</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Les plus récents d'abord</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Encore à trouver</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Cliquez sur l'un d'eux pour un indice. Le dernier, {0}, apporte le thème {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Aucun pour l'instant. Ils arrivent en utilisant l'application.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Il ne reste rien à trouver.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Verrouillé. Comment l'obtenir reste secret jusqu'à ce que vous l'ayez.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Tous les succès débloqués</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>C'était le dernier. L'application n'a plus rien à distribuer ; désormais elle se contentera de vous montrer votre disque. Enfin, une chose : Paramètres › Apparence propose maintenant un thème Or.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys et swapfile.sys sont la mémoire virtuelle. Leur taille se règle s
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1 à 2 ans</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2 à 5 ans</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Plus ancien</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>À regarder</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>De l'espace facile à récupérer. Afficher ouvre la carte filtrée dessus.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Espace perdu</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>alloué au-delà de la taille des fichiers</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Fichiers de moins de 4 Ko</value></data>

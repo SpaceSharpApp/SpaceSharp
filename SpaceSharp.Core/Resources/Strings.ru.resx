@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Размер</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Обзор: элементов {0:N0}</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Обзор: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Открыть это окно</value></data>
+  <data name="Key_About" xml:space="preserve"><value>О SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Добавить к выделению</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Отменить сканирование</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Копировать выбранные пути</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Рамка выделения</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Рамка вокруг выбранных блоков. Блоки под мышью сохраняют белую рамку.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Компоновка</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Объёмное затенение</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Переход от света к тени на каждом файле, как рисовал SpaceMonger. Если выключено, цвета плоские, а параметры ниже ничего не делают.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Наборы</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Отправная точка. Ползунки ниже уточняют её.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Мягкое</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Классическое</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Глубокое</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Глубина</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Насколько выражено затенение: от лёгкого блеска до глубокой подушки.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Разброс</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Файлы в целом светлее или темнее. Папки сохраняют свой цвет.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Ослабление внутри папок</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Сколько затенения сохраняют вложенные файлы. Низкое значение успокаивает глубокие уровни, чтобы выделялись верхние папки.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Выкл.</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Вид</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Грани</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Подушка</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Блик</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Слои</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Боковой свет</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Плоские цвета, без затенения.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Светлая кромка на каждом блоке, как у выпуклой плитки. Цвета остаются плоскими.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Файлы светлее всего в середине и мягко темнеют к краям.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Свет падает сверху на каждый файл и гаснет книзу.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Файлы лежат поверх своей папки с небольшой тенью под ними.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Один ровный переход света по каждому файлу, от освещенной стороны к темной.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Сила</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Насколько сильный эффект, от едва заметного до выраженного.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Мягкость</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Как далеко тень заходит от края внутрь.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Утопить папки</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Рисует каждую папку как неглубокий лоток.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>И рамки папок</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Та же кромка на папках, вполсилы.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Свет с этой стороны</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Свет прямо спереди</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Сверху слева</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp построен на открытой работе</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Спасибо людям, которые за ней стоят.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Карта</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Раскладка — это squarified treemap из работы [Брулса, Хёйзинга и ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опубликованной в 2000 году. Идея показывать диск как карту взята из [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркемы, а сами treemap — у Бена Шнейдермана (1991). Палитра для людей с нарушением цветовосприятия использует восемь цветов [Окабэ и Ито](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Раскладка — это squarified treemap из работы [Брулса, Хёйзинга и ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опубликованной в 2000 году. Идея показывать диск как карту взята из [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркемы, а сами treemap — у Бена Шнейдермана (1991). Палитра для людей с нарушением цветовосприятия использует восемь цветов [Окабэ и Ито](https://jfly.uni-koeln.de/color/) (2002). Еще четыре цвета взяты из яркой схемы [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Программное обеспечение</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Написан на C# для [.NET 10](https://dotnet.microsoft.com). Интерфейс — [Avalonia UI](https://avaloniaui.net), отрисовка через [SkiaSharp](https://github.com/mono/SkiaSharp), шрифт [Inter](https://rsms.me/inter/) Расмуса Андерссона. Значки из [Lucide](https://lucide.dev), продолжения Feather Коула Бемиса. Установщик и обновления в Windows — [Velopack](https://velopack.io) Кейлана Сейлера. Всё под лицензией MIT, кроме Lucide (ISC) и Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Языки</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Ach_Intro" xml:space="preserve"><value>Одни требуют одного сканирования, другие года. Ни одно ничего не стоит, в этом и смысл.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>Открыто {0} из {1}</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Закрыто</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Сначала новые</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Еще не найдены</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Щелкните любое, чтобы увидеть подсказку. Последнее, {0}, открывает тему {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Пока ничего. Они появляются, пока вы пользуетесь приложением.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Больше нечего искать.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Закрыто. Как его получить, останется секретом, пока вы его не получите.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Все достижения открыты</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Это были все. Приложению больше нечего раздавать, так что отныне оно будет просто показывать ваш диск. Ну, одно всё же есть: в Настройки › Внешний вид появилась тема Золото.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys и swapfile.sys — виртуальная память. Их ра�
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 года</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 лет</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Старше</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Стоит взглянуть</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Место, которое легко вернуть. «Показать» открывает карту с этим фильтром.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Потери на кластерах</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>выделено сверх размера файлов</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Файлы меньше 4 КБ</value></data>

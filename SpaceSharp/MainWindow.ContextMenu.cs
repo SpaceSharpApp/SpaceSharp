@@ -26,6 +26,10 @@ public partial class MainWindow
     private const double MenuWidth = 400;
 
     private Border _menuInspect = null!;
+    private TextBlock _menuInspectHint = null!;
+    private DockPanel _menuShareRow = null!;
+    // The scan actions once more, for a menu that would otherwise hold nothing but More: they then stand in the menu itself.
+    private MenuItem _flatRescan = null!, _flatSave = null!, _flatOpen = null!, _flatCompare = null!, _flatStopCompare = null!, _flatExport = null!;
     private TextBlock _menuTitle = null!, _menuFacts = null!, _menuShareLeft = null!, _menuShareRight = null!;
     private Controls.Icon _menuKindIcon = null!;
     private Grid _menuShareBar = null!;
@@ -71,11 +75,11 @@ public partial class MainWindow
         _menuKindIcon.Margin = new Thickness(0, 0, 8, 0);
         DockPanel.SetDock(_menuKindIcon, Dock.Left);
         // What a click on the header does, where a gesture would be, instead of a tooltip over the facts.
-        var inspectHint = new TextBlock { Text = Strings.Get("Menu_Inspect") + "  Ctrl+I", FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
-        DockPanel.SetDock(inspectHint, Dock.Right);
+        _menuInspectHint = new TextBlock { Text = Strings.Get("Menu_Inspect") + "  Ctrl+I", FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
+        DockPanel.SetDock(_menuInspectHint, Dock.Right);
         _menuTitle = new TextBlock { FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
         titleRow.Children.Add(_menuKindIcon);
-        titleRow.Children.Add(inspectHint);
+        titleRow.Children.Add(_menuInspectHint);
         titleRow.Children.Add(_menuTitle);
         header.Children.Add(titleRow);
         _menuFacts = new TextBlock { FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
@@ -93,13 +97,13 @@ public partial class MainWindow
         _menuShareBar.Children.Add(filled);
         _menuShareBar.Children.Add(rest);
         header.Children.Add(_menuShareBar);
-        var shareRow = new DockPanel { Margin = new Thickness(0, 2, 0, 0) };
+        _menuShareRow = new DockPanel { Margin = new Thickness(0, 2, 0, 0) };
         _menuShareLeft = new TextBlock { FontSize = 11, Classes = { "dim" } };
         _menuShareRight = new TextBlock { FontSize = 11, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
         DockPanel.SetDock(_menuShareLeft, Dock.Left);
-        shareRow.Children.Add(_menuShareLeft);
-        shareRow.Children.Add(_menuShareRight);
-        header.Children.Add(shareRow);
+        _menuShareRow.Children.Add(_menuShareLeft);
+        _menuShareRow.Children.Add(_menuShareRight);
+        header.Children.Add(_menuShareRow);
         // No gesture text on the header: it would sit over the facts. The tooltip says what a click does.
         _menuInspect = new Border { Child = header, CornerRadius = new CornerRadius(7), Padding = new Thickness(12, 10, 12, 12), Margin = new Thickness(0, 0, 0, 2), Cursor = new Cursor(StandardCursorType.Hand) };
         _menuInspect.Bind(Border.BackgroundProperty, this.GetResourceObservable("Control"));
@@ -188,6 +192,17 @@ public partial class MainWindow
         menu.Items.Add(_menuLeaveOut);
         menu.Items.Add(new Separator());
         menu.Items.Add(_menuMore);
+        _flatRescan = Item("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
+        _flatSave = Item("Main_SaveScanAs", "Ctrl+S", () => _ = SaveScanAsAsync(), "Export");
+        _flatOpen = Item("Main_OpenSavedScan", "Ctrl+O", () => _ = OpenScanAsync(), "Open");
+        _flatCompare = Item("Main_CompareWithASaved", null, () => _ = CompareWithAsync(), "Sync");
+        _flatStopCompare = Item("Main_StopComparing", null, StopComparing);
+        _flatExport = Item("Menu_Export", null, () => _ = OpenExportAsync(ExportHome()), "Export");
+        foreach (MenuItem flat in new[] { _flatRescan, _flatSave, _flatOpen, _flatCompare, _flatStopCompare, _flatExport })
+        {
+            flat.IsVisible = false;
+            menu.Items.Add(flat);
+        }
         menu.Items.Add(new Separator());
         menu.Items.Add(_menuDelete);
         menu.Opening += (_, _) => UpdateContextMenu();
@@ -236,13 +251,59 @@ public partial class MainWindow
         _menuLeaveOut.IsVisible = real && one && node!.Parent is not null;
         _menuLeaveOut.IsEnabled = !scanning;
 
-        _menuProperties.IsEnabled = _menuCopyName.IsEnabled = real && one;
+        // What cannot be done to the thing clicked is left out, not grayed: free space and a cluster have no properties, no name
+        // worth copying and nothing to delete.
+        _menuProperties.IsVisible = OperatingSystem.IsWindows() && real && one;
+        _menuCopyName.IsVisible = real && one;
         _menuRescan.IsEnabled = _scanRoot is not null && !scanning;
         _menuCompare.IsEnabled = _root is not null && !scanning;
         _menuStopCompare.IsVisible = HasBaseline;
         _menuExport.IsEnabled = _root is not null;
-        _menuDelete.IsEnabled = Treemap.SelectedNodes.Any(selected => selected.IsReal && selected.Parent is not null) && !scanning;
-        _menuDeleteForever.IsEnabled = _menuDelete.IsEnabled;
+        bool deletable = Treemap.SelectedNodes.Any(selected => selected.IsReal && selected.Parent is not null);
+        _menuDelete.IsVisible = _menuDeleteForever.IsVisible = deletable;
+        _menuDelete.IsEnabled = _menuDeleteForever.IsEnabled = deletable && !scanning;
+
+        // Free space, a cluster or nothing at all leaves only More: its scan actions then stand in the menu itself, one click nearer.
+        bool onlyMore = !new[]
+        {
+            _menuFocus, _menuOpen, _menuReveal, _menuCopy, _menuSelectFolder, _menuFilterType, _menuSelectType, _menuCopies,
+            _menuDuplicatesIn, _menuChangedHere, _menuLeaveOut, _menuDelete
+        }.Any(item => item.IsVisible);
+        _menuMore.IsVisible = !onlyMore;
+        _flatRescan.IsVisible = _flatSave.IsVisible = _flatOpen.IsVisible = _flatCompare.IsVisible = _flatExport.IsVisible = onlyMore;
+        _flatStopCompare.IsVisible = onlyMore && HasBaseline;
+        _flatRescan.IsEnabled = _menuRescan.IsEnabled;
+        _flatCompare.IsEnabled = _menuCompare.IsEnabled;
+        _flatExport.IsEnabled = _menuExport.IsEnabled;
+
+        if (Treemap.ContextMenu is { } menu)
+        {
+            TidySeparators(menu);
+        }
+        TidySeparators(_menuMore);
+    }
+
+    /// <summary>Shows a separator only where it separates something: a visible item before it since the last separator shown, and a
+    /// visible item somewhere after it. Hidden rows otherwise leave rules stacked on each other.</summary>
+    /// <param name="menu">The menu or submenu whose separators to set.</param>
+    private static void TidySeparators(ItemsControl menu)
+    {
+        var items = menu.Items.OfType<Control>().ToList();
+        bool itemSinceRule = false;
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] is not Separator separator)
+            {
+                itemSinceRule |= items[i].IsVisible;
+                continue;
+            }
+            bool itemAfter = items.Skip(i + 1).Any(later => later is not Separator && later.IsVisible);
+            separator.IsVisible = itemSinceRule && itemAfter;
+            if (separator.IsVisible)
+            {
+                itemSinceRule = false;
+            }
+        }
     }
 
     /// <summary>Fills the header: the kind icon, the name, a facts line, and the share bar with its two labels; a selection of several
@@ -254,6 +315,8 @@ public partial class MainWindow
     {
         SizeMeasure measure = Treemap.SizeMode;
         _menuShareBar.IsVisible = false;
+        _menuShareRow.IsVisible = false;   // shown with the bar; an empty row would leave the card bottom-heavy
+        _menuInspectHint.IsVisible = canInspect;
         _menuShareLeft.Text = string.Empty;
         _menuShareRight.Text = string.Empty;
         if (selectedCount > 1)
@@ -274,7 +337,9 @@ public partial class MainWindow
         {
             _menuKindIcon.Glyph = Icons.Get(node.IsGroup ? "Composition" : "Drive");
             _menuTitle.Text = node.Name;
-            _menuFacts.Text = Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");
+            // Free space says how much there is before it says what cannot be done with it.
+            string cannot = Strings.Get(node.IsGroup ? "Menu_InspectNoCluster" : "Menu_InspectNoFreeSpace");
+            _menuFacts.Text = node.IsFreeSpace ? Join(SizeFormatter.Format(node.SizeFor(measure)), cannot) : cannot;
             return;
         }
 
@@ -306,6 +371,7 @@ public partial class MainWindow
         double shareOfParent = parentBytes > 0 ? Math.Clamp((double)node.SizeFor(measure) / parentBytes, 0, 1) : 0;
         double shareOfRoot = rootBytes > 0 ? Math.Clamp((double)node.SizeFor(measure) / rootBytes, 0, 1) : 0;
         _menuShareBar.IsVisible = true;
+        _menuShareRow.IsVisible = true;
         _menuShareFilled.Width = new GridLength(Math.Max(0.001, shareOfParent), GridUnitType.Star);
         _menuShareRest.Width = new GridLength(Math.Max(0.001, 1 - shareOfParent), GridUnitType.Star);
         _menuShareLeft.Text = Strings.Format("Menu_ShareOf", Percent(shareOfParent), DisplayName(parent.FullPath));

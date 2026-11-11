@@ -220,7 +220,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Розмір</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Перегляд: елементів {0:N0}</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Перегляд: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Відкрити це вікно</value></data>
+  <data name="Key_About" xml:space="preserve"><value>Про SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Додати до вибраного</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Скасувати сканування</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Копіювати вибрані шляхи</value></data>
@@ -881,13 +881,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Рамка виділення</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>Рамка навколо вибраних блоків. Блоки під вказівником зберігають білу рамку.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Макет</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Подушкове затінення</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Затінення від світлого до темного на кожному файлі, як малював SpaceMonger. Якщо вимкнено — кольори пласкі, а параметри нижче ні на що не впливають.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Стилі</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>Відправна точка. Повзунки нижче дають змогу її підлаштувати.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>М'яке</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Класичне</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Глибоке</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Глибина</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>Наскільки виражене затінення: від ледь помітного блиску до глибокої подушки.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Розсіювання</value></data>
@@ -896,6 +889,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Світліші або темніші файли загалом. Папки зберігають свій колір.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Згасання всередині папок</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>Скільки затінення зберігають вкладені файли. Низьке значення заспокоює глибокі рівні, щоб папки верхнього рівня виділялися.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Вимк.</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Вигляд</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Грані</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Подушка</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Відблиск</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Шари</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Бічне світло</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Плоскі кольори, без затінення.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>Світла кромка на кожному блоці, як у випуклої плитки. Кольори лишаються плоскими.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Файли найсвітліші посередині й м'яко темнішають до країв.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Світло падає згори на кожен файл і згасає донизу.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Файли лежать поверх своєї папки з невеликою тінню під ними.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>Один рівний перехід світла по кожному файлу, від освітленого боку до темного.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Сила</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>Наскільки сильний ефект, від ледь помітного до виразного.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>М'якість</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>Як далеко тінь заходить від краю всередину.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Заглибити папки</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Малює кожну папку як неглибокий лоток.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>І рамки папок</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>Та сама кромка на папках, упівсили.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Світло з цього боку</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Світло прямо спереду</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Зверху зліва</value></data>
@@ -1231,7 +1245,7 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp побудовано на відкритій праці</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Дякуємо людям, які за нею стоять.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Карта</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Розкладка — це squarified treemap із роботи [Брулса, Гейзінга та ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опублікованої 2000 року. Ідея показувати диск як карту походить зі [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркеми, а самі treemap — від Бена Шнейдермана (1991). Палітра для людей із порушенням кольоросприйняття використовує вісім кольорів [Окабе та Іто](https://jfly.uni-koeln.de/color/) (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Розкладка — це squarified treemap із роботи [Брулса, Гейзінга та ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опублікованої 2000 року. Ідея показувати диск як карту походить зі [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркеми, а самі treemap — від Бена Шнейдермана (1991). Палітра для людей із порушенням кольоросприйняття використовує вісім кольорів [Окабе та Іто](https://jfly.uni-koeln.de/color/) (2002). Ще чотири кольори взято з яскравої схеми [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Програмне забезпечення</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Написано на C# для [.NET 10](https://dotnet.microsoft.com). Інтерфейс — [Avalonia UI](https://avaloniaui.net), малювання через [SkiaSharp](https://github.com/mono/SkiaSharp), шрифт [Inter](https://rsms.me/inter/) Расмуса Андерссона. Значки з [Lucide](https://lucide.dev), продовження Feather Коула Беміса. Інсталятор і оновлення у Windows — [Velopack](https://velopack.io) Кейлана Сейлера. Усе під ліцензією MIT, крім Lucide (ISC) та Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Мови</value></data>
@@ -1246,6 +1260,11 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Ach_Intro" xml:space="preserve"><value>Одні потребують одного сканування, інші року. Жодне нічого не варте, у цьому й суть.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>Відкрито {0} з {1}</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Закрито</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Спочатку нові</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Ще не знайдені</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Клацніть будь-яке, щоб побачити підказку. Останнє, {0}, відкриває тему {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Поки що нічого. Вони з'являються, поки ви користуєтеся застосунком.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Більше нічого шукати.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Закрито. Як його отримати, залишиться секретом, доки ви його не отримаєте.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>Усі досягнення відкрито</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>Це були всі. Застосунку більше нічого роздавати, тож відтепер він просто показуватиме ваш диск. Ну, одне все ж є: у Налаштування › Вигляд з'явилася тема Золото.</value></data>
@@ -1378,8 +1397,6 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 роки</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 років</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Старіші</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Варто поглянути</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Місце, яке легко повернути. «Показати» відкриває мапу з цим фільтром.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Втрати на кластерах</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>виділено понад розмір файлів</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Файли менші за 4 КБ</value></data>

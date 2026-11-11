@@ -222,7 +222,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>الحجم</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>فحص: {0:N0} عنصر</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>فحص: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>فتح هذه النافذة</value></data>
+  <data name="Key_About" xml:space="preserve"><value>حول SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>إضافة إلى التحديد</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>إلغاء الفحص</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>نسخ المسارات المحددة</value></data>
@@ -883,13 +883,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>إطار التمييز</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>الإطار حول المربعات المحددة. تحتفظ المربعات تحت المؤشر بإطار أبيض.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>التخطيط</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>تظليل وسائدي</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>تظليل من الفاتح إلى الداكن على كل ملف، كما كان يرسمها SpaceMonger. عند الإيقاف تصبح الألوان مسطحة ولا تؤثر الإعدادات أدناه.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>إعدادات مسبقة</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>نقطة بداية. تضبطها المنزلقات أدناه بدقة.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>ناعم</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>كلاسيكي</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>عميق</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>العمق</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>مدى وضوح التظليل، من لمعة خفيفة إلى وسادة عميقة.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>الانتشار</value></data>
@@ -898,6 +891,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>ملفات أفتح أو أدكن إجمالًا. تحتفظ المجلدات بلونها.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>التلاشي داخل المجلدات</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>مقدار التظليل الذي تحتفظ به الملفات المتداخلة. القيمة المنخفضة تهدئ المستويات العميقة لتبرز المجلدات العليا.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>إيقاف</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>المظهر</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>حواف</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>وسادة</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>لمعة</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>طبقات</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>ضوء جانبي</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>ألوان مسطحة بلا تظليل.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>حافة مضيئة حول كل مربع، كبلاطات بارزة. تبقى الألوان مسطحة.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>الملفات أسطع في الوسط وتغمق بنعومة نحو حوافها.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>يسقط الضوء من أعلى كل ملف ويخفت كلما نزل.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>الملفات موضوعة فوق مجلدها وتحتها ظل صغير.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>ميل واحد منتظم من الضوء عبر كل ملف، من الجهة المضيئة إلى المعتمة.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>القوة</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>مدى قوة التأثير، من شبه غير مرئي إلى واضح.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>النعومة</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>إلى أي مدى يمتد الظل من الحافة إلى الداخل.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>غَور المجلدات</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>يرسم كل مجلد كصينية قليلة العمق.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>إطارات المجلدات أيضًا</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>الحافة نفسها على المجلدات، بنصف القوة.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>الضوء من هذه الجهة</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>الضوء من الأمام مباشرة</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>أعلى اليسار</value></data>
@@ -1232,7 +1246,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp مبني على عمل مفتوح</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>شكرًا للأشخاص الذين يقفون خلفه.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>الخريطة</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>التخطيط هو خريطة الشجرة المربّعة من [Bruls وHuizing وvan Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)، المنشورة عام 2000. فكرة عرض القرص كخريطة مأخوذة من [SpaceMonger](https://www.stardock.com/products/spacemonger/) لـ Sean Werkema، وخرائط الشجرة نفسها من Ben Shneiderman (1991). تستخدم لوحة الألوان المناسبة لعمى الألوان ألوان [Okabe وIto](https://jfly.uni-koeln.de/color/) الثمانية (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>التخطيط هو خريطة الشجرة المربّعة من [Bruls وHuizing وvan Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)، المنشورة عام 2000. فكرة عرض القرص كخريطة مأخوذة من [SpaceMonger](https://www.stardock.com/products/spacemonger/) لـ Sean Werkema، وخرائط الشجرة نفسها من Ben Shneiderman (1991). تستخدم لوحة الألوان المناسبة لعمى الألوان ألوان [Okabe وIto](https://jfly.uni-koeln.de/color/) الثمانية (2002). وأربعة ألوان أخرى فيها من المخطط الساطع لـ [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>البرمجيات</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>مكتوب بلغة C# على [.NET 10](https://dotnet.microsoft.com). الواجهة هي [Avalonia UI](https://avaloniaui.net)، مرسومة بواسطة [SkiaSharp](https://github.com/mono/SkiaSharp)، بخط [Inter](https://rsms.me/inter/) لـ Rasmus Andersson. الأيقونات من [Lucide](https://lucide.dev)، استمرارًا لـ Feather لـ Cole Bemis. برنامج التثبيت والتحديثات على Windows من [Velopack](https://velopack.io) لـ Caelan Sayler. جميعها بترخيص MIT، باستثناء Lucide (ISC) وInter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>اللغات</value></data>
@@ -1247,6 +1261,11 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Ach_Intro" xml:space="preserve"><value>بعضها يحتاج فحصًا واحدًا، وبعضها يحتاج سنة. لا قيمة لأي منها، وهذا هو المقصود.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>فُتح {0} من {1}</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>مقفل</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>الأحدث أولًا</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>ما زالت بانتظارك</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>انقر على أحدها لتظهر لك إشارة. الأخير، {0}، يأتي مع سمة {1}.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>لا شيء بعد. تظهر أثناء استخدامك للتطبيق.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>لم يبقَ شيء لتجده.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>مقفل. طريقة الحصول عليه تبقى سرًا حتى تحصل عليه.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>فُتحت كل الإنجازات</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>كان هذا آخرها. لم يبقَ لدى التطبيق ما يوزعه، فمن الآن سيكتفي بعرض قرصك. حسنًا، شيء واحد: الإعدادات › المظهر فيها الآن سمة ذهبية.</value></data>
@@ -1379,8 +1398,6 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>سنة إلى سنتين</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>سنتان إلى خمس سنوات</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>أقدم</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>يستحق النظر</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>مساحة يسهل استعادتها. «إظهار» يفتح الخريطة مرشّحة إليها.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>الفاقد العنقودي</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>مخصَّص فوق أحجام الملفات</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>ملفات أقل من 4 ك.ب</value></data>

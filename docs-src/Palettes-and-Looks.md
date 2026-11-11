@@ -43,4 +43,4 @@ There is one more of each that no picker lists: the **Gold** theme, which Settin
 
 ## Shading, text and grid
 
-All under Settings › Treemap, with a sample map that follows every change; the [Settings reference](Settings-Reference#treemap) lists each control. The short version: cushion shading is off by default and the Soft preset is ready when you turn it on; Outlined labels helps if the map is hard to read; Density decides how early small files are grouped.
+All under Settings › Treemap, with a sample map that follows every change; the [Settings reference](Settings-Reference#treemap) lists each control. The short version: files come with a light Sheen, and four other looks (Edges, Pillow, Layers, Side light) or none at all are one picker away, each with its own settings; Outlined labels helps if the map is hard to read; Density decides how early small files are grouped.

@@ -19,7 +19,13 @@ public partial class MainWindow
     /// card, then compares with and saves the autosave.
     /// </summary>
     /// <param name="path">A drive root or any folder; in mock mode it is a pretend drive instead. Nothing happens while another scan runs.</param>
-    private async Task ScanAsync(string path)
+    /// <param name="likeSignature">
+    /// The signature of a saved scan to repeat, as <see cref="ScanSignature"/> wrote it: the scan is then made the way that one was
+    /// (file table or folder walk, hard links, hidden files, exclusions) whatever Settings say now, so the two can be compared. Null
+    /// scans by the settings.
+    /// </param>
+    /// <param name="openChanges">True opens the Changes view once the scan has been compared with the one before it.</param>
+    private async Task ScanAsync(string path, string? likeSignature = null, bool openChanges = false)
     {
         if (_scanCts is not null)
         {
@@ -30,6 +36,16 @@ public partial class MainWindow
             LoadMock(path);
             return;
         }
+        // What this scan counts: as the saved scan it repeats did, or as Settings say.
+        bool repeatsFileTable = likeSignature?.StartsWith("MFT", StringComparison.Ordinal) ?? _settings.FastNtfsScan;
+        bool hasExclusions = !string.IsNullOrWhiteSpace(_settings.ExcludePatterns);
+        _scanHow = likeSignature is null
+            ? (_settings.DetectHardLinks, _settings.IncludeHidden, hasExclusions)
+            : (likeSignature.Contains(", links once", StringComparison.Ordinal),
+                !likeSignature.Contains(", no hidden", StringComparison.Ordinal),
+                hasExclusions && likeSignature.Contains(", exclusions", StringComparison.Ordinal));
+        (bool linksOnce, bool includeHidden, bool useExclusions) = _scanHow.Value;
+
         _scanCts = new CancellationTokenSource();
         _scanRoot = path;
         _scanExpectedBytes = null;
@@ -66,7 +82,7 @@ public partial class MainWindow
         }
         ScanTitle.Text = Strings.Format("Scan_Title", DisplayName(path));
 
-        bool fastScanWanted = OperatingSystem.IsWindows() && _settings.FastNtfsScan && _scanExpectedBytes is not null;
+        bool fastScanWanted = OperatingSystem.IsWindows() && repeatsFileTable && _scanExpectedBytes is not null;
         bool readFileTable = fastScanWanted && FileTableSupported(path);
         // Without elevation, a helper process reads the file table.
         bool useElevatedHelper = fastScanWanted && !readFileTable && !IsElevated && !_declinedElevation && IsNtfs(path);
@@ -94,9 +110,9 @@ public partial class MainWindow
         {
             var options = new WalkOptions
             {
-                IncludeHidden = _settings.IncludeHidden,
-                DetectHardLinks = _settings.DetectHardLinks,
-                Exclude = NamePatterns.Parse(_settings.ExcludePatterns),
+                IncludeHidden = includeHidden,
+                DetectHardLinks = linksOnce,
+                Exclude = NamePatterns.Parse(useExclusions ? _settings.ExcludePatterns : string.Empty),
                 Live = _settings.LiveMap
             };
             _liveShown = false;
@@ -132,7 +148,7 @@ public partial class MainWindow
             {
                 ShowAccessBar(_scanner.GetProgress().DeniedFolders);
             }
-            _ = SaveAndCompareAsync(root, path);
+            _ = SaveAndCompareAsync(root, path, openChanges);
             _ = JudgeScanAsync(root, path, readFileTable);
         }
         catch (OperationCanceledException)

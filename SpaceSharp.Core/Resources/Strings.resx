@@ -222,7 +222,7 @@
   <data name="Inspect_Size" xml:space="preserve"><value>Size</value></data>
   <data name="Inspect_TitleMany" xml:space="preserve"><value>Inspect: {0:N0} items</value></data>
   <data name="Inspect_TitleOne" xml:space="preserve"><value>Inspect: {0}</value></data>
-  <data name="Key_About" xml:space="preserve"><value>Open this window</value></data>
+  <data name="Key_About" xml:space="preserve"><value>About SpaceSharp</value></data>
   <data name="Key_AddSelection" xml:space="preserve"><value>Add to selection</value></data>
   <data name="Key_CancelScan" xml:space="preserve"><value>Cancel a scan</value></data>
   <data name="Key_Copy" xml:space="preserve"><value>Copy the selected paths</value></data>
@@ -884,13 +884,6 @@
   <data name="Highlight_Color" xml:space="preserve"><value>Highlight frame</value></data>
   <data name="Highlight_Color_Desc" xml:space="preserve"><value>The frame around selected boxes. Hovered boxes keep a white frame.</value></data>
   <data name="Settings_Layout" xml:space="preserve"><value>Layout</value></data>
-  <data name="Shading_Enable" xml:space="preserve"><value>Cushion shading</value></data>
-  <data name="Shading_Enable_Desc" xml:space="preserve"><value>Light-to-dark shading on every file, the way SpaceMonger drew them. Off gives flat colors, and the settings below do nothing.</value></data>
-  <data name="Shading_Presets" xml:space="preserve"><value>Presets</value></data>
-  <data name="Shading_Presets_Desc" xml:space="preserve"><value>A starting point. The sliders below fine-tune it.</value></data>
-  <data name="Preset_Soft" xml:space="preserve"><value>Soft</value></data>
-  <data name="Preset_Classic" xml:space="preserve"><value>Classic</value></data>
-  <data name="Preset_Deep" xml:space="preserve"><value>Deep</value></data>
   <data name="Shading_Depth" xml:space="preserve"><value>Depth</value></data>
   <data name="Shading_Depth_Desc" xml:space="preserve"><value>How pronounced the shading is, from a faint sheen to a deep pillow.</value></data>
   <data name="Shading_Spread" xml:space="preserve"><value>Spread</value></data>
@@ -899,6 +892,27 @@
   <data name="Shading_Tone_Desc" xml:space="preserve"><value>Lighter or darker files overall. Folders keep their color.</value></data>
   <data name="Shading_Fade" xml:space="preserve"><value>Fade inside folders</value></data>
   <data name="Shading_Fade_Desc" xml:space="preserve"><value>How much shading nested files keep. Low calms deep levels so the top folders stand out.</value></data>
+  <data name="ShadingLook_Off" xml:space="preserve"><value>Off</value></data>
+  <data name="Shading_Look" xml:space="preserve"><value>Look</value></data>
+  <data name="ShadingLook_Edges" xml:space="preserve"><value>Edges</value></data>
+  <data name="ShadingLook_Pillow" xml:space="preserve"><value>Pillow</value></data>
+  <data name="ShadingLook_Sheen" xml:space="preserve"><value>Sheen</value></data>
+  <data name="ShadingLook_Layers" xml:space="preserve"><value>Layers</value></data>
+  <data name="ShadingLook_SideLight" xml:space="preserve"><value>Side light</value></data>
+  <data name="ShadingLook_Off_Desc" xml:space="preserve"><value>Flat colors, no shading.</value></data>
+  <data name="ShadingLook_Edges_Desc" xml:space="preserve"><value>A lit rim on every box, like raised tiles. The colors stay flat.</value></data>
+  <data name="ShadingLook_Pillow_Desc" xml:space="preserve"><value>Files are brightest in the middle and darken softly toward their edges.</value></data>
+  <data name="ShadingLook_Sheen_Desc" xml:space="preserve"><value>Light falls from the top of every file and fades out on the way down.</value></data>
+  <data name="ShadingLook_Layers_Desc" xml:space="preserve"><value>Files lie on top of their folder with a small shadow under them.</value></data>
+  <data name="ShadingLook_SideLight_Desc" xml:space="preserve"><value>One even slope of light across every file, from the lit side to the dark one.</value></data>
+  <data name="Shading_Strength" xml:space="preserve"><value>Strength</value></data>
+  <data name="Shading_Strength_Desc" xml:space="preserve"><value>How strong the effect is, from barely there to pronounced.</value></data>
+  <data name="Shading_Softness" xml:space="preserve"><value>Softness</value></data>
+  <data name="Shading_Softness_Desc" xml:space="preserve"><value>How far the shadow reaches in from the edge.</value></data>
+  <data name="Shading_SinkFolders" xml:space="preserve"><value>Sink folders</value></data>
+  <data name="Shading_SinkFolders_Desc" xml:space="preserve"><value>Draws each folder as a shallow tray.</value></data>
+  <data name="Shading_EdgeFolders" xml:space="preserve"><value>Folder frames too</value></data>
+  <data name="Shading_EdgeFolders_Desc" xml:space="preserve"><value>The same rim on folders, at half strength.</value></data>
   <data name="Shading_LightSide" xml:space="preserve"><value>Light from this side</value></data>
   <data name="Shading_LightAhead" xml:space="preserve"><value>Light from straight ahead</value></data>
   <data name="Light_TopLeft" xml:space="preserve"><value>Top left</value></data>
@@ -1232,7 +1246,7 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp is built on open work</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Thank you to the people behind it.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>The map</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>The layout is the squarified treemap from [Bruls, Huizing and van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), published in 2000. The idea of showing a disk as a map is from [SpaceMonger](https://www.stardock.com/products/spacemonger/) by Sean Werkema, and treemaps themselves from Ben Shneiderman (1991). The color-blind-safe palette uses the eight [Okabe and Ito](https://jfly.uni-koeln.de/color/) colors (2002).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>The layout is the squarified treemap from [Bruls, Huizing and van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), published in 2000. The idea of showing a disk as a map is from [SpaceMonger](https://www.stardock.com/products/spacemonger/) by Sean Werkema, and treemaps themselves from Ben Shneiderman (1991). The color-blind-safe palette uses the eight [Okabe and Ito](https://jfly.uni-koeln.de/color/) colors (2002). Four more colors in it are from [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)'s bright scheme.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Written in C# on [.NET 10](https://dotnet.microsoft.com). The interface is [Avalonia UI](https://avaloniaui.net), drawn with [SkiaSharp](https://github.com/mono/SkiaSharp), in the [Inter](https://rsms.me/inter/) typeface by Rasmus Andersson. Icons are from [Lucide](https://lucide.dev), continued from Feather by Cole Bemis. The Windows installer and updates come from [Velopack](https://velopack.io) by Caelan Sayler. All are MIT licensed except Lucide (ISC) and Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Languages</value></data>
@@ -1247,6 +1261,11 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Ach_Intro" xml:space="preserve"><value>Some take a scan, some take a year. None of them are worth anything, which is the point.</value></data>
   <data name="Ach_Count" xml:space="preserve"><value>{0} of {1} unlocked</value></data>
   <data name="Ach_Locked" xml:space="preserve"><value>Locked</value></data>
+  <data name="Ach_NewestFirst" xml:space="preserve"><value>Newest first</value></data>
+  <data name="Ach_StillOut" xml:space="preserve"><value>Still out there</value></data>
+  <data name="Ach_StillOutHint" xml:space="preserve"><value>Click one for a hint. The last, {0}, comes with the {1} theme.</value></data>
+  <data name="Ach_NoneYet" xml:space="preserve"><value>Nothing yet. They turn up while you use the app.</value></data>
+  <data name="Ach_AllFound" xml:space="preserve"><value>Nothing left to find.</value></data>
   <data name="Ach_HiddenHint" xml:space="preserve"><value>Locked. How you earn it stays a secret until you do.</value></data>
   <data name="Ach_AllUnlocked" xml:space="preserve"><value>All achievements unlocked</value></data>
   <data name="Ach_CollectorMessage" xml:space="preserve"><value>That was all of them. The app has nothing left to hand out, so from here on it will just show you your disk. Well, one thing: Settings › Appearance now has a Gold theme.</value></data>
@@ -1379,8 +1398,6 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Stats_Age_OneToTwoYears" xml:space="preserve"><value>1–2 years</value></data>
   <data name="Stats_Age_TwoToFiveYears" xml:space="preserve"><value>2–5 years</value></data>
   <data name="Stats_Age_Older" xml:space="preserve"><value>Older</value></data>
-  <data name="Stats_Worth" xml:space="preserve"><value>Worth a look</value></data>
-  <data name="Stats_WorthSub" xml:space="preserve"><value>Space that is easy to get back. Show opens the map filtered to it.</value></data>
   <data name="Stats_Slack" xml:space="preserve"><value>Slack space</value></data>
   <data name="Stats_SlackDetail" xml:space="preserve"><value>allocated beyond the files' sizes</value></data>
   <data name="Stats_Tiny" xml:space="preserve"><value>Files under 4 KB</value></data>

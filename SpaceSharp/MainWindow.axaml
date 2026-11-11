@@ -142,18 +142,18 @@
             </DockPanel>
             <!-- the last scan as a panel, the earlier ones as a list; before the first scan, the slot it will fill and the fast-scan card. Built by BuildRecentScans -->
             <StackPanel x:Name="RecentHost" Margin="0,22,0,0" Spacing="12" />
-            <!-- the two actions, with the fast-scan line on the right; hidden before the first scan, when the slot holds them -->
-            <DockPanel x:Name="EmptyActions" Margin="0,16,0,0">
-              <TextBlock x:Name="EmptyFastLine" DockPanel.Dock="Right" Classes="dim" FontSize="12.5" VerticalAlignment="Center" Margin="16,0,0,0" TextWrapping="Wrap" />
-              <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button x:Name="EmptyScanButton" Classes="action" Click="ScanFolder_Click">
+            <!-- the two actions, sized like the featured scan's buttons, over the fast-scan line; hidden before the first scan, when the slot holds them -->
+            <StackPanel x:Name="EmptyActions" Margin="0,16,0,0" Spacing="12">
+              <WrapPanel Orientation="Horizontal" ItemSpacing="10" LineSpacing="10">
+                <Button x:Name="EmptyScanButton" Classes="action" Height="44" MinWidth="210" Padding="22,0" HorizontalContentAlignment="Center" Click="ScanFolder_Click">
                   <StackPanel x:Name="EmptyScanContent" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" />
                 </Button>
-                <Button x:Name="EmptyOpenButton" Classes="action" Click="OpenScan_Click">
+                <Button x:Name="EmptyOpenButton" Classes="action" Height="44" MinWidth="210" Padding="22,0" HorizontalContentAlignment="Center" Click="OpenScan_Click">
                   <StackPanel x:Name="EmptyOpenContent" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" />
                 </Button>
-              </StackPanel>
-            </DockPanel>
+              </WrapPanel>
+              <TextBlock x:Name="EmptyFastLine" Classes="dim" FontSize="12.5" TextWrapping="Wrap" />
+            </StackPanel>
           </StackPanel>
         </ScrollViewer>
       </Grid>

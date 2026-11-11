@@ -545,10 +545,21 @@ public partial class MainWindow : Window
         map.FolderCenterNames = settings.FolderCenterNames;
         map.FolderShowSizes = settings.FolderShowSizes;
         map.FolderShowCounts = settings.FolderShowCounts;
-        map.CushionEnabled = settings.CushionEnabled;
+        // Each look has its own settings; the map takes the chosen look's as strength, detail and whether folders join in.
+        ShadingLook look = Enum.TryParse(settings.ShadingLook, out ShadingLook parsedLook) ? parsedLook : ShadingLook.Off;
+        (int strength, int detail, bool folders) = look switch
+        {
+            ShadingLook.Edges => (settings.EdgeStrength, 0, settings.EdgeFolders),
+            ShadingLook.Pillow => (settings.PillowDepth, settings.PillowSoftness, false),
+            ShadingLook.Sheen => (settings.SheenStrength, settings.SheenSpread, false),
+            ShadingLook.Layers => (settings.LayerLift, 0, settings.LayerSinkFolders),
+            _ => (settings.SideStrength, 0, false)
+        };
+        map.ShadingLook = look;
+        map.ShadingStrength = strength;
+        map.ShadingDetail = detail;
+        map.ShadingFolders = folders;
         map.Brightness = settings.Brightness;
-        map.CushionShading = settings.CushionShading;
-        map.CushionHeight = settings.CushionHeight;
         map.ShadingScale = settings.ShadingScale;
         map.SetLight(settings.LightX, settings.LightY);
         map.ShowGrid = settings.ShowGrid;

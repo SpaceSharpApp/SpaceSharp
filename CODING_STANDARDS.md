@@ -595,7 +595,7 @@ finally
 }
 ```
 
-A lambda with a body follows the same rule: `(_, _) => { _settings.CushionEnabled = enabled; SetEnabled(cushionRows, enabled); }` on one line becomes a block with one statement per line. A lambda that is a single expression stays an expression: `enabled => _settings.LiveMap = enabled`.
+A lambda with a body follows the same rule: `(_, _) => { _settings.ShowGrid = enabled; SetEnabled(gridRows, enabled); }` on one line becomes a block with one statement per line. A lambda that is a single expression stays an expression: `enabled => _settings.LiveMap = enabled`.
 
 ---
 

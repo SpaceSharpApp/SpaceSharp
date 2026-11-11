@@ -23,6 +23,23 @@ public enum MapStyle
     Modern
 }
 
+/// <summary>How file boxes are shaded.</summary>
+public enum ShadingLook
+{
+    /// <summary>Flat colors.</summary>
+    Off,
+    /// <summary>A one-pixel rim on every box, light on the lit side and dark opposite, like raised tiles.</summary>
+    Edges,
+    /// <summary>Brightest in the middle, darkening toward the edges.</summary>
+    Pillow,
+    /// <summary>Light from the top of each box that fades out on the way down.</summary>
+    Sheen,
+    /// <summary>Files lifted off their folder with a shadow under them; folders can be drawn as trays.</summary>
+    Layers,
+    /// <summary>One even slope of light across each box, from the lit side to the dark one.</summary>
+    SideLight
+}
+
 /// <summary>How a folder's children share its area.</summary>
 public enum MapLayout
 {
@@ -51,7 +68,7 @@ public enum MapDensity
 /// <summary>One box of the laid-out map: the node it shows and where it is drawn.</summary>
 /// <param name="Node">The node drawn in this box (deepest folder of a collapsed chain).</param>
 /// <param name="Bounds">Where the box is drawn, in control pixels; may extend outside the viewport when zoomed in.</param>
-/// <param name="Depth">Nesting level from the root, which is 0; picks the cushion gradient and the color by depth.</param>
+/// <param name="Depth">Nesting level from the root, which is 0; picks the shading's strength and the color by depth.</param>
 /// <param name="HasHeader">True when the box is a folder or group wide and tall enough to carry a title bar.</param>
 /// <param name="ChainTop">First folder of a collapsed single-child chain, or null.</param>
 /// <param name="Branch">Index of the top-level folder this item belongs to (0 for the root).</param>

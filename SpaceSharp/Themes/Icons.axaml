@@ -39,6 +39,7 @@
     <StreamGeometry x:Key="Icon.Add">M5 12h14 M12 5v14</StreamGeometry>
     <StreamGeometry x:Key="Icon.Picture">M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z M9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z M21 15l-3.09-3.09a2 2 0 0 0-2.82 0L6 21</StreamGeometry>
     <StreamGeometry x:Key="Icon.Camera">M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z M9 13a3 3 0 1 0 6 0a3 3 0 1 0-6 0Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Lock">M5 11h14v10H5z M8 11V7a4 4 0 0 1 8 0v4</StreamGeometry>
     <StreamGeometry x:Key="Icon.Warning">M21.73 18 l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3 M12 9v4 M12 17h.01</StreamGeometry>
     <StreamGeometry x:Key="Icon.Share">M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z M21.21 15.89A10 10 0 1 1 8 2.83</StreamGeometry>
     <StreamGeometry x:Key="Icon.Composition">M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12 M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17</StreamGeometry>
