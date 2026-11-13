@@ -28,7 +28,7 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 - Use American English in code, comments and UI text.
 - Every UI string a user can see should follow the tone of the rest of the app: short, plain, no jargon.
 - New settings go in `AppSettings`, `SettingsWindow` and `MainWindow.ApplySettings()`, and a mention on the README's Settings list if they are user-facing.
-- New shortcuts go in `MainWindow.Window_PreviewKeyDown`, `ShortcutsWindow.cs` and the README's shortcut table.
+- New shortcuts go in the table in `MainWindow.ShortcutFor`, `ShortcutsWindow.cs` and the README's shortcut table.
 - Add a line to `CHANGELOG.md` under an "Unreleased" heading describing the change from the user's point of view.
 - Test on a real drive, not only a small folder. Performance problems show up at a few hundred thousand files.
 - If you change `Squarify`, `Grouping`, `DriveInsights`, `FsNode`, `FilterSpec`, `FileFilter`, `SizeFormatter`, `ScanFile`, `ScanCompare` or `NamePatterns`, add or adjust a test in `SpaceSharp.Tests`. Text changes are checked too: a test fails if code or XAML asks for a resource key that `Strings.resx` lacks, or if a translation is missing keys. The test workflow runs them on every pull request; it only tests and never builds release assets.
@@ -38,7 +38,8 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 Versions are `major.minor.patch`. Fixes and small improvements ship as often as they are ready and bump the patch number (2.4.2, 2.4.3, 2.4.17); there is no upper limit and no reason to hold a fix back for a bigger release. The minor bumps for a release with new features or changed behavior; the major only when the app changes shape (new file format, dropped platform, a different scanner).
 
 
-1. Bump `<Version>` in `SpaceSharp/SpaceSharp.csproj` and `SpaceSharp.Core/SpaceSharp.Core.csproj`, set the README's version badge to `<version>`, and move the "Unreleased" changelog entries under a `## <version>` heading.
+1. Bump `<Version>` in `SpaceSharp/SpaceSharp.csproj`, set `<PreviousVersion>` to the release before it, and take "(unreleased)" off the changelog section's heading. Leave the README's version badge alone: it names the released version, and `release.ps1` moves it when it uploads the release.
 2. Run `.\installer\release.ps1 -Sign <thumbprint> -Upload` on the PC with the code-signing certificate. It runs the tests, builds the portable exes, the installers and the update packages into `Releases\`, signs every file, checks the signatures and creates the GitHub release as a draft with the changelog section as its notes.
 3. Read the draft on GitHub and publish it, then tag the released commit with the bare version number (`git tag <version> && git push origin <version>`).
 4. Update the winget manifest: `wingetcreate update ClearanceClarence.SpaceSharp --version <version> --urls <MSI download URL> --submit`.
+5. The Scoop bucket ([SpaceSharpApp/scoop-bucket](https://github.com/SpaceSharpApp/scoop-bucket)) follows on its own: its Excavator workflow reads the new release and updates the version and hashes in `bucket/spacesharp.json`. If it has not caught up after a day, run the workflow by hand from the bucket's Actions tab.

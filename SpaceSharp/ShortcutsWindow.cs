@@ -19,7 +19,7 @@ public sealed class ShortcutsWindow : Window
     private static readonly FontFamily Mono = new("Cascadia Mono, Consolas, Menlo, monospace");
 
     private readonly StackPanel _keyboard = new() { Spacing = Gap, HorizontalAlignment = HorizontalAlignment.Center };
-    private readonly TextBlock _note = new() { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+    private readonly TextBlock _note = new() { FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
 
     /// <summary>What each lit key does: the label as drawn (Windows and Mac spellings both listed) to its action and whether Ctrl/Cmd is held.</summary>
     private static readonly Dictionary<string, (string What, bool WithCtrl)> Uses = new(StringComparer.Ordinal)
@@ -102,14 +102,13 @@ public sealed class ShortcutsWindow : Window
                 return;
             }
             settings.KeyboardLayout = chosenName;
-            settings.Save();
             DrawKeyboard(KeyboardLayouts.Find(chosenName));
         };
         DockPanel.SetDock(picker, Dock.Right);
         header.Children.Add(picker);
 
         var titles = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12, VerticalAlignment = VerticalAlignment.Center };
-        titles.Children.Add(new TextBlock { Text = Strings.Get("Keys_Title"), FontSize = 15, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center });
+        titles.Children.Add(new TextBlock { Text = Strings.Get("Keys_Title"), FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center });
         titles.Children.Add(_note);
         header.Children.Add(titles);
         return header;
@@ -127,8 +126,8 @@ public sealed class ShortcutsWindow : Window
         })
         {
             var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            text.Children.Add(new TextBlock { Text = gesture, FontSize = 12, FontWeight = FontWeight.SemiBold });
-            text.Children.Add(new TextBlock { Text = what, FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            text.Children.Add(new TextBlock { Text = gesture, FontSize = FontSizes.Small, FontWeight = FontWeight.SemiBold });
+            text.Children.Add(new TextBlock { Text = what, FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
 
             var row = new DockPanel();
             Icon icon = Icons.Make("Mouse", 18, "Accent");
@@ -154,7 +153,7 @@ public sealed class ShortcutsWindow : Window
             var list = new StackPanel();
             // A heading in full-strength text with a hairline under it, so the four groups read as four at a glance.
             var heading = new DockPanel { Margin = new Thickness(0, index < 2 ? 4 : 18, 0, 8) };
-            var title = new TextBlock { Text = group, FontSize = 13, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
+            var title = new TextBlock { Text = group, FontSize = FontSizes.Emphasis, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
             heading.Children.Add(title);
             heading.Children.Add(new Border { Height = 1, VerticalAlignment = VerticalAlignment.Center, Classes = { "rule" } });
             list.Children.Add(heading);
@@ -163,11 +162,11 @@ public sealed class ShortcutsWindow : Window
                 var row = new Grid { MinHeight = 24, Margin = new Thickness(0, 0, 0, 2) };
                 row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = index % 2 == 0 ? "KeysLeft" : "KeysRight" });
                 row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Top, Child = new TextBlock { Text = key, FontSize = 10.5, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
+                var chip = new Border { Classes = { "chip" }, Padding = new Thickness(5, 1), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Top, Child = new TextBlock { Text = key, FontSize = FontSizes.Micro, FontWeight = FontWeight.SemiBold, FontFamily = Mono } };
                 chip.Margin = new Thickness(0, 2, 12, 0);
                 chip.HorizontalAlignment = HorizontalAlignment.Left;
                 row.Children.Add(chip);
-                var action = new TextBlock { Text = what, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+                var action = new TextBlock { Text = what, FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
                 Grid.SetColumn(action, 1);
                 row.Children.Add(action);
                 list.Children.Add(row);
@@ -202,7 +201,7 @@ public sealed class ShortcutsWindow : Window
         close.Click += (_, _) => Close();
         DockPanel.SetDock(close, Dock.Right);
         footer.Children.Add(close);
-        footer.Children.Add(new TextBlock { Text = Strings.Format(Mac ? "Keys_FootMac" : "Keys_FootWin", Ctrl), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 16, 0), Classes = { "dim" } });
+        footer.Children.Add(new TextBlock { Text = Strings.Format(Mac ? "Keys_FootMac" : "Keys_FootWin", Ctrl), FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 0, 16, 0), Classes = { "dim" } });
         return footer;
     }
 

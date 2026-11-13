@@ -27,7 +27,7 @@ public partial class MainWindow
         _driveRule = Rule();
         _driveMeter = Meter(out _driveLetter, out _driveFill, out _driveText);
         _filesRule = Rule();
-        _filesText = new TextBlock { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        _filesText = new TextBlock { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         _memoryMeter = Meter(out TextBlock memoryLabel, out _memoryFill, out _memoryText);
         memoryLabel.Text = "RAM";
         ToolTip.SetTip(_memoryMeter, Strings.Get("Status_MemoryTip"));
@@ -56,7 +56,7 @@ public partial class MainWindow
     private StackPanel Meter(out TextBlock label, out Border fill, out TextBlock text)
     {
         var row = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 9, VerticalAlignment = VerticalAlignment.Center };
-        label = new TextBlock { FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
+        label = new TextBlock { FontSize = FontSizes.Body, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
         var track = new Grid { Width = MeterWidth, Height = MeterHeight, VerticalAlignment = VerticalAlignment.Center };
         track.ColumnDefinitions.Add(new ColumnDefinition(0.001, GridUnitType.Star));
         track.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
@@ -65,14 +65,14 @@ public partial class MainWindow
         fill = new Border { CornerRadius = new CornerRadius(MeterHeight / 2), Opacity = 0.9, MinWidth = 0 };
         track.Children.Add(back);
         track.Children.Add(fill);
-        text = new TextBlock { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        text = new TextBlock { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         row.Children.Add(label);
         row.Children.Add(track);
         row.Children.Add(text);
         return row;
     }
 
-    private static readonly IBrush MemoryBrush = new Avalonia.Media.Immutable.ImmutableSolidColorBrush(Color.FromRgb(0x7F, 0xBF, 0x8E));   // the green of the Free tile
+    private static readonly IBrush MemoryBrush = Chrome.Good;
 
     /// <summary>Sets a meter's fill to a fraction, in the named theme brush or a given one.</summary>
     /// <param name="fill">The fill border a <see cref="Meter"/> call returned; its parent grid's two star columns are resized.</param>
@@ -212,7 +212,7 @@ public partial class MainWindow
         StatusText.Text = string.Empty;
         UpdateCompareUi();
         InvalidateInsights();
-        InvalidateChanges();
+        ChangesView.DropRows();
         RefreshTopList();
         BuildRecentScans();
         UpdateNavigation();

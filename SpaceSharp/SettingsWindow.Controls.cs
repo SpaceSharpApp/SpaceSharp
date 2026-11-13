@@ -21,10 +21,10 @@ public partial class SettingsWindow
     /// <param name="note">Dimmed explanation under the heading; null adds none.</param>
     private void Section(string title, string? note = null)
     {
-        Body.Children.Add(new TextBlock { Text = title, FontSize = 15, FontWeight = FontWeight.SemiBold });
+        Body.Children.Add(new TextBlock { Text = title, FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold });
         if (note is not null)
         {
-            Body.Children.Add(new TextBlock { Text = note, FontSize = 12, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            Body.Children.Add(new TextBlock { Text = note, FontSize = FontSizes.Small, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         }
         _card = new StackPanel();
         Body.Children.Add(new Border { Classes = { "card" }, Child = _card });
@@ -33,7 +33,7 @@ public partial class SettingsWindow
     /// <summary>Adds an accent-colored note inside the current card, under the last row.</summary>
     /// <param name="text">The note, wrapped to the card width.</param>
     private void Note(string text) =>
-        _card!.Children.Add(new TextBlock { Text = text, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(16, 0, 16, 12), Classes = { "accent" } });
+        _card!.Children.Add(new TextBlock { Text = text, FontSize = FontSizes.Small, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(16, 0, 16, 12), Classes = { "accent" } });
 
     /// <summary>Disables dependent rows while a switch is off.</summary>
     /// <param name="rows">The row grids returned by <see cref="Row"/> that depend on the switch.</param>
@@ -57,7 +57,7 @@ public partial class SettingsWindow
         var grid = new Grid { Margin = new Thickness(16, 12, 16, 12), ColumnDefinitions = new ColumnDefinitions("*,Auto") };
         var labels = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 20, 0) };
         labels.Children.Add(new TextBlock { Text = title, FontWeight = FontWeight.SemiBold });
-        labels.Children.Add(new TextBlock { Text = description, FontSize = 12, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 2, 0, 0), Classes = { "dim" } });
+        labels.Children.Add(new TextBlock { Text = description, FontSize = FontSizes.Small, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 2, 0, 0), Classes = { "dim" } });
         grid.Children.Add(labels);
 
         if (control is not null)
@@ -149,7 +149,6 @@ public partial class SettingsWindow
                 return;
             }
             _settings.Language = chosenName;
-            _settings.Save();
             if (Achievements.Current.Bump("languages") >= 3)
             {
                 Achievements.Current.Unlock(Achievement.Polyglot);
@@ -194,7 +193,7 @@ public partial class SettingsWindow
     {
         var panel = new StackPanel { Spacing = 8, HorizontalAlignment = HorizontalAlignment.Right };
 
-        var openFolder = new Button { Classes = { "link" }, Content = Icons.WithText("ScanFolder", Strings.Get("Palettes_OpenFolder"), 13), FontSize = 12.5, Padding = new Thickness(0) };
+        var openFolder = new Button { Classes = { "link" }, Content = Icons.WithText("ScanFolder", Strings.Get("Palettes_OpenFolder"), 13), FontSize = FontSizes.Body, Padding = new Thickness(0) };
         openFolder.Click += (_, _) =>
         {
             try
@@ -202,13 +201,13 @@ public partial class SettingsWindow
                 CustomPalettes.WriteExample();
                 Trash.Open(CustomPalettes.Folder);
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.ComponentModel.Win32Exception)
             {
                 _ = Dialog.Error(this, Strings.Get("Palettes_CouldNotOpen"), ex.Message);
             }
         };
 
-        var reload = new Button { Classes = { "link" }, Content = Icons.WithText("Refresh", Strings.Get("Palettes_Reload"), 13), FontSize = 12.5, Padding = new Thickness(0) };
+        var reload = new Button { Classes = { "link" }, Content = Icons.WithText("Refresh", Strings.Get("Palettes_Reload"), 13), FontSize = FontSizes.Body, Padding = new Thickness(0) };
         reload.Click += (_, _) =>
         {
             Palette.Reload();
@@ -233,7 +232,7 @@ public partial class SettingsWindow
         // sits with the links instead of as a second big button beside New palette.
         Button edit = currentScheme.IsCustom
             ? new Button { Classes = { "action" }, Height = 32, Content = Icons.WithText("Palette", editLabel, 14) }
-            : new Button { Classes = { "link" }, Content = Icons.WithText("Palette", editLabel, 13), FontSize = 12.5, Padding = new Thickness(0) };
+            : new Button { Classes = { "link" }, Content = Icons.WithText("Palette", editLabel, 13), FontSize = FontSizes.Body, Padding = new Thickness(0) };
         edit.Click += async (_, _) =>
         {
             PaletteDraft draft;
@@ -364,7 +363,6 @@ public partial class SettingsWindow
         void SavePatterns(IEnumerable<string> patterns)
         {
             _settings.ExcludePatterns = string.Join("\n", patterns);
-            _settings.Save();
             RenderChips();
         }
 
@@ -392,8 +390,8 @@ public partial class SettingsWindow
             foreach (string pattern in patterns)
             {
                 var row = new StackPanel { Orientation = Orientation.Horizontal };
-                row.Children.Add(new TextBlock { Text = pattern, FontFamily = Mono, FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center });
-                var remove = new Button { Classes = { "tool" }, Content = "✕", Height = 22, MinWidth = 22, Padding = new Thickness(3, 0), Margin = new Thickness(6, 0, 0, 0), FontSize = 11 };
+                row.Children.Add(new TextBlock { Text = pattern, FontFamily = Mono, FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center });
+                var remove = new Button { Classes = { "tool" }, Content = "✕", Height = 22, MinWidth = 22, Padding = new Thickness(3, 0), Margin = new Thickness(6, 0, 0, 0), FontSize = FontSizes.Caption };
                 ToolTip.SetTip(remove, Strings.Get("Exclude_Remove"));
                 string removedPattern = pattern;
                 remove.Click += (_, _) => SavePatterns(CurrentPatterns()
@@ -407,10 +405,10 @@ public partial class SettingsWindow
             var missing = ExclusionSuggestions.Where(suggestion => !patterns.Contains(suggestion, StringComparer.OrdinalIgnoreCase)).ToList();
             if (missing.Count > 0)
             {
-                suggestions.Children.Add(new TextBlock { Text = Strings.Get("Exclude_Suggestions"), FontSize = 12, Margin = new Thickness(0, 0, 8, 4), VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } });
+                suggestions.Children.Add(new TextBlock { Text = Strings.Get("Exclude_Suggestions"), FontSize = FontSizes.Small, Margin = new Thickness(0, 0, 8, 4), VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } });
                 foreach (string suggestion in missing)
                 {
-                    var link = new Button { Classes = { "link" }, Content = suggestion, FontFamily = Mono, FontSize = 12, Margin = new Thickness(0, 0, 10, 4) };
+                    var link = new Button { Classes = { "link" }, Content = suggestion, FontFamily = Mono, FontSize = FontSizes.Small, Margin = new Thickness(0, 0, 10, 4) };
                     link.Click += (_, _) => AddPattern(suggestion);
                     suggestions.Children.Add(link);
                 }
@@ -447,7 +445,7 @@ public partial class SettingsWindow
         // The slider keeps the column's 220 px; the delete button below it may be wider in a long translation.
         var panel = new StackPanel { MinWidth = 220, HorizontalAlignment = HorizontalAlignment.Left };
         var sliderPanel = new StackPanel { Width = 220, HorizontalAlignment = HorizontalAlignment.Left };
-        var label = new TextBlock { FontSize = 12.5, Margin = new Thickness(0, 0, 0, 2) };
+        var label = new TextBlock { FontSize = FontSizes.Body, Margin = new Thickness(0, 0, 0, 2) };
         // A saved value that is not one of the steps shows as 90 days.
         int stepIndex = Array.IndexOf(KeepSteps, _settings.KeepScansDays);
         if (stepIndex < 0)
@@ -464,7 +462,6 @@ public partial class SettingsWindow
             int index = (int)Math.Round(e.NewValue);
             _settings.KeepScansDays = KeepSteps[index];
             ShowStep(index);
-            _settings.Save();
         };
 
         var deleteAll = new Button { Classes = { "danger-outline" }, Content = Strings.Get("KeepScans_DeleteAll"), Height = 30, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 0) };
@@ -583,7 +580,7 @@ public partial class SettingsWindow
                     place = drive.VolumeLabel;
                 }
             }
-            catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
             {
                 // A drive that is gone is listed by its letter alone.
             }
@@ -605,7 +602,7 @@ public partial class SettingsWindow
     private static TextBlock Caps(string key) => new()
     {
         Text = Strings.Get(key).ToUpper(CultureInfo.CurrentCulture),
-        FontSize = 11,
+        FontSize = FontSizes.Caption,
         FontWeight = FontWeight.SemiBold,
         LetterSpacing = 0.4,
         Classes = { "dim" },
@@ -648,7 +645,7 @@ public partial class SettingsWindow
         icon.VerticalAlignment = VerticalAlignment.Top;
         icon.Margin = new Thickness(0, 1, 10, 0);
         line.Children.Add(icon);
-        line.Children.Add(new TextBlock { Text = text, FontSize = 12.5, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        line.Children.Add(new TextBlock { Text = text, FontSize = FontSizes.Body, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
 
         var card = new Border { Child = line, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(14, 12), Margin = new Thickness(0, 8, 0, 0) };
         card.Bind(Border.BorderBrushProperty, card.GetResourceObservable("Stroke"));
@@ -657,7 +654,7 @@ public partial class SettingsWindow
 
     /// <summary>The dim text brush, for runs inside a text block that is otherwise in the normal color.</summary>
     /// <returns>The theme's TextDim brush, or null before the application resources exist.</returns>
-    private static IBrush? DimBrush() => Application.Current?.FindResource("TextDim") as IBrush;
+    private static IBrush? DimBrush() => Application.Current?.ThemeBrush("TextDim");
 
     /// <summary>The layout bias slider, -1 (horizontal strips) to 1 (vertical strips) in quarter steps, with end labels.</summary>
     /// <returns>The slider and its labels stacked; changes are rounded to two decimals and applied like any other setting.</returns>
@@ -666,9 +663,9 @@ public partial class SettingsWindow
         var panel = new StackPanel { Width = 220 };
         var slider = new Slider { Minimum = -1, Maximum = 1, Value = _settings.Bias, TickFrequency = 0.25, IsSnapToTickEnabled = true, SmallChange = 0.25, LargeChange = 0.5 };
         var labels = new Grid { Margin = new Thickness(0, 2, 0, 0), ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto") };   // the end labels take what they need
-        var horizontalLabel = new TextBlock { Text = Strings.Get("Treemap_Horizontal"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Left, Classes = { "dim" } };
-        var equalLabel = new TextBlock { Text = Strings.Get("Treemap_Equal"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
-        var verticalLabel = new TextBlock { Text = Strings.Get("Treemap_Vertical"), FontSize = 11, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
+        var horizontalLabel = new TextBlock { Text = Strings.Get("Treemap_Horizontal"), FontSize = FontSizes.Caption, HorizontalAlignment = HorizontalAlignment.Left, Classes = { "dim" } };
+        var equalLabel = new TextBlock { Text = Strings.Get("Treemap_Equal"), FontSize = FontSizes.Caption, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
+        var verticalLabel = new TextBlock { Text = Strings.Get("Treemap_Vertical"), FontSize = FontSizes.Caption, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
         Grid.SetColumn(equalLabel, 1);
         Grid.SetColumn(verticalLabel, 2);
         labels.Children.Add(horizontalLabel);
@@ -730,7 +727,6 @@ public partial class SettingsWindow
     private void Change(Action update)
     {
         update();
-        _settings.Save();
         _main?.ApplySettings();
         RefreshPreview();
     }

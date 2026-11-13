@@ -175,7 +175,7 @@ public sealed class FolderWalker
                 }
             }
         }
-        catch (Exception ex) when (ex is UnauthorizedAccessException or IOException or System.Security.SecurityException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
         {
             node.AccessDenied = true;
             Interlocked.Increment(ref _denied);
@@ -234,7 +234,7 @@ public sealed class FolderWalker
             attributes = file.Attributes;
             written = file.LastWriteTimeUtc;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // A file that vanished or cannot be read still gets a node, with no size.
             length = 0;

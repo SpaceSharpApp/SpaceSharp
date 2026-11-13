@@ -21,7 +21,7 @@ public partial class MainWindow
         StatusText.Text = AppLanguages.IsRightToLeft
             ? "Right-to-left preview on (Ctrl+Shift+Alt+R turns it off, Ctrl+Shift+Alt+L lists clipped text)"
             : "Right-to-left preview off";
-        _ = AuditLayoutAsync(quiet: true);
+        AuditLayoutAsync(quiet: true).Detach();
     }
 
     /// <summary>Lists text the window cuts off, in the status bar and in a file next to the crash logs (Ctrl+Shift+Alt+L).</summary>
@@ -43,7 +43,7 @@ public partial class MainWindow
             reportFile = Path.Combine(CrashLog.Folder, "layout-audit.txt");
             await File.WriteAllTextAsync(reportFile, report);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // The report is already on the console; the status bar just leaves out the file name.
         }
@@ -151,7 +151,7 @@ public partial class MainWindow
             await File.WriteAllTextAsync(reportFile, text);
             Console.WriteLine($"{summary}  report: {reportFile}");
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             Console.Error.WriteLine($"Could not write {reportFile}: {ex.Message}");
             Console.WriteLine(text);

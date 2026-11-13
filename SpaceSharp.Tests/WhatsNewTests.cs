@@ -77,6 +77,15 @@ public class WhatsNewTests
     }
 
     [Fact]
+    public void AParagraphLeadsWithItsFirstSentence()
+    {
+        UpdateWindow.NoteBlock block = UpdateWindow.NoteBlocks("Cushion shading is gone, and five looks take its place. Edges puts a lit rim on every box.")[0];
+        Assert.Equal(UpdateWindow.NoteKind.Text, block.Kind);
+        Assert.Equal("Cushion shading is gone, and five looks take its place.", block.Lead);
+        Assert.Equal("Edges puts a lit rim on every box.", block.Rest);
+    }
+
+    [Fact]
     public void NoNotesGiveNoBlocks()
     {
         Assert.Empty(UpdateWindow.NoteBlocks(null));

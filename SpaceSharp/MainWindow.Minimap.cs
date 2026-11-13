@@ -27,7 +27,6 @@ public partial class MainWindow
         hide.Click += (_, _) =>
         {
             _settings.MinimapPlace = "Off";
-            _settings.Save();
             UpdateMinimap();
             StatusText.Text = Strings.Get("Status_MinimapHidden");
         };
@@ -38,7 +37,7 @@ public partial class MainWindow
             Margin = new Thickness(16),
             CornerRadius = new CornerRadius(6),
             BorderThickness = new Thickness(1),
-            BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 8, Blur = 28, Color = Color.FromArgb(0x99, 0, 0, 0) }),
+            BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 8, Blur = 28, Color = Chrome.ShadowColor }),
             ContextMenu = new ContextMenu { Items = { hide } },
             ZIndex = 10,
             IsVisible = false

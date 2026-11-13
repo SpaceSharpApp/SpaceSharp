@@ -220,7 +220,7 @@ public partial class MainWindow
     /// <param name="parts">The rich text parts of the line in order; brush keys resolve against this window's theme.</param>
     private void TipLine(IEnumerable<RichText.Part> parts)
     {
-        var block = new TextBlock { FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 1, 0, 1) };
+        var block = new TextBlock { FontSize = FontSizes.Small, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(0, 1, 0, 1) };
         RichText.Fill(block, parts, this);
         TipLines.Children.Add(block);
     }

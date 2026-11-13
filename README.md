@@ -80,6 +80,17 @@ For 64-bit Windows 10 and 11, from the [latest release](https://github.com/Space
 | **[SpaceSharp-win-x64-Setup.exe](https://github.com/SpaceSharpApp/SpaceSharp/releases/latest/download/SpaceSharp-win-x64-Setup.exe)** | One-click install to your profile, no admin rights, updates itself. |
 | **[SpaceSharp-win-x64.msi](https://github.com/SpaceSharpApp/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi)** | A regular installer: choose the folder, for you or for everyone. Updates itself. |
 
+Or from a package manager:
+
+```powershell
+winget install ClearanceClarence.SpaceSharp
+```
+
+```powershell
+scoop bucket add spacesharp https://github.com/SpaceSharpApp/scoop-bucket
+scoop install spacesharp/spacesharp
+```
+
 32-bit Windows gets the same three with **x86** in the name. SmartScreen may ask for **More info › Run anyway** while a new certificate earns its reputation.
 
 **Requirements:** Windows 10 or 11, 64-bit or 32-bit (Windows on ARM runs the x64 build through emulation). Nothing else to install: the .NET runtime ships inside every download. Administrator rights are asked for once, for the fast drive scan; without them the scan still runs and marks what it could not read.

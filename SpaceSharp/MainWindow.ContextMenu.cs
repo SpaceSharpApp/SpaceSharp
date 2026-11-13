@@ -43,120 +43,9 @@ public partial class MainWindow
     /// <returns>The menu, which refreshes itself on opening.</returns>
     private ContextMenu BuildMenu()
     {
-        // One menu item with a localized header, an optional shortcut and icon.
-        // key: The resource key of the header text.
-        // gesture: A key gesture such as "Ctrl+S" shown at the right, or null for none; it is display only, the key handler does the work.
-        // action: Run on click.
-        // icon: An icon name from Icons.axaml, or null for no icon.
-        // iconKey: The theme brush the icon is drawn in.
-        // Returns: The item, not yet added to a menu.
-        MenuItem Item(string key, string? gesture, Action action, string? icon = null, string? iconKey = "TextDim")
-        {
-            var item = new MenuItem { Header = Strings.Get(key), InputGesture = null };
-            if (gesture is not null)
-            {
-                item.InputGesture = KeyGesture.Parse(gesture);
-            }
-            if (icon is not null)
-            {
-                item.Icon = Icons.Make(icon, 14, iconKey);
-            }
-            item.Click += (_, _) => action();
-            return item;
-        }
-
-        // ---- the header: name, facts, share bar
-        // The header is a plain card, not a MenuItem: a MenuItem keeps columns for an icon, a gesture and a chevron, which would push the
-        // content off center. The card stretches across the menu and pads the same all round.
-        var header = new StackPanel { Spacing = 2 };
-        var titleRow = new DockPanel();
-        _menuKindIcon = Icons.Make("Folder", 15, "Accent");
-        _menuKindIcon.VerticalAlignment = VerticalAlignment.Center;
-        _menuKindIcon.Margin = new Thickness(0, 0, 8, 0);
-        DockPanel.SetDock(_menuKindIcon, Dock.Left);
-        // What a click on the header does, where a gesture would be, instead of a tooltip over the facts.
-        _menuInspectHint = new TextBlock { Text = Strings.Get("Menu_Inspect") + "  Ctrl+I", FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
-        DockPanel.SetDock(_menuInspectHint, Dock.Right);
-        _menuTitle = new TextBlock { FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
-        titleRow.Children.Add(_menuKindIcon);
-        titleRow.Children.Add(_menuInspectHint);
-        titleRow.Children.Add(_menuTitle);
-        header.Children.Add(titleRow);
-        _menuFacts = new TextBlock { FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
-        header.Children.Add(_menuFacts);
-        _menuShareFilled = new ColumnDefinition(1, GridUnitType.Star);
-        _menuShareRest = new ColumnDefinition(1, GridUnitType.Star);
-        _menuShareBar = new Grid { Height = 4, Margin = new Thickness(0, 5, 0, 0) };
-        _menuShareBar.ColumnDefinitions.Add(_menuShareFilled);
-        _menuShareBar.ColumnDefinitions.Add(_menuShareRest);
-        var filled = new Border { CornerRadius = new CornerRadius(2) };
-        filled.Bind(Border.BackgroundProperty, this.GetResourceObservable("Accent"));
-        var rest = new Border { CornerRadius = new CornerRadius(2), Opacity = 0.25 };
-        rest.Bind(Border.BackgroundProperty, this.GetResourceObservable("TextDim"));
-        Grid.SetColumn(rest, 1);
-        _menuShareBar.Children.Add(filled);
-        _menuShareBar.Children.Add(rest);
-        header.Children.Add(_menuShareBar);
-        _menuShareRow = new DockPanel { Margin = new Thickness(0, 2, 0, 0) };
-        _menuShareLeft = new TextBlock { FontSize = 11, Classes = { "dim" } };
-        _menuShareRight = new TextBlock { FontSize = 11, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
-        DockPanel.SetDock(_menuShareLeft, Dock.Left);
-        _menuShareRow.Children.Add(_menuShareLeft);
-        _menuShareRow.Children.Add(_menuShareRight);
-        header.Children.Add(_menuShareRow);
-        // No gesture text on the header: it would sit over the facts. The tooltip says what a click does.
-        _menuInspect = new Border { Child = header, CornerRadius = new CornerRadius(7), Padding = new Thickness(12, 10, 12, 12), Margin = new Thickness(0, 0, 0, 2), Cursor = new Cursor(StandardCursorType.Hand) };
-        _menuInspect.Bind(Border.BackgroundProperty, this.GetResourceObservable("Control"));
-        _menuInspect.PointerReleased += (_, e) =>
-        {
-            if (e.InitialPressMouseButton == MouseButton.Left && _menuInspect.IsEnabled)
-            {
-                Treemap.ContextMenu?.Close();
-                ShowInspect();
-            }
-        };
-
-        // ---- the rows
-        _menuFocus = Item("Main_ZoomToFolder", null, FocusSelected, "ZoomIn");
-        _menuOpen = Item("Main_Open", "Enter", OpenSelected, "Open");
-        _menuReveal = Item("Main_ShowInExplorer", null, RevealSelected, "ScanFolder");
-        _menuCopy = Item("Main_CopyPath", "Ctrl+C", () => CopyToClipboard(Treemap.SelectedNode?.FullPath), "Copy");
-        _menuSelectFolder = Item("Main_SelectEverythingInThis", null, SelectSiblingsOfSelected, "Selection");
-        _menuFilterType = Item("Main_ShowOnlyThisFile", null, FilterToSelectedType, "Filter");
-        _menuSelectType = Item("Menu_SelectAllExt", null, SelectSameTypeInFolder, "Selection");
-        _menuCopies = Item("Menu_FindCopies", null, () => _ = FindCopiesOfSelectedAsync(), "Composition");
-        _menuDuplicatesIn = Item("Menu_FindDuplicatesIn", null, () => _ = OpenDuplicatesAsync(Treemap.SelectedNode), "Composition");
-        _menuChangedHere = Item("Menu_WhatChangedHere", null, ShowChangesForSelected, "Sync");
-        _menuLeaveOut = Item("Menu_LeaveOut", null, () => _ = LeaveOutSelectedAsync(), "Close");
-        _menuDelete = Item("Main_MoveToRecycleBin", "Delete", () => _ = DeleteNodes(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
-        _menuDelete.Classes.Add("danger");
-
-        // ---- More: the long tail, and the delete that cannot be undone
-        _menuProperties = Item("Main_Properties", "Alt+Enter", ShowProperties, "Properties");
-        _menuProperties.IsVisible = OperatingSystem.IsWindows();
-        _menuCopyName = Item("Main_CopyName", null, () => CopyToClipboard(Treemap.SelectedNode?.Name), "Copy");
-        _menuRescan = Item("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
-        MenuItem saveScan = Item("Main_SaveScanAs", "Ctrl+S", () => _ = SaveScanAsAsync(), "Export");
-        MenuItem openScan = Item("Main_OpenSavedScan", "Ctrl+O", () => _ = OpenScanAsync(), "Open");
-        _menuCompare = Item("Main_CompareWithASaved", null, () => _ = CompareWithAsync(), "Sync");
-        _menuStopCompare = Item("Main_StopComparing", null, StopComparing);
-        _menuExport = Item("Menu_Export", null, () => _ = OpenExportAsync(ExportHome()), "Export");
-        _menuDeleteForever = Item("Main_DeletePermanently", null, () => _ = DeletePermanentlyAsync(Treemap.SelectedNodes.ToList()), "Delete", "Danger");
-        _menuDeleteForever.Classes.Add("danger");
-        ToolTip.SetTip(_menuDeleteForever, Strings.Get("Main_DeletePermanentlyTip"));
-        _menuMore = new MenuItem { Header = Strings.Get("Menu_More"), Icon = Icons.Make("Notes", 14, "TextDim") };
-        _menuMore.Items.Add(_menuProperties);
-        _menuMore.Items.Add(_menuCopyName);
-        _menuMore.Items.Add(new Separator());
-        _menuMore.Items.Add(_menuRescan);
-        _menuMore.Items.Add(saveScan);
-        _menuMore.Items.Add(openScan);
-        _menuMore.Items.Add(_menuCompare);
-        _menuMore.Items.Add(_menuStopCompare);
-        _menuMore.Items.Add(new Separator());
-        _menuMore.Items.Add(_menuExport);
-        _menuMore.Items.Add(new Separator());
-        _menuMore.Items.Add(_menuDeleteForever);
+        BuildMenuHeader();
+        BuildMenuRows();
+        BuildMoreMenu();
 
         var menu = new ContextMenu { MaxWidth = MenuWidth };
         // The menu wraps the card in a MenuItem of its own, with the 32 px height, the icon column and the gesture column of every other
@@ -192,13 +81,7 @@ public partial class MainWindow
         menu.Items.Add(_menuLeaveOut);
         menu.Items.Add(new Separator());
         menu.Items.Add(_menuMore);
-        _flatRescan = Item("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
-        _flatSave = Item("Main_SaveScanAs", "Ctrl+S", () => _ = SaveScanAsAsync(), "Export");
-        _flatOpen = Item("Main_OpenSavedScan", "Ctrl+O", () => _ = OpenScanAsync(), "Open");
-        _flatCompare = Item("Main_CompareWithASaved", null, () => _ = CompareWithAsync(), "Sync");
-        _flatStopCompare = Item("Main_StopComparing", null, StopComparing);
-        _flatExport = Item("Menu_Export", null, () => _ = OpenExportAsync(ExportHome()), "Export");
-        foreach (MenuItem flat in new[] { _flatRescan, _flatSave, _flatOpen, _flatCompare, _flatStopCompare, _flatExport })
+        foreach (MenuItem flat in BuildFlatScanRows())
         {
             flat.IsVisible = false;
             menu.Items.Add(flat);
@@ -207,6 +90,143 @@ public partial class MainWindow
         menu.Items.Add(_menuDelete);
         menu.Opening += (_, _) => UpdateContextMenu();
         return menu;
+    }
+
+    /// <summary>One menu row with a localized header, an optional shortcut and an optional icon.</summary>
+    /// <param name="key">The resource key of the header text.</param>
+    /// <param name="gesture">A key gesture such as "Ctrl+S" shown at the right, or null for none; it is display only, the key handler does the work.</param>
+    /// <param name="action">Run on click.</param>
+    /// <param name="icon">An icon name from Icons.axaml, or null for no icon.</param>
+    /// <param name="iconKey">The theme brush the icon is drawn in.</param>
+    /// <returns>The row, not yet added to a menu.</returns>
+    private static MenuItem MenuRow(string key, string? gesture, Action action, string? icon = null, string? iconKey = "TextDim")
+    {
+        var item = new MenuItem { Header = Strings.Get(key), InputGesture = null };
+        if (gesture is not null)
+        {
+            item.InputGesture = KeyGesture.Parse(gesture);
+        }
+        if (icon is not null)
+        {
+            item.Icon = Icons.Make(icon, 14, iconKey);
+        }
+        item.Click += (_, _) => action();
+        return item;
+    }
+
+    /// <summary>Builds the card at the top of the menu, which is the Inspect row: name, facts and the share bar.</summary>
+    /// <remarks>A plain card, not a MenuItem: a MenuItem keeps columns for an icon, a gesture and a chevron, which would push the
+    /// content off center. The card stretches across the menu and pads the same all round.</remarks>
+    private void BuildMenuHeader()
+    {
+        var header = new StackPanel { Spacing = 2 };
+        var titleRow = new DockPanel();
+        _menuKindIcon = Icons.Make("Folder", 15, "Accent");
+        _menuKindIcon.VerticalAlignment = VerticalAlignment.Center;
+        _menuKindIcon.Margin = new Thickness(0, 0, 8, 0);
+        DockPanel.SetDock(_menuKindIcon, Dock.Left);
+        // What a click on the header does, where a gesture would be, instead of a tooltip over the facts.
+        _menuInspectHint = new TextBlock { Text = Strings.Get("Menu_Inspect") + "  Ctrl+I", FontSize = FontSizes.Caption, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
+        DockPanel.SetDock(_menuInspectHint, Dock.Right);
+        _menuTitle = new TextBlock { FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center };
+        titleRow.Children.Add(_menuKindIcon);
+        titleRow.Children.Add(_menuInspectHint);
+        titleRow.Children.Add(_menuTitle);
+        header.Children.Add(titleRow);
+        _menuFacts = new TextBlock { FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        header.Children.Add(_menuFacts);
+        _menuShareFilled = new ColumnDefinition(1, GridUnitType.Star);
+        _menuShareRest = new ColumnDefinition(1, GridUnitType.Star);
+        _menuShareBar = new Grid { Height = 4, Margin = new Thickness(0, 5, 0, 0) };
+        _menuShareBar.ColumnDefinitions.Add(_menuShareFilled);
+        _menuShareBar.ColumnDefinitions.Add(_menuShareRest);
+        var filled = new Border { CornerRadius = new CornerRadius(2) };
+        filled.Bind(Border.BackgroundProperty, this.GetResourceObservable("Accent"));
+        var rest = new Border { CornerRadius = new CornerRadius(2), Opacity = 0.25 };
+        rest.Bind(Border.BackgroundProperty, this.GetResourceObservable("TextDim"));
+        Grid.SetColumn(rest, 1);
+        _menuShareBar.Children.Add(filled);
+        _menuShareBar.Children.Add(rest);
+        header.Children.Add(_menuShareBar);
+        _menuShareRow = new DockPanel { Margin = new Thickness(0, 2, 0, 0) };
+        _menuShareLeft = new TextBlock { FontSize = FontSizes.Caption, Classes = { "dim" } };
+        _menuShareRight = new TextBlock { FontSize = FontSizes.Caption, HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
+        DockPanel.SetDock(_menuShareLeft, Dock.Left);
+        _menuShareRow.Children.Add(_menuShareLeft);
+        _menuShareRow.Children.Add(_menuShareRight);
+        header.Children.Add(_menuShareRow);
+        // No gesture text on the header: it would sit over the facts. The tooltip says what a click does.
+        _menuInspect = new Border { Child = header, CornerRadius = new CornerRadius(7), Padding = new Thickness(12, 10, 12, 12), Margin = new Thickness(0, 0, 0, 2), Cursor = new Cursor(StandardCursorType.Hand) };
+        _menuInspect.Bind(Border.BackgroundProperty, this.GetResourceObservable("Control"));
+        _menuInspect.PointerReleased += (_, e) =>
+        {
+            if (e.InitialPressMouseButton == MouseButton.Left && _menuInspect.IsEnabled)
+            {
+                Treemap.ContextMenu?.Close();
+                ShowInspect();
+            }
+        };
+    }
+
+    /// <summary>Builds the rows people use most and the rows about the folder under the pointer.</summary>
+    private void BuildMenuRows()
+    {
+        _menuFocus = MenuRow("Main_ZoomToFolder", null, FocusSelected, "ZoomIn");
+        _menuOpen = MenuRow("Main_Open", "Enter", OpenSelected, "Open");
+        _menuReveal = MenuRow("Main_ShowInExplorer", null, RevealSelected, "ScanFolder");
+        _menuCopy = MenuRow("Main_CopyPath", "Ctrl+C", () => CopyToClipboard(Treemap.SelectedNode?.FullPath), "Copy");
+        _menuSelectFolder = MenuRow("Main_SelectEverythingInThis", null, SelectSiblingsOfSelected, "Selection");
+        _menuFilterType = MenuRow("Main_ShowOnlyThisFile", null, FilterToSelectedType, "Filter");
+        _menuSelectType = MenuRow("Menu_SelectAllExt", null, SelectSameTypeInFolder, "Selection");
+        _menuCopies = MenuRow("Menu_FindCopies", null, () => FindCopiesOfSelectedAsync().Detach(), "Composition");
+        _menuDuplicatesIn = MenuRow("Menu_FindDuplicatesIn", null, () => OpenDuplicatesAsync(Treemap.SelectedNode).Detach(), "Composition");
+        _menuChangedHere = MenuRow("Menu_WhatChangedHere", null, ShowChangesForSelected, "Sync");
+        _menuLeaveOut = MenuRow("Menu_LeaveOut", null, () => LeaveOutSelectedAsync().Detach(), "Close");
+        _menuDelete = MenuRow("Main_MoveToRecycleBin", "Delete", () => DeleteNodes(Treemap.SelectedNodes.ToList()).Detach(), "Delete", "Danger");
+        _menuDelete.Classes.Add("danger");
+    }
+
+    /// <summary>Builds More: the long tail, and the delete that cannot be undone, a second step away.</summary>
+    private void BuildMoreMenu()
+    {
+        _menuProperties = MenuRow("Main_Properties", "Alt+Enter", ShowProperties, "Properties");
+        _menuProperties.IsVisible = OperatingSystem.IsWindows();
+        _menuCopyName = MenuRow("Main_CopyName", null, () => CopyToClipboard(Treemap.SelectedNode?.Name), "Copy");
+        _menuRescan = MenuRow("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
+        MenuItem saveScan = MenuRow("Main_SaveScanAs", "Ctrl+S", () => SaveScanAsAsync().Detach(), "Export");
+        MenuItem openScan = MenuRow("Main_OpenSavedScan", "Ctrl+O", () => OpenScanAsync().Detach(), "Open");
+        _menuCompare = MenuRow("Main_CompareWithASaved", null, () => CompareWithAsync().Detach(), "Sync");
+        _menuStopCompare = MenuRow("Main_StopComparing", null, StopComparing);
+        _menuExport = MenuRow("Menu_Export", null, () => OpenExportAsync(ExportHome()).Detach(), "Export");
+        _menuDeleteForever = MenuRow("Main_DeletePermanently", null, () => DeletePermanentlyAsync(Treemap.SelectedNodes.ToList()).Detach(), "Delete", "Danger");
+        _menuDeleteForever.Classes.Add("danger");
+        ToolTip.SetTip(_menuDeleteForever, Strings.Get("Main_DeletePermanentlyTip"));
+        _menuMore = new MenuItem { Header = Strings.Get("Menu_More"), Icon = Icons.Make("Notes", 14, "TextDim") };
+        _menuMore.Items.Add(_menuProperties);
+        _menuMore.Items.Add(_menuCopyName);
+        _menuMore.Items.Add(new Separator());
+        _menuMore.Items.Add(_menuRescan);
+        _menuMore.Items.Add(saveScan);
+        _menuMore.Items.Add(openScan);
+        _menuMore.Items.Add(_menuCompare);
+        _menuMore.Items.Add(_menuStopCompare);
+        _menuMore.Items.Add(new Separator());
+        _menuMore.Items.Add(_menuExport);
+        _menuMore.Items.Add(new Separator());
+        _menuMore.Items.Add(_menuDeleteForever);
+    }
+
+    /// <summary>Builds the scan rows a second time, for a menu that would otherwise hold nothing but More.</summary>
+    /// <returns>The rows in menu order; the caller hides them until <see cref="UpdateContextMenu"/> needs them.</returns>
+    private MenuItem[] BuildFlatScanRows()
+    {
+        _flatRescan = MenuRow("Main_RescanThisFolder", "F5", () => Rescan_Click(null, new RoutedEventArgs()), "Refresh");
+        _flatSave = MenuRow("Main_SaveScanAs", "Ctrl+S", () => SaveScanAsAsync().Detach(), "Export");
+        _flatOpen = MenuRow("Main_OpenSavedScan", "Ctrl+O", () => OpenScanAsync().Detach(), "Open");
+        _flatCompare = MenuRow("Main_CompareWithASaved", null, () => CompareWithAsync().Detach(), "Sync");
+        _flatStopCompare = MenuRow("Main_StopComparing", null, StopComparing);
+        _flatExport = MenuRow("Menu_Export", null, () => OpenExportAsync(ExportHome()).Detach(), "Export");
+        return new[] { _flatRescan, _flatSave, _flatOpen, _flatCompare, _flatStopCompare, _flatExport };
     }
 
     /// <summary>Shows the rows that apply to the current selection, names the ones that take the item's folder or type, and fills the header.</summary>
@@ -483,7 +503,7 @@ public partial class MainWindow
         {
             return;
         }
-        _changesFocus = folder;
+        ChangesView.OpenAt(folder);
         ShowView(MainView.Changes);
     }
 
@@ -506,7 +526,6 @@ public partial class MainWindow
         {
             patterns.Add(name);
             _settings.ExcludePatterns = string.Join(Environment.NewLine, patterns);
-            _settings.Save();
         }
         StatusText.Text = Strings.Format("Status_LeftOut", name);
     }
@@ -572,7 +591,7 @@ public partial class MainWindow
         {
             Trash.Open(node.FullPath);
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             StatusText.Text = ex.Message;
         }
@@ -602,7 +621,7 @@ public partial class MainWindow
         {
             Trash.Reveal(node.FullPath);
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             StatusText.Text = ex.Message;
         }
@@ -675,7 +694,7 @@ public partial class MainWindow
             {
                 allSent = await Task.Run(() => Trash.TrySend(paths, out sendError, progress, token));
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidOperationException)
             {
                 sendError = ex.Message;
                 allSent = false;
@@ -901,7 +920,7 @@ public partial class MainWindow
             // 2 s tolerance for FAT-style timestamp rounding
             return node.LastWriteUtc == DateTime.MinValue || Math.Abs((info.LastWriteTimeUtc - node.LastWriteUtc).Ticks) <= TimeSpan.TicksPerSecond * 2;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
         {
             return true;   // let the shell report the error
         }

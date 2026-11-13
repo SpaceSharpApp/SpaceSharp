@@ -54,7 +54,7 @@ public partial class SettingsWindow
             IsSnapToTickEnabled = max - min <= 20,
             TickFrequency = 1
         };
-        var label = new TextBlock { Text = format(value), FontSize = 12.5, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        var label = new TextBlock { Text = format(value), FontSize = FontSizes.Body, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         Grid.SetColumn(label, 1);
 
         slider.ValueChanged += (_, e) =>
@@ -157,7 +157,7 @@ public partial class SettingsWindow
             }
             else
             {
-                var arrow = new TextBlock { Text = glyph, FontSize = 14, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
+                var arrow = new TextBlock { Text = glyph, FontSize = FontSizes.Large, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
                 arrow.Bind(TextBlock.ForegroundProperty, ink);
                 face = arrow;
             }
@@ -189,7 +189,7 @@ public partial class SettingsWindow
             pad.Children.Add(tile);
         }
 
-        var label = new TextBlock { Text = Strings.Get(Compass[currentIndex].Name), Classes = { "dim" }, FontSize = 12.5, MinWidth = 76, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+        var label = new TextBlock { Text = Strings.Get(Compass[currentIndex].Name), Classes = { "dim" }, FontSize = FontSizes.Body, MinWidth = 76, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
         return new StackPanel { Orientation = Orientation.Horizontal, Spacing = 14, HorizontalAlignment = HorizontalAlignment.Right, Children = { pad, label } };
     }
 
@@ -201,7 +201,6 @@ public partial class SettingsWindow
         button.Click += (_, _) =>
         {
             _settings.ResetShading();
-            _settings.Save();
             _main?.ApplySettings();
             Build();
         };
@@ -284,7 +283,6 @@ public partial class SettingsWindow
             return;
         }
         _settings.ResetToDefaults();
-        _settings.Save();
         App.ApplyTheme();
         _main?.ApplySettings();
         Build();

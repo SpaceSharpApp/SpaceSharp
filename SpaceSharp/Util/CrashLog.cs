@@ -9,7 +9,6 @@ public static class CrashLog
 {
     /// <summary>How many crash logs survive pruning.</summary>
     private const int Keep = 20;
-    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
 
     /// <summary>The logs folder under the user's local app data, created on first use.</summary>
     public static string Folder
@@ -69,7 +68,7 @@ public static class CrashLog
             Prune(folder);
             return path;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
         {
             // A log that cannot be written must not turn the crash into a second one; the caller shows the error without it.
             return null;
@@ -122,7 +121,7 @@ public static class CrashLog
             body = body[..1800] + "\n…";   // URL length cap
         }
 
-        return $"{Repository}/issues/new?template=bug_report.yml" +
+        return $"{AppInfo.Repository}/issues/new?template=bug_report.yml" +
                $"&title={Uri.EscapeDataString("[Bug] Unexpected error: " + Shorten(innermost.Message, 60))}" +
                $"&version={Uri.EscapeDataString(AppInfo.Version)}" +
                $"&windows={Uri.EscapeDataString($"{RuntimeInformation.OSDescription} ({RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant()})")}" +
@@ -140,7 +139,7 @@ public static class CrashLog
         {
             return Directory.GetFiles(Folder, "crash-*.log").Length;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Security.SecurityException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
         {
             // A folder that cannot be read has no logs anyone could attach; the link still opens it.
             return 0;

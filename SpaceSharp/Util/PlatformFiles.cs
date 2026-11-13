@@ -100,7 +100,7 @@ internal static class PlatformFiles
                     }
                 }
             }
-            catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
             {
                 // An unreadable or odd path falls back to the usual NTFS cluster size below.
             }

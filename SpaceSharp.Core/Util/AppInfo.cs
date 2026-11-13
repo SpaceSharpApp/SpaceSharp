@@ -8,6 +8,9 @@ public static class AppInfo
     /// <summary>The product name as shown in titles and the user agent.</summary>
     public const string Name = "SpaceSharp";
 
+    /// <summary>The project's home on GitHub, the root of every link to its issues, releases and files.</summary>
+    public const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
+
     /// <summary>The version without any "+commit" suffix.</summary>
     public static string Version { get; } = ReadVersion();
 

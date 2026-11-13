@@ -53,7 +53,7 @@ public partial class MainWindow
                 total = drive.TotalSize;
                 free = drive.AvailableFreeSpace;
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure())
             {
                 // A drive that refuses its sizes (ejected media, a dead network share) is left off the list.
                 continue;
@@ -90,14 +90,14 @@ public partial class MainWindow
         {
             Text = title,
             FontWeight = FontWeight.SemiBold,
-            FontSize = 14,
+            FontSize = FontSizes.Large,
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Bottom
         };
         // The kind's symbol before its name: the glyph Windows draws for that kind, or a silhouette of the device elsewhere.
         var kindLabel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Bottom };
         kindLabel.Children.Add(DriveKindIcon(kind, 14));
-        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = 12, VerticalAlignment = VerticalAlignment.Center });
+        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center });
         Grid.SetColumn(kindLabel, 1);
         top.Children.Add(nameText);
         top.Children.Add(kindLabel);
@@ -111,10 +111,10 @@ public partial class MainWindow
         {
             Text = Strings.Format("Drive_UsedOfShort", SizeFormatter.Format(total - free), SizeFormatter.Format(total)),
             Classes = { "dim" },
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             TextTrimming = TextTrimming.CharacterEllipsis
         };
-        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = 12, FontWeight = FontWeight.Medium };
+        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = FontSizes.Small, FontWeight = FontWeight.Medium };
         Grid.SetColumn(freeText, 1);
         bottom.Children.Add(usedText);
         bottom.Children.Add(freeText);

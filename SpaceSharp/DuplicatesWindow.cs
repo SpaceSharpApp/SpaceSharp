@@ -35,11 +35,11 @@ public sealed class DuplicatesWindow : Window
     private readonly Button _cancelButton;
     private readonly Button _deleteButton;
     private readonly ProgressBar _progress = new() { Height = 4, Minimum = 0, Maximum = 1, IsVisible = false, Margin = new Thickness(0, 10, 0, 0) };
-    private readonly TextBlock _status = new() { FontSize = 12.5, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
-    private readonly TextBlock _checkedText = new() { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+    private readonly TextBlock _status = new() { FontSize = FontSizes.Body, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+    private readonly TextBlock _checkedText = new() { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly StackPanel _picks = new() { Orientation = Orientation.Horizontal, Spacing = 12, IsVisible = false, Margin = new Thickness(0, 8, 0, 0) };
     private readonly Border _warning;   // red note while a ticked copy sits in a program place
-    private readonly TextBlock _warningText = new() { FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+    private readonly TextBlock _warningText = new() { FontSize = FontSizes.Body, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
     private readonly ListBox _list;
     private readonly Border _listBox;
     private readonly BusyPanel _busy = new();
@@ -69,16 +69,16 @@ public sealed class DuplicatesWindow : Window
         ShowInTaskbar = false;
 
         var header = new StackPanel();
-        header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold });
-        header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Intro"), FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
+        header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Title"), FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold });
+        header.Children.Add(new TextBlock { Text = Strings.Get("Dup_Intro"), FontSize = FontSizes.Body, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, LineHeight = 18, Classes = { "dim" } });
         if (root.Parent is not null)
         {
             // one folder of the scan, not all of it: say which, so a short list is not read as the whole drive's
-            header.Children.Add(new TextBlock { Text = Strings.Format("Dup_InFolder", root.FullPath), FontSize = 12.5, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap });
+            header.Children.Add(new TextBlock { Text = Strings.Format("Dup_InFolder", root.FullPath), FontSize = FontSizes.Body, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 6, 0, 0), TextWrapping = TextWrapping.Wrap });
         }
 
         var controls = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10, Margin = new Thickness(0, 12, 0, 0) };
-        controls.Children.Add(new TextBlock { Text = Strings.Get("Dup_MinSize"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center });
+        controls.Children.Add(new TextBlock { Text = Strings.Get("Dup_MinSize"), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center });
         foreach ((string label, long _) in MinimumSizes)
         {
             _minimum.Items.Add(label);
@@ -150,7 +150,7 @@ public sealed class DuplicatesWindow : Window
             // The minimum must let the file through, else its copies can never show.
             int fits = Array.FindLastIndex(MinimumSizes, minimum => minimum.Bytes <= highlight.Size);
             _minimum.SelectedIndex = Math.Max(0, fits);
-            _ = FindAsync();
+            FindAsync().Detach();
         }
         else if (earlier is not null)
         {
@@ -176,7 +176,7 @@ public sealed class DuplicatesWindow : Window
     /// <param name="tip">The link's tooltip; null gives none.</param>
     private void AddPick(string key, Action action, string? tip = null)
     {
-        var link = new Button { Content = Strings.Get(key), Classes = { "link" }, FontSize = 12.5 };
+        var link = new Button { Content = Strings.Get(key), Classes = { "link" }, FontSize = FontSizes.Body };
         link.Click += (_, _) => action();
         if (tip is not null)
         {
@@ -192,11 +192,11 @@ public sealed class DuplicatesWindow : Window
     {
         DuplicateGroup group = line.Group;
         var row = new DockPanel { Height = 34, Margin = new Thickness(0, 6, 0, 0) };
-        var sizeText = new TextBlock { Text = SizeFormatter.Format(group.Wasted), FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
+        var sizeText = new TextBlock { Text = SizeFormatter.Format(group.Wasted), FontSize = FontSizes.Body, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center };
         ToolTip.SetTip(sizeText, group.Hash);
         DockPanel.SetDock(sizeText, Dock.Right);
         row.Children.Add(sizeText);
-        row.Children.Add(new TextBlock { Text = Strings.Format("Dup_Copies", group.Files.Count, SizeFormatter.Format(group.Size)), FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Classes = { "accent" } });
+        row.Children.Add(new TextBlock { Text = Strings.Format("Dup_Copies", group.Files.Count, SizeFormatter.Format(group.Size)), FontSize = FontSizes.Body, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Classes = { "accent" } });
         return row;
     }
 
@@ -214,23 +214,23 @@ public sealed class DuplicatesWindow : Window
             UpdateChecked();
         };
         row.Children.Add(tick);
-        var name = new TextBlock { Text = file.Name, FontSize = 12.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 260 };
+        var name = new TextBlock { Text = file.Name, FontSize = FontSizes.Body, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, MaxWidth = 260 };
         ToolTip.SetTip(name, file.FullPath);
         Grid.SetColumn(name, 1);
         row.Children.Add(name);
-        var where = new TextBlock { Text = PathLoops.Compact(file.Parent?.FullPath ?? string.Empty, 90), FontSize = 11.5, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+        var where = new TextBlock { Text = PathLoops.Compact(file.Parent?.FullPath ?? string.Empty, 90), FontSize = FontSizes.Detail, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
         ToolTip.SetTip(where, file.FullPath);
         Grid.SetColumn(where, 2);
         row.Children.Add(where);
         if (EmptyFolders.IsProgramPlace(file))
         {
             // A copy a program may depend on: named so, in the danger color, so the tick next to it is a considered one.
-            var program = new TextBlock { Text = Strings.Get("Dup_InProgram"), FontSize = 11.5, VerticalAlignment = VerticalAlignment.Center };
+            var program = new TextBlock { Text = Strings.Get("Dup_InProgram"), FontSize = FontSizes.Detail, VerticalAlignment = VerticalAlignment.Center };
             program.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("Danger"));
             Grid.SetColumn(program, 3);
             row.Children.Add(program);
         }
-        var age = new TextBlock { Text = file.LastWriteUtc > DateTime.MinValue ? MainWindow.Ago(file.LastWriteUtc) : string.Empty, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        var age = new TextBlock { Text = file.LastWriteUtc > DateTime.MinValue ? MainWindow.Ago(file.LastWriteUtc) : string.Empty, FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         Grid.SetColumn(age, 4);
         row.Children.Add(age);
         return row;
@@ -265,7 +265,7 @@ public sealed class DuplicatesWindow : Window
         {
             _status.Text = Strings.Get("Status_ScanCancelled");
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidOperationException)
         {
             _status.Text = ex.Message;
         }
@@ -415,7 +415,7 @@ public sealed class DuplicatesWindow : Window
         {
             allSent = await Task.Run(() => Trash.TrySend(picked.Select(file => file.FullPath).ToList(), out error, progress, token));
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidOperationException)
         {
             error = ex.Message;
         }

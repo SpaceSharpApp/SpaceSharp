@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Microsoft.Win32.SafeHandles;
 using SpaceSharp.Models;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
@@ -189,7 +190,7 @@ public static class DuplicateFinder
                     }
                     live.Add(new Reading(file, handle, IncrementalHash.CreateHash(HashAlgorithmName.SHA256)));
                 }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
+                catch (Exception ex) when (ex.IsFileSystemFailure() || ex is NotSupportedException or ArgumentException)
                 {
                     fileDone();
                 }
@@ -208,7 +209,7 @@ public static class DuplicateFinder
                     {
                         got = ReadAt(reading.Handle, buffer.AsSpan(0, want), offset);
                     }
-                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException)
+                    catch (Exception ex) when (ex.IsFileSystemFailure() || ex is NotSupportedException)
                     {
                         got = -1;
                     }
@@ -357,7 +358,7 @@ public static class DuplicateFinder
             bytesRead = total;
             return Convert.ToHexString(SHA256.HashData(buffer.AsSpan(0, total))).ToLowerInvariant();
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is NotSupportedException or ArgumentException)
         {
             return null;
         }
@@ -395,7 +396,7 @@ public static class DuplicateFinder
             }
             return bytesRead == expectedSize ? Convert.ToHexString(sha.GetHashAndReset()).ToLowerInvariant() : null;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or NotSupportedException or ArgumentException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is NotSupportedException or ArgumentException)
         {
             return null;
         }

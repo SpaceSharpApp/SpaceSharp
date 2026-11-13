@@ -132,7 +132,7 @@ public partial class MainWindow
         {
             Classes = { "link" },
             Content = Strings.Get("Palette_NewLink"),
-            FontSize = 13,
+            FontSize = FontSizes.Emphasis,
             VerticalAlignment = VerticalAlignment.Center,
             Margin = new Thickness(12, 0, 10, 0)
         };
@@ -189,7 +189,7 @@ public partial class MainWindow
                 list.Children.Add(new TextBlock
                 {
                     Text = Strings.Get("Palette_NoCustom"),
-                    FontSize = 12.5,
+                    FontSize = FontSizes.Body,
                     TextWrapping = TextWrapping.Wrap,
                     Margin = new Thickness(10, 10, 10, 6),
                     Classes = { "dim" }
@@ -206,7 +206,7 @@ public partial class MainWindow
                 list.Children.Add(new TextBlock
                 {
                     Text = Strings.Format("Palette_SwitchesTheme", themeWord),
-                    FontSize = 11.5,
+                    FontSize = FontSizes.Detail,
                     Margin = new Thickness(10, 2, 10, 4),
                     Classes = { "dim" }
                 });
@@ -238,8 +238,8 @@ public partial class MainWindow
         grid.Children.Add(Strip(scheme, 168, 16));
 
         var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Spacing = 1 };
-        text.Children.Add(new TextBlock { Text = scheme.Name, FontSize = 13.5, TextTrimming = TextTrimming.CharacterEllipsis });
-        text.Children.Add(new TextBlock { Text = scheme.About, FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } });
+        text.Children.Add(new TextBlock { Text = scheme.Name, FontSize = FontSizes.Lead, TextTrimming = TextTrimming.CharacterEllipsis });
+        text.Children.Add(new TextBlock { Text = scheme.About, FontSize = FontSizes.Detail, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } });
         Grid.SetColumn(text, 1);
         grid.Children.Add(text);
 
@@ -318,7 +318,6 @@ public partial class MainWindow
             _settings.Theme = useDarkTheme ? "Dark" : "Light";
         }
         _settings.SetPalette(useDarkTheme, scheme.Name);
-        _settings.Save();
 
         if (switchesTheme)
         {

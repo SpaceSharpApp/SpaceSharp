@@ -20,8 +20,6 @@ namespace SpaceSharp;
 /// <summary>The update prompt and the What's new window.</summary>
 public static class UpdateWindow
 {
-    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
-
     /// <summary>Shows the update prompt for the release <see cref="Updater"/> found; does nothing when none is available.</summary>
     /// <param name="owner">Window the modal prompt centers on and blocks.</param>
     /// <returns>Completes when the prompt closes, by Remind me later or after a failed install; a successful install restarts the process first.</returns>
@@ -131,10 +129,10 @@ public static class UpdateWindow
         body.Children.Add(blurb);
 
         // ---- buttons
-        var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Classes = { "primary" }, Height = 38, FontSize = 13.5, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 22, 0, 0), IsDefault = true };
+        var install = new Button { Content = Strings.Get("Main_InstallAndRestart"), Classes = { "primary" }, Height = 38, FontSize = FontSizes.Lead, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 22, 0, 0), IsDefault = true };
         var later = new Button { Content = Strings.Get("Update_RemindLater"), Classes = { "tool" }, Height = 34, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 8, 0, 0), IsCancel = true, BorderThickness = new Thickness(1) };
         later.Bind(TemplatedControl.BorderBrushProperty, window.GetResourceObservable("Stroke"));
-        var whatsNew = new Button { Content = Strings.Format("Update_WhatsNewIn", ShortVersion(version)), Classes = { "link" }, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0), FontSize = 12.5 };
+        var whatsNew = new Button { Content = Strings.Format("Update_WhatsNewIn", ShortVersion(version)), Classes = { "link" }, HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 12, 0, 0), FontSize = FontSizes.Body };
         whatsNew.Click += async (_, _) => await ShowWhatsNew(window, version, current);
         later.Click += (_, _) => window.Close();
 
@@ -265,7 +263,7 @@ public static class UpdateWindow
         var seeAll = new Button { Content = Icons.WithText("External", Strings.Get("WhatsNew_SeeAll")), Classes = { "tool" }, Height = 32 };
         seeAll.Click += (_, _) =>
         {
-            string url = spansReleases ? $"{Repository}/blob/{version}/CHANGELOG.md" : $"{Repository}/releases/tag/{version}";
+            string url = spansReleases ? $"{AppInfo.Repository}/blob/{version}/CHANGELOG.md" : $"{AppInfo.Repository}/releases/tag/{version}";
             try
             {
                 Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
@@ -302,7 +300,7 @@ public static class UpdateWindow
         {
             notesTask = LoadNotesAsync(version);
         }
-        int maxLines = spansReleases ? 40 : 14;
+        int maxLines = spansReleases ? 40 : 16;
         window.Opened += async (_, _) => FillNotes(window, notes, Abridge(await notesTask, maxLines));
         await window.ShowModal(owner);
     }
@@ -324,8 +322,8 @@ public static class UpdateWindow
 
     /// <summary>One line of the notes, split for display.</summary>
     /// <param name="Kind">What the line is.</param>
-    /// <param name="Lead">The whole line, or for a bullet its opening sentence.</param>
-    /// <param name="Rest">What follows a bullet's opening sentence; empty otherwise.</param>
+    /// <param name="Lead">The whole line, or for a bullet or a paragraph its opening sentence.</param>
+    /// <param name="Rest">What follows the opening sentence; empty when the line was not split.</param>
     internal sealed record NoteBlock(NoteKind Kind, string Lead, string Rest);
 
     /// <summary>Splits the text <see cref="Abridge"/> made into the blocks the What's new window draws.</summary>
@@ -386,7 +384,12 @@ public static class UpdateWindow
             }
             else
             {
-                blocks.Add(new NoteBlock(NoteKind.Text, line, string.Empty));
+                // A paragraph leads with its first sentence, so prose can be skimmed like a list.
+                int end = line.IndexOf(". ", StringComparison.Ordinal);
+                bool leads = end is > 0 and < LongItem && end + 2 < line.Length;
+                blocks.Add(leads
+                    ? new NoteBlock(NoteKind.Text, line[..(end + 1)], line[(end + 2)..])
+                    : new NoteBlock(NoteKind.Text, line, string.Empty));
             }
         }
         return blocks;
@@ -427,19 +430,18 @@ public static class UpdateWindow
             return;
         }
 
-        // Theme colors live in the theme dictionaries, which only a lookup that names the window's theme reaches.
-        IBrush? dim = window.TryFindResource("TextDim", window.ActualThemeVariant, out object? found) ? found as IBrush : null;
+        IBrush? dim = window.ThemeBrush("TextDim");
         foreach (NoteBlock block in blocks)
         {
             double above = notes.Children.Count == 0 ? 0 : 1;   // nothing above the first block
             switch (block.Kind)
             {
                 case NoteKind.Release:
-                    notes.Children.Add(new TextBlock { Text = block.Lead, FontSize = 17, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 18 * above, 0, 6), TextWrapping = TextWrapping.Wrap });
+                    notes.Children.Add(new TextBlock { Text = block.Lead, FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 18 * above, 0, 6), TextWrapping = TextWrapping.Wrap });
                     break;
 
                 case NoteKind.Heading:
-                    var heading = new TextBlock { Text = block.Lead, FontSize = 12, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.8, Margin = new Thickness(0, 16 * above, 0, 8), TextWrapping = TextWrapping.Wrap };
+                    var heading = new TextBlock { Text = block.Lead, FontSize = FontSizes.Small, FontWeight = FontWeight.SemiBold, LetterSpacing = 0.8, Margin = new Thickness(0, 16 * above, 0, 8), TextWrapping = TextWrapping.Wrap };
                     heading.Bind(TextBlock.ForegroundProperty, window.GetResourceObservable("Accent"));
                     notes.Children.Add(heading);
                     break;
@@ -449,7 +451,7 @@ public static class UpdateWindow
                     var marker = new Border { Width = 5, Height = 5, CornerRadius = new CornerRadius(1.5), Margin = new Thickness(2, 8, 0, 0), VerticalAlignment = VerticalAlignment.Top };
                     marker.Bind(Border.BackgroundProperty, window.GetResourceObservable("Accent"));
                     row.Children.Add(marker);
-                    var text = new TextBlock { TextWrapping = TextWrapping.Wrap, LineHeight = 20, FontSize = 13.5 };
+                    var text = new TextBlock { TextWrapping = TextWrapping.Wrap, LineHeight = 20, FontSize = FontSizes.Lead };
                     var lead = new Avalonia.Controls.Documents.Run(block.Lead) { FontWeight = block.Rest.Length > 0 ? FontWeight.SemiBold : FontWeight.Normal };
                     if (block.Rest.Length == 0 && block.Lead.Length > LongItem && dim is not null)
                     {
@@ -473,7 +475,28 @@ public static class UpdateWindow
                     break;
 
                 default:
-                    notes.Children.Add(new TextBlock { Text = block.Lead, FontSize = 13.5, LineHeight = 20, Margin = new Thickness(0, 0, 0, 10), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+                    // A paragraph: its opening sentence in full strength, the rest dimmed; one with no opening to lift out is dimmed whole.
+                    var paragraph = new TextBlock { FontSize = FontSizes.Lead, LineHeight = 20, Margin = new Thickness(0, 0, 0, 12), TextWrapping = TextWrapping.Wrap };
+                    var opening = new Avalonia.Controls.Documents.Run(block.Lead);
+                    if (block.Rest.Length > 0)
+                    {
+                        opening.FontWeight = FontWeight.SemiBold;
+                    }
+                    else if (dim is not null)
+                    {
+                        opening.Foreground = dim;
+                    }
+                    paragraph.Inlines!.Add(opening);
+                    if (block.Rest.Length > 0)
+                    {
+                        var following = new Avalonia.Controls.Documents.Run(" " + block.Rest);
+                        if (dim is not null)
+                        {
+                            following.Foreground = dim;
+                        }
+                        paragraph.Inlines.Add(following);
+                    }
+                    notes.Children.Add(paragraph);
                     break;
             }
         }

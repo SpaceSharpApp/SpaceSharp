@@ -62,6 +62,7 @@ $archs = if ($NoX86) { @("x64") } else { @("x64", "x86") }
 $doBuild = $Stage -in @("All", "Build")
 $doPack = $Stage -in @("All", "Pack")
 $doUpload = $Stage -eq "Upload" -or ($Stage -eq "All" -and $Upload)
+$badgeMoved = $false
 
 if ($Stage -eq "All" -and $Upload -and -not $Force -and -not $Sign) {
     throw "A release should be signed: pass -Sign <thumbprint> with SimplySign running, or -Force to upload an unsigned build anyway."
@@ -251,9 +252,20 @@ if ($doUpload) {
     } else {
         Write-Warning "gh is not installed, so these were not uploaded: $($extra -join ', '). Attach them to the release by hand."
     }
+
+    # The README's badge names the released version, so it moves here, when a release is made, and not when the
+    # version is bumped for the next one. The change is left uncommitted, to go in with the release.
+    $readmePath = Join-Path $root "README.md"
+    $readme = [System.IO.File]::ReadAllText($readmePath)
+    $withBadge = $readme -replace 'badge/version-[0-9.]+-F5B82E" alt="Version [0-9.]+"', "badge/version-$version-F5B82E`" alt=`"Version $version`""
+    if ($withBadge -ne $readme) {
+        [System.IO.File]::WriteAllText($readmePath, $withBadge, (New-Object System.Text.UTF8Encoding $false))
+        $badgeMoved = $true
+    }
 }
 
 ""
 "Release assets:"
 Get-ChildItem .\Releases -ErrorAction SilentlyContinue | ForEach-Object { "  Releases\$($_.Name)" }
 if ($doUpload) { "Draft release created: $repo/releases. Read it, then press Publish." }
+if ($badgeMoved) { "The README's version badge now says ${version}. Commit and push it once the release is published." }

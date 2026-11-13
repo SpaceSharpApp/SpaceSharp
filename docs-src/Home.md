@@ -38,19 +38,14 @@
 - [Architecture](Architecture)
 - [Translating](Translating)
 
-## New in 2.9
+## New in the latest release
 
-- **A Statistics view**: the scan as a report, SpaceMonger style and then some: files by size class stacked by kind, kinds, ages, the biggest extensions, and the space that is easy to get back, every figure a click back to the map, with deltas against the compared scan ([Statistics](Statistics)).
-- **The palette editor rebuilt** around a few decisions: hue, saturation, lightness, a scheme, a step per level and how files are tinted, with a readability guard that fixes itself, Random, From a picture and Start from any palette; the preview is live and clickable, and the color-by-color grids live under Advanced ([Custom palettes](Custom-Palettes)).
-- **The map**: title bars with the name left and the facts right, Uniform as the default, live loading that keeps up with the walk, the folder in the window title, slim scrollbars, and a theme button that shows what a click gives you.
+- **A Statistics view**: the scan as a report, with files by size class, kind and age, the largest files and folders and the biggest extensions, every figure a click back to the map ([Statistics](Statistics)). Insights now keeps to what you can do about a full drive ([Insights](Insights)).
+- **A minimap** while you are zoomed in: the whole scan in a corner with a box where you are, or thin markers on the map's edges ([Navigating](Navigating#the-minimap)).
+- **Five shading looks** in place of cushion shading: Edges, Pillow, Sheen, Layers and Side light, each with its own settings ([Reading the map](Reading-the-Map#shading)).
+- **Scanning**: a live map that starts out close to the finished one, and Scan again and compare, which repeats the saved scan's method and opens Changes ([Saved scans and the start screen](Saved-Scans-and-the-Start-Screen)).
+- **Duplicates** on Ctrl+D, from the Insights tile or for one folder, with a much faster search ([Duplicates and empty folders](Duplicates-and-Empty-Folders)).
+- **The palette editor rebuilt** around hue, scheme and a readability check, and available in the browser at [palette.spacesharp.app](https://palette.spacesharp.app/) ([Custom palettes](Custom-Palettes)).
+- **Achievements as a journal**: what you unlocked down a dated line, beside the ones still out there ([Achievements](Achievements)).
 
-## New in 2.8
-
-- **A Modern map style**, now the default: rounded boxes with a gap around each, Windows' icon for each kind of file, labels that shrink with the box and add the size and date when there is room. Classic, the map as it was, is one setting or the **M** key away ([Reading the map](Reading-the-Map#two-styles)).
-- **A Uniform map** beside the Physical one: folders keep their share, every file in a folder is drawn the same size (**U**) ([Reading the map](Reading-the-Map#physical-or-uniform)).
-- **Export** is a window: pick the rows, CSV or TSV, the columns, a row limit, and see the file before you save it, or copy it straight to a spreadsheet ([Exporting](Exporting)).
-- **The right-click menu redone**: the item's facts and its share up top, only the rows that apply, the long tail under More, and new rows for selecting all files of a type, finding copies of a file, opening Changes at a folder and leaving a folder out of future scans ([Navigating](Navigating#the-right-click-menu)).
-- **Free space** as a quiet panel with a ring for the free share (**G** shows or hides it), sizes as exact bytes, a date toggle, and a Snapshot button that saves the map as a picture ([Navigating](Navigating#saving-the-map-as-a-picture)).
-- Settings › Treemap sorted by style, the shortcuts window regrouped, a crash in the autosave fixed, and a Recycle Bin report that names the file in use instead of calling a folder too long.
-
-Earlier releases are in the [changelog](https://github.com/SpaceSharpApp/SpaceSharp/blob/main/CHANGELOG.md).
+Every release is in the [changelog](https://github.com/SpaceSharpApp/SpaceSharp/blob/main/CHANGELOG.md).

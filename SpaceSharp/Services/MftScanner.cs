@@ -258,7 +258,7 @@ internal sealed class MftScanner
         {
             return string.Equals(new DriveInfo(rootPath).DriveFormat, "NTFS", StringComparison.OrdinalIgnoreCase);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // A drive that cannot even report its format is not one the file table scan can read.
             return false;
@@ -287,7 +287,7 @@ internal sealed class MftScanner
                 return false;
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             reason = ex.Message;
             return false;

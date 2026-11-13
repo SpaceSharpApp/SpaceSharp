@@ -14,7 +14,7 @@ namespace SpaceSharp;
 /// <summary>The Credits window, opened from About.</summary>
 public sealed class CreditsWindow : Window
 {
-    private const string Licenses = "https://github.com/SpaceSharpApp/SpaceSharp/blob/main/THIRD-PARTY.md";
+    private const string Licenses = AppInfo.Repository + "/blob/main/THIRD-PARTY.md";
 
     /// <summary>Builds the whole window in code: header with the logo, three text sections, a licenses link and Close.</summary>
     public CreditsWindow()
@@ -38,7 +38,7 @@ public sealed class CreditsWindow : Window
         var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 40, Height = 40, HorizontalAlignment = HorizontalAlignment.Center };
         RenderOptions.SetBitmapInterpolationMode(logo, BitmapInterpolationMode.HighQuality);
         headerStack.Children.Add(logo);
-        headerStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
+        headerStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Title"), FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
         headerStack.Children.Add(new TextBlock { Text = Strings.Get("Credits_Thanks"), Classes = { "dim" }, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
         header.Child = headerStack;
         root.Children.Add(header);
@@ -90,7 +90,7 @@ public sealed class CreditsWindow : Window
         {
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             _ = Dialog.Error(this, "SpaceSharp", Strings.Format("About_BrowserFailed", url, ex.Message));
         }

@@ -29,7 +29,7 @@ public partial class MainWindow
         {
             if (achievement == Achievement.Collector)
             {
-                _ = ShowCollectorAsync();
+                ShowCollectorAsync().Detach();
             }
             else
             {
@@ -75,7 +75,7 @@ public partial class MainWindow
         var kicker = new TextBlock
         {
             Text = Strings.Get(kickerKey).ToUpper(System.Globalization.CultureInfo.CurrentCulture),
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             FontWeight = FontWeight.Bold,
             LetterSpacing = 1.2,
             TextTrimming = TextTrimming.CharacterEllipsis
@@ -121,7 +121,7 @@ public partial class MainWindow
         words.Children.Add(new TextBlock
         {
             Text = unlocked ? AchievementHint(achievement) : Strings.Get("Ach_HiddenHint"),
-            FontSize = 12.5,
+            FontSize = FontSizes.Body,
             LineHeight = 18,
             Margin = new Thickness(0, 3, 0, 0),
             TextWrapping = TextWrapping.Wrap,
@@ -130,7 +130,7 @@ public partial class MainWindow
         if (collector && unlocked)
         {
             int total = Enum.GetValues<Achievement>().Length;
-            words.Children.Add(new TextBlock { Text = Strings.Format("Ach_Count", total, total), FontSize = 12, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 8, 0, 0), Classes = { "accent" } });
+            words.Children.Add(new TextBlock { Text = Strings.Format("Ach_Count", total, total), FontSize = FontSizes.Small, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 8, 0, 0), Classes = { "accent" } });
         }
 
         var body = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = collector ? 20 : 16 };
@@ -270,7 +270,7 @@ public partial class MainWindow
             var drive = new DriveInfo(path);
             return drive.IsReady ? (drive.TotalSize, drive.AvailableFreeSpace) : (0, 0);
         }
-        catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
         {
             // A drive that is gone is judged as a folder.
             return (0, 0);

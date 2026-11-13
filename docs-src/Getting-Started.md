@@ -14,6 +14,21 @@ All of them are on the [latest release](https://github.com/SpaceSharpApp/SpaceSh
 
 `SHA256SUMS.txt` on the release page lists the hash of every file.
 
+### From a package manager
+
+**winget** installs the MSI, which then updates itself:
+
+```powershell
+winget install ClearanceClarence.SpaceSharp
+```
+
+**Scoop** installs the portable exe for 64-bit or 32-bit Windows, and `scoop update spacesharp` brings in new versions:
+
+```powershell
+scoop bucket add spacesharp https://github.com/SpaceSharpApp/scoop-bucket
+scoop install spacesharp/spacesharp
+```
+
 **SmartScreen.** A new certificate earns its reputation over time; while it does, Windows may show "Windows protected your PC" the first time. Choose **More info**, then **Run anyway**. The publisher shown in that dialog is what the signature guarantees.
 
 ## The first scan

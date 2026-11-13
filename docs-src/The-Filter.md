@@ -21,7 +21,7 @@ Words like `and`, `with`, `the`, `show`, `find` are ignored, so `show me videos 
 
 ## The drawer
 
-The default filter face, a sheet over the right of the map, writes the same filter from controls:
+The default filter face, a sheet over the right of the map, writes the same filter from controls: It belongs to the map: switch to Insights, Statistics or Changes and it puts itself away, then comes back when you return, with the filter still applied. Pressing Filter or Ctrl+F from another view takes you to the map.
 
 - **Type**: a stacked bar of how the scan divides between file types, then one tile per type with its size; pick any number.
 - **Larger than**, **Smaller than**, **Not modified for**: scales with seven ticks each; click a tick and the span lights up.

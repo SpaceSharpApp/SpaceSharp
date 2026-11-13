@@ -388,7 +388,7 @@ private async Task<FsNode> ReadTreeFromFileTableAsync(string path, WalkOptions o
         ...
         return await _scanner.ScanAsync(path, options, token);
     }
-    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
+    catch (Exception ex) when (ex.IsFileSystemFailure() || ex is IndexOutOfRangeException or ArgumentException)
     {
         ...
         return await _scanner.ScanAsync(path, options, token);
@@ -1004,10 +1004,33 @@ When a method throws something the caller is expected to catch, say which and wh
 Name the exceptions the operation is known to throw, with `when` to list several.
 
 ```csharp
-catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
 ```
 
+The two sets that come up everywhere have a name in `Failures` (`SpaceSharp.Core/Util/Failures.cs`), so the rule for what counts is written once:
+
+```csharp
+catch (Exception ex) when (ex.IsFileSystemFailure())                        // missing, locked, too long, not allowed
+catch (Exception ex) when (ex.IsFileSystemFailure() || ex is JsonException) // the same, plus what this call adds
+catch (Exception ex) when (ex.IsLaunchFailure())                            // Windows could not start or open it
+```
+
+**Don't** write `ex is IOException or UnauthorizedAccessException` out again. It was once spelled sixty times with a dozen variations, and each site had decided for itself what "the file system said no" means. If a third set turns up in more than a handful of places, give it a name in `Failures` too.
+
 Not `catch (Exception)` because "something might go wrong". A `catch (Exception)` or a bare `catch` is for the few places where anything at all may fail and the app must carry on regardless (the crash reporter, COM calls into the Explorer shell, the update check, the clipboard), and the comment inside says that.
+
+### Fix the class, not the case
+
+When the same bug or the same line turns up a second time, stop and ask what would make it impossible, and fix that. Two rules in this codebase came from doing so:
+
+- **Theme brushes come from `ThemeBrush`.** The colors live in the theme dictionaries, and a plain `FindResource("TextDim")` does not look there: it returns null and the fallback quietly wins. Code asks `this.ThemeBrush("TextDim", Brushes.Gray)` (`SpaceSharp/Util/ThemeResources.cs`), and XAML and bindings use `DynamicResource` and `GetResourceObservable` as before.
+- **A fact is written once.** The repository address is `AppInfo.Repository`; links are built from it. The same goes for any URL, path, limit or name that two files need.
+- **Text sizes have names.** Code-built windows use `FontSizes.Body`, `FontSizes.Caption` and the rest of the scale in `SpaceSharp/Util/FontSizes.cs`, never a number. A size that appears once and belongs to one drawing (a big figure, a key cap) may stay a number next to the code that needs it.
+- **Settings save themselves.** Set the property and stop. The app writes `settings.json` on a timer and at exit, and `Save()` writes nothing when nothing changed. Call `Save()` yourself only where the file must be on disk before something else reads it, such as a restart.
+- **A task nobody awaits is detached.** `ScanAsync(path).Detach();`, not `_ = ScanAsync(path);`. A task dropped with `_ =` keeps its exception until the garbage collector finds it; `Detach` (`SpaceSharp/Util/BackgroundTasks.cs`) sends it to the crash report at once. `_ =` stays for results that really are ignored, such as a dialog's answer or a native call's status.
+- **One Save dialog.** `await this.PickSavePathAsync(title, name, typeName, extension)` (`SpaceSharp/Util/SaveDialog.cs`).
+- **A view is a control of its own.** `InsightsPage`, `StatisticsPage` and `ChangesPage` (`SpaceSharp/Views`) each build themselves and know the window only through a small host interface (`IInsightsHost` and so on) that says what the view needs: the scan, and the few things only the window can do. `FilterPanel` follows the same rule but is a plain class, since its two faces sit in different places of the window. The window implements each interface explicitly, in the partial named after the view. A new view follows that shape and does not become another `MainWindow.Something.cs`; what several views share goes in `ViewParts`. What a view decides (labels, filters, table rows) belongs in Core with a test, and the view only draws it.
+- **Shared fixed colors live in `Chrome`.** The floating-card shadow and the "good" green are defined once in `SpaceSharp/Util/Chrome.cs`. Colors that change with the theme stay in the theme dictionaries.
 
 ### Translate at the boundary
 
@@ -1081,7 +1104,7 @@ Before a pull request, read the diff once with only these in mind:
 - Is there a block three levels deep that an early `return` or `continue` would flatten?
 - Is there a ternary inside a ternary? A condition with more than three terms without a name?
 - Is any method longer than a screen, or doing two things its name does not say?
-- Is any expression written twice?
+- Is any expression written twice? Is this the second fix of its kind, and is there a cause to fix once?
 - Is there a body without braces, a `catch` on one line, two declarations on one line?
 - Is `var` used where the type is not on the right, or the type repeated where it is?
 - Is there a `!` that a local, a pattern or `OfType<T>()` would remove?

@@ -34,7 +34,7 @@ public sealed class ExportWindow : Window
     private IReadOnlyList<FsNode> _rows = Array.Empty<FsNode>();
 
     private readonly ComboBox _sourceBox = new() { MinWidth = 200 };
-    private readonly TextBlock _facts = new() { FontSize = 12.5, Classes = { "dim" }, Margin = new Thickness(0, 3, 0, 0) };
+    private readonly TextBlock _facts = new() { FontSize = FontSizes.Body, Classes = { "dim" }, Margin = new Thickness(0, 3, 0, 0) };
     private readonly List<RadioButton> _delimiters = new();
     private ExportDelimiter _delimiter = ExportDelimiter.Comma;   // the picked delimiter, kept apart from the radios so a rebuild never loses it
     private readonly Dictionary<ExportColumns, CheckBox> _columnBoxes = new();
@@ -42,12 +42,12 @@ public sealed class ExportWindow : Window
     private readonly ToggleSwitch _folders = new() { OnContent = null, OffContent = null, MinWidth = 0 };
     private readonly ToggleSwitch _header = new() { OnContent = null, OffContent = null, MinWidth = 0 };
     private readonly ToggleSwitch _separators = new() { OnContent = null, OffContent = null, MinWidth = 0 };
-    private readonly TextBlock _previewCount = new() { FontSize = 11.5, Classes = { "dim" } };
+    private readonly TextBlock _previewCount = new() { FontSize = FontSizes.Detail, Classes = { "dim" } };
     private readonly StackPanel _previewLines = new();
-    private readonly TextBlock _previewEnd = new() { FontSize = 12, Margin = new Thickness(12, 2, 12, 12), Classes = { "dim" } };
+    private readonly TextBlock _previewEnd = new() { FontSize = FontSizes.Small, Margin = new Thickness(12, 2, 12, 12), Classes = { "dim" } };
     private readonly TextBox _fileName = new() { MinWidth = 200 };
-    private readonly TextBlock _extension = new() { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
-    private readonly TextBlock _sizeNote = new() { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+    private readonly TextBlock _extension = new() { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+    private readonly TextBlock _sizeNote = new() { FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly Button _save = new() { Classes = { "primary" }, MinWidth = 96, Height = 32, IsDefault = true };
     private readonly Button _copy = new() { Classes = { "tool" }, Height = 32 };
     private bool _building = true;
@@ -108,7 +108,7 @@ public sealed class ExportWindow : Window
         DockPanel.SetDock(_sourceBox, Dock.Right);
         head.Children.Add(_sourceBox);
         var titles = new StackPanel();
-        titles.Children.Add(new TextBlock { Text = Strings.Get("Export_Heading"), FontSize = 18, FontWeight = FontWeight.SemiBold });
+        titles.Children.Add(new TextBlock { Text = Strings.Get("Export_Heading"), FontSize = FontSizes.Title, FontWeight = FontWeight.SemiBold });
         titles.Children.Add(_facts);
         head.Children.Add(titles);
         return head;
@@ -128,7 +128,7 @@ public sealed class ExportWindow : Window
         AddDelimiter(formatCard, ExportDelimiter.Tab, "Export_Tab", "Export_Tab_Desc", first: false);
         stack.Children.Add(Card(formatCard));
 
-        var all = new Button { Content = Strings.Get("Export_All"), Classes = { "link" }, FontSize = 11.5, Padding = new Thickness(0) };
+        var all = new Button { Content = Strings.Get("Export_All"), Classes = { "link" }, FontSize = FontSizes.Detail, Padding = new Thickness(0) };
         all.Click += (_, _) =>
         {
             foreach (CheckBox box in _columnBoxes.Values)
@@ -142,7 +142,7 @@ public sealed class ExportWindow : Window
         int index = 0;
         foreach (ExportColumns column in TableExport.Order)
         {
-            var box = new CheckBox { Content = ColumnName(column), MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), FontSize = 13, Height = 30 };
+            var box = new CheckBox { Content = ColumnName(column), MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), FontSize = FontSizes.Emphasis, Height = 30 };
             box.IsCheckedChanged += (_, _) => Refresh();
             // Two columns, filled down the left then down the right.
             int rows = (TableExport.Order.Length + 1) / 2;
@@ -182,8 +182,8 @@ public sealed class ExportWindow : Window
     private void AddDelimiter(StackPanel card, ExportDelimiter delimiter, string nameKey, string descriptionKey, bool first)
     {
         var text = new StackPanel();
-        text.Children.Add(new TextBlock { Text = Strings.Get(nameKey), FontSize = 13 });
-        text.Children.Add(new TextBlock { Text = Strings.Get(descriptionKey), FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
+        text.Children.Add(new TextBlock { Text = Strings.Get(nameKey), FontSize = FontSizes.Emphasis });
+        text.Children.Add(new TextBlock { Text = Strings.Get(descriptionKey), FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
         var radio = new RadioButton { Content = text, GroupName = "delimiter", Tag = delimiter, MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), Margin = new Thickness(0, 7, 0, 7), VerticalContentAlignment = VerticalAlignment.Top };
         radio.IsCheckedChanged += (_, _) =>
         {
@@ -214,10 +214,10 @@ public sealed class ExportWindow : Window
         DockPanel.SetDock(control, Dock.Right);
         row.Children.Add(control);
         var labels = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 12, 0) };
-        labels.Children.Add(new TextBlock { Text = title, FontSize = 13 });
+        labels.Children.Add(new TextBlock { Text = title, FontSize = FontSizes.Emphasis });
         if (description is not null)
         {
-            labels.Children.Add(new TextBlock { Text = description, FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
+            labels.Children.Add(new TextBlock { Text = description, FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
         }
         row.Children.Add(labels);
         if (first)
@@ -242,7 +242,7 @@ public sealed class ExportWindow : Window
             DockPanel.SetDock(trailing, Dock.Right);
             row.Children.Add(trailing);
         }
-        row.Children.Add(new TextBlock { Text = title.ToUpperInvariant(), FontSize = 11.5, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } });
+        row.Children.Add(new TextBlock { Text = title.ToUpperInvariant(), FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } });
         return row;
     }
 
@@ -261,7 +261,7 @@ public sealed class ExportWindow : Window
         DockPanel.SetDock(title, Dock.Top);
         DockPanel.SetDock(_previewCount, Dock.Right);
         title.Children.Add(_previewCount);
-        title.Children.Add(new TextBlock { Text = Strings.Get("Export_Preview").ToUpperInvariant(), FontSize = 11.5, FontWeight = FontWeight.SemiBold, Classes = { "dim" } });
+        title.Children.Add(new TextBlock { Text = Strings.Get("Export_Preview").ToUpperInvariant(), FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, Classes = { "dim" } });
         column.Children.Add(title);
         // The file as it will be written, not a table: the delimiter and the quoting are part of what is being previewed.
         var scroller = new ScrollViewer { Content = _previewLines, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
@@ -333,7 +333,6 @@ public sealed class ExportWindow : Window
         _settings.ExportHeader = options.Header;
         _settings.ExportSeparators = options.Separators;
         _settings.ExportLimit = options.Limit;
-        _settings.Save();
     }
 
     /// <summary>The options as the controls stand.</summary>
@@ -422,7 +421,7 @@ public sealed class ExportWindow : Window
         {
             Text = TableExport.Render(rows, _measure, previewOptions, out _, _scanBytes).TrimEnd(),
             FontFamily = new FontFamily("Cascadia Mono, Consolas, Menlo, monospace"),
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             LineHeight = 19,
             Margin = new Thickness(12, 10)
         });
@@ -461,14 +460,7 @@ public sealed class ExportWindow : Window
         ExportOptions options = Options();
         string stem = string.IsNullOrWhiteSpace(_fileName.Text) ? Strings.Get("Export_Title") : _fileName.Text.Trim();
         string label = options.Delimiter == ExportDelimiter.Tab ? "TSV" : "CSV";
-        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = Strings.Get("Export_Save"),
-            SuggestedFileName = stem + "." + options.Extension,
-            DefaultExtension = options.Extension,
-            FileTypeChoices = new[] { new FilePickerFileType(label) { Patterns = new[] { "*." + options.Extension } } }
-        });
-        string? path = file?.TryGetLocalPath();
+        string? path = await this.PickSavePathAsync(Strings.Get("Export_Save"), stem + "." + options.Extension, label, options.Extension);
         if (path is null)
         {
             return;
@@ -484,7 +476,7 @@ public sealed class ExportWindow : Window
             _main.ShowStatus(Strings.Format("Status_Exported", written, path));
             Close();
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             await Dialog.Error(this, Strings.Get("Export_Title"), ex.Message);
         }

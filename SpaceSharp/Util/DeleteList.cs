@@ -60,7 +60,7 @@ internal static class DeleteList
         var show = new Button
         {
             Classes = { "link" },
-            FontSize = 12.5,
+            FontSize = FontSizes.Body,
             Padding = new Thickness(12, 7),
             HorizontalAlignment = HorizontalAlignment.Left,
             Content = Strings.Format("Delete_ShowRest", rest, SizeFormatter.Format(restBytes))
@@ -88,15 +88,15 @@ internal static class DeleteList
         row.Children.Add(icon);
 
         var text = new StackPanel();
-        var name = new TextBlock { Text = node.Name, FontSize = 13, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis };
-        var where = new TextBlock { Text = PathLoops.Compact(node.Parent?.FullPath ?? string.Empty, 90), FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+        var name = new TextBlock { Text = node.Name, FontSize = FontSizes.Emphasis, FontWeight = FontWeight.SemiBold, TextTrimming = TextTrimming.CharacterEllipsis };
+        var where = new TextBlock { Text = PathLoops.Compact(node.Parent?.FullPath ?? string.Empty, 90), FontSize = FontSizes.Detail, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
         text.Children.Add(name);
         text.Children.Add(where);
         ToolTip.SetTip(text, node.FullPath);
         Grid.SetColumn(text, 1);
         row.Children.Add(text);
 
-        var size = new TextBlock { Text = SizeFormatter.Format(node.SizeFor(measure)), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center };
+        var size = new TextBlock { Text = SizeFormatter.Format(node.SizeFor(measure)), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center };
         Grid.SetColumn(size, 2);
         row.Children.Add(size);
         return Hairline(host, row, "Control");
@@ -120,7 +120,7 @@ internal static class DeleteList
     private static TextBlock Small(string text) => new()
     {
         Text = text.ToUpper(System.Globalization.CultureInfo.CurrentCulture),
-        FontSize = 11,
+        FontSize = FontSizes.Caption,
         LetterSpacing = 0.5,
         Classes = { "dim" }
     };

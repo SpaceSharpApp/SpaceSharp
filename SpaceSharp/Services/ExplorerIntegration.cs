@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
@@ -56,7 +57,7 @@ public static class ExplorerIntegration
             {
                 Registry.CurrentUser.DeleteSubKeyTree(root + Verb, throwOnMissingSubKey: false);
             }
-            catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
             {
                 // A key that cannot be removed is left behind; the setting still turns off.
                 Debug.WriteLine(ex);

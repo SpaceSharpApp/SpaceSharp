@@ -142,10 +142,7 @@ public partial class MainWindow
                 ShowView(MainView.Changes);
                 await Settle();
                 // The biggest mover open, so the table shows a folder's inside too.
-                if (_changeRows.FirstOrDefault(row => row.CanOpen) is { } biggestMover)
-                {
-                    ToggleChangeRow(biggestMover);
-                }
+                ChangesView.OpenFirstFolders(1);
                 break;
             case "light":
                 _settings.Theme = "Light";
@@ -276,14 +273,8 @@ public partial class MainWindow
                 // Unlike the README's scene: every row, unchanged ones included, sorted by size now, two folders open.
                 ShowView(MainView.Changes);
                 await Settle();
-                _changesOnly = false;
-                _changeSort = ChangeSort.Now;
-                _changeSortDescending = true;
-                RefreshChanges();
-                foreach (ChangeRow openableRow in _changeRows.Where(row => row.CanOpen).Take(2).ToList())
-                {
-                    ToggleChangeRow(openableRow);
-                }
+                ChangesView.ShowEverythingBySize();
+                ChangesView.OpenFirstFolders(2);
                 break;
             case "wiki-inspect-selection":
                 if (_root?.FindDescendant(System.IO.Path.Combine(_root.FullPath, "Users", "User", "Videos", "Recordings")) is { } recordings)
@@ -458,7 +449,7 @@ public partial class MainWindow
             stack.Children.Add(new TextBlock
             {
                 Text = Strings.Get(dark ? "Palette_GroupDark" : "Palette_GroupLight"),
-                FontSize = 15,
+                FontSize = FontSizes.Subheading,
                 FontWeight = Avalonia.Media.FontWeight.Bold,
                 Margin = new Thickness(0, 0, 0, 4)
             });

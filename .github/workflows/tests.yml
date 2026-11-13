@@ -1,6 +1,6 @@
 name: Tests
 
-# Test only. This is the only workflow: it never publishes, packs or uploads anything built from SpaceSharp.
+# Build and test only. This is the only workflow: it never publishes, packs or uploads anything built from SpaceSharp.
 # Releases are built and signed on the developer's PC with installer\release.ps1.
 
 on:
@@ -27,6 +27,10 @@ jobs:
       - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
+
+      # Warnings are errors here, so a style or analyzer warning cannot land on main.
+      - name: Build without warnings
+        run: dotnet build SpaceSharp/SpaceSharp.csproj --configuration Release -warnaserror
 
       - name: Test
         run: dotnet test SpaceSharp.Tests/SpaceSharp.Tests.csproj --configuration Release

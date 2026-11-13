@@ -104,7 +104,7 @@ public partial class SettingsWindow : Window
 
         if (_tab == "General")
         {
-            Body.Children.Add(new TextBlock { Text = Strings.Get("Settings_SavedIn"), FontSize = 12, Margin = new Thickness(0, 0, 0, 8), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            Body.Children.Add(new TextBlock { Text = Strings.Get("Settings_SavedIn"), FontSize = FontSizes.Small, Margin = new Thickness(0, 0, 0, 8), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         }
     }
 
@@ -133,7 +133,7 @@ public partial class SettingsWindow : Window
             BorderThickness = new Thickness(0),
             Background = Brushes.Transparent,
             FontFamily = Mono,
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             Margin = new Thickness(16, 8, 16, 12),
             TextWrapping = TextWrapping.NoWrap
         });
@@ -155,7 +155,7 @@ public partial class SettingsWindow : Window
                 ExplorerIntegration.Uninstall();
             }
         }
-        catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
         {
             _ = Dialog.Error(this, Strings.Get("Settings_ExplorerMenu"), ex.Message);
         }

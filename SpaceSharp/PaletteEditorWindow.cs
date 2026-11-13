@@ -45,7 +45,7 @@ public sealed class PaletteEditorWindow : Window
     // chrome
     private readonly TreemapControl _preview = new() { Focusable = false };
     private readonly Button _saveButton = new() { Classes = { "primary" }, IsDefault = true, Margin = new Thickness(6, 0, 0, 0) };
-    private readonly TextBlock _status = new() { VerticalAlignment = VerticalAlignment.Center, FontSize = 12, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+    private readonly TextBlock _status = new() { VerticalAlignment = VerticalAlignment.Center, FontSize = FontSizes.Small, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
     private readonly Dictionary<ColorMode, Button> _modeButtons = new();
     private readonly Dictionary<PaletteTheme, Button> _themeButtons = new();
     private TextBox _nameBox = null!;
@@ -184,11 +184,11 @@ public sealed class PaletteEditorWindow : Window
         var right = new DockPanel();
         var previewHead = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(16, 9), Classes = { "frame" } };
         var headRow = new DockPanel();
-        var note = new TextBlock { Text = Strings.Get("PaletteEd_PreviewNote") + " · " + Strings.Get("PaletteEd_ClickPreview"), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+        var note = new TextBlock { Text = Strings.Get("PaletteEd_PreviewNote") + " · " + Strings.Get("PaletteEd_ClickPreview"), FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
         DockPanel.SetDock(note, Dock.Right);
         headRow.Children.Add(note);
         var modes = new StackPanel { Orientation = Orientation.Horizontal };
-        modes.Children.Add(new TextBlock { Text = Strings.Get("PaletteEd_Preview"), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), Classes = { "dim" } });
+        modes.Children.Add(new TextBlock { Text = Strings.Get("PaletteEd_Preview"), FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0), Classes = { "dim" } });
         foreach ((ColorMode colorMode, string nameKey) in new[] { (ColorMode.ByDepth, "Main_Depth"), (ColorMode.ByBranch, "Main_TopFolder"), (ColorMode.ByFileType, "Main_FileType") })
         {
             var button = new Button { Classes = { "tab" }, Content = Strings.Get(nameKey), Height = 28 };
@@ -272,7 +272,7 @@ public sealed class PaletteEditorWindow : Window
         (_sat, _satValue) = RecipeSlider(column, Strings.Get("PaletteEd_Saturation"), 0, 100, value => _recipe.Saturation = value / 100);
         (_light, _lightValue) = RecipeSlider(column, Strings.Get("PaletteEd_Lightness"), 10, 90, value => _recipe.Lightness = value / 100);
         // the scheme cards take the full width: five names do not fit beside a label
-        column.Children.Add(new TextBlock { Text = Strings.Get("PaletteEd_Scheme"), FontSize = 12.5, Margin = new Thickness(0, 2, 0, -6) });
+        column.Children.Add(new TextBlock { Text = Strings.Get("PaletteEd_Scheme"), FontSize = FontSizes.Body, Margin = new Thickness(0, 2, 0, -6) });
         column.Children.Add(BuildSchemeCards());
 
         // depth and files
@@ -285,7 +285,7 @@ public sealed class PaletteEditorWindow : Window
         // guard
         _guard = new Border { CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(12, 9), Classes = { "card", "flat" } };
         var guardRow = new DockPanel();
-        _fixButton = new Button { Classes = { "link" }, Content = Strings.Get("PaletteEd_Fix"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center };
+        _fixButton = new Button { Classes = { "link" }, Content = Strings.Get("PaletteEd_Fix"), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center };
         _fixButton.Click += (_, _) =>
         {
             PaletteRecipe.Fix(_draft);
@@ -296,13 +296,13 @@ public sealed class PaletteEditorWindow : Window
         _guardDot = new Border { Width = 8, Height = 8, CornerRadius = new CornerRadius(4), Margin = new Thickness(0, 0, 10, 0), VerticalAlignment = VerticalAlignment.Center };
         DockPanel.SetDock(_guardDot, Dock.Left);
         guardRow.Children.Add(_guardDot);
-        _guardText = new TextBlock { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap };
+        _guardText = new TextBlock { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap };
         guardRow.Children.Add(_guardText);
         _guard.Child = guardRow;
         column.Children.Add(_guard);
 
         // advanced
-        _advancedToggle = new Button { Classes = { "link" }, FontSize = 12.5, HorizontalAlignment = HorizontalAlignment.Left, Padding = new Thickness(0, 6), Margin = new Thickness(0, 4, 0, 0) };
+        _advancedToggle = new Button { Classes = { "link" }, FontSize = FontSizes.Body, HorizontalAlignment = HorizontalAlignment.Left, Padding = new Thickness(0, 6), Margin = new Thickness(0, 4, 0, 0) };
         _advancedToggle.Click += (_, _) => SetAdvanced(!_advanced);
         column.Children.Add(_advancedToggle);
         _advancedPanel = BuildAdvanced();
@@ -318,7 +318,7 @@ public sealed class PaletteEditorWindow : Window
     private static TextBlock SectionLabel(string text) => new()
     {
         Text = text.ToUpper(CultureInfo.CurrentCulture),
-        FontSize = 11,
+        FontSize = FontSizes.Caption,
         FontWeight = FontWeight.SemiBold,
         LetterSpacing = 0.4,
         Margin = new Thickness(0, 4, 0, -4),
@@ -332,7 +332,7 @@ public sealed class PaletteEditorWindow : Window
     private static DockPanel LabeledRow(string label, Control content)
     {
         var row = new DockPanel { LastChildFill = true };
-        var text = new TextBlock { Text = label, Width = 92, FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
+        var text = new TextBlock { Text = label, Width = 92, FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 10, 0) };
         DockPanel.SetDock(text, Dock.Left);
         row.Children.Add(text);
         row.Children.Add(content);
@@ -367,7 +367,7 @@ public sealed class PaletteEditorWindow : Window
             ApplyRecipe();
             RefreshRecipeControls(skipSliders: true);
         };
-        var valueText = new TextBlock { Width = valueWidth, FontSize = 12, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        var valueText = new TextBlock { Width = valueWidth, FontSize = FontSizes.Small, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         var row = new DockPanel();
         DockPanel.SetDock(valueText, Dock.Right);
         row.Children.Add(valueText);
@@ -409,7 +409,7 @@ public sealed class PaletteEditorWindow : Window
             }
             var body = new StackPanel { Spacing = 6 };
             body.Children.Add(dotRow);
-            body.Children.Add(new TextBlock { Text = Strings.Get(nameKey), FontSize = 11.5, HorizontalAlignment = HorizontalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
+            body.Children.Add(new TextBlock { Text = Strings.Get(nameKey), FontSize = FontSizes.Detail, HorizontalAlignment = HorizontalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
             var card = new Border { Child = body, Padding = new Thickness(4, 8, 4, 6), Margin = new Thickness(0, 0, 6, 0), CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Cursor = new Cursor(StandardCursorType.Hand), Classes = { "card", "flat" } };
             ToolTip.SetTip(card, Strings.Get(descriptionKey));
             PaletteSpread chosen = spread;
@@ -433,7 +433,7 @@ public sealed class PaletteEditorWindow : Window
         var box = new Border { Child = parts, Height = 30, Classes = { "segments" } };
         for (int i = 0; i < 3; i++)
         {
-            var button = new Button { Classes = { "segment-part" }, FontSize = 12 };
+            var button = new Button { Classes = { "segment-part" }, FontSize = FontSizes.Small };
             if (i > 0)
             {
                 button.BorderThickness = new Thickness(1, 0, 0, 0);
@@ -483,7 +483,7 @@ public sealed class PaletteEditorWindow : Window
             RefreshRecipeControls(skipSliders: true);
             RefreshColors();
         };
-        var hint = new TextBlock { Text = Strings.Get("PaletteEd_FilesSub"), Width = 110, FontSize = 11.5, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
+        var hint = new TextBlock { Text = Strings.Get("PaletteEd_FilesSub"), Width = 110, FontSize = FontSizes.Detail, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), Classes = { "dim" } };
         var row = new DockPanel();
         DockPanel.SetDock(hint, Dock.Right);
         row.Children.Add(hint);
@@ -515,7 +515,7 @@ public sealed class PaletteEditorWindow : Window
 
         // the selected color
         var selectedHead = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        _resetCategory = new Button { Classes = { "link" }, Content = Strings.Get("PaletteEd_ResetDerived"), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, IsVisible = false };
+        _resetCategory = new Button { Classes = { "link" }, Content = Strings.Get("PaletteEd_ResetDerived"), FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, IsVisible = false };
         _resetCategory.Click += (_, _) =>
         {
             if (_selectedTarget == Target.Category)
@@ -532,7 +532,7 @@ public sealed class PaletteEditorWindow : Window
         panel.Children.Add(selectedHead);
 
         var hexRow = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 10 };
-        _selectedHex = new TextBox { FontFamily = Mono, FontSize = 12.5, Width = 110, Height = 30, MinHeight = 30, Padding = new Thickness(8, 0), VerticalContentAlignment = VerticalAlignment.Center };
+        _selectedHex = new TextBox { FontFamily = Mono, FontSize = FontSizes.Body, Width = 110, Height = 30, MinHeight = 30, Padding = new Thickness(8, 0), VerticalContentAlignment = VerticalAlignment.Center };
         _selectedHex.TextChanged += (_, _) =>
         {
             if (_updating)
@@ -560,7 +560,7 @@ public sealed class PaletteEditorWindow : Window
             }
         };
         hexRow.Children.Add(_selectedHex);
-        _selectedNote = new TextBlock { FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        _selectedNote = new TextBlock { FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
         hexRow.Children.Add(_selectedNote);
         panel.Children.Add(hexRow);
 
@@ -587,7 +587,7 @@ public sealed class PaletteEditorWindow : Window
     /// <summary>Small dim wrapped text.</summary>
     /// <param name="text">The text.</param>
     /// <returns>The text block.</returns>
-    private static TextBlock Small(string text) => new() { Text = text, FontSize = 11.5, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, -8, 0, 0), Classes = { "dim" } };
+    private static TextBlock Small(string text) => new() { Text = text, FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, -8, 0, 0), Classes = { "dim" } };
 
     /// <summary>A grid of swatch buttons with a caption under each; a click selects the color for editing.</summary>
     /// <param name="target">Which list the swatches show.</param>
@@ -616,7 +616,7 @@ public sealed class PaletteEditorWindow : Window
             swatch.Click += (_, _) => Select(target, index);
             var cell = new StackPanel { Spacing = 3, Margin = new Thickness(0, 0, 8, 8) };
             cell.Children.Add(swatch);
-            cell.Children.Add(new TextBlock { Text = SwatchCaption(target, i), FontSize = 11, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } });
+            cell.Children.Add(new TextBlock { Text = SwatchCaption(target, i), FontSize = FontSizes.Caption, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } });
             into.Add(swatch);
             grid.Children.Add(cell);
         }
@@ -656,7 +656,7 @@ public sealed class PaletteEditorWindow : Window
             }
             SetSelectedColor(Palette.FromHsl(_selHue.Value, _selSat.Value / 100, _selLight.Value / 100), fromHex: false);
         };
-        var valueText = new TextBlock { Width = 48, FontSize = 12, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+        var valueText = new TextBlock { Width = 48, FontSize = FontSizes.Small, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
         var row = new DockPanel();
         DockPanel.SetDock(valueText, Dock.Right);
         row.Children.Add(valueText);
@@ -780,7 +780,7 @@ public sealed class PaletteEditorWindow : Window
                 Color color = colorOf(i);
                 swatches[i].Background = new SolidColorBrush(color);
                 bool selected = _advanced && _selectedTarget == target && _selectedIndex == i;
-                swatches[i].BorderBrush = selected ? this.FindResource("Accent") as IBrush ?? Brushes.Orange : SwatchEdge;
+                swatches[i].BorderBrush = selected ? this.ThemeBrush("Accent", Brushes.Orange) : SwatchEdge;
                 double contrast = PaletteDraft.LabelCheck(color).Contrast;
                 ToolTip.SetTip(swatches[i], $"{PaletteDraft.ToHex(color)} · {contrast:0.0}:1");
                 swatches[i].Opacity = target == Target.Category && _draft.Categories[i] is null ? 0.8 : 1;
@@ -832,7 +832,7 @@ public sealed class PaletteEditorWindow : Window
                 dots[i].Background = new SolidColorBrush(sample[i]);
             }
             bool chosen = spread == _recipe.Spread;
-            card.BorderBrush = chosen ? this.FindResource("Accent") as IBrush ?? Brushes.Orange : this.FindResource("Stroke") as IBrush ?? Brushes.Gray;
+            card.BorderBrush = chosen ? this.ThemeBrush("Accent", Brushes.Orange) : this.ThemeBrush("Stroke", Brushes.Gray);
         }
 
         int filesChoice = _draft.Files is not null ? 2 : _draft.FileTint <= 0 ? 0 : 1;
@@ -965,7 +965,7 @@ public sealed class PaletteEditorWindow : Window
                 }
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or ArgumentException or NotSupportedException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException or NotSupportedException)
         {
             SetStatus(Strings.Get("PaletteEd_PictureFailed"), warn: true);
             return;
@@ -1105,14 +1105,7 @@ public sealed class PaletteEditorWindow : Window
     /// <summary>Saves the palette file anywhere the user picks, without installing it.</summary>
     private async Task ExportFileAsync()
     {
-        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = Strings.Get("PaletteEd_ExportFile").TrimEnd('…', '.'),
-            SuggestedFileName = _draft.FileName(),
-            DefaultExtension = "json",
-            FileTypeChoices = new[] { new FilePickerFileType("JSON") { Patterns = new[] { "*.json" } } }
-        });
-        string? path = file?.TryGetLocalPath();
+        string? path = await this.PickSavePathAsync(Strings.Get("PaletteEd_ExportFile").TrimEnd('…', '.'), _draft.FileName(), "JSON", "json");
         if (path is null)
         {
             return;
@@ -1122,7 +1115,7 @@ public sealed class PaletteEditorWindow : Window
             await File.WriteAllTextAsync(path, _draft.ToJson());
             SetStatus(Strings.Format("PaletteEd_SavedFile", path), warn: false);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             SetStatus(ex.Message, warn: true);
         }
@@ -1161,14 +1154,13 @@ public sealed class PaletteEditorWindow : Window
         {
             CustomPalettes.Save(_draft);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             await Dialog.Error(this, Strings.Get("PaletteEd_CouldNotSave"), ex.Message);
             return;
         }
         Palette.Reload();
         _settings.SetPalette(App.IsDark, _draft.Name);
-        _settings.Save();
         _main?.ApplySettings();
         Achievements.Current.Unlock(Achievement.Painter);
         Saved = true;

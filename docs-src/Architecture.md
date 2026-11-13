@@ -5,7 +5,7 @@ Two projects and a line between them. `SpaceSharp.Core` targets plain `net10.0` 
 ```
 scan ─────▶ FsNode tree ─────▶ Squarify + Grouping ─────▶ TreemapControl (render, zoom, input)
   │              │                                                │
-  │              ├──▶ FileFilter (dims the map)                   ├──▶ MainWindow partials: FilterPanel, Insights, InsightRows, Changes, Scans, Achievements, Tooltip, StatusBar, PalettePicker, Showcase
+  │              ├──▶ FileFilter (dims the map)                   ├──▶ Views: InsightsPage, StatisticsPage, ChangesPage, FilterPanel; MainWindow partials: Views, Scans, Achievements, Tooltip, StatusBar, PalettePicker, Showcase
   │              ├──▶ DriveInsights + ExtraInsights (the Insights rows)
   │              ├──▶ DuplicateFinder, EmptyFolders, PathLoops (the tools behind three rows)
   │              ├──▶ ScanCompare (baselines + gone items)
@@ -22,17 +22,17 @@ scan ─────▶ FsNode tree ─────▶ Squarify + Grouping ─�
 
 **Rendering and zoom** (`Controls/TreemapControl*.cs`). One custom Avalonia control in six partial files (fields, camera, layout, render, input, live). It draws every box itself in two render passes rather than creating a control per box, which is why tens of thousands of boxes stay fast. Zoom re-lays out the visible folder rather than scaling a picture; the camera animates between layouts, and the live map draws each snapshot in one step, with no animation between them.
 
-**Filter** (`Core/Services/FileFilter.cs`, `MainWindow.FilterPanel.cs`). Text is parsed into a `FilterSpec`; the tree is evaluated once per change and a folder stays lit when anything inside it matches. The drawer and the rail both write the same text.
+**Filter** (`Core/Services/FileFilter.cs`, `Views/FilterPanel.cs`). Text is parsed into a `FilterSpec`; the tree is evaluated once per change and a folder stays lit when anything inside it matches. The drawer and the rail both write the same text.
 
-**Statistics** (`Core/Services/Statistics.cs`, `MainWindow.Statistics.cs`). One tested pass over a folder: files per size class (one per doubling) split by kind, kinds, ages, the biggest extensions, slack, tiny and zero-byte files, empty folders, untouched files; with a comparison, the previous figures per class and extension from each file's baseline size and the gone files. The window draws it as cards and sends every click to the map as a filter.
+**Statistics** (`Core/Services/Statistics.cs`, `Views/StatisticsPage.cs`). One tested pass over a folder: files per size class (one per doubling) split by kind, kinds, ages, the biggest extensions, slack, tiny and zero-byte files, empty folders, untouched files; with a comparison, the previous figures per class and extension from each file's baseline size and the gone files. The window draws it as cards and sends every click to the map as a filter.
 
-**Insights** (`Core/Services/DriveInsights.cs`, `ExtraInsights.cs`, `MainWindow.Insights.cs`, `MainWindow.InsightRows.cs`). Pure, tested functions: bytes by type, by month, the cleanup suggestions (name patterns in `CachePatterns`), change totals, the free-space projection, and in `ExtraInsights` one extra pass over the tree for the games, media, developer, Downloads, hard links, small and empty, and deep and long rows. The window arranges the four tiles and the rows (`Row(...)` in `InsightRows`), remembers the open one in settings, and leaves rows with nothing to show out.
+**Insights** (`Core/Services/DriveInsights.cs`, `ExtraInsights.cs`, `Views/InsightsPage.cs`). Pure, tested functions: bytes by type, by month, the cleanup suggestions (name patterns in `CachePatterns`), change totals, the free-space projection, and in `ExtraInsights` one extra pass over the tree for the games, media, developer, Downloads, hard links, small and empty, and deep and long rows. The window arranges the four tiles and the rows (`Row(...)` in `InsightRows`), remembers the open one in settings, and leaves rows with nothing to show out.
 
 **Duplicates, empty folders and loops** (`Core/Services/DuplicateFinder.cs`, `EmptyFolders.cs`, `Core/Util/PathLoops.cs`, `DuplicatesWindow.cs`, `EmptyFoldersWindow.cs`). `DuplicateFinder.Find` groups by size, hashes three samples of each file (first, middle and last 16 KB), then reads whole files, big ones side by side with an early exit at the first difference, on a few threads with throttled progress; `EmptyFolders.Find` lists the topmost folders with no files below them; `PathLoops.Find` spots a path that repeats inside itself and `Compact` shortens long paths from the middle. The two windows are virtualizing lists (`PickList`) whose ticks live in row models, and both hand their deletions to `MainWindow.RemovedFromDiskAsync` so every view follows. `DeepDelete` (app, Windows) removes a tree with long-path names, without recursion, bottom up.
 
 **Achievements** (`Core/Services/Achievements.cs`, `MainWindow.Achievements.cs`, `AchievementsWindow.cs`). An enum, a small JSON store with an `Unlocked` event, and judging functions fed with `ScanFacts` after a scan and with the comparison after a compare; the window shows the toast queue and the list. The mock PC uses an in-memory store.
 
-**Changes** (`Core/Services/ScanCompare.cs`, `MainWindow.Changes.cs`). `ScanCompare.Apply` walks two trees matching names within each folder, writes baseline sizes onto the current nodes and returns a `ScanComparison` holding what is gone per folder. The view is a virtualized table over that.
+**Changes** (`Core/Services/ScanCompare.cs`, `Views/ChangesPage.cs`). `ScanCompare.Apply` walks two trees matching names within each folder, writes baseline sizes onto the current nodes and returns a `ScanComparison` holding what is gone per folder. The view is a virtualized table over that.
 
 **Saved scans** (`Core/Services/ScanFile.cs`). A gzip-compressed binary of the tree with a header (root, time, method, free space). Autosaves live per root, with a `.prev` copy for comparison.
 
@@ -50,7 +50,7 @@ scan ─────▶ FsNode tree ─────▶ Squarify + Grouping ─�
 | A built-in palette | `BuildSchemes()` in `Util/Palette.cs` with twelve folder colors and a `PaletteAbout_` string |
 | A file type | One line under its `[Category]` in `Core/Resources/FileTypes.txt` (987 extensions; a test rejects duplicates); the filter's words in `FileFilter.TypeWords` |
 | A cleanup pattern | `CachePatterns` in `DriveInsights.cs` and a `Cleanup_` string pair |
-| An Insights row | A `Build…Row` method in `MainWindow.InsightRows.cs` called from `BuildRows`, its facts computed in `ExtraInsights` with a test, and `Insights_Row…` strings |
+| An Insights row | A `Build…Row` method in `Views/InsightsPage.cs` called from `BuildRows`, its facts computed in `ExtraInsights` with a test, and `Insights_Row…` strings |
 | An achievement | A value in the `Achievement` enum, `Ach_<Id>_Name` and `_Hint` strings (a test checks every value has them), and a judging line in `Achievements` |
 | An icon | A line in `tools/make-icons.py`'s table (Lucide), which regenerates `Themes/Icons.axaml` |
 | A translation | One more `Strings.<culture>.resx` with a `Meta_MachineTranslated` entry; it appears in the language list on its own ([Translating](Translating)) |

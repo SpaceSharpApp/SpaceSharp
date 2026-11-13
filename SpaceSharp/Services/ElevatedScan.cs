@@ -265,7 +265,7 @@ public static class ElevatedScan
                 }
                 return 0;
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is IndexOutOfRangeException or ArgumentException)
             {
                 // The window shows this message; the helper has no UI of its own.
                 lock (writer)
@@ -277,7 +277,7 @@ public static class ElevatedScan
                 return 1;
             }
         }
-        catch (Exception ex) when (ex is IOException or TimeoutException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is TimeoutException)
         {
             // The pipe itself failed, so there is no one to tell; the window times out on its side.
             Debug.WriteLine(ex);

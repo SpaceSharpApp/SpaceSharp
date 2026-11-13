@@ -112,6 +112,7 @@ public sealed class StatisticsReport
     /// <summary>The biggest extensions by bytes, largest first, as many as were asked for.</summary>
     public IReadOnlyList<ExtensionTotal> Extensions { get; private set; } = Array.Empty<ExtensionTotal>();
 
+    private static readonly string[] ClassUnits = { "B", "KB", "MB", "GB", "TB", "PB" };
     private static readonly int KindCount = Enum.GetValues<FileCategory>().Length;
     private static readonly int AgeCount = Enum.GetValues<StatAge>().Length;
 
@@ -172,6 +173,83 @@ public sealed class StatisticsReport
         return bytes + units[unit];
     }
 
+    /// <summary>The unit a size class is listed under.</summary>
+    /// <param name="index">A class index from <see cref="ClassOf"/>.</param>
+    /// <returns>"B" for the classes below 1 KB, then "KB", "MB" and so on, ten classes to a unit.</returns>
+    public static string ClassUnit(int index)
+    {
+        int unit = index <= 0 ? 0 : (index - 1) / 10;
+        return ClassUnits[Math.Min(unit, ClassUnits.Length - 1)];
+    }
+
+    /// <summary>A size class's label within its unit.</summary>
+    /// <param name="index">A class index from <see cref="ClassOf"/>.</param>
+    /// <returns>"0", "1", "2–3" up to "512–1023" for bytes, then "1–2" to "512–1024" for each unit above.</returns>
+    public static string ClassLabel(int index)
+    {
+        if (index <= 0)
+        {
+            return "0";
+        }
+        int unit = (index - 1) / 10;
+        long low = 1L << ((index - 1) % 10);
+        if (unit == 0)
+        {
+            return low == 1 ? "1" : $"{low}–{2 * low - 1}";
+        }
+        return $"{low}–{2 * low}";
+    }
+
+    /// <summary>The filter text that picks an age class on the map.</summary>
+    /// <param name="age">The class.</param>
+    /// <returns>Files only, bounded by the class's two ages; the youngest and oldest classes have one bound.</returns>
+    public static string AgeFilter(StatAge age) => age switch
+    {
+        StatAge.Today => "is:file newer than 1 day",
+        StatAge.ThisWeek => "is:file older than 1 day newer than 1 week",
+        StatAge.ThisMonth => "is:file older than 1 week newer than 1 month",
+        StatAge.ThisYear => "is:file older than 1 month newer than 1 year",
+        StatAge.OneToTwoYears => "is:file older than 1 year newer than 2 years",
+        StatAge.TwoToFiveYears => "is:file older than 2 years newer than 5 years",
+        _ => "is:file older than 5 years"
+    };
+
+    /// <summary>The extensions as a table for export: the report's own list, so compute it with a large enough count to hold them all.</summary>
+    /// <returns>
+    /// The column names and one row per extension. Numbers are plain bytes and counts in the invariant culture, so any
+    /// program reads them; the change column is there only when the report compares with an older scan.
+    /// </returns>
+    public (IReadOnlyList<string> Header, IReadOnlyList<IReadOnlyList<string>> Rows) ExtensionTable()
+    {
+        System.Globalization.CultureInfo plain = System.Globalization.CultureInfo.InvariantCulture;
+        bool compared = PreviousBytes is not null;
+        var header = new List<string> { "Extension", "Kind", "Size (bytes)", "Files", "Average (bytes)", "Share of scan (%)" };
+        if (compared)
+        {
+            header.Add("Change since compared scan (bytes)");
+        }
+
+        var rows = new List<IReadOnlyList<string>>(Extensions.Count);
+        foreach (ExtensionTotal total in Extensions)
+        {
+            var cells = new List<string>
+            {
+                total.Extension,
+                total.Category.ToString(),
+                total.Bytes.ToString(plain),
+                total.Files.ToString(plain),
+                (total.Files > 0 ? total.Bytes / total.Files : 0).ToString(plain),
+                (100.0 * InspectSummary.Fraction(total.Bytes, Bytes)).ToString("0.0", plain)
+            };
+            if (compared)
+            {
+                cells.Add((total.Bytes - (total.PreviousBytes ?? 0)).ToString(plain));
+            }
+            rows.Add(cells);
+        }
+        return (header, rows);
+    }
+
     /// <summary>Computes the report for a tree.</summary>
     /// <param name="root">The scan root; pseudo nodes are skipped.</param>
     /// <param name="measure">File size or size on disk, for every byte figure.</param>
@@ -183,57 +261,113 @@ public sealed class StatisticsReport
     {
         var report = new StatisticsReport();
         bool compared = root.HasBaseline;
-        long[] classBytes = new long[65];
-        int[] classFiles = new int[65];
-        long[] classPreviousBytes = new long[65];
-        int[] classPreviousFiles = new int[65];
-        long[][] classKindBytes = new long[65][];
-        int[][] classKindFiles = new int[65][];
-        long[] kindBytes = new long[KindCount];
-        int[] kindFiles = new int[KindCount];
-        long[] ageBytes = new long[AgeCount];
-        int[] ageFiles = new int[AgeCount];
-        var extensions = new Dictionary<string, (long Bytes, int Files, long Previous)>(StringComparer.Ordinal);
-        var sizes = new List<long>();
-        int previousFiles = 0;
-        long largestSize = -1;
-        int maxClass = 0;
+        var tally = new Tally(report, measure, nowUtc, compared, comparison);
+        tally.Walk(root, 0);
 
-        void CountKind(long[][] perKind, int[][] perKindFiles, int index, int kind, long bytes)
+        report.Files = root.FileCount;
+        report.Bytes = tally.Bytes;
+        if (tally.CountedFiles > 0)
         {
-            perKind[index] ??= new long[KindCount];
-            perKindFiles[index] ??= new int[KindCount];
-            perKind[index][kind] += bytes;
-            perKindFiles[index][kind]++;
+            report.AverageBytes = report.Bytes / tally.CountedFiles;
+            report.MedianBytes = tally.MedianBytes();
+        }
+        if (compared)
+        {
+            report.PreviousBytes = measure == SizeMeasure.SizeOnDisk ? root.BaselineAllocated : root.BaselineSize;
+            // The files inside gone folders are known as a count only.
+            int goneFolderFiles = comparison is null ? 0 : GoneFolderFiles(root, comparison);
+            report.PreviousFiles = tally.PreviousFiles + goneFolderFiles;
         }
 
-        void Previous(string name, long previousBytes)
+        report.Classes = tally.Classes();
+        report.Kinds = tally.Kinds();
+        report.Ages = tally.Ages();
+        report.ExtensionCount = tally.ExtensionCount;
+        report.Extensions = tally.TopExtensions(topExtensions);
+        return report;
+    }
+
+    /// <summary>
+    /// The running totals of one pass over the tree. The walk adds every real file to its size class, kind,
+    /// age band and extension, and writes the single-figure facts straight into the report; the lists are
+    /// built from the totals once the walk is done.
+    /// </summary>
+    private sealed class Tally
+    {
+        // One slot per size class: class 0 is the empty file, and a long has 64 bits above it.
+        private const int ClassSlots = 65;
+
+        private readonly StatisticsReport _report;
+        private readonly SizeMeasure _measure;
+        private readonly DateTime _nowUtc;
+        private readonly bool _compared;
+        private readonly ScanComparison? _comparison;
+
+        private readonly long[] _classBytes = new long[ClassSlots];
+        private readonly int[] _classFiles = new int[ClassSlots];
+        private readonly long[] _classPreviousBytes = new long[ClassSlots];
+        private readonly int[] _classPreviousFiles = new int[ClassSlots];
+        private readonly long[][] _classKindBytes = new long[ClassSlots][];
+        private readonly int[][] _classKindFiles = new int[ClassSlots][];
+        private readonly long[] _kindBytes = new long[KindCount];
+        private readonly int[] _kindFiles = new int[KindCount];
+        private readonly long[] _ageBytes = new long[AgeCount];
+        private readonly int[] _ageFiles = new int[AgeCount];
+        private readonly Dictionary<string, (long Bytes, int Files, long Previous)> _extensions = new(StringComparer.Ordinal);
+        private readonly List<long> _sizes = new();
+        private int _previousFiles;
+        private long _largestSize = -1;
+        private int _maxClass;
+
+        /// <summary>Starts an empty tally.</summary>
+        /// <param name="report">The report the single-figure facts are written into as the walk finds them.</param>
+        /// <param name="measure">File size or size on disk, for every byte figure.</param>
+        /// <param name="nowUtc">The moment ages are measured from.</param>
+        /// <param name="compared">True when the tree carries an older scan's sizes, so previous figures are kept too.</param>
+        /// <param name="comparison">The comparison listing what is gone since the older scan; null without one.</param>
+        public Tally(StatisticsReport report, SizeMeasure measure, DateTime nowUtc, bool compared, ScanComparison? comparison)
         {
-            int previousClass = ClassOf(previousBytes);
-            classPreviousBytes[previousClass] += previousBytes;
-            classPreviousFiles[previousClass]++;
-            previousFiles++;
-            string extension = Path.GetExtension(name).ToLowerInvariant();
-            extensions[extension] = extensions.TryGetValue(extension, out (long Bytes, int Files, long Previous) totals)
-                ? (totals.Bytes, totals.Files, totals.Previous + previousBytes)
-                : (0, 0, previousBytes);
+            _report = report;
+            _measure = measure;
+            _nowUtc = nowUtc;
+            _compared = compared;
+            _comparison = comparison;
         }
 
-        void Walk(FsNode folder, int depth)
+        /// <summary>What the counted files hold, in the measure.</summary>
+        public long Bytes => _kindBytes.Sum();
+
+        /// <summary>How many files were counted: the real ones, each hard-linked file once.</summary>
+        public int CountedFiles => _sizes.Count;
+
+        /// <summary>How many files of the older scan were seen, the gone ones included; files inside gone folders are not.</summary>
+        public int PreviousFiles => _previousFiles;
+
+        /// <summary>How many different extensions the counted files have.</summary>
+        public int ExtensionCount => _extensions.Count(pair => pair.Value.Files > 0);
+
+        /// <summary>The median size of the counted files.</summary>
+        /// <returns>The median, in the measure.</returns>
+        public long MedianBytes() => InspectSummary.Median(_sizes);
+
+        /// <summary>Counts a folder's files and walks into its folders.</summary>
+        /// <param name="folder">The folder to count.</param>
+        /// <param name="depth">How many levels under the scan root the folder is; 0 for the root itself.</param>
+        public void Walk(FsNode folder, int depth)
         {
             if (folder.Children.Count == 0 && folder.Parent is not null)
             {
-                report.EmptyFolders++;
+                _report.EmptyFolders++;
             }
             foreach (FsNode child in folder.Children)
             {
                 if (child.IsDirectory)
                 {
-                    report.Folders++;
-                    if (depth + 1 > report.MaxDepth)
+                    _report.Folders++;
+                    if (depth + 1 > _report.MaxDepth)
                     {
-                        report.MaxDepth = depth + 1;
-                        report.Deepest = child;
+                        _report.MaxDepth = depth + 1;
+                        _report.Deepest = child;
                     }
                     Walk(child, depth + 1);
                     continue;
@@ -242,107 +376,133 @@ public sealed class StatisticsReport
                 {
                     continue;
                 }
-
-                long bytes = child.SizeFor(measure);
-                int index = ClassOf(bytes);
-                int kind = (int)FileCategories.Categorize(child.Extension);
-                sizes.Add(bytes);
-                classBytes[index] += bytes;
-                classFiles[index]++;
-                CountKind(classKindBytes, classKindFiles, index, kind, bytes);
-                kindBytes[kind] += bytes;
-                kindFiles[kind]++;
-                maxClass = Math.Max(maxClass, index);
-
-                int age = (int)AgeOf(child.LastWriteUtc, nowUtc);
-                ageBytes[age] += bytes;
-                ageFiles[age]++;
-                if (child.LastWriteUtc > DateTime.MinValue && (nowUtc - child.LastWriteUtc).TotalDays >= UntouchedDays)
-                {
-                    report.UntouchedFiles++;
-                    report.UntouchedBytes += bytes;
-                }
-
-                if (bytes > largestSize)
-                {
-                    largestSize = bytes;
-                    report.Largest = child;
-                }
-                if (child.Size == 0)
-                {
-                    report.ZeroByteFiles++;
-                }
-                if (child.Size < TinyLimit)
-                {
-                    report.TinyFiles++;
-                    report.TinyBytes += bytes;
-                }
-                report.SlackBytes += Math.Max(0, child.Allocated - child.Size);
-
-                string extension = child.Extension;
-                extensions[extension] = extensions.TryGetValue(extension, out (long Bytes, int Files, long Previous) totals)
-                    ? (totals.Bytes + bytes, totals.Files + 1, totals.Previous)
-                    : (bytes, 1, 0);
-
-                if (compared && child.HasBaseline && (measure == SizeMeasure.SizeOnDisk ? child.BaselineAllocated : child.BaselineSize) is { } previousBytes)
-                {
-                    Previous(child.Name, previousBytes);
-                }
+                CountFile(child);
             }
 
-            if (compared && comparison is not null)
+            if (_compared && _comparison is not null)
             {
-                foreach (GoneEntry gone in comparison.GoneIn(folder))
+                foreach (GoneEntry gone in _comparison.GoneIn(folder))
                 {
                     if (!gone.IsDirectory && !gone.Unseen)
                     {
-                        Previous(gone.Name, gone.SizeFor(measure));
+                        CountPrevious(gone.Name, gone.SizeFor(_measure));
                     }
                 }
             }
         }
 
-        Walk(root, 0);
-
-        report.Files = root.FileCount;
-        report.Bytes = kindBytes.Sum();
-        if (sizes.Count > 0)
+        /// <summary>Adds one file to every total it belongs in.</summary>
+        /// <param name="file">A real file, not a hard link already counted.</param>
+        private void CountFile(FsNode file)
         {
-            report.AverageBytes = report.Bytes / sizes.Count;
-            report.MedianBytes = InspectSummary.Median(sizes);
+            long bytes = file.SizeFor(_measure);
+            int index = ClassOf(bytes);
+            int kind = (int)FileCategories.Categorize(file.Extension);
+            _sizes.Add(bytes);
+            _classBytes[index] += bytes;
+            _classFiles[index]++;
+            _classKindBytes[index] ??= new long[KindCount];
+            _classKindFiles[index] ??= new int[KindCount];
+            _classKindBytes[index][kind] += bytes;
+            _classKindFiles[index][kind]++;
+            _kindBytes[kind] += bytes;
+            _kindFiles[kind]++;
+            _maxClass = Math.Max(_maxClass, index);
+
+            int age = (int)AgeOf(file.LastWriteUtc, _nowUtc);
+            _ageBytes[age] += bytes;
+            _ageFiles[age]++;
+            if (file.LastWriteUtc > DateTime.MinValue && (_nowUtc - file.LastWriteUtc).TotalDays >= UntouchedDays)
+            {
+                _report.UntouchedFiles++;
+                _report.UntouchedBytes += bytes;
+            }
+
+            if (bytes > _largestSize)
+            {
+                _largestSize = bytes;
+                _report.Largest = file;
+            }
+            if (file.Size == 0)
+            {
+                _report.ZeroByteFiles++;
+            }
+            if (file.Size < TinyLimit)
+            {
+                _report.TinyFiles++;
+                _report.TinyBytes += bytes;
+            }
+            _report.SlackBytes += Math.Max(0, file.Allocated - file.Size);
+
+            string extension = file.Extension;
+            _extensions[extension] = _extensions.TryGetValue(extension, out (long Bytes, int Files, long Previous) totals)
+                ? (totals.Bytes + bytes, totals.Files + 1, totals.Previous)
+                : (bytes, 1, 0);
+
+            if (_compared && file.HasBaseline && (_measure == SizeMeasure.SizeOnDisk ? file.BaselineAllocated : file.BaselineSize) is { } previousBytes)
+            {
+                CountPrevious(file.Name, previousBytes);
+            }
         }
-        if (compared)
+
+        /// <summary>Adds a file of the older scan to the previous figures of its size class and extension.</summary>
+        /// <param name="name">The file's name, for its extension.</param>
+        /// <param name="previousBytes">What the file held in the older scan, in the measure.</param>
+        private void CountPrevious(string name, long previousBytes)
         {
-            report.PreviousBytes = measure == SizeMeasure.SizeOnDisk ? root.BaselineAllocated : root.BaselineSize;
-            // The files inside gone folders are known as a count only.
-            int goneFolderFiles = comparison is null ? 0 : GoneFolderFiles(root, comparison);
-            report.PreviousFiles = previousFiles + goneFolderFiles;
+            int previousClass = ClassOf(previousBytes);
+            _classPreviousBytes[previousClass] += previousBytes;
+            _classPreviousFiles[previousClass]++;
+            _previousFiles++;
+            string extension = Path.GetExtension(name).ToLowerInvariant();
+            _extensions[extension] = _extensions.TryGetValue(extension, out (long Bytes, int Files, long Previous) totals)
+                ? (totals.Bytes, totals.Files, totals.Previous + previousBytes)
+                : (0, 0, previousBytes);
         }
 
-        var classes = new List<SizeClass>(maxClass + 1);
-        for (int index = 0; index <= maxClass; index++)
+        /// <summary>The size classes from the empty-file class up to the largest file's class.</summary>
+        /// <returns>One entry per class in order, the empty ones included.</returns>
+        public List<SizeClass> Classes()
         {
-            classes.Add(new SizeClass(index, ClassMin(index), ClassMax(index), classBytes[index], classFiles[index],
-                compared ? classPreviousBytes[index] : 0, compared ? classPreviousFiles[index] : 0,
-                classKindBytes[index] ?? new long[KindCount], classKindFiles[index] ?? new int[KindCount]));
+            var classes = new List<SizeClass>(_maxClass + 1);
+            for (int index = 0; index <= _maxClass; index++)
+            {
+                classes.Add(new SizeClass(index, ClassMin(index), ClassMax(index), _classBytes[index], _classFiles[index],
+                    _compared ? _classPreviousBytes[index] : 0, _compared ? _classPreviousFiles[index] : 0,
+                    _classKindBytes[index] ?? new long[KindCount], _classKindFiles[index] ?? new int[KindCount]));
+            }
+            return classes;
         }
-        report.Classes = classes;
 
-        report.Kinds = Enumerable.Range(0, KindCount)
-            .Where(kind => kindFiles[kind] > 0)
-            .Select(kind => new KindShare((FileCategory)kind, kindBytes[kind], kindFiles[kind]))
-            .OrderByDescending(share => share.Bytes).ThenByDescending(share => share.Files)
-            .ToList();
-        report.Ages = Enumerable.Range(0, AgeCount).Select(age => new AgeShare((StatAge)age, ageBytes[age], ageFiles[age])).ToList();
+        /// <summary>The kinds of file that have at least one file.</summary>
+        /// <returns>The kinds, largest first, then by file count.</returns>
+        public List<KindShare> Kinds() =>
+            Enumerable.Range(0, KindCount)
+                .Where(kind => _kindFiles[kind] > 0)
+                .Select(kind => new KindShare((FileCategory)kind, _kindBytes[kind], _kindFiles[kind]))
+                .OrderByDescending(share => share.Bytes)
+                .ThenByDescending(share => share.Files)
+                .ToList();
 
-        report.ExtensionCount = extensions.Count(pair => pair.Value.Files > 0);
-        report.Extensions = extensions
-            .Where(pair => pair.Value.Files > 0)
-            .OrderByDescending(pair => pair.Value.Bytes).ThenByDescending(pair => pair.Value.Files).ThenBy(pair => pair.Key, StringComparer.Ordinal)
-            .Take(topExtensions)
-            .Select(pair => new ExtensionTotal(pair.Key, FileCategories.Categorize(pair.Key), pair.Value.Bytes, pair.Value.Files, compared ? pair.Value.Previous : null))
-            .ToList();
-        return report;
+        /// <summary>Every age band, youngest first.</summary>
+        /// <returns>One entry per band, the empty ones included.</returns>
+        public List<AgeShare> Ages() =>
+            Enumerable.Range(0, AgeCount)
+                .Select(age => new AgeShare((StatAge)age, _ageBytes[age], _ageFiles[age]))
+                .ToList();
+
+        /// <summary>The extensions that hold the most.</summary>
+        /// <param name="count">How many to list.</param>
+        /// <returns>The extensions with at least one file, largest first, then by file count, then by name.</returns>
+        public List<ExtensionTotal> TopExtensions(int count) =>
+            _extensions
+                .Where(pair => pair.Value.Files > 0)
+                .OrderByDescending(pair => pair.Value.Bytes)
+                .ThenByDescending(pair => pair.Value.Files)
+                .ThenBy(pair => pair.Key, StringComparer.Ordinal)
+                .Take(count)
+                .Select(pair => new ExtensionTotal(pair.Key, FileCategories.Categorize(pair.Key), pair.Value.Bytes, pair.Value.Files, _compared ? pair.Value.Previous : null))
+                .ToList();
     }
 
     /// <summary>How many files the gone folders held, summed over the whole tree.</summary>

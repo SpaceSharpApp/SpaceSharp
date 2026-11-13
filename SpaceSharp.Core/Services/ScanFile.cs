@@ -109,7 +109,7 @@ public static class ScanFile
                 }
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // An unreadable scans folder shows as no recent scans.
         }
@@ -144,13 +144,13 @@ public static class ScanFile
                     File.Delete(file);
                     removed++;
                 }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                catch (Exception ex) when (ex.IsFileSystemFailure())
                 {
                     // A file in use or locked is left for the next prune.
                 }
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // An unreadable scans folder has nothing to prune.
         }
@@ -191,7 +191,7 @@ public static class ScanFile
         {
             return new FileInfo(path).Length;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             return 0;
         }
@@ -215,13 +215,13 @@ public static class ScanFile
                     removed++;
                     bytes += length;
                 }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                catch (Exception ex) when (ex.IsFileSystemFailure())
                 {
                     // A file in use or locked is skipped; the count tells the caller how many went.
                 }
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // An unreadable scans folder has nothing to delete.
         }
@@ -347,7 +347,7 @@ public static class ScanFile
             }
             return ReadHeader(reader, version, path);
         }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidDataException)
         {
             // A file that is not a readable scan is simply not listed.
             return null;

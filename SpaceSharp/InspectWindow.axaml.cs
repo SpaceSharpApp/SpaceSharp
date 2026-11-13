@@ -103,7 +103,6 @@ public partial class InspectWindow : Window
         if (WindowState == WindowState.Normal && Math.Abs(Bounds.Width - _settings.InspectWidth) > 1)
         {
             _settings.InspectWidth = Bounds.Width;
-            _settings.Save();
         }
     }
 
@@ -315,7 +314,7 @@ public partial class InspectWindow : Window
         glyph.Margin = new Thickness(0, 2, 12, 0);
         DockPanel.SetDock(glyph, Dock.Left);
         line.Children.Add(glyph);
-        var block = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = 13.5, LineHeight = 20 };
+        var block = new TextBlock { TextWrapping = TextWrapping.Wrap, FontSize = FontSizes.Lead, LineHeight = 20 };
         var runs = new List<RichText.Part>(parts);
         if (tail is { Count: > 0 })
         {
@@ -616,10 +615,10 @@ public partial class InspectWindow : Window
     {
         var stack = new StackPanel();
         var titleRow = new DockPanel { Margin = new Thickness(12, 0, 12, 0), Height = 34 };
-        var subtitleText = new TextBlock { Text = subtitle, FontSize = 12, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(12, 0, 0, 0), Classes = { "dim" } };
+        var subtitleText = new TextBlock { Text = subtitle, FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis, Margin = new Thickness(12, 0, 0, 0), Classes = { "dim" } };
         DockPanel.SetDock(subtitleText, Dock.Right);
         titleRow.Children.Add(subtitleText);
-        titleRow.Children.Add(new TextBlock { Text = title, FontSize = 13, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
+        titleRow.Children.Add(new TextBlock { Text = title, FontSize = FontSizes.Emphasis, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis });
         var titleBorder = new Border { Child = titleRow, BorderThickness = new Thickness(0, 0, 0, 1) };
         titleBorder.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
         stack.Children.Add(titleBorder);
@@ -627,7 +626,7 @@ public partial class InspectWindow : Window
         var headerGrid = new Grid { ColumnDefinitions = Clone(columns), ColumnSpacing = 12, Height = 24, Margin = new Thickness(12, 0, 12, 0) };
         for (int i = 0; i < headers.Length; i++)
         {
-            var text = new TextBlock { Text = headers[i].ToUpper(CultureInfo.CurrentCulture), FontSize = 10.5, LetterSpacing = 0.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = right[i] ? TextAlignment.Right : TextAlignment.Left, Classes = { "dim" } };
+            var text = new TextBlock { Text = headers[i].ToUpper(CultureInfo.CurrentCulture), FontSize = FontSizes.Micro, LetterSpacing = 0.5, VerticalAlignment = VerticalAlignment.Center, TextAlignment = right[i] ? TextAlignment.Right : TextAlignment.Left, Classes = { "dim" } };
             Grid.SetColumn(text, i);
             headerGrid.Children.Add(text);
         }
@@ -696,7 +695,7 @@ public partial class InspectWindow : Window
         var block = new TextBlock
         {
             Text = text,
-            FontSize = 12.5,
+            FontSize = FontSizes.Body,
             VerticalAlignment = VerticalAlignment.Center,
             TextAlignment = right ? TextAlignment.Right : TextAlignment.Left,
             TextTrimming = TextTrimming.CharacterEllipsis,
@@ -852,7 +851,7 @@ public partial class InspectWindow : Window
 
     /// <summary>Appends a "›" between two crumbs.</summary>
     private void Separator() =>
-        Crumbs.Children.Add(new TextBlock { Text = "›", Margin = new Thickness(2, 0, 2, 0), VerticalAlignment = VerticalAlignment.Center, FontSize = 11, Classes = { "dim" } });
+        Crumbs.Children.Add(new TextBlock { Text = "›", Margin = new Thickness(2, 0, 2, 0), VerticalAlignment = VerticalAlignment.Center, FontSize = FontSizes.Caption, Classes = { "dim" } });
 
     /// <summary>One breadcrumb: a link into the map, or plain text for the item itself or when nothing can navigate.</summary>
     /// <param name="crumb">The folder (or item) this crumb stands for.</param>
@@ -862,10 +861,10 @@ public partial class InspectWindow : Window
     {
         if (last || _navigate is null)
         {
-            return new TextBlock { Text = crumb.Name, FontSize = 11, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 6, 0), Classes = { last ? "dim" : "accent" } };
+            return new TextBlock { Text = crumb.Name, FontSize = FontSizes.Caption, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 6, 0), Classes = { last ? "dim" : "accent" } };
         }
         Action<FsNode> navigate = _navigate;
-        var button = new Button { Content = crumb.Name, Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22 };
+        var button = new Button { Content = crumb.Name, Classes = { "crumb", "accent-text" }, FontSize = FontSizes.Caption, Height = 22 };
         ToolTip.SetTip(button, Strings.Get("Inspect_CrumbTip"));
         button.Click += (_, _) =>
         {
@@ -880,7 +879,7 @@ public partial class InspectWindow : Window
     /// <returns>The button with its flyout attached and a tooltip joining the folded names.</returns>
     private Control FoldButton(List<FsNode> folded)
     {
-        var button = new Button { Content = "…", Classes = { "crumb", "accent-text" }, FontSize = 11, Height = 22, Padding = new Thickness(7, 0) };
+        var button = new Button { Content = "…", Classes = { "crumb", "accent-text" }, FontSize = FontSizes.Caption, Height = 22, Padding = new Thickness(7, 0) };
         ToolTip.SetTip(button, string.Join("  ›  ", folded.Select(folder => folder.Name)));
 
         var flyout = new MenuFlyout { Placement = PlacementMode.BottomEdgeAlignedLeft };
@@ -967,7 +966,7 @@ public partial class InspectWindow : Window
         {
             Trash.Reveal(node.FullPath);
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             _ = Dialog.Error(this, Strings.Get("InspectWin_ShowInExplorer"), ex.Message);
         }

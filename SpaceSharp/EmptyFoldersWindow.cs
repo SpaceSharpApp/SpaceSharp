@@ -28,14 +28,14 @@ public sealed class EmptyFoldersWindow : Window
     private readonly MainWindow _main;
     private readonly FsNode _root;
     private readonly List<Pick> _picks = new();
-    private readonly TextBlock _summary = new() { FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
-    private readonly TextBlock _checkedText = new() { FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+    private readonly TextBlock _summary = new() { FontSize = FontSizes.Body, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+    private readonly TextBlock _checkedText = new() { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly ListBox _list;
     private readonly Border _listBox;
     private readonly StackPanel _links;
     private readonly Border _warning;
     private readonly Button _allButton;
-    private readonly TextBlock _warningText = new() { FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+    private readonly TextBlock _warningText = new() { FontSize = FontSizes.Body, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
     private bool _onSystemDrive;
     private readonly BusyPanel _busy = new();
     private readonly Button _deleteButton;
@@ -60,16 +60,16 @@ public sealed class EmptyFoldersWindow : Window
 
         // Title, one line of numbers, one line on how the delete works, then the three select buttons, then the warning that appears while anything risky is ticked.
         var header = new StackPanel { Margin = new Thickness(0, 0, 0, 12), Spacing = 0 };
-        header.Children.Add(new TextBlock { Text = Strings.Get("Empty_Title"), FontSize = 17, FontWeight = FontWeight.SemiBold });
+        header.Children.Add(new TextBlock { Text = Strings.Get("Empty_Title"), FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold });
         header.Children.Add(_summary);
-        header.Children.Add(new TextBlock { Text = Strings.Get("Empty_NoBin"), FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        header.Children.Add(new TextBlock { Text = Strings.Get("Empty_NoBin"), FontSize = FontSizes.Body, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         _links = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Margin = new Thickness(0, 12, 0, 0) };
-        var safe = new Button { Content = Strings.Get("Empty_SelectSafe"), Classes = { "tool" }, Height = 30, Padding = new Thickness(12, 0), FontSize = 12.5 };
+        var safe = new Button { Content = Strings.Get("Empty_SelectSafe"), Classes = { "tool" }, Height = 30, Padding = new Thickness(12, 0), FontSize = FontSizes.Body };
         ToolTip.SetTip(safe, Strings.Get("Empty_SafeTip"));
         safe.Click += (_, _) => SetSafe();
-        var none = new Button { Content = Strings.Get("Empty_SelectNone"), Classes = { "tool" }, Height = 30, Padding = new Thickness(12, 0), FontSize = 12.5 };
+        var none = new Button { Content = Strings.Get("Empty_SelectNone"), Classes = { "tool" }, Height = 30, Padding = new Thickness(12, 0), FontSize = FontSizes.Body };
         none.Click += (_, _) => SetAll(false);
-        _allButton = new Button { Content = Strings.Get("Empty_SelectAll"), Classes = { "danger-outline" }, Height = 30, Padding = new Thickness(12, 0), FontSize = 12.5 };
+        _allButton = new Button { Content = Strings.Get("Empty_SelectAll"), Classes = { "danger-outline" }, Height = 30, Padding = new Thickness(12, 0), FontSize = FontSizes.Body };
         ToolTip.SetTip(_allButton, Strings.Get("Empty_AllTip"));
         _allButton.Click += (_, _) => SetAll(true);
         _links.Children.Add(safe);
@@ -134,13 +134,13 @@ public sealed class EmptyFoldersWindow : Window
             UpdateChecked();
         };
         row.Children.Add(tick);
-        var path = new TextBlock { Text = PathLoops.Compact(entry.Folder.FullPath, 110), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
+        var path = new TextBlock { Text = PathLoops.Compact(entry.Folder.FullPath, 110), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis };
         ToolTip.SetTip(path, entry.Folder.FullPath);
         Grid.SetColumn(path, 1);
         row.Children.Add(path);
         if (entry.NestedFolders > 0)
         {
-            var nestedText = new TextBlock { Text = Strings.Format("Empty_Nested", entry.NestedFolders), FontSize = 12, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
+            var nestedText = new TextBlock { Text = Strings.Format("Empty_Nested", entry.NestedFolders), FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
             Grid.SetColumn(nestedText, 2);
             row.Children.Add(nestedText);
         }
@@ -296,8 +296,8 @@ public sealed class EmptyFoldersWindow : Window
 /// <summary>The panel a tick-and-delete window shows while the Recycle Bin works: what is happening, how far it is, and a Stop button.</summary>
 internal sealed class BusyPanel : Border
 {
-    private readonly TextBlock _title = new() { FontSize = 13.5, FontWeight = FontWeight.SemiBold };
-    private readonly TextBlock _count = new() { FontSize = 12.5, Margin = new Thickness(0, 2, 0, 0), Classes = { "dim" } };
+    private readonly TextBlock _title = new() { FontSize = FontSizes.Lead, FontWeight = FontWeight.SemiBold };
+    private readonly TextBlock _count = new() { FontSize = FontSizes.Body, Margin = new Thickness(0, 2, 0, 0), Classes = { "dim" } };
     private readonly ProgressBar _bar = new() { Height = 6, Minimum = 0, Margin = new Thickness(0, 10, 0, 0) };
     private string _format = "{0:N0} / {1:N0}";
     private int _total;

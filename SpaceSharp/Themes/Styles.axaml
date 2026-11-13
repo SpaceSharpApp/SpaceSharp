@@ -488,13 +488,13 @@
   <Style Selector="Button.segment.active">
     <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
     <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
   <Style Selector="Button.segment.active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
   </Style>
   <Style Selector="Button.segment:focus-visible /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
@@ -566,7 +566,7 @@
   </Style>
   <Style Selector="Button.textlink:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
   </Style>
   <Style Selector="Button.textlink:pressed /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="Transparent" />
@@ -656,7 +656,7 @@
   </Style>
   <Style Selector="ToggleButton.tile:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.tile:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource AccentFaint}" />
-    <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+    <Setter Property="Foreground" Value="{DynamicResource Link}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
   </Style>
   <Style Selector="ToggleButton.tile:focus-visible /template/ ContentPresenter#PART_ContentPresenter">

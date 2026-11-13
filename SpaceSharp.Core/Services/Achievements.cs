@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SpaceSharp.Models;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
@@ -130,7 +131,7 @@ public sealed class Achievements
                 return new Achievements(path, unlocked, new Dictionary<string, int>(file.Counters, StringComparer.OrdinalIgnoreCase));
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is JsonException)
         {
             // A damaged file starts the collection over; nothing here is worth a dialog.
         }
@@ -381,7 +382,7 @@ public sealed class Achievements
             };
             File.WriteAllText(_path, JsonSerializer.Serialize(file, JsonOptions));
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // Losing an achievement to a full disk is in keeping with the app.
         }

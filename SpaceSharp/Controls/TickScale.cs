@@ -5,6 +5,7 @@ using Avalonia.Controls.Documents;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Reactive;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Controls;
 
@@ -137,7 +138,7 @@ public sealed class TickScale : Control
     /// <param name="key">A brush resource key such as "Accent" or "Stroke".</param>
     /// <param name="fallback">Used when the key is missing or does not hold a brush, so the scale still draws without a theme.</param>
     /// <returns>The themed brush, or <paramref name="fallback"/>.</returns>
-    private IBrush Brush(string key, IBrush fallback) => this.FindResource(key) as IBrush ?? fallback;
+    private IBrush Brush(string key, IBrush fallback) => this.ThemeBrush(key, fallback);
 
     /// <summary>Draws the line, the ticks and their labels, the selected tick filled and the hovered one brighter.</summary>
     /// <param name="context">The drawing context.</param>

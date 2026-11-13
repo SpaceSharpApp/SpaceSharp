@@ -82,7 +82,7 @@ public static class CustomPalettes
         {
             folder = Folder;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // Without the folder there is nothing to load; the Settings page shows the reason.
             LastErrors = new[] { ex.Message };

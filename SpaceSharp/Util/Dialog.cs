@@ -74,7 +74,7 @@ internal static class Dialog
         {
             return null;
         }
-        var body = new TextBlock { Text = details.Trim(), TextWrapping = TextWrapping.Wrap, FontSize = 12.5, LineHeight = 18 };
+        var body = new TextBlock { Text = details.Trim(), TextWrapping = TextWrapping.Wrap, FontSize = FontSizes.Body, LineHeight = 18 };
         return new Border
         {
             Classes = { "card", "flat" },
@@ -98,7 +98,7 @@ internal static class Dialog
         icon.Margin = new Thickness(0, 1, 10, 0);
         DockPanel.SetDock(icon, Dock.Left);
         row.Children.Add(icon);
-        row.Children.Add(new TextBlock { Text = text, FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 });
+        row.Children.Add(new TextBlock { Text = text, FontSize = FontSizes.Body, TextWrapping = TextWrapping.Wrap, LineHeight = 17 });
         note.Child = row;
         return note;
     }

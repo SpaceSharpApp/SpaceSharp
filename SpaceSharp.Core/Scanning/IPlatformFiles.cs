@@ -1,3 +1,5 @@
+using SpaceSharp.Util;
+
 namespace SpaceSharp.Scanning;
 
 /// <summary>Platform file services beyond System.IO; <see cref="Plain"/> is the portable fallback.</summary>
@@ -65,7 +67,7 @@ public interface IPlatformFiles
             {
                 return new DriveInfo(Path.GetPathRoot(Path.GetFullPath(path)) ?? path).AvailableFreeSpace;
             }
-            catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
             {
                 // Unknown free space reads as none rather than failing the scan.
                 return 0;

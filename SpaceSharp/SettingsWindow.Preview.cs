@@ -23,7 +23,7 @@ public partial class SettingsWindow
         RefreshPreview();
         var frame = new Border { CornerRadius = new CornerRadius(6), BorderThickness = new Thickness(1), ClipToBounds = true, Child = _preview, Classes = { "frame" } };
         var panel = new DockPanel();
-        var caption = new TextBlock { Text = Strings.Get("Settings_PreviewSample"), FontSize = 11.5, Margin = new Thickness(0, 4, 0, 0), HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
+        var caption = new TextBlock { Text = Strings.Get("Settings_PreviewSample"), FontSize = FontSizes.Detail, Margin = new Thickness(0, 4, 0, 0), HorizontalAlignment = HorizontalAlignment.Right, Classes = { "dim" } };
         DockPanel.SetDock(caption, Dock.Bottom);
         panel.Children.Add(caption);
         panel.Children.Add(frame);

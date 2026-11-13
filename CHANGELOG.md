@@ -2,46 +2,81 @@
 
 What changed in each SpaceSharp release from 2.0 on, newest first; the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.9.1 (unreleased)
+
+### Fixes
+
+Colors that the app picks in code now follow the theme. Several places asked for a theme color in a way that never found it and drew a stand-in instead: grey for dim text and lines, a fixed orange or green for the accent, white for the labels on the filter's size and age scales. In the dark theme the stand-ins were close enough to pass. In the light theme the scale labels were white on a light background, and the accent in Insights, Statistics, Changes and the palette editor did not match the rest of the window. All of them now use the theme's own colors.
+
+The filter stays with the map. Its drawer or rail used to remain open over Insights, Statistics and Changes, where it covered part of the page. It now puts itself away when you leave the map and comes back when you return, with the filter still applied. Pressing Filter or Ctrl+F from another view takes you to the map and opens it.
+
+Amber text is readable in the light theme. A picked tile in the filter, the active half of a segmented switch, a hovered text link and the scan percentage were amber on a pale background; they now use the darker amber that links already use there. "No filter: everything is shown" is a plain dim remark instead of bold accent text.
+
+### Under the hood
+
+A tidy-up with no change in behavior beyond the fix above and the one noted at the end.
+
+The rule for which errors count as "the file system said no" was written out at some sixty catch sites in a dozen variations; it now has one name, `IsFileSystemFailure`, with `IsLaunchFailure` beside it for a program or link Windows could not open, and each catch says only what it adds. Theme brushes are read through one helper, `ThemeBrush`, so the lookup cannot be done the wrong way again. The repository address is defined once in `AppInfo` instead of in five files.
+
+Text sizes in the windows built in code are named. The 277 hand-typed sizes are now twelve names in `FontSizes`, with the same values as before, so the scale can be seen and retuned in one place. The shadow under floating cards and the green of the Free tile are defined once in `Chrome`. The five Save dialogs go through one helper.
+
+Settings save themselves. The app writes the settings file every few seconds when something changed and again at exit, so a change no longer depends on its call site remembering to save; 26 scattered save calls are gone, and the two restarts save explicitly because the new instance reads the file as it starts.
+
+Tasks that nobody waits for report their failures at once. They used to keep an exception until the garbage collector found the task, which could be minutes later; they now go through `Detach`, which sends it to the crash report straight away. This is the one change you may notice: a background failure that was silent for a while now shows the crash dialog immediately.
+
+Four of the longest methods are split by step. The keyboard handler is a table of shortcuts, one line each. The right-click menu is built by a method per part. A scan is started, shown and torn down by named steps. The statistics pass keeps its totals in a small class of its own instead of in a dozen local arrays.
+
+The views have left the main window. Insights, Statistics and Changes are each a control of their own, and the filter's rail and drawer are a class of their own. Each knows the window only through a small interface naming what it needs: the scan, the comparison, and the few things only the window can do, such as showing something on the map or deleting. The main window went from about 11,500 lines to about 6,650, and what is left is the window itself: scanning, saved scans, the right-click menu, the drives panel and moving between views.
+
+What the Statistics view decided on its own moved into Core with tests: the size class labels and units, the filter for each age band, signed sizes and counts, and the rows of the extension export. The small parts the views share, such as swatches, bars and clickable rows, are in one place.
+
+The test workflow now builds with warnings as errors, so a style or analyzer warning cannot land on main. The coding standards name each of these rules under "Fix the class, not the case".
+
 ## 2.9.0
 
-### Views
+### Statistics and Insights
 
-- A Statistics view beside Insights: the scan as a report. Headline figures, the files by size class (one row per doubling, stacked by kind, Space or Count), the kinds with a donut, the ages, the largest files and folders, and the biggest extensions with an export of all of them. Every figure opens the map filtered to what it counts; with a compared scan, every figure carries its change and the size rows mark where the earlier scan stood. A picker at the top narrows the figures to a folder.
-- Insights and Statistics no longer say the same things twice. Statistics is what is on the drive: the breakdowns by size, kind, age and extension, and now the largest files and folders, which moved over from Insights. Insights is what you can do about it: its By type, When changed and Largest rows are gone (Statistics has them), and its tiles add up what could be freed or looked at (safe to clear, duplicates, what can be rebuilt, untouched for a year or the change since the last scan) instead of repeating Scanned and Free. The rows are in the order of how much they usually give back: safe to clear, duplicates, developer, downloads, games, media, small and empty, deep and long, hard links, since last scan. Small and empty lists slack, files under 4 KB, zero-byte files and empty folders, each with a Show link. A line under the rows opens Statistics.
-- A minimap: while the map is zoomed in, a small card over one corner shows the scan's biggest folders as plain labeled blocks, laid out as on the map, with a box where you are. Click in it to jump there, drag to move the view, right-click to hide it. Settings › Behavior › Minimap picks the corner (bottom left by default), turns it off, or swaps it for edge markers: two thin bars on the map's bottom and right edges that cover nothing and drag like scrollbars.
-- Save the map as a picture has moved from the end of the toolbar to the path row, beside Filter, where it sits next to the map it captures. It is a camera with the word Snapshot now; the lone picture icon said nothing about what it did.
-- Opening a saved scan, from the start page, the Open dialog or a file, shows an "Opening the scan…" card with a moving bar and a wait cursor until the map is up. A big scan takes a few seconds to read, and the window used to look frozen meanwhile.
-- More ways into the duplicate finder: Ctrl+D from anywhere, a click on the Duplicates tile in Insights, and **Find duplicates in this folder** on a folder's right-click menu, which searches that folder alone and says so in the window. A folder's result does not replace the whole scan's in Insights.
-- The duplicate search reads much less. Files of the same size are told apart by three samples (the first, middle and last 16 KB) where only the first 16 KB was looked at, so files that merely start alike, such as game archives with a common header, are no longer read in full. Big files that pass the samples are read side by side a few megabytes at a time, and a file is dropped the moment it differs, so only true copies are read to the end. A file whose size changed since the scan is left out of the search.
-- The palette editor is rebuilt around decisions instead of hex fields: hue, saturation and lightness sliders that move the whole palette, five schemes (One hue, Neighbors, Two-tone, Triad, Rainbow) shown as sample cards, a per-level lightness step, a Files switch (same as folder, tinted, own), a readability guard with Fix them, Random, From a picture (the hues of any image) and Start from any palette. The preview is live and clickable: a click on a box selects its color. The twelve folder colors, the file colors and the file types are swatch grids under Advanced, with one editor for the selected color, Copy JSON, Paste 12 hexes and Export file.
+SpaceSharp has a new view, Statistics, that shows the scan as a report. It lays out the files by size class, kind and age, lists the largest files and folders, and ranks the biggest extensions, with an export of all of them. Every figure opens the map filtered to what it counts, and when you have compared two scans every figure carries its change. A picker at the top narrows the whole page to one folder.
 
-### Map
+Insights and Statistics no longer say the same things twice. Statistics is what is on the drive; Insights is what you can do about it. The Insights tiles now add up what could be freed, from what is safe to clear to duplicates and files that can be rebuilt, and its rows come in the order of how much they usually give back. The lists of largest files, types and ages moved to Statistics, where they belong.
 
-- Shading is redone. Cushion shading, with its presets and its hot spot in one corner, is replaced by a Look picker in Settings › Treemap › Shading with five looks: Edges (a one-pixel lit rim on every box, like raised tiles), Pillow (bright in the middle, darker toward the edges), Sheen (light from the top of each file), Layers (files lifted off their folder with a small shadow, folders as shallow trays) and Side light (one even slope across each file). Each has two or three settings of its own and keeps them when you switch. A fresh install starts with a light Sheen. Settings from an earlier version keep what they had: a flat map stays flat, and a map that had cushion shading on comes up in Side light, the nearest to it.
-- Scan again and compare on the start page scans the drive the way the saved scan was made: by the file table or folder by folder, with hidden files, hard links and exclusions as they were then, whatever Settings say now. Scans made differently cannot be compared, so the button used to end in "the previous scan was made differently" after a setting had changed. When the scan is done it opens Changes.
-- The live map goes by the last scan of the same drive or folder: a folder still being walked is drawn at the size it had then, with the part not yet read as one "…" box, until the walk has read more than that. The map therefore starts out close to the finished one and fills in, instead of reordering itself each time a growing folder overtakes another. The tree on screen is used when it is of the same folder, else the scan saved last time; a first scan has nothing to go by and grows from nothing.
-- The live map is redrawn in one step, up to fifteen times a second, with no slide and no fade between snapshots (a big tree paces them: the next one waits at least as long as the window took to lay out the last, and the snapshot is built on a thread of its own, since the walk keeps every pool thread busy and a pool task waited a second or two for its turn), with icons and labels as the finished map has them. Every folder shows its size so far and its own structure as it is read, ten levels down instead of three: the live map used to hold a folder still being walked back until its ancestor three levels under the root had finished, so a big folder that finished late (Users, with everything under AppData) stayed small until the end, then reordered the whole map and opened into its folders all at once. Folders and files now appear where they belong as the walk reads them, so a folder finishing changes little. On a drive, the used space not read yet is one "…" box at the top level that shrinks as the walk goes, so the first folders do not fill the whole map, and the free-space box is there from the first snapshot. Together that leaves nothing to shift when the walk ends. A folder the walk has finished keeps its layout from one snapshot to the next, so only the folders still being walked are laid out again. A snapshot of the walk is one pass down the folders still being walked, with no copying or sorting of everything recorded so far, which took most of each update's time on a big drive. While a scan runs, the runtime puts off blocking full garbage collections, which froze the window for a moment now and then; this costs memory for the length of the scan only. Label text is shaped once and reused instead of being shaped again for every box on every redraw, which also makes zooming and panning lighter.
-- The "protected folders couldn't be read" notice is a floating notice over the top of the map, with a close button, instead of a bar above it. It used to take a row of its own when a walk ended, which made the map a little shorter and so laid the whole map out anew the moment the scan finished, and again when the notice was closed.
-- The scanning card's clock counts in tenths of a second from the start ("9.2 s"); the hundredths it showed for the first ten seconds flickered too fast to read.
-- Settings › Behavior › While scanning › Scanning card: which corner the progress card sits in, or the center. It used to jump to the middle whenever there was no map behind it, such as before the administrator prompt of a file-table scan; it now stays where you put it.
-- Stop on the scanning card (or Esc) stops a scan and returns to the start page; what was read so far is dropped, and nothing was written to disk.
-- Modern file labels grow with their box: from 220 px the name, size and icon get larger, up to almost twice the label size in a box that fills the window, and shrink back as you zoom out.
-- Title bars put the folder name at the left and the size and file count at the right, so a long name no longer pushes the facts off the bar; a drive reads as "C:". Dates on files, when shown, carry the time to the minute.
-- The Uniform map is the default for a fresh install; a saved Physical choice is kept.
-- The window title names the folder on the map ("C: - SpaceSharp 2.9.0") and follows the view as you move.
+### Finding your way
 
-### Window
+Zoom in and a minimap appears in a corner of the map. It shows the scan's biggest folders as labeled blocks with a box where you are; click to jump there, drag to move the view, right-click to hide it. If you would rather have nothing over the map, Settings › Behavior › Minimap swaps it for two thin markers along the edges, moves it to another corner, or turns it off.
 
-- The Achievements window is a journal now: what you unlocked down a dated line, newest first, each with what earned it, and a Still out there panel beside it with the locked ones by name. A click on a locked one shows its hint under the panel. It replaces the single list of twenty-six rows that all looked alike.
-- The Explorer menu entry "Scan with SpaceSharp" shows the app icon: the icon file stored its small sizes as PNG, which the classic context menu cannot draw, so they are bitmaps now (256 px stays PNG).
-- The theme button shows what a click gives you: a sun in the dark theme, a moon in the light one.
-- Scrollbars are a bare rounded thumb over the edge of the content, no track and no arrows, in every list and page; the one in the Achievements window sits inside its frame instead of over the dates.
-- The right-click menu on free space, or on a cluster of small files, no longer shows a stack of empty rules and grayed-out rows. What cannot be done to the thing clicked (Properties, Copy name, Move to Recycle Bin, Delete permanently) is left out, a rule is only drawn between two groups that both have something in them, the free space card says how much is free, and when More would be the only row left its actions (Rescan, Save scan as, Open saved scan, Compare, Export) stand in the menu itself.
-- What's new is set as a page instead of one block of text: section headings as small labels, each change as its own item with the opening sentence standing out and the detail after it dimmed, in a wider window whose scrollbar no longer lies over the ends of the lines.
-- The text on the amber buttons (OK, Close, Install) is centered when the button is wider than its word.
-- The Shortcuts list lines up: every action starts at the same place in its half of the window, whatever the width of its key. F1 is listed as what it does, About SpaceSharp, instead of "Open this window".
-- About is tidied. Each entry is a full row that lights up under the pointer; rows that open the browser carry a small arrow, Achievements shows its T key as a key, and Crash logs ends in how many there are (0 on a machine where nothing has gone wrong). The .NET and Windows line moved under the version it belongs to.
-- Built on .NET 10.0.15, up from 10.0.14 (the installers and the portable exe carry the runtime, so nothing to install).
+The window title now names the folder on the map and follows you as you move. Saving the map as a picture has moved to the path row beside Filter, as a camera with the word Snapshot, next to the map it captures.
+
+### Shading
+
+Cushion shading is gone, and five looks take its place. Edges puts a lit rim on every box, Pillow makes files bright in the middle and darker toward the edges, Sheen lets light fall from the top of each file, Layers lifts files off their folder with a small shadow, and Side light lays one even slope across each file. You pick one in Settings › Treemap › Shading, and each look has two or three settings of its own that it keeps when you try another.
+
+A fresh install starts with a light Sheen. If you are upgrading, the map keeps what it had: a flat map stays flat, and a map with cushion shading comes up in Side light, the look nearest to it.
+
+### Scanning
+
+The live map now starts out close to the finished one. It goes by the last scan of the same drive, so folders are drawn near their final size from the first moment and fill in as they are read, instead of trading places every time one outgrows another. It is redrawn in one step, with icons and labels as the finished map has them, and nothing shifts when the scan ends. Zooming and panning are lighter as well.
+
+Scan again and compare now repeats the saved scan. On the start page it scans the drive the way that scan was made: by the file table or folder by folder, with hidden files, hard links and exclusions as they were then, whatever Settings say today. Two scans made differently cannot be compared, so this is what makes the comparison dependable. When the scan is done it opens Changes.
+
+A few smaller things make scanning calmer. Opening a saved scan shows an "Opening the scan…" card where the window used to look frozen. The scanning card stays in the corner you choose under Settings › Behavior › While scanning, its clock counts in tenths of a second, and Stop takes you back to the start page. The notice about protected folders floats over the map with a close button, so the map no longer jumps when a scan finishes.
+
+### Duplicates
+
+The duplicate finder is easier to reach and much faster. Ctrl+D opens it from anywhere, a click on the Duplicates tile in Insights does the same, and Find duplicates in this folder on a folder's right-click menu searches that folder alone. The search itself reads far less: files of the same size are told apart by samples from their start, middle and end, and big files are compared side by side and dropped the moment they differ, so only true copies are read to the end.
+
+### Palettes
+
+The palette editor is rebuilt around decisions instead of hex fields. You set a hue, saturation and lightness for the whole palette, pick one of five schemes from sample cards, and a readability check tells you when a label is hard to read and fixes it on request. Random and From a picture give you a starting point, the preview is live and clickable, and single colors are still there under Advanced. The same generator also runs in a browser at [palette.spacesharp.app](https://palette.spacesharp.app/), with nothing to install.
+
+### The map
+
+Labels in the Modern style grow with their box. A file that fills the window is no longer named in small print. Title bars keep the folder name at the left and the size and file count at the right, which stops a long name from pushing the facts off the bar. Uniform is the default layout for a fresh install; if you chose Physical, it stays. Right-clicking free space gives a short menu with only what applies, and says how much is free.
+
+### Windows
+
+Achievements is a journal now. What you unlocked runs down a dated line, newest first, beside a panel of the ones still out there, and a click on a locked one shows its hint. What's new reads as a page instead of one block of text. About is tidier, with rows that light up, an arrow on the ones that open the browser and the number of crash logs at a glance. The Shortcuts list lines up, and F1 is listed as what it does: About SpaceSharp.
+
+There are smaller touches too. The text on the amber buttons is centered, scrollbars are a bare thumb with no track, the theme button shows what a click gives you, and the Explorer entry "Scan with SpaceSharp" shows the app icon. This release is built on .NET 10.0.15; the installers and the portable exe carry the runtime, so there is nothing to install.
 
 ## 2.8.0
 

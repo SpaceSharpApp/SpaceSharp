@@ -11,6 +11,9 @@ internal sealed class AppSettings
 
     private static AppSettings? _current;
 
+    // What Save last wrote, so a call that changes nothing costs no write.
+    private string? _savedJson;
+
     /// <summary>The one shared instance, loaded on first use.</summary>
     public static AppSettings Current => _current ??= Load();
 
@@ -383,7 +386,7 @@ internal sealed class AppSettings
                 return loaded;
             }
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is JsonException)
         {
             // An unreadable or corrupt settings file is replaced by the defaults on the next save.
         }
@@ -397,7 +400,14 @@ internal sealed class AppSettings
         get; set;
     }
 
-    /// <summary>Writes the settings to settings.json, creating the folder; failures are swallowed and <see cref="Frozen"/> skips the write.</summary>
+    /// <summary>
+    /// Writes the settings to settings.json when they differ from what was last written, creating the folder;
+    /// failures are swallowed and <see cref="Frozen"/> skips the write.
+    /// </summary>
+    /// <remarks>
+    /// The app calls this on a timer and at exit, so setting a property is all a change needs. Call it directly
+    /// only where the file must be on disk before something else reads it, such as a restart.
+    /// </remarks>
     public void Save()
     {
         if (Frozen)
@@ -405,12 +415,19 @@ internal sealed class AppSettings
             return;
         }
 
+        string json = JsonSerializer.Serialize(this, JsonOptions);
+        if (json == _savedJson)
+        {
+            return;
+        }
+
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-            File.WriteAllText(FilePath, JsonSerializer.Serialize(this, JsonOptions));
+            File.WriteAllText(FilePath, json);
+            _savedJson = json;
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             // Settings that cannot be written are kept for this session only; failing here would not help the user.
         }

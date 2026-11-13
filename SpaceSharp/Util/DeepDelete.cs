@@ -32,7 +32,7 @@ internal static class DeepDelete
             DeleteTree(target, filesToo: true);
             return !Directory.Exists(target);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             error = ex.Message;
             return false;
@@ -57,7 +57,7 @@ internal static class DeepDelete
             DeleteTree(target, filesToo: false);
             return !Directory.Exists(target);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             error = ex.Message;
             return false;

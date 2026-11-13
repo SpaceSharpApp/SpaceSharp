@@ -51,7 +51,7 @@ public partial class MainWindow
     /// <param name="firstSignature">A signature as <see cref="ScanSignature"/> builds it.</param>
     /// <param name="secondSignature">The other signature; compared ordinally, so the order of the parts matters.</param>
     /// <returns>True when the two texts are identical.</returns>
-    private static bool Comparable(string firstSignature, string secondSignature) =>
+    internal static bool Comparable(string firstSignature, string secondSignature) =>
         string.Equals(firstSignature, secondSignature, StringComparison.Ordinal);
 
     /// <summary>Compares a finished scan with the previous autosave, then saves it.</summary>
@@ -92,8 +92,8 @@ public partial class MainWindow
                 RefreshTopList();
                 InvalidateInsights();
                 RefreshInsights();
-                InvalidateChanges();
-                RefreshChanges();
+                ChangesView.DropRows();
+                ChangesView.Refresh();
                 if (openChanges && comparison is not null)
                 {
                     ShowView(MainView.Changes);
@@ -105,7 +105,7 @@ public partial class MainWindow
             }
             BuildRecentScans();
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             StatusText.Text = ex.Message;
         }
@@ -257,7 +257,7 @@ public partial class MainWindow
             (FsNode root, ScanFileInfo info) = await Task.Run(() => ScanFile.Load(scanFilePath));
             ShowLoadedScan(root, info, null, null, Strings.Get("Status_OpenedVerb"));
         }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidDataException)
         {
             problem = ex.Message;
         }
@@ -281,7 +281,7 @@ public partial class MainWindow
     {
         if (_openBusy is null)
         {
-            var text = new TextBlock { Text = Strings.Get("Scan_Opening"), FontSize = 13.5, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap };
+            var text = new TextBlock { Text = Strings.Get("Scan_Opening"), FontSize = FontSizes.Lead, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap };
             var bar = new ProgressBar { IsIndeterminate = true, Height = 6, Minimum = 0, Maximum = 1, Margin = new Thickness(0, 12, 0, 0) };
             var stack = new StackPanel();
             stack.Children.Add(text);
@@ -295,7 +295,7 @@ public partial class MainWindow
                 BorderThickness = new Thickness(1),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 12, Blur = 40, Color = Color.FromArgb(0x99, 0, 0, 0) }),
+                BoxShadow = Chrome.CardShadow(),
                 ZIndex = 50,
                 IsVisible = false
             };
@@ -321,15 +321,12 @@ public partial class MainWindow
             return;
         }
         string suggestedName = DisplayName(_root.FullPath).Replace(':', ' ').Trim();
-        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = Strings.Get("Dialog_SaveScan"),
-            SuggestedFileName = $"{suggestedName} {DateTime.Now:yyyy-MM-dd}{ScanFile.Extension}",
-            DefaultExtension = ScanFile.Extension.TrimStart('.'),
-            FileTypeChoices = new[] { ScanFileType },
-            SuggestedStartLocation = await StorageProvider.TryGetFolderFromPathAsync(ScanFile.Folder)
-        });
-        string? savePath = file?.TryGetLocalPath();
+        string? savePath = await this.PickSavePathAsync(
+            Strings.Get("Dialog_SaveScan"),
+            $"{suggestedName} {DateTime.Now:yyyy-MM-dd}{ScanFile.Extension}",
+            ScanFileType.Name,
+            ScanFile.Extension.TrimStart('.'),
+            startFolder: ScanFile.Folder);
         if (savePath is null)
         {
             return;
@@ -343,7 +340,7 @@ public partial class MainWindow
             await Task.Run(() => ScanFile.Save(root, savePath, scannedUtc, method));
             StatusText.Text = Strings.Format("Status_Saved", savePath);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             await Dialog.Error(this, Strings.Get("Dialog_SaveScan"), ex.Message);
         }
@@ -416,7 +413,7 @@ public partial class MainWindow
             RefreshTopList();
             InvalidateInsights();
             RefreshInsights();
-            InvalidateChanges();
+            ChangesView.DropRows();
             ShowView(MainView.Changes);
 
             bool sameRoot = string.Equals(Path.GetFullPath(baselineInfo.RootPath), Path.GetFullPath(root.FullPath), StringComparison.OrdinalIgnoreCase);
@@ -424,7 +421,7 @@ public partial class MainWindow
                 ? Strings.Format("Status_Comparing", Ago(baselineInfo.ScannedUtc))
                 : Strings.Format("Status_ComparingOtherRoot", baselineInfo.RootPath);
         }
-        catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidDataException)
         {
             await Dialog.Error(this, Strings.Get("Dialog_CouldNotOpenScan"), ex.Message);
         }
@@ -450,7 +447,7 @@ public partial class MainWindow
         ScanCompare.Clear(_root);
         _baselineInfo = null;
         _comparison = null;
-        InvalidateChanges();
+        ChangesView.DropRows();
         UpdateCompareUi();
         Treemap.Refresh();
         RefreshTopList();
@@ -581,11 +578,11 @@ public partial class MainWindow
 
         var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
         Grid.SetColumn(text, 1);
-        text.Children.Add(new TextBlock { Text = Strings.Get("Start_FirstScanHere"), FontSize = 20, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        text.Children.Add(new TextBlock { Text = Strings.Get("Start_FirstScanHere"), FontSize = FontSizes.Display, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
         text.Children.Add(new TextBlock
         {
             Text = Strings.Get("Start_FirstScanText"),
-            FontSize = 13,
+            FontSize = FontSizes.Emphasis,
             LineHeight = 19,
             MaxWidth = 560,
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -637,7 +634,7 @@ public partial class MainWindow
 
         var words = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         words.Children.Add(new TextBlock { Text = "0", FontSize = 26, FontWeight = FontWeight.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } });
-        words.Children.Add(new TextBlock { Text = Strings.Get("Start_ScansWord"), FontSize = 11.5, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_ScansWord"), FontSize = FontSizes.Detail, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } });
         grid.Children.Add(words);
         return grid;
     }
@@ -657,8 +654,8 @@ public partial class MainWindow
         line.Children.Add(restartButton);
 
         var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastTitle"), FontSize = 13, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
-        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastText"), FontSize = 12, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastTitle"), FontSize = FontSizes.Emphasis, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        words.Children.Add(new TextBlock { Text = Strings.Get("Start_FastText"), FontSize = FontSizes.Small, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         line.Children.Add(words);
 
         return new Border { Child = line, Padding = new Thickness(18, 14), CornerRadius = new CornerRadius(10), Classes = { "start-panel" } };
@@ -681,7 +678,7 @@ public partial class MainWindow
     private static DockPanel EarlierScansHeader(int earlierCount)
     {
         var head = new DockPanel { Margin = new Thickness(2, 6, 2, 0) };
-        var newest = new TextBlock { Text = Strings.Get("Start_NewestFirst"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } };
+        var newest = new TextBlock { Text = Strings.Get("Start_NewestFirst"), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } };
         DockPanel.SetDock(newest, Dock.Right);
         head.Children.Add(newest);
 
@@ -689,13 +686,13 @@ public partial class MainWindow
         title.Children.Add(new TextBlock
         {
             Text = Strings.Get("Start_EarlierScans").ToUpper(System.Globalization.CultureInfo.CurrentCulture),
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             FontWeight = FontWeight.SemiBold,
             LetterSpacing = 0.4,
             VerticalAlignment = VerticalAlignment.Bottom,
             Classes = { "dim" }
         });
-        title.Children.Add(new TextBlock { Text = ScanCount(earlierCount), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } });
+        title.Children.Add(new TextBlock { Text = ScanCount(earlierCount), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Bottom, Classes = { "dim" } });
         head.Children.Add(title);
         return head;
     }
@@ -717,7 +714,7 @@ public partial class MainWindow
                     readyDrive = drive;
                 }
             }
-            catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
             {
                 // A drive that is gone or unreadable is listed without its usage ring.
             }
@@ -793,7 +790,7 @@ public partial class MainWindow
         text.Children.Add(new TextBlock
         {
             Text = Strings.Format("Start_LastScan", Ago(scan.Info.ScannedUtc)).ToUpper(System.Globalization.CultureInfo.CurrentCulture),
-            FontSize = 11.5,
+            FontSize = FontSizes.Detail,
             FontWeight = FontWeight.SemiBold,
             LetterSpacing = 0.4,
             Classes = { "accent" }
@@ -804,7 +801,7 @@ public partial class MainWindow
         text.Children.Add(new TextBlock
         {
             Text = Strings.Format("Start_ScannedSize", SizeFormatter.Format(scan.Info.Bytes)) + " · " + Usage(scan),
-            FontSize = 13.5,
+            FontSize = FontSizes.Lead,
             Margin = new Thickness(0, 4, 0, 0),
             TextTrimming = TextTrimming.CharacterEllipsis,
             Classes = { scan.NearlyFull ? "danger" : "dim" }
@@ -817,7 +814,7 @@ public partial class MainWindow
             icon.VerticalAlignment = VerticalAlignment.Top;
             icon.Margin = new Thickness(0, 1, 7, 0);
             line.Children.Add(icon);
-            var words = new TextBlock { Text = DriftText(drift), FontSize = 12.5, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
+            var words = new TextBlock { Text = DriftText(drift), FontSize = FontSizes.Body, TextWrapping = TextWrapping.Wrap, LineHeight = 17 };
             words.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable(drift >= 0 ? "Warn" : "TextDim"));
             line.Children.Add(words);
             text.Children.Add(line);
@@ -894,7 +891,7 @@ public partial class MainWindow
                     frame.IsVisible = true;
                 });
             }
-            catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or EndOfStreamException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidDataException)
             {
                 // A save that cannot be read just leaves the panel without its foot.
             }
@@ -952,7 +949,7 @@ public partial class MainWindow
             string size = SizeFormatter.Format(node.SizeFor(measure));
             var label = new TextBlock
             {
-                FontSize = 11.5,
+                FontSize = FontSizes.Detail,
                 FontWeight = FontWeight.SemiBold,
                 VerticalAlignment = VerticalAlignment.Center,
                 Foreground = light ? Brushes.Black : Brushes.White,
@@ -981,13 +978,13 @@ public partial class MainWindow
         TextBlock name = NameLine(scan, 14, 14);
         Grid.SetColumn(name, 1);
         grid.Children.Add(name);
-        var size = new TextBlock { Text = SizeFormatter.Format(scan.Info.Bytes), FontSize = 13, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+        var size = new TextBlock { Text = SizeFormatter.Format(scan.Info.Bytes), FontSize = FontSizes.Emphasis, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
         Grid.SetColumn(size, 2);
         grid.Children.Add(size);
         var ago = new TextBlock
         {
             Text = Ago(scan.Info.ScannedUtc),
-            FontSize = 13,
+            FontSize = FontSizes.Emphasis,
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
             Classes = { "dim" }
@@ -998,7 +995,7 @@ public partial class MainWindow
         var usage = new TextBlock
         {
             Text = Usage(scan),
-            FontSize = 12.5,
+            FontSize = FontSizes.Body,
             VerticalAlignment = VerticalAlignment.Center,
             TextTrimming = TextTrimming.CharacterEllipsis,
             Classes = { scan.NearlyFull ? "danger" : "dim" }
@@ -1152,7 +1149,7 @@ public partial class MainWindow
         int index = sources.FindIndex(source => source.FileStem == "changes");
         if (index >= 0)
         {
-            _ = OpenExportAsync(null, index);
+            OpenExportAsync(null, index).Detach();
         }
     }
 

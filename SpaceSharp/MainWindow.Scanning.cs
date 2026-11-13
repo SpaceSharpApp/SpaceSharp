@@ -38,12 +38,7 @@ public partial class MainWindow
         }
         // What this scan counts: as the saved scan it repeats did, or as Settings say.
         bool repeatsFileTable = likeSignature?.StartsWith("MFT", StringComparison.Ordinal) ?? _settings.FastNtfsScan;
-        bool hasExclusions = !string.IsNullOrWhiteSpace(_settings.ExcludePatterns);
-        _scanHow = likeSignature is null
-            ? (_settings.DetectHardLinks, _settings.IncludeHidden, hasExclusions)
-            : (likeSignature.Contains(", links once", StringComparison.Ordinal),
-                !likeSignature.Contains(", no hidden", StringComparison.Ordinal),
-                hasExclusions && likeSignature.Contains(", exclusions", StringComparison.Ordinal));
+        _scanHow = WhatToCount(likeSignature);
         (bool linksOnce, bool includeHidden, bool useExclusions) = _scanHow.Value;
 
         _scanCts = new CancellationTokenSource();
@@ -60,19 +55,7 @@ public partial class MainWindow
             ApplyView();
         }
 
-        try
-        {
-            var drive = new DriveInfo(path);
-            if (PlatformFiles.Current.IsVolumeRoot(path) && drive.IsReady)
-            {
-                _scanExpectedBytes = drive.TotalSize - drive.AvailableFreeSpace;
-                _liveFreeBytes = PlatformFiles.Current.FreeBytes(path);   // the live map carries the free-space box the finished one will have
-            }
-        }
-        catch (Exception ex) when (ex is IOException or ArgumentException or UnauthorizedAccessException)
-        {
-            // Without the drive's used size the progress is shown as a sweep instead of a percentage.
-        }
+        MeasureDrive(path);
 
         ScanCard.IsVisible = true;
         ApplyView();
@@ -82,14 +65,7 @@ public partial class MainWindow
         }
         ScanTitle.Text = Strings.Format("Scan_Title", DisplayName(path));
 
-        bool fastScanWanted = OperatingSystem.IsWindows() && repeatsFileTable && _scanExpectedBytes is not null;
-        bool readFileTable = fastScanWanted && FileTableSupported(path);
-        // Without elevation, a helper process reads the file table.
-        bool useElevatedHelper = fastScanWanted && !readFileTable && !IsElevated && !_declinedElevation && IsNtfs(path);
-        if (useElevatedHelper)
-        {
-            readFileTable = true;
-        }
+        (bool readFileTable, bool useElevatedHelper) = ChooseScanMethod(path, repeatsFileTable);
         _scanMethod = readFileTable ? "MFT" : "folder walk";
         _mftProgress = new WalkProgress(0, 0, 0, 0, path);
 
@@ -115,16 +91,7 @@ public partial class MainWindow
                 Exclude = NamePatterns.Parse(useExclusions ? _settings.ExcludePatterns : string.Empty),
                 Live = _settings.LiveMap
             };
-            _liveShown = false;
-            _liveGuide = null;
-            if (_settings.LiveMap)
-            {
-                PrepareLiveGuide(path);
-            }
-            // A file-table scan has nothing to draw live; say so where the live map would be.
-            SampleBanner.IsVisible = readFileTable && _settings.LiveMap;
-            SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
-            SampleText.Text = Strings.Get("Scan_NoLiveText");
+            PrepareLiveMap(path, readFileTable);
 
             FsNode root;
             if (readFileTable && OperatingSystem.IsWindows())
@@ -136,26 +103,13 @@ public partial class MainWindow
                 root = await _scanner.ScanAsync(path, options, _scanCts.Token);
             }
 
-            SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
-            SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: false, done: true);
-            SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: true);
-            _baselineInfo = null;
-            _comparison = null;
-            ShowTree(root);
-            _settings.Save();
-            StatusText.Text = Strings.Format("Status_Rescanned", DisplayName(path), root.FileCount, SizeFormatter.Format(root.Size));
-            if (_scanMethod != "MFT")
-            {
-                ShowAccessBar(_scanner.GetProgress().DeniedFolders);
-            }
-            _ = SaveAndCompareAsync(root, path, openChanges);
-            _ = JudgeScanAsync(root, path, readFileTable);
+            ShowFinishedScan(root, path, readFileTable, openChanges);
         }
         catch (OperationCanceledException)
         {
             stopped = true;   // handled once the scan is torn down, below
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure())
         {
             StatusText.Text = ex.Message;
             if (_liveShown)
@@ -165,15 +119,8 @@ public partial class MainWindow
         }
         finally
         {
-            _progressTimer.Stop();
-            _liveTimer.Stop();
             System.Runtime.GCSettings.LatencyMode = latencyBefore;
-            _liveGuide = null;
-            ScanCard.IsVisible = false;
-            _scanCts.Dispose();
-            _scanCts = null;
-            UpdateNavigation();
-            ApplyView();
+            EndScan();
         }
 
         if (stopped)
@@ -184,6 +131,103 @@ public partial class MainWindow
             CloseScan(evenWithoutScan: true);
             StatusText.Text = Strings.Get("Status_ScanCancelled");
         }
+    }
+
+    /// <summary>What a scan counts: as the saved scan it repeats did, or as Settings say.</summary>
+    /// <param name="likeSignature">The signature of the saved scan to repeat, as <see cref="ScanSignature"/> wrote it; null scans by the settings.</param>
+    /// <returns>Whether hard-linked files count once, whether hidden files count, and whether the exclusions apply.</returns>
+    private (bool LinksOnce, bool IncludeHidden, bool UseExclusions) WhatToCount(string? likeSignature)
+    {
+        bool hasExclusions = !string.IsNullOrWhiteSpace(_settings.ExcludePatterns);
+        return likeSignature is null
+            ? (_settings.DetectHardLinks, _settings.IncludeHidden, hasExclusions)
+            : (likeSignature.Contains(", links once", StringComparison.Ordinal),
+                !likeSignature.Contains(", no hidden", StringComparison.Ordinal),
+                hasExclusions && likeSignature.Contains(", exclusions", StringComparison.Ordinal));
+    }
+
+    /// <summary>Reads how much a drive holds and has free, for the progress percentage and the live map's free-space box.</summary>
+    /// <param name="path">The scan root; anything but a ready drive root leaves both figures as they were reset.</param>
+    private void MeasureDrive(string path)
+    {
+        try
+        {
+            var drive = new DriveInfo(path);
+            if (PlatformFiles.Current.IsVolumeRoot(path) && drive.IsReady)
+            {
+                _scanExpectedBytes = drive.TotalSize - drive.AvailableFreeSpace;
+                _liveFreeBytes = PlatformFiles.Current.FreeBytes(path);   // the live map carries the free-space box the finished one will have
+            }
+        }
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is ArgumentException)
+        {
+            // Without the drive's used size the progress is shown as a sweep instead of a percentage.
+        }
+    }
+
+    /// <summary>Decides how the drive is read: from the NTFS file table, by this process or by an elevated helper, or by walking the folders.</summary>
+    /// <param name="path">The scan root.</param>
+    /// <param name="wantsFileTable">True when the settings, or the saved scan being repeated, ask for the file table.</param>
+    /// <returns>Whether the file table is read, and whether a helper process reads it because this one is not elevated.</returns>
+    private (bool ReadFileTable, bool UseElevatedHelper) ChooseScanMethod(string path, bool wantsFileTable)
+    {
+        bool fastScanWanted = OperatingSystem.IsWindows() && wantsFileTable && _scanExpectedBytes is not null;
+        bool readFileTable = fastScanWanted && FileTableSupported(path);
+        // Without elevation, a helper process reads the file table.
+        bool useElevatedHelper = fastScanWanted && !readFileTable && !IsElevated && !_declinedElevation && IsNtfs(path);
+        return (readFileTable || useElevatedHelper, useElevatedHelper);
+    }
+
+    /// <summary>Sets up the map that draws itself during the scan, or the note that stands in for it.</summary>
+    /// <param name="path">The scan root.</param>
+    /// <param name="readFileTable">True when the scan reads the file table, which has nothing to draw live.</param>
+    private void PrepareLiveMap(string path, bool readFileTable)
+    {
+        _liveShown = false;
+        _liveGuide = null;
+        if (_settings.LiveMap)
+        {
+            PrepareLiveGuide(path);
+        }
+        // A file-table scan has nothing to draw live; say so where the live map would be.
+        SampleBanner.IsVisible = readFileTable && _settings.LiveMap;
+        SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
+        SampleText.Text = Strings.Get("Scan_NoLiveText");
+    }
+
+    /// <summary>Shows a finished scan: the map, the status line, the folders that could not be read, then the save and the comparison in the background.</summary>
+    /// <param name="root">The scanned tree.</param>
+    /// <param name="path">The scan root.</param>
+    /// <param name="readFileTable">True when the file table was read; a folder walk also reports the folders it was denied.</param>
+    /// <param name="openChanges">True opens the Changes view once the scan has been compared with the one before it.</param>
+    private void ShowFinishedScan(FsNode root, string path, bool readFileTable, bool openChanges)
+    {
+        SetStage(StageFindIcon, StageFindFill, StageFindBar, running: false, done: true);
+        SetStage(StageBuildIcon, StageBuildFill, StageBuildBar, running: false, done: true);
+        SetStage(StageDrawIcon, StageDrawFill, StageDrawBar, running: false, done: true);
+        _baselineInfo = null;
+        _comparison = null;
+        ShowTree(root);
+        StatusText.Text = Strings.Format("Status_Rescanned", DisplayName(path), root.FileCount, SizeFormatter.Format(root.Size));
+        if (_scanMethod != "MFT")
+        {
+            ShowAccessBar(_scanner.GetProgress().DeniedFolders);
+        }
+        SaveAndCompareAsync(root, path, openChanges).Detach();
+        JudgeScanAsync(root, path, readFileTable).Detach();
+    }
+
+    /// <summary>Tears a scan down whether it finished, failed or was stopped: timers off, card hidden, and the window ready for the next one.</summary>
+    private void EndScan()
+    {
+        _progressTimer.Stop();
+        _liveTimer.Stop();
+        _liveGuide = null;
+        ScanCard.IsVisible = false;
+        _scanCts?.Dispose();
+        _scanCts = null;
+        UpdateNavigation();
+        ApplyView();
     }
 
     /// <summary>Puts the scanning card back to its starting state for a new scan.</summary>
@@ -263,7 +307,7 @@ public partial class MainWindow
             StageFindText.Text = Strings.Get("Scan_StageFind");
             return await _scanner.ScanAsync(path, options, token);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or IndexOutOfRangeException or ArgumentException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is IndexOutOfRangeException or ArgumentException)
         {
             _scanMethod = "folder walk";
             SampleBanner.IsVisible = false;
@@ -363,7 +407,7 @@ public partial class MainWindow
             {
                 return File.Exists(saved) ? ScanFile.Load(saved, addFreeSpace: false).Root : null;
             }
-            catch (Exception ex) when (ex is IOException or InvalidDataException or EndOfStreamException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidDataException)
             {
                 return null;
             }
@@ -570,11 +614,11 @@ public partial class MainWindow
         UpdateNavigation();
         UpdateCompareUi();
         InvalidateInsights();
-        InvalidateChanges();
+        ChangesView.DropRows();
         ApplyFilter();
         RefreshTopList();
         ApplyView();
         RefreshInsights();
-        RefreshChanges();
+        ChangesView.Refresh();
     }
 }

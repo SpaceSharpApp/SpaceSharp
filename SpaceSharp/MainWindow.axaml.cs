@@ -14,6 +14,7 @@ using SpaceSharp.Models;
 using SpaceSharp.Scanning;
 using SpaceSharp.Services;
 using SpaceSharp.Util;
+using SpaceSharp.Views;
 
 namespace SpaceSharp;
 
@@ -41,11 +42,14 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        StatisticsView.Attach(this);
+        InsightsView.Attach(this);
+        _filterPanel = new FilterPanel(this, new FilterPanelParts(FilterBox, FilterToggleButton, FilterRail, RailContent, FilterDrawer, DrawerContent, DrawerFooter, DrawerClearButton));
         _deleteBusy.Width = 460;
         _deleteBusy.Margin = new Thickness(18);
         _deleteBusy.HorizontalAlignment = HorizontalAlignment.Right;
         _deleteBusy.VerticalAlignment = VerticalAlignment.Bottom;
-        _deleteBusy.BoxShadow = new BoxShadows(new BoxShadow { OffsetY = 12, Blur = 40, Color = Color.FromArgb(0x99, 0, 0, 0) });
+        _deleteBusy.BoxShadow = Chrome.CardShadow();
         _deleteBusy.CornerRadius = new CornerRadius(12);
         _deleteBusy.Padding = new Thickness(18, 16, 18, 14);
         _deleteBusy.BorderThickness = new Thickness(1);
@@ -55,7 +59,7 @@ public partial class MainWindow : Window
         MapHost.Children.Add(_deleteBusy);
         TitleBarTheme.Attach(this);
         BuildStatusRight();   // before Build and ApplyLook, which refresh it
-        BuildChangesView();
+        ChangesView.Attach(this);
         Build();
         BuildDrives();
         ApplyLook();
@@ -89,7 +93,7 @@ public partial class MainWindow : Window
         Opened += async (_, _) =>
         {
             FitToScreen();
-            _ = Task.Run(() => ScanFile.Prune(_settings.KeepScansDays));
+            Task.Run(() => ScanFile.Prune(_settings.KeepScansDays)).Detach();
             if (App.Args.Audit is { } auditFile)
             {
                 await RunAuditAsync(auditFile);
@@ -128,7 +132,7 @@ public partial class MainWindow : Window
             {
                 ExplorerIntegration.Install(Strings.Get("Explorer_ScanWith"));
             }
-            catch (Exception ex) when (ex is System.Security.SecurityException or UnauthorizedAccessException or IOException)
+            catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.Security.SecurityException)
             {
                 // A locked-down registry only costs the Explorer entry; the app itself is unaffected.
             }
@@ -231,6 +235,7 @@ public partial class MainWindow : Window
         try
         {
             string scanRootArgument = _scanRoot is null ? string.Empty : $"\"{_scanRoot}\"";
+            _settings.Save();   // the new instance reads the file as it starts
             App.Instance.Release();
             Process.Start(new ProcessStartInfo(exe, scanRootArgument) { UseShellExecute = true, Verb = "runas" });
             if (Application.Current?.ApplicationLifetime is Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime desktop)
@@ -411,7 +416,7 @@ public partial class MainWindow : Window
         Treemap.Refresh();
         RefreshTopList();
         RefreshInsights();
-        RefreshChanges();
+        ChangesView.Refresh();
         ShowThemeButton();
         if (_dimDepth > 0)
         {
@@ -488,7 +493,6 @@ public partial class MainWindow : Window
             }
             dragging = false;
             e.Pointer.Capture(null);
-            _settings.Save();
         };
         handle.PointerCaptureLost += (_, _) => dragging = false;
     }
@@ -599,7 +603,7 @@ public partial class MainWindow : Window
         ToolTip.SetTip(ThemeButton, Strings.Get(App.IsDark ? "Main_ThemeToLight" : "Main_ThemeToDark"));
     }
 
-    /// <summary>The window title: the focused folder's path before the app name and version ("C: - SpaceSharp 2.9.0"), or the app alone without a map.</summary>
+    /// <summary>The window title: the focused folder's path before the app name and version ("C: - SpaceSharp 2.9.1"), or the app alone without a map.</summary>
     private void UpdateTitle()
     {
         string app = $"SpaceSharp {AppInfo.Version}";
@@ -841,7 +845,7 @@ public partial class MainWindow : Window
             {
                 Text = Strings.Get(key),
                 Classes = { "dim" },
-                FontSize = 12,
+                FontSize = FontSizes.Small,
                 TextTrimming = TextTrimming.CharacterEllipsis,
                 VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
             };
@@ -910,7 +914,7 @@ public partial class MainWindow : Window
         };
         var labels = new StackPanel { VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
         labels.Children.Add(new TextBlock { Text = row.Name, FontWeight = FontWeight.Medium, TextTrimming = TextTrimming.CharacterEllipsis });
-        labels.Children.Add(new TextBlock { Text = row.Detail, Classes = { "dim" }, FontSize = 11, TextTrimming = TextTrimming.CharacterEllipsis });
+        labels.Children.Add(new TextBlock { Text = row.Detail, Classes = { "dim" }, FontSize = FontSizes.Caption, TextTrimming = TextTrimming.CharacterEllipsis });
 
         var bar = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 8, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center };
         Grid fill = CapacityBar(row.Fraction, 6);
@@ -922,7 +926,7 @@ public partial class MainWindow : Window
         {
             Text = ShareText(row.Share),
             Classes = { "dim" },
-            FontSize = 11,
+            FontSize = FontSizes.Caption,
             MinWidth = 34,
             TextAlignment = TextAlignment.Right,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center
@@ -935,7 +939,7 @@ public partial class MainWindow : Window
         {
             Text = row.SizeText,
             FontWeight = FontWeight.SemiBold,
-            FontSize = 14,
+            FontSize = FontSizes.Large,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
             MinWidth = 64,
             TextAlignment = TextAlignment.Right
@@ -979,7 +983,7 @@ public partial class MainWindow : Window
         {
             Text = text.ToUpperInvariant(),
             Classes = { "dim" },
-            FontSize = 11,
+            FontSize = FontSizes.Caption,
             FontWeight = FontWeight.SemiBold,
             LetterSpacing = 0.4
         };
@@ -1011,7 +1015,7 @@ public partial class MainWindow : Window
     {
         if (_scanRoot is not null)
         {
-            _ = ScanAsync(_scanRoot);
+            ScanAsync(_scanRoot).Detach();
         }
     }
 
@@ -1036,14 +1040,12 @@ public partial class MainWindow : Window
             return;
         }
         string suggestedName = DisplayName(_root.FullPath).Replace(':', ' ').Trim();
-        IStorageFile? file = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-        {
-            Title = Strings.Get("Main_SavePicture"),
-            SuggestedFileName = $"SpaceSharp {suggestedName} {DateTime.Now:yyyy-MM-dd HH.mm}.png",
-            DefaultExtension = "png",
-            FileTypeChoices = new[] { new FilePickerFileType("PNG") { Patterns = new[] { "*.png" }, MimeTypes = new[] { "image/png" } } }
-        });
-        string? path = file?.TryGetLocalPath();
+        string? path = await this.PickSavePathAsync(
+            Strings.Get("Main_SavePicture"),
+            $"SpaceSharp {suggestedName} {DateTime.Now:yyyy-MM-dd HH.mm}.png",
+            "PNG",
+            "png",
+            mimeType: "image/png");
         if (path is null)
         {
             return;
@@ -1054,7 +1056,7 @@ public partial class MainWindow : Window
             bitmap.Save(path, Avalonia.Media.Imaging.PngBitmapEncoderOptions.Default);
             StatusText.Text = Strings.Format("Status_Saved", path);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidOperationException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is InvalidOperationException)
         {
             await Dialog.Error(this, Strings.Get("Main_SavePicture"), ex.Message);
         }
@@ -1065,7 +1067,6 @@ public partial class MainWindow : Window
     private void Panel_Click(object? sender, RoutedEventArgs e)
     {
         _settings.ShowSidePanel = !_settings.ShowSidePanel;
-        _settings.Save();
         ApplyLook();
     }
 
@@ -1081,7 +1082,6 @@ public partial class MainWindow : Window
             2 => "ByFileType",
             _ => "ByBranch"
         };
-        _settings.Save();
         ApplyLook();
     }
 
@@ -1105,7 +1105,7 @@ public partial class MainWindow : Window
                 desktop.Shutdown();
             }
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             StatusText.Text = ex.Message;
         }
@@ -1115,158 +1115,108 @@ public partial class MainWindow : Window
     {
         bool dark = !App.IsDark;   // Gold counts as dark, so the toggle leaves it for Light
         _settings.Theme = dark ? "Dark" : "Light";
-        _settings.Save();
         App.ApplyTheme();
         ApplySettings();
     }
 
-    /// <summary>The window's keyboard shortcuts; most are ignored while the filter box has focus, and the map ones while the Changes view shows.</summary>
+    /// <summary>Runs the keyboard shortcut for a key press and marks the press handled; a key with no shortcut passes through.</summary>
     /// <param name="sender">The window; unused.</param>
-    /// <param name="e">The key and modifiers; marked handled for every shortcut taken.</param>
+    /// <param name="e">The key and modifiers.</param>
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
-        switch (e.Key)
+        if (ShortcutFor(e) is not { } run)
         {
-            case Key.Escape when _scanCts is not null:
-                _scanCts.Cancel();
-                e.Handled = true;
-                break;
-            case Key.Escape when FilterDrawer.IsVisible && !FilterHasFocus && string.IsNullOrEmpty(FilterBox.Text):
-                FilterDrawer.IsVisible = false;
-                e.Handled = true;
-                break;
-            case Key.Escape when !string.IsNullOrEmpty(FilterBox.Text) && !FilterHasFocus:
-                FilterBox.Text = string.Empty;
-                e.Handled = true;
-                break;
-            case Key.Delete when !FilterHasFocus && !ChangesShowing:
-                _ = DeleteNodes(Treemap.SelectedNodes.ToList());
-                e.Handled = true;
-                break;
-            case Key.Enter when e.KeyModifiers.HasFlag(KeyModifiers.Alt) && !FilterHasFocus && !ChangesShowing:
-                ShowProperties();
-                e.Handled = true;
-                break;
-            case Key.Enter when !FilterHasFocus && !ChangesShowing:
-                OpenSelected();
-                e.Handled = true;
-                break;
-            case Key.C when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus:
-                CopyToClipboard(Treemap.SelectedNode?.FullPath);
-                e.Handled = true;
-                break;
-            case Key.Back when !FilterHasFocus && !ChangesShowing:
-                Up_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
-            case Key.Home when !FilterHasFocus && !ChangesShowing:
-                Treemap.ShowAll();
-                e.Handled = true;
-                break;
-            case Key.Add or Key.OemPlus when !FilterHasFocus:
-                Treemap.ZoomBy(1.25);
-                e.Handled = true;
-                break;
-            case Key.Subtract or Key.OemMinus when !FilterHasFocus:
-                Treemap.ZoomBy(1 / 1.25);
-                e.Handled = true;
-                break;
-            case Key.F5:
-                Rescan_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
-            // hidden debug shortcuts
-            case Key.U when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt):
-                _ = UpdateWindow.ShowPreview(this);
-                e.Handled = true;
-                break;
-            case Key.M when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt):
-                LoadMock(MockSystem.Drives[0].Root);
-                e.Handled = true;
-                break;
-            case Key.R when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt):
-                ToggleRightToLeft();
-                e.Handled = true;
-                break;
-            case Key.L when e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt):
-                _ = AuditLayoutAsync();
-                e.Handled = true;
-                break;
-            case Key.I when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                ShowInspect();
-                e.Handled = true;
-                break;
-            case Key.S when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                _ = SaveScanAsAsync();
-                e.Handled = true;
-                break;
-            case Key.O when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                _ = OpenScanAsync();
-                e.Handled = true;
-                break;
-            case Key.W when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                CloseScan();
-                e.Handled = true;
-                break;
-            case Key.K when !FilterHasFocus:
-                ColorCombo.SelectedIndex = (ColorCombo.SelectedIndex + 1) % ColorCombo.ItemCount;
-                e.Handled = true;
-                break;
-            case Key.L when !FilterHasFocus:
-                Panel_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
-            case Key.G when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
-                _settings.ShowFreeSpace = !_settings.ShowFreeSpace;
-                _settings.Save();
-                ApplySettings();
-                StatusText.Text = Strings.Get(_settings.ShowFreeSpace ? "Status_FreeSpaceShown" : "Status_FreeSpaceHidden");
-                e.Handled = true;
-                break;
-            case Key.U when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
-                bool uniform = string.Equals(_settings.MapLayout, "Uniform", StringComparison.OrdinalIgnoreCase);
-                _settings.MapLayout = uniform ? "BySize" : "Uniform";
-                _settings.Save();
-                ApplySettings();
-                StatusText.Text = Strings.Format("Status_MapLayout", Strings.Get(uniform ? "MapLayout_BySize" : "MapLayout_Uniform"));
-                e.Handled = true;
-                break;
-            case Key.M when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
-                bool classic = string.Equals(_settings.MapStyle, "Classic", StringComparison.OrdinalIgnoreCase);
-                _settings.MapStyle = classic ? "Modern" : "Classic";
-                _settings.Save();
-                ApplySettings();
-                StatusText.Text = Strings.Format("Status_MapStyle", Strings.Get(classic ? "MapStyle_Modern" : "MapStyle_Classic"));
-                e.Handled = true;
-                break;
-            case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                FocusFilter();
-                e.Handled = true;
-                break;
-            case Key.D when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus:
-                _ = OpenDuplicatesAsync();
-                e.Handled = true;
-                break;
-            case Key.A when e.KeyModifiers.HasFlag(KeyModifiers.Control) && !FilterHasFocus:
-                SelectMatches_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
-            case Key.F1:
-                About_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
-            case Key.B when !FilterHasFocus:
-                NextView();
-                e.Handled = true;
-                break;
-            case Key.T when !FilterHasFocus && e.KeyModifiers == KeyModifiers.None:
-                new AchievementsWindow().ShowDialog(this);
-                e.Handled = true;
-                break;
-            case Key.OemComma when e.KeyModifiers.HasFlag(KeyModifiers.Control):
-                Settings_Click(null, new RoutedEventArgs());
-                e.Handled = true;
-                break;
+            return;
         }
+        run();
+        e.Handled = true;
+    }
+
+    /// <summary>The table of keyboard shortcuts: the first line that matches the key, its modifiers and where the focus is wins.</summary>
+    /// <param name="e">The key and modifiers pressed.</param>
+    /// <returns>What the shortcut does; null when the press is not a shortcut here, such as a letter typed into the filter box.</returns>
+    private Action? ShortcutFor(KeyEventArgs e)
+    {
+        bool typing = FilterHasFocus;
+        bool onMap = !typing && !ChangesShowing;
+        bool control = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+        bool alt = e.KeyModifiers.HasFlag(KeyModifiers.Alt);
+        bool bare = e.KeyModifiers == KeyModifiers.None;
+        bool debug = e.KeyModifiers == (KeyModifiers.Control | KeyModifiers.Shift | KeyModifiers.Alt);
+        bool filterEmpty = string.IsNullOrEmpty(FilterBox.Text);
+
+        return e.Key switch
+        {
+            Key.Escape when _scanCts is not null => () => _scanCts?.Cancel(),
+            Key.Escape when FilterDrawer.IsVisible && !typing && filterEmpty => () => FilterDrawer.IsVisible = false,
+            Key.Escape when !filterEmpty && !typing => () => FilterBox.Text = string.Empty,
+
+            // The selection.
+            Key.Delete when onMap => () => DeleteNodes(Treemap.SelectedNodes.ToList()).Detach(),
+            Key.Enter when alt && onMap => () => ShowProperties(),
+            Key.Enter when onMap => () => OpenSelected(),
+            Key.C when control && !typing => () => CopyToClipboard(Treemap.SelectedNode?.FullPath),
+
+            // Moving around the map.
+            Key.Back when onMap => () => Up_Click(null, new RoutedEventArgs()),
+            Key.Home when onMap => () => Treemap.ShowAll(),
+            Key.Add or Key.OemPlus when !typing => () => Treemap.ZoomBy(1.25),
+            Key.Subtract or Key.OemMinus when !typing => () => Treemap.ZoomBy(1 / 1.25),
+            Key.F5 => () => Rescan_Click(null, new RoutedEventArgs()),
+
+            // Hidden debug shortcuts; they come before the plain letters they share.
+            Key.U when debug => () => UpdateWindow.ShowPreview(this).Detach(),
+            Key.M when debug => () => LoadMock(MockSystem.Drives[0].Root),
+            Key.R when debug => () => ToggleRightToLeft(),
+            Key.L when debug => () => AuditLayoutAsync().Detach(),
+
+            // Scans and windows.
+            Key.I when control => () => ShowInspect(),
+            Key.S when control => () => SaveScanAsAsync().Detach(),
+            Key.O when control => () => OpenScanAsync().Detach(),
+            Key.W when control => () => CloseScan(),
+            Key.F when control => () => FocusFilter(),
+            Key.D when control && !typing => () => OpenDuplicatesAsync().Detach(),
+            Key.A when control && !typing => () => SelectMatches_Click(null, new RoutedEventArgs()),
+            Key.OemComma when control => () => Settings_Click(null, new RoutedEventArgs()),
+            Key.F1 => () => About_Click(null, new RoutedEventArgs()),
+
+            // How the map looks.
+            Key.K when !typing => () => ColorCombo.SelectedIndex = (ColorCombo.SelectedIndex + 1) % ColorCombo.ItemCount,
+            Key.L when !typing => () => Panel_Click(null, new RoutedEventArgs()),
+            Key.G when !typing && bare => ToggleFreeSpace,
+            Key.U when !typing && bare => ToggleMapLayout,
+            Key.M when !typing && bare => ToggleMapStyle,
+            Key.B when !typing => () => NextView(),
+            Key.T when !typing && bare => () => new AchievementsWindow().ShowDialog(this),
+
+            _ => null
+        };
+    }
+
+    /// <summary>G: shows or hides the free space box and says which in the status bar.</summary>
+    private void ToggleFreeSpace()
+    {
+        _settings.ShowFreeSpace = !_settings.ShowFreeSpace;
+        ApplySettings();
+        StatusText.Text = Strings.Get(_settings.ShowFreeSpace ? "Status_FreeSpaceShown" : "Status_FreeSpaceHidden");
+    }
+
+    /// <summary>U: switches the map between boxes by size and uniform boxes and says which in the status bar.</summary>
+    private void ToggleMapLayout()
+    {
+        bool uniform = string.Equals(_settings.MapLayout, "Uniform", StringComparison.OrdinalIgnoreCase);
+        _settings.MapLayout = uniform ? "BySize" : "Uniform";
+        ApplySettings();
+        StatusText.Text = Strings.Format("Status_MapLayout", Strings.Get(uniform ? "MapLayout_BySize" : "MapLayout_Uniform"));
+    }
+
+    /// <summary>M: switches the map between the modern and the classic style and says which in the status bar.</summary>
+    private void ToggleMapStyle()
+    {
+        bool classic = string.Equals(_settings.MapStyle, "Classic", StringComparison.OrdinalIgnoreCase);
+        _settings.MapStyle = classic ? "Modern" : "Classic";
+        ApplySettings();
+        StatusText.Text = Strings.Format("Status_MapStyle", Strings.Get(classic ? "MapStyle_Modern" : "MapStyle_Classic"));
     }
 }

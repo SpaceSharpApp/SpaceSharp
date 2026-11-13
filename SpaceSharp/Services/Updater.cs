@@ -1,3 +1,4 @@
+using SpaceSharp.Util;
 using Velopack;
 using Velopack.Sources;
 
@@ -7,9 +8,7 @@ namespace SpaceSharp.Services;
 /// <remarks>Inactive for portable copies not installed through a Velopack setup.</remarks>
 internal sealed class Updater
 {
-    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
-
-    private readonly UpdateManager _manager = new(new GithubSource(Repository, null, prerelease: false));
+    private readonly UpdateManager _manager = new(new GithubSource(AppInfo.Repository, null, prerelease: false));
 
     /// <summary>The single updater; the manager keeps the state of the last check.</summary>
     public static Updater Instance { get; } = new();

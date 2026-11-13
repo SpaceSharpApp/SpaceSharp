@@ -14,8 +14,8 @@ namespace SpaceSharp;
 /// out there. A click on a locked one shows its hint under the panel; a second click hides it again.</summary>
 public sealed class AchievementsWindow : Window
 {
-    private readonly TextBlock _peekName = new() { FontSize = 13, FontWeight = FontWeight.SemiBold, IsVisible = false };
-    private readonly TextBlock _peekText = new() { FontSize = 12.5, LineHeight = 17, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+    private readonly TextBlock _peekName = new() { FontSize = FontSizes.Emphasis, FontWeight = FontWeight.SemiBold, IsVisible = false };
+    private readonly TextBlock _peekText = new() { FontSize = FontSizes.Body, LineHeight = 17, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
     private readonly string _restingHint;
     private Achievement? _peeked;
 
@@ -65,17 +65,17 @@ public sealed class AchievementsWindow : Window
         var header = new DockPanel();
         if (unlocked.Count > 1)
         {
-            var order = new TextBlock { Text = Strings.Get("Ach_NewestFirst"), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(12, 0, 0, 2), Classes = { "dim" } };
+            var order = new TextBlock { Text = Strings.Get("Ach_NewestFirst"), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(12, 0, 0, 2), Classes = { "dim" } };
             DockPanel.SetDock(order, Dock.Right);
             header.Children.Add(order);
         }
-        header.Children.Add(new TextBlock { Text = Strings.Format("Ach_Count", unlocked.Count, total), FontSize = 20, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        header.Children.Add(new TextBlock { Text = Strings.Format("Ach_Count", unlocked.Count, total), FontSize = FontSizes.Display, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
 
-        var intro = new TextBlock { Text = Strings.Get("Ach_Intro"), FontSize = 12.5, LineHeight = 17, Margin = new Thickness(0, 4, 0, 14), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        var intro = new TextBlock { Text = Strings.Get("Ach_Intro"), FontSize = FontSizes.Body, LineHeight = 17, Margin = new Thickness(0, 4, 0, 14), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
         var column = new StackPanel { Children = { header, intro } };
         if (unlocked.Count == 0)
         {
-            column.Children.Add(new TextBlock { Text = Strings.Get("Ach_NoneYet"), FontSize = 13, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+            column.Children.Add(new TextBlock { Text = Strings.Get("Ach_NoneYet"), FontSize = FontSizes.Emphasis, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
             return column;
         }
 
@@ -112,7 +112,7 @@ public sealed class AchievementsWindow : Window
         grid.Children.Add(new TextBlock
         {
             Text = unlockedUtc.ToLocalTime().ToString("d MMM yyyy", CultureInfo.CurrentCulture),
-            FontSize = 12,
+            FontSize = FontSizes.Small,
             Margin = new Thickness(0, 2, 0, 0),
             HorizontalAlignment = HorizontalAlignment.Right,
             Classes = { "dim" }
@@ -133,8 +133,8 @@ public sealed class AchievementsWindow : Window
         grid.Children.Add(line);
 
         var words = new StackPanel { Margin = new Thickness(0, 0, 0, 12) };
-        words.Children.Add(new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = 13.5, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
-        words.Children.Add(new TextBlock { Text = MainWindow.AchievementHint(achievement), FontSize = 12.5, LineHeight = 17, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
+        words.Children.Add(new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = FontSizes.Lead, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        words.Children.Add(new TextBlock { Text = MainWindow.AchievementHint(achievement), FontSize = FontSizes.Body, LineHeight = 17, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Classes = { "dim" } });
         Grid.SetColumn(words, 2);
         grid.Children.Add(words);
         return grid;
@@ -146,10 +146,10 @@ public sealed class AchievementsWindow : Window
     private Border StillOut(List<Achievement> locked)
     {
         var header = new DockPanel();
-        var count = new TextBlock { Text = locked.Count.ToString(CultureInfo.CurrentCulture), FontSize = 13, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(12, 0, 0, 1), Classes = { "dim" } };
+        var count = new TextBlock { Text = locked.Count.ToString(CultureInfo.CurrentCulture), FontSize = FontSizes.Emphasis, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(12, 0, 0, 1), Classes = { "dim" } };
         DockPanel.SetDock(count, Dock.Right);
         header.Children.Add(count);
-        header.Children.Add(new TextBlock { Text = Strings.Get("Ach_StillOut"), FontSize = 15, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        header.Children.Add(new TextBlock { Text = Strings.Get("Ach_StillOut"), FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
 
         var names = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), ColumnSpacing = 6, RowSpacing = 6 };
         for (int i = 0; i < locked.Count; i++)
@@ -182,7 +182,7 @@ public sealed class AchievementsWindow : Window
         Icon icon = Icons.Make("Lock", 13, "TextDim");
         icon.VerticalAlignment = VerticalAlignment.Center;
         content.Children.Add(icon);
-        var name = new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = 12.5, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        var name = new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
         Grid.SetColumn(name, 1);
         content.Children.Add(name);
 

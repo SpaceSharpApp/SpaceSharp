@@ -17,7 +17,6 @@ namespace SpaceSharp;
 /// <summary>The About window.</summary>
 public sealed class AboutWindow : Window
 {
-    private const string Repository = "https://github.com/SpaceSharpApp/SpaceSharp";
     private readonly string _version = AppInfo.Version;
 
     /// <summary>Builds the window in code: a logo column, link groups on the right and a footer with Copy and Close.</summary>
@@ -60,8 +59,8 @@ public sealed class AboutWindow : Window
         var leftStack = new DockPanel();
         // The system line sits with the version it belongs to; Copy version info copies both.
         var legal = new StackPanel { Spacing = 10 };
-        legal.Children.Add(new TextBlock { Text = SystemDescription(), Classes = { "dim" }, FontSize = 11.5, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
-        legal.Children.Add(new TextBlock { Text = $"{Copyright()}\n{Strings.Get("About_SourceSub")}", Classes = { "dim" }, FontSize = 11.5, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
+        legal.Children.Add(new TextBlock { Text = SystemDescription(), Classes = { "dim" }, FontSize = FontSizes.Detail, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
+        legal.Children.Add(new TextBlock { Text = $"{Copyright()}\n{Strings.Get("About_SourceSub")}", Classes = { "dim" }, FontSize = FontSizes.Detail, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
         DockPanel.SetDock(legal, Dock.Bottom);
         leftStack.Children.Add(legal);
 
@@ -69,7 +68,7 @@ public sealed class AboutWindow : Window
         var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 64, Height = 64, HorizontalAlignment = HorizontalAlignment.Left };
         RenderOptions.SetBitmapInterpolationMode(logo, BitmapInterpolationMode.HighQuality);
         intro.Children.Add(logo);
-        intro.Children.Add(new TextBlock { Text = "SpaceSharp", FontSize = 20, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 10, 0, 0) });
+        intro.Children.Add(new TextBlock { Text = "SpaceSharp", FontSize = FontSizes.Display, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 10, 0, 0) });
         string buildKind = Strings.Get(installed ? "About_BuildInstalled" : "About_BuildPortable");
         intro.Children.Add(new TextBlock { Text = Strings.Get("About_Tagline"), LineHeight = 19, TextWrapping = TextWrapping.Wrap });
         intro.Children.Add(new TextBlock { Text = $"{Strings.Format("About_Version", _version)}\n{buildKind}", Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 24) });
@@ -100,14 +99,14 @@ public sealed class AboutWindow : Window
 
         StackPanel help = Group(Strings.Get("About_GroupHelp"));
         help.Children.Add(Link("Bug", Strings.Get("About_ReportABug"), ReportBug, OpensBrowser()));
-        help.Children.Add(Link("Idea", Strings.Get("About_SuggestAFeature"), () => OpenUrl($"{Repository}/issues/new?template=feature_request.yml"), OpensBrowser()));
+        help.Children.Add(Link("Idea", Strings.Get("About_SuggestAFeature"), () => OpenUrl($"{AppInfo.Repository}/issues/new?template=feature_request.yml"), OpensBrowser()));
         // The number of logs sits at the end of the row, so a clean run reads 0 without opening the folder.
-        var crashCount = new TextBlock { Text = CrashLog.Count().ToString(System.Globalization.CultureInfo.CurrentCulture), FontSize = 12.5, Classes = { "dim" } };
+        var crashCount = new TextBlock { Text = CrashLog.Count().ToString(System.Globalization.CultureInfo.CurrentCulture), FontSize = FontSizes.Body, Classes = { "dim" } };
         help.Children.Add(Link("ScanFolder", Strings.Get("About_CrashLogs"), () => OpenFolder(CrashLog.Folder), crashCount));
         right.Children.Add(help);
 
         StackPanel project = Group(Strings.Get("About_GroupProject"));
-        project.Children.Add(Link("Globe", Strings.Get("About_Source"), () => OpenUrl(Repository), OpensBrowser()));
+        project.Children.Add(Link("Globe", Strings.Get("About_Source"), () => OpenUrl(AppInfo.Repository), OpensBrowser()));
         project.Children.Add(Link("Book", Strings.Get("About_Credits"), () => new CreditsWindow().ShowDialog(this)));
         right.Children.Add(project);
         return right;
@@ -143,7 +142,7 @@ public sealed class AboutWindow : Window
     {
         var group = new StackPanel { Spacing = 1 };
         // Indented to the rows' own padding, so the heading stands over their icons.
-        group.Children.Add(new TextBlock { Text = heading.ToUpperInvariant(), FontSize = 11, FontWeight = FontWeight.SemiBold, LetterSpacing = 1, Classes = { "dim" }, Margin = new Thickness(10, 0, 0, 5) });
+        group.Children.Add(new TextBlock { Text = heading.ToUpperInvariant(), FontSize = FontSizes.Caption, FontWeight = FontWeight.SemiBold, LetterSpacing = 1, Classes = { "dim" }, Margin = new Thickness(10, 0, 0, 5) });
         return group;
     }
 
@@ -190,7 +189,7 @@ public sealed class AboutWindow : Window
         var cap = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(1, 1, 1, 2), Padding = new Thickness(6, 0), MinWidth = 22 };
         cap.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
         cap.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
-        cap.Child = new TextBlock { Text = key, FontSize = 11.5, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
+        cap.Child = new TextBlock { Text = key, FontSize = FontSizes.Detail, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
         return cap;
     }
 
@@ -238,7 +237,7 @@ public sealed class AboutWindow : Window
         {
             Trash.Open(folder);
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is System.ComponentModel.Win32Exception)
         {
             _ = Dialog.Error(this, "SpaceSharp", ex.Message);
         }
@@ -267,7 +266,7 @@ public sealed class AboutWindow : Window
 
     /// <summary>Opens the bug report form with version and system prefilled.</summary>
     private void ReportBug() =>
-        OpenUrl($"{Repository}/issues/new?template=bug_report.yml" +
+        OpenUrl($"{AppInfo.Repository}/issues/new?template=bug_report.yml" +
                 $"&version={Uri.EscapeDataString(_version)}" +
                 $"&windows={Uri.EscapeDataString(SystemDescription())}" +
                 $"&install={Uri.EscapeDataString(Updater.Instance.IsInstalled ? "Installed (Velopack) · Avalonia" : "Portable · Avalonia")}");
@@ -280,7 +279,7 @@ public sealed class AboutWindow : Window
         {
             Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             _ = Dialog.Error(this, "SpaceSharp", Strings.Format("About_BrowserFailed", url, ex.Message));
         }

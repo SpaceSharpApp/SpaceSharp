@@ -22,6 +22,11 @@ public partial class App : Application
     /// <summary>Set by Program.Main before the framework starts.</summary>
     public static string[] StartupArgs { get; set; } = Array.Empty<string>();
 
+    // A changed setting is on disk within this long, whichever window changed it.
+    private static readonly TimeSpan AutosaveEvery = TimeSpan.FromSeconds(3);
+
+    private DispatcherTimer? _autosave;
+
     /// <summary>Loads App.axaml (styles and the theme dictionaries).</summary>
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
@@ -51,6 +56,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
         {
             lifetime.MainWindow = new MainWindow();
+            StartAutosave();
             if (Args.ShowHelp)
             {
                 lifetime.MainWindow.Opened += async (_, _) => await Dialog.Info(lifetime.MainWindow, "SpaceSharp", CommandLine.HelpText.TrimEnd());
@@ -58,6 +64,14 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    /// <summary>Starts the timer that saves the settings on its own, so no change depends on its call site remembering to.</summary>
+    private void StartAutosave()
+    {
+        _autosave = new DispatcherTimer { Interval = AutosaveEvery };
+        _autosave.Tick += (_, _) => AppSettings.Current.Save();
+        _autosave.Start();
     }
 
     // ------------------------------------------------------------------ theme and look
@@ -139,7 +153,6 @@ public partial class App : Application
         {
             AppSettings.Current.LookLight = name;
         }
-        AppSettings.Current.Save();
         if (dark && IsGold)
         {
             return;   // stored for later; Gold keeps its own look while it is on
@@ -254,7 +267,7 @@ public partial class App : Application
     /// <summary>Writes the crash log and offers to open a bug report.</summary>
     /// <param name="exception">The unhandled exception; its message chain is shown and its details go into the log and the issue URL.</param>
     /// <param name="source">Where it was caught ("UI thread", "background task"), written into the log.</param>
-    private static async void Report(Exception exception, string source)
+    internal static async void Report(Exception exception, string source)
     {
         string? logPath = CrashLog.Write(exception, source);
         string savedNote = logPath is null ? Strings.Get("Crash_NotSaved") : Strings.Format("Crash_Saved", logPath);

@@ -1,6 +1,7 @@
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
@@ -85,7 +86,7 @@ public sealed class SingleInstance : IDisposable
                     // Release() canceled the token; the listener is done.
                     break;
                 }
-                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+                catch (Exception ex) when (ex.IsFileSystemFailure() || ex is JsonException)
                 {
                     // A broken pipe or garbled message is dropped; a short pause keeps a stuck pipe from spinning.
                     // The ContinueWith swallows the cancellation so the loop condition ends the task instead.
@@ -109,7 +110,7 @@ public sealed class SingleInstance : IDisposable
             writer.Flush();
             return true;
         }
-        catch (Exception ex) when (ex is IOException or TimeoutException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex.IsFileSystemFailure() || ex is TimeoutException)
         {
             // The first instance is gone or not listening; the caller starts normally instead.
             return false;

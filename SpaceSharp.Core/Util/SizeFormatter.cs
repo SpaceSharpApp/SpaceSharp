@@ -21,6 +21,17 @@ public static class SizeFormatter
         return unit == 0 ? $"{bytes} B" : $"{value:0.##} {Units[unit]}";
     }
 
+    /// <summary>A size with its sign written out, for a change between two scans.</summary>
+    /// <param name="bytes">The change in bytes.</param>
+    /// <returns>"+1.2 GB" or "−340 MB", with a true minus sign; no change reads "±0 B".</returns>
+    public static string Signed(long bytes) => bytes == 0 ? "±0 B" : (bytes > 0 ? "+" : "−") + Format(Math.Abs(bytes));
+
+    /// <summary>A count with its sign written out, for a change between two scans.</summary>
+    /// <param name="count">The change.</param>
+    /// <returns>"+3,210" or "−12" in the current culture's grouping, with a true minus sign; no change reads "±0".</returns>
+    public static string SignedCount(long count) =>
+        (count > 0 ? "+" : count < 0 ? "−" : "±") + Math.Abs(count).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+
     /// <summary>A short form with fewer decimals as the number grows: two below 10, one below 100, none above.</summary>
     /// <param name="bytes">A byte count; negative values keep their sign.</param>
     /// <returns>The number and unit separated by a space, at most five significant characters before the unit.</returns>

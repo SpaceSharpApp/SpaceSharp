@@ -101,4 +101,85 @@ public class StatisticsTests
         ExtensionTotal png = report.Extensions.First(extension => extension.Extension == ".png");
         Assert.Equal(0, png.PreviousBytes);
     }
+
+    [Fact]
+    public void ClassLabelsCountWithinTheirUnit()
+    {
+        Assert.Equal("0", StatisticsReport.ClassLabel(0));
+        Assert.Equal("1", StatisticsReport.ClassLabel(1));
+        Assert.Equal("2–3", StatisticsReport.ClassLabel(2));
+        Assert.Equal("512–1023", StatisticsReport.ClassLabel(10));
+        Assert.Equal("1–2", StatisticsReport.ClassLabel(11));
+        Assert.Equal("512–1024", StatisticsReport.ClassLabel(20));
+        Assert.Equal("1–2", StatisticsReport.ClassLabel(21));
+    }
+
+    [Fact]
+    public void ClassUnitsStepEveryTenClasses()
+    {
+        Assert.Equal("B", StatisticsReport.ClassUnit(0));
+        Assert.Equal("B", StatisticsReport.ClassUnit(10));
+        Assert.Equal("KB", StatisticsReport.ClassUnit(11));
+        Assert.Equal("KB", StatisticsReport.ClassUnit(20));
+        Assert.Equal("MB", StatisticsReport.ClassUnit(21));
+        Assert.Equal("PB", StatisticsReport.ClassUnit(64));
+    }
+
+    [Fact]
+    public void EveryAgeFilterParsesToFilesOnly()
+    {
+        foreach (StatAge age in Enum.GetValues<StatAge>())
+        {
+            FilterSpec spec = FilterSpec.Parse(StatisticsReport.AgeFilter(age));
+            Assert.Equal(ItemKind.Files, spec.Kind);
+        }
+        Assert.Equal("is:file newer than 1 day", StatisticsReport.AgeFilter(StatAge.Today));
+        Assert.Equal("is:file older than 5 years", StatisticsReport.AgeFilter(StatAge.Older));
+    }
+
+    [Fact]
+    public void SignedSizesAndCountsWriteTheSign()
+    {
+        Assert.Equal("±0 B", SizeFormatter.Signed(0));
+        Assert.Equal("+" + SizeFormatter.Format(2048), SizeFormatter.Signed(2048));
+        Assert.Equal("−" + SizeFormatter.Format(2048), SizeFormatter.Signed(-2048));
+        Assert.Equal("±0", SizeFormatter.SignedCount(0));
+        Assert.StartsWith("+", SizeFormatter.SignedCount(12));
+        Assert.StartsWith("−", SizeFormatter.SignedCount(-12));
+    }
+
+    [Fact]
+    public void ExtensionTableListsEveryExtensionInPlainNumbers()
+    {
+        StatisticsReport report = StatisticsReport.Compute(Sample(), SizeMeasure.FileSize, Now, null, int.MaxValue);
+        (IReadOnlyList<string> header, IReadOnlyList<IReadOnlyList<string>> rows) = report.ExtensionTable();
+
+        Assert.Equal(6, header.Count);
+        Assert.Equal(report.Extensions.Count, rows.Count);
+        IReadOnlyList<string> jpg = rows.First(row => row[0] == ".jpg");
+        Assert.Equal("Images", jpg[1]);
+        Assert.Equal("4500", jpg[2]);
+        Assert.Equal("2", jpg[3]);
+        Assert.Equal("2250", jpg[4]);
+        Assert.Equal("0.1", jpg[5]);
+        Assert.All(rows, row => Assert.Equal(header.Count, row.Count));
+    }
+
+    [Fact]
+    public void ExtensionTableAddsTheChangeWhenCompared()
+    {
+        FsNode before = TestTree.Dir(@"C:\");
+        TestTree.File(before, "a.jpg", 1000);
+        TestTree.Finish(before);
+        FsNode now = TestTree.Dir(@"C:\");
+        TestTree.File(now, "a.jpg", 3000);
+        TestTree.Finish(now);
+        ScanComparison comparison = ScanCompare.Apply(now, before);
+
+        StatisticsReport report = StatisticsReport.Compute(now, SizeMeasure.FileSize, Now, comparison, int.MaxValue);
+        (IReadOnlyList<string> header, IReadOnlyList<IReadOnlyList<string>> rows) = report.ExtensionTable();
+
+        Assert.Equal(7, header.Count);
+        Assert.Equal("2000", rows.First(row => row[0] == ".jpg")[6]);
+    }
 }

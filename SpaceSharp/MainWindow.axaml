@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:SpaceSharp.Controls"
+        xmlns:views="using:SpaceSharp.Views"
         x:Class="SpaceSharp.MainWindow"
         Title="SpaceSharp"
         Width="1920" Height="1080" MinWidth="1040" MinHeight="460"
@@ -112,17 +113,13 @@
       <controls:TreemapControl x:Name="Treemap" MapBackground="{DynamicResource MapBackground}" />
 
       <!-- the Insights view, in the map's place -->
-      <ScrollViewer x:Name="InsightsView" IsVisible="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{DynamicResource Window}" SizeChanged="InsightsView_SizeChanged">
-        <StackPanel x:Name="InsightsHost" Margin="18,16,22,18" />
-      </ScrollViewer>
+      <views:InsightsPage x:Name="InsightsView" IsVisible="False" Background="{DynamicResource Window}" />
 
-      <!-- the Statistics view, in the map's place: built by RefreshStatistics -->
-      <ScrollViewer x:Name="StatisticsView" IsVisible="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="{DynamicResource Window}" SizeChanged="StatisticsView_SizeChanged">
-        <StackPanel x:Name="StatisticsHost" Margin="18,16,22,18" />
-      </ScrollViewer>
+      <!-- the Statistics view, in the map's place: a control of its own, in Views/StatisticsPage.cs -->
+      <views:StatisticsPage x:Name="StatisticsView" IsVisible="False" Background="{DynamicResource Window}" />
 
-      <!-- the Changes view, in the map's place: built by BuildChangesView -->
-      <Grid x:Name="ChangesView" IsVisible="False" Background="{DynamicResource Window}" />
+      <!-- the Changes view, in the map's place: a control of its own, in Views/ChangesPage.cs -->
+      <views:ChangesPage x:Name="ChangesView" IsVisible="False" Background="{DynamicResource Window}" />
 
       <!-- start screen: pick a drive, or pick up where you left off -->
       <Grid x:Name="EmptyHint">
@@ -244,7 +241,7 @@
             <!-- title row: spinner, drive, what is in use, percent, Cancel -->
             <DockPanel>
               <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Height="28" MinHeight="28" Padding="10,0" Margin="8,0,0,0" Click="Cancel_Click" />
-              <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="8,0,0,0" />
+              <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource Link}" VerticalAlignment="Center" Margin="8,0,0,0" />
               <controls:Icon x:Name="ScanSpinner" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="16" Height="16" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
               <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="ScanTitle" FontSize="15" FontWeight="Bold" /><Run Text="  " /><Run x:Name="ScanSubtitle" FontSize="12.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
             </DockPanel>

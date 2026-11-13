@@ -101,7 +101,7 @@ internal static class Trash
                 ? Strings.Format("Trash_Exited", file, process.ExitCode)
                 : errorOutput.Trim();
         }
-        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or IOException)
+        catch (Exception ex) when (ex.IsLaunchFailure())
         {
             // A missing osascript or gio is reported like any other failure, as text for the dialog.
             return ex.Message;
@@ -352,7 +352,7 @@ internal static class Trash
             {
                 children = Directory.EnumerateFileSystemEntries(folder).ToList();
             }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            catch (Exception ex) when (ex.IsFileSystemFailure())
             {
                 return;
             }
