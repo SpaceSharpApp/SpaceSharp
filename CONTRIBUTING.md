@@ -38,7 +38,7 @@ Thanks for your interest. SpaceSharp is a small project, so the process is light
 Versions are `major.minor.patch`. Fixes and small improvements ship as often as they are ready and bump the patch number (2.4.2, 2.4.3, 2.4.17); there is no upper limit and no reason to hold a fix back for a bigger release. The minor bumps for a release with new features or changed behavior; the major only when the app changes shape (new file format, dropped platform, a different scanner).
 
 
-1. Bump `<Version>` in `SpaceSharp/SpaceSharp.csproj`, set `<PreviousVersion>` to the release before it, and take "(unreleased)" off the changelog section's heading. Leave the README's version badge alone: it names the released version, and `release.ps1` moves it when it uploads the release.
+1. Bump `<Version>` in `SpaceSharp/SpaceSharp.csproj`, set `<PreviousVersion>` to the release before it, and take "(unreleased)" off the changelog section's heading. Leave the README's version line alone: it names the released version, and `release.ps1` moves it when it uploads the release.
 2. Run `.\installer\release.ps1 -Sign <thumbprint> -Upload` on the PC with the code-signing certificate. It runs the tests, builds the portable exes, the installers and the update packages into `Releases\`, signs every file, checks the signatures and creates the GitHub release as a draft with the changelog section as its notes.
 3. Read the draft on GitHub and publish it, then tag the released commit with the bare version number (`git tag <version> && git push origin <version>`).
 4. Update the winget manifest: `wingetcreate update ClearanceClarence.SpaceSharp --version <version> --urls <MSI download URL> --submit`.

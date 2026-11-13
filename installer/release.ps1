@@ -253,11 +253,11 @@ if ($doUpload) {
         Write-Warning "gh is not installed, so these were not uploaded: $($extra -join ', '). Attach them to the release by hand."
     }
 
-    # The README's badge names the released version, so it moves here, when a release is made, and not when the
+    # The README's version line names the released version, so it moves here, when a release is made, and not when the
     # version is bumped for the next one. The change is left uncommitted, to go in with the release.
     $readmePath = Join-Path $root "README.md"
     $readme = [System.IO.File]::ReadAllText($readmePath)
-    $withBadge = $readme -replace 'badge/version-[0-9.]+-F5B82E" alt="Version [0-9.]+"', "badge/version-$version-F5B82E`" alt=`"Version $version`""
+    $withBadge = $readme -replace '<a href="CHANGELOG.md">Version [0-9.]+</a>', "<a href=`"CHANGELOG.md`">Version $version</a>"
     if ($withBadge -ne $readme) {
         [System.IO.File]::WriteAllText($readmePath, $withBadge, (New-Object System.Text.UTF8Encoding $false))
         $badgeMoved = $true
@@ -268,4 +268,4 @@ if ($doUpload) {
 "Release assets:"
 Get-ChildItem .\Releases -ErrorAction SilentlyContinue | ForEach-Object { "  Releases\$($_.Name)" }
 if ($doUpload) { "Draft release created: $repo/releases. Read it, then press Publish." }
-if ($badgeMoved) { "The README's version badge now says ${version}. Commit and push it once the release is published." }
+if ($badgeMoved) { "The README's version line now says ${version}. Commit and push it once the release is published." }

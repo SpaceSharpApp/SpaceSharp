@@ -3,25 +3,17 @@
 </p>
 
 <p align="center">
-  <b>See where your disk space went.</b><br>
   A fast, zoomable treemap of your drives, in the spirit of <a href="https://www.stardock.com/products/spacemonger/">SpaceMonger</a>.
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/version-2.9.0-F5B82E" alt="Version 2.9.0"></a>
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml"><img src="https://github.com/SpaceSharpApp/SpaceSharp/actions/workflows/tests.yml/badge.svg?branch=main" alt="Test status"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F5B82E" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-74A6CC" alt="Windows 10 and 11">
-  <img src="https://img.shields.io/badge/.NET-10-8C84D6" alt=".NET 10">
-  <img src="https://img.shields.io/badge/Avalonia-12-8B44AC" alt="Avalonia 12">
-  <img src="https://img.shields.io/badge/languages-18-3FB950" alt="18 languages">
+  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="docs/button-download.svg" height="44" alt="Download for Windows"></a>
+  <a href="https://spacesharp.app/"><img src="docs/button-website.svg" height="44" alt="Website"></a>
+  <a href="https://docs.spacesharp.app/"><img src="docs/button-docs.svg" height="44" alt="Docs"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/SpaceSharpApp/SpaceSharp/releases/latest"><img src="https://img.shields.io/badge/Download-latest%20release-F5B82E?style=for-the-badge" alt="Download the latest release"></a>
-  <a href="https://spacesharp.app/"><img src="https://img.shields.io/badge/Website-spacesharp.app-21262D?style=for-the-badge" alt="Website"></a>
-  <a href="https://docs.spacesharp.app/"><img src="https://img.shields.io/badge/Docs-docs.spacesharp.app-21262D?style=for-the-badge" alt="Documentation"></a>
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/What's%20new-changelog-21262D?style=for-the-badge" alt="What's new"></a>
+  <sub><a href="CHANGELOG.md">Version 2.9.0</a> · MIT license · Windows 10 and 11 · 18 languages · No telemetry</sub>
 </p>
 
 <p align="center">
