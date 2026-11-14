@@ -184,7 +184,7 @@ if ($doPack) {
 
         "== Naming the MSI ($arch)"
         # vpk names the MSI after its own rules (they have changed between versions); the release, the website and
-        # the winget manifest all expect exactly SpaceSharp-win-x64.msi / SpaceSharp-win-x86.msi, so rename whatever came out.
+        # the download links all expect exactly SpaceSharp-win-x64.msi / SpaceSharp-win-x86.msi, so rename whatever came out.
         $wanted = "SpaceSharp-win-$arch.msi"
         $other = if ($arch -eq "x64") { "SpaceSharp-win-x86.msi" } else { "SpaceSharp-win-x64.msi" }
         $msi = Get-ChildItem .\Releases\*.msi | Where-Object { $_.Name -ne $other } | Sort-Object LastWriteTime -Descending | Select-Object -First 1

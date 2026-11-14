@@ -30,7 +30,7 @@ Only the latest release receives fixes. Please check that the problem is still p
 
 ## Downloads and signing
 
-Release builds are produced by `installer/release.ps1` on the developer's PC and code-signed with a Certum certificate (Windows shows the publisher on every download); the commit they come from is tagged with the version. GitHub Actions only runs the tests. Each release lists its assets on the Releases page; download from there through winget (`ClearanceClarence.SpaceSharp`) or through the Scoop bucket (`SpaceSharpApp/scoop-bucket`), not from third-party download sites, which repackage at their own pace.
+Release builds are produced by `installer/release.ps1` on the developer's PC and code-signed with a Certum certificate (Windows shows the publisher on every download); the commit they come from is tagged with the version. GitHub Actions only runs the tests. Each release lists its assets on the Releases page; download from there or through the Scoop bucket (`SpaceSharpApp/scoop-bucket`), not from third-party download sites, which repackage at their own pace.
 
 Every exe, installer and MSI carries that signature; check it in the file's Properties › Digital Signatures, or with `Get-AuthenticodeSignature .\SpaceSharp-win-x64.exe` in PowerShell, which should say Valid. SmartScreen may still show "Windows protected your PC" while a new certificate earns its reputation; choose More info, then Run anyway. To verify a download independently of the signature, compare its SHA-256 (`Get-FileHash .\SpaceSharp-win-x64.exe`) with the line for it in `SHA256SUMS.txt`, which every release carries as an asset.
 

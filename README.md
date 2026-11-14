@@ -72,11 +72,7 @@ For 64-bit Windows 10 and 11, from the [latest release](https://github.com/Space
 | **[SpaceSharp-win-x64-Setup.exe](https://github.com/SpaceSharpApp/SpaceSharp/releases/latest/download/SpaceSharp-win-x64-Setup.exe)** | One-click install to your profile, no admin rights, updates itself. |
 | **[SpaceSharp-win-x64.msi](https://github.com/SpaceSharpApp/SpaceSharp/releases/latest/download/SpaceSharp-win-x64.msi)** | A regular installer: choose the folder, for you or for everyone. Updates itself. |
 
-Or from a package manager:
-
-```powershell
-winget install ClearanceClarence.SpaceSharp
-```
+Or with Scoop:
 
 ```powershell
 scoop bucket add spacesharp https://github.com/SpaceSharpApp/scoop-bucket
