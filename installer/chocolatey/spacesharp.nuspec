@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Chocolatey package. release.ps1 copies this folder to Releases\chocolatey, fills in __VERSION__ here and the
+     download addresses and checksums in tools\chocolateyinstall.ps1, and packs it. Edit the text here, not there. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>spacesharp</id>
+    <version>__VERSION__</version>
+    <packageSourceUrl>https://github.com/SpaceSharpApp/SpaceSharp/tree/main/installer/chocolatey</packageSourceUrl>
+    <owners>ClearanceClarence</owners>
+    <title>SpaceSharp</title>
+    <authors>ClearanceClarence</authors>
+    <projectUrl>https://spacesharp.app/</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/SpaceSharpApp/SpaceSharp@main/docs/app-icon-256.png</iconUrl>
+    <copyright>© 2026 ClearanceClarence</copyright>
+    <licenseUrl>https://github.com/SpaceSharpApp/SpaceSharp/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/SpaceSharpApp/SpaceSharp</projectSourceUrl>
+    <docsUrl>https://docs.spacesharp.app/</docsUrl>
+    <bugTrackerUrl>https://github.com/SpaceSharpApp/SpaceSharp/issues</bugTrackerUrl>
+    <tags>spacesharp disk-space disk-usage treemap storage cleanup duplicates foss</tags>
+    <summary>See where your disk space went: a treemap of every file and folder, sized by the space it uses.</summary>
+    <description><![CDATA[SpaceSharp maps every file and folder on a drive as a box sized by the space it uses, so the biggest ones stand out. It is free, open source (MIT) and sends nothing anywhere.
+
+## Features
+
+- **A treemap of the whole drive**, in the style of SpaceMonger, with folders nested inside folders and names on the boxes.
+- **Whole drives in seconds**: with administrator rights it reads the NTFS file table instead of walking every folder.
+- **Insights and Statistics**: what takes the space by kind, age and size, the largest files and folders, and what you can do about it.
+- **Changes**: scan again and compare with a saved scan to see what grew and what shrank.
+- **Duplicates and empty folders**, with the files going to the Recycle Bin.
+- **Filters, export** to CSV, JSON, HTML and more, custom color palettes, and 18 languages.
+
+## Package notes
+
+- This package installs the signed MSI from the project's GitHub release.
+- SpaceSharp updates itself from inside the app. `choco upgrade spacesharp` works too once the new version of the package is approved.
+- Windows 10 and 11, x64 and x86.]]></description>
+    <releaseNotes>https://github.com/SpaceSharpApp/SpaceSharp/releases/tag/__VERSION__</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

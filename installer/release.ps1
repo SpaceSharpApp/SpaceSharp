@@ -5,6 +5,7 @@
 #   SpaceSharp-win-x64.exe                 one-file portable exe (no updater)
 #   SpaceSharp-win-x64-Setup.exe           Velopack installer
 #   SpaceSharp-win-x64.msi                 Windows Installer package, branded
+#   chocolatey\spacesharp.<version>.nupkg  the Chocolatey package, pointing at the MSIs on the GitHub release
 #   SpaceSharp-win-x64-Portable.zip        auto-updating portable
 #   SpaceSharp-<version>-win-x64-full.nupkg, releases.win-x64.json, RELEASES-win-x64   update packages and manifests
 #   SpaceSharp-win-x86-*, releases.win-x86.json, ...                                   the same for 32-bit Windows
@@ -24,7 +25,7 @@
 #   .\installer\release.ps1                        # build everything into Releases\
 #   .\installer\release.ps1 -SkipDelta             # first release on a channel, or offline: no delta package
 #   .\installer\release.ps1 -NoX86                 # x64 only
-#   .\installer\release.ps1 -Upload -Force         # also upload, as a draft, from this PC (needs $env:GITHUB_TOKEN)
+#   .\installer\release.ps1 -Upload -Force         # also upload, as a draft, from this PC (the token: $env:GITHUB_TOKEN, else the GitHub CLI's)
 #
 # Code signing happens on this PC, where the certificate lives (Certum SimplySign or a card; either shows up in the
 # Windows certificate store once its desktop software is running). -Sign takes the certificate's SHA-1 thumbprint
@@ -66,6 +67,24 @@ $badgeMoved = $false
 
 if ($Stage -eq "All" -and $Upload -and -not $Force -and -not $Sign) {
     throw "A release should be signed: pass -Sign <thumbprint> with SimplySign running, or -Force to upload an unsigned build anyway."
+}
+if ($doUpload -and -not $env:GITHUB_TOKEN) {
+    # No token in this window: take the one the GitHub CLI is signed in with. Checked here, before the long build,
+    # so a missing token stops the run in the first second and not at the upload.
+    if (Get-Command gh -ErrorAction SilentlyContinue) {
+        # "Continue" for this one call: under "Stop", Windows PowerShell turns anything gh writes to its error stream
+        # (not signed in, say) into a terminating error, and the message below would never show.
+        $ErrorActionPreference = "Continue"
+        $token = gh auth token 2>$null
+        $ErrorActionPreference = "Stop"
+        if ($LASTEXITCODE -eq 0 -and $token) {
+            $env:GITHUB_TOKEN = "$token".Trim()
+            "Using the GitHub CLI's token for the upload."
+        }
+    }
+    if (-not $env:GITHUB_TOKEN) {
+        throw "No GitHub token for the upload. Sign in with the GitHub CLI (gh auth login), or set `$env:GITHUB_TOKEN to a token with repo access."
+    }
 }
 if (($doPack -or $doUpload) -and -not (Get-Command vpk -ErrorAction SilentlyContinue)) {
     throw "vpk is not installed. Run: dotnet tool install -g vpk"
@@ -217,6 +236,10 @@ if ($doPack) {
         "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
     } | Set-Content .\Releases\SHA256SUMS.txt -Encoding ascii
 
+    "== Chocolatey package"
+    # After signing: the package carries the checksums of the MSIs as they will be downloaded.
+    & (Join-Path $PSScriptRoot "pack-chocolatey.ps1") -Version $version
+
     if ($Sign) {
         "== Checking signatures"
         Get-ChildItem .\Releases\*.exe, .\Releases\*.msi | Get-AuthenticodeSignature | ForEach-Object {
@@ -227,12 +250,12 @@ if ($doPack) {
         ""
         "Packed. Files to sign before uploading:"
         foreach ($arch in $archs) { "  Releases\SpaceSharp-win-$arch-Setup.exe"; "  Releases\SpaceSharp-win-$arch.msi" }
+        "Signing changes the MSIs, so the checksums in Releases\chocolatey are for the unsigned files: pack again with -Sign before pushing that package."
     }
 }
 
 # ------------------------------------------------------------------ Upload
 if ($doUpload) {
-    if (-not $env:GITHUB_TOKEN) { throw "Set `$env:GITHUB_TOKEN to a token with repo access before uploading." }
     "== Creating the GitHub release (draft)"
     # No --publish: the release stays a draft until someone reads it and presses Publish. Installed copies only
     # see published releases, so a broken run never reaches anyone.
@@ -267,5 +290,10 @@ if ($doUpload) {
 ""
 "Release assets:"
 Get-ChildItem .\Releases -ErrorAction SilentlyContinue | ForEach-Object { "  Releases\$($_.Name)" }
-if ($doUpload) { "Draft release created: $repo/releases. Read it, then press Publish." }
+if ($doUpload) {
+    "Draft release created: $repo/releases. Read it, then press Publish."
+    if (Test-Path ".\Releases\chocolatey\spacesharp.$version.nupkg") {
+        "After publishing, push the Chocolatey package: choco push .\Releases\chocolatey\spacesharp.$version.nupkg --source https://push.chocolatey.org/"
+    }
+}
 if ($badgeMoved) { "The README's version line now says ${version}. Commit and push it once the release is published." }
