@@ -42,6 +42,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ScrollGutter.Reserve(DriveScroller, DriveList);
+        ScrollGutter.Reserve(TopListScroller, TopList);
         StatisticsView.Attach(this);
         InsightsView.Attach(this);
         _filterPanel = new FilterPanel(this, new FilterPanelParts(FilterBox, FilterToggleButton, FilterRail, RailContent, FilterDrawer, DrawerContent, DrawerFooter, DrawerClearButton));
@@ -81,6 +83,7 @@ public partial class MainWindow : Window
         ShowThemeButton();
 
         HookResizeHandles();
+        HookScanCardDrag();
         HookAchievements();
         KeyDown += OnKeyDown;
         Closing += (_, _) => { _scanCts?.Cancel(); _settings.Save(); };
@@ -430,7 +433,7 @@ public partial class MainWindow : Window
     {
         Drag(PanelResizeHandle, horizontal: true, () => SidePanel.Bounds.Width, panelWidth =>
         {
-            panelWidth = Math.Clamp(panelWidth, 220, Math.Max(220, Bounds.Width - 400));
+            panelWidth = Math.Clamp(panelWidth, SidePanelMinWidth, Math.Max(SidePanelMinWidth, Bounds.Width - 400));
             SidePanel.Width = panelWidth;
             _settings.SidePanelWidth = panelWidth;
         });
@@ -502,10 +505,10 @@ public partial class MainWindow : Window
     {
         ApplyLook(Treemap, _settings, App.IsDark);
         SidePanel.IsVisible = _settings.ShowSidePanel;
-        SidePanel.Width = Math.Max(220, _settings.SidePanelWidth);
+        SidePanel.Width = Math.Max(SidePanelMinWidth, _settings.SidePanelWidth);
         PanelButton.Classes.Set("primary", _settings.ShowSidePanel);
         PanelButton.Classes.Set("tool", !_settings.ShowSidePanel);
-        DriveScroller.MaxHeight = Math.Max(72, _settings.DriveListHeight);
+        SizeDriveList();
         ApplyFilterLayout();
         RecolorFilterSwatches();
     }
@@ -603,7 +606,7 @@ public partial class MainWindow : Window
         ToolTip.SetTip(ThemeButton, Strings.Get(App.IsDark ? "Main_ThemeToLight" : "Main_ThemeToDark"));
     }
 
-    /// <summary>The window title: the focused folder's path before the app name and version ("C: - SpaceSharp 2.9.1"), or the app alone without a map.</summary>
+    /// <summary>The window title: the focused folder's path before the app name and version ("C: - SpaceSharp 2.10.0"), or the app alone without a map.</summary>
     private void UpdateTitle()
     {
         string app = $"SpaceSharp {AppInfo.Version}";
@@ -778,6 +781,25 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>The narrowest the side panel can be dragged: wide enough that a drive's two lines stay two lines and no word is
+    /// broken in the middle. The same number is the panel's MinWidth in the markup.</summary>
+    private const double SidePanelMinWidth = 340;
+
+    /// <summary>Gives the drive list its height. With a scan it keeps the height set by the handle under it, and the largest items take
+    /// the rest of the panel. Before a scan there is nothing under it, so it takes the whole panel and scrolls only when the drives
+    /// do not fit in the window.</summary>
+    private void SizeDriveList()
+    {
+        bool hasScan = _root is not null;
+        DriveScroller.MaxHeight = hasScan ? Math.Max(72, _settings.DriveListHeight) : double.PositiveInfinity;
+        if (SidePanel.Child is Grid rows)
+        {
+            // Row 2 is the drive list, row 7 the largest items: whichever is in use gets the room that is left.
+            rows.RowDefinitions[2].Height = hasScan ? GridLength.Auto : GridLength.Star;
+            rows.RowDefinitions[7].Height = hasScan ? GridLength.Star : GridLength.Auto;
+        }
+    }
+
     /// <summary>Rebuilds the side panel's largest-items list for the current kind: hint, legend, header and up to 60 rows. Before a scan the
     /// whole section stays hidden and the drive list takes the panel.</summary>
     private void RefreshTopList()
@@ -789,7 +811,7 @@ public partial class MainWindow : Window
         ListSwitch.IsVisible = hasScan;
         ListHint.IsVisible = hasScan;
         TopListScroller.IsVisible = hasScan;
-        DriveScroller.MaxHeight = hasScan ? Math.Max(72, _settings.DriveListHeight) : double.PositiveInfinity;
+        SizeDriveList();
         if (_root is null)
         {
             ListHint.Text = Strings.Get("List_HintNoScan");

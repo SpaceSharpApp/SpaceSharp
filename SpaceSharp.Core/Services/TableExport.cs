@@ -122,7 +122,7 @@ public static class TableExport
             ExportDelimiter.Tab => '\t',
             _ => ','
         };
-        ExportColumns[] columns = Order.Where(column => options.Columns.HasFlag(column)).ToArray();
+        ExportColumns[] columns = ColumnsOf(options);
         var table = new StringBuilder();
         if (options.Header)
         {
@@ -130,6 +130,110 @@ public static class TableExport
         }
 
         rows = 0;
+        foreach (FsNode node in Written(nodes, options))
+        {
+            table.AppendLine(string.Join(delimiter, columns.Select(column => Field(Value(node, column, measure, options, scanBytes), delimiter))));
+            rows++;
+        }
+        return table.ToString();
+    }
+
+    /// <summary>How many bytes <see cref="Write"/> would put in the file, counted row by row without building the table.</summary>
+    /// <param name="nodes">The nodes, in order; placeholders are skipped.</param>
+    /// <param name="measure">Which size fills the Size and Change columns.</param>
+    /// <param name="options">What to write and how.</param>
+    /// <param name="scanBytes">The whole scan's bytes in the measure, for the Share column; 0 leaves it blank.</param>
+    /// <param name="cancel">Stops the count between rows.</param>
+    /// <returns>The file's size in bytes, the byte-order mark included.</returns>
+    /// <exception cref="OperationCanceledException">The count was cancelled.</exception>
+    public static long ByteCount(IEnumerable<FsNode> nodes, SizeMeasure measure, ExportOptions options, long scanBytes = 0, CancellationToken cancel = default)
+    {
+        ExportColumns[] columns = ColumnsOf(options);
+        // Every delimiter is one byte; a line has one fewer than it has columns, and ends in the platform's newline.
+        long perLine = Math.Max(0, columns.Length - 1) + Environment.NewLine.Length;
+        char delimiter = options.Delimiter switch
+        {
+            ExportDelimiter.Semicolon => ';',
+            ExportDelimiter.Tab => '\t',
+            _ => ','
+        };
+        long bytes = Encoding.UTF8.Preamble.Length;
+        if (options.Header)
+        {
+            bytes += perLine + columns.Sum(column => (long)Encoding.UTF8.GetByteCount(Field(HeaderOf(column), delimiter)));
+        }
+        foreach (FsNode node in Written(nodes, options))
+        {
+            cancel.ThrowIfCancellationRequested();
+            bytes += perLine;
+            foreach (ExportColumns column in columns)
+            {
+                bytes += Encoding.UTF8.GetByteCount(Field(Value(node, column, measure, options, scanBytes), delimiter));
+            }
+        }
+        return bytes;
+    }
+
+    /// <summary>The columns the options ask for, in the order they are written.</summary>
+    /// <param name="options">The options.</param>
+    /// <returns>The picked columns; empty when none is picked.</returns>
+    public static ExportColumns[] ColumnsOf(ExportOptions options) => Order.Where(column => options.Columns.HasFlag(column)).ToArray();
+
+    /// <summary>The rows as cells of raw text, not yet quoted or joined, for showing the table before it is written.</summary>
+    /// <param name="nodes">The nodes, in order; placeholders are skipped.</param>
+    /// <param name="measure">Which size fills the Size and Change columns.</param>
+    /// <param name="options">What to write: the columns, whether folders are kept, the row limit and the digit grouping.</param>
+    /// <param name="scanBytes">The whole scan's bytes in the measure, for the Share column; 0 leaves it blank.</param>
+    /// <returns>One list per row, each with one cell per column of <see cref="ColumnsOf"/>; the header is not among them.</returns>
+    public static IReadOnlyList<IReadOnlyList<string>> Cells(IEnumerable<FsNode> nodes, SizeMeasure measure, ExportOptions options, long scanBytes = 0)
+    {
+        ExportColumns[] columns = ColumnsOf(options);
+        var rows = new List<IReadOnlyList<string>>();
+        foreach (FsNode node in Written(nodes, options))
+        {
+            rows.Add(columns.Select(column => Value(node, column, measure, options, scanBytes)).ToArray());
+        }
+        return rows;
+    }
+
+    /// <summary>Whether a column holds numbers, which a table shows aligned to the right.</summary>
+    /// <param name="column">One flag.</param>
+    /// <returns>True for the byte columns, Size, Share and Change.</returns>
+    public static bool IsNumber(ExportColumns column) =>
+        column is ExportColumns.SizeBytes or ExportColumns.AllocatedBytes or ExportColumns.Size or ExportColumns.Share or ExportColumns.Change;
+
+    /// <summary>Makes a suggested name safe to use as a file name on every platform the app runs on.</summary>
+    /// <param name="name">The name without an extension, such as "C: 2026-11-16".</param>
+    /// <returns>The name without the characters Windows forbids in a file name and without control characters, runs of spaces
+    /// collapsed, and no space or dot at either end; empty when nothing is left.</returns>
+    public static string FileStem(string name)
+    {
+        var kept = new StringBuilder(name.Length);
+        foreach (char character in name)
+        {
+            if (char.IsControl(character) || ForbiddenInFileNames.Contains(character))
+            {
+                continue;
+            }
+            if (character == ' ' && kept.Length > 0 && kept[^1] == ' ')
+            {
+                continue;
+            }
+            kept.Append(character);
+        }
+        return kept.ToString().Trim(' ', '.');
+    }
+
+    /// <summary>The characters Windows does not allow in a file name; spelled out so the result is the same on every platform.</summary>
+    private const string ForbiddenInFileNames = "<>:\"/\\|?*";
+
+    /// <summary>The nodes an export writes: the real ones, without the folders when those are off, up to the limit.</summary>
+    /// <param name="nodes">The nodes, in order.</param>
+    /// <param name="options">Whether folders are kept, and the row limit.</param>
+    /// <returns>The nodes to write, in order.</returns>
+    private static IEnumerable<FsNode> Written(IEnumerable<FsNode> nodes, ExportOptions options)
+    {
+        int rows = 0;
         foreach (FsNode node in nodes)
         {
             if (!node.IsReal || (!options.Folders && node.IsDirectory))
@@ -138,13 +242,11 @@ public static class TableExport
             }
             if (options.Limit > 0 && rows >= options.Limit)
             {
-                break;
+                yield break;
             }
-
-            table.AppendLine(string.Join(delimiter, columns.Select(column => Field(Value(node, column, measure, options, scanBytes), delimiter))));
             rows++;
+            yield return node;
         }
-        return table.ToString();
     }
 
     /// <summary>Builds any table as text: a header and rows of ready-made cells, quoted as the node export quotes them.</summary>

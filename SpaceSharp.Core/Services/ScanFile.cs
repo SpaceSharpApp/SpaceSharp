@@ -229,6 +229,58 @@ public static class ScanFile
         return (removed, bytes);
     }
 
+    /// <summary>The ".prev" copy that belongs to a save: the scan before it, kept as the comparison baseline.</summary>
+    /// <param name="savePath">The save's own path.</param>
+    /// <returns>The copy's path next to the save; the file may not exist.</returns>
+    public static string PreviousOf(string savePath) => Path.ChangeExtension(savePath, ".prev" + Extension);
+
+    /// <summary>Deletes one save and the ".prev" copy that belongs to it.</summary>
+    /// <param name="savePath">The save's path; anything that is not a scan file is refused.</param>
+    /// <returns>How many files were deleted, how many bytes they took, and how many were in use and left.</returns>
+    public static (int Files, long Bytes, int Left) Delete(string savePath)
+    {
+        int removed = 0;
+        long bytes = 0;
+        int left = 0;
+        if (!savePath.EndsWith(Extension, StringComparison.OrdinalIgnoreCase))
+        {
+            return (removed, bytes, left);
+        }
+
+        foreach (string file in new[] { savePath, PreviousOf(savePath) })
+        {
+            if (!File.Exists(file))
+            {
+                continue;
+            }
+
+            long length = FileLength(file);
+            try
+            {
+                File.Delete(file);
+                removed++;
+                bytes += length;
+            }
+            catch (Exception ex) when (ex.IsFileSystemFailure())
+            {
+                left++;
+            }
+        }
+
+        return (removed, bytes, left);
+    }
+
+    /// <summary>What deleting a save would take off the disk.</summary>
+    /// <param name="savePath">The save's path.</param>
+    /// <returns>The size of the save and its ".prev" copy together, and when that copy was scanned; null when there is no readable copy.</returns>
+    public static (long Bytes, DateTime? PreviousScannedUtc) Weigh(string savePath)
+    {
+        string previous = PreviousOf(savePath);
+        bool hasPrevious = File.Exists(previous);
+        long bytes = FileLength(savePath) + (hasPrevious ? FileLength(previous) : 0);
+        return (bytes, hasPrevious ? Peek(previous)?.ScannedUtc : null);
+    }
+
     // ------------------------------------------------------------------ write
 
     /// <summary>Writes the tree to a file through a temporary file, so a crash mid-write leaves the old file intact.</summary>

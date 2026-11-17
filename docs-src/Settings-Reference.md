@@ -20,12 +20,15 @@
 |---|---|---|
 | Check for updates on startup | Looks for a new release on GitHub a few seconds after start and offers to install it. Installed copies only; the portable exe does not update itself. | On |
 | Draw the map as the scan goes | During a folder walk the map fills in as folders are placed, and what is drawn becomes the finished map. Off keeps the last map until the new one is ready. File-table scans arrive whole either way. | On |
-| Scanning card | Where the progress card sits while a scan runs: bottom right, bottom left, top right, top left or center. | Bottom right |
-| Keep saved scans for | Automatic saves older than this are deleted at startup: 7 days, 30 days, 3 months, 6 months, 1 year or forever. **Delete all saved scans** sits under it, asks with a table of what goes, and closes a comparison whose scan went with them. | 3 months |
+| Scanning card | Where the progress card sits while a scan runs: bottom right, bottom left, top right, top left or center. Dragging the card to a corner during a scan changes this too. | Bottom right |
+| Keep saved scans for | Automatic saves older than this are deleted at startup: 7 days, 30 days, 3 months, 6 months, 1 year or forever. | 3 months |
+| Saved scans | How many automatic saves there are and what they take on disk. **Delete all saved scans** asks with a table of what goes, and closes a comparison whose scan went with them. | |
 | Animate zoom | Fly into folders instead of jumping. | On |
 | Minimap | Shown while you are zoomed in. A corner (bottom left, bottom right, top left, top right) puts a small plain picture of the scan's biggest folders there, with a box where you are; click or drag in it to move. Edge markers puts two thin bars on the map's bottom and right edges instead, which cover nothing and drag like scrollbars. Off shows neither. | Bottom left |
+| Minimap levels | How many levels of folders the minimap draws: 1 level (the top folders alone), 2 or 3 (the folders inside them too). More levels make the blocks smaller and the minimap harder to read. A change shows the next time you zoom in from the whole map. | 1 level |
+| Names in the minimap | Writes folder names on the minimap's blocks where they fit. Off draws the blocks alone. | On |
 | Confirm before moving to the Recycle Bin | Ask before deleting. Items inside Windows, program, app and game folders always ask, setting or not. | On |
-| Hide unsafe empty folders | The empty folder list shows only folders that are plainly yours; the ones inside Windows, Program Files, ProgramData, AppData and game or build folders, which programs often expect to exist, are left out. Off lists them unticked, with a warning when you tick one ([Duplicates and empty folders](Duplicates-and-Empty-Folders#empty-folders)). | On |
+| Hide unsafe empty folders | The empty folder list shows only folders that are plainly yours; the ones inside Windows, Program Files, ProgramData, AppData and game or build folders, which programs often expect to exist, are left out. Off lists them unticked, with a warning when you tick one ([Duplicates and empty folders](Duplicates-and-Empty-Folders#empty-folders)). Turning it off asks twice before it takes effect; answer no to either question and the switch goes back on. | On |
 
 ## Appearance
 

@@ -11,7 +11,7 @@ There are four ways into the finder:
 - Right-click a folder on the map, **Find duplicates in this folder**: the search covers that folder alone, and the window says which. Its result does not replace the whole scan's in Insights.
 - Right-click a file, **Find copies of this file**: the search runs at once and picks out that file's set.
 
-Pick a minimum size and press **Find duplicates**.
+Pick a minimum size and press **Find duplicates**; once there is a result the button reads **Search again**.
 
 **How it searches.** Files are grouped by size first, since only a size shared by two or more files can hold a duplicate. The files that share a size have three samples hashed: the first, middle and last 16 KB. That splits nearly every group apart, including files that only start alike, such as archives and game data with a common header. Only the files that still match are read in full (SHA-256), and big ones are read side by side a few megabytes at a time: a file is dropped the moment its contents so far match no other, so only true copies are read to the end. On most drives very little is read, and the reads run on several threads at once. Hard links are the same file and are not counted. A file the search cannot read, or whose size is no longer what the scan recorded, is left out of its set; rescan to include it.
 
@@ -19,12 +19,17 @@ Pick a minimum size and press **Find duplicates**.
 
 **While it runs.** A progress bar and a line that says which stage it is in (grouping by size, comparing samples, reading whole files), how many files are done and how much has been read. **Cancel** stops it between files.
 
-**The result.** Sets sorted by what deleting the extra copies would free, each with its copies, their folders and ages, and the hash in the tooltip of the size. Nothing is ticked to start with:
+**The result.** Three figures beside the heading say how many sets there are, how many extra copies, and how much could go. Under them the window has two sides. The left lists the sets, sorted by what deleting the extra copies would free, each with its file name, how many copies of what size, and the saving (its tooltip is the hash). Click a set and the right side shows its copies: each with its folder in full, its age, **Open folder**, and a word on what will happen to it, **Keep** or **Goes to the Recycle Bin**.
 
-- **Keep the first of each** ticks every copy but the first (in path order) of every set.
+**Narrowing the list.** Type a file name or part of a folder in **Filter the list** to list just the sets with a copy there. **Hide program folders** leaves out the sets whose every copy sits in a program folder, which are the ones you can rarely do anything about. Ticks you made stay while a set is hidden.
+
+Nothing is ticked to start with:
+
+- **Keep the first of each** ticks every copy but the first (in path order) of every listed set; sets the filter has hidden are left as they are.
 - **Keep the newest of each** keeps the most recently modified copy.
-- Neither ticks a copy inside Windows, Program Files, ProgramData, AppData or a game or build folder. A program that depends on its copy breaks without it, so those are marked **program folder** in red and are only ticked by hand. While any of them is ticked, a warning under the links says how many, the footer counts them, and the confirmation repeats the number.
-- **Clear all ticks** starts over.
+- Neither ticks a copy inside Windows, Program Files, ProgramData, AppData or a game or build folder. A program that depends on its copy breaks without it, so those are marked **program folder** and are only ticked by hand. While any of them is ticked, a warning under the links says how many, the footer counts them, and the confirmation repeats the number.
+- **Keep the newest** and **Keep the oldest** over a set's copies do the same for that one set.
+- **Clear all ticks** starts over, in every set.
 - Or tick by hand.
 
 **Move checked to Recycle Bin** sends the ticked copies to the Recycle Bin after the usual confirmation. If every copy of a set is ticked, the confirmation says so first, since nothing of that file would be left; if a ticked copy is in a program folder, it says that too. The copies go two hundred at a time with a progress panel in the window and a **Stop** button that ends it between batches, keeping what was already moved. Afterward the list shows what is still duplicated, and the Duplicates row in Insights shows the sets, the extra copies and what could go, until the next scan.
@@ -35,14 +40,16 @@ Pick a minimum size and press **Find duplicates**.
 
 **Review empty folders…** on the Small and empty row lists every folder in the scan with no files in it at any depth. A folder that only holds other empty folders is listed once, as the topmost one, with the count of empty folders nested inside it; deleting it takes them along. A folder the scan could not read is never listed as empty, since it may hold anything.
 
+**The list.** The folders are grouped under the folder they sit in: the long path is written once as a heading, in full, and the empty folders are listed by name under it. A heading's tick ticks or clears its whole group and shows half-ticked when only some are, and the count beside it says how many of the group are ticked, "3 of 4". Beside the window's heading, figures give the empty folders listed, the ones nested inside them, and the ones left out because they are in program folders. Type part of a path in **Filter the list** to list just the folders there; ticks you made stay while a folder is hidden. Right-click a heading or a row to **Open folder** or **Show in Explorer**, to see where it is before you decide.
+
 Empty folders are **deleted directly, not moved to the Recycle Bin**: there is nothing in them to restore, and the bin would take minutes for thousands of them. The delete is the non-recursive one, so a folder that gained a file since the scan refuses to go and is reported.
 
 Not every empty folder is yours to delete. Windows Store apps keep their state in empty folders under `AppData\Local\Packages`, games keep save folders, installed programs keep folders under `Program Files`, and deleting those breaks the program that owns them. So the list is careful by default:
 
-- Settings › Behavior › **Hide unsafe empty folders** (on by default) leaves those out of the list entirely, and the summary says how many were left out.
-- With it off, they are listed unticked. **Select safe** ticks only the folders that are plainly yours (under your own Desktop, Documents, Downloads, Pictures, Music and Videos on the system drive; outside program, game and build folders on other drives), **Select none** clears, and **Select all** is red for a reason. While anything outside the safe set is ticked, a warning under the buttons says how many and what can break, the footer counts them, and the confirmation repeats the number.
+- Settings › Behavior › **Hide unsafe empty folders** (on by default) leaves those out of the list entirely, and a figure at the top says how many were left out. Turning the setting off asks twice first, since these are the folders whose removal has broken apps.
+- With it off, they are listed unticked. **Select safe** ticks only the folders that are plainly yours (under your own Desktop, Documents, Downloads, Pictures, Music and Videos on the system drive; outside program, game and build folders on other drives), **Select all** ticks every folder that is listed and leaves the ones the filter has hidden alone, and **Select none** clears every tick. While anything outside the safe set is ticked, a warning under the links says how many and what can break, the footer counts them, and the confirmation repeats the number.
 
-Each row has its own tick, **Delete checked folders** asks first and then shows progress with a Stop button, and the list is rebuilt from what is left.
+A note above the buttons repeats that the delete is direct. **Delete checked folders** asks first and then shows progress with a Stop button, and the list is rebuilt from what is left.
 
 ## Notes
 

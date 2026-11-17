@@ -7,9 +7,47 @@ namespace SpaceSharp.Services;
 /// <param name="NestedFolders">How many empty folders it holds below itself, 0 for a plain empty folder.</param>
 public sealed record EmptyFolder(FsNode Folder, int NestedFolders);
 
+/// <summary>The empty folders that sit in the same folder, for listing them under one heading.</summary>
+/// <param name="Parent">The folder they sit in.</param>
+/// <param name="Folders">The empty folders in it, in path order; at least one.</param>
+public sealed record EmptyFolderGroup(FsNode Parent, IReadOnlyList<EmptyFolder> Folders)
+{
+    /// <summary>The full path of the folder the group's folders sit in.</summary>
+    public string ParentPath => Parent.FullPath;
+}
+
 /// <summary>Finds the folders a scan can show as empty: no files anywhere below, only other empty folders at most.</summary>
 public static class EmptyFolders
 {
+    /// <summary>Groups empty folders by the folder they sit in, so a list can write the long path once and the names under it.</summary>
+    /// <param name="folders">The folders, in the order to keep; one without a parent is left out, since it has no folder to sit in.</param>
+    /// <param name="filter">Text a folder's full path must contain, compared without regard to case; empty lets every folder through.</param>
+    /// <returns>The groups in the order their first folder came, each with its folders in the order they came.</returns>
+    public static List<EmptyFolderGroup> Group(IEnumerable<EmptyFolder> folders, string filter = "")
+    {
+        var groups = new List<EmptyFolderGroup>();
+        var byParent = new Dictionary<FsNode, List<EmptyFolder>>(ReferenceEqualityComparer.Instance);
+        foreach (EmptyFolder entry in folders)
+        {
+            if (entry.Folder.Parent is not { } parent)
+            {
+                continue;
+            }
+            if (filter.Length > 0 && !entry.Folder.FullPath.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            if (!byParent.TryGetValue(parent, out List<EmptyFolder>? members))
+            {
+                members = new List<EmptyFolder>();
+                byParent[parent] = members;
+                groups.Add(new EmptyFolderGroup(parent, members));
+            }
+            members.Add(entry);
+        }
+        return groups;
+    }
+
     /// <summary>The topmost empty folders of a tree, each with the count of empty folders nested inside it.</summary>
     /// <param name="root">The scan root; it is never listed itself.</param>
     /// <returns>The folders in path order; a folder inside another listed folder is not repeated.</returns>

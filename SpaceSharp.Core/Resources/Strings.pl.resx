@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Zapisz…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Skopiowano tabelę: {0:N0} wierszy</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} elementów · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Co wyeksportować</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} z {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Domyślne</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Nazwa pliku</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Zbieranie wierszy…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Elementy w {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Wszystko w {0} i niżej</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Największe pliki na dysku</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Pytaj przed usunięciem. Usunięte elementy zawsze można przywrócić z Kosza. Elementy w folderach Windows, programów, aplikacji i gier zawsze pytają.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ukryj niebezpieczne puste foldery</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Pokazuje tylko puste foldery, które są wyraźnie Twoje. Te w Windows, Program Files, ProgramData, AppData oraz folderach gier lub kompilacji, których programy często oczekują, są całkiem pomijane. Wyłączone pokazuje je odznaczone, z ostrzeżeniem przy zaznaczeniu.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Pokazać niebezpieczne puste foldery?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>Lista pustych folderów pokaże także foldery w Windows, Program Files, ProgramData, AppData oraz w folderach gier i kompilacji. Programy często oczekują, że te foldery istnieją, a ich usunięcie już wcześniej uszkadzało aplikacje systemu Windows.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Pokaż</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Pozostaw ukryte</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Czy na pewno, naprawdę na pewno?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Puste foldery są usuwane bezpośrednio, z pominięciem Kosza, więc błędnego usunięcia nie da się cofnąć. Niebezpieczne foldery są wyświetlane bez zaznaczenia i z ostrzeżeniem, ale Zaznacz wszystko zaznacza każdy z nich. Pozostaw je ukryte, chyba że dokładnie wiesz, których folderów szukasz.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Tak, pokaż niebezpieczne foldery</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Palety niestandardowe</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Używaj dowolnej palety w obu motywach</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Wyłączone: wybranie palety dla drugiego motywu przełącza na ten motyw, więc jasna paleta przynosi jasny motyw. Włączone: paleta jest używana taka, jaka jest, jasne palety w ciemnym motywie i ciemne w jasnym.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Ostatnie skanowanie · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Otwórz mapę</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Skanuj ponownie i porównaj</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Usuń ten zapisany skan</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Usunąć zapisany skan {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>Skan ({0}) zostanie usunięty trwale, bez przenoszenia do Kosza. Zajmuje {1} na dysku. Nic na samym dysku ani w folderze nie zostanie naruszone.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>Wcześniejszy skan ({0}), zachowany do porównań, zostanie usunięty razem z nim.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Usuń skan</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Zachowaj</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Plik skanu jest używany i nie został usunięty. Zamknij program, który go otworzył, i spróbuj ponownie.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Wcześniejsze skanowania</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanowanie</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>Skanowania: {0}</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Cała reszta</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>Użyto {0}% · wolne {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · pliki: {0}</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Niepodłączony · {0} plików</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Od tego skanowania dysk zapełnił się o {0}. Skanuj ponownie, aby zobaczyć, gdzie się to podziało.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Dysk ma o {0} więcej wolnego miejsca niż przy tym skanowaniu. Skanuj ponownie, aby zobaczyć go takim, jaki jest teraz.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Twoje skanowania</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Z uprawnieniami administratora SpaceSharp odczytuje tabelę plików NTFS zamiast przechodzić przez każdy folder.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Zachowuj zapisane skanowania przez</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatyczne zapisy starsze niż to są usuwane przy uruchomieniu SpaceSharp. Skanowania zapisane samodzielnie jako pliki nigdy nie są ruszane.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Zapisane skany</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, zajmują {1} na dysku.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dni</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} mies.</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 rok</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} plików ma mniej niż 4 KB; zawierają {1}, ale dysk przydziela całe klastry, więc {2} z tego to strata, której żadne narzędzie nie zwolni. {3:N0} folderów jest pustych.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Głęboko i długo</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Puste foldery</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Foldery bez plików na żadnym poziomie.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Zagnieżdżone w nich</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>W folderach programów, niewymienione</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Żaden folder nie pasuje. Wyczyść pole powyżej.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>Foldery bez plików: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Foldery bez plików: {0:N0}, zagnieżdżonych w nich: {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Brak pustych folderów w tym skanie.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Dup_Stage2" xml:space="preserve"><value>Porównywanie próbek: {0:N0} z {1:N0} · odczytano {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Odczyt całych plików: {0:N0} z {1:N0} · odczytano {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>Zestawów: {0:N0} · dodatkowych kopii: {1:N0} · do zwolnienia: {2}</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Zestawy</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Dodatkowe kopie</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Do zwolnienia</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Szukaj ponownie</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Filtruj listę</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Wpisz nazwę pliku lub część folderu</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Wpisz część ścieżki</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Ukryj foldery programów</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>Kopii: {0:N0} · po {1} · zostawienie jednej zwalnia {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Zachowaj najnowszy</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Zachowaj najstarszy</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Zostaje</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Trafi do Kosza</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Żaden zestaw nie pasuje. Wyczyść pole powyżej lub wyłącz Ukryj foldery programów.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Brak duplikatów wśród plików powyżej {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Zachowaj pierwszy z każdego</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Zachowaj najnowszy z każdego</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Scan_Stop" xml:space="preserve"><value>Zatrzymaj</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Zatrzymaj skanowanie i wróć do strony startowej; to, co odczytano, zostanie odrzucone (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Karta skanowania</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Gdzie leży karta postępu podczas skanowania.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Gdzie leży karta postępu podczas skanowania. Możesz też przeciągnąć samą kartę do rogu mapy.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minimapa</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Przy powiększeniu: mały, prosty obraz największych folderów skanowania w rogu mapy, z polem w miejscu, w którym jesteś. Kliknij lub przeciągnij w nim, aby się przesunąć. Albo znaczniki na krawędziach: dwa cienkie paski przy krawędziach mapy, które niczego nie zasłaniają. Kliknij obraz prawym przyciskiem myszy, aby go ukryć.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Poziomy minimapy</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Ile poziomów folderów rysuje minimapa: tylko foldery najwyższego poziomu czy także foldery w nich. Więcej poziomów oznacza mniejsze bloki i mniej czytelną minimapę. Zmiana będzie widoczna przy następnym powiększeniu z widoku całej mapy.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 poziom</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>Poziomy: {0}</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Nazwy na minimapie</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Wypisuje nazwy folderów na blokach minimapy tam, gdzie się mieszczą. Po wyłączeniu rysowane są same bloki, co jest spokojniejsze przy 2 lub 3 poziomach.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Wyłączona</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Znaczniki na krawędziach</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Ukryj minimapę</value></data>

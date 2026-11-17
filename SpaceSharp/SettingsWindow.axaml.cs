@@ -178,7 +178,8 @@ public partial class SettingsWindow : Window
         string[] placeNames = placeKeys.Select(key => Strings.Get("ScanCard_" + key)).ToArray();
         Row(Strings.Get("Settings_ScanCard"), Strings.Get("Settings_ScanCard_Desc"),
             Combo(placeNames, Math.Max(0, Array.IndexOf(placeKeys, _settings.ScanCardPlace)), index => _settings.ScanCardPlace = placeKeys[index]));
-        Row(Strings.Get("Settings_KeepScans"), Strings.Get("Settings_KeepScans_Desc"), KeepScansSlider());
+        Row(Strings.Get("Settings_KeepScans"), Strings.Get("Settings_KeepScans_Desc"), KeepScansCombo());
+        SavedScansRow();
 
         Section(Strings.Get("Settings_Map"));
         Row(Strings.Get("Settings_AnimateZoom"), Strings.Get("Settings_AnimateZoom_Desc"),
@@ -191,12 +192,26 @@ public partial class SettingsWindow : Window
                 _settings.MinimapPlace = minimapKeys[index];
                 _main?.UpdateMinimap();
             }));
+        string[] levelNames = Enumerable.Range(1, AppSettings.MaxMinimapLevels)
+            .Select(levels => levels == 1 ? Strings.Get("MinimapLevels_One") : Strings.Format("MinimapLevels_Many", levels))
+            .ToArray();
+        Row(Strings.Get("Settings_MinimapLevels"), Strings.Get("Settings_MinimapLevels_Desc"),
+            Combo(levelNames, Math.Clamp(_settings.MinimapLevels, 1, AppSettings.MaxMinimapLevels) - 1, index =>
+            {
+                _settings.MinimapLevels = index + 1;
+                _main?.UpdateMinimap();
+            }));
+        Row(Strings.Get("Settings_MinimapNames"), Strings.Get("Settings_MinimapNames_Desc"),
+            Switch(_settings.MinimapNames, enabled =>
+            {
+                _settings.MinimapNames = enabled;
+                _main?.UpdateMinimap();
+            }));
 
         Section(Strings.Get("Settings_Safety"));
         Row(Strings.Get("Settings_ConfirmDelete"), Strings.Get("Settings_ConfirmDelete_Desc"),
             Switch(_settings.ConfirmDelete, enabled => _settings.ConfirmDelete = enabled));
-        Row(Strings.Get("Settings_HideUnsafeEmpty"), Strings.Get("Settings_HideUnsafeEmpty_Desc"),
-            Switch(_settings.HideUnsafeEmptyFolders, enabled => _settings.HideUnsafeEmptyFolders = enabled));
+        Row(Strings.Get("Settings_HideUnsafeEmpty"), Strings.Get("Settings_HideUnsafeEmpty_Desc"), HideUnsafeEmptySwitch());
     }
 
     /// <summary>Theme variant, the dark and light looks and the dialog dimming.</summary>

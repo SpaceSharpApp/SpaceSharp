@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>保存…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>表をコピーしました: {0:N0} 行</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} 項目 · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>エクスポートする内容</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{1} 中 {0}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>既定</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>ファイル名</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>行を集めています…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>{0} 内の項目</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>{0} 以下のすべて</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>ドライブ内の最大のファイル</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>削除前に確認します。削除した項目はいつでもごみ箱から戻せます。Windows、プログラム、アプリ、ゲームのフォルダー内の項目は常に確認します。</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>安全でない空のフォルダーを隠す</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>明らかに自分のものである空のフォルダーだけを一覧に表示します。プログラムが存在を前提にしていることの多い Windows、Program Files、ProgramData、AppData、ゲームやビルドのフォルダー内のものは一覧から除外されます。オフにするとチェックなしで表示され、チェックすると警告が出ます。</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>安全でない空のフォルダーを表示しますか?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>空のフォルダーの一覧に、Windows、Program Files、ProgramData、AppData、ゲームやビルドのフォルダー内のフォルダーも表示されます。プログラムはこれらのフォルダーが存在することを前提にしていることが多く、削除によって Windows アプリが壊れた例があります。</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>表示する</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>非表示のままにする</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>本当によろしいですか?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>空のフォルダーはごみ箱を経由せず直接削除されるため、誤って削除すると元に戻せません。安全でないフォルダーはチェックなしで警告付きで表示されますが、[すべて選択] を押すとすべてにチェックが付きます。どのフォルダーが必要かはっきり分かっている場合以外は、非表示のままにしてください。</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>はい、安全でないフォルダーを表示する</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>カスタムパレット</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>どちらのテーマでも任意のパレットを使う</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>オフ: もう一方のテーマ向けのパレットを選ぶとそのテーマに切り替わります（明るいパレットはライトテーマを連れてきます）。オン: パレットはそのまま使われ、ダークテーマで明るいパレット、ライトテーマで暗いパレットも使えます。</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>前回のスキャン · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>マップを開く</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>再スキャンして比較</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>この保存済みスキャンを削除</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>{0} の保存済みスキャンを削除しますか?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>このスキャン({0})は完全に削除され、ごみ箱には移動されません。ディスク上のサイズは {1} です。ドライブやフォルダー自体には何も変更を加えません。</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>比較用に保存されている以前のスキャン({0})も一緒に削除されます。</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>スキャンを削除</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>残す</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>スキャン ファイルは使用中のため削除されませんでした。開いているプログラムを閉じてから、もう一度お試しください。</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>以前のスキャン</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 件のスキャン</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} 件のスキャン</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>その他すべて</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% 使用中 · 空き {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>フォルダー · {0} ファイル</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>未接続 · {0} 個のファイル</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>このスキャン以降、ドライブの使用量が {0} 増えました。再スキャンして増えた場所を確認してください。</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>このスキャン時より空き容量が {0} 増えています。再スキャンして現在の状態を確認してください。</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>スキャン一覧</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>管理者権限があれば、SpaceSharp は各フォルダーをたどる代わりに NTFS ファイルテーブルを読み取ります。</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存したスキャンの保持期間</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>この期間より古い自動保存は SpaceSharp の起動時に削除されます。ご自身でファイルとして保存したスキャンには影響しません。</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>保存済みスキャン</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}、ディスク上で {1} を使用しています。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 日</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} か月</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 年</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} 個のファイルが 4 KB 未満で、中身は {1} ですが、ディスクはクラスター単位で割り当てるため {2} はどのツールでも解放できない無駄です。{3:N0} 個のフォルダーが空です。</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>深さと長さ</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>空のフォルダー</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>どの階層にもファイルがないフォルダーです。</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>その中の入れ子</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>プログラムのフォルダー内（非表示）</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>一致するフォルダーがありません。上の欄を空にしてください。</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>ファイルのないフォルダー {0:N0} 個、その中に入れ子で {1:N0} 個</value></data>
   <data name="Empty_None" xml:space="preserve"><value>このスキャンに空のフォルダーはありません。</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Dup_Stage2" xml:space="preserve"><value>サンプルを比較中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>ファイル全体を読み取り中: {0:N0} / {1:N0} · {2} 読み取り</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 組 · 余分なコピー {1:N0} 個 · {2} を空けられます</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>組</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>余分なコピー</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>空けられる容量</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>もう一度検索</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>一覧を絞り込む</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>ファイル名またはフォルダーの一部を入力</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>パスの一部を入力</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>プログラムのフォルダーを隠す</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} 個のコピー · 各 {1} · 1 つ残すと {2} 空きます</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>最新を残す</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>最古を残す</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>残す</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>ごみ箱へ移動</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>一致する組がありません。上の欄を空にするか、プログラムのフォルダーを隠す設定を外してください。</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>{0} を超えるファイルに重複はありません。</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>各組の最初を残す</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>各組の最新を残す</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Scan_Stop" xml:space="preserve"><value>停止</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>スキャンを停止してスタートページに戻ります。ここまで読み取った内容は破棄されます (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>スキャンカード</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>スキャン中に進行状況カードを置く位置。</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>スキャン中に進行状況カードを置く位置。カード自体をマップの隅にドラッグすることもできます。</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>ミニマップ</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>拡大中に表示されます。マップの隅に、スキャン内の大きなフォルダーを簡略に描いた小さな画像と現在位置を示す枠を表示します。クリックまたはドラッグで移動できます。「端のマーカー」は、マップの端に細いバーを 2 本表示するだけで、何も隠しません。画像を右クリックすると隠せます。</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>ミニマップの階層</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>ミニマップに描くフォルダーの階層数です。最上位のフォルダーだけにするか、その中のフォルダーも描くかを選びます。階層を増やすとブロックが小さくなり、ミニマップが読みにくくなります。変更は、次にマップ全体から拡大したときに反映されます。</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 階層</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} 階層</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>ミニマップの名前</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>収まる場合に、ミニマップのブロックにフォルダー名を表示します。オフにするとブロックだけを描き、2 階層や 3 階層のときにすっきりします。</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>オフ</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>端のマーカー</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>ミニマップを隠す</value></data>

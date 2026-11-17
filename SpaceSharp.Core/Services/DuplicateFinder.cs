@@ -16,6 +16,18 @@ public sealed record DuplicateGroup(long Size, IReadOnlyList<FsNode> Files, stri
 {
     /// <summary>What deleting every copy but one would free.</summary>
     public long Wasted => Size * (Files.Count - 1);
+
+    /// <summary>The name the set goes by in a list: its first copy's file name. Copies often share a name, but need not.</summary>
+    public string Name => Files[0].Name;
+
+    /// <summary>Whether every copy sits inside Windows, a program, app or game folder, where a program may depend on each of them.</summary>
+    public bool AllInProgramPlaces => Files.All(EmptyFolders.IsProgramPlace);
+
+    /// <summary>Whether a piece of text appears in the full path of any copy, so a search for a file name or a folder finds the set.</summary>
+    /// <param name="text">What to look for, compared without regard to case; empty matches every set.</param>
+    /// <returns>True when the text is empty or one of the copies' paths contains it.</returns>
+    public bool Mentions(string text) =>
+        text.Length == 0 || Files.Any(file => file.FullPath.Contains(text, StringComparison.OrdinalIgnoreCase));
 }
 
 /// <summary>How far a duplicate search has come.</summary>

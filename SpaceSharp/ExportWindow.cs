@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Text;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -19,11 +18,13 @@ namespace SpaceSharp;
 /// <param name="Rows">Produces the rows, largest first where that is meaningful; called once when the source is picked.</param>
 public sealed record ExportSource(string Title, string FileStem, Func<IReadOnlyList<FsNode>> Rows);
 
-/// <summary>The Export window: picks the rows, the delimiter, the columns and a few options, shows the first rows as a table, and writes
-/// the file or puts the table on the clipboard as TSV. The choices are kept in Settings for next time.</summary>
+/// <summary>The Export window: picks the rows, the delimiter, the columns and a few options in one strip, shows the first rows as a table
+/// under it, and writes the file or puts the table on the clipboard as TSV. The choices are kept in Settings for next time.</summary>
 public sealed class ExportWindow : Window
 {
-    private const int PreviewRows = 200;
+    private const int PreviewRows = 100;
+    private const double RowHeight = 32;
+    private const double ControlHeight = 30;
     private static readonly int[] Limits = { 0, 1000, 100 };
 
     private readonly MainWindow _main;
@@ -32,19 +33,27 @@ public sealed class ExportWindow : Window
     private readonly SizeMeasure _measure;
     private readonly long _scanBytes;
     private IReadOnlyList<FsNode> _rows = Array.Empty<FsNode>();
+    private int _realRows;          // how many of _rows an export can write
+    private int _fileRows;          // how many of those are files, for when folders are left out
+    private int _sourcePick;        // counts the source picks, so a slow one that was overtaken is dropped
+    private CancellationTokenSource? _sizing;   // the running size count, cancelled when the options change
 
-    private readonly ComboBox _sourceBox = new() { MinWidth = 200 };
+    private readonly ComboBox _sourceBox = new() { MinWidth = 240 };
     private readonly TextBlock _facts = new() { FontSize = FontSizes.Body, Classes = { "dim" }, Margin = new Thickness(0, 3, 0, 0) };
-    private readonly List<RadioButton> _delimiters = new();
-    private ExportDelimiter _delimiter = ExportDelimiter.Comma;   // the picked delimiter, kept apart from the radios so a rebuild never loses it
+    private readonly Dictionary<ExportDelimiter, Button> _delimiters = new();
+    private ExportDelimiter _delimiter = ExportDelimiter.Comma;   // the picked delimiter, kept apart from the buttons so a rebuild never loses it
     private readonly Dictionary<ExportColumns, CheckBox> _columnBoxes = new();
-    private readonly ComboBox _limitBox = new() { MinWidth = 110 };
-    private readonly ToggleSwitch _folders = new() { OnContent = null, OffContent = null, MinWidth = 0 };
-    private readonly ToggleSwitch _header = new() { OnContent = null, OffContent = null, MinWidth = 0 };
-    private readonly ToggleSwitch _separators = new() { OnContent = null, OffContent = null, MinWidth = 0 };
+    private readonly TextBlock _columnsText = new() { VerticalAlignment = VerticalAlignment.Center };
+    private readonly ComboBox _limitBox = new() { MinWidth = 110, Height = ControlHeight };
+    private readonly CheckBox _folders = Option("Export_IncludeFolders");
+    private readonly CheckBox _header = Option("Export_HeaderRow");
+    private readonly CheckBox _separators = Option("Export_Separators");
     private readonly TextBlock _previewCount = new() { FontSize = FontSizes.Detail, Classes = { "dim" } };
-    private readonly StackPanel _previewLines = new();
-    private readonly TextBlock _previewEnd = new() { FontSize = FontSizes.Small, Margin = new Thickness(12, 2, 12, 12), Classes = { "dim" } };
+    private readonly ScrollViewer _tableScroll = new() { HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Disabled };
+    private readonly DockPanel _table = new();
+    private readonly Border _tableHead = new();
+    private readonly StackPanel _tableBody = new();
+    private readonly TextBlock _previewEnd = new() { FontSize = FontSizes.Small, Margin = new Thickness(14, 8, 14, 12), Classes = { "dim" } };
     private readonly TextBox _fileName = new() { MinWidth = 200 };
     private readonly TextBlock _extension = new() { FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
     private readonly TextBlock _sizeNote = new() { FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } };
@@ -66,7 +75,7 @@ public sealed class ExportWindow : Window
         _scanBytes = scanBytes;
         Title = Strings.Get("Export_Title");
         TitleBarTheme.Attach(this);
-        Width = 900;
+        Width = 1000;
         Height = 720;
         MinWidth = 760;
         MinHeight = 560;
@@ -76,24 +85,25 @@ public sealed class ExportWindow : Window
         var root = new DockPanel { Margin = new Thickness(22, 14, 22, 16) };
         root.Children.Add(BuildHead());
         root.Children.Add(BuildFooter());
-        var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("272,18,*"), Margin = new Thickness(0, 14, 0, 0) };
-        Control left = BuildOptions();
-        Control right = BuildPreview();
-        Grid.SetColumn(right, 2);
-        columns.Children.Add(left);
-        columns.Children.Add(right);
-        root.Children.Add(columns);
+        var body = new DockPanel();
+        body.Children.Add(BuildOptions());
+        var rule = new Border { Height = 1, Classes = { "rule" } };
+        DockPanel.SetDock(rule, Dock.Top);
+        body.Children.Add(rule);
+        body.Children.Add(BuildPreview());
+        root.Children.Add(new Border { Child = body, Classes = { "card", "flat" }, CornerRadius = new CornerRadius(8), ClipToBounds = true, Margin = new Thickness(0, 16, 0, 0) });
         Content = root;
 
         LoadSettings();
         _sourceBox.SelectedIndex = Math.Clamp(initial, 0, sources.Count - 1);
         _building = false;
-        PickSource();
+        PickSourceAsync().Detach();
+        Closed += (_, _) => _sizing?.Cancel();
     }
 
     // ---------------------------------------------------------------- building
 
-    /// <summary>The heading, the facts line and the source picker.</summary>
+    /// <summary>The heading and the facts line on the left, the source picker under its label on the right.</summary>
     /// <returns>The row, docked at the top.</returns>
     private Control BuildHead()
     {
@@ -103,171 +113,178 @@ public sealed class ExportWindow : Window
         {
             _sourceBox.Items.Add(source.Title);
         }
-        _sourceBox.VerticalAlignment = VerticalAlignment.Top;
-        _sourceBox.SelectionChanged += (_, _) => PickSource();
-        DockPanel.SetDock(_sourceBox, Dock.Right);
-        head.Children.Add(_sourceBox);
-        var titles = new StackPanel();
+        _sourceBox.Height = ControlHeight;
+        _sourceBox.SelectionChanged += (_, _) => PickSourceAsync().Detach();
+        Control picker = Group(Strings.Get("Export_What"), _sourceBox);
+        picker.Margin = new Thickness(16, 0, 0, 0);
+        DockPanel.SetDock(picker, Dock.Right);
+        head.Children.Add(picker);
+        var titles = new StackPanel { VerticalAlignment = VerticalAlignment.Bottom };
         titles.Children.Add(new TextBlock { Text = Strings.Get("Export_Heading"), FontSize = FontSizes.Title, FontWeight = FontWeight.SemiBold });
         titles.Children.Add(_facts);
         head.Children.Add(titles);
         return head;
     }
 
-    /// <summary>The left column: format, columns and rows, in a scroller since it is taller than a small window.</summary>
-    /// <returns>The scroller.</returns>
+    /// <summary>The strip over the table: format, columns, the row limit and the three row options, wrapping onto a second line in a narrow window.</summary>
+    /// <returns>The strip, docked at the top of the card.</returns>
     private Control BuildOptions()
     {
-        // Room on the right so the scroll bar does not sit on the cards.
-        var stack = new StackPanel { Spacing = 12, Margin = new Thickness(0, 0, 16, 0) };
+        var strip = new WrapPanel { Orientation = Orientation.Horizontal };
+        strip.Children.Add(Group(Strings.Get("Export_Format"), BuildFormat()));
+        strip.Children.Add(Group(Strings.Get("Export_Columns"), BuildColumns()));
 
-        stack.Children.Add(SectionTitle(Strings.Get("Export_Format"), null));
-        var formatCard = new StackPanel();
-        AddDelimiter(formatCard, ExportDelimiter.Comma, "Export_Comma", "Export_Comma_Desc", first: true);
-        AddDelimiter(formatCard, ExportDelimiter.Semicolon, "Export_Semicolon", "Export_Semicolon_Desc", first: false);
-        AddDelimiter(formatCard, ExportDelimiter.Tab, "Export_Tab", "Export_Tab_Desc", first: false);
-        stack.Children.Add(Card(formatCard));
-
-        var all = new Button { Content = Strings.Get("Export_All"), Classes = { "link" }, FontSize = FontSizes.Detail, Padding = new Thickness(0) };
-        all.Click += (_, _) =>
-        {
-            foreach (CheckBox box in _columnBoxes.Values)
-            {
-                box.IsChecked = true;
-            }
-            Refresh();
-        };
-        stack.Children.Add(SectionTitle(Strings.Get("Export_Columns"), all));
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), Margin = new Thickness(0, 2, 0, 2) };
-        int index = 0;
-        foreach (ExportColumns column in TableExport.Order)
-        {
-            var box = new CheckBox { Content = ColumnName(column), MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), FontSize = FontSizes.Emphasis, Height = 30 };
-            box.IsCheckedChanged += (_, _) => Refresh();
-            // Two columns, filled down the left then down the right.
-            int rows = (TableExport.Order.Length + 1) / 2;
-            Grid.SetColumn(box, index / rows);
-            Grid.SetRow(box, index % rows);
-            while (grid.RowDefinitions.Count <= index % rows)
-            {
-                grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-            }
-            grid.Children.Add(box);
-            _columnBoxes[column] = box;
-            index++;
-        }
-        stack.Children.Add(Card(grid));
-
-        stack.Children.Add(SectionTitle(Strings.Get("Export_Rows"), null));
-        var rowsCard = new StackPanel();
         _limitBox.SelectionChanged += (_, _) => Refresh();
-        rowsCard.Children.Add(OptionRow(Strings.Get("Export_AtMost"), null, _limitBox, first: true));
-        _folders.IsCheckedChanged += (_, _) => Refresh();
-        rowsCard.Children.Add(OptionRow(Strings.Get("Export_IncludeFolders"), null, _folders, first: false));
-        _header.IsCheckedChanged += (_, _) => Refresh();
-        rowsCard.Children.Add(OptionRow(Strings.Get("Export_HeaderRow"), null, _header, first: false));
-        _separators.IsCheckedChanged += (_, _) => Refresh();
-        rowsCard.Children.Add(OptionRow(Strings.Get("Export_Separators"), Strings.Get("Export_Separators_Desc"), _separators, first: false));
-        stack.Children.Add(Card(rowsCard));
+        strip.Children.Add(Group(Strings.Get("Export_AtMost"), _limitBox));
 
-        return new ScrollViewer { Content = stack, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-    }
+        var checks = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 18 };
+        foreach (CheckBox option in new[] { _folders, _header, _separators })
+        {
+            option.IsCheckedChanged += (_, _) => Refresh();
+            checks.Children.Add(option);
+        }
+        ToolTip.SetTip(_separators, Strings.Get("Export_Separators_Desc"));
+        strip.Children.Add(Group(Strings.Get("Export_Rows"), checks));
 
-    /// <summary>One delimiter choice: a radio with its name and a line on when to pick it.</summary>
-    /// <param name="card">The card the row goes into.</param>
-    /// <param name="delimiter">The choice.</param>
-    /// <param name="nameKey">The name's resource key.</param>
-    /// <param name="descriptionKey">The line's resource key.</param>
-    /// <param name="first">False draws a hairline over the row.</param>
-    private void AddDelimiter(StackPanel card, ExportDelimiter delimiter, string nameKey, string descriptionKey, bool first)
-    {
-        var text = new StackPanel();
-        text.Children.Add(new TextBlock { Text = Strings.Get(nameKey), FontSize = FontSizes.Emphasis });
-        text.Children.Add(new TextBlock { Text = Strings.Get(descriptionKey), FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
-        var radio = new RadioButton { Content = text, GroupName = "delimiter", Tag = delimiter, MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), Margin = new Thickness(0, 7, 0, 7), VerticalContentAlignment = VerticalAlignment.Top };
-        radio.IsCheckedChanged += (_, _) =>
-        {
-            if (radio.IsChecked == true)
-            {
-                _delimiter = delimiter;
-                Refresh();
-            }
-        };
-        _delimiters.Add(radio);
-        if (!first)
-        {
-            card.Children.Add(new Border { Height = 1, Classes = { "rule" } });
-        }
-        card.Children.Add(radio);
-    }
-
-    /// <summary>A label (with an optional line under it) on the left and a control on the right.</summary>
-    /// <param name="title">The label.</param>
-    /// <param name="description">The dimmed line under it, or null.</param>
-    /// <param name="control">The editor.</param>
-    /// <param name="first">False draws a hairline over the row.</param>
-    /// <returns>The row, hairline included.</returns>
-    private static Control OptionRow(string title, string? description, Control control, bool first)
-    {
-        var row = new DockPanel { MinHeight = 36, Margin = new Thickness(0, 4, 0, 4) };
-        control.VerticalAlignment = VerticalAlignment.Center;
-        DockPanel.SetDock(control, Dock.Right);
-        row.Children.Add(control);
-        var labels = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 12, 0) };
-        labels.Children.Add(new TextBlock { Text = title, FontSize = FontSizes.Emphasis });
-        if (description is not null)
-        {
-            labels.Children.Add(new TextBlock { Text = description, FontSize = FontSizes.Detail, TextWrapping = TextWrapping.Wrap, Classes = { "dim" }, Margin = new Thickness(0, 1, 0, 0) });
-        }
-        row.Children.Add(labels);
-        if (first)
-        {
-            return row;
-        }
-        var withRule = new StackPanel();
-        withRule.Children.Add(new Border { Height = 1, Classes = { "rule" } });
-        withRule.Children.Add(row);
-        return withRule;
-    }
-
-    /// <summary>A small caps-style section title with an optional control at its right end.</summary>
-    /// <param name="title">The title text.</param>
-    /// <param name="trailing">A link button, or null.</param>
-    /// <returns>The row.</returns>
-    private static Control SectionTitle(string title, Control? trailing)
-    {
-        var row = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        if (trailing is not null)
-        {
-            DockPanel.SetDock(trailing, Dock.Right);
-            row.Children.Add(trailing);
-        }
-        row.Children.Add(new TextBlock { Text = title.ToUpperInvariant(), FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" } });
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), Margin = new Thickness(14, 6, 14, 12) };
+        row.Children.Add(strip);
+        Control count = Group(Strings.Get("Export_Preview"), _previewCount);
+        count.HorizontalAlignment = HorizontalAlignment.Right;
+        count.Margin = new Thickness(0, 6, 0, 0);
+        _previewCount.Height = ControlHeight;
+        _previewCount.Padding = new Thickness(0, 7, 0, 0);
+        Grid.SetColumn(count, 1);
+        row.Children.Add(count);
+        DockPanel.SetDock(row, Dock.Top);
         return row;
     }
 
-    /// <summary>Wraps content in the dialog card look.</summary>
-    /// <param name="content">The card's content.</param>
-    /// <returns>The card.</returns>
-    private static Border Card(Control content) =>
-        new() { Child = content, Classes = { "card", "flat" }, CornerRadius = new CornerRadius(8), Padding = new Thickness(12, 4), ClipToBounds = true };
+    /// <summary>The three delimiters as one segmented control, the picked one filled.</summary>
+    /// <returns>The control; each part's tooltip says when to pick it.</returns>
+    private Control BuildFormat()
+    {
+        var parts = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,Auto,Auto") };
+        (ExportDelimiter Delimiter, string NameKey, string TipKey)[] choices =
+        {
+            (ExportDelimiter.Comma, "Export_Comma", "Export_Comma_Desc"),
+            (ExportDelimiter.Semicolon, "Export_Semicolon", "Export_Semicolon_Desc"),
+            (ExportDelimiter.Tab, "Export_Tab", "Export_Tab_Desc")
+        };
+        for (int i = 0; i < choices.Length; i++)
+        {
+            ExportDelimiter delimiter = choices[i].Delimiter;
+            var button = new Button { Content = Strings.Get(choices[i].NameKey), Classes = { "segment-part" }, FontSize = FontSizes.Small, Padding = new Thickness(12, 0) };
+            if (i > 0)
+            {
+                button.BorderThickness = new Thickness(1, 0, 0, 0);
+            }
+            ToolTip.SetTip(button, Strings.Get(choices[i].TipKey));
+            button.Click += (_, _) =>
+            {
+                _delimiter = delimiter;
+                ShowDelimiter();
+                Refresh();
+            };
+            Grid.SetColumn(button, i);
+            parts.Children.Add(button);
+            _delimiters[delimiter] = button;
+        }
+        return new Border { Child = parts, Height = ControlHeight, Classes = { "segments" } };
+    }
 
-    /// <summary>The right column: the preview title and the table.</summary>
-    /// <returns>The column.</returns>
+    /// <summary>The Columns button, which says how many are ticked and opens the list of them.</summary>
+    /// <returns>The button with its flyout.</returns>
+    private Control BuildColumns()
+    {
+        var list = new StackPanel();
+        foreach (ExportColumns column in TableExport.Order)
+        {
+            var box = new CheckBox { Content = ColumnName(column), MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), FontSize = FontSizes.Emphasis, Height = ControlHeight };
+            box.IsCheckedChanged += (_, _) => Refresh();
+            list.Children.Add(box);
+            _columnBoxes[column] = box;
+        }
+        list.Children.Add(new Border { Height = 1, Classes = { "rule" }, Margin = new Thickness(0, 6, 0, 6) });
+        var links = new DockPanel();
+        Button defaults = ColumnsLink("Export_Default", column => ExportColumns.Default.HasFlag(column));
+        DockPanel.SetDock(defaults, Dock.Right);
+        links.Children.Add(defaults);
+        links.Children.Add(ColumnsLink("Export_All", _ => true));
+        list.Children.Add(links);
+
+        var host = new Border { Child = list, CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1), Padding = new Thickness(12, 8, 12, 10), MinWidth = 220 };
+        host.Bind(Border.BackgroundProperty, this.GetResourceObservable("MenuBg"));
+        host.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+
+        var content = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8 };
+        content.Children.Add(_columnsText);
+        content.Children.Add(Icons.Make("ChevronDown", 12, "TextDim"));
+        return new Button
+        {
+            Content = content,
+            Classes = { "segment" },
+            Height = ControlHeight,
+            Flyout = new Flyout { Content = host, Placement = PlacementMode.BottomEdgeAlignedLeft, ShowMode = FlyoutShowMode.Transient }
+        };
+    }
+
+    /// <summary>A link under the column list that ticks a chosen set of columns and unticks the rest.</summary>
+    /// <param name="textKey">The link text's resource key.</param>
+    /// <param name="ticked">Whether a column is in the set.</param>
+    /// <returns>The link button.</returns>
+    private Button ColumnsLink(string textKey, Func<ExportColumns, bool> ticked)
+    {
+        var link = new Button { Content = Strings.Get(textKey), Classes = { "link" }, FontSize = FontSizes.Small, Padding = new Thickness(0), HorizontalAlignment = HorizontalAlignment.Left };
+        link.Click += (_, _) =>
+        {
+            // One refresh for the whole set, not one per box.
+            _building = true;
+            foreach ((ExportColumns column, CheckBox box) in _columnBoxes)
+            {
+                box.IsChecked = ticked(column);
+            }
+            _building = false;
+            Refresh();
+        };
+        return link;
+    }
+
+    /// <summary>A check box for one of the row options.</summary>
+    /// <param name="textKey">The label's resource key.</param>
+    /// <returns>The check box, as tall as the other controls in the strip.</returns>
+    private static CheckBox Option(string textKey) =>
+        new() { Content = Strings.Get(textKey), MinWidth = 0, Padding = new Thickness(8, 0, 0, 0), FontSize = FontSizes.Emphasis, Height = ControlHeight };
+
+    /// <summary>A control under a small dimmed label, the unit the head and the strip are made of.</summary>
+    /// <param name="label">The label over the control.</param>
+    /// <param name="control">The control.</param>
+    /// <returns>The pair, with room after it for the next one in a wrapping row.</returns>
+    private static StackPanel Group(string label, Control control)
+    {
+        var group = new StackPanel { Spacing = 5, Margin = new Thickness(0, 6, 24, 0) };
+        group.Children.Add(new TextBlock { Text = label, FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, Classes = { "dim" } });
+        control.HorizontalAlignment = HorizontalAlignment.Left;
+        group.Children.Add(control);
+        return group;
+    }
+
+    /// <summary>The table: a header that stays put over rows that scroll, the two sharing their column widths, and the whole thing
+    /// scrolling sideways when the columns are wider than the window so no cell is ever cut off.</summary>
+    /// <returns>The scroller that fills the rest of the card.</returns>
     private Control BuildPreview()
     {
-        var column = new DockPanel();
-        var title = new DockPanel { Margin = new Thickness(0, 4, 0, 0) };
-        DockPanel.SetDock(title, Dock.Top);
-        DockPanel.SetDock(_previewCount, Dock.Right);
-        title.Children.Add(_previewCount);
-        title.Children.Add(new TextBlock { Text = Strings.Get("Export_Preview").ToUpperInvariant(), FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, Classes = { "dim" } });
-        column.Children.Add(title);
-        // The file as it will be written, not a table: the delimiter and the quoting are part of what is being previewed.
-        var scroller = new ScrollViewer { Content = _previewLines, HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        var card = new Border { Child = scroller, Classes = { "card", "flat" }, CornerRadius = new CornerRadius(8), ClipToBounds = true, Margin = new Thickness(0, 12, 0, 0) };
-        column.Children.Add(card);
-        return column;
+        Grid.SetIsSharedSizeScope(_table, true);
+        _tableHead.Bind(Border.BackgroundProperty, this.GetResourceObservable("MenuBg"));
+        DockPanel.SetDock(_tableHead, Dock.Top);
+        _table.Children.Add(_tableHead);
+        var rule = new Border { Height = 1, Classes = { "rule" } };
+        DockPanel.SetDock(rule, Dock.Top);
+        _table.Children.Add(rule);
+        _table.Children.Add(new ScrollViewer { Content = _tableBody, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, VerticalScrollBarVisibility = ScrollBarVisibility.Auto });
+        _tableScroll.Content = _table;
+        // A narrow table still reaches the card's right edge, so the header band and the row lines run all the way across.
+        _tableScroll.SizeChanged += (_, e) => _table.MinWidth = e.NewSize.Width;
+        return _tableScroll;
     }
 
     /// <summary>The footer: the file name with its extension, the size note, Copy, Cancel and Save.</summary>
@@ -290,6 +307,9 @@ public sealed class ExportWindow : Window
         footer.Children.Add(buttons);
 
         var name = new DockPanel { Margin = new Thickness(0, 0, 12, 0) };
+        var label = new TextBlock { Text = Strings.Get("Export_FileName"), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, Classes = { "dim" }, Margin = new Thickness(0, 0, 10, 0) };
+        DockPanel.SetDock(label, Dock.Left);
+        name.Children.Add(label);
         DockPanel.SetDock(_sizeNote, Dock.Right);
         _sizeNote.Margin = new Thickness(12, 0, 0, 0);
         name.Children.Add(_sizeNote);
@@ -356,40 +376,77 @@ public sealed class ExportWindow : Window
         return new ExportOptions(delimiter, columns, _header.IsChecked == true, _folders.IsChecked == true, limit, _separators.IsChecked == true);
     }
 
-    /// <summary>Takes the rows of the picked source and refreshes everything that depends on them.</summary>
-    private void PickSource()
+    /// <summary>Takes the rows of the picked source and refreshes everything that depends on them. A source can be every file on the
+    /// drive, so the rows are collected, sorted and counted off the UI thread while the window says it is working.</summary>
+    /// <returns>A task that ends when the rows are in, or at once when a later pick overtook this one.</returns>
+    private async Task PickSourceAsync()
     {
         if (_building)
         {
             return;
         }
         ExportSource source = _sources[Math.Clamp(_sourceBox.SelectedIndex, 0, _sources.Count - 1)];
-        _rows = source.Rows();
-        long bytes = _rows.Sum(row => row.SizeFor(_measure));
-        _facts.Text = Strings.Format("Export_Items", _rows.Count, SizeFormatter.Format(bytes));
-        _fileName.Text = $"{source.FileStem} {DateTime.Now:yyyy-MM-dd}";
+        int pick = ++_sourcePick;
+        _sizing?.Cancel();
+        _rows = Array.Empty<FsNode>();
+        _realRows = _fileRows = 0;
+        _facts.Text = Strings.Get("Export_Collecting");
+        _sizeNote.Text = string.Empty;
+        _previewCount.Text = string.Empty;
+        _tableBody.Children.Clear();
+        _save.IsEnabled = _copy.IsEnabled = false;
+        _fileName.Text = TableExport.FileStem($"{source.FileStem} {DateTime.Now:yyyy-MM-dd}");
+
+        SizeMeasure measure = _measure;
+        (IReadOnlyList<FsNode> Rows, long Bytes, int Real, int Files) collected = await Task.Run(() =>
+        {
+            IReadOnlyList<FsNode> rows = source.Rows();
+            long bytes = 0;
+            int real = 0;
+            int files = 0;
+            foreach (FsNode row in rows)
+            {
+                bytes += row.SizeFor(measure);
+                if (row.IsReal)
+                {
+                    real++;
+                    if (!row.IsDirectory)
+                    {
+                        files++;
+                    }
+                }
+            }
+            return (rows, bytes, real, files);
+        });
+        if (pick != _sourcePick)
+        {
+            return;
+        }
+
+        _rows = collected.Rows;
+        _realRows = collected.Real;
+        _fileRows = collected.Files;
+        _facts.Text = Strings.Format("Export_Items", _rows.Count, SizeFormatter.Format(collected.Bytes));
         // The "All n" entry names the new count; the pick itself stays, and so does the delimiter.
         int limitIndex = _limitBox.SelectedIndex >= 0 ? _limitBox.SelectedIndex : Math.Max(0, Array.IndexOf(Limits, _settings.ExportLimit));
+        _building = true;
         _limitBox.Items.Clear();
         foreach (int limit in Limits)
         {
             _limitBox.Items.Add(limit == 0 ? Strings.Format("Export_AllRows", _rows.Count) : limit.ToString("N0", CultureInfo.CurrentCulture));
         }
         _limitBox.SelectedIndex = limitIndex;
+        _building = false;
         ShowDelimiter();
         Refresh();
     }
 
-    /// <summary>Checks the radio for the picked delimiter and no other.</summary>
+    /// <summary>Fills the picked delimiter's part of the segmented control and no other.</summary>
     private void ShowDelimiter()
     {
-        foreach (RadioButton radio in _delimiters)
+        foreach ((ExportDelimiter delimiter, Button button) in _delimiters)
         {
-            bool on = (ExportDelimiter)radio.Tag! == _delimiter;
-            if (radio.IsChecked != on)
-            {
-                radio.IsChecked = on;
-            }
+            button.Classes.Set("active", delimiter == _delimiter);
         }
     }
 
@@ -402,34 +459,131 @@ public sealed class ExportWindow : Window
         }
         ExportOptions options = Options();
         _extension.Text = "." + options.Extension;
+        _columnsText.Text = Strings.Format("Export_ColumnsCount", _columnBoxes.Values.Count(box => box.IsChecked == true), _columnBoxes.Count);
 
-        IReadOnlyList<FsNode> rows = _rows.Where(row => row.IsReal && (options.Folders || !row.IsDirectory)).ToList();
-        int total = options.Limit > 0 ? Math.Min(options.Limit, rows.Count) : rows.Count;
-        _previewCount.Text = Strings.Format("Export_PreviewCount", Math.Min(PreviewRows, total), total);
+        // Counted when the source was picked, so a change of options never walks a million rows on the UI thread.
+        int available = options.Folders ? _realRows : _fileRows;
+        int total = options.Limit > 0 ? Math.Min(options.Limit, available) : available;
+        int shown = Math.Min(PreviewRows, total);
+        _previewCount.Text = Strings.Format("Export_PreviewCount", shown, total);
         _save.IsEnabled = _copy.IsEnabled = total > 0;
 
-        // The size note comes from the real rendering, so it is right to the byte.
-        string text = TableExport.Render(_rows, _measure, options, out _, _scanBytes);
-        _sizeNote.Text = Strings.Format("Export_Encoding", SizeFormatter.Format(Encoding.UTF8.GetByteCount(text) + 3));
-
-        // The first rows rendered exactly as the file will be, so quoting and the delimiter show; the rest is a count.
-        int shown = Math.Min(PreviewRows, total);
-        ExportOptions previewOptions = options with { Limit = shown };
-        // A fresh block each time, so nothing of the old layout lingers whatever changed.
-        _previewLines.Children.Clear();
-        _previewLines.Children.Add(new SelectableTextBlock
-        {
-            Text = TableExport.Render(rows, _measure, previewOptions, out _, _scanBytes).TrimEnd(),
-            FontFamily = new FontFamily("Cascadia Mono, Consolas, Menlo, monospace"),
-            FontSize = FontSizes.Small,
-            LineHeight = 19,
-            Margin = new Thickness(12, 10)
-        });
+        FillTable(options, shown);
         if (total > shown)
         {
             _previewEnd.Text = Strings.Format("Export_PreviewEnds", total - shown);
-            _previewLines.Children.Add(_previewEnd);
+            _tableBody.Children.Add(_previewEnd);
         }
+        ShowSizeAsync(options).Detach();
+    }
+
+    /// <summary>Counts the bytes the file will have, off the UI thread, and shows them in the foot when the count is in.</summary>
+    /// <param name="options">The options the file would be written with.</param>
+    /// <returns>A task that ends when the note is shown, or when a change of options cancelled the count.</returns>
+    private async Task ShowSizeAsync(ExportOptions options)
+    {
+        _sizing?.Cancel();
+        var sizing = new CancellationTokenSource();
+        _sizing = sizing;
+        _sizeNote.Text = string.Empty;
+        IReadOnlyList<FsNode> rows = _rows;
+        SizeMeasure measure = _measure;
+        long scanBytes = _scanBytes;
+        try
+        {
+            long bytes = await Task.Run(() => TableExport.ByteCount(rows, measure, options, scanBytes, sizing.Token), sizing.Token);
+            if (ReferenceEquals(_sizing, sizing))
+            {
+                _sizeNote.Text = Strings.Format("Export_Encoding", SizeFormatter.Format(bytes));
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // The options changed; the count for the new ones is already running.
+        }
+    }
+
+    /// <summary>Draws the header and the first rows as the file will hold them, one cell per column.</summary>
+    /// <param name="options">The current options, for the columns and the digit grouping.</param>
+    /// <param name="shown">How many rows to draw, from the top.</param>
+    private void FillTable(ExportOptions options, int shown)
+    {
+        ExportColumns[] columns = TableExport.ColumnsOf(options);
+        // Fresh grids each time, so nothing of the old layout lingers whatever changed.
+        Grid head = TableGrid(columns.Length);
+        head.Height = RowHeight;
+        for (int column = 0; column < columns.Length; column++)
+        {
+            TextBlock cell = Cell(TableExport.HeaderOf(columns[column]), columns[column], column);
+            cell.FontSize = FontSizes.Detail;
+            cell.FontWeight = FontWeight.SemiBold;
+            cell.Classes.Add("dim");
+            head.Children.Add(cell);
+        }
+        _tableHead.Child = head;
+
+        Grid body = TableGrid(columns.Length);
+        IReadOnlyList<IReadOnlyList<string>> cells = shown > 0
+            ? TableExport.Cells(_rows, _measure, options with { Limit = shown }, _scanBytes)
+            : Array.Empty<IReadOnlyList<string>>();
+        for (int row = 0; row < cells.Count; row++)
+        {
+            body.RowDefinitions.Add(new RowDefinition(new GridLength(RowHeight)));
+            for (int column = 0; column < columns.Length; column++)
+            {
+                TextBlock cell = Cell(cells[row][column], columns[column], column);
+                if (columns[column] == ExportColumns.Size)
+                {
+                    cell.FontWeight = FontWeight.SemiBold;
+                }
+                else if (columns[column] is not (ExportColumns.Path or ExportColumns.Name))
+                {
+                    cell.Classes.Add("dim");
+                }
+                Grid.SetRow(cell, row);
+                body.Children.Add(cell);
+            }
+            var line = new Border { Height = 1, Classes = { "rule" }, VerticalAlignment = VerticalAlignment.Bottom, Opacity = 0.6 };
+            Grid.SetRow(line, row);
+            Grid.SetColumnSpan(line, columns.Length + 1);
+            body.Children.Add(line);
+        }
+        _tableBody.Children.Clear();
+        _tableBody.Children.Add(body);
+    }
+
+    /// <summary>A grid with one content-sized column per table column, each sharing its width with the same column of the other grid,
+    /// and a last column that takes whatever width is left.</summary>
+    /// <param name="columns">How many table columns.</param>
+    /// <returns>The empty grid.</returns>
+    private static Grid TableGrid(int columns)
+    {
+        var grid = new Grid();
+        for (int column = 0; column < columns; column++)
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = "export" + column.ToString(CultureInfo.InvariantCulture) });
+        }
+        grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+        return grid;
+    }
+
+    /// <summary>One cell of the table, header or row: numbers to the right, everything else to the left.</summary>
+    /// <param name="text">The cell's text.</param>
+    /// <param name="column">Which column it is in, for the alignment.</param>
+    /// <param name="index">The column's position, for the grid.</param>
+    /// <returns>The text block, placed in its column.</returns>
+    private static TextBlock Cell(string text, ExportColumns column, int index)
+    {
+        var cell = new TextBlock
+        {
+            Text = text,
+            FontSize = FontSizes.Body,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = TableExport.IsNumber(column) ? HorizontalAlignment.Right : HorizontalAlignment.Left,
+            Margin = new Thickness(index == 0 ? 14 : 0, 0, 24, 0)
+        };
+        Grid.SetColumn(cell, index);
+        return cell;
     }
 
     /// <summary>The localized name of a column for its checkbox.</summary>
@@ -447,7 +601,12 @@ public sealed class ExportWindow : Window
             return;
         }
         ExportOptions options = Options() with { Delimiter = ExportDelimiter.Tab };
-        string text = TableExport.Render(_rows, _measure, options, out int rows, _scanBytes);
+        IReadOnlyList<FsNode> nodes = _rows;
+        SizeMeasure measure = _measure;
+        long scanBytes = _scanBytes;
+        _save.IsEnabled = _copy.IsEnabled = false;
+        // A large table takes a moment to build; the window stays live meanwhile.
+        (string text, int rows) = await Task.Run(() => (TableExport.Render(nodes, measure, options, out int written, scanBytes), written));
         await ClipboardText.SetAsync(Clipboard, text);
         SaveSettings();
         _main.ShowStatus(Strings.Format("Export_Copied", rows));
@@ -458,7 +617,11 @@ public sealed class ExportWindow : Window
     private async Task SaveAsync()
     {
         ExportOptions options = Options();
-        string stem = string.IsNullOrWhiteSpace(_fileName.Text) ? Strings.Get("Export_Title") : _fileName.Text.Trim();
+        string stem = TableExport.FileStem(_fileName.Text ?? string.Empty);
+        if (stem.Length == 0)
+        {
+            stem = Strings.Get("Export_Title");
+        }
         string label = options.Delimiter == ExportDelimiter.Tab ? "TSV" : "CSV";
         string? path = await this.PickSavePathAsync(Strings.Get("Export_Save"), stem + "." + options.Extension, label, options.Extension);
         if (path is null)

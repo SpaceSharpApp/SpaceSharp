@@ -40,12 +40,10 @@
 
 ## New in the latest release
 
-- **A Statistics view**: the scan as a report, with files by size class, kind and age, the largest files and folders and the biggest extensions, every figure a click back to the map ([Statistics](Statistics)). Insights now keeps to what you can do about a full drive ([Insights](Insights)).
-- **A minimap** while you are zoomed in: the whole scan in a corner with a box where you are, or thin markers on the map's edges ([Navigating](Navigating#the-minimap)).
-- **Five shading looks** in place of cushion shading: Edges, Pillow, Sheen, Layers and Side light, each with its own settings ([Reading the map](Reading-the-Map#shading)).
-- **Scanning**: a live map that starts out close to the finished one, and Scan again and compare, which repeats the saved scan's method and opens Changes ([Saved scans and the start screen](Saved-Scans-and-the-Start-Screen)).
-- **Duplicates** on Ctrl+D, from the Insights tile or for one folder, with a much faster search ([Duplicates and empty folders](Duplicates-and-Empty-Folders)).
-- **The palette editor rebuilt** around hue, scheme and a readability check, and available in the browser at [palette.spacesharp.app](https://palette.spacesharp.app/) ([Custom palettes](Custom-Palettes)).
-- **Achievements as a journal**: what you unlocked down a dated line, beside the ones still out there ([Achievements](Achievements)).
+- **A scanning card you can move**: drag it to any corner of the map and it stays there ([Getting started](Getting-Started)).
+- **Saved scans you can delete one at a time**, from the start screen ([Saved scans and the start screen](Saved-Scans-and-the-Start-Screen)).
+- **Export, Duplicates and Empty folders laid out again**: a table preview in Export, sets on the left and copies on the right in Duplicates, and empty folders grouped under the folder they sit in ([Exporting](Exporting), [Duplicates and empty folders](Duplicates-and-Empty-Folders)).
+- **A deeper minimap**: up to three levels of folders, with or without names ([Navigating](Navigating#the-minimap)).
+- **Drive tiles in the shape of the SpaceSharp cube**, in the color of the drive's kind, in the side panel and on the start screen.
 
 Every release is in the [changelog](https://github.com/SpaceSharpApp/SpaceSharp/blob/main/CHANGELOG.md).

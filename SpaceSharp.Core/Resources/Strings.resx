@@ -375,6 +375,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Save…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Table copied: {0:N0} rows</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} items · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>What to export</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} of {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Default</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>File name</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Collecting the rows…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Items in {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Everything under {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>The largest files on the drive</value></data>
@@ -560,6 +565,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Ask before deleting. Deleted items can always be restored from the Recycle Bin. Items inside Windows, program, app and game folders always ask.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Hide unsafe empty folders</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lists only the empty folders that are plainly yours. The ones inside Windows, Program Files, ProgramData, AppData and game or build folders, which programs often expect to exist, are left out of the list entirely. Off lists them unticked, with a warning when you tick one.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Show unsafe empty folders?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>The empty folder list will also show folders inside Windows, Program Files, ProgramData, AppData and game or build folders. Programs often expect these folders to exist, and deleting them has broken Windows apps before.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Show them</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Keep them hidden</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Are you really sure?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Empty folders are deleted directly, not through the Recycle Bin, so a wrong delete cannot be undone. The unsafe folders are listed unticked with a warning, but Select all ticks every one of them. Leave them hidden unless you know exactly which folders you are after.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Yes, show unsafe folders</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Custom palettes</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Use any palette on either theme</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Off: picking a palette made for the other theme switches to that theme, so a light palette brings the light theme with it. On: the palette is used as it is, light palettes on the dark theme and dark palettes on the light one.</value></data>
@@ -782,6 +794,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Last scan · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Open the map</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Scan again and compare</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Delete this saved scan</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Delete the saved scan of {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>The scan made {0} is deleted for good, not moved to the Recycle Bin. It takes {1} on disk. Nothing on the drive or folder itself is touched.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>The earlier scan made {0}, kept for comparing, goes with it.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Delete the scan</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Keep it</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>The scan file is in use and was left. Close whatever has it open and try again.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Earlier scans</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scan</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} scans</value></data>
@@ -789,6 +808,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Everything else</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% used · {1} free</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Folder · {0} files</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Not connected · {0} files</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>The drive has filled {0} since this scan. Scan again to see where it went.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>The drive has {0} more free space than at this scan. Scan again to see it as it is now.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Your scans</value></data>
@@ -802,6 +822,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>With administrator rights SpaceSharp reads the NTFS file table instead of walking every folder.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Keep saved scans for</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatic saves older than this are deleted when SpaceSharp starts. Scans you saved as files yourself are never touched.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Saved scans</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, taking {1} on disk.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} days</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} months</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 year</value></data>
@@ -1178,6 +1200,10 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} files are under 4 KB; they hold {1} but the disk hands out whole clusters, so {2} of it is slack no tool can free. {3:N0} folders are empty.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Deep and long</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Empty folders</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Folders with no files in them at any depth.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Nested inside them</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>In program folders, not listed</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>No folder matches. Clear the box above.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} folders with no files in them</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} folders with no files in them, {1:N0} more nested inside those</value></data>
   <data name="Empty_None" xml:space="preserve"><value>No empty folders in this scan.</value></data>
@@ -1208,6 +1234,20 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Dup_Stage2" xml:space="preserve"><value>Comparing samples: {0:N0} of {1:N0} · {2} read</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Reading whole files: {0:N0} of {1:N0} · {2} read</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sets · {1:N0} extra copies · {2} could go</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Sets</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Extra copies</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Could go</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Search again</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Filter the list</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Type a file name or part of a folder</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Type part of a path</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Hide program folders</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} copies · {1} each · keeping one frees {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Keep the newest</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Keep the oldest</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Keep</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Goes to the Recycle Bin</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>No set matches. Clear the box above or untick Hide program folders.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>No duplicates among files over {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Keep the first of each</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Keep the newest of each</value></data>
@@ -1461,9 +1501,15 @@ pagefile.sys and swapfile.sys are virtual memory. Their size is set under System
   <data name="Scan_Stop" xml:space="preserve"><value>Stop</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Stop the scan and go back to the start page; what was read so far is dropped (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Scanning card</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Where the progress card sits while a scan runs.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Where the progress card sits while a scan runs. Or drag the card itself to a corner of the map.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minimap</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>While you are zoomed in: a small plain picture of the scan's biggest folders in a corner of the map, with a box where you are. Click or drag in it to move. Or edge markers: two thin bars on the map's edges that cover nothing. Right-click the picture to hide it.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Minimap levels</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>How many levels of folders the minimap draws: the top folders alone, or the folders inside them too. More levels make the blocks smaller and the minimap harder to read. A change shows the next time you zoom in from the whole map.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 level</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} levels</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Names in the minimap</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Writes folder names on the minimap's blocks where they fit. Off draws the blocks alone, which is calmer with 2 or 3 levels.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Off</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Edge markers</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Hide the minimap</value></data>

@@ -23,6 +23,8 @@ Once you zoom in, a small card appears over a corner of the map: the scan's bigg
 
 Settings › Behavior › Minimap picks the corner (bottom left by default), turns it off, or swaps it for **edge markers**: two thin bars on the map's bottom and right edges that show which part of the width and height you are on. They cover nothing and drag like scrollbars. At zoom 1 neither is shown, since there is nothing to locate.
 
+Settings › Behavior › **Minimap levels** sets how deep the picture goes: the top folders alone (1 level, the default), or the folders inside them as well (2 or 3 levels), drawn inside their parent as on the map. More levels tell you more about where you are, but the blocks get small and the picture is harder to read, so try 2 before 3. A change shows the next time you zoom in from the whole map. **Names in the minimap** turns the folder names on the blocks off, which is calmer at 2 or 3 levels; it takes effect at once.
+
 ## Saving the map as a picture
 
 The **Snapshot** button in the path row, beside Filter, saves the map as you see it, zoom and all, to a PNG at twice the screen's pixels. The side panel, toolbar and path row are not in it.
@@ -35,7 +37,7 @@ Under the toolbar: the path to the folder you are looking at, each part a button
 
 On the left; **L** or the panel button hides and shows it, and its edge drags to set its width.
 
-- **Drives**: every drive as a tile tinted by its kind (amber NVMe, green SSD, grey spinning disk, blue removable, purple network, orange optical) with the letter on it, then its label, the kind with the icon Windows uses for it, how full it is, and free space. Click one to scan it. The line under the list drags to give the list more or less room.
+- **Drives**: every drive with a tile that is the SpaceSharp cube in the color of its kind (amber NVMe, green SSD, grey spinning disk, blue removable, purple network, teal optical). The small cube inside grows with how full the drive is, as a hint; the bar under the name is the exact reading. From 85% used the bar and the small cube turn orange and from 92% red, and the free figure beside the name turns with them; no kind is orange or red, so those two always mean nearly full. Beside it: the letter and label with the free space, and under them how much is used of how much and the kind with the icon Windows uses for it. Before a scan the list takes the whole panel. Click one to scan it. The line under the list drags to give the list more or less room.
 - **Largest items**: a **Files / Folders / Types** switch, then the top of each. Before a scan the section is hidden and the drive list has the whole panel. Click a row to go to it on the map; hover for its path. The **Share** column shows each item's share of the scan.
 
 ## The three views

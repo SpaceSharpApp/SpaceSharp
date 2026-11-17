@@ -1,5 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -68,56 +70,65 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>Adds one drive to the side panel: letter tile, label and kind, capacity bar, used and free figures; clicking it scans the drive.</summary>
+    /// <summary>Adds one drive to the side panel: the logo tile, the letter and label, the capacity bar, the kind, and the used and free figures; clicking it scans the drive.</summary>
     /// <param name="rootPath">The drive root to scan when clicked (for example <c>C:\</c>).</param>
-    /// <param name="name">The drive's short name as shown in the tile and tooltip; on Windows the letter with its colon.</param>
+    /// <param name="name">The drive's short name as shown before its label and in the tooltip; on Windows the letter with its colon.</param>
     /// <param name="volumeLabel">The volume label; null or blank shows the localized "no label" text instead.</param>
     /// <param name="kind">The detected drive kind, which picks the tile's tint and symbol.</param>
     /// <param name="format">The file system name (NTFS, exFAT, ...) shown after the kind.</param>
     /// <param name="total">The drive's size in bytes; must be above 0.</param>
-    /// <param name="free">Free bytes; the bar turns Warn at 85% used and Danger at 92%.</param>
+    /// <param name="free">Free bytes; the bar, the tile's small cube and the free figure turn Warn at 85% used and Danger at 92%.</param>
     private void AddDriveRow(string rootPath, string name, string? volumeLabel, DriveKind kind, string format, long total, long free)
     {
-        string letter = OperatingSystem.IsWindows() || _mock ? name.TrimEnd(':') : name;
         string title = string.IsNullOrWhiteSpace(volumeLabel) ? Strings.Get("Drive_NoLabel") : volumeLabel;
         string kindText = DriveKinds.Label(kind) is { } label ? $"{label} · {format}" : format;
         double fraction = (double)(total - free) / total;
 
-        Grid tile = DriveTile(letter, kind);
+        string? alarm = FullnessAlarm(fraction);
+        Color tint = DriveKinds.TintColor(kind);
+        Control tile = DriveTile(tint, fraction, alarm);
 
         var top = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
-        var nameText = new TextBlock
+        // The letter leads the name, in the tile's color, since the tile itself no longer carries it.
+        var nameText = new TextBlock { FontWeight = FontWeight.SemiBold, FontSize = FontSizes.Large, TextWrapping = TextWrapping.Wrap, VerticalAlignment = VerticalAlignment.Bottom };
+        nameText.Inlines!.Add(new Run(name + " ")
         {
-            Text = title,
-            FontWeight = FontWeight.SemiBold,
-            FontSize = FontSizes.Large,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            VerticalAlignment = VerticalAlignment.Bottom
-        };
+            FontWeight = FontWeight.Bold,
+            // A light tone on the dark panel, a deep one on the light panel, so the letter reads as text in both.
+            Foreground = new ImmutableSolidColorBrush(App.IsDark ? Tone(tint, 0.35) : Tone(tint, -0.45))
+        });
+        nameText.Inlines.Add(new Run(title));
         // The kind's symbol before its name: the glyph Windows draws for that kind, or a silhouette of the device elsewhere.
-        var kindLabel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Bottom };
-        kindLabel.Children.Add(DriveKindIcon(kind, 14));
-        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = FontSizes.Small, VerticalAlignment = VerticalAlignment.Center });
+        var kindLabel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 5, VerticalAlignment = VerticalAlignment.Top };
+        kindLabel.Children.Add(DriveKindIcon(kind, 13));
+        kindLabel.Children.Add(new TextBlock { Text = kindText, Classes = { "dim" }, FontSize = FontSizes.Caption, VerticalAlignment = VerticalAlignment.Center });
         Grid.SetColumn(kindLabel, 1);
+        // The name shares its line with the short free figure, not the long kind text, so it has room and rarely wraps.
+        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = FontSizes.Small, FontWeight = FontWeight.Medium, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(0, 0, 0, 1) };
+        if (alarm is not null)
+        {
+            // The warning is in the words too, not only in the tile's small cube, so it never rests on telling two colors apart.
+            freeText.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable(alarm));
+            freeText.FontWeight = FontWeight.SemiBold;
+        }
+        Grid.SetColumn(freeText, 1);
         top.Children.Add(nameText);
-        top.Children.Add(kindLabel);
-
-        string? fillBrush = fraction >= 0.92 ? "Danger" : fraction >= 0.85 ? "Warn" : null;
-        Grid bar = CapacityBar(fraction, 5, fillBrush);
-        bar.Margin = new Thickness(0, 6, 0, 5);
+        top.Children.Add(freeText);
 
         var bottom = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 10 };
         var usedText = new TextBlock
         {
             Text = Strings.Format("Drive_UsedOfShort", SizeFormatter.Format(total - free), SizeFormatter.Format(total)),
             Classes = { "dim" },
-            FontSize = FontSizes.Small,
-            TextTrimming = TextTrimming.CharacterEllipsis
+            FontSize = FontSizes.Caption,
+            // Small, so it fits beside the kind; in a panel too narrow even for that it wraps and is never cut.
+            TextWrapping = TextWrapping.Wrap
         };
-        var freeText = new TextBlock { Text = Strings.Format("Drive_Free", SizeFormatter.Format(free)), FontSize = FontSizes.Small, FontWeight = FontWeight.Medium };
-        Grid.SetColumn(freeText, 1);
         bottom.Children.Add(usedText);
-        bottom.Children.Add(freeText);
+        bottom.Children.Add(kindLabel);
+        // The bar is the exact reading; the tile's small cube only hints at it.
+        Grid bar = CapacityBar(fraction, 5, alarm);
+        bar.Margin = new Thickness(0, 5, 0, 4);
         var body = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Children = { top, bar, bottom } };
 
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 12 };
@@ -153,39 +164,66 @@ public partial class MainWindow
         return glyph;
     }
 
-    /// <summary>The drive tile: a square tinted by the drive kind with the letter in dark on it; the kind's symbol sits by the kind text instead, where it has room.</summary>
-    /// <param name="letter">The text in the square; three or more characters are drawn smaller.</param>
-    /// <param name="kind">Picks the tint: amber NVMe, green SSD, grey HDD, blue USB, purple network, orange optical.</param>
-    /// <returns>A 46 px grid holding the 40 px square.</returns>
-    private static Grid DriveTile(string letter, DriveKind kind)
-    {
-        var ink = new ImmutableSolidColorBrush(Color.FromRgb(0x0D, 0x11, 0x17));
-        var square = new Border
-        {
-            Width = 40,
-            Height = 40,
-            CornerRadius = new CornerRadius(8),
-            Background = new ImmutableSolidColorBrush(DriveKinds.TintColor(kind)),
-            HorizontalAlignment = HorizontalAlignment.Left,
-            VerticalAlignment = VerticalAlignment.Top
-        };
-        var letterText = new TextBlock
-        {
-            Text = letter,
-            FontWeight = FontWeight.Bold,
-            FontSize = letter.Length > 2 ? 11 : 18,
-            Foreground = ink,
-            MaxWidth = 36,
-            TextAlignment = TextAlignment.Center,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center
-        };
-        square.Child = letterText;
+    /// <summary>The theme brush that warns a drive is nearly full, the same wherever a drive's tile is drawn.</summary>
+    /// <param name="fraction">The used share of the drive, 0 to 1.</param>
+    /// <returns>"Danger" from 92% used, "Warn" from 85%, otherwise null.</returns>
+    private static string? FullnessAlarm(double fraction) => fraction >= 0.92 ? "Danger" : fraction >= 0.85 ? "Warn" : null;
 
-        var tile = new Grid { Width = 46, Height = 46, VerticalAlignment = VerticalAlignment.Center };
-        tile.Children.Add(square);
-        return tile;
+    /// <summary>The drive tile, which is the logo: a cube in the drive kind's color with a dark hollow, and a small cube in the hollow
+    /// that grows with how full the drive is. Three flat tones per cube, light on top, mid on the left, dark on the right.</summary>
+    /// <param name="tint">The drive kind's color, from <see cref="DriveKinds.TintColor"/>; none of them is near the warning colors.</param>
+    /// <param name="fraction">The used share of the drive, 0 to 1, which sizes the small cube.</param>
+    /// <param name="alarm">The theme brush the small cube takes when the drive is nearly full, "Warn" or "Danger"; null keeps the tint.</param>
+    /// <param name="size">The tile's width and height in device-independent pixels.</param>
+    /// <returns>A square of that size holding the drawing.</returns>
+    private Control DriveTile(Color tint, double fraction, string? alarm, double size = 46)
+    {
+        Color inner = alarm is not null && this.ThemeBrush(alarm) is ISolidColorBrush brush ? brush.Color : tint;
+        double scale = DriveGauge.InnerScale(fraction);
+        var drawing = new Canvas { Width = 84, Height = 92 };
+
+        // The logo's points, on its 100 by 100 grid.
+        AddFace(drawing, Tone(tint, 0.35), 1, 13.6, 31, 50, 52, 86.4, 31, 50, 10);
+        AddFace(drawing, tint, 1, 50, 94, 50, 52, 13.6, 31, 13.6, 73);
+        AddFace(drawing, Tone(tint, -0.18), 1, 50, 94, 50, 52, 86.4, 31, 86.4, 73);
+        // The hollow, a little wider than the logo's so the small cube has room to show a nearly full drive.
+        AddFace(drawing, Color.FromRgb(0x30, 0x36, 0x3D), 1, 23, 67.7, 50, 52, 50, 20.8, 23, 36.4);
+        AddFace(drawing, Color.FromRgb(0x21, 0x26, 0x2D), 1, 77, 67.7, 50, 52, 23, 67.7, 50, 83.3);
+        AddFace(drawing, Color.FromRgb(0x16, 0x1B, 0x22), 1, 77, 67.7, 50, 52, 50, 20.8, 77, 36.4);
+        AddFace(drawing, Tone(inner, 0.35), scale, 38, 45.1, 50, 52, 62, 45.1, 50, 38.1);
+        AddFace(drawing, inner, scale, 50, 65.9, 50, 52, 38, 45.1, 38, 58.9);
+        AddFace(drawing, Tone(inner, -0.18), scale, 50, 65.9, 50, 52, 62, 45.1, 62, 58.9);
+
+        return new Viewbox { Width = size, Height = size, Child = drawing, VerticalAlignment = VerticalAlignment.Center };
+    }
+
+    /// <summary>Adds one flat face of a cube to the tile's drawing.</summary>
+    /// <param name="drawing">The canvas, 84 by 92: the logo's grid without its empty margin.</param>
+    /// <param name="color">The face's color.</param>
+    /// <param name="scale">How much to grow the face about the cube's middle; 1 leaves it as the logo has it.</param>
+    /// <param name="points">The face's corners as x, y pairs on the logo's 100 by 100 grid.</param>
+    private static void AddFace(Canvas drawing, Color color, double scale, params double[] points)
+    {
+        // The middle of the logo's cubes, and the margin the canvas leaves out.
+        const double middleX = 50, middleY = 52, marginX = 8, marginY = 6;
+        var corners = new List<Point>(points.Length / 2);
+        for (int i = 0; i + 1 < points.Length; i += 2)
+        {
+            double x = middleX + ((points[i] - middleX) * scale);
+            double y = middleY + ((points[i + 1] - middleY) * scale);
+            corners.Add(new Point(x - marginX, y - marginY));
+        }
+        drawing.Children.Add(new Polygon { Points = corners, Fill = new ImmutableSolidColorBrush(color) });
+    }
+
+    /// <summary>A lighter or darker tone of a color, for the cube's top and right faces.</summary>
+    /// <param name="color">The mid tone.</param>
+    /// <param name="amount">Above 0 mixes that share of white in; below 0 takes that share of the color away.</param>
+    /// <returns>The tone, opaque.</returns>
+    private static Color Tone(Color color, double amount)
+    {
+        byte Mix(byte channel) => (byte)Math.Round(amount >= 0 ? channel + ((255 - channel) * amount) : channel * (1 + amount));
+        return Color.FromRgb(Mix(color.R), Mix(color.G), Mix(color.B));
     }
 
     // ------------------------------------------------------------------ mock system

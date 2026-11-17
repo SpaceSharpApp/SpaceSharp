@@ -98,6 +98,12 @@ internal sealed class AppSettings
     /// <summary>The minimap shown while the map is zoomed in: a card in a corner ("BottomLeft", "BottomRight", "TopLeft", "TopRight"),
     /// thin markers on the map's edges ("Edges"), or nothing ("Off").</summary>
     public string MinimapPlace { get; set; } = "BottomLeft";
+    /// <summary>The most levels of folders the minimap can draw.</summary>
+    public const int MaxMinimapLevels = 3;
+    /// <summary>How many levels of folders the minimap draws, 1 to <see cref="MaxMinimapLevels"/>; more is finer but harder to read.</summary>
+    public int MinimapLevels { get; set; } = 1;
+    /// <summary>True writes folder names on the minimap's blocks where they fit; false draws the blocks alone.</summary>
+    public bool MinimapNames { get; set; } = true;
     /// <summary>True allows a palette made for the other theme without switching the theme.</summary>
     public bool PaletteAnyTheme
     {
@@ -270,7 +276,7 @@ internal sealed class AppSettings
         get; set;
     }
     /// <summary>The side panel's width in device-independent pixels, as last dragged.</summary>
-    public double SidePanelWidth { get; set; } = 300;
+    public double SidePanelWidth { get; set; } = 360;
     /// <summary>The height of the drive list on the start screen in device-independent pixels, as last dragged.</summary>
     public double DriveListHeight { get; set; } = 320;
 
@@ -296,6 +302,8 @@ internal sealed class AppSettings
         LiveMap = defaults.LiveMap;
         ScanCardPlace = defaults.ScanCardPlace;
         MinimapPlace = defaults.MinimapPlace;
+        MinimapLevels = defaults.MinimapLevels;
+        MinimapNames = defaults.MinimapNames;
         PaletteAnyTheme = defaults.PaletteAnyTheme;
         IncludeHidden = defaults.IncludeHidden;
         FastNtfsScan = defaults.FastNtfsScan;

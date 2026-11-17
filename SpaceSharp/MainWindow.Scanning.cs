@@ -189,7 +189,7 @@ public partial class MainWindow
         {
             PrepareLiveGuide(path);
         }
-        // A file-table scan has nothing to draw live; say so where the live map would be.
+        // A file-table scan has nothing to draw live; a note on the card says so.
         SampleBanner.IsVisible = readFileTable && _settings.LiveMap;
         SampleTitle.Text = Strings.Get("Scan_NoLiveTitle");
         SampleText.Text = Strings.Get("Scan_NoLiveText");
@@ -223,6 +223,7 @@ public partial class MainWindow
         _progressTimer.Stop();
         _liveTimer.Stop();
         _liveGuide = null;
+        EndScanCardDrag();   // a card still held when the scan ends is let go, its place unchanged
         ScanCard.IsVisible = false;
         _scanCts?.Dispose();
         _scanCts = null;

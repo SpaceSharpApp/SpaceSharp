@@ -21,6 +21,7 @@ public sealed class Minimap : Control
 
     private TreemapControl? _map;
     private bool _dragging;
+    private bool _showNames = true;
 
     /// <summary>A minimap with a hand cursor and no map yet.</summary>
     public Minimap()
@@ -37,6 +38,20 @@ public sealed class Minimap : Control
         {
             _map = value;
             InvalidateVisual();
+        }
+    }
+
+    /// <summary>True writes each block's name on it where it fits; false draws the blocks alone.</summary>
+    public bool ShowNames
+    {
+        get => _showNames;
+        set
+        {
+            if (_showNames != value)
+            {
+                _showNames = value;
+                InvalidateVisual();
+            }
         }
     }
 
@@ -61,7 +76,7 @@ public sealed class Minimap : Control
                 Math.Max(1, block.Fraction.Height * area.Height - Gap));
             context.DrawRectangle(block.Fill, null, box, 2, 2);
 
-            if (box.Width >= 40 && box.Height >= 18)
+            if (_showNames && box.Width >= 40 && box.Height >= 18)
             {
                 var label = new FormattedText(block.Name, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, LabelFace, LabelSize, block.Text)
                 {

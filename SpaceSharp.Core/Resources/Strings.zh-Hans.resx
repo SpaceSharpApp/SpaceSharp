@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>保存…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>已复制表格：{0:N0} 行</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} 项 · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>导出内容</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0}/{1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>默认</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>文件名</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>正在收集行…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>{0} 中的项目</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>{0} 下的全部内容</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>驱动器上最大的文件</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>删除前询问。已删除的项目始终可以从回收站还原。Windows、程序、应用和游戏文件夹内的项目始终会询问。</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>隐藏不安全的空文件夹</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>只列出明显属于你的空文件夹。位于 Windows、Program Files、ProgramData、AppData 以及游戏或构建文件夹内、程序往往需要其存在的那些，完全不列出。关闭后它们会以未勾选状态列出，勾选时给出警告。</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>要显示不安全的空文件夹吗?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>空文件夹列表还会显示 Windows、Program Files、ProgramData、AppData 以及游戏或生成文件夹中的文件夹。程序通常需要这些文件夹存在,删除它们曾导致 Windows 应用损坏。</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>显示</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>保持隐藏</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>你真的确定吗?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>空文件夹会被直接删除,不经过回收站,因此误删无法撤销。不安全的文件夹默认不勾选并带有警告,但“全选”会勾选其中每一个。除非你确切知道要找哪些文件夹,否则请保持隐藏。</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>是,显示不安全的文件夹</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>自定义配色</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>在两种主题中使用任意调色板</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>关闭：选择为另一主题制作的调色板会切换到该主题，因此浅色调色板会带来浅色主题。开启：调色板按原样使用，深色主题可用浅色调色板，浅色主题可用深色调色板。</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>上次扫描 · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>打开地图</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>重新扫描并比较</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>删除此已保存的扫描</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>要删除 {0} 的已保存扫描吗?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>此扫描({0})将被永久删除,不会移入回收站。它在磁盘上占用 {1}。驱动器或文件夹本身不受任何影响。</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>为比较而保留的上一次扫描({0})也会一并删除。</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>删除扫描</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>保留</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>扫描文件正在使用中,未被删除。请关闭打开它的程序后重试。</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>更早的扫描</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 次扫描</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} 次扫描</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>其余所有</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>已用 {0}% · 可用 {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>文件夹 · {0} 个文件</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>未连接 · {0} 个文件</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>自此次扫描以来，驱动器又占用了 {0}。重新扫描以查看空间去了哪里。</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>驱动器的可用空间比此次扫描时多了 {0}。重新扫描以查看当前状态。</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>你的扫描</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>拥有管理员权限时，SpaceSharp 会读取 NTFS 文件表，而不是逐个遍历文件夹。</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>保存的扫描保留</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>SpaceSharp 启动时会删除早于此时限的自动保存。您自己保存为文件的扫描不受影响。</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>已保存的扫描</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0},在磁盘上占用 {1}。</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} 天</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} 个月</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 年</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} 个文件小于 4 KB；它们只有 {1}，但磁盘按整簇分配，因此其中 {2} 是任何工具都无法释放的浪费。{3:N0} 个文件夹是空的。</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>深与长</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>空文件夹</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>任何层级都没有文件的文件夹。</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>嵌套在其中</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>位于程序文件夹中，未列出</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>没有匹配的文件夹。请清空上方的输入框。</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} 个文件夹内没有文件，其中还嵌套了 {1:N0} 个</value></data>
   <data name="Empty_None" xml:space="preserve"><value>此次扫描没有空文件夹。</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Dup_Stage2" xml:space="preserve"><value>比较采样：{0:N0} / {1:N0} · 已读 {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>读取整个文件：{0:N0} / {1:N0} · 已读 {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} 组 · {1:N0} 个多余副本 · 可释放 {2}</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>组</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>多余副本</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>可释放</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>重新搜索</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>筛选列表</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>输入文件名或文件夹的一部分</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>输入路径的一部分</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>隐藏程序文件夹</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} 个副本 · 每个 {1} · 保留一个可释放 {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>保留最新的</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>保留最旧的</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>保留</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>移到回收站</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>没有匹配的组。请清空上方的输入框，或取消隐藏程序文件夹。</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>大于 {0} 的文件中没有重复。</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>每组保留第一个</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>每组保留最新的</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Scan_Stop" xml:space="preserve"><value>停止</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>停止扫描并返回起始页；已读取的内容将被丢弃 (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>扫描卡片</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>扫描时进度卡片所在的位置。</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>扫描时进度卡片所在的位置。也可以直接把卡片拖到地图的一角。</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>小地图</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>放大时显示：在地图一角用简洁的色块画出扫描中最大的文件夹，并用方框标出当前位置。在其中单击或拖动即可移动。也可选择边缘标记：地图边缘的两条细条，不遮挡任何内容。右键单击该图可将其隐藏。</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>小地图层级</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>小地图绘制多少层文件夹:只画顶层文件夹,或同时画出其中的文件夹。层级越多,方块越小,小地图越难看清。更改会在下次从整张地图放大时生效。</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 层</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} 层</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>小地图中的名称</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>在放得下的地方把文件夹名称写在小地图的方块上。关闭后只画方块,在 2 层或 3 层时更清爽。</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>关闭</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>边缘标记</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>隐藏小地图</value></data>

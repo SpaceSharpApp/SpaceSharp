@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Kaydet…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tablo kopyalandı: {0:N0} satır</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} öğe · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Dışa aktarılacaklar</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} / {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Varsayılan</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Dosya adı</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Satırlar toplanıyor…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>{0} içindeki öğeler</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>{0} altındaki her şey</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Sürücüdeki en büyük dosyalar</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Silmeden önce sor. Silinen öğeler her zaman Geri Dönüşüm Kutusu'ndan geri alınabilir. Windows, program, uygulama ve oyun klasörlerindeki öğeler için her zaman sorulur.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Güvenli olmayan boş klasörleri gizle</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Yalnızca açıkça sizin olan boş klasörleri listeler. Programların genellikle var olmasını beklediği Windows, Program Files, ProgramData, AppData ile oyun veya derleme klasörlerindekiler listeye hiç alınmaz. Kapalıyken işaretsiz listelenir, birini işaretleyince uyarı çıkar.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Güvenli olmayan boş klasörler gösterilsin mi?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>Boş klasör listesi Windows, Program Files, ProgramData, AppData ile oyun ve derleme klasörlerinin içindeki klasörleri de gösterir. Programlar çoğu zaman bu klasörlerin var olmasını bekler ve bunların silinmesi daha önce Windows uygulamalarını bozdu.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Göster</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Gizli kalsın</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Gerçekten ama gerçekten emin misiniz?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Boş klasörler Geri Dönüşüm Kutusu’na gitmeden doğrudan silinir; yanlış bir silme geri alınamaz. Güvenli olmayan klasörler işaretsiz ve bir uyarıyla listelenir, ancak Tümünü seç hepsini işaretler. Tam olarak hangi klasörleri aradığınızı bilmiyorsanız gizli bırakın.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Evet, güvenli olmayan klasörleri göster</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Özel paletler</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Her iki temada da herhangi bir paleti kullan</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Kapalı: diğer tema için yapılmış bir paleti seçmek o temaya geçirir, yani açık bir palet açık temayı da getirir. Açık: palet olduğu gibi kullanılır, koyu temada açık paletler ve açık temada koyu paletler.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Son tarama · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Haritayı aç</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Yeniden tara ve karşılaştır</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Bu kayıtlı taramayı sil</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>{0} için kayıtlı tarama silinsin mi?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>Tarama ({0}) kalıcı olarak silinir, Geri Dönüşüm Kutusu’na taşınmaz. Diskte {1} yer kaplıyor. Sürücüdeki veya klasördeki hiçbir şeye dokunulmaz.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>Karşılaştırma için saklanan önceki tarama ({0}) da onunla birlikte silinir.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Taramayı sil</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Sakla</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Tarama dosyası kullanımda olduğu için silinmedi. Dosyayı açık tutan programı kapatıp yeniden deneyin.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Önceki taramalar</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 tarama</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} tarama</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Geri kalan her şey</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>%{0} dolu · {1} boş</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Klasör · {0} dosya</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Bağlı değil · {0} dosya</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Bu taramadan bu yana sürücü {0} doldu. Nereye gittiğini görmek için yeniden tarayın.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Sürücüde bu taramaya göre {0} daha fazla boş alan var. Şimdiki halini görmek için yeniden tarayın.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Taramalarınız</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Yönetici haklarıyla SpaceSharp her klasörü dolaşmak yerine NTFS dosya tablosunu okur.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Kaydedilmiş taramaları saklama süresi</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Bundan daha eski otomatik kayıtlar SpaceSharp başlarken silinir. Kendiniz dosya olarak kaydettiğiniz taramalara hiç dokunulmaz.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Kayıtlı taramalar</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, diskte {1} yer kaplıyor.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} gün</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} ay</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 yıl</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} dosya 4 KB'den küçük; {1} tutuyorlar ama disk tam kümeler ayırdığından {2} kadarı hiçbir aracın boşaltamayacağı boşluk. {3:N0} klasör boş.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Derin ve uzun</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Boş klasörler</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Hiçbir derinlikte dosya içermeyen klasörler.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>İçlerinde iç içe</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>Program klasörlerinde, listelenmiyor</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Eşleşen klasör yok. Yukarıdaki kutuyu boşaltın.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>İçinde dosya olmayan {0:N0} klasör, bunların içinde iç içe {1:N0} tane daha</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Bu taramada boş klasör yok.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Dup_Stage2" xml:space="preserve"><value>Örnekler karşılaştırılıyor: {0:N0} / {1:N0} · {2} okundu</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Dosyalar tamamen okunuyor: {0:N0} / {1:N0} · {2} okundu</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} küme · {1:N0} fazla kopya · {2} gidebilir</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Kümeler</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Fazla kopya</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Gidebilir</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Yeniden ara</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Listeyi filtrele</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Bir dosya adı veya klasörün bir kısmını yazın</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Yolun bir kısmını yazın</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Program klasörlerini gizle</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} kopya · her biri {1} · birini tutmak {2} boşaltır</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>En yenisini tut</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>En eskisini tut</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Kalıyor</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Geri Dönüşüm Kutusu'na gidiyor</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Eşleşen küme yok. Yukarıdaki kutuyu boşaltın veya Program klasörlerini gizle seçeneğini kapatın.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>{0} üzerindeki dosyalar arasında yinelenen yok.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Her kümenin ilkini tut</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Her kümenin en yenisini tut</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Scan_Stop" xml:space="preserve"><value>Durdur</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Taramayı durdur ve başlangıç sayfasına dön; şimdiye kadar okunanlar atılır (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Tarama kartı</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Tarama sürerken ilerleme kartının durduğu yer.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Tarama sürerken ilerleme kartının durduğu yer. Ya da kartı haritanın bir köşesine sürükleyin.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Mini harita</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Yakınlaştırılmışken: haritanın bir köşesinde, taramadaki en büyük klasörlerin küçük ve sade bir görüntüsü ve bulunduğunuz yeri gösteren bir kutu. Taşımak için içine tıklayın veya sürükleyin. Ya da kenar işaretleri: haritanın kenarlarında hiçbir şeyi örtmeyen iki ince çubuk. Gizlemek için görüntüye sağ tıklayın.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Mini harita düzeyleri</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Mini haritanın kaç klasör düzeyi çizeceği: yalnızca en üst klasörler ya da içlerindeki klasörler de. Daha fazla düzey blokları küçültür ve mini haritanın okunmasını zorlaştırır. Değişiklik, haritanın tamamından bir sonraki yakınlaştırmada görünür.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 düzey</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} düzey</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Mini haritada adlar</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Sığdığı yerde klasör adlarını mini haritanın bloklarına yazar. Kapalıyken yalnızca bloklar çizilir; 2 veya 3 düzeyde daha sade görünür.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Kapalı</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Kenar işaretleri</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Mini haritayı gizle</value></data>

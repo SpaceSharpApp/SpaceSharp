@@ -114,16 +114,17 @@ public static class DriveKinds
     /// <summary>The Windows icon font family, with the Windows 10 name as the fallback.</summary>
     public const string SystemIconFont = "Segoe Fluent Icons, Segoe MDL2 Assets";
 
-    /// <summary>The tile color for a kind: amber NVMe, green SSD, grey HDD, blue USB, purple network, orange optical.</summary>
+    /// <summary>The tile color for a kind: amber NVMe, green SSD, grey HDD, blue USB, purple network, teal optical. None is orange or
+    /// red, which are kept for the warning that a drive is nearly full, and they differ in lightness as well as in hue.</summary>
     /// <param name="kind">The detected kind; Unknown gets the HDD grey.</param>
-    /// <returns>An opaque color that reads with dark text in both themes.</returns>
+    /// <returns>An opaque color.</returns>
     public static Avalonia.Media.Color TintColor(DriveKind kind) => kind switch
     {
         DriveKind.Nvme => Avalonia.Media.Color.FromRgb(0xF5, 0xB8, 0x2E),
-        DriveKind.Ssd => Avalonia.Media.Color.FromRgb(0x9B, 0xC4, 0x6B),
-        DriveKind.Usb => Avalonia.Media.Color.FromRgb(0x61, 0xAF, 0xEF),
-        DriveKind.Network => Avalonia.Media.Color.FromRgb(0xA9, 0x8B, 0xD6),
-        DriveKind.Optical => Avalonia.Media.Color.FromRgb(0xE0, 0x9A, 0x5B),
+        DriveKind.Ssd => Avalonia.Media.Color.FromRgb(0x8F, 0xC2, 0x5A),
+        DriveKind.Usb => Avalonia.Media.Color.FromRgb(0x4F, 0x9F, 0xE8),
+        DriveKind.Network => Avalonia.Media.Color.FromRgb(0xA0, 0x7F, 0xD8),
+        DriveKind.Optical => Avalonia.Media.Color.FromRgb(0x3F, 0xB5, 0xA8),
         _ => Avalonia.Media.Color.FromRgb(0x8B, 0x94, 0x9E)
     };
 

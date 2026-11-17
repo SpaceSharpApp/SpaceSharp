@@ -14,13 +14,7 @@ All of them are on the [latest release](https://github.com/SpaceSharpApp/SpaceSh
 
 `SHA256SUMS.txt` on the release page lists the hash of every file.
 
-### From a package manager
-
-**winget** installs the MSI, which then updates itself:
-
-```powershell
-winget install ClearanceClarence.SpaceSharp
-```
+### From Scoop
 
 **Scoop** installs the portable exe for 64-bit or 32-bit Windows, and `scoop update spacesharp` brings in new versions:
 
@@ -39,7 +33,7 @@ For an NTFS drive, SpaceSharp asks for **administrator permission** through the 
 
 Say **No** and nothing breaks: SpaceSharp walks the folders instead, which takes longer, and the map draws itself as it goes. Folders, external drives and non-NTFS drives always use the walk.
 
-While a scan runs, a small card in the map's corner shows the stage, the file count, the current path and a clock (in tenths of a second for the first minute). **Stop** on the card, or **Esc**, stops the scan and takes you back to the start page: what was read so far is dropped (it was only in memory, nothing is written until a scan finishes), and the scans you saved earlier are still in the recent list.
+While a scan runs, a small card in the map's corner shows the stage, the file count, the current path and a clock (in tenths of a second for the first minute). **Stop** on the card, or **Esc**, stops the scan and takes you back to the start page: what was read so far is dropped (it was only in memory, nothing is written until a scan finishes), and the scans you saved earlier are still in the recent list. The card can be dragged: dashed outlines show in the four corners of the map, and it stays in the one you drop it on. Dropped anywhere else, it goes back to where it was.
 
 ## What you see afterwards
 

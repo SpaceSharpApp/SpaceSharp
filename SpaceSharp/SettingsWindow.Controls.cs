@@ -88,6 +88,51 @@ public partial class SettingsWindow
         return toggle;
     }
 
+    /// <summary>The Hide unsafe empty folders switch. Turning it on applies at once; turning it off asks twice, and goes back on unless
+    /// both questions are answered yes.</summary>
+    /// <returns>The switch, ready to place in a row.</returns>
+    private ToggleSwitch HideUnsafeEmptySwitch()
+    {
+        var toggle = new ToggleSwitch { IsChecked = _settings.HideUnsafeEmptyFolders, OnContent = null, OffContent = null, MinWidth = 0 };
+        bool settingBack = false;
+        toggle.IsCheckedChanged += async (_, _) =>
+        {
+            if (settingBack)
+            {
+                return;
+            }
+
+            if (toggle.IsChecked == true)
+            {
+                Change(() => _settings.HideUnsafeEmptyFolders = true);
+                return;
+            }
+
+            bool sure = await Dialog.Confirm(this,
+                Strings.Get("UnsafeEmpty_AskTitle"),
+                Strings.Get("UnsafeEmpty_AskText"),
+                Strings.Get("UnsafeEmpty_AskYes"),
+                Strings.Get("UnsafeEmpty_AskNo"),
+                danger: true);
+            bool reallySure = sure && await Dialog.Confirm(this,
+                Strings.Get("UnsafeEmpty_Ask2Title"),
+                Strings.Get("UnsafeEmpty_Ask2Text"),
+                Strings.Get("UnsafeEmpty_Ask2Yes"),
+                Strings.Get("UnsafeEmpty_AskNo"),
+                danger: true);
+            if (reallySure)
+            {
+                Change(() => _settings.HideUnsafeEmptyFolders = false);
+                return;
+            }
+
+            settingBack = true;
+            toggle.IsChecked = true;
+            settingBack = false;
+        };
+        return toggle;
+    }
+
     /// <summary>The language dropdown.</summary>
     /// <remarks>Avalonia's ComboBox has no group headers, so the headings are disabled items.</remarks>
     /// <returns>A box listing System and every translation under Translations or Machine translations; choosing one saves the language and offers a restart.</returns>
@@ -438,43 +483,43 @@ public partial class SettingsWindow
 
     private static readonly int[] KeepSteps = { 7, 30, 90, 180, 365, 0 };   // 0 = forever
 
-    /// <summary>A six-step slider for how long saved scans are kept (7 days to forever) with a Delete all saved scans button under it.</summary>
-    /// <returns>The panel; moving the slider saves at once, and Delete all asks for confirmation first.</returns>
-    private Control KeepScansSlider()
+    /// <summary>The dropdown for how long saved scans are kept, 7 days to forever.</summary>
+    /// <returns>The box; a choice is saved at once.</returns>
+    private ComboBox KeepScansCombo()
     {
-        // The slider keeps the column's 220 px; the delete button below it may be wider in a long translation.
-        var panel = new StackPanel { MinWidth = 220, HorizontalAlignment = HorizontalAlignment.Left };
-        var sliderPanel = new StackPanel { Width = 220, HorizontalAlignment = HorizontalAlignment.Left };
-        var label = new TextBlock { FontSize = FontSizes.Body, Margin = new Thickness(0, 0, 0, 2) };
+        string[] names = KeepSteps.Select(KeepScansText).ToArray();
         // A saved value that is not one of the steps shows as 90 days.
         int stepIndex = Array.IndexOf(KeepSteps, _settings.KeepScansDays);
-        if (stepIndex < 0)
-        {
-            stepIndex = 2;
-        }
-        var slider = new Slider { Minimum = 0, Maximum = KeepSteps.Length - 1, Value = stepIndex, TickFrequency = 1, IsSnapToTickEnabled = true, SmallChange = 1, LargeChange = 1 };
-
-        void ShowStep(int index) => label.Text = KeepScansText(KeepSteps[index]);
-
-        ShowStep(stepIndex);
-        slider.ValueChanged += (_, e) =>
-        {
-            int index = (int)Math.Round(e.NewValue);
-            _settings.KeepScansDays = KeepSteps[index];
-            ShowStep(index);
-        };
-
-        var deleteAll = new Button { Classes = { "danger-outline" }, Content = Strings.Get("KeepScans_DeleteAll"), Height = 30, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(0, 10, 0, 0) };
-        deleteAll.Click += async (_, _) => await DeleteSavedScansAsync();
-
-        sliderPanel.Children.Add(label);
-        sliderPanel.Children.Add(slider);
-        panel.Children.Add(sliderPanel);
-        panel.Children.Add(deleteAll);
-        return panel;
+        return Combo(names, stepIndex < 0 ? 2 : stepIndex, index => _settings.KeepScansDays = KeepSteps[index]);
     }
 
-    /// <summary>The keep period in words, as the slider's label and the start screen show it.</summary>
+    /// <summary>Adds the Saved scans row: how many automatic saves there are and what they take on disk, with Delete all saved scans beside it.</summary>
+    private void SavedScansRow()
+    {
+        var deleteAll = new Button { Classes = { "danger-outline" }, Content = Strings.Get("KeepScans_DeleteAll"), Height = 32 };
+        Grid row = Row(Strings.Get("Settings_SavedScans"), string.Empty, deleteAll);
+        var note = (TextBlock)((StackPanel)row.Children[0]).Children[1];
+
+        void ShowCount()
+        {
+            List<SavedScanGroup> groups = ScanFile.AutoSaveGroups();
+            int scanCount = groups.Sum(group => group.ScannedUtc.Count);
+            string count = scanCount == 1 ? Strings.Get("Start_ScanCountOne") : Strings.Format("Start_ScanCount", scanCount);
+            note.Text = scanCount == 0
+                ? Strings.Get("KeepScans_NoneToDelete")
+                : Strings.Format("Settings_SavedScans_Desc", count, SizeFormatter.Format(groups.Sum(group => group.Bytes)));
+            deleteAll.IsEnabled = scanCount > 0;
+        }
+
+        ShowCount();
+        deleteAll.Click += async (_, _) =>
+        {
+            await DeleteSavedScansAsync();
+            ShowCount();
+        };
+    }
+
+    /// <summary>The keep period in words, as the dropdown and the start screen show it.</summary>
     /// <param name="days">The period in days; 0 keeps scans forever.</param>
     /// <returns>"Forever", "1 year", "n months" for 30 days and up, or "n days", localized.</returns>
     internal static string KeepScansText(int days)

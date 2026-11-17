@@ -44,7 +44,7 @@ public sealed class AchievementsWindow : Window
             : Strings.Get("Ach_AllFound");
         _peekText.Text = _restingHint;
 
-        var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("11*,9*"), ColumnSpacing = 24 };
+        var columns = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 24 };   // the panel is as wide as its names need
         columns.Children.Add(Journal(unlocked, all.Length));
         Border stillOut = StillOut(locked);
         Grid.SetColumn(stillOut, 1);
@@ -140,7 +140,7 @@ public sealed class AchievementsWindow : Window
         return grid;
     }
 
-    /// <summary>The right panel: the locked achievements by name, two to a row, over the line that shows a hint.</summary>
+    /// <summary>The right panel: the locked achievements by name, two to a row and each on one line, over the line that shows a hint.</summary>
     /// <param name="locked">The locked achievements in the order to show them.</param>
     /// <returns>The panel.</returns>
     private Border StillOut(List<Achievement> locked)
@@ -151,7 +151,11 @@ public sealed class AchievementsWindow : Window
         header.Children.Add(count);
         header.Children.Add(new TextBlock { Text = Strings.Get("Ach_StillOut"), FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
 
-        var names = new Grid { ColumnDefinitions = new ColumnDefinitions("*,*"), ColumnSpacing = 6, RowSpacing = 6 };
+        // Two columns of one width, the widest name's, so every name is on one line in any language.
+        var names = new Grid { ColumnSpacing = 6, RowSpacing = 6 };
+        Grid.SetIsSharedSizeScope(names, true);
+        names.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "Name" });
+        names.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto, SharedSizeGroup = "Name" });
         for (int i = 0; i < locked.Count; i++)
         {
             if (i % 2 == 0)
@@ -169,7 +173,10 @@ public sealed class AchievementsWindow : Window
         {
             panel.Children.Add(names);
         }
-        panel.Children.Add(new StackPanel { Spacing = 2, Children = { _peekName, _peekText } });
+        // The hint wraps to the width of the names; it must not widen the panel, which sizes itself to its content.
+        var peek = new StackPanel { Spacing = 2, Width = locked.Count > 0 ? 0 : 340, HorizontalAlignment = HorizontalAlignment.Left, Children = { _peekName, _peekText } };
+        names.SizeChanged += (_, e) => peek.Width = e.NewSize.Width;
+        panel.Children.Add(peek);
         return new Border { Child = panel, Padding = new Thickness(16, 14), VerticalAlignment = VerticalAlignment.Top, Classes = { "start-panel" } };
     }
 
@@ -182,7 +189,7 @@ public sealed class AchievementsWindow : Window
         Icon icon = Icons.Make("Lock", 13, "TextDim");
         icon.VerticalAlignment = VerticalAlignment.Center;
         content.Children.Add(icon);
-        var name = new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+        var name = new TextBlock { Text = MainWindow.AchievementName(achievement), FontSize = FontSizes.Body, VerticalAlignment = VerticalAlignment.Center, TextWrapping = TextWrapping.NoWrap, Classes = { "dim" } };
         Grid.SetColumn(name, 1);
         content.Children.Add(name);
 
@@ -192,7 +199,8 @@ public sealed class AchievementsWindow : Window
             Classes = { "row" },
             Height = double.NaN,
             MinHeight = 40,
-            Padding = new Thickness(10, 8),
+            MinWidth = 160,
+            Padding = new Thickness(10, 8, 12, 8),
             CornerRadius = new CornerRadius(6),
             BorderThickness = new Thickness(1),
             HorizontalAlignment = HorizontalAlignment.Stretch,

@@ -78,7 +78,7 @@
     </Border>
 
     <!-- ============================================================ side panel -->
-    <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="300" MinWidth="220" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,1,0">
+    <Border x:Name="SidePanel" DockPanel.Dock="Left" Width="360" MinWidth="340" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,1,0">
       <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*">
         <TextBlock x:Name="DrivesTitle" Grid.Row="0" FontSize="15" FontWeight="SemiBold" Margin="14,12,14,4" />
         <TextBlock x:Name="DrivesHint" Grid.Row="1" Classes="dim" FontSize="12" Margin="14,0,14,4" />
@@ -94,9 +94,9 @@
         <Border x:Name="ListSwitch" Grid.Row="5" Classes="segments" Height="32" Margin="14,4,14,6" SizeChanged="ListSwitch_SizeChanged">
           <Grid ColumnDefinitions="*,*,*">
             <!-- the end parts round their outer corners one pixel tighter than the frame, so the amber fill follows the outline -->
-            <Button x:Name="ListFilesButton" Classes="segment-part" CornerRadius="5,0,0,5" Click="ListKind_Click" Tag="Files" />
+            <Button x:Name="ListFilesButton" Classes="segment-part" Click="ListKind_Click" Tag="Files" />
             <Button x:Name="ListFoldersButton" Grid.Column="1" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Folders" />
-            <Button x:Name="ListTypesButton" Grid.Column="2" Classes="segment-part" BorderThickness="1,0,0,0" CornerRadius="0,5,5,0" Click="ListKind_Click" Tag="Types" />
+            <Button x:Name="ListTypesButton" Grid.Column="2" Classes="segment-part" BorderThickness="1,0,0,0" Click="ListKind_Click" Tag="Types" />
           </Grid>
         </Border>
         <TextBlock x:Name="ListHint" Grid.Row="6" Classes="dim" FontSize="12" Margin="14,0,14,6" TextTrimming="CharacterEllipsis" />
@@ -227,20 +227,14 @@
 
       <!-- while scanning: a card in the map's corner; the last map stays in view behind it (centered when there is none) -->
       <Grid x:Name="ScanCard" IsVisible="False" Background="Transparent">
-        <!-- over the map during a file-table scan: says why there is no live drawing -->
-        <Border x:Name="SampleBanner" IsVisible="False" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="18,18,18,0" MaxWidth="720"
-                Padding="16,11" CornerRadius="8" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Accent}" BorderThickness="1" BoxShadow="0 8 28 0 #80000000">
-          <DockPanel>
-            <controls:Icon DockPanel.Dock="Left" Glyph="{StaticResource Icon.Info}" Width="18" Height="18" StrokeWidth="2.2" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,1,12,0" />
-            <TextBlock FontSize="13.5" TextWrapping="Wrap" LineHeight="19"><Run x:Name="SampleTitle" FontWeight="Bold" /><Run Text="  " /><Run x:Name="SampleText" Foreground="{DynamicResource TextDim}" /></TextBlock>
-          </DockPanel>
-        </Border>
-        <Border x:Name="ScanPanel" Width="460" Padding="18,16,18,14" CornerRadius="12" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
+        <!-- while the card is dragged: a dashed outline in each corner it can be dropped on -->
+        <Canvas x:Name="ScanDockMarks" IsVisible="False" IsHitTestVisible="False" />
+        <Border x:Name="ScanPanel" Cursor="SizeAll" Width="460" Padding="18,16,18,14" CornerRadius="12" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="18" BoxShadow="0 12 40 0 #99000000">
           <StackPanel Spacing="12">
             <!-- title row: spinner, drive, what is in use, percent, Cancel -->
             <DockPanel>
-              <Button x:Name="CancelButton" DockPanel.Dock="Right" Classes="tool" Height="28" MinHeight="28" Padding="10,0" Margin="8,0,0,0" Click="Cancel_Click" />
+              <Button x:Name="CancelButton" DockPanel.Dock="Right" Cursor="Arrow" Classes="tool" Height="28" MinHeight="28" Padding="10,0" Margin="8,0,0,0" Click="Cancel_Click" />
               <TextBlock x:Name="ScanPercent" DockPanel.Dock="Right" FontSize="13" FontWeight="Bold" Foreground="{DynamicResource Link}" VerticalAlignment="Center" Margin="8,0,0,0" />
               <controls:Icon x:Name="ScanSpinner" DockPanel.Dock="Left" Glyph="{StaticResource Icon.Loader}" Width="16" Height="16" StrokeWidth="2.4" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
               <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis"><Run x:Name="ScanTitle" FontSize="15" FontWeight="Bold" /><Run Text="  " /><Run x:Name="ScanSubtitle" FontSize="12.5" Foreground="{DynamicResource TextDim}" /></TextBlock>
@@ -297,6 +291,17 @@
                 </Grid>
                 <TextBlock x:Name="ScanPath" Classes="dim" FontSize="11" FontFamily="Cascadia Mono, Consolas, Menlo, monospace" TextTrimming="CharacterEllipsis" />
               </StackPanel>
+            </Border>
+
+            <!-- during a file-table scan: says why there is no live drawing; in the card, so it never sits under a drop mark -->
+            <Border x:Name="SampleBanner" IsVisible="False" Padding="12,10" CornerRadius="8" Background="{DynamicResource Control}">
+              <DockPanel>
+                <controls:Icon DockPanel.Dock="Left" Glyph="{StaticResource Icon.Info}" Width="15" Height="15" StrokeWidth="2.2" Foreground="{DynamicResource Accent}" VerticalAlignment="Top" Margin="0,1,10,0" />
+                <StackPanel Spacing="2">
+                  <TextBlock x:Name="SampleTitle" FontSize="12.5" FontWeight="SemiBold" TextWrapping="Wrap" />
+                  <TextBlock x:Name="SampleText" FontSize="12" Classes="dim" TextWrapping="Wrap" LineHeight="17" />
+                </StackPanel>
+              </DockPanel>
             </Border>
           </StackPanel>
         </Border>

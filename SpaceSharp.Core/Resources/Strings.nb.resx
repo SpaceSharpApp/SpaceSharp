@@ -374,6 +374,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Lagre …</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tabell kopiert: {0:N0} rader</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} elementer · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Hva som eksporteres</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} av {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Standard</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Filnavn</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Samler radene…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Elementer i {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Alt under {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>De største filene på stasjonen</value></data>
@@ -558,6 +563,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Spør før sletting. Slettede elementer kan alltid gjenopprettes fra papirkurven. Elementer i Windows-, program-, app- og spillmapper spør alltid.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Skjul utrygge tomme mapper</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Viser bare de tomme mappene som tydelig er dine. De som ligger i Windows, Program Files, ProgramData, AppData og spill- eller byggmapper, som programmer ofte forventer at finnes, holdes helt utenfor listen. Av viser dem uten kryss, med en advarsel når du krysser av en.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Vise utrygge tomme mapper?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>Listen over tomme mapper vil også vise mapper i Windows, Program Files, ProgramData, AppData og spill- eller byggemapper. Programmer forventer ofte at disse mappene finnes, og sletting av dem har ødelagt Windows-apper før.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Vis dem</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Hold dem skjult</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Er du helt, helt sikker?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Tomme mapper slettes direkte, ikke via papirkurven, så en feil sletting kan ikke angres. De utrygge mappene vises uten hake og med en advarsel, men Velg alle haker av hver eneste en. La dem være skjult med mindre du vet nøyaktig hvilke mapper du er ute etter.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Ja, vis utrygge mapper</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Egne paletter</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Bruk hvilken som helst palett i begge temaer</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Av: velger du en palett laget for det andre temaet, byttes det til det temaet, så en lys palett tar med seg det lyse temaet. På: paletten brukes som den er, lyse paletter i mørkt tema og mørke paletter i lyst.</value></data>
@@ -780,6 +792,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Siste skanning · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Åpne kartet</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Skann på nytt og sammenlign</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Slett denne lagrede skanningen</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Slette den lagrede skanningen av {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>Skanningen som ble gjort {0}, slettes for godt og flyttes ikke til papirkurven. Den tar {1} på disken. Ingenting på selve stasjonen eller mappen røres.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>Den tidligere skanningen som ble gjort {0}, og som er beholdt for sammenligning, forsvinner også.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Slett skanningen</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Behold den</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Skannefilen er i bruk og ble ikke slettet. Lukk det som har den åpen, og prøv igjen.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Tidligere skanninger</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 skanning</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} skanninger</value></data>
@@ -787,6 +806,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Alt annet</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % brukt · {1} ledig</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Mappe · {0} filer</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Ikke tilkoblet · {0} filer</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Disken har fylt seg med {0} siden denne skanningen. Skann på nytt for å se hvor det ble av.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Disken har {0} mer ledig plass enn ved denne skanningen. Skann på nytt for å se den slik den er nå.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Dine skanninger</value></data>
@@ -800,6 +820,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Med administratorrettigheter leser SpaceSharp NTFS-filtabellen i stedet for å gå gjennom hver mappe.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Behold lagrede skanninger i</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatiske lagringer eldre enn dette slettes når SpaceSharp starter. Skanninger du selv har lagret som filer, røres aldri.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Lagrede skanninger</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, som tar {1} på disken.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dager</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} måneder</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 år</value></data>
@@ -1176,6 +1198,10 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} filer er under 4 KB; de inneholder {1}, men disken deler ut hele klynger, så {2} av det er svinn ingen verktøy kan frigjøre. {3:N0} mapper er tomme.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Dypt og langt</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Tomme mapper</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Mapper uten filer i seg, uansett dybde.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Nestet inni dem</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>I programmapper, ikke vist</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Ingen mappe passer. Tøm feltet over.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mapper uten filer</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mapper uten filer, {1:N0} til nøstet inni dem</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Ingen tomme mapper i denne skanningen.</value></data>
@@ -1206,6 +1232,20 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Dup_Stage2" xml:space="preserve"><value>Sammenligner stikkprøver: {0:N0} av {1:N0} · {2} lest</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Leser hele filer: {0:N0} av {1:N0} · {2} lest</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sett · {1:N0} ekstra kopier · {2} kan fjernes</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Sett</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Ekstra kopier</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Kan fjernes</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Søk på nytt</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Filtrer listen</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Skriv et filnavn eller en del av en mappe</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Skriv en del av en bane</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Skjul programmapper</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} kopier · {1} hver · behold én og frigjør {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Behold den nyeste</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Behold den eldste</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Beholdes</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Flyttes til papirkurven</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Ingen sett passer. Tøm feltet over, eller slå av Skjul programmapper.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Ingen duplikater blant filer over {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Behold den første i hvert sett</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Behold den nyeste i hvert sett</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Scan_Stop" xml:space="preserve"><value>Stopp</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Stopp skanningen og gå tilbake til startsiden; det som er lest så langt forkastes (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Skannekort</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Hvor fremdriftskortet ligger mens en skanning kjører.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Hvor fremdriftskortet ligger mens en skanning kjører. Eller dra fremdriftskortet til et hjørne av kartet.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minikart</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Mens du er zoomet inn: et lite, enkelt bilde av de største mappene i skanningen i et hjørne av kartet, med en boks der du er. Klikk eller dra i det for å flytte. Eller kantmarkører: to tynne streker langs kantene av kartet, som ikke dekker noe. Høyreklikk på bildet for å skjule det.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Nivåer i minikartet</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Hvor mange mappenivåer minikartet tegner: bare de øverste mappene, eller også mappene inni dem. Flere nivåer gir mindre blokker og gjør minikartet vanskeligere å lese. Endringen vises neste gang du zoomer inn fra hele kartet.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 nivå</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} nivåer</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Navn i minikartet</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Skriver mappenavn på blokkene i minikartet der de får plass. Av tegner bare blokkene, noe som er roligere med 2 eller 3 nivåer.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Av</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Kantmarkører</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Skjul minikartet</value></data>

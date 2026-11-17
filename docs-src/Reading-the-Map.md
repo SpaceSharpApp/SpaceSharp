@@ -81,7 +81,7 @@ Hovering a box shows a card with its size, size on disk, file count, last-modifi
 
 During a folder walk the map **draws itself**. Finished folders appear as they finish, real files and all; folders still being read get a stand-in that fills as they go. Nothing jumps: boxes ease from where they were to where they belong, and because the last picture already is the finished tree, the end of the scan is a small settle rather than a reveal. Settings › Behavior › Draw the map as the scan goes turns it off, which keeps the previous map in view until the new one is ready.
 
-A file-table scan has no tree until the whole table is read, so it arrives in one piece; a banner at the top of the map says so while it runs.
+A file-table scan has no tree until the whole table is read, so it arrives in one piece; a note on the scanning card says so while it runs.
 
 ## Sizes
 

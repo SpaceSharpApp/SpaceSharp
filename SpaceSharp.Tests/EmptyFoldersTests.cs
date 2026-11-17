@@ -96,4 +96,70 @@ public class EmptyFoldersTests
         Assert.True(EmptyFolders.IsSafeByDefault(loose, onSystemDrive: false));
         Assert.False(EmptyFolders.IsSafeByDefault(programs, onSystemDrive: false));
     }
+
+    [Fact]
+    public void GroupPutsFoldersUnderTheFolderTheySitIn()
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode games = TestTree.Dir("Games", root);
+        FsNode first = TestTree.Dir("First", games);
+        FsNode second = TestTree.Dir("Second", games);
+        var entries = new[]
+        {
+            new EmptyFolder(TestTree.Dir("saves", first), 0),
+            new EmptyFolder(TestTree.Dir("shots", first), 2),
+            new EmptyFolder(TestTree.Dir("saves", second), 0)
+        };
+        List<EmptyFolderGroup> groups = EmptyFolders.Group(entries);
+        Assert.Equal(2, groups.Count);
+        Assert.Same(first, groups[0].Parent);
+        Assert.Equal(new[] { "saves", "shots" }, groups[0].Folders.Select(entry => entry.Folder.Name));
+        Assert.Same(second, groups[1].Parent);
+        Assert.Single(groups[1].Folders);
+        Assert.Equal(first.FullPath, groups[0].ParentPath);
+    }
+
+    [Fact]
+    public void GroupKeepsTheOrderTheFoldersCameIn()
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode a = TestTree.Dir("A", root);
+        FsNode b = TestTree.Dir("B", root);
+        var entries = new[]
+        {
+            new EmptyFolder(TestTree.Dir("one", b), 0),
+            new EmptyFolder(TestTree.Dir("two", a), 0),
+            new EmptyFolder(TestTree.Dir("three", b), 0)
+        };
+        List<EmptyFolderGroup> groups = EmptyFolders.Group(entries);
+        Assert.Equal(new[] { "B", "A" }, groups.Select(group => group.Parent.Name));
+        Assert.Equal(new[] { "one", "three" }, groups[0].Folders.Select(entry => entry.Folder.Name));
+    }
+
+    [Theory]
+    [InlineData("", 3)]
+    [InlineData("FIRST", 2)]
+    [InlineData("saves", 2)]
+    [InlineData(@"Second\saves", 1)]
+    [InlineData("nothing like this", 0)]
+    public void GroupFiltersOnTheFullPathWithoutCase(string filter, int folders)
+    {
+        FsNode root = TestTree.Dir(@"C:\");
+        FsNode first = TestTree.Dir("First", root);
+        FsNode second = TestTree.Dir("Second", root);
+        var entries = new[]
+        {
+            new EmptyFolder(TestTree.Dir("saves", first), 0),
+            new EmptyFolder(TestTree.Dir("shots", first), 0),
+            new EmptyFolder(TestTree.Dir("saves", second), 0)
+        };
+        Assert.Equal(folders, EmptyFolders.Group(entries, filter).Sum(group => group.Folders.Count));
+        Assert.DoesNotContain(EmptyFolders.Group(entries, filter), group => group.Folders.Count == 0);
+    }
+
+    [Fact]
+    public void GroupLeavesOutAFolderWithNoParent()
+    {
+        Assert.Empty(EmptyFolders.Group(new[] { new EmptyFolder(TestTree.Dir(@"C:\"), 0) }));
+    }
 }

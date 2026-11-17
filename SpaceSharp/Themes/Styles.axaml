@@ -522,6 +522,13 @@
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Cursor" Value="Hand" />
   </Style>
+  <!-- the end parts follow the control's rounded corners, or the amber fill of a picked end pokes out past them -->
+  <Style Selector="Border.segments Button.segment-part:nth-child(1)">
+    <Setter Property="CornerRadius" Value="5,0,0,5" />
+  </Style>
+  <Style Selector="Border.segments Button.segment-part:nth-last-child(1)">
+    <Setter Property="CornerRadius" Value="0,5,5,0" />
+  </Style>
   <Style Selector="Button.segment-part:pointerover /template/ ContentPresenter#PART_ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource ControlHover}" />
     <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
@@ -683,6 +690,26 @@
     <Setter Property="CornerRadius" Value="6" />
     <Setter Property="CaretBrush" Value="{DynamicResource Text}" />
     <Setter Property="SelectionBrush" Value="{DynamicResource Accent}" />
+  </Style>
+  <!-- Fluent gives a focused box a black fill and the system's blue edge; here it keeps its fill and takes an amber edge,
+       and a hovered one keeps its looks. A box marked bad stays red while it has the focus. -->
+  <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Stroke}" />
+  </Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource Control}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="TextBox:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+  </Style>
+  <Style Selector="TextBox:focus">
+    <Setter Property="Foreground" Value="{DynamicResource Text}" />
+  </Style>
+  <Style Selector="TextBox.bad:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource Danger}" />
   </Style>
 
   <Style Selector="ToggleSwitch">

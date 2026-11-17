@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Guardar…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tabla copiada: {0:N0} filas</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} elementos · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Qué exportar</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} de {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Predeterminado</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Nombre de archivo</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Reuniendo las filas…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Elementos de {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Todo lo que hay bajo {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Los archivos más grandes de la unidad</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Preguntar antes de eliminar. Los elementos eliminados siempre se pueden restaurar desde la Papelera de reciclaje. Los elementos dentro de carpetas de Windows, programas, aplicaciones y juegos siempre preguntan.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar carpetas vacías no seguras</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista solo las carpetas vacías que son claramente tuyas. Las de Windows, Program Files, ProgramData, AppData y carpetas de juegos o de compilación, que los programas suelen esperar que existan, quedan fuera de la lista. Desactivado, se listan sin marcar, con un aviso al marcar una.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>¿Mostrar las carpetas vacías no seguras?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>La lista de carpetas vacías mostrará también las carpetas de Windows, Program Files, ProgramData, AppData y de juegos o compilación. Los programas suelen esperar que estas carpetas existan, y eliminarlas ya ha dañado aplicaciones de Windows.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Mostrarlas</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Mantenerlas ocultas</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>¿Está realmente seguro?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Las carpetas vacías se eliminan directamente, sin pasar por la Papelera de reciclaje, así que una eliminación errónea no se puede deshacer. Las carpetas no seguras aparecen sin marcar y con una advertencia, pero Seleccionar todo las marca todas. Déjelas ocultas salvo que sepa exactamente qué carpetas busca.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Sí, mostrar las carpetas no seguras</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usar cualquier paleta en ambos temas</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Desactivado: elegir una paleta hecha para el otro tema cambia a ese tema, así que una paleta clara trae consigo el tema claro. Activado: la paleta se usa tal cual, paletas claras en el tema oscuro y oscuras en el claro.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Último análisis · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Abrir el mapa</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Analizar de nuevo y comparar</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Eliminar este análisis guardado</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>¿Eliminar el análisis guardado de {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>El análisis ({0}) se elimina definitivamente, sin pasar por la Papelera de reciclaje. Ocupa {1} en el disco. No se toca nada en la unidad ni en la carpeta.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>El análisis anterior ({0}), guardado para comparar, se elimina con él.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Eliminar el análisis</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Conservarlo</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>El archivo del análisis está en uso y no se ha eliminado. Cierre el programa que lo tiene abierto e inténtelo de nuevo.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Análisis anteriores</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 análisis</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} análisis</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Todo lo demás</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % usado · {1} libres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Carpeta · {0} archivos</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>No conectada · {0} archivos</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>La unidad se ha llenado {0} desde este análisis. Analiza de nuevo para ver adónde fue.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>La unidad tiene {0} más de espacio libre que en este análisis. Analiza de nuevo para verla como está ahora.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Tus análisis</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Con permisos de administrador, SpaceSharp lee la tabla de archivos NTFS en lugar de recorrer cada carpeta.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Conservar los análisis guardados durante</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Los guardados automáticos más antiguos que esto se eliminan cuando SpaceSharp se inicia. Los análisis que guardó usted mismo como archivos nunca se tocan.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Análisis guardados</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, que ocupan {1} en el disco.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} días</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} meses</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 año</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} archivos pesan menos de 4 KB; contienen {1}, pero el disco reparte clústeres enteros, así que {2} es desperdicio que ninguna herramienta puede liberar. {3:N0} carpetas están vacías.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Profundo y largo</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Carpetas vacías</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Carpetas sin ningún archivo a ninguna profundidad.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Anidadas dentro de ellas</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>En carpetas de programas, no listadas</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Ninguna carpeta coincide. Vacía el cuadro de arriba.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} carpetas sin archivos</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} carpetas sin archivos, {1:N0} más anidadas dentro</value></data>
   <data name="Empty_None" xml:space="preserve"><value>No hay carpetas vacías en este análisis.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Dup_Stage2" xml:space="preserve"><value>Comparando muestras: {0:N0} de {1:N0} · {2} leídos</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Leyendo archivos enteros: {0:N0} de {1:N0} · {2} leídos</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} grupos · {1:N0} copias de más · {2} podrían irse</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Grupos</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Copias de más</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Podrían irse</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Buscar de nuevo</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Filtrar la lista</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Escribe un nombre de archivo o parte de una carpeta</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Escribe parte de una ruta</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Ocultar carpetas de programas</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} copias · {1} cada una · conservar una libera {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Conservar el más reciente</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Conservar el más antiguo</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Se conserva</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Va a la Papelera de reciclaje</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Ningún grupo coincide. Vacía el cuadro de arriba o desmarca Ocultar carpetas de programas.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>No hay duplicados entre los archivos de más de {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Conservar el primero de cada uno</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Conservar el más reciente de cada uno</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys y swapfile.sys son memoria virtual. Su tamaño se define en Sistema
   <data name="Scan_Stop" xml:space="preserve"><value>Detener</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Detener el análisis y volver a la página de inicio; lo leído hasta ahora se descarta (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Tarjeta de análisis</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Dónde se coloca la tarjeta de progreso mientras se analiza.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Dónde se coloca la tarjeta de progreso mientras se analiza. O arrastre la tarjeta a una esquina del mapa.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minimapa</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Mientras hay zoom: una imagen pequeña y sencilla de las carpetas más grandes del análisis en una esquina del mapa, con un recuadro donde está usted. Haga clic o arrastre en ella para moverse. O marcadores de borde: dos barras finas en los bordes del mapa que no tapan nada. Haga clic con el botón derecho en la imagen para ocultarla.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Niveles del minimapa</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Cuántos niveles de carpetas dibuja el minimapa: solo las carpetas principales o también las que contienen. Más niveles hacen los bloques más pequeños y el minimapa más difícil de leer. El cambio se ve la próxima vez que amplíe desde el mapa completo.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 nivel</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} niveles</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Nombres en el minimapa</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Escribe los nombres de las carpetas en los bloques del minimapa donde caben. Desactivado dibuja solo los bloques, lo que resulta más tranquilo con 2 o 3 niveles.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Desactivado</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Marcadores de borde</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Ocultar el minimapa</value></data>

@@ -44,9 +44,14 @@ public partial class MainWindow : IInsightsHost
     private void ShowView(bool insights) => ShowView(insights ? MainView.Insights : MainView.Map);
 
     /// <summary>Switches the main view and refreshes whichever one came up.</summary>
-    /// <param name="view">The view to show; Map and Insights are remembered in Settings, Statistics and Changes are not.</param>
+    /// <param name="view">The view to show; Map and Insights are remembered in Settings, Statistics and Changes are not. Before the first scan only Map is taken.</param>
     private void ShowView(MainView view)
     {
+        if (_root is null && view != MainView.Map)
+        {
+            // Nothing is scanned yet, so the other views have nothing to show; this also stops B and the shortcuts.
+            return;
+        }
         NoteViewForAchievements(view);
         _changesShowing = view == MainView.Changes;
         _statisticsShowing = view == MainView.Statistics;
@@ -77,7 +82,8 @@ public partial class MainWindow : IInsightsHost
     {
         MainView view = CurrentView;
         bool isIdle = _root is null && _scanCts is null;
-        bool showsInsights = view == MainView.Insights && !isIdle;
+        // Insights needs a finished scan; during the first one the map shows, and Insights comes up when the scan is in.
+        bool showsInsights = view == MainView.Insights && _root is not null;
         bool showsStatistics = view == MainView.Statistics && !isIdle;
         bool showsChanges = view == MainView.Changes && !isIdle;
         InsightsView.IsVisible = showsInsights;
@@ -88,10 +94,13 @@ public partial class MainWindow : IInsightsHost
         UpdateMinimap();
         EmptyHint.IsVisible = isIdle;
 
-        MapViewButton.Classes.Set("primary", view == MainView.Map);
-        MapViewButton.Classes.Set("tool", view != MainView.Map);
-        InsightsButton.Classes.Set("primary", view == MainView.Insights);
-        InsightsButton.Classes.Set("tool", view != MainView.Insights);
+        // Before the first scan only the map can be picked, and it is the one marked, whatever view Settings remembers.
+        bool mapMarked = view == MainView.Map || _root is null;
+        MapViewButton.Classes.Set("primary", mapMarked);
+        MapViewButton.Classes.Set("tool", !mapMarked);
+        InsightsButton.Classes.Set("primary", !mapMarked && view == MainView.Insights);
+        InsightsButton.Classes.Set("tool", mapMarked || view != MainView.Insights);
+        InsightsButton.IsEnabled = _root is not null;
         StatisticsButton.Classes.Set("primary", view == MainView.Statistics);
         StatisticsButton.Classes.Set("tool", view != MainView.Statistics);
         StatisticsButton.IsEnabled = _root is not null && _scanCts is null;

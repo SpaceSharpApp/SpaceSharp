@@ -68,6 +68,8 @@ public partial class MainWindow
         bool edges = place == "Edges";
         bool corner = place != "Off" && !edges;
         Treemap.KeepOverview = corner;
+        Treemap.OverviewLevels = Math.Clamp(_settings.MinimapLevels, 1, AppSettings.MaxMinimapLevels);
+        _minimap.ShowNames = _settings.MinimapNames;
         bool zoomedIn = _scanCts is null && _root is not null && Treemap.IsVisible && Treemap.Zoom > 1.02;
 
         _markerAcross.IsVisible = edges && zoomedIn;

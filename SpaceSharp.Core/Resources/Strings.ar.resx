@@ -375,6 +375,11 @@
   <data name="Export_Save" xml:space="preserve"><value>حفظ…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>تم نسخ الجدول: {0:N0} صفاً</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} عنصر · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>ما المراد تصديره</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} من {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>الافتراضي</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>اسم الملف</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>جارٍ جمع الصفوف…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>العناصر في {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>كل ما تحت {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>أكبر الملفات على القرص</value></data>
@@ -559,6 +564,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>اسأل قبل الحذف. يمكن دائمًا استعادة العناصر المحذوفة من سلة المحذوفات. العناصر الموجودة في مجلدات Windows والبرامج والتطبيقات والألعاب تسأل دائمًا.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>إخفاء المجلدات الفارغة غير الآمنة</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>يعرض فقط المجلدات الفارغة التي هي لك بوضوح. أما التي داخل Windows وProgram Files وProgramData وAppData ومجلدات الألعاب أو البناء، والتي تتوقع البرامج وجودها غالبًا، فتُستبعد من القائمة كليًا. عند الإيقاف تُعرض غير محددة مع تحذير عند تحديد أي منها.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>هل تريد إظهار المجلدات الفارغة غير الآمنة؟</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>ستعرض قائمة المجلدات الفارغة أيضًا المجلدات داخل Windows و Program Files و ProgramData و AppData ومجلدات الألعاب والبناء. تتوقع البرامج غالبًا وجود هذه المجلدات، وقد أدى حذفها من قبل إلى تعطل تطبيقات Windows.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>إظهارها</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>إبقاؤها مخفية</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>هل أنت متأكد تمامًا؟</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>تُحذف المجلدات الفارغة مباشرة دون المرور بسلة المحذوفات، لذا لا يمكن التراجع عن حذف خاطئ. تظهر المجلدات غير الآمنة دون تحديد ومع تحذير، لكن «تحديد الكل» يحددها جميعًا. أبقِها مخفية ما لم تكن تعرف بالضبط أي المجلدات تريد.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>نعم، إظهار المجلدات غير الآمنة</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>لوحات ألوان مخصصة</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>استخدام أي لوحة ألوان في كلتا السمتين</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>إيقاف: اختيار لوحة مصممة للسمة الأخرى ينتقل إلى تلك السمة، فتجلب اللوحة الفاتحة السمة الفاتحة معها. تشغيل: تُستخدم اللوحة كما هي، لوحات فاتحة على السمة الداكنة ولوحات داكنة على الفاتحة.</value></data>
@@ -781,6 +793,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>آخر فحص · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>فتح الخريطة</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>إعادة الفحص والمقارنة</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>حذف هذا الفحص المحفوظ</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>هل تريد حذف الفحص المحفوظ لـ {0}؟</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>يُحذف الفحص ({0}) نهائيًا ولا يُنقل إلى سلة المحذوفات. يشغل {1} على القرص. لا يُمَسّ أي شيء على محرك الأقراص أو المجلد نفسه.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>يُحذف معه الفحص السابق ({0}) المحفوظ للمقارنة.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>حذف الفحص</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>الاحتفاظ به</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>ملف الفحص قيد الاستخدام ولم يُحذف. أغلق البرنامج الذي يفتحه ثم حاول مرة أخرى.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>فحوصات سابقة</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>فحص واحد</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} فحوصات</value></data>
@@ -788,6 +807,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>كل ما تبقى</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% مستخدمة · {1} متاحة</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>مجلد · {0} ملفات</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>غير متصل · {0} ملف</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>امتلأ القرص بمقدار {0} منذ هذا الفحص. افحص مجددًا لترى أين ذهبت المساحة.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>في القرص الآن {0} من المساحة الحرة أكثر مما كان عند هذا الفحص. افحص مجددًا لتراه كما هو الآن.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>عمليات الفحص</value></data>
@@ -801,6 +821,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>بصلاحيات المسؤول يقرأ SpaceSharp جدول ملفات NTFS بدلًا من المرور على كل مجلد.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>الاحتفاظ بالفحوصات المحفوظة لمدة</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>تُحذف الحفظات التلقائية الأقدم من هذا عند بدء SpaceSharp. الفحوصات التي حفظتها كملفات بنفسك لا تُمس أبدًا.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>الفحوص المحفوظة</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}، تشغل {1} على القرص.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} أيام</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} أشهر</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>سنة واحدة</value></data>
@@ -1177,6 +1199,10 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} ملفات أصغر من 4 ك.ب؛ تحوي {1} لكن القرص يخصص عناقيد كاملة، فيكون {2} منها هدرًا لا تحرره أي أداة. {3:N0} مجلدات فارغة.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>عميق وطويل</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>المجلدات الفارغة</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>مجلدات لا تحتوي على أي ملفات في أي مستوى.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>متداخلة بداخلها</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>في مجلدات البرامج، غير مدرجة</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>لا يوجد مجلد مطابق. امسح المربع أعلاه.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} مجلدات بلا ملفات، و{1:N0} أخرى متداخلة فيها</value></data>
   <data name="Empty_None" xml:space="preserve"><value>لا مجلدات فارغة في هذا الفحص.</value></data>
@@ -1207,6 +1233,20 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Dup_Stage2" xml:space="preserve"><value>مقارنة عيّنات: {0:N0} من {1:N0} · قُرئ {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>قراءة الملفات كاملة: {0:N0} من {1:N0} · قُرئ {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} مجموعات · {1:N0} نسخ زائدة · يمكن تحرير {2}</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>المجموعات</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>نسخ زائدة</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>يمكن تحريره</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>البحث مجددًا</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>تصفية القائمة</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>اكتب اسم ملف أو جزءًا من مجلد</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>اكتب جزءًا من مسار</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>إخفاء مجلدات البرامج</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} نسخ · {1} لكل منها · الاحتفاظ بواحدة يحرر {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>الاحتفاظ بالأحدث</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>الاحتفاظ بالأقدم</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>يبقى</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>يذهب إلى سلة المحذوفات</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>لا توجد مجموعة مطابقة. امسح المربع أعلاه أو ألغِ إخفاء مجلدات البرامج.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>لا مكررات بين الملفات الأكبر من {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>الاحتفاظ بالأولى من كل مجموعة</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>الاحتفاظ بالأحدث من كل مجموعة</value></data>
@@ -1461,9 +1501,15 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Scan_Stop" xml:space="preserve"><value>إيقاف</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>إيقاف الفحص والعودة إلى صفحة البدء؛ يُهمل ما قُرئ حتى الآن (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>بطاقة الفحص</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>موضع بطاقة التقدم أثناء الفحص.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>موضع بطاقة التقدم أثناء الفحص. أو اسحب البطاقة نفسها إلى أحد أركان الخريطة.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>الخريطة المصغّرة</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>أثناء التكبير: صورة صغيرة مبسّطة لأكبر مجلدات الفحص في إحدى زوايا الخريطة، مع مربع يبيّن موضعك. انقر أو اسحب داخلها للتنقل. أو علامات الحواف: شريطان رفيعان على حافتي الخريطة لا يغطيان شيئًا. انقر بالزر الأيمن على الصورة لإخفائها.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>مستويات الخريطة المصغرة</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>عدد مستويات المجلدات التي ترسمها الخريطة المصغرة: المجلدات العليا فقط أو المجلدات التي بداخلها أيضًا. كلما زادت المستويات صغرت المربعات وصعبت قراءة الخريطة المصغرة. يظهر التغيير عند التكبير التالي من الخريطة الكاملة.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>مستوى واحد</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} مستويات</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>الأسماء في الخريطة المصغرة</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>يكتب أسماء المجلدات على مربعات الخريطة المصغرة حيثما يتسع المكان. عند الإيقاف تُرسم المربعات وحدها، وهو أهدأ مع مستويين أو ثلاثة.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>إيقاف</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>علامات الحواف</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>إخفاء الخريطة المصغّرة</value></data>

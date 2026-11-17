@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Opslaan …</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tabel gekopieerd: {0:N0} rijen</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} items · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Wat exporteren</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} van {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Standaard</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Bestandsnaam</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Rijen verzamelen…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Items in {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Alles onder {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>De grootste bestanden op de schijf</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vragen voor het verwijderen. Verwijderde items kunnen altijd uit de prullenbak worden teruggezet. Items in Windows-, programma-, app- en gamemappen vragen altijd.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Onveilige lege mappen verbergen</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Toont alleen de lege mappen die duidelijk van jou zijn. Die in Windows, Program Files, ProgramData, AppData en game- of buildmappen, die programma's vaak verwachten, staan helemaal niet in de lijst. Uit toont ze zonder vinkje, met een waarschuwing zodra je er een aanvinkt.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Onveilige lege mappen tonen?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>De lijst met lege mappen toont dan ook mappen in Windows, Program Files, ProgramData, AppData en in game- of buildmappen. Programma’s verwachten vaak dat deze mappen bestaan, en het verwijderen ervan heeft eerder Windows-apps beschadigd.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Tonen</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Verborgen houden</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Weet u het echt heel zeker?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Lege mappen worden direct verwijderd, niet via de Prullenbak, dus een verkeerde verwijdering kan niet ongedaan worden gemaakt. De onveilige mappen staan niet aangevinkt en krijgen een waarschuwing, maar Alles selecteren vinkt ze allemaal aan. Laat ze verborgen, tenzij u precies weet welke mappen u zoekt.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Ja, onveilige mappen tonen</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Aangepaste paletten</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Elk palet in beide thema's gebruiken</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Uit: een palet voor het andere thema kiezen schakelt naar dat thema, dus een licht palet brengt het lichte thema mee. Aan: het palet wordt gebruikt zoals het is, lichte paletten in het donkere thema en donkere in het lichte.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Laatste scan · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Kaart openen</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Opnieuw scannen en vergelijken</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Deze opgeslagen scan verwijderen</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>De opgeslagen scan van {0} verwijderen?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>De scan ({0}) wordt definitief verwijderd en niet naar de Prullenbak verplaatst. Hij neemt {1} op schijf in. Op het station of in de map zelf wordt niets aangeraakt.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>De eerdere scan ({0}), die bewaard is om te vergelijken, gaat mee.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Scan verwijderen</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Bewaren</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Het scanbestand is in gebruik en is blijven staan. Sluit het programma dat het open heeft en probeer het opnieuw.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Eerdere scans</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 scan</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} scans</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Al het andere</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% gebruikt · {1} vrij</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Map · {0} bestanden</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Niet aangesloten · {0} bestanden</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>De schijf is sinds deze scan {0} voller geworden. Scan opnieuw om te zien waar het heen ging.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>De schijf heeft {0} meer vrije ruimte dan bij deze scan. Scan opnieuw om hem te zien zoals hij nu is.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Je scans</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Met beheerdersrechten leest SpaceSharp de NTFS-bestandstabel in plaats van elke map te doorlopen.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Opgeslagen scans bewaren gedurende</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatisch opgeslagen scans ouder dan dit worden verwijderd wanneer SpaceSharp start. Scans die u zelf als bestand hebt opgeslagen, blijven onaangeroerd.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Opgeslagen scans</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, samen {1} op schijf.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dagen</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} maanden</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 jaar</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} bestanden zijn kleiner dan 4 KB; ze bevatten {1}, maar de schijf deelt hele clusters uit, dus {2} daarvan is verlies dat geen tool kan vrijmaken. {3:N0} mappen zijn leeg.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Diep en lang</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Lege mappen</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Mappen zonder bestanden, op welke diepte ook.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Daarin genest</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>In programmamappen, niet vermeld</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Geen map komt overeen. Maak het vak hierboven leeg.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} mappen zonder bestanden</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} mappen zonder bestanden, {1:N0} meer daarin genest</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Geen lege mappen in deze scan.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Dup_Stage2" xml:space="preserve"><value>Steekproeven vergelijken: {0:N0} van {1:N0} · {2} gelezen</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Hele bestanden lezen: {0:N0} van {1:N0} · {2} gelezen</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} sets · {1:N0} extra kopieën · {2} kan weg</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Sets</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Extra kopieën</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Kan weg</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Opnieuw zoeken</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Lijst filteren</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Typ een bestandsnaam of een deel van een map</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Typ een deel van een pad</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Programmamappen verbergen</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} kopieën · elk {1} · één houden maakt {2} vrij</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>De nieuwste houden</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>De oudste houden</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Blijft</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Gaat naar de Prullenbak</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Geen set komt overeen. Maak het vak hierboven leeg of zet Programmamappen verbergen uit.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Geen dubbele onder de bestanden boven {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Van elke set de eerste houden</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Van elke set de nieuwste houden</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Scan_Stop" xml:space="preserve"><value>Stoppen</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>De scan stoppen en terug naar de startpagina; wat tot nu toe is gelezen vervalt (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Scankaart</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Waar de voortgangskaart ligt terwijl een scan loopt.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Waar de voortgangskaart ligt terwijl een scan loopt. Of sleep de voortgangskaart naar een hoek van de kaart.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minikaart</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Zolang je bent ingezoomd: een kleine, eenvoudige afbeelding van de grootste mappen van de scan in een hoek van de kaart, met een vak waar je bent. Klik of sleep erin om te verplaatsen. Of randmarkeringen: twee dunne balken langs de randen van de kaart, die niets bedekken. Klik met de rechtermuisknop op de afbeelding om hem te verbergen.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Niveaus van de minikaart</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Hoeveel mapniveaus de minikaart tekent: alleen de bovenste mappen of ook de mappen daarin. Meer niveaus maken de blokken kleiner en de minikaart moeilijker te lezen. De wijziging is zichtbaar zodra u opnieuw inzoomt vanaf de hele kaart.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 niveau</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} niveaus</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Namen in de minikaart</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Zet mapnamen op de blokken van de minikaart waar ze passen. Uit tekent alleen de blokken, wat rustiger is bij 2 of 3 niveaus.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Uit</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Randmarkeringen</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Minikaart verbergen</value></data>

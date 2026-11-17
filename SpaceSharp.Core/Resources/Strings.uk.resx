@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Зберегти…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Таблицю скопійовано: {0:N0} рядків</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} елементів · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Що експортувати</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} з {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Типово</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Ім'я файлу</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Збирання рядків…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Елементи в {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Усе всередині {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Найбільші файли на диску</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Запитувати перед видаленням. Видалені елементи завжди можна відновити з кошика. Для елементів у теках Windows, програм, застосунків та ігор запит з'являється завжди.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Приховувати небезпечні порожні папки</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Показує лише порожні папки, які явно ваші. Ті, що у Windows, Program Files, ProgramData, AppData та папках ігор чи збірок, на які часто розраховують програми, до списку не потрапляють зовсім. Вимкнено: вони показуються непозначеними, з попередженням при позначенні.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Показувати небезпечні порожні папки?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>У списку порожніх папок з’являться також папки у Windows, Program Files, ProgramData, AppData та в папках ігор і збірок. Програми часто очікують, що ці папки існують, і їх видалення вже ламало програми Windows.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Показувати</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Залишити прихованими</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Ви справді цілком упевнені?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Порожні папки видаляються одразу, оминаючи кошик, тож помилкове видалення неможливо скасувати. Небезпечні папки показано без позначки та з попередженням, але «Вибрати всі» позначає кожну з них. Залиште їх прихованими, якщо точно не знаєте, які папки вам потрібні.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Так, показувати небезпечні папки</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Власні палітри</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Використовувати будь-яку палітру в обох темах</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Вимкнено: вибір палітри для іншої теми перемикає на ту тему, тож світла палітра приносить світлу тему. Увімкнено: палітра використовується як є, світлі палітри в темній темі й темні у світлій.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Останнє сканування · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Відкрити карту</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Сканувати знову й порівняти</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Видалити це збережене сканування</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Видалити збережене сканування {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>Сканування ({0}) видаляється назавжди, без переміщення до кошика. Воно займає {1} на диску. На самому диску чи в папці нічого не зачіпається.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>Попереднє сканування ({0}), збережене для порівняння, видаляється разом із ним.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Видалити сканування</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Залишити</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Файл сканування використовується, тому його не видалено. Закрийте програму, у якій він відкритий, і спробуйте ще раз.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Попередні сканування</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 сканування</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>Сканувань: {0}</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Усе інше</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>Зайнято {0}% · вільно {1}</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Папка · файлів: {0}</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Не підключено · {0} файлів</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Від часу цього сканування диск заповнився на {0}. Проскануйте знову, щоб побачити, куди поділося місце.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>На диску на {0} більше вільного місця, ніж під час цього сканування. Проскануйте знову, щоб побачити його теперішній стан.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Ваші сканування</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>З правами адміністратора SpaceSharp читає таблицю файлів NTFS замість обходу кожної папки.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Зберігати сканування протягом</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Автоматичні збереження, старіші за цей термін, видаляються під час запуску SpaceSharp. Сканування, які ви зберегли у файли самостійно, не чіпаються.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Збережені сканування</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, займають {1} на диску.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} дн.</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} міс.</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 рік</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} файлів менші за 4 КБ; вони містять {1}, але диск виділяє цілі кластери, тож {2} з цього — втрати, які не звільнить жоден інструмент. {3:N0} папок порожні.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Глибоко й довго</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Порожні папки</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Папки, у яких немає файлів на жодному рівні.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Вкладені в них</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>У папках програм, не показано</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Немає відповідних папок. Очистьте поле вище.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>Папок без файлів: {0:N0}</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>Папок без файлів: {0:N0}, вкладених у них ще {1:N0}</value></data>
   <data name="Empty_None" xml:space="preserve"><value>У цьому скані немає порожніх папок.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Dup_Stage2" xml:space="preserve"><value>Порівняння зразків: {0:N0} з {1:N0} · прочитано {2}</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Читання файлів повністю: {0:N0} з {1:N0} · прочитано {2}</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>Наборів: {0:N0} · зайвих копій: {1:N0} · можна звільнити {2}</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Набори</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Зайві копії</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Можна звільнити</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Шукати знову</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Фільтр списку</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Введіть ім'я файлу або частину папки</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Введіть частину шляху</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Сховати папки програм</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>Копій: {0:N0} · по {1} · якщо лишити одну, звільниться {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Лишити найновіший</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Лишити найстаріший</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Лишається</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Піде в Кошик</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Немає відповідних наборів. Очистьте поле вище або зніміть позначку «Сховати папки програм».</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Серед файлів понад {0} дублікатів немає.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Лишити перший у кожному</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Лишити найновіший у кожному</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Scan_Stop" xml:space="preserve"><value>Стоп</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Зупинити сканування й повернутися на стартову сторінку; прочитане відкидається (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Картка сканування</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Де лежить картка перебігу під час сканування.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Де лежить картка перебігу під час сканування. Або перетягніть саму картку в кут карти.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Мінікарта</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Під час збільшення: невелике просте зображення найбільших папок сканування в куті карти з рамкою там, де ви перебуваєте. Клацніть або перетягніть у ньому, щоб переміститися. Або позначки по краях: дві тонкі смужки біля країв карти, які нічого не закривають. Клацніть зображення правою кнопкою миші, щоб приховати його.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Рівні мінікарти</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Скільки рівнів папок малює мінікарта: лише верхні папки чи також папки всередині них. Що більше рівнів, то дрібніші блоки й то важче читати мінікарту. Зміна з’явиться під час наступного збільшення з вигляду всієї карти.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 рівень</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>Рівнів: {0}</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Назви на мінікарті</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Пише назви папок на блоках мінікарти там, де вони вміщуються. Якщо вимкнено, малюються лише блоки, що спокійніше за 2 або 3 рівнів.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Вимк.</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Позначки по краях</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Приховати мінікарту</value></data>

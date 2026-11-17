@@ -19,6 +19,8 @@ public sealed partial class TreemapControl
 {
     private const double DominantShare = 0.85;   // one block covering more than this says too little; the level below is shown instead
     private const int DeepestOverviewLevel = 4;
+    private const double SmallestInnerWidth = 0.02;    // of the map: about 4 px in the minimap
+    private const double SmallestInnerHeight = 0.03;
 
     private OverviewBlock[] _overview = Array.Empty<OverviewBlock>();
     private bool _overviewStale = true;
@@ -32,7 +34,25 @@ public sealed partial class TreemapControl
         get; set;
     }
 
-    /// <summary>The map's biggest blocks as they lay at zoom 1; empty before the view was ever zoomed in with <see cref="KeepOverview"/> on.</summary>
+    private int _overviewLevels = 1;
+
+    /// <summary>How many levels of the map <see cref="Overview"/> holds, 1 or more: 1 is the top folders alone, 2 adds the folders inside
+    /// them, and so on. A change shows the next time the view leaves zoom 1.</summary>
+    public int OverviewLevels
+    {
+        get => _overviewLevels;
+        set
+        {
+            int levels = Math.Max(1, value);
+            if (levels != _overviewLevels)
+            {
+                _overviewLevels = levels;
+                _overviewStale = true;
+            }
+        }
+    }
+
+    /// <summary>The map's biggest blocks as they lay at zoom 1, parents before the blocks inside them; empty before the view was ever zoomed in with <see cref="KeepOverview"/> on.</summary>
     public IReadOnlyList<OverviewBlock> Overview => _overview;
 
     /// <summary>The part of the map the window shows, on the unit square: (0, 0, 1, 1) at zoom 1.</summary>
@@ -80,31 +100,60 @@ public sealed partial class TreemapControl
 
         // The first level whose biggest block does not swallow the map: a scan that is one folder inside another shows what is in it.
         var blocks = new List<OverviewBlock>();
-        for (int level = 1; level <= DeepestOverviewLevel; level++)
+        int first = 1;
+        for (; first <= DeepestOverviewLevel; first++)
         {
             blocks.Clear();
-            double biggest = 0;
-            for (int i = 0; i < _items.Count; i++)
-            {
-                TreemapItem item = _items[i];
-                if (item.Depth != level || item.Bounds.Width < 2 || item.Bounds.Height < 2)
-                {
-                    continue;
-                }
-
-                var fraction = new Rect(item.Bounds.X / baseWidth, item.Bounds.Y / baseHeight, item.Bounds.Width / baseWidth, item.Bounds.Height / baseHeight);
-                IBrush fill = item.Node.IsFreeSpace ? FreeSpaceBrush : _scheme.Fill(item.Node, item.Depth, item.Branch, _colorMode);
-                blocks.Add(new OverviewBlock(fraction, fill, _scheme.LabelFor(fill), (item.ChainTop ?? item.Node).Name));
-                biggest = Math.Max(biggest, fraction.Width * fraction.Height);
-            }
+            double biggest = AddOverviewLevel(blocks, first, baseWidth, baseHeight, 0, 0);
             if (blocks.Count > 1 && biggest <= DominantShare)
             {
                 break;
             }
         }
+        first = Math.Min(first, DeepestOverviewLevel);   // every level was one block: the last one read stands
+
+        // The levels under it, parents first so the blocks inside are painted over them. Blocks too small to see in a minimap are left
+        // out, which also keeps a deep level from adding thousands.
+        for (int level = first + 1; level < first + _overviewLevels; level++)
+        {
+            AddOverviewLevel(blocks, level, baseWidth, baseHeight, SmallestInnerWidth, SmallestInnerHeight);
+        }
 
         _overview = blocks.ToArray();
         _overviewStale = false;
+    }
+
+    /// <summary>Adds one level of the laid-out map to the overview blocks.</summary>
+    /// <param name="blocks">The list to add to.</param>
+    /// <param name="level">The depth to read, 1 for the top folders.</param>
+    /// <param name="baseWidth">The map's width at zoom 1.</param>
+    /// <param name="baseHeight">The map's height at zoom 1.</param>
+    /// <param name="smallestWidth">Blocks narrower than this share of the map are left out; 0 keeps all.</param>
+    /// <param name="smallestHeight">Blocks lower than this share of the map are left out; 0 keeps all.</param>
+    /// <returns>The share of the map the level's biggest block covers.</returns>
+    private double AddOverviewLevel(List<OverviewBlock> blocks, int level, double baseWidth, double baseHeight, double smallestWidth, double smallestHeight)
+    {
+        double biggest = 0;
+        for (int i = 0; i < _items.Count; i++)
+        {
+            TreemapItem item = _items[i];
+            if (item.Depth != level || item.Bounds.Width < 2 || item.Bounds.Height < 2)
+            {
+                continue;
+            }
+
+            var fraction = new Rect(item.Bounds.X / baseWidth, item.Bounds.Y / baseHeight, item.Bounds.Width / baseWidth, item.Bounds.Height / baseHeight);
+            if (fraction.Width < smallestWidth || fraction.Height < smallestHeight)
+            {
+                continue;
+            }
+
+            IBrush fill = item.Node.IsFreeSpace ? FreeSpaceBrush : _scheme.Fill(item.Node, item.Depth, item.Branch, _colorMode);
+            blocks.Add(new OverviewBlock(fraction, fill, _scheme.LabelFor(fill), (item.ChainTop ?? item.Node).Name));
+            biggest = Math.Max(biggest, fraction.Width * fraction.Height);
+        }
+
+        return biggest;
     }
 
     /// <summary>Called at the end of a layout pass: a pass at zoom 1 means the whole map may look different now.</summary>

@@ -226,6 +226,53 @@ public class ScanFileTests
         Assert.Same(root.FreeSpaceNode, root.Children[0]); // still sorted
         Assert.Same(fresh, root.Children[1]);
     }
+
+    [Fact]
+    public void DeletingASaveTakesItsEarlierCopyAndNothingElse()
+    {
+        string folder = Path.Combine(Path.GetTempPath(), $"spacesharp-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(folder);
+        try
+        {
+            string save = Path.Combine(folder, "D.sscan");
+            string other = Path.Combine(folder, "E.sscan");
+            ScanFile.Save(SampleDrive(), save, new DateTime(2026, 11, 2, 10, 0, 0, DateTimeKind.Utc), "MFT");
+            ScanFile.Save(SampleDrive(), ScanFile.PreviousOf(save), new DateTime(2026, 11, 1, 10, 0, 0, DateTimeKind.Utc), "MFT");
+            ScanFile.Save(SampleDrive(), other, new DateTime(2026, 11, 2, 10, 0, 0, DateTimeKind.Utc), "MFT");
+
+            (long weight, DateTime? earlier) = ScanFile.Weigh(save);
+            Assert.Equal(new DateTime(2026, 11, 1, 10, 0, 0, DateTimeKind.Utc), earlier);
+
+            (int files, long bytes, int left) = ScanFile.Delete(save);
+
+            Assert.Equal(2, files);
+            Assert.Equal(weight, bytes);
+            Assert.Equal(0, left);
+            Assert.False(File.Exists(save));
+            Assert.False(File.Exists(ScanFile.PreviousOf(save)));
+            Assert.True(File.Exists(other));
+        }
+        finally
+        {
+            Directory.Delete(folder, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void DeletingRefusesAFileThatIsNotAScan()
+    {
+        string path = Path.Combine(Path.GetTempPath(), $"spacesharp-{Guid.NewGuid():N}.txt");
+        File.WriteAllText(path, "keep me");
+        try
+        {
+            Assert.Equal((0, 0L, 0), ScanFile.Delete(path));
+            Assert.True(File.Exists(path));
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
 }
 
 public class NamePatternsTests

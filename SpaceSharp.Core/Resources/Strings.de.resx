@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Speichern …</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tabelle kopiert: {0:N0} Zeilen</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} Elemente · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>Was exportiert wird</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} von {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Standard</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Dateiname</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Zeilen werden gesammelt…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Elemente in {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Alles unter {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Die größten Dateien des Laufwerks</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Vor dem Löschen nachfragen. Gelöschte Elemente lassen sich immer aus dem Papierkorb wiederherstellen. Bei Elementen in Windows-, Programm-, App- und Spielordnern wird immer nachgefragt.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Unsichere leere Ordner ausblenden</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Listet nur die leeren Ordner, die eindeutig Ihre sind. Die in Windows, Program Files, ProgramData, AppData und Spiel- oder Build-Ordnern, die Programme oft erwarten, bleiben ganz aus der Liste. Aus listet sie unmarkiert, mit einer Warnung, sobald Sie einen markieren.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Unsichere leere Ordner anzeigen?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>Die Liste der leeren Ordner zeigt dann auch Ordner in Windows, Program Files, ProgramData, AppData sowie in Spiel- und Build-Ordnern. Programme erwarten oft, dass diese Ordner vorhanden sind, und ihr Löschen hat schon Windows-Apps beschädigt.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Anzeigen</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Ausgeblendet lassen</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Sind Sie wirklich ganz sicher?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>Leere Ordner werden direkt gelöscht, nicht über den Papierkorb; ein falsches Löschen lässt sich nicht rückgängig machen. Die unsicheren Ordner erscheinen ohne Häkchen und mit einer Warnung, aber „Alle auswählen“ markiert jeden einzelnen. Lassen Sie sie ausgeblendet, sofern Sie nicht genau wissen, welche Ordner Sie suchen.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Ja, unsichere Ordner anzeigen</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Benutzerdefinierte Paletten</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Jede Palette in beiden Designs verwenden</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Aus: eine Palette für das andere Design wechselt zu diesem Design, eine helle Palette bringt also das helle Design mit. Ein: die Palette wird so verwendet, wie sie ist, helle Paletten im dunklen Design und dunkle im hellen.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Letzter Scan · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Karte öffnen</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Erneut scannen und vergleichen</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Diesen gespeicherten Scan löschen</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Den gespeicherten Scan von {0} löschen?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>Der Scan ({0}) wird endgültig gelöscht und nicht in den Papierkorb verschoben. Er belegt {1} auf dem Datenträger. Auf dem Laufwerk oder im Ordner selbst wird nichts angerührt.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>Der frühere Scan ({0}), der zum Vergleichen aufbewahrt wird, wird mit gelöscht.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Scan löschen</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Behalten</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>Die Scandatei wird verwendet und wurde nicht gelöscht. Schließen Sie das Programm, das sie geöffnet hat, und versuchen Sie es erneut.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Frühere Scans</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 Scan</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} Scans</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Alles andere</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0} % belegt · {1} frei</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Ordner · {0} Dateien</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Nicht verbunden · {0} Dateien</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>Das Laufwerk hat sich seit diesem Scan um {0} gefüllt. Scannen Sie erneut, um zu sehen, wohin der Platz ging.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>Das Laufwerk hat {0} mehr freien Platz als bei diesem Scan. Scannen Sie erneut, um es so zu sehen, wie es jetzt ist.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>Ihre Scans</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Mit Administratorrechten liest SpaceSharp die NTFS-Dateitabelle, statt jeden Ordner zu durchlaufen.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Gespeicherte Scans aufbewahren für</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Automatische Speicherungen, die älter sind, werden beim Start von SpaceSharp gelöscht. Scans, die Sie selbst als Dateien gespeichert haben, werden nie angerührt.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Gespeicherte Scans</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, belegen {1} auf dem Datenträger.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} Tage</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} Monate</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 Jahr</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} Dateien sind unter 4 KB; sie halten {1}, aber die Festplatte vergibt ganze Cluster, also sind {2} davon Verschnitt, den kein Werkzeug freigeben kann. {3:N0} Ordner sind leer.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Tief und lang</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Leere Ordner</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Ordner, die in keiner Tiefe Dateien enthalten.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Darin verschachtelt</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>In Programmordnern, nicht aufgeführt</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Kein Ordner passt. Leeren Sie das Feld oben.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} Ordner ohne Dateien, {1:N0} weitere darin verschachtelt</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Keine leeren Ordner in diesem Scan.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Dup_Stage2" xml:space="preserve"><value>Stichproben vergleichen: {0:N0} von {1:N0} · {2} gelesen</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>Ganze Dateien lesen: {0:N0} von {1:N0} · {2} gelesen</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} Gruppen · {1:N0} zusätzliche Kopien · {2} könnten weg</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Gruppen</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Zusätzliche Kopien</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Könnten weg</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Erneut suchen</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Liste filtern</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Dateiname oder Teil eines Ordners eingeben</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Teil eines Pfads eingeben</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Programmordner ausblenden</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} Kopien · je {1} · eine behalten gibt {2} frei</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Die neueste behalten</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Die älteste behalten</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Bleibt</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Kommt in den Papierkorb</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Keine Gruppe passt. Leeren Sie das Feld oben oder zeigen Sie Programmordner wieder an.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Keine Duplikate unter den Dateien über {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Jeweils die erste behalten</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Jeweils die neueste behalten</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Scan_Stop" xml:space="preserve"><value>Stopp</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Scan stoppen und zur Startseite zurückkehren; das bisher Gelesene wird verworfen (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Scan-Karte</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Wo die Fortschrittskarte während eines Scans liegt.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Wo die Fortschrittskarte während eines Scans liegt. Oder ziehen Sie die Fortschrittskarte in eine Ecke der Karte.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minikarte</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Solange hineingezoomt ist: ein kleines, schlichtes Bild der größten Ordner des Scans in einer Ecke der Karte, mit einem Feld an Ihrer Position. Klicken oder ziehen Sie darin, um den Ausschnitt zu verschieben. Oder Randmarkierungen: zwei schmale Balken an den Rändern der Karte, die nichts verdecken. Ein Rechtsklick auf das Bild blendet es aus.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Ebenen der Minikarte</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Wie viele Ordnerebenen die Minikarte zeichnet: nur die obersten Ordner oder auch die Ordner darin. Mehr Ebenen machen die Blöcke kleiner und die Minikarte schwerer lesbar. Die Änderung erscheint, wenn Sie das nächste Mal aus der Gesamtansicht hineinzoomen.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 Ebene</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} Ebenen</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Namen in der Minikarte</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Schreibt Ordnernamen auf die Blöcke der Minikarte, wo sie Platz haben. Aus zeichnet nur die Blöcke, was bei 2 oder 3 Ebenen ruhiger wirkt.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Aus</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Randmarkierungen</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Minikarte ausblenden</value></data>

@@ -373,6 +373,11 @@
   <data name="Export_Save" xml:space="preserve"><value>Guardar…</value></data>
   <data name="Export_Copied" xml:space="preserve"><value>Tabela copiada: {0:N0} linhas</value></data>
   <data name="Export_Items" xml:space="preserve"><value>{0:N0} itens · {1}</value></data>
+  <data name="Export_What" xml:space="preserve"><value>O que exportar</value></data>
+  <data name="Export_ColumnsCount" xml:space="preserve"><value>{0} de {1}</value></data>
+  <data name="Export_Default" xml:space="preserve"><value>Padrão</value></data>
+  <data name="Export_FileName" xml:space="preserve"><value>Nome do arquivo</value></data>
+  <data name="Export_Collecting" xml:space="preserve"><value>Reunindo as linhas…</value></data>
   <data name="Export_Source_Folder" xml:space="preserve"><value>Itens em {0}</value></data>
   <data name="Export_Source_Under" xml:space="preserve"><value>Tudo sob {0}</value></data>
   <data name="Export_Source_Largest" xml:space="preserve"><value>Os maiores ficheiros da unidade</value></data>
@@ -557,6 +562,13 @@
   <data name="Settings_ConfirmDelete_Desc" xml:space="preserve"><value>Perguntar antes de eliminar. Os itens eliminados podem sempre ser restaurados da Lixeira. Os itens dentro de pastas do Windows, de programas, de apps e de jogos perguntam sempre.</value></data>
   <data name="Settings_HideUnsafeEmpty" xml:space="preserve"><value>Ocultar pastas vazias inseguras</value></data>
   <data name="Settings_HideUnsafeEmpty_Desc" xml:space="preserve"><value>Lista só as pastas vazias que são claramente suas. As que estão em Windows, Program Files, ProgramData, AppData e pastas de jogos ou de compilação, com que os programas costumam contar, ficam fora da lista. Desligado, lista-as desmarcadas, com um aviso quando marca uma.</value></data>
+  <data name="UnsafeEmpty_AskTitle" xml:space="preserve"><value>Mostrar as pastas vazias não seguras?</value></data>
+  <data name="UnsafeEmpty_AskText" xml:space="preserve"><value>A lista de pastas vazias passa a mostrar também as pastas dentro de Windows, Program Files, ProgramData, AppData e de jogos ou compilação. Os programas esperam muitas vezes que estas pastas existam, e eliminá-las já danificou aplicações do Windows.</value></data>
+  <data name="UnsafeEmpty_AskYes" xml:space="preserve"><value>Mostrar</value></data>
+  <data name="UnsafeEmpty_AskNo" xml:space="preserve"><value>Manter ocultas</value></data>
+  <data name="UnsafeEmpty_Ask2Title" xml:space="preserve"><value>Tem mesmo a certeza absoluta?</value></data>
+  <data name="UnsafeEmpty_Ask2Text" xml:space="preserve"><value>As pastas vazias são eliminadas diretamente, sem passar pela Reciclagem, pelo que uma eliminação errada não pode ser anulada. As pastas não seguras aparecem desmarcadas e com um aviso, mas Selecionar tudo marca todas. Deixe-as ocultas, a menos que saiba exatamente que pastas procura.</value></data>
+  <data name="UnsafeEmpty_Ask2Yes" xml:space="preserve"><value>Sim, mostrar as pastas não seguras</value></data>
   <data name="Settings_CustomPalettes" xml:space="preserve"><value>Paletas personalizadas</value></data>
   <data name="Settings_PaletteAnyTheme" xml:space="preserve"><value>Usar qualquer paleta em ambos os temas</value></data>
   <data name="Settings_PaletteAnyTheme_Desc" xml:space="preserve"><value>Desligado: escolher uma paleta feita para o outro tema muda para esse tema, pelo que uma paleta clara traz consigo o tema claro. Ligado: a paleta é usada tal como está, paletas claras no tema escuro e escuras no claro.</value></data>
@@ -779,6 +791,13 @@
   <data name="Start_LastScan" xml:space="preserve"><value>Última verificação · {0}</value></data>
   <data name="Start_OpenTheMap" xml:space="preserve"><value>Abrir o mapa</value></data>
   <data name="Start_ScanAgainCompare" xml:space="preserve"><value>Verificar de novo e comparar</value></data>
+  <data name="Start_DeleteScan" xml:space="preserve"><value>Eliminar esta verificação guardada</value></data>
+  <data name="Start_DeleteScanTitle" xml:space="preserve"><value>Eliminar a verificação guardada de {0}?</value></data>
+  <data name="Start_DeleteScanText" xml:space="preserve"><value>A verificação ({0}) é eliminada definitivamente, sem passar pela Reciclagem. Ocupa {1} no disco. Nada é alterado na unidade ou na pasta em si.</value></data>
+  <data name="Start_DeleteScanEarlier" xml:space="preserve"><value>A verificação anterior ({0}), guardada para comparação, é eliminada com ela.</value></data>
+  <data name="Start_DeleteScanYes" xml:space="preserve"><value>Eliminar a verificação</value></data>
+  <data name="Start_DeleteScanNo" xml:space="preserve"><value>Manter</value></data>
+  <data name="Start_DeleteScanLocked" xml:space="preserve"><value>O ficheiro da verificação está em uso e não foi eliminado. Feche o programa que o tem aberto e tente novamente.</value></data>
   <data name="Start_EarlierScans" xml:space="preserve"><value>Verificações anteriores</value></data>
   <data name="Start_ScanCountOne" xml:space="preserve"><value>1 verificação</value></data>
   <data name="Start_ScanCount" xml:space="preserve"><value>{0} verificações</value></data>
@@ -786,6 +805,7 @@
   <data name="Start_MapRest" xml:space="preserve"><value>Todo o resto</value></data>
   <data name="Start_UsedFree" xml:space="preserve"><value>{0}% usado · {1} livres</value></data>
   <data name="Start_FolderFiles" xml:space="preserve"><value>Pasta · {0} ficheiros</value></data>
+  <data name="Start_AwayFiles" xml:space="preserve"><value>Não ligada · {0} ficheiros</value></data>
   <data name="Start_FilledSince" xml:space="preserve"><value>A unidade encheu {0} desde esta análise. Analise de novo para ver para onde foi.</value></data>
   <data name="Start_FreedSince" xml:space="preserve"><value>A unidade tem {0} mais de espaço livre do que nesta análise. Analise de novo para a ver como está agora.</value></data>
   <data name="Start_YourScans" xml:space="preserve"><value>As suas verificações</value></data>
@@ -799,6 +819,8 @@
   <data name="Start_FastText" xml:space="preserve"><value>Com direitos de administrador, o SpaceSharp lê a tabela de ficheiros NTFS em vez de percorrer cada pasta.</value></data>
   <data name="Settings_KeepScans" xml:space="preserve"><value>Manter verificações salvas por</value></data>
   <data name="Settings_KeepScans_Desc" xml:space="preserve"><value>Salvamentos automáticos mais antigos que isso são excluídos quando o SpaceSharp inicia. Verificações que você salvou como arquivos nunca são tocadas.</value></data>
+  <data name="Settings_SavedScans" xml:space="preserve"><value>Verificações guardadas</value></data>
+  <data name="Settings_SavedScans_Desc" xml:space="preserve"><value>{0}, a ocupar {1} no disco.</value></data>
   <data name="KeepScans_Days" xml:space="preserve"><value>{0} dias</value></data>
   <data name="KeepScans_Months" xml:space="preserve"><value>{0} meses</value></data>
   <data name="KeepScans_OneYear" xml:space="preserve"><value>1 ano</value></data>
@@ -1175,6 +1197,10 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Insights_SmallExplain" xml:space="preserve"><value>{0:N0} ficheiros têm menos de 4 KB; guardam {1}, mas o disco atribui clusters inteiros, por isso {2} são desperdício que nenhuma ferramenta liberta. {3:N0} pastas estão vazias.</value></data>
   <data name="Insights_RowDeep" xml:space="preserve"><value>Fundo e comprido</value></data>
   <data name="Empty_Title" xml:space="preserve"><value>Pastas vazias</value></data>
+  <data name="Empty_Intro" xml:space="preserve"><value>Pastas sem ficheiros a qualquer profundidade.</value></data>
+  <data name="Empty_FigNested" xml:space="preserve"><value>Aninhadas dentro delas</value></data>
+  <data name="Empty_FigHidden" xml:space="preserve"><value>Em pastas de programas, não listadas</value></data>
+  <data name="Empty_NoMatches" xml:space="preserve"><value>Nenhuma pasta corresponde. Limpe a caixa acima.</value></data>
   <data name="Empty_Summary" xml:space="preserve"><value>{0:N0} pastas sem ficheiros</value></data>
   <data name="Empty_SummaryNested" xml:space="preserve"><value>{0:N0} pastas sem ficheiros, mais {1:N0} aninhadas dentro delas</value></data>
   <data name="Empty_None" xml:space="preserve"><value>Sem pastas vazias nesta análise.</value></data>
@@ -1205,6 +1231,20 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Dup_Stage2" xml:space="preserve"><value>A comparar amostras: {0:N0} de {1:N0} · {2} lidos</value></data>
   <data name="Dup_Stage3" xml:space="preserve"><value>A ler ficheiros inteiros: {0:N0} de {1:N0} · {2} lidos</value></data>
   <data name="Dup_Summary" xml:space="preserve"><value>{0:N0} conjuntos · {1:N0} cópias a mais · {2} podiam sair</value></data>
+  <data name="Dup_Sets" xml:space="preserve"><value>Conjuntos</value></data>
+  <data name="Dup_ExtraCopies" xml:space="preserve"><value>Cópias a mais</value></data>
+  <data name="Dup_CouldGo" xml:space="preserve"><value>Podiam sair</value></data>
+  <data name="Dup_SearchAgain" xml:space="preserve"><value>Procurar de novo</value></data>
+  <data name="Dup_ShowOnly" xml:space="preserve"><value>Filtrar a lista</value></data>
+  <data name="Dup_FilterHint" xml:space="preserve"><value>Escreva um nome de ficheiro ou parte de uma pasta</value></data>
+  <data name="Empty_FilterHint" xml:space="preserve"><value>Escreva parte de um caminho</value></data>
+  <data name="Dup_HidePrograms" xml:space="preserve"><value>Ocultar pastas de programas</value></data>
+  <data name="Dup_SetDetail" xml:space="preserve"><value>{0:N0} cópias · {1} cada · manter uma liberta {2}</value></data>
+  <data name="Dup_KeepNewestHere" xml:space="preserve"><value>Manter o mais recente</value></data>
+  <data name="Dup_KeepOldestHere" xml:space="preserve"><value>Manter o mais antigo</value></data>
+  <data name="Dup_StateKeep" xml:space="preserve"><value>Fica</value></data>
+  <data name="Dup_StateGoes" xml:space="preserve"><value>Vai para a Reciclagem</value></data>
+  <data name="Dup_NoMatches" xml:space="preserve"><value>Nenhum conjunto corresponde. Limpe a caixa acima ou desmarque Ocultar pastas de programas.</value></data>
   <data name="Dup_NoneFound" xml:space="preserve"><value>Sem duplicados entre os ficheiros acima de {0}.</value></data>
   <data name="Dup_KeepFirst" xml:space="preserve"><value>Manter o primeiro de cada</value></data>
   <data name="Dup_KeepNewest" xml:space="preserve"><value>Manter o mais recente de cada</value></data>
@@ -1460,9 +1500,15 @@ pagefile.sys e swapfile.sys são memória virtual. O tamanho deles é definido e
   <data name="Scan_Stop" xml:space="preserve"><value>Parar</value></data>
   <data name="Scan_StopTip" xml:space="preserve"><value>Parar a verificação e voltar à página inicial; o que foi lido até agora é descartado (Esc)</value></data>
   <data name="Settings_ScanCard" xml:space="preserve"><value>Cartão de verificação</value></data>
-  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Onde o cartão de progresso fica durante uma verificação.</value></data>
+  <data name="Settings_ScanCard_Desc" xml:space="preserve"><value>Onde o cartão de progresso fica durante uma verificação. Ou arraste o cartão para um canto do mapa.</value></data>
   <data name="Settings_Minimap" xml:space="preserve"><value>Minimapa</value></data>
   <data name="Settings_Minimap_Desc" xml:space="preserve"><value>Enquanto há zoom: uma pequena imagem simples das maiores pastas da verificação num canto do mapa, com uma caixa no ponto onde está. Clique ou arraste nela para se deslocar. Ou marcadores nas margens: duas barras finas nas margens do mapa, que não tapam nada. Clique com o botão direito na imagem para a ocultar.</value></data>
+  <data name="Settings_MinimapLevels" xml:space="preserve"><value>Níveis do minimapa</value></data>
+  <data name="Settings_MinimapLevels_Desc" xml:space="preserve"><value>Quantos níveis de pastas o minimapa desenha: só as pastas principais ou também as pastas dentro delas. Mais níveis tornam os blocos mais pequenos e o minimapa mais difícil de ler. A alteração aparece da próxima vez que ampliar a partir do mapa inteiro.</value></data>
+  <data name="MinimapLevels_One" xml:space="preserve"><value>1 nível</value></data>
+  <data name="MinimapLevels_Many" xml:space="preserve"><value>{0} níveis</value></data>
+  <data name="Settings_MinimapNames" xml:space="preserve"><value>Nomes no minimapa</value></data>
+  <data name="Settings_MinimapNames_Desc" xml:space="preserve"><value>Escreve os nomes das pastas nos blocos do minimapa onde couberem. Desligado desenha apenas os blocos, o que fica mais calmo com 2 ou 3 níveis.</value></data>
   <data name="Minimap_Off" xml:space="preserve"><value>Desativado</value></data>
   <data name="Minimap_Edges" xml:space="preserve"><value>Marcadores nas margens</value></data>
   <data name="Minimap_Hide" xml:space="preserve"><value>Ocultar o minimapa</value></data>

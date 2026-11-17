@@ -132,6 +132,22 @@ public class WhatsNewTests
     }
 
     [Fact]
+    public void SectionsBetweenReadsVersionsAsNumbersNotText()
+    {
+        // As text "2.10.0" sorts before "2.9.0"; as a version it comes after.
+        const string changelog = "# Changelog\n\n## 2.10.0\n- dragging\n\n## 2.9.0\n- statistics\n\n## 2.8.0\n- insights\n";
+
+        string text = UpdateWindow.SectionsBetween(changelog, "2.9.0", "2.10.0")!;
+        Assert.Contains("## 2.10.0", text);
+        Assert.DoesNotContain("2.9.0", text);
+
+        string both = UpdateWindow.SectionsBetween(changelog, "2.8.0", "2.10.0")!;
+        Assert.Contains("## 2.10.0", both);
+        Assert.Contains("## 2.9.0", both);
+        Assert.Null(UpdateWindow.SectionsBetween(changelog, "2.10.0", "2.9.0"));
+    }
+
+    [Fact]
     public void SectionsBetweenGivesNullWhenNothingIsInRange()
     {
         Assert.Null(UpdateWindow.SectionsBetween(Changelog, "1.6.0", "1.6.0"));

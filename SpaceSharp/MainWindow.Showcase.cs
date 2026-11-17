@@ -118,11 +118,12 @@ public partial class MainWindow
     private async Task<Window?> PoseSceneAsync(string scene)
     {
         EnterMock();
-        ShowView(insights: scene is "insights" or "duplicates" or "wiki-empty-folders" or "wiki-duplicates");   // the remembered view must not leak into a pose
         if (scene != "start")
         {
             LoadMock(MockSystem.Drives[0].Root);
         }
+        // After the load: before a scan is in, only the map can be picked. The remembered view must not leak into a pose.
+        ShowView(insights: scene is "insights" or "duplicates" or "wiki-empty-folders" or "wiki-duplicates");
         await Settle();
 
         Window? dialog = null;

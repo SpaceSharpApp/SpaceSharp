@@ -251,7 +251,7 @@ public partial class MainWindow
             return;
         }
         string? problem = null;
-        ShowOpening(true);
+        ShowOpening(true, OpeningDetail(scanFilePath));
         try
         {
             (FsNode root, ScanFileInfo info) = await Task.Run(() => ScanFile.Load(scanFilePath));
@@ -271,40 +271,65 @@ public partial class MainWindow
         }
     }
 
-    private Border? _openBusy;   // the card over the window while a saved scan is read
+    private Grid? _openBusy;   // the dim and the card over the window while a saved scan is read
+    private TextBlock? _openBusyDetail;
     private bool _opening;
 
-    /// <summary>Shows or hides the card that says a saved scan is being opened. Reading a big scan takes seconds, and without the card
-    /// the window looks frozen after the click.</summary>
+    /// <summary>Shows or hides the card that says a saved scan is being opened, over a dim that keeps the screen behind it out of reach.
+    /// Reading a big scan takes seconds, and without the card the window looks frozen after the click.</summary>
     /// <param name="on">True shows the card and a wait cursor and refuses a second open; false puts things back.</param>
-    private void ShowOpening(bool on)
+    /// <param name="detail">Which scan is being opened, shown under the title; empty hides the line.</param>
+    private void ShowOpening(bool on, string detail = "")
     {
         if (_openBusy is null)
         {
-            var text = new TextBlock { Text = Strings.Get("Scan_Opening"), FontSize = FontSizes.Lead, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap };
-            var bar = new ProgressBar { IsIndeterminate = true, Height = 6, Minimum = 0, Maximum = 1, Margin = new Thickness(0, 12, 0, 0) };
-            var stack = new StackPanel();
-            stack.Children.Add(text);
-            stack.Children.Add(bar);
-            _openBusy = new Border
+            Icon icon = Icons.Make("Treemap", 20, "Accent");
+            icon.HorizontalAlignment = HorizontalAlignment.Center;
+            icon.VerticalAlignment = VerticalAlignment.Center;
+            var tile = new Border { Width = 44, Height = 44, CornerRadius = new CornerRadius(10), Child = icon, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 0, 16, 0) };
+            tile.Bind(Border.BackgroundProperty, this.GetResourceObservable("Control"));
+
+            var words = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Spacing = 3 };
+            words.Children.Add(new TextBlock { Text = Strings.Get("Scan_Opening"), FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+            _openBusyDetail = new TextBlock { FontSize = FontSizes.Body, TextWrapping = TextWrapping.Wrap, Classes = { "dim" } };
+            words.Children.Add(_openBusyDetail);
+
+            var top = new DockPanel();
+            DockPanel.SetDock(tile, Dock.Left);
+            top.Children.Add(tile);
+            top.Children.Add(words);
+
+            var stack = new StackPanel { Spacing = 18 };
+            stack.Children.Add(top);
+            stack.Children.Add(new ProgressBar { IsIndeterminate = true, Height = 4, MinHeight = 4, Minimum = 0, Maximum = 1, CornerRadius = new CornerRadius(2) });
+
+            var card = new Border
             {
                 Child = stack,
-                Width = 360,
-                Padding = new Thickness(18, 16, 18, 16),
+                Width = 420,
+                Padding = new Thickness(22, 20, 22, 22),
                 CornerRadius = new CornerRadius(12),
                 BorderThickness = new Thickness(1),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                BoxShadow = Chrome.CardShadow(),
-                ZIndex = 50,
-                IsVisible = false
+                BoxShadow = Chrome.CardShadow()
             };
-            _openBusy.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
-            _openBusy.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+            card.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
+            card.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+
+            // The dim takes the clicks, so nothing behind the card can be pressed while the scan is read.
+            var dim = new Border { Opacity = 0.78 };
+            dim.Bind(Border.BackgroundProperty, this.GetResourceObservable("Window"));
+
+            _openBusy = new Grid { ZIndex = 50, IsVisible = false };
+            _openBusy.Children.Add(dim);
+            _openBusy.Children.Add(card);
             MapHost.Children.Add(_openBusy);
         }
 
         _opening = on;
+        _openBusyDetail!.Text = detail;
+        _openBusyDetail.IsVisible = detail.Length > 0;
         _openBusy.IsVisible = on;
         Cursor = on ? new Avalonia.Input.Cursor(Avalonia.Input.StandardCursorType.Wait) : null;
         if (on)
@@ -312,6 +337,13 @@ public partial class MainWindow
             StatusText.Text = Strings.Get("Scan_Opening");
         }
     }
+
+    /// <summary>The line under "Opening the scan…": what the file holds, from its header.</summary>
+    /// <param name="scanFilePath">The scan file about to be read.</param>
+    /// <returns>"C: · 487.77 GB · 5 minutes ago", or empty when the header cannot be read.</returns>
+    private static string OpeningDetail(string scanFilePath) => ScanFile.Peek(scanFilePath) is { } info
+        ? DisplayName(info.RootPath) + " · " + SizeFormatter.Format(info.Bytes) + " · " + Ago(info.ScannedUtc)
+        : string.Empty;
 
     /// <summary>Save as: writes the current scan to a file the user names, with its original scan time and method.</summary>
     private async Task SaveScanAsAsync()
@@ -750,10 +782,11 @@ public partial class MainWindow
 
     /// <summary>The usage text under a recent scan.</summary>
     /// <param name="scan">The entry; a Total of 0 means the drive's size is unknown or it is a folder.</param>
-    /// <returns>"n% used · x free" for a drive with a known size, otherwise "Folder · n files".</returns>
+    /// <returns>"n% used · x free" for a drive with a known size, "Not connected · n files" for a drive that is not plugged in, and "Folder · n files" for a folder.</returns>
     private static string Usage(RecentScan scan) => scan.Total > 0
         ? Strings.Format("Start_UsedFree", (int)Math.Round(Math.Clamp(scan.Fraction, 0, 1) * 100), SizeFormatter.Format(scan.Free))
-        : Strings.Format("Start_FolderFiles", scan.Info.FileCount.ToString("N0"));
+        // No capacity to show: a folder scan says so, and a drive that is not plugged in is not called a folder.
+        : Strings.Format(scan.IsDrive ? "Start_AwayFiles" : "Start_FolderFiles", scan.Info.FileCount.ToString("N0"));
 
     /// <summary>The name in semibold with the detail dimmed after it, on one trimmed line.</summary>
     /// <param name="scan">The entry whose <see cref="Names"/> are shown.</param>
@@ -774,14 +807,14 @@ public partial class MainWindow
         return block;
     }
 
-    /// <summary>The newest scan as the start screen's featured panel: a large ring, the name, size and usage, a drift note, Open and Scan again buttons,
+    /// <summary>The newest scan as the start screen's featured panel: a large cube tile, the name, size and usage, a drift note, Open and Scan again buttons,
     /// and along the foot a strip of the drive's largest top-level items by size.</summary>
     /// <param name="scan">The most recent entry.</param>
     /// <returns>The panel, ready to add to the recent list.</returns>
     private Control FeaturedScan(RecentScan scan)
     {
         var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*,Auto"), ColumnSpacing = 26 };
-        Grid ring = Ring(scan, 104, 7, 26);
+        Grid ring = ScanTile(scan, 104);
         ToolTip.SetTip(ring, scan.Info.RootPath);
         grid.Children.Add(ring);
 
@@ -803,7 +836,7 @@ public partial class MainWindow
             Text = Strings.Format("Start_ScannedSize", SizeFormatter.Format(scan.Info.Bytes)) + " · " + Usage(scan),
             FontSize = FontSizes.Lead,
             Margin = new Thickness(0, 4, 0, 0),
-            TextTrimming = TextTrimming.CharacterEllipsis,
+            TextWrapping = TextWrapping.Wrap,
             Classes = { scan.NearlyFull ? "danger" : "dim" }
         });
         if (scan.DriftSince is { } drift)
@@ -838,6 +871,7 @@ public partial class MainWindow
         // Made the way that scan was, so the two can be compared, and straight to what changed.
         scanAgainButton.Click += (_, _) => _ = ScanAsync(scan.Info.RootPath, scan.Info.Method, openChanges: true);
         buttons.Children.Add(scanAgainButton);
+        buttons.Children.Add(DeleteScanButton(scan, 36));
         grid.Children.Add(buttons);
 
         var body = new DockPanel();
@@ -847,7 +881,7 @@ public partial class MainWindow
             body.Children.Add(strip);
         }
         body.Children.Add(new Border { Child = grid, Padding = new Thickness(28, 22) });
-        return new Border { Child = body, Classes = { "start-panel" } };
+        return new Border { Child = body, Classes = { "start-panel" }, ContextMenu = ScanMenu(scan) };
     }
 
     /// <summary>The panel's foot: the drive's largest top-level items as one strip, left to right by size, from the header when the save stored
@@ -968,13 +1002,13 @@ public partial class MainWindow
         }
     }
 
-    /// <summary>One earlier scan as a clickable row: small ring, name, size, age and usage, with a chevron.</summary>
+    /// <summary>One earlier scan as a clickable row: small cube tile, name, size, age and usage, with a chevron.</summary>
     /// <param name="scan">The entry; a drift since the scan is marked with an icon whose tooltip has the sentence.</param>
     /// <returns>A row-styled button that opens the scan when clicked.</returns>
     private Button ScanRow(RecentScan scan)
     {
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("36,*,110,110,220,16"), ColumnSpacing = 16 };
-        grid.Children.Add(Ring(scan, 36, 4, 0));
+        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("36,*,110,110,220,16,Auto"), ColumnSpacing = 16 };
+        grid.Children.Add(ScanTile(scan, 36));
         TextBlock name = NameLine(scan, 14, 14);
         Grid.SetColumn(name, 1);
         grid.Children.Add(name);
@@ -1021,11 +1055,88 @@ public partial class MainWindow
         Icon chevron = Icons.Make("ChevronRight", 16, "TextDim");
         Grid.SetColumn(chevron, 5);
         grid.Children.Add(chevron);
+        Button delete = DeleteScanButton(scan, 30);
+        Grid.SetColumn(delete, 6);
+        grid.Children.Add(delete);
 
-        var row = new Button { Content = grid, Classes = { "row" } };
+        var row = new Button { Content = grid, Classes = { "row" }, ContextMenu = ScanMenu(scan) };
         ToolTip.SetTip(row, scan.Info.RootPath);
         row.Click += (_, _) => _ = OpenRecentAsync(scan.Info);
         return row;
+    }
+
+    /// <summary>The bin button beside a saved scan on the start screen.</summary>
+    /// <param name="scan">The entry the button deletes, after asking.</param>
+    /// <param name="height">The button's height, to match its neighbors.</param>
+    /// <returns>An icon button named and tipped "Delete this saved scan".</returns>
+    private Button DeleteScanButton(RecentScan scan, double height)
+    {
+        var button = new Button
+        {
+            Content = Icons.Make("Delete", 15, "TextDim"),
+            Classes = { "tool" },
+            Height = height,
+            MinHeight = height,
+            Width = height,
+            Padding = new Thickness(0),
+            HorizontalContentAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        ToolTip.SetTip(button, Strings.Get("Start_DeleteScan"));
+        Avalonia.Automation.AutomationProperties.SetName(button, Strings.Get("Start_DeleteScan"));
+        button.Click += (_, e) =>
+        {
+            // Inside a row that is itself a button: the click is this button's alone.
+            e.Handled = true;
+            DeleteRecentAsync(scan).Detach();
+        };
+        return button;
+    }
+
+    /// <summary>The right-click menu of a saved scan on the start screen.</summary>
+    /// <param name="scan">The entry the menu is for.</param>
+    /// <returns>A menu with Open the map and Delete this saved scan.</returns>
+    private ContextMenu ScanMenu(RecentScan scan)
+    {
+        var menu = new ContextMenu();
+        menu.Items.Add(MenuRow("Start_OpenTheMap", null, () => OpenRecentAsync(scan.Info).Detach(), "Treemap"));
+        menu.Items.Add(MenuRow("Start_DeleteScan", null, () => DeleteRecentAsync(scan).Detach(), "Delete", "Danger"));
+        return menu;
+    }
+
+    /// <summary>Asks, then deletes one saved scan and the earlier copy kept for comparing, and rebuilds the start screen.</summary>
+    /// <param name="scan">The entry to delete; nothing on the scanned drive or folder is touched.</param>
+    private async Task DeleteRecentAsync(RecentScan scan)
+    {
+        if (_mock)
+        {
+            return;   // the pretend PC has no files to delete
+        }
+
+        (long bytes, DateTime? earlierUtc) = ScanFile.Weigh(scan.Info.Path);
+        string message = Strings.Format("Start_DeleteScanText", Ago(scan.Info.ScannedUtc), SizeFormatter.Format(bytes));
+        if (earlierUtc is { } earlier)
+        {
+            message += " " + Strings.Format("Start_DeleteScanEarlier", Ago(earlier));
+        }
+
+        bool confirmed = await Dialog.Confirm(this,
+            Strings.Format("Start_DeleteScanTitle", scan.Info.RootPath),
+            message,
+            Strings.Get("Start_DeleteScanYes"),
+            Strings.Get("Start_DeleteScanNo"),
+            danger: true);
+        if (!confirmed)
+        {
+            return;
+        }
+
+        (int _, long _, int left) = ScanFile.Delete(scan.Info.Path);
+        SavedScansChanged();
+        if (left > 0)
+        {
+            await Dialog.Info(this, Strings.Get("Start_DeleteScan"), Strings.Get("Start_DeleteScanLocked"));
+        }
     }
 
     /// <summary>Opens a recent scan from the start screen; on the pretend PC it loads the mock drive instead.</summary>
@@ -1040,13 +1151,12 @@ public partial class MainWindow
         await OpenScanFileAsync(info.Path);
     }
 
-    /// <summary>The drive usage ring, or an icon for folders and missing drives.</summary>
-    /// <param name="scan">The entry; its <see cref="RecentScan.Fraction"/> fills the arc, NaN gives the icon instead.</param>
-    /// <param name="size">Outer diameter in device-independent pixels; the icon is drawn at 55% of it.</param>
-    /// <param name="thickness">Stroke width of the ring in pixels.</param>
-    /// <param name="letterSize">Font size of the drive letter in the middle; 0 leaves it out.</param>
-    /// <returns>A square grid of the given size holding the ring and letter, or the icon.</returns>
-    private Grid Ring(RecentScan scan, double size, double thickness, double letterSize)
+    /// <summary>The mark beside a saved scan: for a drive, the same cube tile the side panel draws, in the drive kind's color with the
+    /// small cube sized to how full the drive is now; for a folder or a drive that is not connected, an icon.</summary>
+    /// <param name="scan">The entry; its <see cref="RecentScan.Fraction"/> sizes the small cube, NaN gives the icon instead.</param>
+    /// <param name="size">The mark's width and height in device-independent pixels; the icon is drawn at about half of it.</param>
+    /// <returns>A square grid of the given size holding the tile or the icon.</returns>
+    private Grid ScanTile(RecentScan scan, double size)
     {
         var grid = new Grid { Width = size, Height = size, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
         if (!scan.IsDrive || double.IsNaN(scan.Fraction))
@@ -1061,26 +1171,7 @@ public partial class MainWindow
         }
 
         double fraction = Math.Clamp(scan.Fraction, 0, 1);
-        var track = new Avalonia.Controls.Shapes.Ellipse { StrokeThickness = thickness };
-        track.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable("Control"));
-        grid.Children.Add(track);
-
-        // Dash lengths are in multiples of the stroke thickness.
-        double circumference = Math.PI * (size - thickness) / thickness;
-        var arc = new Avalonia.Controls.Shapes.Ellipse
-        {
-            StrokeThickness = thickness,
-            StrokeLineCap = PenLineCap.Round,
-            StrokeDashArray = new AvaloniaList<double> { Math.Max(0.01, circumference * fraction), circumference },
-            RenderTransformOrigin = RelativePoint.Center,
-            RenderTransform = new RotateTransform(-90)
-        };
-        arc.Bind(Avalonia.Controls.Shapes.Shape.StrokeProperty, this.GetResourceObservable(scan.NearlyFull ? "Danger" : "Accent"));
-        grid.Children.Add(arc);
-        if (letterSize > 0)
-        {
-            grid.Children.Add(new TextBlock { Text = DisplayName(scan.Info.RootPath), FontSize = letterSize, FontWeight = FontWeight.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center });
-        }
+        grid.Children.Add(DriveTile(DriveKinds.TintColor(DriveKinds.Detect(scan.Info.RootPath)), fraction, FullnessAlarm(fraction), size));
         return grid;
     }
 
