@@ -2,6 +2,12 @@
 
 What changed in each SpaceSharp release from 2.9 on, newest first. Releases 2.0.0 through 2.8.0 are in [CHANGELOG-ARCHIVE.md](CHANGELOG-ARCHIVE.md); the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.10.1 (unreleased)
+
+### Fixes
+
+A condition typed into the filter's name box goes away again when you delete it from the text. Typing `videos over 1GB` and then changing it to `over 500mb` kept Video picked, so only videos over 500 MB showed. Now the text takes back what its earlier wording set (a type, a size, an age, files or folders only), and leaves alone what you set on the tiles and scales yourself.
+
 ## 2.10.0
 
 ### Scanning

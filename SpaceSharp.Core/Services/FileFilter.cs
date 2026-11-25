@@ -136,6 +136,35 @@ public sealed class FilterSpec
     public bool IsEmpty => Patterns.Count == 0 && Words.Count == 0 && MinBytes is null && MaxBytes is null &&
                            OlderThanDays is null && NewerThanDays is null && Types.Count == 0 && Kind == ItemKind.Any;
 
+    /// <summary>Takes what a name box now says into this spec, in place of what the box said before. The box owns the patterns and
+    /// words outright. A condition typed as syntax ("videos", "over 1GB") sets the matching control; one the earlier text set and the
+    /// new text no longer has is taken back, unless the control was moved to another value in between.</summary>
+    /// <param name="previous">The spec of the box's earlier text; null when the box held no syntax of its own.</param>
+    /// <param name="typed">The spec of the box's text now.</param>
+    public void Retype(FilterSpec? previous, FilterSpec typed)
+    {
+        if (previous is not null)
+        {
+            Types.ExceptWith(previous.Types);
+            MinBytes = previous.MinBytes is not null && MinBytes == previous.MinBytes ? null : MinBytes;
+            MaxBytes = previous.MaxBytes is not null && MaxBytes == previous.MaxBytes ? null : MaxBytes;
+            OlderThanDays = previous.OlderThanDays is not null && OlderThanDays == previous.OlderThanDays ? null : OlderThanDays;
+            NewerThanDays = previous.NewerThanDays is not null && NewerThanDays == previous.NewerThanDays ? null : NewerThanDays;
+            Kind = previous.Kind != ItemKind.Any && Kind == previous.Kind ? ItemKind.Any : Kind;
+        }
+
+        Patterns.Clear();
+        Words.Clear();
+        Patterns.AddRange(typed.Patterns);
+        Words.AddRange(typed.Words);
+        Types.UnionWith(typed.Types);
+        MinBytes = typed.MinBytes ?? MinBytes;
+        MaxBytes = typed.MaxBytes ?? MaxBytes;
+        OlderThanDays = typed.OlderThanDays ?? OlderThanDays;
+        NewerThanDays = typed.NewerThanDays ?? NewerThanDays;
+        Kind = typed.Kind != ItemKind.Any ? typed.Kind : Kind;
+    }
+
     // ------------------------------------------------------------------ parse
 
     /// <summary>Reads filter text as the user typed it.</summary>

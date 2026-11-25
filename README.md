@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <sub><a href="CHANGELOG.md">Version 2.9.0</a> · MIT license · Windows 10 and 11 · 18 languages · No telemetry</sub>
+  <sub><a href="CHANGELOG.md">Version 2.10.0</a> · MIT license · Windows 10 and 11 · 18 languages · No telemetry</sub>
 </p>
 
 <p align="center">

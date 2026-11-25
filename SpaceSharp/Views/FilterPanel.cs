@@ -146,6 +146,8 @@ internal sealed class FilterPanel
 
     /// <summary>True while <see cref="Sync"/> sets controls, so their change handlers do not write the spec back.</summary>
     private bool _syncingFilterUi;
+    private TextBox? _typedBox;    // the name box last typed in, and what its text said then: see NameBoxChanged
+    private FilterSpec? _typed;
     /// <summary>True while the drawer was open on the map and is put away because another view is showing; it comes back with the map.</summary>
     private bool _drawerParked;
     /// <summary>True when Settings picks the drawer over the rail.</summary>
@@ -988,39 +990,26 @@ internal sealed class FilterPanel
             return;
         }
 
-        // The name box owns the patterns and words; any condition typed as syntax overrides the matching control.
+        // The name box owns the patterns and words; a condition typed as syntax sets the matching control, and one that
+        // is deleted from the text is taken back, so "videos over 1GB" edited to "over 500MB" no longer keeps Video.
         var typed = FilterSpec.Parse(nameBox.Text ?? string.Empty);
         FilterSpec spec = CurrentSpec;
-        spec.Patterns.Clear();
-        spec.Words.Clear();
-        spec.Patterns.AddRange(typed.Patterns);
-        spec.Words.AddRange(typed.Words);
-        foreach (FileCategory typedCategory in typed.Types)
-        {
-            spec.Types.Add(typedCategory);
-        }
-        if (typed.MinBytes is not null)
-        {
-            spec.MinBytes = typed.MinBytes;
-        }
-        if (typed.MaxBytes is not null)
-        {
-            spec.MaxBytes = typed.MaxBytes;
-        }
-        if (typed.OlderThanDays is not null)
-        {
-            spec.OlderThanDays = typed.OlderThanDays;
-        }
-        if (typed.NewerThanDays is not null)
-        {
-            spec.NewerThanDays = typed.NewerThanDays;
-        }
-        if (typed.Kind != ItemKind.Any)
-        {
-            spec.Kind = typed.Kind;
-        }
+        spec.Retype(ReferenceEquals(_typedBox, nameBox) ? _typed : null, typed);
+        _typedBox = nameBox;
+        _typed = typed;
 
         WriteFilterText(spec);
+    }
+
+    /// <summary>Called when a name box's text is replaced by the filter's own words: the box no longer holds typed syntax.</summary>
+    /// <param name="nameBox">The box that was rewritten.</param>
+    private void ForgetTyped(TextBox nameBox)
+    {
+        if (ReferenceEquals(_typedBox, nameBox))
+        {
+            _typedBox = null;
+            _typed = null;
+        }
     }
 
     private void NameBox_KeyDown(object? sender, KeyEventArgs e)
@@ -1173,6 +1162,7 @@ internal sealed class FilterPanel
         if ((_railName!.Text ?? string.Empty) != nameText && !_railName.IsFocused)
         {
             _railName.Text = nameText;
+            ForgetTyped(_railName);
         }
         _railInfo!.Text = infoText;
         _railSelect!.IsVisible = canSelect;
@@ -1197,6 +1187,7 @@ internal sealed class FilterPanel
         if ((_drawerName.Text ?? string.Empty) != nameText && !_drawerName.IsFocused)
         {
             _drawerName.Text = nameText;
+            ForgetTyped(_drawerName);
         }
 
         List<TypeShare>? shares = Host.TypeShares;

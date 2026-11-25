@@ -176,4 +176,48 @@ public class FilterSpecTests
     {
         Assert.Equal(expected, FilterSpec.Period(days));
     }
+
+    [Fact]
+    public void RetypingTakesBackWhatTheEarlierTextSet()
+    {
+        var spec = new FilterSpec();
+        FilterSpec first = FilterSpec.Parse("videos over 1GB");
+        spec.Retype(null, first);
+        Assert.Equal(new[] { FileCategory.Video }, spec.Types);
+        Assert.Equal(1 * GB, spec.MinBytes);
+
+        // The bug: Video stayed picked after the word was deleted.
+        spec.Retype(first, FilterSpec.Parse("over 500mb"));
+        Assert.Empty(spec.Types);
+        Assert.Equal(500 * MB, spec.MinBytes);
+    }
+
+    [Fact]
+    public void RetypingLeavesWhatTheControlsSet()
+    {
+        var spec = new FilterSpec { OlderThanDays = 365 };   // set on the scale, not typed
+        spec.Types.Add(FileCategory.Audio);                  // a tile picked by hand
+        FilterSpec first = FilterSpec.Parse("videos over 1GB report");
+        spec.Retype(null, first);
+
+        spec.MinBytes = 10 * GB;                             // the scale was moved after typing
+        spec.Retype(first, FilterSpec.Parse("report"));
+
+        Assert.Equal(new[] { FileCategory.Audio }, spec.Types);
+        Assert.Equal(10 * GB, spec.MinBytes);
+        Assert.Equal(365, spec.OlderThanDays);
+        Assert.Equal(new[] { "report" }, spec.Words);
+    }
+
+    [Fact]
+    public void RetypingWithNoEarlierTextOnlyAdds()
+    {
+        var spec = new FilterSpec { MinBytes = 1 * GB };
+        spec.Types.Add(FileCategory.Video);
+        spec.Retype(null, FilterSpec.Parse("*.mkv"));
+
+        Assert.Equal(new[] { FileCategory.Video }, spec.Types);
+        Assert.Equal(1 * GB, spec.MinBytes);
+        Assert.Equal(new[] { "*.mkv" }, spec.Patterns);
+    }
 }
