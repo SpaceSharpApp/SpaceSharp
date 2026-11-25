@@ -1518,4 +1518,18 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="ScanCard_TopRight" xml:space="preserve"><value>右上</value></data>
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>左上</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>中央</value></data>
+  <data name="Supporter_Title" xml:space="preserve"><value>サポーター エディション</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp は誰でも無料で、すべての機能を使えます。サポーター キーは 1 回限りの寄付へのお礼です。ここにお名前が表示されるだけで、ほかに解除される機能はありません。</value></data>
+  <data name="Supporter_Placeholder" xml:space="preserve"><value>メールに記載されたキーを貼り付けてください</value></data>
+  <data name="Supporter_Use" xml:space="preserve"><value>このキーを使う</value></data>
+  <data name="Supporter_Get" xml:space="preserve"><value>サポーター キーを入手</value></data>
+  <data name="Supporter_Invalid" xml:space="preserve"><value>有効なサポーター キーではありません。SSUP1 から最後の文字まで、キー全体をコピーしてください。</value></data>
+  <data name="Supporter_Thanks" xml:space="preserve"><value>{0} さん、ありがとうございます。</value></data>
+  <data name="Supporter_ThanksNoName" xml:space="preserve"><value>SpaceSharp をご支援いただきありがとうございます。</value></data>
+  <data name="Supporter_Since" xml:space="preserve"><value>{0} からのサポーターです。</value></data>
+  <data name="Supporter_Offline" xml:space="preserve"><value>キーはこの PC 上で確認されます。どこにも送信されません。</value></data>
+  <data name="Supporter_Remove" xml:space="preserve"><value>この PC からキーを削除</value></data>
+  <data name="Credits_SupportersHeading" xml:space="preserve"><value>サポーター</value></data>
+  <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp は無料で、これからも無料です。次の方々が[サポーター キー](https://spacesharp.app/supporter/)で支援してくださいました:</value></data>
+  <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp は無料で、これからも無料です。[サポーター キー](https://spacesharp.app/supporter/)は感謝を伝える方法で、ここにお名前が載ります。</value></data>
 </root>

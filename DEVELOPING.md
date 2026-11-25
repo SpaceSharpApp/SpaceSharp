@@ -67,7 +67,7 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 ├── MainWindow.Tooltip.cs         the hover tooltip on the map
 ├── MainWindow.Minimap.cs         the minimap card and the edge markers shown while the map is zoomed in
 ├── SettingsWindow*.cs            the pages (axaml.cs), the row and picker builders (Controls), sliders and color choices (Editors), the sample map (Preview)
-├── AboutWindow, InspectWindow, UpdateWindow, ShortcutsWindow, PaletteEditorWindow
+├── AboutWindow, InspectWindow, UpdateWindow, ShortcutsWindow, PaletteEditorWindow, SupporterWindow
 ├── Controls/
 │   ├── TreemapControl*.cs        fields, camera, layout, render, input, the shading looks (Shading), the live map (Live), what a minimap needs (Overview)
 │   ├── Minimap.cs, EdgeMarker.cs the two minimap looks: the scan's biggest folders as blocks, or thin bars on the map's edges
@@ -80,6 +80,7 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 └── Properties/PublishProfiles/   Portable, Portable-x86, Small, Velopack, Velopack-x86 (Windows; the Mac and Linux builds are plain publishes)
 tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots at 1800 px for the website's phone gallery
 docs-src/                         the pages of docs.spacesharp.app as Markdown, _Sidebar.md, _Footer.md, images/
+tools/supporter/                  the supporter edition's other half: new-keys.ps1 (the signing key pair) and server/ (the PHP that makes keys from Polar orders)
 installer/                        wizard pages, dialog images, release.ps1, sign-test.ps1, brand-msi.ps1, pack-chocolatey.ps1, chocolatey/ (the package source)
 ```
 
@@ -126,6 +127,8 @@ Until 2.3.0 the Windows app was a separate WPF project; git history has it. Next
 5. **Tried on a throwaway before release**: a second Windows user account or a VM, scanning C:, with every default accepted. If accepting the defaults could break anything on that machine, the defaults are wrong.
 
 Where each delete stands against these (2.7): the map's **Move to Recycle Bin** and **Delete permanently** (and **Delete the repeats**, which is the latter) ask with the program-place count and run with the corner panel's progress and Stop; the confirmation setting cannot turn off the ask for items in program places. **Safe to clear** goes through the same path but is told its places are curated, so it does not warn about AppData. **Empty the Recycle Bin** asks with the size, since there is no undo. The **duplicates** window never ticks a copy in a program place by itself, marks them, warns while one is ticked, and says so in the confirmation. The **empty folder** window is the model from 2.6.2; turning off Hide unsafe empty folders in Settings asks twice, and the switch goes back on unless both answers are yes. `EmptyFolders.IsProgramPlace` is the one test for "in a program place"; use it rather than a new list. The start screen's **Delete this saved scan** removes only SpaceSharp's own `.sscan` file and its `.prev` copy (`ScanFile.Delete` refuses any other extension), asks first with the size and whether an earlier scan goes too, and never touches the scanned place.
+
+**The supporter edition.** A supporter key is a thank-you, not a lock: the code is public, so it gates nothing and never should. `SupporterKey` in Core reads a key (`SSUP1.<note>.<signature>`, the note being JSON with the name, the order and the date, signed with ECDSA P-256) against the public key in the same file, with no network involved; `SupporterWindow` is where it is pasted, About shows "Supporter edition" while a good one is in the settings, and the Credits window lists `Resources/Supporters.txt`. The private key never enters the repository: `tools/supporter/new-keys.ps1` makes the pair once and writes only the public half into `SupporterKey.cs`, and a test fails while that is empty, so no release ships unable to read the keys people bought. Keys are made by the PHP in `tools/supporter/server` when Polar reports a paid order; `tools/supporter/README.md` covers setting that up, a manual key, and bringing `Supporters.txt` up to date before a release.
 
 **The docs site.** The text of docs.spacesharp.app lives in `docs-src/`: one Markdown file per page (`Home.md` is the front page; `README.md` explains the folder), `_Sidebar.md` for the navigation and its order, `_Footer.md` for the version line, `images/` for the pictures. Links between pages use the file name without `.md`, `[Insights](Insights)` or `[Changes](Changes#filters)`. The site is built from these files and kept outside this repository, like spacesharp.app, and updated with each release. A change to a screen is three things in one commit: the code, the page in `docs-src/` that describes it, and its picture from `tools/screenshots_docs.ps1`. The GitHub wiki is a single page pointing at the site; do not add pages to it.
 

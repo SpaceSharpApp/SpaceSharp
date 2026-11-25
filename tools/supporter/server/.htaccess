@@ -1,0 +1,4 @@
+# Only the three addresses below are meant to be opened; the rest is code to include.
+<FilesMatch "^(lib|where|config\.sample|issue|names)\.php$">
+    Require all denied
+</FilesMatch>

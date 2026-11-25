@@ -1518,4 +1518,18 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="ScanCard_TopRight" xml:space="preserve"><value>오른쪽 위</value></data>
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>왼쪽 위</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>가운데</value></data>
+  <data name="Supporter_Title" xml:space="preserve"><value>서포터 에디션</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp는 누구에게나 무료이며 모든 기능을 제공합니다. 서포터 키는 일회성 후원에 대한 감사의 표시입니다. 여기에 이름이 표시될 뿐 다른 기능을 잠금 해제하지 않습니다.</value></data>
+  <data name="Supporter_Placeholder" xml:space="preserve"><value>이메일로 받은 키를 붙여 넣으세요</value></data>
+  <data name="Supporter_Use" xml:space="preserve"><value>이 키 사용</value></data>
+  <data name="Supporter_Get" xml:space="preserve"><value>서포터 키 받기</value></data>
+  <data name="Supporter_Invalid" xml:space="preserve"><value>올바른 서포터 키가 아닙니다. SSUP1부터 마지막 문자까지 키 전체를 복사하세요.</value></data>
+  <data name="Supporter_Thanks" xml:space="preserve"><value>{0} 님, 감사합니다.</value></data>
+  <data name="Supporter_ThanksNoName" xml:space="preserve"><value>SpaceSharp를 후원해 주셔서 감사합니다.</value></data>
+  <data name="Supporter_Since" xml:space="preserve"><value>{0}부터 서포터입니다.</value></data>
+  <data name="Supporter_Offline" xml:space="preserve"><value>키는 이 PC에서 확인됩니다. 어디로도 전송되지 않습니다.</value></data>
+  <data name="Supporter_Remove" xml:space="preserve"><value>이 PC에서 키 제거</value></data>
+  <data name="Credits_SupportersHeading" xml:space="preserve"><value>서포터</value></data>
+  <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp는 무료이며 앞으로도 무료입니다. 다음 분들이 [서포터 키](https://spacesharp.app/supporter/)로 후원해 주셨습니다:</value></data>
+  <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp는 무료이며 앞으로도 무료입니다. [서포터 키](https://spacesharp.app/supporter/)는 고마움을 전하는 방법이며, 여기에 이름이 표시됩니다.</value></data>
 </root>

@@ -16,6 +16,10 @@ TestResults/
 *.sscan
 *.csv
 
+# The supporter key's private half and the server's settings must never be committed
+supporter-private.pem
+tools/supporter/server/config.php
+
 # IDEs
 .idea/
 .vs/

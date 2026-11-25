@@ -16,7 +16,7 @@ public sealed class CreditsWindow : Window
 {
     private const string Licenses = AppInfo.Repository + "/blob/main/THIRD-PARTY.md";
 
-    /// <summary>Builds the whole window in code: header with the logo, three text sections, a licenses link and Close.</summary>
+    /// <summary>Builds the whole window in code: header with the logo, four text sections, a licenses link and Close.</summary>
     public CreditsWindow()
     {
         Title = Strings.Get("About_Credits");
@@ -48,6 +48,7 @@ public sealed class CreditsWindow : Window
         body.Children.Add(Section(Strings.Get("Credits_MapHeading"), Strings.Get("Credits_MapText")));
         body.Children.Add(Section(Strings.Get("Credits_SoftwareHeading"), Strings.Get("Credits_SoftwareText")));
         body.Children.Add(Section(Strings.Get("Credits_LanguagesHeading"), Strings.Get("Credits_LanguagesText")));
+        body.Children.Add(Supporters());
         Grid.SetRow(body, 1);
         root.Children.Add(body);
 
@@ -79,6 +80,19 @@ public sealed class CreditsWindow : Window
         var text = new LinkText(markup) { Classes = { "dim" }, LineHeight = 19 };
         text.LinkClicked += OpenUrl;
         section.Children.Add(text);
+        return section;
+    }
+
+    /// <summary>The Supporters section: the people who bought a supporter key and asked to be named, as of this build.</summary>
+    /// <returns>The section, with the names under its text when there are any.</returns>
+    private StackPanel Supporters()
+    {
+        IReadOnlyList<string> names = SupporterList.Names;
+        StackPanel section = Section(Strings.Get("Credits_SupportersHeading"), Strings.Get(names.Count == 0 ? "Credits_SupportersNone" : "Credits_SupportersText"));
+        if (names.Count > 0)
+        {
+            section.Children.Add(new TextBlock { Text = string.Join(", ", names), LineHeight = 19, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 4, 0, 0) });
+        }
         return section;
     }
 

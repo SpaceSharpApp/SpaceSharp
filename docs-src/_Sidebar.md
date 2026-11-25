@@ -20,6 +20,7 @@
 - [Command line](Command-Line)
 - [Languages](Languages)
 - [Achievements](Achievements)
+- [Supporter edition](Supporter-Edition)
 
 **Questions and problems**
 - [FAQ](FAQ)

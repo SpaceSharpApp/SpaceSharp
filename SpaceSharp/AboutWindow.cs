@@ -71,7 +71,10 @@ public sealed class AboutWindow : Window
         intro.Children.Add(new TextBlock { Text = "SpaceSharp", FontSize = FontSizes.Display, FontWeight = FontWeight.SemiBold, Margin = new Thickness(0, 10, 0, 0) });
         string buildKind = Strings.Get(installed ? "About_BuildInstalled" : "About_BuildPortable");
         intro.Children.Add(new TextBlock { Text = Strings.Get("About_Tagline"), LineHeight = 19, TextWrapping = TextWrapping.Wrap });
-        intro.Children.Add(new TextBlock { Text = $"{Strings.Format("About_Version", _version)}\n{buildKind}", Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 24) });
+        _versionLines = new TextBlock { Classes = { "dim" }, LineHeight = 18, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 24) };
+        _buildLines = $"{Strings.Format("About_Version", _version)}\n{buildKind}";
+        ShowSupporter();
+        intro.Children.Add(_versionLines);
         leftStack.Children.Add(intro);
 
         left.Child = leftStack;
@@ -108,6 +111,7 @@ public sealed class AboutWindow : Window
         StackPanel project = Group(Strings.Get("About_GroupProject"));
         project.Children.Add(Link("Globe", Strings.Get("About_Source"), () => OpenUrl(AppInfo.Repository), OpensBrowser()));
         project.Children.Add(Link("Book", Strings.Get("About_Credits"), () => new CreditsWindow().ShowDialog(this)));
+        project.Children.Add(Link("Heart", Strings.Get("Supporter_Title"), () => _ = OpenSupporter()));
         right.Children.Add(project);
         return right;
     }
@@ -191,6 +195,28 @@ public sealed class AboutWindow : Window
         cap.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
         cap.Child = new TextBlock { Text = key, FontSize = FontSizes.Detail, HorizontalAlignment = HorizontalAlignment.Center, Classes = { "dim" } };
         return cap;
+    }
+
+    private TextBlock? _versionLines;
+    private string _buildLines = string.Empty;
+
+    /// <summary>Writes the version lines under the name, with "Supporter edition" as a third line while a good supporter key is in use.</summary>
+    private void ShowSupporter()
+    {
+        if (_versionLines is null)
+        {
+            return;
+        }
+        bool supporter = SupporterKey.Read(AppSettings.Current.SupporterKey) is not null;
+        _versionLines.Text = supporter ? $"{_buildLines}\n{Strings.Get("Supporter_Title")}" : _buildLines;
+    }
+
+    /// <summary>Opens the Supporter edition window and, once it closes, shows what it left: a key added or removed.</summary>
+    /// <returns>Completes when the window has closed.</returns>
+    private async Task OpenSupporter()
+    {
+        await new SupporterWindow().ShowDialog(this);
+        ShowSupporter();
     }
 
     private Button? _checkButton;

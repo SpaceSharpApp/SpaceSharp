@@ -4,6 +4,10 @@ The short version: SpaceSharp reads metadata about your files, writes a few file
 
 File and folder metadata (names, sizes, dates, attributes) on the drives and folders you choose to scan. The fast scan reads the NTFS master file table, which is the same metadata in one place. File contents are read in one case only: the duplicate finder, when you run it, reads the files that share a size with another to compare them, and keeps only a hash while it works.
 
+## The supporter key
+
+A [supporter key](Supporter-Edition) is checked on your PC against a public key built into the app. Entering one makes no network request, and the app never tells anyone that a key is in use.
+
 ## Administrator rights
 
 The main window never runs elevated. For the fast scan it starts a second copy of its own exe through the normal Windows prompt; that copy reads the file table, hands the tree back over a local pipe and exits. Decline the prompt and the folder walk runs with your normal rights.

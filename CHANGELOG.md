@@ -2,7 +2,13 @@
 
 What changed in each SpaceSharp release from 2.9 on, newest first. Releases 2.0.0 through 2.8.0 are in [CHANGELOG-ARCHIVE.md](CHANGELOG-ARCHIVE.md); the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.10.1 (unreleased)
+## 2.11.0 (unreleased)
+
+### Supporter edition
+
+SpaceSharp is free and complete, and stays that way. If you want to say thanks, a supporter key is a one-time contribution of your choosing: it puts "Supporter edition" under the version in About, thanks you by name, and, if you ask for it, adds your name to the Credits window. It unlocks no feature, because there is none held back.
+
+About › Supporter edition is where a key is pasted. The key is a short signed note with the name you chose, the order and the date, and it is checked on your PC against a public key built into the app, so entering it sends nothing anywhere and it works offline and forever. Line breaks an email put into the key do not matter. Remove the key from this PC takes it out of the settings again; Reset to defaults leaves it alone.
 
 ### Fixes
 

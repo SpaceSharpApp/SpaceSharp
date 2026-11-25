@@ -1519,4 +1519,18 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="ScanCard_TopRight" xml:space="preserve"><value>أعلى اليمين</value></data>
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>أعلى اليسار</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>الوسط</value></data>
+  <data name="Supporter_Title" xml:space="preserve"><value>إصدار الداعمين</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp مجاني وكامل للجميع. مفتاح الداعم هو شكر على مساهمة لمرة واحدة. يضيف اسمك هنا ولا يفتح أي شيء آخر.</value></data>
+  <data name="Supporter_Placeholder" xml:space="preserve"><value>الصق المفتاح من بريدك الإلكتروني</value></data>
+  <data name="Supporter_Use" xml:space="preserve"><value>استخدام هذا المفتاح</value></data>
+  <data name="Supporter_Get" xml:space="preserve"><value>الحصول على مفتاح داعم</value></data>
+  <data name="Supporter_Invalid" xml:space="preserve"><value>هذا ليس مفتاح داعم صالحًا. انسخ المفتاح كاملًا، من SSUP1 إلى آخر حرف.</value></data>
+  <data name="Supporter_Thanks" xml:space="preserve"><value>شكرًا لك، {0}.</value></data>
+  <data name="Supporter_ThanksNoName" xml:space="preserve"><value>شكرًا لدعمك SpaceSharp.</value></data>
+  <data name="Supporter_Since" xml:space="preserve"><value>داعم منذ {0}.</value></data>
+  <data name="Supporter_Offline" xml:space="preserve"><value>يُفحص المفتاح على هذا الكمبيوتر. لا يُرسل أي شيء إلى أي مكان.</value></data>
+  <data name="Supporter_Remove" xml:space="preserve"><value>إزالة المفتاح من هذا الكمبيوتر</value></data>
+  <data name="Credits_SupportersHeading" xml:space="preserve"><value>الداعمون</value></data>
+  <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp مجاني وسيبقى مجانيًا. ساهم هؤلاء الأشخاص عبر [مفتاح داعم](https://spacesharp.app/supporter/):</value></data>
+  <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp مجاني وسيبقى مجانيًا. [مفتاح الداعم](https://spacesharp.app/supporter/) طريقة لقول شكرًا، ويضع اسمك هنا.</value></data>
 </root>

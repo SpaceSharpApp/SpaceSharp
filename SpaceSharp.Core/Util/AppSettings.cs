@@ -117,6 +117,8 @@ internal sealed class AppSettings
     public bool FastNtfsScan { get; set; } = true;
     /// <summary>The Leave out patterns, one wildcard per line or separated by semicolons, parsed by <see cref="NamePatterns.Parse"/>.</summary>
     public string ExcludePatterns { get; set; } = string.Empty;
+    /// <summary>The supporter key as pasted, or null. Read with SupporterKey.Read in Services; Reset to defaults leaves it alone.</summary>
+    public string? SupporterKey { get; set; }
     /// <summary>How long automatic saved scans are kept, in days; 0 keeps them forever.</summary>
     public int KeepScansDays { get; set; } = 90;
     /// <summary>The UI culture name, such as "nb"; null follows the Windows display language.</summary>

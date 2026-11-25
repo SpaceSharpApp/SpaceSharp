@@ -38,6 +38,10 @@ Yes. A folder nested inside itself hundreds of levels deep, the kind a bad extra
 
 A tree node per file, so it scales with the file count: a drive with a million files lands in the hundreds of megabytes, more while a scan is being compared with the previous one. The status bar's right-hand meter shows SpaceSharp's own working set against the PC's memory, live. Closing the scan (Ctrl+W) releases it.
 
+## Is SpaceSharp free? What is the supporter edition?
+
+Free, open source and complete; no feature is held back. The [supporter edition](Supporter-Edition) is a way to say thanks: a one-time contribution of your choosing gets you a key that shows "Supporter edition" in About and, if you want, your name in the Credits window. The key is checked on your PC and sends nothing.
+
 ## What does the update check send?
 
 One request to `api.github.com` for the latest release, with no identifier of you or your PC beyond what any HTTP request carries. If there is a newer version it downloads the package from `github.com`. Settings › Behavior › Check for updates on startup turns it off. The portable exe never checks.

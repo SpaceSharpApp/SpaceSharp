@@ -29,6 +29,7 @@
   <ItemGroup>
     <!-- The file type table; its header says how to add a type. -->
     <EmbeddedResource Include="Resources\FileTypes.txt" LogicalName="SpaceSharp.Resources.FileTypes.txt" />
+    <EmbeddedResource Include="Resources\Supporters.txt" LogicalName="SpaceSharp.Resources.Supporters.txt" />
   </ItemGroup>
 
   <ItemGroup>
