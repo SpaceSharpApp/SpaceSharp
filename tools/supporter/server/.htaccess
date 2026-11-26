@@ -1,4 +1,5 @@
-# Only the three addresses below are meant to be opened; the rest is code to include.
+# hook.php and thanks.php are the two addresses meant to be opened; the rest is code to include. On a server that does not
+# read this file (IIS) they are still safe to request: each one prints nothing.
 <FilesMatch "^(lib|where|config\.sample|issue|names)\.php$">
     Require all denied
 </FilesMatch>

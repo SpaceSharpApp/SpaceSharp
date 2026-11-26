@@ -1,4 +1,5 @@
 <?php
-// The private folder: config.php, supporter-private.pem and orders/. Keep it outside the web root, so no address reaches it.
-// The default is a folder named supporter-private beside the web root.
-return dirname($_SERVER['DOCUMENT_ROOT'] ?? __DIR__) . '/supporter-private';
+// The private folder: config.php, key.php and orders/. pack-server.ps1 makes it beside this file with a random name,
+// private-<random>, for hosts where nothing outside the web root can be reached. On a host that lets you, move it out of
+// the web root and return its path here instead.
+return (glob(__DIR__ . '/private-*', GLOB_ONLYDIR) ?: [''])[0];

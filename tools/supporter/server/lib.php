@@ -1,11 +1,16 @@
 <?php
 // Shared by hook.php, thanks.php and the command-line scripts: the private folder, webhook checking, key signing, the order files.
+//
+// The private folder may have to sit inside the web root, where an address could reach it. So nothing in it is a plain file:
+// every file there is a .php file that starts with GUARD, and a server asked for one runs it and sends back nothing.
+// The folder's random name, its .htaccess and its web.config are the second and third locks, not the first.
 
 declare(strict_types=1);
 
 const KEY_PREFIX = 'SSUP1';
+const GUARD = "<?php exit; ?>\n";
 
-/** The private folder: config.php, supporter-private.pem and orders/. where.php beside this file returns its path. */
+/** The private folder: config.php, key.php and orders/. where.php beside this file returns its path. */
 function private_folder(): string
 {
     $folder = require __DIR__ . '/where.php';
@@ -65,10 +70,27 @@ function tidy_name(mixed $name): string
     return mb_substr(trim($name), 0, 60);
 }
 
-/** Signs a key: "SSUP1.<note>.<signature>", where the note is JSON with n (name), o (order) and d (date). */
-function make_key(string $name, string $order, string $date, string $privateKeyFile): string
+/** The contents of a guarded file without its first line, or null when the file is missing or not guarded. */
+function read_guarded(string $file): ?string
 {
-    $privateKey = openssl_pkey_get_private('file://' . $privateKeyFile);
+    $text = @file_get_contents($file);
+    return is_string($text) && str_starts_with($text, GUARD) ? substr($text, strlen(GUARD)) : null;
+}
+
+/** The private key as PEM text: key.php on the server, or the plain supporter-private.pem on your own PC. */
+function read_private_key(string $folder): string
+{
+    $pem = read_guarded($folder . '/key.php') ?? @file_get_contents($folder . '/supporter-private.pem');
+    if (!is_string($pem) || $pem === '') {
+        throw new RuntimeException('The private key is not in the private folder.');
+    }
+    return $pem;
+}
+
+/** Signs a key: "SSUP1.<note>.<signature>", where the note is JSON with n (name), o (order) and d (date). */
+function make_key(string $name, string $order, string $date, string $privateKeyFolder): string
+{
+    $privateKey = openssl_pkey_get_private(read_private_key($privateKeyFolder));
     if ($privateKey === false) {
         throw new RuntimeException('The private key could not be read.');
     }
@@ -89,18 +111,18 @@ function file_id(mixed $id): string
 
 function order_file(string $folder, string $order): string
 {
-    return $folder . '/orders/order-' . $order . '.json';
+    return $folder . '/orders/order-' . $order . '.php';
 }
 
 function checkout_file(string $folder, string $checkout): string
 {
-    return $folder . '/orders/checkout-' . $checkout . '.json';
+    return $folder . '/orders/checkout-' . $checkout . '.php';
 }
 
 function read_json(string $file): ?array
 {
-    $text = @file_get_contents($file);
-    $value = $text === false ? null : json_decode($text, true);
+    $text = read_guarded($file);
+    $value = $text === null ? null : json_decode($text, true);
     return is_array($value) ? $value : null;
 }
 
@@ -109,7 +131,7 @@ function write_json(string $file, array $value): void
     if (!is_dir(dirname($file))) {
         mkdir(dirname($file), 0700, true);
     }
-    file_put_contents($file, json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    file_put_contents($file, GUARD . json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
 }
 
 /** Sends the key by plain-text email. Returns whether the server accepted it for delivery. */

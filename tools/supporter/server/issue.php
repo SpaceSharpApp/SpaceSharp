@@ -15,4 +15,4 @@ if ($argc < 3) {
     exit(1);
 }
 $order = $argv[3] ?? 'manual-' . gmdate('Ymd-His');
-echo make_key(tidy_name($argv[2]), $order, gmdate('Y-m-d'), rtrim($argv[1], '/\\') . '/supporter-private.pem'), "\n";
+echo make_key(tidy_name($argv[2]), $order, gmdate('Y-m-d'), rtrim($argv[1], '/\\')), "\n";

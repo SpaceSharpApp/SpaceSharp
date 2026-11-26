@@ -1,5 +1,6 @@
 <?php
-// Copy to config.php in the private folder and fill in. Never put config.php or the private key in the repository.
+// pack-server.ps1 copies this to config.php in the private folder; fill it in there. Never put config.php or the private key
+// in the repository. Opened in a browser this file shows nothing, since it only returns a value.
 return [
     // Polar: Settings > Webhooks > the endpoint's secret (starts with whsec_ or polar_whs_).
     'webhook_secret' => '',

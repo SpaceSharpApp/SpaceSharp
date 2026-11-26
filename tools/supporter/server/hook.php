@@ -69,7 +69,7 @@ try {
         'date' => $date,
         'email' => $email,
         'name' => $name,
-        'key' => make_key($name, $orderId, $date, $folder . '/supporter-private.pem'),
+        'key' => make_key($name, $orderId, $date, $folder),
         'refunded' => false,
     ];
     write_json($file, $record);

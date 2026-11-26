@@ -80,7 +80,7 @@ SpaceSharp/                       the app (Avalonia, Skia), references SpaceShar
 └── Properties/PublishProfiles/   Portable, Portable-x86, Small, Velopack, Velopack-x86 (Windows; the Mac and Linux builds are plain publishes)
 tools/make-mobile-shots.py        docs/m/*.webp (not committed), the screenshots at 1800 px for the website's phone gallery
 docs-src/                         the pages of docs.spacesharp.app as Markdown, _Sidebar.md, _Footer.md, images/
-tools/supporter/                  the supporter edition's other half: new-keys.ps1 (the signing key pair) and server/ (the PHP that makes keys from Polar orders)
+tools/supporter/                  the supporter edition's other half: new-keys.ps1 (the signing key pair), pack-server.ps1 (the folder to upload) and server/ (the PHP that makes keys from Polar orders)
 installer/                        wizard pages, dialog images, release.ps1, sign-test.ps1, brand-msi.ps1, pack-chocolatey.ps1, chocolatey/ (the package source)
 ```
 

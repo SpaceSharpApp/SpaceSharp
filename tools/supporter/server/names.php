@@ -16,7 +16,7 @@ if ($argc < 2) {
     exit(1);
 }
 
-$records = array_filter(array_map('read_json', glob(rtrim($argv[1], '/\\') . '/orders/order-*.json') ?: []));
+$records = array_filter(array_map('read_json', glob(rtrim($argv[1], '/\\') . '/orders/order-*.php') ?: []));
 $named = array_filter($records, fn (array $record): bool => ($record['name'] ?? '') !== '' && !($record['refunded'] ?? false));
 usort($named, fn (array $first, array $second): int => [$first['date'], $first['order']] <=> [$second['date'], $second['order']]);
 foreach (array_unique(array_column($named, 'name')) as $name) {

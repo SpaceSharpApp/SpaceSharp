@@ -144,4 +144,6 @@ dotnet test
 
 Squarified treemaps by Bruls, Huizing and van Wijk (2000). Inspired by [SpaceMonger](https://www.stardock.com/products/spacemonger/). Built with [Avalonia UI](https://avaloniaui.net) and [SkiaSharp](https://github.com/mono/SkiaSharp) on .NET 10, in the [Inter](https://rsms.me/inter/) typeface, with [Velopack](https://velopack.io) for the installer and updates; icons are [Lucide](https://lucide.dev), the color-blind safe palette is Okabe and Ito's. Licenses for all of it are in [THIRD-PARTY.md](THIRD-PARTY.md).
 
+SpaceSharp is free and complete, and stays that way. If you want to say thanks, the [Supporter edition](https://spacesharp.app/supporter/) is a one-time contribution of your choosing: you get a supporter key and, if you like, your name in the credits. It unlocks no feature.
+
 [MIT License](LICENSE). Made by ClearanceClarence.
