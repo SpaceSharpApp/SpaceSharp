@@ -2,6 +2,12 @@
 
 What changed in each SpaceSharp release from 2.9 on, newest first. Releases 2.0.0 through 2.8.0 are in [CHANGELOG-ARCHIVE.md](CHANGELOG-ARCHIVE.md); the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
+## 2.11.1
+
+### Fixes
+
+In Inspect, the By type and By age cards cut their labels short on a window of ordinary width: "Archives" read "Arc…" and "This year" read "Thi…". The number columns were wider than their figures needed and left the label almost no room. They are now as wide as the widest figure in the card, and the file counts step aside when a card is too narrow to show them beside every name in full. A long file name under Largest files is shortened in the middle, so its start and its extension both stay readable where it used to lose its end. The three cards are the same height, so their lower edges line up. The bar over Where the space is no longer shows half a label either: a part too narrow for its whole name and share shows none, and the table under it and the tooltip still say what it is.
+
 ## 2.11.0
 
 ### Supporter edition

@@ -155,10 +155,13 @@ public partial class InspectWindow
             var block = new Border { Background = part.Fill, CornerRadius = new CornerRadius(left, right, right, left), ClipToBounds = true };
             if (part.Label is not null)
             {
-                var label = new TextBlock { Text = part.Label, FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 6, 0), TextTrimming = TextTrimming.CharacterEllipsis };
+                var label = new TextBlock { Text = part.Label, FontSize = FontSizes.Detail, FontWeight = FontWeight.SemiBold, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 6, 0) };
                 label.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable(part.LabelBrushKey));
                 block.Child = label;
                 ToolTip.SetTip(block, part.Label);
+                // A part too narrow for its whole label shows none; the tooltip and the table under the bar still name it.
+                double needed = Fit.TextWidth(part.Label, FontSizes.Detail, FontWeight.SemiBold) + label.Margin.Left + label.Margin.Right;
+                block.SizeChanged += (_, change) => label.IsVisible = change.NewSize.Width >= needed;
             }
             Grid.SetColumn(block, i);
             grid.Children.Add(block);

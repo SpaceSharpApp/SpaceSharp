@@ -15,6 +15,9 @@ public partial class InspectWindow
 {
     private const int ShownKinds = 6;            // kinds listed before the rest is summed in one line
     private const double FileRowHeight = 46;     // a largest-file row has two lines
+    private const int BreakdownColumns = 4;      // label, files, size, share
+    private const int FilesColumn = 1;           // where a breakdown line keeps its file count
+    private const double BreakdownGap = 10;      // between the columns of a breakdown line
 
     /// <summary>True when the inspected items have contents to break down by type.</summary>
     /// <returns>False for a single file, an empty folder or a scan without sizes.</returns>
@@ -56,6 +59,8 @@ public partial class InspectWindow
         for (int i = 0; i < cards.Count; i++)
         {
             Breakdowns.ColumnDefinitions.Add(new ColumnDefinition(cards[i].Weight, GridUnitType.Star));
+            // One height for the row of cards, the tallest one's, so their lower edges line up.
+            cards[i].Card.VerticalAlignment = VerticalAlignment.Stretch;
             Grid.SetColumn(cards[i].Card, i);
             Breakdowns.Children.Add(cards[i].Card);
         }
@@ -83,6 +88,7 @@ public partial class InspectWindow
             content.Children.Add(BreakdownRow(Cell(Strings.Format("Inspect_More", rest.Count), dim: true), rest.Sum(slice => slice.Files),
                 SizeFormatter.Compact(rest.Sum(slice => slice.Bytes)), InspectSummary.Percent(rest.Sum(slice => slice.Share)), dim: true));
         }
+        FitBreakdown(content);
 
         string subtitle = Strings.Format("Inspect_Strip_Kinds", summary.ByType.Count);
         if (summary.Files > 1)
@@ -108,6 +114,7 @@ public partial class InspectWindow
             content.Children.Add(BreakdownRow(SwatchCell(Strings.Get("Inspect_Age_" + band.Bucket), BrushOf(band), dim: empty), band.Files,
                 SizeFormatter.Compact(band.Bytes), InspectSummary.Percent(band.Share), dim: empty));
         }
+        FitBreakdown(content);
 
         string oldest = summary.OldestUtc > DateTime.MinValue
             ? Strings.Format("Inspect_OldestChange", summary.OldestUtc.ToLocalTime().ToString("d", CultureInfo.CurrentCulture))
@@ -130,7 +137,11 @@ public partial class InspectWindow
             string under = folder.Length > 0 && changed.Length > 0 ? folder + "  ·  " + changed : folder + changed;
 
             var lines = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            lines.Children.Add(Cell(row.Node.Name));
+            TextBlock nameText = Cell(row.Node.Name);
+            nameText.TextTrimming = TextTrimming.None;   // shortened in the middle below, never a second time at the end
+            lines.Children.Add(nameText);
+            string fullName = row.Node.Name;
+            lines.SizeChanged += (_, change) => FitName(nameText, fullName, change.NewSize.Width);
             var underText = new TextBlock { Text = under, FontSize = FontSizes.Detail, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
             lines.Children.Add(underText);
 
@@ -151,6 +162,24 @@ public partial class InspectWindow
         return Card(Strings.Get("Inspect_LargestFiles"), Strings.Format("Inspect_NOfM", summary.LargestFiles.Count, summary.Files), content);
     }
 
+    /// <summary>Shows as much of a file name as its line has room for: a name too long loses its middle, so the start and the
+    /// extension both stay. The tooltip has it whole.</summary>
+    /// <param name="block">The name's text block, in the window; it is measured itself, so the font is the one it is drawn in.</param>
+    /// <param name="fullName">The whole name.</param>
+    /// <param name="room">The width the line gives the name.</param>
+    private static void FitName(TextBlock block, string fullName, double room)
+    {
+        const double slack = 2;   // rounding, and the last pixel of a glyph
+        bool Fits(string candidate)
+        {
+            block.Text = candidate;
+            block.Measure(Size.Infinity);
+            return block.DesiredSize.Width <= room - slack;
+        }
+
+        block.Text = MiddleEllipsis.Shorten(fullName, Fits);
+    }
+
     /// <summary>A thin divided bar, inset like the card's title, for the top of By type and By age.</summary>
     /// <param name="segments">The parts, in the order of the lines under the bar.</param>
     /// <returns>The bar with its margins.</returns>
@@ -159,6 +188,38 @@ public partial class InspectWindow
         Control bar = SegmentedBar(segments, 10);
         bar.Margin = new Thickness(CardPadding, 0, CardPadding, 12);
         return bar;
+    }
+
+    /// <summary>Gives the labels of a By type or By age card the room they need: the number columns are as wide as their widest
+    /// figure and no wider, the same in every line, and the file counts show only while every label still fits beside them.</summary>
+    /// <param name="lines">The card's content, holding the lines <see cref="BreakdownRow"/> made.</param>
+    private static void FitBreakdown(StackPanel lines)
+    {
+        Grid.SetIsSharedSizeScope(lines, true);
+        var grids = lines.Children.OfType<Border>().Select(line => line.Child).OfType<Grid>().Where(grid => grid.Children.Count > FilesColumn).ToList();
+
+        // What the widest line needs with every column showing: each column's widest cell, the gaps and the card's padding.
+        double needed = 2 * CardPadding;
+        for (int column = 0; column < BreakdownColumns; column++)
+        {
+            double widest = 0;
+            foreach (Grid grid in grids)
+            {
+                Control cell = grid.Children[column];
+                cell.Measure(Size.Infinity);
+                widest = Math.Max(widest, cell.DesiredSize.Width);
+            }
+            needed += widest + (column > 0 ? BreakdownGap : 0);
+        }
+
+        lines.SizeChanged += (_, change) =>
+        {
+            bool roomForFiles = change.NewSize.Width >= needed;
+            foreach (Grid grid in grids)
+            {
+                grid.Children[FilesColumn].IsVisible = roomForFiles;
+            }
+        };
     }
 
     /// <summary>One line of By type or By age: the label, the file count, the size and the share.</summary>
@@ -170,7 +231,12 @@ public partial class InspectWindow
     /// <returns>The line.</returns>
     private static Border BreakdownRow(Control label, int files, string size, string share, bool dim)
     {
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,58,70,48"), ColumnSpacing = 10 };
+        var grid = new Grid { ColumnSpacing = BreakdownGap };
+        grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+        foreach (string group in new[] { "BreakdownFiles", "BreakdownSize", "BreakdownShare" })
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto) { SharedSizeGroup = group });
+        }
         Control[] cells =
         {
             label,
