@@ -2,7 +2,7 @@
 
 What changed in each SpaceSharp release from 2.9 on, newest first. Releases 2.0.0 through 2.8.0 are in [CHANGELOG-ARCHIVE.md](CHANGELOG-ARCHIVE.md); the 1.x releases are on the [releases page](https://github.com/SpaceSharpApp/SpaceSharp/releases). A section marked unreleased is what the next version will say; the marker comes off when it ships, since the release script and the in-app What's new read the `## version` heading.
 
-## 2.11.0 (unreleased)
+## 2.11.0
 
 ### Supporter edition
 
