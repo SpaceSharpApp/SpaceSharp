@@ -28,6 +28,8 @@ internal static class TitleBarTheme
     /// <param name="window">A window that has not opened yet; off Windows only the flow direction is set.</param>
     public static void Attach(Window window)
     {
+        // Every window comes through here, so this is also where it starts following the Accessibility settings.
+        Accessibility.Attach(window);
         if (AppLanguages.IsRightToLeft)
         {
             window.FlowDirection = FlowDirection.RightToLeft;

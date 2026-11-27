@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using System.Globalization;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -12,20 +14,25 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp;
 
-/// <summary>The Supporter edition window, opened from About: paste a supporter key, or see whose key is in use. The key is read
+/// <summary>The Supporter edition window, opened from About: paste a supporter key, or see that one is in use. The key is read
 /// on this PC by <see cref="SupporterKey"/> and unlocks nothing but the thank-you.</summary>
+/// <remarks>The window never shows the name the key was made out to: a name on screen ends up in screenshots and shared screens.</remarks>
 public sealed class SupporterWindow : Window
 {
     /// <summary>The page that sells supporter keys.</summary>
     private const string GetKeyPage = "https://spacesharp.app/supporter/";
 
+    private const double CardLogoSize = 56;
+    private const double CardTitleSize = 22;
+    private const double CardRadius = 10;
+
     private static readonly FontFamily Mono = new("Cascadia Mono, Consolas, Menlo, monospace");
 
     private readonly AppSettings _settings = AppSettings.Current;
-    private readonly StackPanel _body = new() { Margin = new Thickness(40, 22, 40, 24), Spacing = 12 };
+    private readonly StackPanel _body = new() { Margin = new Thickness(28, 24, 28, 22), Spacing = 14 };
     private readonly Grid _footer = new() { ColumnDefinitions = new ColumnDefinitions("*,Auto"), ColumnSpacing = 16 };
 
-    /// <summary>Builds the window in code: a header with the logo, a body that depends on whether a key is in use, and a footer.</summary>
+    /// <summary>Builds the window in code: the supporter card and what goes under it, which depend on whether a key is in use, and a footer.</summary>
     public SupporterWindow()
     {
         Title = Strings.Get("Supporter_Title");
@@ -37,37 +44,97 @@ public sealed class SupporterWindow : Window
         Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp.ico")));
         TitleBarTheme.Attach(this);
 
-        var root = new Grid { RowDefinitions = new RowDefinitions("Auto,*,Auto") };
-        root.Children.Add(BuildHeader());
-
-        Grid.SetRow(_body, 1);
-        root.Children.Add(_body);
+        var root = new Grid { RowDefinitions = new RowDefinitions("*,Auto") };
+        // A line under the title bar, as the footer has one above it.
+        var body = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Child = _body };
+        body.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        root.Children.Add(body);
 
         var footer = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Padding = new Thickness(20, 12), Child = _footer };
         footer.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
-        Grid.SetRow(footer, 2);
+        Grid.SetRow(footer, 1);
         root.Children.Add(footer);
         Content = root;
 
         ShowState();
     }
 
-    /// <summary>The logo, the title and what a supporter key is.</summary>
-    /// <returns>The header strip with the panel background and a bottom line.</returns>
-    private Border BuildHeader()
+    /// <summary>The supporter card at the top of the window: a dashed, dimmed outline while no key is in use, and an accent-edged
+    /// card with the month the key dates from once one is.</summary>
+    /// <param name="supporter">Who the key in the settings was made out to; null draws the empty card.</param>
+    /// <returns>The card.</returns>
+    private Panel Card(Supporter? supporter)
     {
-        var header = new Border { BorderThickness = new Thickness(0, 0, 0, 1), Padding = new Thickness(40, 30, 40, 22) };
-        header.Bind(Border.BackgroundProperty, this.GetResourceObservable("Panel"));
-        header.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
-
-        var stack = new StackPanel { Spacing = 6, HorizontalAlignment = HorizontalAlignment.Center };
-        var logo = new Image { Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))), Width = 40, Height = 40, HorizontalAlignment = HorizontalAlignment.Center };
+        bool inUse = supporter is not null;
+        var logo = new Image
+        {
+            Source = new Bitmap(AssetLoader.Open(new Uri("avares://SpaceSharp/Assets/SpaceSharp-256.png"))),
+            Width = CardLogoSize,
+            Height = CardLogoSize,
+            Opacity = inUse ? 1 : 0.45,
+            VerticalAlignment = VerticalAlignment.Center
+        };
         RenderOptions.SetBitmapInterpolationMode(logo, BitmapInterpolationMode.HighQuality);
-        stack.Children.Add(logo);
-        stack.Children.Add(new TextBlock { Text = Strings.Get("Supporter_Title"), FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 6, 0, 0) });
-        stack.Children.Add(new TextBlock { Text = Strings.Get("Supporter_Lead"), Classes = { "dim" }, LineHeight = 19, TextAlignment = TextAlignment.Center, TextWrapping = TextWrapping.Wrap });
-        header.Child = stack;
-        return header;
+
+        // The product name, the same in every language.
+        var product = new TextBlock { Text = "SPACESHARP", FontSize = FontSizes.Caption, FontWeight = FontWeight.Bold, LetterSpacing = 1 };
+        product.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable(inUse ? "Link" : "TextDim"));
+        var title = new TextBlock
+        {
+            Text = Strings.Get(inUse ? "Supporter_Title" : "Supporter_CardNoKey"),
+            FontSize = CardTitleSize,
+            FontWeight = FontWeight.Bold,
+            TextWrapping = TextWrapping.Wrap
+        };
+        if (!inUse)
+        {
+            title.Classes.Add("dim");
+        }
+        string line = supporter is null
+            ? Strings.Get("Supporter_CardNoKeyHint")
+            : Strings.Format("Supporter_Since", supporter.Since.ToString("Y", CultureInfo.CurrentCulture));
+        var text = new StackPanel { Spacing = 4, VerticalAlignment = VerticalAlignment.Center };
+        text.Children.Add(product);
+        text.Children.Add(title);
+        text.Children.Add(Note(line));
+
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 18, Margin = new Thickness(22, 20) };
+        row.Children.Add(logo);
+        Grid.SetColumn(text, 1);
+        row.Children.Add(text);
+
+        // A Border cannot draw dashes, so the card's edge is a rectangle under its content.
+        var edge = new Rectangle { RadiusX = CardRadius, RadiusY = CardRadius, StrokeThickness = 1 };
+        if (inUse)
+        {
+            edge.Bind(Shape.FillProperty, this.GetResourceObservable("AccentFaint"));
+            edge.Bind(Shape.StrokeProperty, this.GetResourceObservable("Accent"));
+        }
+        else
+        {
+            edge.StrokeDashArray = new AvaloniaList<double> { 4, 3 };
+            edge.Bind(Shape.StrokeProperty, this.GetResourceObservable("Stroke"));
+        }
+
+        var card = new Panel();
+        card.Children.Add(edge);
+        card.Children.Add(row);
+        return card;
+    }
+
+    /// <summary>The line that says the key never leaves the PC, with a lock in front of it.</summary>
+    /// <returns>The lock and the wrapped text in a row.</returns>
+    private static Grid PrivacyNote()
+    {
+        var row = new Grid { ColumnDefinitions = new ColumnDefinitions("Auto,*"), ColumnSpacing = 8 };
+        Controls.Icon locked = Icons.Make("Lock", 13, "TextDim");   // "Icon" alone is the window's own property here
+        locked.VerticalAlignment = VerticalAlignment.Top;
+        locked.Margin = new Thickness(0, 3, 0, 0);
+        row.Children.Add(locked);
+        TextBlock text = Note(Strings.Get("Supporter_Offline"));
+        Grid.SetColumn(text, 1);
+        row.Children.Add(text);
+        return row;
     }
 
     /// <summary>Fills the body and the footer for the key in the settings: the thank-you when it is a good key, the box to paste one otherwise.</summary>
@@ -87,7 +154,8 @@ public sealed class SupporterWindow : Window
         }
     }
 
-    /// <summary>The state without a key: a box to paste one into, with Use this key and a link to the page that sells them.</summary>
+    /// <summary>The state without a key: the empty card, what a key is, a box to paste one into, Use this key and a link to the page
+    /// that sells them.</summary>
     private void ShowEntry()
     {
         // Return stays a line break: a key copied from an email often comes on several lines, and a one-line box would cut it at the first.
@@ -104,9 +172,11 @@ public sealed class SupporterWindow : Window
         };
         var invalid = new TextBlock { Text = Strings.Get("Supporter_Invalid"), LineHeight = 19, TextWrapping = TextWrapping.Wrap, IsVisible = false };
         invalid.Bind(TextBlock.ForegroundProperty, this.GetResourceObservable("Danger"));
+        _body.Children.Add(Card(null));
+        _body.Children.Add(Note(Strings.Get("Supporter_Lead")));
         _body.Children.Add(keyBox);
         _body.Children.Add(invalid);
-        _body.Children.Add(Note(Strings.Get("Supporter_Offline")));
+        _body.Children.Add(PrivacyNote());
 
         var getKey = new Button { Classes = { "textlink" }, Content = Icons.WithText("Heart", Strings.Get("Supporter_Get")), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center };
         getKey.Click += (_, _) => OpenUrl(GetKeyPage);
@@ -133,14 +203,14 @@ public sealed class SupporterWindow : Window
         keyBox.AttachedToVisualTree += (_, _) => keyBox.Focus();
     }
 
-    /// <summary>The state with a good key: the thank-you, since when, and a way to take the key off this PC.</summary>
-    /// <param name="supporter">Who the key in the settings was made out to.</param>
+    /// <summary>The state with a good key: the card switched on, the thank-you, and a way to take the key off this PC.</summary>
+    /// <param name="supporter">Who the key in the settings was made out to; only the date is shown.</param>
     private void ShowThanks(Supporter supporter)
     {
-        string thanks = supporter.Name.Length == 0 ? Strings.Get("Supporter_ThanksNoName") : Strings.Format("Supporter_Thanks", supporter.Name);
-        _body.Children.Add(new TextBlock { Text = thanks, FontSize = FontSizes.Heading, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
-        _body.Children.Add(Note(Strings.Format("Supporter_Since", supporter.Since.ToString("Y", CultureInfo.CurrentCulture))));
-        _body.Children.Add(Note(Strings.Get("Supporter_Offline")));
+        _body.Children.Add(Card(supporter));
+        _body.Children.Add(new TextBlock { Text = Strings.Get("Supporter_ThanksNoName"), FontSize = FontSizes.Subheading, FontWeight = FontWeight.SemiBold, TextWrapping = TextWrapping.Wrap });
+        _body.Children.Add(Note(Strings.Get("Supporter_KeepsFree")));
+        _body.Children.Add(PrivacyNote());
 
         var remove = new Button { Classes = { "textlink" }, Content = Strings.Get("Supporter_Remove"), HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center };
         remove.Click += (_, _) =>

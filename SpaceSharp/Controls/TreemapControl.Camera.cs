@@ -222,6 +222,56 @@ public sealed partial class TreemapControl
         ZoomChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>How much of the window a file's box spans when the camera goes to the file; the rest shows what is around it.</summary>
+    private const double FileSpan = 0.4;
+
+    /// <summary>Moves the camera to a file: into its folder and then further in, until the file's own box is a good part of the window.</summary>
+    /// <param name="file">A file of the tree. A folder is shown the way <see cref="FocusOn"/> shows it, and so is a file too small to have a
+    /// box of its own in its folder (it is part of an "n files" box): the camera stops at the folder.</param>
+    public void FocusOnFile(FsNode file)
+    {
+        if (_root is null)
+        {
+            return;
+        }
+        if (file.IsDirectory || file.Parent is not { } folder || Bounds.Width < 8)
+        {
+            FocusOn(file);
+            return;
+        }
+
+        // The file's box is only known once its folder is laid out, so look from there and come back before anything is drawn.
+        double zoomBefore = _zoom;
+        Point centerBefore = CurrentCenter();
+        StopAnimation();
+        SnapTo(folder);
+        if (!_index.TryGetValue(file, out TreemapItem fileItem))
+        {
+            SetView(zoomBefore, centerBefore);
+            Rebuild();
+            FocusOn(folder);
+            return;
+        }
+
+        (double fitZoom, Point fileCenter) = FitView(fileItem.Bounds);
+        double zoom = Math.Clamp(fitZoom * FileSpan, _zoom, MaxZoom);   // never further out than the folder itself
+        Point center = ClampCenter(fileCenter, zoom);
+        _pinnedFocus = folder;
+        if (AnimateZoom)
+        {
+            SetView(zoomBefore, centerBefore);
+            Rebuild();
+            StartAnimation(zoom, center, null);
+        }
+        else
+        {
+            SetView(zoom, center);
+            Rebuild();
+            ZoomChanged?.Invoke(this, EventArgs.Empty);
+        }
+        UpdateFocus();
+    }
+
     /// <summary>Begins a 0.4 s eased camera move from the current view, replacing any move in flight.</summary>
     /// <param name="zoom">The zoom to end at.</param>
     /// <param name="center">The view center to end at, in normalized map coordinates.</param>

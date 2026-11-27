@@ -10,7 +10,7 @@
         Background="{DynamicResource Window}">
 
   <!-- The main window, laid out as the WPF app's (2.2): top bar, path row, the filter rail under it, the side
-       panel with drives and largest items, the map (or the start screen, the Insights view, the Changes view, the
+       panel with drives and largest items, the map (or the start screen, the Tree view, the Insights view, the Changes view, the
        scan card), and the status bar. The text is set in Build() from the same Strings.resx. -->
 
   <Grid>
@@ -18,13 +18,14 @@
     <!-- ============================================================ top bar -->
     <Border x:Name="TopBar" DockPanel.Dock="Top" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,0,1" Padding="10,8" SizeChanged="TopBar_SizeChanged">
       <DockPanel>
-        <!-- when the two groups do not fit side by side, FitToolbar drops the labels, then the view buttons' text, then the palette's name -->
+        <!-- when the two groups do not fit side by side, FitToolbar drops the labels, then the view buttons' text, then the palette's name;
+             Color by and Palette show with the map only -->
         <StackPanel x:Name="ToolbarRight" DockPanel.Dock="Right" Orientation="Horizontal">
           <TextBlock x:Name="ColorLabel" Classes="dim" VerticalAlignment="Center" Margin="0,0,8,0" />
           <ComboBox x:Name="ColorCombo" Width="130" SelectionChanged="ColorMode_Changed" />
           <TextBlock x:Name="PaletteLabel" Classes="dim" VerticalAlignment="Center" Margin="14,0,8,0" />
           <Button x:Name="PaletteButton" Classes="combo" Width="250" />
-          <Border Classes="divider" />
+          <Border x:Name="MapColorsDivider" Classes="divider" />
           <Button x:Name="SettingsButton" Classes="tool" Margin="0,0,6,0" Click="Settings_Click"><controls:Icon Glyph="{StaticResource Icon.Settings}" Width="15" Height="15" /></Button>
           <Button x:Name="ThemeButton" Classes="tool" Margin="0,0,6,0" Click="Theme_Click"><controls:Icon x:Name="ThemeIcon" Glyph="{StaticResource Icon.Moon}" Width="15" Height="15" /></Button>
           <Button x:Name="AboutButton" Classes="tool" Click="About_Click"><controls:Icon Glyph="{StaticResource Icon.Info}" Width="15" Height="15" /></Button>
@@ -40,6 +41,7 @@
           <Button x:Name="PanelButton" Classes="tool" Margin="0,0,6,0" Click="Panel_Click"><controls:Icon Glyph="{StaticResource Icon.SidePanel}" Width="15" Height="15" /></Button>
           <Border Classes="divider" />
           <Button x:Name="MapViewButton" Classes="primary" Margin="0,0,2,0" Padding="10,0" Click="MapView_Click" />
+          <Button x:Name="TreeButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="TreeView_Click" />
           <Button x:Name="InsightsButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="InsightsView_Click" />
           <Button x:Name="StatisticsButton" Classes="tool" Margin="0,0,2,0" Padding="10,0" Click="StatisticsView_Click" />
           <Button x:Name="ChangesButton" Classes="tool" Margin="0,0,6,0" Padding="10,0" Click="ChangesView_Click" />
@@ -112,13 +114,16 @@
     <Grid x:Name="MapHost" Background="{DynamicResource Window}">
       <controls:TreemapControl x:Name="Treemap" MapBackground="{DynamicResource MapBackground}" />
 
+      <!-- the Tree view, in the map's place: a control of its own, in Views/Tree/ -->
+      <views:TreePage x:Name="FolderTreeView" IsVisible="False" Background="{DynamicResource Window}" />
+
       <!-- the Insights view, in the map's place -->
       <views:InsightsPage x:Name="InsightsView" IsVisible="False" Background="{DynamicResource Window}" />
 
-      <!-- the Statistics view, in the map's place: a control of its own, in Views/StatisticsPage.cs -->
+      <!-- the Statistics view, in the map's place: a control of its own, in Views/Statistics/ -->
       <views:StatisticsPage x:Name="StatisticsView" IsVisible="False" Background="{DynamicResource Window}" />
 
-      <!-- the Changes view, in the map's place: a control of its own, in Views/ChangesPage.cs -->
+      <!-- the Changes view, in the map's place: a control of its own, in Views/Changes/ -->
       <views:ChangesPage x:Name="ChangesView" IsVisible="False" Background="{DynamicResource Window}" />
 
       <!-- start screen: pick a drive, or pick up where you left off -->

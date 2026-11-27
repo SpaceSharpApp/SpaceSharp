@@ -5,6 +5,7 @@
 - [Reading the map](Reading-the-Map)
 - [Navigating](Navigating)
 - [The filter](The-Filter)
+- [Tree](Tree)
 - [Insights](Insights)
 - [Statistics](Statistics)
 - [Duplicates and empty folders](Duplicates-and-Empty-Folders)

@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Değişim</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Daha fazla</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Burada ne değişti</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>Ağaç görünümünde göster</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Gelecek taramalardan çıkar</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>"{0}" adlı her dosya ve klasör sonraki taramadan itibaren atlanır. Liste Ayarlar › Tarama › Çıkar altındadır.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Çıkar</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>Türe göre</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>Yaşa göre</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Alan nerede</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Haritayı buraya yakınlaştır</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Haritayı bu klasöre yakınlaştır</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Bu ay</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Bu yıl</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ila 3 yıl</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>En eski değişiklik {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>Bu klasörün {0} kadarı tek bir şey: {1}, {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>diskte {0}</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} içinde {0}, tek klasörü</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{1} içinde {0}, tek dosyası</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{1} içinde {0}, {2} klasörünün en büyüğü</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{1} içinde {0}, {2} dosyasının en büyüğü</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{1} içinde {0}, boyuta göre {2} klasör arasında {3}. sırada</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{1} içinde {0}, boyuta göre {2} dosya arasında {3}. sırada</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Çoğunlukla {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Çoğunlukla {0} ({1}) ve {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0} ({1}), {2} ({3}) ve {4} ({5}) karışımı</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Son değişiklik: {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Değiştirilme: {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>son taramadan bu yana değişmedi</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>son taramadan bu yana {0} büyüdü</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>son taramadan bu yana {0} küçüldü</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Açık tema için aynısı: Kâğıt, Keten, Sis, Kum veya Kar.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Pencerelerin arkasını karart</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Ayarlar, İncele, Hakkında veya güncelleme uyarısı üstte açıkken haritanın ne kadar karardığı. 0 olduğu gibi bırakır.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Erişilebilirlik</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Metin boyutu</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Tüm arayüzü, metin ve denetimlerle birlikte daha büyük çizer. Menüler ve araç ipuçları boyutunu korur.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Okuma yazı tipi</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible az görenler için tasarlandı; harfleri birbirine karıştırmak zordur. Haritadaki etiketler de buna uyar.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Varsayılan (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Hareketi azalt</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Klasörler arasındaki yakınlaştırmayı ve seçili öğedeki yanıp sönmeyi atlar.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Daha güçlü kontrast</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Her görünümde soluk metni ve satırlar arasındaki çizgileri belirginleştirir.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Renk görme</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Bir renk görme bozukluğunun karıştırdığı renkler ayrışsın diye tüm paletleri ayarlar.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Kapalı</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Kırmızı zayıflığı (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Yeşil zayıflığı (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Mavi zayıflığı (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Deniz mavileri, pas ve halat</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Çiçek, yaprak ve olgun meyve</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, gölgelendirme ve metin</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Haritanın görünümüyle ilgili her şey, bir önizlemenin yanında, Ağaç haritası sayfasında.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Renkler</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Bakır, pirinç, zeytin ve pas</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Tayf tam gücünde</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Griler, vurgu için kehribar</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito ve Tol; herkes için ayırt edilebilir</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Her rengin yumuşak tonları; açık temanın varsayılanı</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Kâğıt üzerinde solmuş tonlar</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Tatlı ve parlak</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Kil, kum ve gül; Earth'ten daha sıcak</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Morlar ve pudra mavileri</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Yedi güçlü ana renk</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Aynı güvenli küme, açık yüzeyler için aydınlatılmış</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0} tema için palet. Her tema kendininkini anımsar; harita temayla birlikte değişir.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1} tema için yapıldı</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Harita, Öngörüler, İstatistikler ve Değişiklikler arasında geçiş</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Harita, Ağaç, Öngörüler, İstatistikler ve Değişiklikler arasında geçiş</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Türe göre</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Güvenle temizlenebilir</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Değişiklik zamanı</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Ad veya desen, örn. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Harita</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>Taramanın haritası (B görünümler arasında geçer)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Ağaç</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Her klasör ve içindekiler, düzey düzey açılır (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Her klasör ve içindekiler. Açmak için klasörün okuna tıklayın.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Üst klasördeki pay</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>İlk düzeyi aç</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>İlk düzeydeki klasörleri açar. Daha derindeki klasörler tek tek açılır</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Tümünü kapat</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} klasör · {1:N0} dosya · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Öngörüler</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Taramanın özeti: türe göre, güvenle temizlenebilir, değişiklik zamanı, en büyük öğeler (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Öngörüler</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp açık çalışmaların üzerine kuruludur</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Arkasındaki insanlara teşekkürler.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Harita</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Yerleşim, [Bruls, Huizing ve van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) tarafından 2000'de yayımlanan squarified treemap'tir. Bir diski harita olarak gösterme fikri Sean Werkema'nın [SpaceMonger](https://www.stardock.com/products/spacemonger/) programından, treemap'in kendisi ise Ben Shneiderman'dan (1991) gelir. Renk körlüğüne uygun palet [Okabe ve Ito](https://jfly.uni-koeln.de/color/)'nun sekiz rengini (2002) kullanır. Diğer dört renk [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) tarafından hazırlanan parlak şemadan alınmıştır.</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Yerleşim, [Bruls, Huizing ve van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) tarafından 2000'de yayımlanan squarified treemap'tir. Bir diski harita olarak gösterme fikri Sean Werkema'nın [SpaceMonger](https://www.stardock.com/products/spacemonger/) programından, treemap'in kendisi ise Ben Shneiderman'dan (1991) gelir.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Yazılım</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) üzerinde C# ile yazıldı. Arayüz [Avalonia UI](https://avaloniaui.net), çizim [SkiaSharp](https://github.com/mono/SkiaSharp) ile, yazı tipi Rasmus Andersson'un [Inter](https://rsms.me/inter/) fontudur. Simgeler, Cole Bemis'in Feather'ını sürdüren [Lucide](https://lucide.dev)'dan gelir. Windows yükleyicisi ve güncellemeler Caelan Sayler'ın [Velopack](https://velopack.io) aracından gelir. Lucide (ISC) ve Inter (SIL Open Font License) dışında hepsi MIT lisanslıdır.</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Diller</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows ayarını izle ya da her zaman açık veya koyu kullan. Altın sizin: her başarım açıldı ve uygulama ona uygun giyindi, kendi harita paletiyle.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Pirinçten pembe altına on iki metal, Altın teması için</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} tür</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0} klasörde {0:N0} dosya içeren bir klasör, {2:N0} tanesi doğrudan içinde.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0} dosya içeren bir klasör, hepsi doğrudan içinde.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0} ve {2} içinde {1} yer kaplıyor.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0} yer kaplıyor.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Diğer {0:N0} tür toplam {1} yer kaplıyor.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Ortanca dosya {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} bu ay değişti; {1} bir yıldan uzun süredir dokunulmadı.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Klasör veya dosya</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Boyut</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Pay</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Dosyalar</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Değişti</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Tür</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Dosya</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>Konum</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>En büyük dosyalar</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} içinden {0:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>{0} içinde</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>{0:N0} klasörde, {1:N0} tanesi doğrudan içinde</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>tümü doğrudan içinde</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>{0:N0} klasörün en büyüğü</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>{0:N0} dosyanın en büyüğü</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>tek klasörü</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>tek dosyası</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>boyuta göre {0:N0} klasör içinde {1:N0}. sırada</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>boyuta göre {0:N0} dosya içinde {1:N0}. sırada</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>taranan {0} içinde</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Son değişiklik</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Değiştirilme</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>İncele</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>{0:N0} öğenin tümünü göster</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Daha az göster</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>Diğer {0:N0} dosya</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} tane daha</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>bu {0:N0} öğe klasörün {1} kadarı</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys ve swapfile.sys sanal bellektir. Boyutları Sistem › Gelişmiş s
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Sol üst</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>Orta</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Destekçi sürümü</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp herkes için ücretsiz ve eksiksizdir. Destekçi anahtarı, tek seferlik bir katkı için teşekkürdür. Adınızı buraya ekler ve başka hiçbir şeyin kilidini açmaz.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp herkes için ücretsiz ve eksiksizdir. Destekçi anahtarı, tek seferlik bir katkı için teşekkürdür. Bu kopyayı bir destekçinin kopyası olarak işaretler ve başka hiçbir şeyin kilidini açmaz.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>E-postanızdaki anahtarı yapıştırın</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Bu anahtarı kullan</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Destekçi anahtarı al</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>Bu geçerli bir destekçi anahtarı değil. Anahtarın tamamını, SSUP1 ile başlayıp son karaktere kadar kopyalayın.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Teşekkürler, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>SpaceSharp'ı desteklediğiniz için teşekkürler.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Destekçilik başlangıcı: {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>Anahtar bu bilgisayarda denetlenir. Hiçbir yere hiçbir şey gönderilmez.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>Anahtarı bu bilgisayardan kaldır</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>Bu bilgisayarda anahtar yok</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>Bir anahtar bu kartı etkinleştirir</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp herkes için ücretsiz ve eksiksizdir. Katkınız bunun böyle kalmasına yardımcı olur.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Destekçiler</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp ücretsizdir ve ücretsiz kalacaktır. Bu kişiler bir [destekçi anahtarı](https://spacesharp.app/supporter/) alarak katkıda bulundu:</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp ücretsizdir ve ücretsiz kalacaktır. [Destekçi anahtarı](https://spacesharp.app/supporter/) teşekkür etmenin bir yoludur ve adınızı buraya ekler.</value></data>

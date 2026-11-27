@@ -24,7 +24,7 @@ ICONS = {
     # toolbar and path row
     "ScanFolder": "folder-open", "Refresh": "refresh-cw", "Up": "arrow-up", "Home": "house",
     "SidePanel": "panel-left", "ZoomOut": "zoom-out", "ZoomIn": "zoom-in",
-    "Settings": "settings", "Moon": "moon", "Sun": "sun", "Monitor": "monitor", "Info": "info",
+    "Settings": "settings", "Moon": "moon", "Sun": "sun", "Monitor": "monitor", "Info": "info", "Tree": "list-tree",
     "Filter": "filter", "Close": "x", "Shield": "shield",
     # the scan card's stages: waiting, running, done
     "Circle": "circle", "Loader": "loader-circle",

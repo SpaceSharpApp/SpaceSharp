@@ -213,6 +213,7 @@ public partial class MainWindow
         UpdateCompareUi();
         InvalidateInsights();
         ChangesView.DropRows();
+        FolderTreeView.DropRows();
         RefreshTopList();
         BuildRecentScans();
         UpdateNavigation();

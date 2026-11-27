@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>变化</value></data>
   <data name="Menu_More" xml:space="preserve"><value>更多</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>此处的变化</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>在树形视图中显示</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>从以后的扫描中排除</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>所有名为“{0}”的文件和文件夹将从下次扫描起被跳过。列表在设置 › 扫描 › 排除中。</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>排除</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>按类型</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>按时间</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>空间在哪里</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>将地图缩放到此处</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>将地图缩放到此文件夹</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>本月</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 到 3 年</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>最早的更改 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>此文件夹的 {0} 来自同一项：{1}，大小 {2}。</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>占用空间 {0}</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>占 {1} 的 {0}，是其唯一的文件夹</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>占 {1} 的 {0}，是其唯一的文件</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>占 {1} 的 {0}，是其 {2} 个文件夹中最大的</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>占 {1} 的 {0}，是其 {2} 个文件中最大的</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>占 {1} 的 {0}，按大小在 {2} 个文件夹中排第 {3}</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>占 {1} 的 {0}，按大小在 {2} 个文件中排第 {3}</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>主要是{0}（{1}）</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>主要是{0}（{1}）和{2}（{3}）</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>混合了{0}（{1}）、{2}（{3}）和{4}（{5}）</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>最后更改于{0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>修改于{0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>自上次扫描以来无变化</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>自上次扫描以来增大了 {0}</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>自上次扫描以来缩小了 {0}</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>浅色主题的对应设置：纸张、亚麻、薄雾、沙色或雪白。</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>窗口后方变暗</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>在设置、检查、关于或更新提示打开时，地图变暗的程度。0 表示保持原样。</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>辅助功能</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>文字大小</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>将整个界面连同文字和控件一起放大显示。菜单和工具提示保持原有大小。</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>阅读字体</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible 为低视力设计，字形不易混淆。地图标签也会随之改变。</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>默认 (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>减弱动态效果</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>省去文件夹之间的缩放动画和选中项的闪烁。</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>增强对比度</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>在每种外观下让暗淡的文字和行间的线条更清晰。</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>色觉</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>调整每个调色板，让色觉障碍者容易混淆的颜色区分开来。</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>关闭</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>红色弱 (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>绿色弱 (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>蓝色弱 (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>海蓝、铁锈与缆绳</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>花朵、绿叶与熟果</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>配色、阴影和文字</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>有关地图外观的所有设置都在“树状图”页面，旁边有预览。</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>颜色</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>铜、黄铜、橄榄与锈</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>全强度光谱</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>灰色，琥珀色点缀</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito 与 Tol；人人可辨</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>各色相的柔和浅色；浅色默认</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>纸上的褪色调</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>甜美明亮</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>陶土、沙与玫瑰；比 Earth 更暖</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>紫罗兰与粉蓝</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>七种浓烈原色</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>同一安全配色，为浅色表面提亮</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}主题的配色。每个主题各自记住自己的配色；地图随主题切换。</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · 为{1}主题设计</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图、洞察、统计和变更之间切换</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>在地图、树形、洞察、统计和变更之间切换</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>按类型</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>可安全清理</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>更改时间</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>名称或模式，例如 *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>地图</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>扫描的地图（B 切换视图）</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>树形</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>每个文件夹及其内容，逐级展开（B）</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>每个文件夹及其内容。点击文件夹旁的箭头即可展开。</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>占上级文件夹的比例</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>展开第一级</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>展开第一级的文件夹。更深的文件夹需逐个展开</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>全部折叠</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} 个文件夹 · {1:N0} 个文件 · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>洞察</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>扫描汇总：按类型、可安全清理、更改时间、最大的项目 (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>洞察</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp 建立在开放成果之上</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>感谢这些成果背后的人们。</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>地图</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>布局采用 [Bruls、Huizing 和 van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) 于 2000 年发表的 squarified treemap 算法。把磁盘显示为地图的想法来自 Sean Werkema 的 [SpaceMonger](https://www.stardock.com/products/spacemonger/)，treemap 本身则来自 Ben Shneiderman（1991 年）。色觉友好调色板使用 [Okabe 和 Ito](https://jfly.uni-koeln.de/color/) 的八种颜色（2002 年）。另外四种颜色来自 [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) 的明亮配色。</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>布局采用 [Bruls、Huizing 和 van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) 于 2000 年发表的 squarified treemap 算法。把磁盘显示为地图的想法来自 Sean Werkema 的 [SpaceMonger](https://www.stardock.com/products/spacemonger/)，treemap 本身则来自 Ben Shneiderman（1991 年）。</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>软件</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>以 C# 编写，运行于 [.NET 10](https://dotnet.microsoft.com)。界面使用 [Avalonia UI](https://avaloniaui.net)，由 [SkiaSharp](https://github.com/mono/SkiaSharp) 绘制，字体为 Rasmus Andersson 的 [Inter](https://rsms.me/inter/)。图标来自 [Lucide](https://lucide.dev)，它延续了 Cole Bemis 的 Feather。Windows 安装程序和更新由 Caelan Sayler 的 [Velopack](https://velopack.io) 提供。除 Lucide（ISC）和 Inter（SIL Open Font License）外，均为 MIT 许可。</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>语言</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>跟随 Windows 设置，或始终使用浅色或深色。金色是你的：全部成就已解锁，应用也相应盛装，并配有专属地图调色板。</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>从黄铜到玫瑰金的十二种金属，用于金色主题</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} 种</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>一个包含 {1:N0} 个文件夹、{0:N0} 个文件的文件夹，其中 {2:N0} 个直接位于其下。</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>一个包含 {0:N0} 个文件的文件夹，全部直接位于其下。</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}：{1}，{2}。</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>占 {0}，以及 {2} 的 {1}。</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>占 {0}。</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>其他 {0:N0} 种类型共占 {1}。</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>文件中位数 {0}。</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} 在本月有改动；{1} 已超过一年未动。</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>文件夹或文件</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>大小</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>占比</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>文件</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>更改</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>类型</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>文件</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>位于</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>最大的文件</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} 个中的 {0:N0} 个</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>占 {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>分布在 {0:N0} 个文件夹中，{1:N0} 个直接位于其中</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>全部直接位于其中</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>{0:N0} 个文件夹中最大</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>{0:N0} 个文件中最大</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>唯一的文件夹</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>唯一的文件</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>按大小在 {0:N0} 个文件夹中排第 {1:N0}</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>按大小在 {0:N0} 个文件中排第 {1:N0}</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>已扫描 {0} 中</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>上次更改</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>修改时间</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>检查</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>显示全部 {0:N0} 项</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>显示较少</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>其余 {0:N0} 个文件</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>还有 {0:N0} 个</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>这 {0:N0} 项占文件夹的 {1}</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys 和 swapfile.sys 是虚拟内存。它们的大小在“系统 › 
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>左上</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>居中</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>支持者版</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp 对所有人免费且功能完整。支持者密钥是对一次性捐助的感谢。它会在这里显示你的名字，不会解锁其他任何功能。</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp 对所有人免费且功能完整。支持者密钥是对一次性捐助的感谢。它会将此副本标记为支持者版本，不会解锁其他任何功能。</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>粘贴电子邮件中的密钥</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>使用此密钥</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>获取支持者密钥</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>这不是有效的支持者密钥。请复制整个密钥，从 SSUP1 到最后一个字符。</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>谢谢你，{0}。</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>感谢你支持 SpaceSharp。</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>自 {0} 起成为支持者。</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>密钥在这台电脑上验证，不会向任何地方发送任何内容。</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>从这台电脑移除密钥</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>此电脑上没有密钥</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>输入密钥即可点亮这张卡片</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp 对所有人免费且功能完整。你的捐助有助于保持这一点。</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>支持者</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp 免费，并将一直免费。以下人士通过[支持者密钥](https://spacesharp.app/supporter/)提供了支持：</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp 免费，并将一直免费。[支持者密钥](https://spacesharp.app/supporter/)是表达感谢的一种方式，你的名字也会出现在这里。</value></data>

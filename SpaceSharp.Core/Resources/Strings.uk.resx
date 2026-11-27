@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Зміна</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Ще</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Що тут змінилося</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>Показати в дереві</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Виключити з майбутніх сканів</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Кожен файл чи папку з ім'ям «{0}» буде пропущено починаючи з наступного скану. Список у Налаштуваннях › Сканування › Виключити.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Виключити</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>За типом</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>За віком</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Де місце</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Збільшити карту тут</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Збільшити карту до цієї папки</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Цього місяця</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Цього року</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>Від 1 до 3 років</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Найстаріша зміна {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} цієї папки — це одне: {1} розміром {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} на диску</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} від {1}, її єдина папка</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} від {1}, її єдиний файл</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} від {1}, найбільша з її папок ({2})</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} від {1}, найбільший з її файлів ({2})</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} від {1}, номер {3} з {2} папок за розміром</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} від {1}, номер {3} з {2} файлів за розміром</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Переважно {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Переважно {0} ({1}) і {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Суміш: {0} ({1}), {2} ({3}) і {4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Остання зміна {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Змінено {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>без змін з останнього сканування</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>збільшився на {0} з останнього сканування</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>зменшився на {0} з останнього сканування</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Те саме для світлої теми: папір, льон, імла, пісок або сніг.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Затемнення за вікнами</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Наскільки темнішає карта, поки над нею відкриті Налаштування, Огляд, Про програму або вікно оновлення. 0 залишає як є.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Спеціальні можливості</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Розмір тексту</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Малює весь інтерфейс більшим, текст разом з елементами керування. Меню та підказки зберігають свій розмір.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Шрифт для читання</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible створено для людей зі слабким зором: його літери важко сплутати. Підписи на карті теж змінюються.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Типовий (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Зменшити рух</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Прибирає масштабування між папками та спалах на вибраному елементі.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Сильніший контраст</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Робить приглушений текст і лінії між рядками помітнішими, у будь-якому оформленні.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Колірний зір</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Налаштовує кожну палітру так, щоб кольори, які зливаються при порушенні кольоросприйняття, розрізнялися.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Вимкнено</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Слабкість до червоного (протан)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Слабкість до зеленого (дейтан)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Слабкість до синього (тритан)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Морська синь, іржа й канат</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Цвіт, листя й стиглі плоди</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Палітра, затінення та текст</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Усе про вигляд карти є на сторінці «Деревоподібна карта» поруч із попереднім переглядом.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Кольори</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Мідь, латунь, олива та іржа</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Спектр на повну силу</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Сірі, бурштин як акцент</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Окабе-Іто й Тол; розрізнювані для всіх</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>М'які відтінки всіх кольорів; типова у світлій темі</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Вицвілі тони на папері</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Солодка та яскрава</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Глина, пісок і троянда; тепліша за Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Фіолетові та пудрово-блакитні</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Сім насичених основних кольорів</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Той самий безпечний набір, освітлений для світлих поверхонь</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Палітра для теми «{0}». Кожна тема пам'ятає свою; карта перемикається разом із темою.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · створено для теми «{1}»</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Перемикання між картою, Оглядом, Статистикою і Змінами</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Перемикання між картою, Деревом, Оглядом, Статистикою і Змінами</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>За типом</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Можна безпечно очистити</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Коли змінено</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Ім'я або шаблон, напр. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Карта</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>Карта сканування (B перемикає вигляди)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Дерево</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Кожна папка та її вміст, рівень за рівнем (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Кожна папка з її вмістом. Клацніть стрілку біля папки, щоб відкрити її.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Частка в батьківській папці</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>Відкрити перший рівень</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>Відкриває папки першого рівня. Глибші папки відкриваються по одній</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Закрити все</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>Папок: {0:N0} · файлів: {1:N0} · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Огляд</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Підсумок сканування: за типом, що можна очистити, коли змінено, найбільші елементи (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Огляд</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp побудовано на відкритій праці</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Дякуємо людям, які за нею стоять.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Карта</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Розкладка — це squarified treemap із роботи [Брулса, Гейзінга та ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опублікованої 2000 року. Ідея показувати диск як карту походить зі [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркеми, а самі treemap — від Бена Шнейдермана (1991). Палітра для людей із порушенням кольоросприйняття використовує вісім кольорів [Окабе та Іто](https://jfly.uni-koeln.de/color/) (2002). Ще чотири кольори взято з яскравої схеми [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Розкладка — це squarified treemap із роботи [Брулса, Гейзінга та ван Вейка](https://www.win.tue.nl/~vanwijk/stm.pdf), опублікованої 2000 року. Ідея показувати диск як карту походить зі [SpaceMonger](https://www.stardock.com/products/spacemonger/) Шона Веркеми, а самі treemap — від Бена Шнейдермана (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Програмне забезпечення</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Написано на C# для [.NET 10](https://dotnet.microsoft.com). Інтерфейс — [Avalonia UI](https://avaloniaui.net), малювання через [SkiaSharp](https://github.com/mono/SkiaSharp), шрифт [Inter](https://rsms.me/inter/) Расмуса Андерссона. Значки з [Lucide](https://lucide.dev), продовження Feather Коула Беміса. Інсталятор і оновлення у Windows — [Velopack](https://velopack.io) Кейлана Сейлера. Усе під ліцензією MIT, крім Lucide (ISC) та Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Мови</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Дотримуватися налаштування Windows або завжди використовувати світлу чи темну. Золото ваше: усі досягнення відкриті, і застосунок одягнений відповідно, зі своєю палітрою мапи.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Дванадцять металів від латуні до рожевого золота, для теми Золото</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>Типів: {0:N0}</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>Тека з {0:N0} файлами в {1:N0} теках, {2:N0} з них просто всередині.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Тека з {0:N0} файлами, усі просто всередині.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>Займає {0} і {1} від {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Займає {0}.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>Ще {0:N0} типів ділять {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Медіанний файл {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} змінилося цього місяця; {1} не чіпали понад рік.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Тека або файл</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Розмір</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Частка</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Файли</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Змінено</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Тип</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Файл</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>У</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>Найбільші файли</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} з {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>Від {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>у {0:N0} папках, {1:N0} безпосередньо всередині</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>усі безпосередньо всередині</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>найбільша з {0:N0} папок</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>найбільший з {0:N0} файлів</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>єдина папка</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>єдиний файл</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>номер {1:N0} з {0:N0} папок за розміром</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>номер {1:N0} з {0:N0} файлів за розміром</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>із {0} просканованих</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Остання зміна</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Змінено</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>Переглянути</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>Показати всі елементи ({0:N0})</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Показати менше</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>Решта {0:N0} файлів</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>Ще {0:N0}</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>ці {0:N0} становлять {1} теки</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys і swapfile.sys — це віртуальна пам'ять. Їхн
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Ліворуч угорі</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>По центру</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Видання для прихильників</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp безкоштовний і повний для всіх. Ключ підтримки є подякою за разовий внесок. Він додає сюди ваше ім'я і більше нічого не відкриває.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp безкоштовний і повний для всіх. Ключ підтримки є подякою за разовий внесок. Він позначає цю копію як копію прихильника і більше нічого не відкриває.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>Вставте ключ із листа</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Використати цей ключ</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Отримати ключ підтримки</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>Це недійсний ключ підтримки. Скопіюйте ключ повністю, від SSUP1 до останнього символу.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Дякуємо, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>Дякуємо за підтримку SpaceSharp.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Підтримує з: {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>Ключ перевіряється на цьому комп'ютері. Нічого нікуди не надсилається.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>Вилучити ключ із цього комп'ютера</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>На цьому комп'ютері немає ключа</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>Ключ вмикає цю картку</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp безкоштовний і повний для всіх. Ваш внесок допомагає зберегти його таким.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Прихильники</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp безкоштовний і таким залишиться. Ці люди допомогли, придбавши [ключ підтримки](https://spacesharp.app/supporter/):</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp безкоштовний і таким залишиться. [Ключ підтримки](https://spacesharp.app/supporter/) є способом подякувати, і ваше ім'я з'явиться тут.</value></data>

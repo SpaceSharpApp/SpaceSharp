@@ -73,6 +73,7 @@
     <StreamGeometry x:Key="Icon.Disc">M2,12 A10,10 0 1 0 22,12 A10,10 0 1 0 2,12 Z M10,12 A2,2 0 1 0 14,12 A2,2 0 1 0 10,12 Z</StreamGeometry>
     <StreamGeometry x:Key="Icon.Ssd">M5,4 h14 a2,2 0 0 1 2,2 v12 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-12 a2,2 0 0 1 2,-2 Z M13 8l-3.5 4.5H14L10.5 17</StreamGeometry>
     <StreamGeometry x:Key="Icon.Treemap">M5,3 h14 a2,2 0 0 1 2,2 v14 a2,2 0 0 1 -2,2 h-14 a2,2 0 0 1 -2,-2 v-14 a2,2 0 0 1 2,-2 Z M3 12h11 M14 3v18 M14 15h7</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Tree">M21 12h-8 M21 6H8 M21 18h-8 M3 6v4c0 1.1.9 2 2 2h3 M3 10v6c0 1.1.9 2 2 2h3</StreamGeometry>
     <StreamGeometry x:Key="Icon.Statistics">M4 20V10 M10 20V4 M16 20v-7 M22 20H2</StreamGeometry>
     <StreamGeometry x:Key="Icon.UsbStick">M4,7 h9 a2,2 0 0 1 2,2 v6 a2,2 0 0 1 -2,2 h-9 a2,2 0 0 1 -2,-2 v-6 a2,2 0 0 1 2,-2 Z M15 10h5v4h-5 M17 12h1</StreamGeometry>
 </ResourceDictionary>

@@ -101,7 +101,7 @@ public class LocalizationTests
         {
             Assert.Contains("Density_" + d, keys);
         }
-        foreach (string? t in new[] { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" })
+        foreach (string? t in new[] { "General", "Behavior", "Appearance", "Accessibility", "Treemap", "Map", "Scanning" })
         {
             Assert.Contains("SettingsTab_" + t, keys);
         }

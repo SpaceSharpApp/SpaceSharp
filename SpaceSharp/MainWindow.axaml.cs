@@ -45,6 +45,7 @@ public partial class MainWindow : Window
         ScrollGutter.Reserve(DriveScroller, DriveList);
         ScrollGutter.Reserve(TopListScroller, TopList);
         StatisticsView.Attach(this);
+        FolderTreeView.Attach(this);
         InsightsView.Attach(this);
         _filterPanel = new FilterPanel(this, new FilterPanelParts(FilterBox, FilterToggleButton, FilterRail, RailContent, FilterDrawer, DrawerContent, DrawerFooter, DrawerClearButton));
         _deleteBusy.Width = 460;
@@ -264,6 +265,7 @@ public partial class MainWindow : Window
         UpdateTitle();
         ScanFolderButton.Content = Icons.WithText("ScanFolder", Strings.Get("Main_ScanFolder"));
         MapViewButton.Content = Icons.WithText("Treemap", Strings.Get("Main_ViewMap"));
+        TreeButton.Content = Icons.WithText("Tree", Strings.Get("Main_ViewTree"));
         InsightsButton.Content = Icons.WithText("Info", Strings.Get("Main_ViewInsights"));
         StatisticsButton.Content = Icons.WithText("Statistics", Strings.Get("Main_ViewStatistics"));
         ChangesButton.Content = Icons.WithText("Sync", Strings.Get("Main_ViewChanges"));
@@ -309,6 +311,7 @@ public partial class MainWindow : Window
         MarkListKind();
         RefreshTopList();   // hides the section until a scan loads
         ToolTip.SetTip(MapViewButton, Strings.Get("Main_ViewMapTip"));
+        ToolTip.SetTip(TreeButton, Strings.Get("Main_ViewTreeTip"));
         ToolTip.SetTip(InsightsButton, Strings.Get("Main_ViewInsightsTip"));
         ToolTip.SetTip(StatisticsButton, Strings.Get("Main_ViewStatisticsTip"));
         ToolTip.SetTip(ChangesButton, Strings.Get("Main_ViewChangesTip"));
@@ -348,15 +351,20 @@ public partial class MainWindow : Window
     }
 
     /// <summary>Puts the toolbar in one of its four fits.</summary>
-    /// <param name="stage">0 shows everything; 1 drops the "Color by" and "Palette" labels; 2 also reduces the view buttons to icons; 3 also hides the palette's name.</param>
+    /// <param name="stage">0 shows everything; 1 drops the "Color by" and "Palette" labels; 2 also reduces the view buttons to icons; 3 also hides the palette's name.
+    /// On any view but the map, Color by and Palette are hidden at every stage.</param>
     private void ApplyToolbarStage(int stage)
     {
         _toolbarStage = stage;
-        ColorLabel.IsVisible = PaletteLabel.IsVisible = stage < 1;
+        // Color by and Palette color the map, so they are in the way on every other view.
+        bool showsMapColors = Treemap.IsVisible;
+        ColorCombo.IsVisible = PaletteButton.IsVisible = MapColorsDivider.IsVisible = showsMapColors;
+        ColorLabel.IsVisible = PaletteLabel.IsVisible = showsMapColors && stage < 1;
         PaletteButton.Margin = stage < 1 ? default : new Thickness(10, 0, 0, 0);   // the label carried the gap
 
         bool showViewText = stage < 2;
         MapViewButton.Content = showViewText ? Icons.WithText("Treemap", Strings.Get("Main_ViewMap")) : Icons.Make("Treemap", 15);
+        TreeButton.Content = showViewText ? Icons.WithText("Tree", Strings.Get("Main_ViewTree")) : Icons.Make("Tree", 15);
         InsightsButton.Content = showViewText ? Icons.WithText("Info", Strings.Get("Main_ViewInsights")) : Icons.Make("Info", 15);
         StatisticsButton.Content = showViewText ? Icons.WithText("Statistics", Strings.Get("Main_ViewStatistics")) : Icons.Make("Statistics", 15);
         ChangesButton.Content = showViewText ? Icons.WithText("Sync", Strings.Get("Main_ViewChanges")) : Icons.Make("Sync", 15);
@@ -537,11 +545,12 @@ public partial class MainWindow : Window
         };
         map.LabelHalo = settings.LabelHalo;
         map.MergeSingleFolderChains = settings.MergeChains;
-        map.AnimateZoom = settings.AnimateZoom;
+        map.AnimateZoom = settings.AnimateZoom && !settings.ReduceMotion;
+        map.ReduceMotion = settings.ReduceMotion;
         map.Density = Enum.TryParse<MapDensity>(settings.Density, out MapDensity density) ? density : MapDensity.Normal;
         map.Bias = settings.Bias;
         map.Padding = settings.Padding;
-        map.FontFamilyName = settings.MapFont;
+        map.FontFamilyName = Accessibility.MapFontName(settings);
         map.Style = Enum.TryParse<MapStyle>(settings.MapStyle, out MapStyle style) ? style : MapStyle.Modern;
         map.Layout = Enum.TryParse<MapLayout>(settings.MapLayout, out MapLayout layout) ? layout : MapLayout.Uniform;
         map.SizesAsBytes = settings.SizesAsBytes;
@@ -1160,7 +1169,7 @@ public partial class MainWindow : Window
     private Action? ShortcutFor(KeyEventArgs e)
     {
         bool typing = FilterHasFocus;
-        bool onMap = !typing && !ChangesShowing;
+        bool onMap = !typing && !ChangesShowing && !TreeShowing;
         bool control = e.KeyModifiers.HasFlag(KeyModifiers.Control);
         bool alt = e.KeyModifiers.HasFlag(KeyModifiers.Alt);
         bool bare = e.KeyModifiers == KeyModifiers.None;

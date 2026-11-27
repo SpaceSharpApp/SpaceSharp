@@ -20,7 +20,7 @@ namespace SpaceSharp;
 public partial class MainWindow
 {
     private MenuItem _menuDuplicatesIn = null!;
-    private MenuItem _menuCompare = null!, _menuStopCompare = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuFocus = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuSelectType = null!, _menuCopies = null!, _menuChangedHere = null!, _menuLeaveOut = null!, _menuRescan = null!, _menuExport = null!, _menuMore = null!, _menuDelete = null!, _menuDeleteForever = null!;
+    private MenuItem _menuCompare = null!, _menuStopCompare = null!, _menuOpen = null!, _menuReveal = null!, _menuProperties = null!, _menuShowInTree = null!, _menuFocus = null!, _menuCopy = null!, _menuCopyName = null!, _menuFilterType = null!, _menuSelectFolder = null!, _menuSelectType = null!, _menuCopies = null!, _menuChangedHere = null!, _menuLeaveOut = null!, _menuRescan = null!, _menuExport = null!, _menuMore = null!, _menuDelete = null!, _menuDeleteForever = null!;
 
     /// <summary>The right-click menu's width cap: the header's facts wrap inside it, and every row fits with its shortcut.</summary>
     private const double MenuWidth = 400;
@@ -68,6 +68,7 @@ public partial class MainWindow
         menu.Items.Add(_menuInspect);
         menu.Items.Add(new Separator());
         menu.Items.Add(_menuFocus);
+        menu.Items.Add(_menuShowInTree);
         menu.Items.Add(_menuOpen);
         menu.Items.Add(_menuReveal);
         menu.Items.Add(_menuCopy);
@@ -172,6 +173,7 @@ public partial class MainWindow
     private void BuildMenuRows()
     {
         _menuFocus = MenuRow("Main_ZoomToFolder", null, FocusSelected, "ZoomIn");
+        _menuShowInTree = MenuRow("Menu_ShowInTree", null, ShowSelectedInTree, "Tree");
         _menuOpen = MenuRow("Main_Open", "Enter", OpenSelected, "Open");
         _menuReveal = MenuRow("Main_ShowInExplorer", null, RevealSelected, "ScanFolder");
         _menuCopy = MenuRow("Main_CopyPath", "Ctrl+C", () => CopyToClipboard(Treemap.SelectedNode?.FullPath), "Copy");
@@ -253,6 +255,7 @@ public partial class MainWindow
             ? Strings.Format("Menu_ZoomToParent", DisplayName(parent.FullPath))
             : Strings.Get("Main_ZoomToFolder");
         _menuOpen.IsVisible = _menuReveal.IsVisible = _menuCopy.IsVisible = real && one;
+        _menuShowInTree.IsVisible = real && one && _root is not null;
 
         _menuSelectFolder.IsVisible = (file || folder) && !node!.IsFreeSpace;
         bool typed = file && node!.Extension.Length > 0;
@@ -286,7 +289,7 @@ public partial class MainWindow
         // Free space, a cluster or nothing at all leaves only More: its scan actions then stand in the menu itself, one click nearer.
         bool onlyMore = !new[]
         {
-            _menuFocus, _menuOpen, _menuReveal, _menuCopy, _menuSelectFolder, _menuFilterType, _menuSelectType, _menuCopies,
+            _menuFocus, _menuShowInTree, _menuOpen, _menuReveal, _menuCopy, _menuSelectFolder, _menuFilterType, _menuSelectType, _menuCopies,
             _menuDuplicatesIn, _menuChangedHere, _menuLeaveOut, _menuDelete
         }.Any(item => item.IsVisible);
         _menuMore.IsVisible = !onlyMore;
@@ -494,6 +497,17 @@ public partial class MainWindow
         await new DuplicatesWindow(this, _root, DuplicatesForScan, node).ShowDialog(this);
     }
 
+    /// <summary>Switches to the Tree view with the selected item's line opened up, selected and scrolled to.</summary>
+    private void ShowSelectedInTree()
+    {
+        if (Treemap.SelectedNode is not { IsReal: true } node || _root is null)
+        {
+            return;
+        }
+        ShowView(MainView.Tree);
+        FolderTreeView.Reveal(node);
+    }
+
     /// <summary>Switches to Changes opened at the selected folder, or a file's folder.</summary>
     private void ShowChangesForSelected()
     {
@@ -572,12 +586,12 @@ public partial class MainWindow
             return;
         }
 
-        void FocusOnMap(FsNode node)
+        void ShowInTree(FsNode node)
         {
-            ShowView(insights: false);
-            Treemap.FocusOn(node);
+            ShowView(MainView.Tree);
+            FolderTreeView.Reveal(node);
         }
-        _ = new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, FocusOnMap).ShowModal(this);
+        _ = new InspectWindow(nodes, _root, Treemap.SizeMode, Treemap.Scheme, ShowOnMap, ShowInTree).ShowModal(this);
     }
 
     /// <summary>Opens the selected file or folder with the shell's default handler; errors go to the status bar.</summary>

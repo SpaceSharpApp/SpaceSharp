@@ -397,6 +397,7 @@
   <data name="Col_Change" xml:space="preserve"><value>التغيير</value></data>
   <data name="Menu_More" xml:space="preserve"><value>المزيد</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>ما الذي تغيّر هنا</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>إظهار في عرض الشجرة</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>استبعاد من الفحوصات القادمة</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>سيتم تخطي كل ملف أو مجلد باسم "{0}" بدءاً من الفحص التالي. القائمة في الإعدادات › الفحص › استبعاد.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>استبعاد</value></data>
@@ -854,8 +855,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>حسب النوع</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>حسب العمر</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>أين المساحة</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>تكبير الخريطة هنا</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>تكبير الخريطة إلى هذا المجلد</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>هذا الشهر</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>هذه السنة</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>من سنة إلى 3 سنوات</value></data>
@@ -863,17 +862,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>أقدم تغيير {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} من هذا المجلد شيء واحد: {1} بحجم {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} على القرص</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} من {1}، مجلده الوحيد</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} من {1}، ملفه الوحيد</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} من {1}، الأكبر بين مجلداته الـ{2}</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} من {1}، الأكبر بين ملفاته الـ{2}</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} من {1}، رقم {3} من {2} مجلدًا حسب الحجم</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} من {1}، رقم {3} من {2} ملفًا حسب الحجم</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>معظمه {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>معظمه {0} ({1}) و{2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>مزيج من {0} ({1}) و{2} ({3}) و{4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>آخر تغيير {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>عُدِّل {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>لم يتغير منذ آخر فحص</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>كبُر بمقدار {0} منذ آخر فحص</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>صغُر بمقدار {0} منذ آخر فحص</value></data>
@@ -951,6 +939,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>الشيء نفسه للسمة الفاتحة: Paper أو Linen أو Mist أو Sand, GitHub Light أو Snow.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>تعتيم خلف النوافذ</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>مقدار تعتيم الخريطة أثناء فتح الإعدادات أو الفحص أو حول أو مطالبة التحديث فوقها. 0 يتركها كما هي.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>إمكانية الوصول</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>حجم النص</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>يرسم الواجهة كلها بحجم أكبر، النص وعناصر التحكم معًا. القوائم وتلميحات الأدوات تحتفظ بحجمها.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>خط القراءة</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible مصمم لضعاف البصر، بحروف يصعب الخلط بينها. تسميات الخريطة تتبع الاختيار.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>الافتراضي (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>تقليل الحركة</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>يستغني عن حركة التكبير بين المجلدات وعن الوميض على العنصر المحدد.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>تباين أقوى</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>يزيد وضوح النص الخافت والخطوط بين الصفوف، في كل مظهر.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>رؤية الألوان</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>يضبط كل لوحة ألوان بحيث تتباعد الألوان التي يخلط بينها عمى الألوان.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>إيقاف</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>ضعف الأحمر (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>ضعف الأخضر (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>ضعف الأزرق (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>أزرق البحر والصدأ والحبال</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>زهر وورق وثمار ناضجة</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>لوحة الألوان والتظليل والنص</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>كل ما يخص مظهر الخريطة موجود في صفحة «الخريطة الشجرية»، بجانب معاينة.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>الألوان</value></data>
@@ -986,7 +992,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>نحاس ونحاس أصفر وزيتوني وصدأ</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>الطيف بكامل قوته</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>رماديات مع كهرماني للتمييز</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito وTol؛ يميزها الجميع</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>درجات ناعمة من كل لون؛ الافتراضية في السمة الفاتحة</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>درجات باهتة على ورق</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>حلوة وزاهية</value></data>
@@ -998,10 +1003,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>طين ورمل ووردي؛ أدفأ من Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>بنفسجي وأزرق بودرة</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>سبعة ألوان أساسية قوية</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>المجموعة الآمنة نفسها، مُفتَّحة للأسطح الفاتحة</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>لوحة الألوان للسمة {0}. تتذكر كل سمة لوحتها؛ وتتبدل الخريطة مع السمة.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · مصممة للسمة {1}</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>التبديل بين الخريطة والرؤى والإحصاءات والتغييرات</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>التبديل بين الخريطة والشجرة والرؤى والإحصاءات والتغييرات</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>حسب النوع</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>آمن للتفريغ</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>وقت التغيير</value></data>
@@ -1085,6 +1089,14 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>اسم أو نمط، مثل *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>الخريطة</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>خريطة الفحص (B يبدّل بين العروض)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>الشجرة</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>كل مجلد وما بداخله، يُفتح مستوى بعد مستوى (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>كل مجلد مع ما بداخله. انقر على سهم المجلد لفتحه.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>الحصة من المجلد الأصل</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>فتح المستوى الأول</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>يفتح مجلدات المستوى الأول. تُفتح المجلدات الأعمق واحدًا تلو الآخر</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>إغلاق الكل</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} مجلد · {1:N0} ملف · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>الرؤى</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>ملخص الفحص: حسب النوع، آمن للتفريغ، وقت التغيير، أكبر العناصر (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>الرؤى</value></data>
@@ -1286,7 +1298,7 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp مبني على عمل مفتوح</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>شكرًا للأشخاص الذين يقفون خلفه.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>الخريطة</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>التخطيط هو خريطة الشجرة المربّعة من [Bruls وHuizing وvan Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)، المنشورة عام 2000. فكرة عرض القرص كخريطة مأخوذة من [SpaceMonger](https://www.stardock.com/products/spacemonger/) لـ Sean Werkema، وخرائط الشجرة نفسها من Ben Shneiderman (1991). تستخدم لوحة الألوان المناسبة لعمى الألوان ألوان [Okabe وIto](https://jfly.uni-koeln.de/color/) الثمانية (2002). وأربعة ألوان أخرى فيها من المخطط الساطع لـ [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>التخطيط هو خريطة الشجرة المربّعة من [Bruls وHuizing وvan Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)، المنشورة عام 2000. فكرة عرض القرص كخريطة مأخوذة من [SpaceMonger](https://www.stardock.com/products/spacemonger/) لـ Sean Werkema، وخرائط الشجرة نفسها من Ben Shneiderman (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>البرمجيات</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>مكتوب بلغة C# على [.NET 10](https://dotnet.microsoft.com). الواجهة هي [Avalonia UI](https://avaloniaui.net)، مرسومة بواسطة [SkiaSharp](https://github.com/mono/SkiaSharp)، بخط [Inter](https://rsms.me/inter/) لـ Rasmus Andersson. الأيقونات من [Lucide](https://lucide.dev)، استمرارًا لـ Feather لـ Cole Bemis. برنامج التثبيت والتحديثات على Windows من [Velopack](https://velopack.io) لـ Caelan Sayler. جميعها بترخيص MIT، باستثناء Lucide (ISC) وInter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>اللغات</value></data>
@@ -1378,24 +1390,30 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>اتبع إعداد Windows، أو استخدم الفاتح أو الداكن دائمًا. الذهبي لك: كل الإنجازات مفتوحة، والتطبيق يرتدي ما يليق بذلك، مع لوحة خريطة خاصة به.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>اثنا عشر معدنًا من النحاس الأصفر إلى الذهب الوردي، لسمة الذهبي</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} أنواع</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>مجلد يضم {0:N0} ملفًا في {1:N0} مجلدًا، {2:N0} منها مباشرة بداخله.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>مجلد يضم {0:N0} ملفًا، كلها مباشرة بداخله.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}، {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>يشغل {0}، و{1} من {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>يشغل {0}.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} أنواع أخرى تتقاسم {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>الملف الوسيط {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} منه تغيّر هذا الشهر؛ و{1} لم يُمس منذ أكثر من عام.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>مجلد أو ملف</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>الحجم</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>الحصة</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>الملفات</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>تغيّر</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>النوع</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>الملف</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>في</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>أكبر الملفات</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} من {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>من {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>في {0:N0} مجلد، {1:N0} منها مباشرة بالداخل</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>كلها مباشرة بالداخل</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>الأكبر بين مجلداته الـ {0:N0}</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>الأكبر بين ملفاته الـ {0:N0}</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>مجلده الوحيد</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>ملفه الوحيد</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>رقم {1:N0} من {0:N0} مجلد حسب الحجم</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>رقم {1:N0} من {0:N0} ملف حسب الحجم</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>من أصل {0} تم فحصها</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>آخر تغيير</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>تاريخ التعديل</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>فحص</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>إظهار كل العناصر ({0:N0})</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>إظهار أقل</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>الملفات الأخرى وعددها {0:N0}</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} أخرى</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>هذه الـ{0:N0} تشكّل {1} من المجلد</value></data>
@@ -1520,16 +1538,18 @@ pagefile.sys وswapfile.sys هما الذاكرة الافتراضية. يُضب
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>أعلى اليسار</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>الوسط</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>إصدار الداعمين</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp مجاني وكامل للجميع. مفتاح الداعم هو شكر على مساهمة لمرة واحدة. يضيف اسمك هنا ولا يفتح أي شيء آخر.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp مجاني وكامل للجميع. مفتاح الداعم هو شكر على مساهمة لمرة واحدة. يميّز هذه النسخة كنسخة داعم ولا يفتح أي شيء آخر.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>الصق المفتاح من بريدك الإلكتروني</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>استخدام هذا المفتاح</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>الحصول على مفتاح داعم</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>هذا ليس مفتاح داعم صالحًا. انسخ المفتاح كاملًا، من SSUP1 إلى آخر حرف.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>شكرًا لك، {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>شكرًا لدعمك SpaceSharp.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>داعم منذ {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>يُفحص المفتاح على هذا الكمبيوتر. لا يُرسل أي شيء إلى أي مكان.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>إزالة المفتاح من هذا الكمبيوتر</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>لا يوجد مفتاح على هذا الحاسوب</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>المفتاح يفعّل هذه البطاقة</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp مجاني وكامل للجميع. مساهمتك تساعد على بقائه كذلك.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>الداعمون</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp مجاني وسيبقى مجانيًا. ساهم هؤلاء الأشخاص عبر [مفتاح داعم](https://spacesharp.app/supporter/):</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp مجاني وسيبقى مجانيًا. [مفتاح الداعم](https://spacesharp.app/supporter/) طريقة لقول شكرًا، ويضع اسمك هنا.</value></data>

@@ -396,6 +396,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Endring</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Mer</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Hva som endret seg her</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>Vis i trevisning</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Utelat fra fremtidige skanninger</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Alle filer og mapper som heter «{0}», hoppes over fra neste skanning. Listen ligger under Innstillinger › Skanning › Utelat.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Utelat</value></data>
@@ -853,8 +854,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>Etter type</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>Etter alder</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Hvor plassen er</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Zoom kartet hit</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Zoom kartet til denne mappen</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Denne måneden</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>I år</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 til 3 år</value></data>
@@ -862,17 +861,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Eldste endring {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} av denne mappen er én ting: {1} på {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} på disk</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} av {1}, den eneste mappen der</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} av {1}, den eneste filen der</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} av {1}, den største av de {2} mappene</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} av {1}, den største av de {2} filene</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} av {1}, nummer {3} av {2} mapper etter størrelse</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} av {1}, nummer {3} av {2} filer etter størrelse</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Mest {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Mest {0} ({1}) og {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>En blanding av {0} ({1}), {2} ({3}) og {4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Sist endret {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Endret {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>uendret siden forrige skanning</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>vokste {0} siden forrige skanning</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>krympet {0} siden forrige skanning</value></data>
@@ -950,6 +938,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Det samme for det lyse temaet: Paper, Linen, Mist, Sand, GitHub Light eller Snow.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Demp bak vinduer</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hvor mye kartet mørkner mens Innstillinger, Undersøk, Om eller oppdateringsvinduet er åpent over det. 0 lar det være.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Tilgjengelighet</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Tekststørrelse</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Tegner hele grensesnittet større, tekst og knapper sammen. Menyer og verktøytips beholder størrelsen.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Leseskrift</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible er laget for svaksynte, med bokstaver som er vanskelige å forveksle. Etikettene i kartet følger med.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Standard (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Mindre bevegelse</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Dropper zoomingen mellom mapper og blinket på et valgt element.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Sterkere kontrast</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Gjør den dempede teksten og linjene mellom rader tydeligere, i alle utseender.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Fargesyn</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Justerer alle palettene slik at fargene en fargesvakhet blander sammen, skilles fra hverandre.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Av</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Rødsvak (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Grønnsvak (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Blåsvak (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Havblått, rust og tauverk</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Blomst, blad og moden frukt</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palett, skygge og tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alt om hvordan kartet ser ut ligger på Trekart-siden, ved siden av en forhåndsvisning.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farger</value></data>
@@ -985,7 +991,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Kobber, messing, oliven og rust</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Hele spekteret i full styrke</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Gråtoner, rav som aksent</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito og Tol; kan skilles av alle</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Myke toner i alle nyanser; standarden i lyst tema</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Falmede toner på papir</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Søtt og klart</value></data>
@@ -997,10 +1002,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Leire, sand og rosa; varmere enn Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Fiolett og pudderblått</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Sju kraftige grunnfarger</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Det samme trygge settet, lysnet for lyse flater</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Paletten for {0} tema. Hvert tema husker sin egen; kartet bytter sammen med temaet.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · laget for {1} tema</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Bytt mellom kartet, Innsikt, Statistikk og Endringer</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Bytt mellom kartet, treet, Innsikt, Statistikk og Endringer</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Etter type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Trygt å tømme</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Sist endret</value></data>
@@ -1084,6 +1088,14 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Navn eller mønster, f.eks. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Kart</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>Kartet over skanningen (B bytter mellom visningene)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Tre</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Hver mappe og det som ligger i den, åpnet nivå for nivå (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Hver mappe med det som ligger i den. Klikk pilen ved en mappe for å åpne den.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Andel av overmappen</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>Åpne første nivå</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>Åpner mappene på første nivå. Dypere mapper åpnes én om gangen</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Lukk alle</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} mapper · {1:N0} filer · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Innsikt</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Skanningen oppsummert: etter type, trygt å tømme, sist endret, største elementer (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Innsikt</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp er bygget på åpent arbeid</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Takk til menneskene bak det.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Kartet</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Oppsettet er det kvadrerte trekartet fra [Bruls, Huizing og van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publisert i 2000. Ideen om å vise en disk som et kart kommer fra [SpaceMonger](https://www.stardock.com/products/spacemonger/) av Sean Werkema, og trekart i seg selv fra Ben Shneiderman (1991). Den fargeblindvennlige paletten bruker de åtte [Okabe og Ito](https://jfly.uni-koeln.de/color/)-fargene (2002). Fire farger til i den er fra [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)s lyse fargeskjema.</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Oppsettet er det kvadrerte trekartet fra [Bruls, Huizing og van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), publisert i 2000. Ideen om å vise en disk som et kart kommer fra [SpaceMonger](https://www.stardock.com/products/spacemonger/) av Sean Werkema, og trekart i seg selv fra Ben Shneiderman (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Programvare</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Skrevet i C# på [.NET 10](https://dotnet.microsoft.com). Grensesnittet er [Avalonia UI](https://avaloniaui.net), tegnet med [SkiaSharp](https://github.com/mono/SkiaSharp), i skrifttypen [Inter](https://rsms.me/inter/) av Rasmus Andersson. Ikonene er fra [Lucide](https://lucide.dev), en videreføring av Feather av Cole Bemis. Installasjonsprogrammet og oppdateringene på Windows kommer fra [Velopack](https://velopack.io) av Caelan Sayler. Alle er MIT-lisensiert, unntatt Lucide (ISC) og Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Språk</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Følg Windows-innstillingen, eller bruk alltid lys eller mørk. Gull er ditt: alle prestasjoner låst opp, og appen kledd deretter, med sin egen kartpalett.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Tolv metaller fra messing til rosegull, for Gull-temaet</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} typer</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>En mappe med {0:N0} filer i {1:N0} mapper, {2:N0} av dem rett innenfor.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>En mappe med {0:N0} filer, alle rett innenfor.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>Den tar {0}, og {1} av {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Den tar {0}.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} andre typer deler {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Medianfil {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} av den ble endret denne måneden; {1} har stått urørt i over ett år.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Mappe eller fil</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Størrelse</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Andel</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Filer</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Endret</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Type</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Fil</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>I</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>Største filer</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} av {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>Av {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>i {0:N0} mapper, {1:N0} rett i mappen</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>alle rett i mappen</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>den største av de {0:N0} mappene</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>den største av de {0:N0} filene</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>den eneste mappen</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>den eneste filen</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>nummer {1:N0} av {0:N0} mapper etter størrelse</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>nummer {1:N0} av {0:N0} filer etter størrelse</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>av {0} skannet</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Sist endret</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Endret</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>Undersøk</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>Vis alle {0:N0} elementene</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Vis færre</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>De andre {0:N0} filene</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} til</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>disse {0:N0} er {1} av mappen</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys og swapfile.sys er virtuelt minne. Størrelsen settes under System 
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Øverst til venstre</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>Midten</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Støtteutgave</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp er gratis og komplett for alle. En støttenøkkel er en takk for et engangsbidrag. Den setter navnet ditt her og låser ikke opp noe annet.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp er gratis og komplett for alle. En støttenøkkel er en takk for et engangsbidrag. Den merker denne kopien som en støttespillers og låser ikke opp noe annet.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>Lim inn nøkkelen fra e-posten</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Bruk denne nøkkelen</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Få en støttenøkkel</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>Dette er ikke en gyldig støttenøkkel. Kopier hele nøkkelen, fra SSUP1 til siste tegn.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Takk, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>Takk for at du støtter SpaceSharp.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Støttespiller siden {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>Nøkkelen sjekkes på denne PC-en. Ingenting sendes noe sted.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>Fjern nøkkelen fra denne PC-en</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>Ingen nøkkel på denne PC-en</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>En nøkkel slår på dette kortet</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp er gratis og komplett for alle. Bidraget ditt hjelper til med å holde det slik.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Støttespillere</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp er gratis og forblir gratis. Disse har bidratt med en [støttenøkkel](https://spacesharp.app/supporter/):</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp er gratis og forblir gratis. En [støttenøkkel](https://spacesharp.app/supporter/) er en måte å si takk på, og den setter navnet ditt her.</value></data>

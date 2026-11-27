@@ -76,6 +76,9 @@ public partial class App : Application
 
     // ------------------------------------------------------------------ theme and look
 
+    private const double DimTextTowardText = 0.55;   // Stronger contrast: how far the dim text moves toward the text color
+    private const double StrokeTowardText = 0.3;     // and the hairlines
+
     /// <summary>Applies the theme variant and looks from the settings.</summary>
     public static void ApplyTheme()
     {
@@ -171,6 +174,12 @@ public partial class App : Application
             return;
         }
         var colors = look.Colors().ToDictionary(entry => entry.Key, entry => Color.Parse(entry.Hex));
+        if (AppSettings.Current.HighContrast)
+        {
+            // Stronger contrast: the dim text and the hairlines move toward the text color, on whatever look is chosen.
+            colors["TextDim"] = Palette.Mix(colors["TextDim"], colors["Text"], DimTextTowardText);
+            colors["Stroke"] = Palette.Mix(colors["Stroke"], colors["Text"], StrokeTowardText);
+        }
 
         // Each app key is a brush, with the color beside it under "<key>Color".
         void SetColorAndBrush(string key, string lookKey)

@@ -19,7 +19,13 @@ Twenty-four built in, twelve per theme. Each has twelve folder hues, ordered so 
 | **Copper** | Copper, brass, olive and rust | **Terracotta** | Clay, sand and rose; warmer than Earth |
 | **Prism** | The spectrum at full strength | **Lilac** | Violets and powder blues |
 | **Monochrome** | Grays, amber for the accent | **Retro** | Seven bold primaries |
-| **Color-blind safe** | Okabe-Ito and Tol; tells apart for everyone | **Color-blind safe (light)** | The same safe set, lifted for light surfaces |
+| **Marina** | Sea blues, rust and rope | **Orchard** | Blossom, leaf and ripe fruit |
+
+### Color vision
+
+There is no separate color-blind palette any more. Settings › Accessibility › Color vision adjusts every palette, the built-in ones and your own, for red-weak, green-weak or blue-weak vision: the colors that would run together are moved apart, mostly by making one lighter and another darker, so each palette keeps its character. The two Color-blind safe palettes from earlier versions are gone; a settings file that had one chosen goes back to the theme's default palette with the adjustment turned on for green-weak vision, the most common kind.
+
+<p align="center"><img src="images/color-vision.png" width="900" alt="The map with the color vision adjustment on"></p>
 
 ### The picker
 

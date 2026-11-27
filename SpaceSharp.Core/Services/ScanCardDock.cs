@@ -1,6 +1,6 @@
 namespace SpaceSharp.Services;
 
-/// <summary>Where the scanning card sits in the map area, and which corner a dragged card is dropped on.</summary>
+/// <summary>Where the scanning card sits in the map area, and which corner a dragged card goes to.</summary>
 public static class ScanCardDock
 {
     /// <summary>The corners a dragged card can be dropped on, as the names kept in settings.</summary>
@@ -31,37 +31,37 @@ public static class ScanCardDock
         return (x, y);
     }
 
-    /// <summary>The corner a dragged card would attach to if let go now.</summary>
-    /// <param name="centerX">The dragged card's center, across.</param>
-    /// <param name="centerY">The dragged card's center, down.</param>
+    /// <summary>The corner a dragged card would go to: the one whose quarter of the map area the pointer is in.</summary>
+    /// <param name="x">The pointer, across, in the area's coordinates.</param>
+    /// <param name="y">The pointer, down.</param>
     /// <param name="areaWidth">The map area's width.</param>
     /// <param name="areaHeight">The map area's height.</param>
-    /// <param name="cardWidth">The card's width.</param>
-    /// <param name="cardHeight">The card's height.</param>
-    /// <param name="margin">The gap kept between the card and the area's edges.</param>
-    /// <returns>The corner whose spot holds the card's center, the nearest one when spots overlap; null when the center is over none.</returns>
-    public static string? CornerAt(double centerX, double centerY, double areaWidth, double areaHeight, double cardWidth, double cardHeight, double margin)
+    /// <returns>The corner's name as kept in settings; null when the pointer is outside the area.</returns>
+    public static string? QuarterAt(double x, double y, double areaWidth, double areaHeight)
     {
-        string? nearest = null;
-        double nearestDistance = double.MaxValue;
-        foreach (string corner in Corners)
+        bool isInside = x >= 0 && y >= 0 && x <= areaWidth && y <= areaHeight;
+        if (!isInside)
         {
-            (double x, double y) = Spot(corner, areaWidth, areaHeight, cardWidth, cardHeight, margin);
-            double across = centerX - (x + (cardWidth / 2));
-            double down = centerY - (y + (cardHeight / 2));
-            if (Math.Abs(across) > cardWidth / 2 || Math.Abs(down) > cardHeight / 2)
-            {
-                continue;
-            }
-
-            double distance = (across * across) + (down * down);
-            if (distance < nearestDistance)
-            {
-                nearest = corner;
-                nearestDistance = distance;
-            }
+            return null;
         }
 
-        return nearest;
+        bool isLeft = x < areaWidth / 2;
+        if (y < areaHeight / 2)
+        {
+            return isLeft ? "TopLeft" : "TopRight";
+        }
+        return isLeft ? "BottomLeft" : "BottomRight";
+    }
+
+    /// <summary>The top-left point of a corner's quarter of the map area.</summary>
+    /// <param name="corner">A corner name.</param>
+    /// <param name="areaWidth">The map area's width.</param>
+    /// <param name="areaHeight">The map area's height.</param>
+    /// <returns>The quarter's left and top; each quarter is half the area wide and half as high.</returns>
+    public static (double X, double Y) QuarterOrigin(string corner, double areaWidth, double areaHeight)
+    {
+        double x = corner is "TopLeft" or "BottomLeft" ? 0 : areaWidth / 2;
+        double y = corner is "TopLeft" or "TopRight" ? 0 : areaHeight / 2;
+        return (x, y);
     }
 }

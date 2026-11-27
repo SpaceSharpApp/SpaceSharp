@@ -39,7 +39,10 @@ public sealed class AboutWindow : Window
         StackPanel right = BuildRightColumn(installed);
         Grid.SetColumn(right, 1);
         columns.Children.Add(right);
-        root.Children.Add(columns);
+        // A line under the title bar, as the footer has one above it; without it the panes look cut off at the top.
+        var body = new Border { BorderThickness = new Thickness(0, 1, 0, 0), Child = columns };
+        body.Bind(Border.BorderBrushProperty, this.GetResourceObservable("Stroke"));
+        root.Children.Add(body);
 
         Border footer = BuildFooter();
         Grid.SetRow(footer, 1);
@@ -59,7 +62,7 @@ public sealed class AboutWindow : Window
         var leftStack = new DockPanel();
         // The system line sits with the version it belongs to; Copy version info copies both.
         var legal = new StackPanel { Spacing = 10 };
-        legal.Children.Add(new TextBlock { Text = SystemDescription(), Classes = { "dim" }, FontSize = FontSizes.Detail, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
+        legal.Children.Add(new TextBlock { Text = $"{SystemDescription()}\n{FrameworkLine()}", Classes = { "dim" }, FontSize = FontSizes.Detail, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
         legal.Children.Add(new TextBlock { Text = $"{Copyright()}\n{Strings.Get("About_SourceSub")}", Classes = { "dim" }, FontSize = FontSizes.Detail, LineHeight = 16, TextWrapping = TextWrapping.Wrap });
         DockPanel.SetDock(legal, Dock.Bottom);
         leftStack.Children.Add(legal);
@@ -275,13 +278,25 @@ public sealed class AboutWindow : Window
         Strings.Format("About_SystemLine", RuntimeInformation.FrameworkDescription, RuntimeInformation.OSDescription) + " " +
         $"({RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant()})";
 
+    /// <summary>The UI framework and its version, for the About text and bug reports: drawing and input faults often depend on it.</summary>
+    /// <remarks>Read from the loaded Avalonia assembly, so it cannot fall behind a package update.</remarks>
+    /// <returns>"Avalonia 12.2.0"; a product name, the same in every language.</returns>
+    private static string FrameworkLine()
+    {
+        Assembly avalonia = typeof(Application).Assembly;
+        string? informational = avalonia.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        // The informational version carries the commit after a plus sign; the number before it is the package version.
+        string version = informational?.Split('+')[0] ?? avalonia.GetName().Version?.ToString(3) ?? string.Empty;
+        return $"Avalonia {version}".TrimEnd();
+    }
+
     private async void CopyInfo_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         try
         {
             if (Clipboard is { } clipboard)
             {
-                await ClipboardText.SetAsync(clipboard, $"SpaceSharp {_version} (Avalonia){Environment.NewLine}{SystemDescription()}");
+                await ClipboardText.SetAsync(clipboard, $"SpaceSharp {_version}{Environment.NewLine}{SystemDescription()}{Environment.NewLine}{FrameworkLine()}");
             }
         }
         catch (Exception ex)
@@ -294,7 +309,7 @@ public sealed class AboutWindow : Window
     private void ReportBug() =>
         OpenUrl($"{AppInfo.Repository}/issues/new?template=bug_report.yml" +
                 $"&version={Uri.EscapeDataString(_version)}" +
-                $"&windows={Uri.EscapeDataString(SystemDescription())}" +
+                $"&windows={Uri.EscapeDataString($"{SystemDescription()}, {FrameworkLine()}")}" +
                 $"&install={Uri.EscapeDataString(Updater.Instance.IsInstalled ? "Installed (Velopack) · Avalonia" : "Portable · Avalonia")}");
 
     /// <summary>Opens a web address in the default browser; failures show an error dialog instead of throwing.</summary>

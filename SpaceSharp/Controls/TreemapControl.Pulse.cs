@@ -20,7 +20,7 @@ public sealed partial class TreemapControl
     /// selection is set; the pulse follows the boxes through any camera move.</summary>
     public void PulseSelection()
     {
-        if (_selection.Count == 0)
+        if (_selection.Count == 0 || ReduceMotion)
         {
             return;
         }

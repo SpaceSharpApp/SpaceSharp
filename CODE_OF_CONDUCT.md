@@ -31,7 +31,7 @@ SpaceSharp is a small open-source project, and the places where people meet arou
 
 ## Scope
 
-This applies to the GitHub repository (issues, pull requests, discussions, wiki, releases), to the project website, and to anywhere someone represents the project, such as a talk, a post or a package listing that speaks for SpaceSharp. It also applies when project spaces are used to target someone who is not a participant, and to conduct outside the project when it is directed at a participant because of their participation.
+This applies to the GitHub repository (issues, pull requests, discussions, releases), to the project website and the docs site, and to anywhere someone represents the project, such as a talk, a post or a package listing that speaks for SpaceSharp. It also applies when project spaces are used to target someone who is not a participant, and to conduct outside the project when it is directed at a participant because of their participation.
 
 ## Reporting
 

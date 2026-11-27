@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>変化</value></data>
   <data name="Menu_More" xml:space="preserve"><value>その他</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>ここで変わったもの</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>ツリー ビューで表示</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>今後のスキャンから除外</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>「{0}」という名前のファイルとフォルダーは次回以降のスキャンで除外されます。一覧は設定 › スキャン › 除外にあります。</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>除外</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>種類別</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>経過期間別</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>領域の内訳</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>ここにマップを拡大</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>このフォルダーにマップを拡大</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>今月</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>今年</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 ～ 3 年</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>最も古い変更 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>このフォルダーの {0} は 1 つの項目です：{1}（{2}）。</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>ディスク上 {0}</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1} の {0}、唯一のフォルダー</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{1} の {0}、唯一のファイル</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{1} の {0}、{2} 個のフォルダー中最大</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{1} の {0}、{2} 個のファイル中最大</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{1} の {0}、サイズ順で {2} 個のフォルダー中 {3} 番目</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{1} の {0}、サイズ順で {2} 個のファイル中 {3} 番目</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>大半は{0}（{1}）</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>大半は{0}（{1}）と{2}（{3}）</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0}（{1}）、{2}（{3}）、{4}（{5}）の混在</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>最終変更：{0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>更新：{0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>前回のスキャンから変更なし</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>前回のスキャンから {0} 増加</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>前回のスキャンから {0} 減少</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>ライトテーマでの同様の設定：ペーパー、リネン、ミスト、サンド、スノー。</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>ウィンドウの背後を暗くする</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>設定、検査、バージョン情報、更新の案内が手前に開いている間、マップをどれだけ暗くするか。0 はそのままにします。</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>アクセシビリティ</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>文字サイズ</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>インターフェース全体を、文字とコントロールごと大きく表示します。メニューとツールチップの大きさは変わりません。</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>読みやすいフォント</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible はロービジョン向けで、見分けやすい字形です。マップのラベルにも適用されます。</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>既定 (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>視覚効果を減らす</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>フォルダー間のズームと、選択した項目の点滅を省きます。</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>コントラストを強くする</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>どの外観でも、薄い文字と行の間の線をはっきりさせます。</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>色覚</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>色覚特性によって見分けにくい色が区別できるよう、すべてのパレットを調整します。</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>オフ</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>赤が見えにくい (P型)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>緑が見えにくい (D型)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>青が見えにくい (T型)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>海の青、錆、ロープの色</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>花、葉、熟した果実</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>パレット、シェーディング、文字</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>マップの見た目に関する設定はすべて「ツリーマップ」ページにあり、プレビューの横で設定できます。</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>色</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>銅、真鍮、オリーブ、錆</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>スペクトルを全開で</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>グレーにアンバーのアクセント</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito と Tol。誰にでも見分けられる</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>全色相の淡い色。ライトの既定</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>紙の上の褪せた色</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>甘く明るい</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>粘土、砂、ローズ。Earth より暖かい</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>すみれと淡い青</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>力強い 7 原色</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>同じ安全な配色を明るい面向けに明るく</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0}テーマのパレット。テーマごとに個別に記憶され、マップはテーマに合わせて切り替わります。</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1}テーマ用</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>マップ、インサイト、統計、変更を切り替え</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>マップ、ツリー、インサイト、統計、変更を切り替え</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>種類別</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>安全に削除可能</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>変更時期</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>名前またはパターン。例：*.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>マップ</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>スキャンのマップ（B で表示を切り替え）</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>ツリー</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>すべてのフォルダーとその中身を階層ごとに開いて表示（B）</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>すべてのフォルダーとその中身。フォルダーの矢印をクリックすると開きます。</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>親フォルダーに占める割合</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>第 1 階層を開く</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>第 1 階層のフォルダーを開きます。それより深いフォルダーは 1 つずつ開きます</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>すべて閉じる</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>フォルダー {0:N0} 個 · ファイル {1:N0} 個 · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>インサイト</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>スキャンの概要：種類別、安全に削除可能、変更時期、最大の項目 (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>インサイト</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp はオープンな成果の上に築かれています</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>その背後にいる人々に感謝します。</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>マップ</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>レイアウトは [Bruls、Huizing、van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) が 2000 年に発表した squarified treemap です。ディスクをマップとして表示する発想は Sean Werkema の [SpaceMonger](https://www.stardock.com/products/spacemonger/) から、treemap そのものは Ben Shneiderman (1991) から来ています。色覚多様性に配慮したパレットは [岡部・伊藤](https://jfly.uni-koeln.de/color/) の 8 色 (2002) を使っています。 さらに 4 色は [Paul Tol](https://tol-colors.readthedocs.io/en/latest/) の明るい配色から取っています。</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>レイアウトは [Bruls、Huizing、van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf) が 2000 年に発表した squarified treemap です。ディスクをマップとして表示する発想は Sean Werkema の [SpaceMonger](https://www.stardock.com/products/spacemonger/) から、treemap そのものは Ben Shneiderman (1991) から来ています。</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>ソフトウェア</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 上で C# で書かれています。インターフェースは [Avalonia UI](https://avaloniaui.net) で、[SkiaSharp](https://github.com/mono/SkiaSharp) で描画し、書体は Rasmus Andersson の [Inter](https://rsms.me/inter/) です。アイコンは Cole Bemis の Feather を受け継ぐ [Lucide](https://lucide.dev) のものです。Windows のインストーラーと更新は Caelan Sayler の [Velopack](https://velopack.io) によるものです。Lucide (ISC) と Inter (SIL Open Font License) を除き、すべて MIT ライセンスです。</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>言語</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows の設定に従うか、常にライトまたはダークを使います。ゴールドはあなたのもの: 実績をすべて解除し、アプリもそれに合わせた装いに、専用のマップパレット付きで。</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>真鍮からローズゴールドまでの 12 の金属、ゴールドテーマ用</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} 種類</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0} 個のフォルダーに {0:N0} 個のファイルを含むフォルダー。うち {2:N0} 個は直下にあります。</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0} 個のファイルを含むフォルダー。すべて直下にあります。</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}、{2}。</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0}、また {2} の {1} を占めています。</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0} を占めています。</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>他の {0:N0} 種類で合計 {1} です。</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>ファイルの中央値は {0} です。</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} は今月変更され、{1} は 1 年以上手つかずです。</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>フォルダーまたはファイル</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>サイズ</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>割合</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>ファイル</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>変更</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>種類</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>ファイル</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>場所</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>最大のファイル</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0} 件中 {0:N0} 件</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>{0} のうち</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>{0:N0} 個のフォルダー内、直下に {1:N0} 個</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>すべて直下</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>{0:N0} 個のフォルダー中で最大</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>{0:N0} 個のファイル中で最大</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>唯一のフォルダー</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>唯一のファイル</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>サイズ順で {0:N0} 個のフォルダー中 {1:N0} 番目</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>サイズ順で {0:N0} 個のファイル中 {1:N0} 番目</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>スキャンした {0} のうち</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>最終変更</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>更新日時</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>詳細</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>{0:N0} 項目をすべて表示</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>表示を減らす</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>その他 {0:N0} 個のファイル</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>他 {0:N0} 件</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>この {0:N0} 件でフォルダーの {1}</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys と swapfile.sys は仮想メモリです。サイズは「シス�
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>左上</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>中央</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>サポーター エディション</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp は誰でも無料で、すべての機能を使えます。サポーター キーは 1 回限りの寄付へのお礼です。ここにお名前が表示されるだけで、ほかに解除される機能はありません。</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp は誰でも無料で、すべての機能を使えます。サポーター キーは 1 回限りの寄付へのお礼です。このコピーがサポーター版であることを示すだけで、ほかに解除される機能はありません。</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>メールに記載されたキーを貼り付けてください</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>このキーを使う</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>サポーター キーを入手</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>有効なサポーター キーではありません。SSUP1 から最後の文字まで、キー全体をコピーしてください。</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>{0} さん、ありがとうございます。</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>SpaceSharp をご支援いただきありがとうございます。</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>{0} からのサポーターです。</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>キーはこの PC 上で確認されます。どこにも送信されません。</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>この PC からキーを削除</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>この PC にキーはありません</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>キーを入力するとこのカードが有効になります</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp は誰でも無料で、すべての機能を使えます。ご支援がそれを続ける力になります。</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>サポーター</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp は無料で、これからも無料です。次の方々が[サポーター キー](https://spacesharp.app/supporter/)で支援してくださいました:</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp は無料で、これからも無料です。[サポーター キー](https://spacesharp.app/supporter/)は感謝を伝える方法で、ここにお名前が載ります。</value></data>

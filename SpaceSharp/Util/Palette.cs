@@ -15,6 +15,9 @@ public sealed class ColorScheme
     private static readonly IBrush DarkText = Palette.Freeze(Color.FromRgb(0x14, 0x14, 0x18));
     private static readonly IBrush LightText = Palette.Freeze(Color.FromRgb(0xF2, 0xF2, 0xF6));
 
+    private readonly Color[] _folderColors;       // as the palette defines them, before any color-blind adjustment
+    private readonly Color[] _fileColors;
+    private readonly Color[] _categoryColors;
     private readonly IBrush[] _folders;
     private readonly IBrush[] _files;
     private readonly IBrush[] _neutral;
@@ -31,8 +34,12 @@ public sealed class ColorScheme
         IReadOnlyList<Color> categories, Func<int, Color> neutral)
     {
         Name = name;
-        _folders = Enumerable.Range(0, DepthCycle).Select(depth => Palette.Freeze(folder(depth))).ToArray();
-        _files = Enumerable.Range(0, DepthCycle).Select(depth => Palette.Freeze(file(depth))).ToArray();
+        // The map draws the adjusted colors; the palette's own are kept for the palette creator, which edits and saves them.
+        ColorVisionMode vision = ColorVision.Parse(AppSettings.Current.ColorVision);
+        _folderColors = Enumerable.Range(0, DepthCycle).Select(folder).ToArray();
+        _fileColors = Enumerable.Range(0, DepthCycle).Select(file).ToArray();
+        _folders = SeenApart(_folderColors, vision).Select(Palette.Freeze).ToArray();
+        _files = SeenApart(_fileColors, vision).Select(Palette.Freeze).ToArray();
         _neutral = Enumerable.Range(0, 6).Select(depth => Palette.Freeze(neutral(depth))).ToArray();
 
         // A short list names the first categories and Other; System gets its fixed grey and the rest take file colors.
@@ -51,9 +58,25 @@ public sealed class ColorScheme
             categories = full;
         }
 
+        _categoryColors = categories.ToArray();
+        Color[] categoriesApart = SeenApart(_categoryColors, vision);
         _categories = Enum.GetValues<FileCategory>()
-            .ToDictionary(category => category, category => Palette.Freeze(categories[(int)category]));
+            .ToDictionary(category => category, category => Palette.Freeze(categoriesApart[(int)category]));
         Swatches = _folders.Take(8).ToArray();
+    }
+
+    /// <summary>A set of the palette's colors adjusted for the color vision setting, so the ones a deficiency runs together come apart.</summary>
+    /// <param name="colors">The colors as the palette defines them.</param>
+    /// <param name="vision">The deficiency to adjust for; Off returns the colors as they are.</param>
+    /// <returns>The colors to draw with, in the same order.</returns>
+    private static Color[] SeenApart(Color[] colors, ColorVisionMode vision)
+    {
+        if (vision == ColorVisionMode.Off)
+        {
+            return colors;
+        }
+        var channels = colors.Select(color => (color.R, color.G, color.B)).ToList();
+        return ColorVision.AdjustSet(channels, vision).Select(color => Color.FromRgb(color.Red, color.Green, color.Blue)).ToArray();
     }
 
     /// <summary>The display name; unique among built-in palettes, and what the settings file stores.</summary>
@@ -81,14 +104,13 @@ public sealed class ColorScheme
     }
 
     /// <summary>The folder colors in depth order.</summary>
-    public IReadOnlyList<Color> FolderColors => _folders.Select(brush => TreemapControl.ColorOf(brush)).ToList();
+    public IReadOnlyList<Color> FolderColors => _folderColors;
 
     /// <summary>The file colors in depth order.</summary>
-    public IReadOnlyList<Color> FileColors => _files.Select(brush => TreemapControl.ColorOf(brush)).ToList();
+    public IReadOnlyList<Color> FileColors => _fileColors;
 
     /// <summary>One color per <see cref="FileCategory"/>, in enum order.</summary>
-    public IReadOnlyList<Color> CategoryColors =>
-        Enum.GetValues<FileCategory>().Select(category => TreemapControl.ColorOf(_categories[category])).ToList();
+    public IReadOnlyList<Color> CategoryColors => _categoryColors;
 
     /// <summary>True when the palette fits the given theme.</summary>
     /// <param name="dark">True for the dark window theme, false for light.</param>
@@ -316,10 +338,10 @@ public static class Palette
                 Hex("#D8D8DE", "#9A9AA6", "#B4B4BE", "#F5B82E", "#7E7E8A", "#E8E8EC", "#C4C4CC", "#A6A6B0"),
                 depth => FromHsl(230, 0.06, 0.34 + depth * 0.05)),
 
-            // Okabe-Ito's eight plus four from Tol's bright set
-            FromList("Color-blind safe",
-                new[] { "#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#4477AA", "#EE6677", "#228833", "#AA3377", "#66CCEE" }, 0.45,
-                Hex("#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB")),
+            // a working marina: sea blues, rust, rope and weathered paint
+            FromList("Marina",
+                new[] { "#3D6B8F", "#C4603F", "#D9B26A", "#4E8F86", "#8C5A7A", "#6F8FB8", "#B88645", "#5A7D5A", "#C97A6A", "#476A9E", "#A39A6B", "#7A5F9A" }, 0.42,
+                Hex("#4E8F86", "#C4603F", "#8C5A7A", "#D9B26A", "#3D6B8F", "#A9BCCF", "#5A7D5A", "#A8A398")),
 
             // the Gold theme's own: twelve golds from old brass to bright leaf, all yellow, kept apart by lightness and warmth
             FromList("Gold",
@@ -364,10 +386,10 @@ public static class Palette
             FromList("Retro",
                 new[] { "#5B8DEF", "#49B86B", "#E8C547", "#E8864A", "#B565D9", "#4CC3C9", "#E86A8A" }, 0.45),
 
-            // the dark set lifted a quarter toward white
-            FromList("Color-blind safe (light)",
-                Lift(new[] { "#0072B2", "#E69F00", "#009E73", "#CC79A7", "#56B4E9", "#D55E00", "#F0E442", "#4477AA", "#EE6677", "#228833", "#AA3377", "#66CCEE" }, 0.25), 0.4,
-                Lift(new[] { "#009E73", "#D55E00", "#CC79A7", "#E69F00", "#0072B2", "#56B4E9", "#F0E442", "#BBBBBB" }, 0.25).Select(hex => Hex(hex)[0]).ToArray())
+            // an orchard in late summer: blossom, leaf, sky and ripe fruit
+            FromList("Orchard",
+                new[] { "#E5A3A3", "#B8D48A", "#F0C987", "#A8C8E0", "#D7A8D4", "#9FD4B8", "#F2B08A", "#C5CE8A", "#B0B8E8", "#E8C0A0", "#A8D8D0", "#E0B0C0" }, 0.4,
+                Hex("#8FCC9A", "#E58A6A", "#C79AD6", "#EFC55A", "#7FAEDD", "#BCC6E0", "#9FD4B8", "#C9C2B6"))
         };
 
         foreach (ColorScheme scheme in dark)
@@ -410,18 +432,6 @@ public static class Palette
                 categories,
                 Neutral);
         }
-
-        // The same hex list moved a fraction toward white, for the light-theme twin of a dark palette.
-        // hexes: "#RRGGBB" strings.
-        // whiteAmount: How far toward white, 0..1.
-        // Returns: New "#RRGGBB" strings in the same order.
-        static string[] Lift(string[] hexes, double whiteAmount) => hexes
-            .Select(hex =>
-            {
-                Color lifted = Mix(Hex(hex)[0], Colors.White, whiteAmount);
-                return $"#{lifted.R:X2}{lifted.G:X2}{lifted.B:X2}";
-            })
-            .ToArray();
     }
 
     // ------------------------------------------------------------ helpers

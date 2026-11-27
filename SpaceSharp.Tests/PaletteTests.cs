@@ -49,7 +49,7 @@ public class PaletteTests
     [Fact]
     public void TheNewPalettesHaveTwelveDistinctFolderColors()
     {
-        foreach (string? name in new[] { "Berry", "Mineral", "Twilight", "Copper", "Prism", "Meadow", "Sorbet", "Sea glass", "Terracotta", "Lilac" })
+        foreach (string? name in new[] { "Berry", "Mineral", "Twilight", "Copper", "Prism", "Marina", "Meadow", "Sorbet", "Sea glass", "Terracotta", "Lilac", "Orchard" })
         {
             IReadOnlyList<Color> folders = Palette.Find(name).FolderColors;
             Assert.Equal(12, folders.Count);
@@ -60,7 +60,7 @@ public class PaletteTests
     [Fact]
     public void EveryBuiltInPaletteHasALineAboutIt()
     {
-        Assert.Equal("PaletteAbout_Colorblindsafelight", ColorScheme.AboutKey("Color-blind safe (light)"));
+        Assert.Equal("PaletteAbout_Highcontrastlight", ColorScheme.AboutKey("High-contrast (light)"));
         Assert.Equal("PaletteAbout_Seaglass", ColorScheme.AboutKey("Sea glass"));
         foreach (ColorScheme? scheme in Palette.Schemes.Where(s => !s.IsCustom))
         {

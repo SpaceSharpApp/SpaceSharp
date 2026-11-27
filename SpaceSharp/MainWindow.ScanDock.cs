@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
 using SpaceSharp.Services;
@@ -17,7 +16,9 @@ public partial class MainWindow
     /// <summary>How far the pointer travels before a press on the card counts as a drag.</summary>
     private const double ScanDragThreshold = 4;
 
-    private readonly Dictionary<string, Rectangle> _scanDockMarks = [];
+    private readonly Dictionary<string, Border> _scanDockQuarters = [];
+    private Border? _scanDockGhost;        // the outline of the card where it would land
+    private TextBlock? _scanDockGhostName; // the corner's name inside it
     private bool _scanCardPressed;
     private bool _scanCardDragging;
     private Point _scanCardPressPoint;
@@ -46,7 +47,8 @@ public partial class MainWindow
                 return;
             }
 
-            Vector offset = e.GetPosition(ScanCard) - _scanCardPressPoint;
+            Point pointer = e.GetPosition(ScanCard);
+            Vector offset = pointer - _scanCardPressPoint;
             if (!_scanCardDragging)
             {
                 if (Math.Abs(offset.X) < ScanDragThreshold && Math.Abs(offset.Y) < ScanDragThreshold)
@@ -59,7 +61,7 @@ public partial class MainWindow
             }
 
             ScanPanel.RenderTransform = new TranslateTransform(offset.X, offset.Y);
-            LightScanDockMark(ScanCornerUnder(offset));
+            LightScanDockMark(ScanCornerUnder(pointer));
         };
         ScanPanel.PointerReleased += (_, e) =>
         {
@@ -68,7 +70,7 @@ public partial class MainWindow
                 return;
             }
 
-            string? corner = _scanCardDragging ? ScanCornerUnder(e.GetPosition(ScanCard) - _scanCardPressPoint) : null;
+            string? corner = _scanCardDragging ? ScanCornerUnder(e.GetPosition(ScanCard)) : null;
             EndScanCardDrag();
             e.Pointer.Capture(null);
             if (corner is not null && corner != _settings.ScanCardPlace)
@@ -81,69 +83,98 @@ public partial class MainWindow
         ScanPanel.PointerCaptureLost += (_, _) => EndScanCardDrag();
     }
 
-    /// <summary>The corner the dragged card is over.</summary>
-    /// <param name="offset">How far the card has been dragged from where it sat.</param>
-    /// <returns>The corner's name as kept in settings, or null when the card is over none.</returns>
-    private string? ScanCornerUnder(Vector offset)
-    {
-        Point center = _scanCardHome.Center + offset;
-        return ScanCardDock.CornerAt(center.X, center.Y, ScanCard.Bounds.Width, ScanCard.Bounds.Height, _scanCardHome.Width, _scanCardHome.Height, ScanCardMargin);
-    }
+    /// <summary>The corner the dragged card would go to.</summary>
+    /// <param name="pointer">The pointer, in the map area's coordinates.</param>
+    /// <returns>The corner's name as kept in settings, or null when the pointer is outside the map.</returns>
+    private string? ScanCornerUnder(Point pointer) =>
+        ScanCardDock.QuarterAt(pointer.X, pointer.Y, ScanCard.Bounds.Width, ScanCard.Bounds.Height);
 
-    /// <summary>Draws a mark the size of the card in each corner it can be dropped on: a dashed outline on a near-solid plate.</summary>
+    /// <summary>Divides the map into its four quarters, each the target for its corner, and adds the outline that shows where the card would land.</summary>
     private void ShowScanDockMarks()
     {
         ScanDockMarks.Children.Clear();
-        _scanDockMarks.Clear();
-        IBrush backdrop = this.ThemeBrush("Panel") is ISolidColorBrush panel
-            ? new SolidColorBrush(panel.Color, 0.86)
-            : new SolidColorBrush(Colors.Black, 0.7);
+        _scanDockQuarters.Clear();
+        double quarterWidth = ScanCard.Bounds.Width / 2;
+        double quarterHeight = ScanCard.Bounds.Height / 2;
         foreach (string corner in ScanCardDock.Corners)
         {
-            (double x, double y) = ScanCardDock.Spot(corner, ScanCard.Bounds.Width, ScanCard.Bounds.Height, _scanCardHome.Width, _scanCardHome.Height, ScanCardMargin);
-            var mark = new Rectangle
+            (double x, double y) = ScanCardDock.QuarterOrigin(corner, ScanCard.Bounds.Width, ScanCard.Bounds.Height);
+            var quarter = new Border
             {
-                RadiusX = 12,
-                RadiusY = 12,
-                StrokeThickness = 2.5,
-                StrokeDashArray = new Avalonia.Collections.AvaloniaList<double> { 4, 3 }
+                Width = quarterWidth,
+                Height = quarterHeight,
+                BorderThickness = new Thickness(1)
             };
-
-            // A near-solid plate under the dashes, so the mark reads over any map colors.
-            var plate = new Border
-            {
-                Width = _scanCardHome.Width,
-                Height = _scanCardHome.Height,
-                CornerRadius = new CornerRadius(12),
-                Background = backdrop,
-                BoxShadow = BoxShadows.Parse("0 6 24 0 #80000000"),
-                Child = mark
-            };
-            Canvas.SetLeft(plate, x);
-            Canvas.SetTop(plate, y);
-            ScanDockMarks.Children.Add(plate);
-            _scanDockMarks[corner] = mark;
+            Canvas.SetLeft(quarter, x);
+            Canvas.SetTop(quarter, y);
+            ScanDockMarks.Children.Add(quarter);
+            _scanDockQuarters[corner] = quarter;
         }
+
+        _scanDockGhostName = new TextBlock
+        {
+            FontSize = FontSizes.Emphasis,
+            FontWeight = FontWeight.SemiBold,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+            VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+            Foreground = this.ThemeBrush("Link", Brushes.Orange)
+        };
+        _scanDockGhost = new Border
+        {
+            Width = _scanCardHome.Width,
+            Height = _scanCardHome.Height,
+            CornerRadius = new CornerRadius(12),
+            BorderThickness = new Thickness(2),
+            BorderBrush = this.ThemeBrush("Accent", Brushes.Orange),
+            Background = Faded("AccentFaint", 0.88, Colors.Black),
+            Child = _scanDockGhostName
+        };
+        ScanDockMarks.Children.Add(_scanDockGhost);
 
         LightScanDockMark(null);
         ScanDockMarks.IsVisible = true;
     }
 
-    /// <summary>Colors the marks: the one the card would attach to in the accent color and filled, the rest in the text color.</summary>
-    /// <param name="corner">The corner under the card, or null for none.</param>
+    /// <summary>Colors the quarters: the one the card would go to tinted in the accent color, the rest dimmed; and moves the outline to that corner.</summary>
+    /// <param name="corner">The corner of the quarter the pointer is in, or null for none.</param>
     private void LightScanDockMark(string? corner)
     {
-        IBrush plain = this.ThemeBrush("Text", Brushes.Gray);
-        IBrush accent = this.ThemeBrush("Accent", Brushes.Orange);
-        foreach ((string name, Rectangle mark) in _scanDockMarks)
+        IBrush dimWash = Faded("Window", 0.45, Colors.Black);
+        IBrush dimLine = Faded("Stroke", 0.9, Colors.Gray);
+        IBrush litWash = Faded("Accent", 0.14, Colors.Orange);
+        IBrush litLine = Faded("Accent", 0.7, Colors.Orange);
+        foreach ((string name, Border quarter) in _scanDockQuarters)
         {
-            bool lit = name == corner;
-            mark.Stroke = lit ? accent : plain;
-            mark.Fill = lit && accent is ISolidColorBrush solid ? new SolidColorBrush(solid.Color, 0.3) : null;
+            bool isLit = name == corner;
+            quarter.Background = isLit ? litWash : dimWash;
+            quarter.BorderBrush = isLit ? litLine : dimLine;
         }
+
+        if (_scanDockGhost is null || _scanDockGhostName is null)
+        {
+            return;
+        }
+        _scanDockGhost.IsVisible = corner is not null;
+        if (corner is null)
+        {
+            return;
+        }
+
+        (double x, double y) = ScanCardDock.Spot(corner, ScanCard.Bounds.Width, ScanCard.Bounds.Height, _scanCardHome.Width, _scanCardHome.Height, ScanCardMargin);
+        Canvas.SetLeft(_scanDockGhost, x);
+        Canvas.SetTop(_scanDockGhost, y);
+        _scanDockGhostName.Text = Strings.Get("ScanCard_" + corner);
     }
 
-    /// <summary>Ends a drag: the card goes back to where its place puts it and the marks go away.</summary>
+    /// <summary>A theme color at an opacity, so the map stays visible through it.</summary>
+    /// <param name="key">The theme brush's key.</param>
+    /// <param name="opacity">0 to 1.</param>
+    /// <param name="fallback">The color to use when the theme has no solid brush by that key.</param>
+    /// <returns>A new brush of that color at that opacity.</returns>
+    private SolidColorBrush Faded(string key, double opacity, Color fallback) =>
+        new(this.ThemeBrush(key) is ISolidColorBrush solid ? solid.Color : fallback, opacity);
+
+    /// <summary>Ends a drag: the card goes back to where its place puts it and the quarters go away.</summary>
     private void EndScanCardDrag()
     {
         _scanCardPressed = false;

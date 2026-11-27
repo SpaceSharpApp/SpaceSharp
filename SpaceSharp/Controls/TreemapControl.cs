@@ -904,6 +904,12 @@ public sealed partial class TreemapControl : Panel
     /// regardless, and the wheel never does.</summary>
     public bool AnimateZoom { get; set; } = true;
 
+    /// <summary>True leaves out the flash <see cref="PulseSelection"/> draws; the selection's own frame still marks the item.</summary>
+    public bool ReduceMotion
+    {
+        get; set;
+    }
+
     /// <summary>Draws single-subfolder chains (a folder whose one subfolder holds at least 97% of its size) as one box with a combined
     /// title.</summary>
     public bool MergeSingleFolderChains

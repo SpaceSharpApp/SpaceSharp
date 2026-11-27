@@ -283,7 +283,9 @@ public partial class SettingsWindow
             return;
         }
         _settings.ResetToDefaults();
+        Palette.Reload();   // the color vision adjustment is among the defaults
         App.ApplyTheme();
+        Accessibility.Refresh();
         _main?.ApplySettings();
         Build();
     }

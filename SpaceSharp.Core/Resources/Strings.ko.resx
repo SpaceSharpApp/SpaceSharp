@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>변화</value></data>
   <data name="Menu_More" xml:space="preserve"><value>더 보기</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>여기서 바뀐 것</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>트리 보기에서 표시</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>앞으로의 스캔에서 제외</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>이름이 "{0}"인 모든 파일과 폴더는 다음 스캔부터 건너뜁니다. 목록은 설정 › 스캔 › 제외에 있습니다.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>제외</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>형식별</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>기간별</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>공간 사용 위치</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>여기로 맵 확대</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>이 폴더로 맵 확대</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>이번 달</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>올해</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1~3년</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>가장 오래된 변경 {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>이 폴더의 {0}이(가) 하나의 항목입니다: {1}, {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>디스크 할당 크기 {0}</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{1}의 {0}, 유일한 폴더</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{1}의 {0}, 유일한 파일</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{1}의 {0}, 폴더 {2}개 중 가장 큼</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{1}의 {0}, 파일 {2}개 중 가장 큼</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{1}의 {0}, 크기순으로 폴더 {2}개 중 {3}번째</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{1}의 {0}, 크기순으로 파일 {2}개 중 {3}번째</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>대부분 {0}({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>대부분 {0}({1}) 및 {2}({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>{0}({1}), {2}({3}), {4}({5})의 혼합</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>마지막 변경 {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>수정됨 {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>마지막 검사 이후 변경 없음</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>마지막 검사 이후 {0} 증가</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>마지막 검사 이후 {0} 감소</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>밝은 테마의 같은 설정입니다: 페이퍼, 리넨, 미스트, 샌드 또는 스노우.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>창 뒤 어둡게</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>설정, 검사, 정보, 업데이트 안내가 위에 열려 있는 동안 맵을 얼마나 어둡게 할지. 0이면 그대로 둡니다.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>접근성</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>텍스트 크기</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>텍스트와 컨트롤을 포함한 인터페이스 전체를 더 크게 그립니다. 메뉴와 도구 설명은 크기가 그대로입니다.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>읽기 글꼴</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible은 저시력용으로, 글자를 서로 혼동하기 어렵습니다. 지도 레이블에도 적용됩니다.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>기본값 (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>동작 줄이기</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>폴더 사이의 확대/축소와 선택한 항목의 깜박임을 생략합니다.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>더 강한 대비</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>모든 모양에서 흐린 텍스트와 행 사이의 선을 더 또렷하게 합니다.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>색각</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>색각 이상으로 구분하기 어려운 색이 서로 구별되도록 모든 팔레트를 조정합니다.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>끔</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>적색약 (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>녹색약 (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>청색약 (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>바다의 파랑, 녹, 밧줄의 색</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>꽃과 잎, 잘 익은 과일</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>팔레트, 음영 및 텍스트</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>맵의 모양에 관한 모든 설정은 미리 보기 옆의 트리맵 페이지에 있습니다.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>색상</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>구리, 황동, 올리브, 녹</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>스펙트럼을 최대 강도로</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>회색에 호박색 강조</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito와 Tol. 누구나 구분 가능</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>모든 색상의 연한 색조. 밝은 테마 기본값</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>종이 위의 바랜 색조</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>달콤하고 밝음</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>점토, 모래, 장미. Earth보다 따뜻함</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>보라와 파우더 블루</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>강한 7가지 원색</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>같은 안전한 세트를 밝은 면에 맞게 밝힘</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>{0} 테마의 팔레트입니다. 테마마다 팔레트를 따로 기억하며, 맵은 테마와 함께 전환됩니다.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · {1} 테마용</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>지도, 인사이트, 통계, 변경 사항 사이를 전환</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>지도, 트리, 인사이트, 통계, 변경 사항 사이를 전환</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>형식별</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>정리해도 안전</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>변경 시기</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>이름 또는 패턴, 예: *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>맵</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>검사의 지도 (B로 보기 전환)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>트리</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>모든 폴더와 그 안의 내용을 단계별로 열어 보기 (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>모든 폴더와 그 안의 내용입니다. 폴더의 화살표를 클릭하면 열립니다.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>상위 폴더 대비 비율</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>첫 단계 열기</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>첫 단계의 폴더를 엽니다. 더 깊은 폴더는 하나씩 엽니다</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>모두 닫기</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>폴더 {0:N0}개 · 파일 {1:N0}개 · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>인사이트</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>검사 요약: 형식별, 정리해도 안전, 변경 시기, 가장 큰 항목(B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>인사이트</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp는 열린 작업 위에 세워졌습니다</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>그 뒤에 있는 분들께 감사드립니다.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>지도</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>레이아웃은 [Bruls, Huizing, van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)가 2000년에 발표한 squarified treemap입니다. 디스크를 지도로 보여주는 아이디어는 Sean Werkema의 [SpaceMonger](https://www.stardock.com/products/spacemonger/)에서, treemap 자체는 Ben Shneiderman(1991)에서 왔습니다. 색약 친화 팔레트는 [Okabe와 Ito](https://jfly.uni-koeln.de/color/)의 여덟 가지 색(2002)을 사용합니다. 나머지 네 가지 색은 [Paul Tol](https://tol-colors.readthedocs.io/en/latest/)의 밝은 색 구성에서 가져왔습니다.</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>레이아웃은 [Bruls, Huizing, van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf)가 2000년에 발표한 squarified treemap입니다. 디스크를 지도로 보여주는 아이디어는 Sean Werkema의 [SpaceMonger](https://www.stardock.com/products/spacemonger/)에서, treemap 자체는 Ben Shneiderman(1991)에서 왔습니다.</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>소프트웨어</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>[.NET 10](https://dotnet.microsoft.com) 위에서 C#으로 작성되었습니다. 인터페이스는 [Avalonia UI](https://avaloniaui.net)이며 [SkiaSharp](https://github.com/mono/SkiaSharp)로 그리고, 글꼴은 Rasmus Andersson의 [Inter](https://rsms.me/inter/)입니다. 아이콘은 Cole Bemis의 Feather를 이어받은 [Lucide](https://lucide.dev)에서 가져왔습니다. Windows 설치 프로그램과 업데이트는 Caelan Sayler의 [Velopack](https://velopack.io)에서 제공합니다. Lucide(ISC)와 Inter(SIL Open Font License)를 제외하면 모두 MIT 라이선스입니다.</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>언어</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Windows 설정을 따르거나 항상 라이트 또는 다크를 사용합니다. 골드는 당신의 것: 모든 도전 과제를 달성했고, 앱도 거기에 맞춰 차려입었습니다. 전용 지도 팔레트와 함께.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>황동부터 로즈골드까지 열두 가지 금속, 골드 테마용</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0}가지</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>{1:N0}개 폴더에 {0:N0}개 파일이 든 폴더이며, 그중 {2:N0}개는 바로 안에 있습니다.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>{0:N0}개 파일이 든 폴더이며, 모두 바로 안에 있습니다.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>{0}을(를) 차지하며, {2}의 {1}입니다.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>{0}을(를) 차지합니다.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>다른 {0:N0}개 종류가 {1}을(를) 나눕니다.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>중간값 파일 {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0}은(는) 이번 달에 바뀌었고, {1}은(는) 1년 넘게 손대지 않았습니다.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>폴더 또는 파일</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>크기</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>비율</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>파일</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>변경</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>종류</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>파일</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>위치</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>가장 큰 파일</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{1:N0}개 중 {0:N0}개</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>{0} 중</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>폴더 {0:N0}개, 바로 안에 {1:N0}개</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>모두 바로 안에 있음</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>폴더 {0:N0}개 중 가장 큼</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>파일 {0:N0}개 중 가장 큼</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>유일한 폴더</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>유일한 파일</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>크기순으로 폴더 {0:N0}개 중 {1:N0}번째</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>크기순으로 파일 {0:N0}개 중 {1:N0}번째</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>스캔한 {0} 중</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>마지막 변경</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>수정한 날짜</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>검사</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>항목 {0:N0}개 모두 표시</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>간단히 표시</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>나머지 {0:N0}개 파일</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0}개 더</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>이 {0:N0}개가 폴더의 {1}</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys와 swapfile.sys는 가상 메모리입니다. 크기는 시스템 �
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>왼쪽 위</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>가운데</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>서포터 에디션</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp는 누구에게나 무료이며 모든 기능을 제공합니다. 서포터 키는 일회성 후원에 대한 감사의 표시입니다. 여기에 이름이 표시될 뿐 다른 기능을 잠금 해제하지 않습니다.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp는 누구에게나 무료이며 모든 기능을 제공합니다. 서포터 키는 일회성 후원에 대한 감사의 표시입니다. 이 사본을 서포터 에디션으로 표시할 뿐 다른 기능을 잠금 해제하지 않습니다.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>이메일로 받은 키를 붙여 넣으세요</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>이 키 사용</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>서포터 키 받기</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>올바른 서포터 키가 아닙니다. SSUP1부터 마지막 문자까지 키 전체를 복사하세요.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>{0} 님, 감사합니다.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>SpaceSharp를 후원해 주셔서 감사합니다.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>{0}부터 서포터입니다.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>키는 이 PC에서 확인됩니다. 어디로도 전송되지 않습니다.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>이 PC에서 키 제거</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>이 PC에 키가 없습니다</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>키를 입력하면 이 카드가 활성화됩니다</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp는 누구에게나 무료이며 모든 기능을 제공합니다. 여러분의 후원이 이를 유지하는 데 도움이 됩니다.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>서포터</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp는 무료이며 앞으로도 무료입니다. 다음 분들이 [서포터 키](https://spacesharp.app/supporter/)로 후원해 주셨습니다:</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp는 무료이며 앞으로도 무료입니다. [서포터 키](https://spacesharp.app/supporter/)는 고마움을 전하는 방법이며, 여기에 이름이 표시됩니다.</value></data>

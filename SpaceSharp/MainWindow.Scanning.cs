@@ -616,6 +616,7 @@ public partial class MainWindow
         UpdateCompareUi();
         InvalidateInsights();
         ChangesView.DropRows();
+        FolderTreeView.DropRows();
         ApplyFilter();
         RefreshTopList();
         ApplyView();

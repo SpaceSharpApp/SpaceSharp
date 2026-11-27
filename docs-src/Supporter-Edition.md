@@ -3,7 +3,7 @@ SpaceSharp is free, open source and complete. Nothing is held back for people wh
 ## What the key does
 
 - **About** shows "Supporter edition" under the version.
-- **About › Supporter edition** thanks you by the name you chose.
+- **About › Supporter edition** switches on its supporter card, with the month the key dates from, and thanks you. It does not show your name: the window stays safe to have on screen or in a screenshot.
 - **About › Credits** lists the supporters who asked to be named. That list is part of the app, so a new name appears with the release after the contribution.
 
 It unlocks no feature. The app with a key and the app without one do the same things.
@@ -13,6 +13,8 @@ It unlocks no feature. The app with a key and the app without one do the same th
 [spacesharp.app/supporter](https://spacesharp.app/supporter/) has the button. Payment is handled by Polar, which is the seller on the receipt and takes care of the tax for your country. The checkout asks, optionally, for a name to show; leave it empty to stay unnamed. The key appears on the page right after the payment and is sent to your email as well.
 
 ## Entering it
+
+<p align="center"><img src="images/supporter.png" width="900" alt="The Supporter edition window before a key is entered"></p>
 
 1. Press **F1** for About and choose **Supporter edition**.
 2. Paste the key. It starts with `SSUP1` and is about 200 characters long; it does not matter if the email broke it over several lines.

@@ -1,7 +1,8 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SpaceSharp.Controls"
         x:Class="SpaceSharp.InspectWindow"
-        Width="1000" Height="1120" MinWidth="760" MinHeight="600"
+        Width="1120" Height="1000" MinWidth="900" MinHeight="340"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Icon="avares://SpaceSharp/Assets/SpaceSharp.ico"
         Background="{DynamicResource Window}">
@@ -11,48 +12,90 @@
       <DockPanel>
         <Button x:Name="CloseButton" DockPanel.Dock="Right" Classes="primary" MinWidth="84" HorizontalContentAlignment="Center" IsDefault="True" IsCancel="True" Click="Close_Click" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Spacing="6">
-          <Button x:Name="CopyButton" Classes="tool" Click="Copy_Click" />
+          <Button x:Name="MapButton" Classes="tool" Click="ShowOnMap_Click" />
+          <Button x:Name="TreeButton" Classes="tool" Click="ShowInTree_Click" />
           <Button x:Name="RevealButton" Classes="tool" Click="Reveal_Click" />
+          <Button x:Name="CopyButton" Classes="tool" Click="Copy_Click" />
         </StackPanel>
       </DockPanel>
     </Border>
 
     <ScrollViewer x:Name="Scroll" VerticalScrollBarVisibility="Auto">
-      <!-- the same margin on every side, so the last table never sits on the footer -->
-      <StackPanel x:Name="Body" Margin="24,14,24,24" Spacing="14">
-        <!-- ================================================================ header: crumbs, then the name left and the size right -->
-        <StackPanel x:Name="Header" SizeChanged="Header_SizeChanged" Spacing="8">
-          <!-- one line: the middle of a long path folds into a … button whose flyout lists the folded folders -->
-          <StackPanel x:Name="Crumbs" Orientation="Horizontal" Margin="-6,0,0,0" />
-          <Grid ColumnDefinitions="*,16,Auto">
-            <DockPanel VerticalAlignment="Center">
-              <TextBlock x:Name="Glyph" DockPanel.Dock="Left" FontSize="18" Foreground="{DynamicResource Accent}" VerticalAlignment="Center" Margin="0,0,10,0" />
-              <!-- a file's own icon, as Windows shows it, in place of the glyph -->
-              <Image x:Name="IconImage" DockPanel.Dock="Left" Width="28" Height="28" VerticalAlignment="Center" Margin="0,0,10,0" IsVisible="False" RenderOptions.BitmapInterpolationMode="HighQuality" />
-              <TextBlock x:Name="NameText" FontSize="24" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-            </DockPanel>
-            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-              <TextBlock x:Name="SizeText" FontSize="30" FontWeight="Bold" VerticalAlignment="Center" />
-              <TextBlock x:Name="OnDiskText" Classes="dim" FontSize="12.5" VerticalAlignment="Center" Margin="0,6,0,0" />
+     <Panel>
+      <!-- ================================================================ one file: two panes, the size at the left and the facts at the right -->
+      <Border x:Name="FileBody" IsVisible="False" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0">
+        <Grid ColumnDefinitions="250,*">
+          <Border Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,0,1,0" Padding="24,28,24,24">
+            <StackPanel>
+              <Border Width="64" Height="64" CornerRadius="13" Background="{DynamicResource AccentFaint}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" HorizontalAlignment="Left">
+                <Panel>
+                  <controls:Icon x:Name="FileBadgeIcon" Glyph="{StaticResource Icon.File}" Width="32" Height="32" Foreground="{DynamicResource Link}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                  <!-- the file's own icon, as Windows shows it, in place of the drawn one -->
+                  <Image x:Name="FileIconImage" Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False" RenderOptions.BitmapInterpolationMode="HighQuality" />
+                </Panel>
+              </Border>
+              <TextBlock x:Name="FileSizeText" FontSize="34" FontWeight="Bold" Margin="0,18,0,0" />
+              <TextBlock x:Name="FileBytesText" Classes="dim" FontSize="12.5" Margin="0,8,0,0" TextWrapping="Wrap" />
+              <TextBlock x:Name="FileOnDiskText" Classes="dim" FontSize="12.5" Margin="0,2,0,0" TextWrapping="Wrap" />
+              <DockPanel Margin="0,18,0,0">
+                <Border x:Name="FileKindSwatch" DockPanel.Dock="Left" Width="9" Height="9" CornerRadius="2" VerticalAlignment="Top" Margin="0,4,8,0" />
+                <TextBlock x:Name="FileKindText" Classes="dim" FontSize="12.5" TextWrapping="Wrap" />
+              </DockPanel>
             </StackPanel>
-          </Grid>
-        </StackPanel>
+          </Border>
+          <StackPanel x:Name="FileTitleColumn" Grid.Column="1" Margin="26,22,26,8" SizeChanged="TitleColumn_SizeChanged">
+            <StackPanel x:Name="FileCrumbs" Orientation="Horizontal" Margin="-6,0,0,0" />
+            <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2,0,0">
+              <TextBlock x:Name="FileNameText" FontSize="19" FontWeight="Bold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+              <Button x:Name="FileCopyPathButton" Classes="tool" Width="30" Height="30" Padding="0" VerticalAlignment="Center" Click="CopyPath_Click">
+                <controls:Icon Glyph="{StaticResource Icon.Copy}" Width="15" Height="15" Foreground="{DynamicResource TextDim}" />
+              </Button>
+            </StackPanel>
+            <!-- hard links and access problems, when there are any -->
+            <StackPanel x:Name="FileNotes" Spacing="8" Margin="0,12,0,0" />
+            <!-- one row per figure: its share of the folder, of the scan, and when it was modified -->
+            <StackPanel x:Name="FileFacts" Margin="0,14,0,0" />
+          </StackPanel>
+        </Grid>
+      </Border>
 
-        <!-- ================================================================ the story: one line per fact, with an icon each -->
-        <Border x:Name="Card" Classes="card flat" CornerRadius="10" Padding="16,2">
-          <StackPanel x:Name="Sentences" />
-        </Border>
+      <!-- ================================================================ a folder or a selection -->
+      <!-- the same margin on every side, so the last card never sits on the footer -->
+      <StackPanel x:Name="Body" Margin="24,18,24,24" Spacing="16">
+        <!-- ================================================================ header: a mark, the path and name, the size -->
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
+          <Border Width="52" Height="52" CornerRadius="10" Background="{DynamicResource AccentFaint}" BorderBrush="{DynamicResource Stroke}" BorderThickness="1" VerticalAlignment="Center">
+            <Panel>
+              <controls:Icon x:Name="BadgeIcon" Width="26" Height="26" Foreground="{DynamicResource Link}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Panel>
+          </Border>
+          <StackPanel x:Name="TitleColumn" Grid.Column="1" Spacing="2" VerticalAlignment="Center" SizeChanged="TitleColumn_SizeChanged">
+            <!-- one line: the middle of a long path folds into a … button whose flyout lists the folded folders -->
+            <StackPanel x:Name="Crumbs" Orientation="Horizontal" Margin="-6,0,0,0" />
+            <StackPanel Orientation="Horizontal" Spacing="6">
+              <TextBlock x:Name="NameText" FontSize="24" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+              <Button x:Name="CopyPathButton" Classes="tool" Width="30" Height="30" Padding="0" VerticalAlignment="Center" Click="CopyPath_Click">
+                <controls:Icon Glyph="{StaticResource Icon.Copy}" Width="15" Height="15" Foreground="{DynamicResource TextDim}" />
+              </Button>
+            </StackPanel>
+          </StackPanel>
+          <StackPanel Grid.Column="2" VerticalAlignment="Center" Spacing="4">
+            <TextBlock x:Name="SizeText" FontSize="32" FontWeight="Bold" HorizontalAlignment="Right" />
+            <TextBlock x:Name="OnDiskText" Classes="dim" FontSize="12.5" HorizontalAlignment="Right" />
+          </StackPanel>
+        </Grid>
+
+        <!-- ================================================================ the figures, one tile each -->
+        <Grid x:Name="Tiles" ColumnSpacing="12" />
+
+        <!-- ================================================================ what stands out: one thing holds most of it, hard links, access problems -->
+        <StackPanel x:Name="Notes" Spacing="8" />
 
         <!-- ================================================================ the tables -->
         <Panel x:Name="WhereHost" />
-        <Grid x:Name="Pair" ColumnDefinitions="*,14,*">
-          <Panel x:Name="TypeHost" VerticalAlignment="Top" />
-          <StackPanel x:Name="RightColumn" Grid.Column="2" Spacing="14">
-            <Panel x:Name="AgeHost" />
-            <Panel x:Name="FilesHost" />
-          </StackPanel>
-        </Grid>
+        <Grid x:Name="Breakdowns" ColumnSpacing="16" />
       </StackPanel>
+     </Panel>
     </ScrollViewer>
   </DockPanel>
 </Window>

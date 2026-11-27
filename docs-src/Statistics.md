@@ -1,6 +1,6 @@
 <p align="center"><img src="images/shot-statistics.png" width="900" alt="The Statistics view"></p>
 
-**Statistics** is the scan as a report. Where [Insights](Insights) reads the drive for you and points at what to do, Statistics lays out the numbers the way SpaceMonger's statistics page did, and then goes further: every figure is a click back to the map, and with a compared scan every figure carries its change. The Statistics button in the toolbar opens it; **B** cycles Map, Insights, Statistics and Changes.
+**Statistics** is the scan as a report. Where [Insights](Insights) reads the drive for you and points at what to do, Statistics lays out the numbers the way SpaceMonger's statistics page did, and then goes further: every figure is a click back to the map, and with a compared scan every figure carries its change. The Statistics button in the toolbar opens it; **B** cycles Map, Tree, Insights, Statistics and Changes.
 
 ## The scope
 

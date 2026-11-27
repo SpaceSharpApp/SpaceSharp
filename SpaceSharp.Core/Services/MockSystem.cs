@@ -1,4 +1,5 @@
 using SpaceSharp.Models;
+using SpaceSharp.Util;
 
 namespace SpaceSharp.Services;
 
@@ -36,6 +37,20 @@ public static class MockSystem
     /// <param name="Free">The drive's free bytes now, for the nudge; 0 for a folder scan.</param>
     /// <param name="Total">The drive's capacity in bytes; 0 for a folder scan.</param>
     public sealed record RecentScan(ScanFileInfo Info, bool IsDrive, string? Label, long Free, long Total);
+
+    /// <summary>Puts the settings that are a person's own, and would make one PC's pictures differ from another's, to what the pretend PC
+    /// has: the interface at 100% in the app's own font, motion on, the looks' own contrast, no color vision adjustment, and no supporter
+    /// key.</summary>
+    /// <param name="settings">The settings to change in place; the caller keeps them from being saved.</param>
+    internal static void UseNeutralSettings(AppSettings settings)
+    {
+        settings.TextScale = 100;
+        settings.ReadingFont = "Default";
+        settings.ReduceMotion = false;
+        settings.HighContrast = false;
+        settings.ColorVision = "Off";
+        settings.SupporterKey = null;
+    }
 
     /// <summary>The mock PC's achievements: an in-memory store with four of the mild ones unlocked at dates relative to now, so screenshots spoil nothing worth keeping secret.</summary>
     /// <returns>A store that is never written to disk.</returns>

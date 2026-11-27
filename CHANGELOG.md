@@ -6,9 +6,49 @@ What changed in each SpaceSharp release from 2.9 on, newest first. Releases 2.0.
 
 ### Supporter edition
 
-SpaceSharp is free and complete, and stays that way. If you want to say thanks, a supporter key is a one-time contribution of your choosing: it puts "Supporter edition" under the version in About, thanks you by name, and, if you ask for it, adds your name to the Credits window. It unlocks no feature, because there is none held back.
+SpaceSharp is free and complete, and stays that way. If you want to say thanks, a supporter key is a one-time contribution of your choosing: it puts "Supporter edition" under the version in About, switches on the supporter card in its own window, and, if you ask for it, adds your name to the Credits window. It unlocks no feature, because there is none held back.
 
-About › Supporter edition is where a key is pasted. The key is a short signed note with the name you chose, the order and the date, and it is checked on your PC against a public key built into the app, so entering it sends nothing anywhere and it works offline and forever. Line breaks an email put into the key do not matter. Remove the key from this PC takes it out of the settings again; Reset to defaults leaves it alone.
+About › Supporter edition is where a key is pasted. The window opens on a supporter card that is a dashed outline until a key fills it in; the card shows the month the key dates from and never your name, so it is safe on a shared screen. The key is a short signed note with the name you chose, the order and the date, and it is checked on your PC against a public key built into the app, so entering it sends nothing anywhere and it works offline and forever. Line breaks an email put into the key do not matter. Remove the key from this PC takes it out of the settings again; Reset to defaults leaves it alone.
+
+### Tree view
+
+There is a new view beside Map: Tree. It lists the scan as a table of folders that open in place, the way TreeSize and Explorer's folder pane do, for when you want to walk down a drive folder by folder and read exact figures next to each other. Each line has the name, a bar and a percentage for its share of the folder it is in, the size, how many files and folders are inside, and when it last changed. This was the first feature request on GitHub (#11).
+
+Click a folder's arrow to open it. Open first level opens the folders directly under the scan, and Close all folds it back. Files and folders or Folders only chooses whether files are listed, any column header sorts, and a double-click or Show on map takes a line to the map. For a file, here and everywhere else a file is shown on the map (Changes, Insights, Statistics), the map now zooms in on the file itself and flashes it, where it used to stop at the file's folder. B now cycles Map, Tree, Insights, Statistics and Changes, and the tree is remembered as your view the way Insights is.
+
+The other way works too: the map's right-click menu has Show in Tree view, which switches to the tree with the folders above the item opened and its line selected.
+
+### Inspect
+
+The Inspect window is rebuilt. The card of sentences is gone: its numbers are now a row of tiles (files, the share of the parent folder with its rank, the share of the scan, and when it last changed), each with a small bar, and the one remark worth a sentence, that a single item holds most of the folder, is a highlighted line with Inspect it beside it. Where the space is opens on one bar divided among the largest items, and its table sorts by a click on a column heading. By type, By age and Largest files sit side by side under it, so the window is about a third shorter than it was.
+
+The window no longer has to close to look further. A click on a row, on one of the largest files, on a crumb in the path or on Inspect it fills the window again for that item, and the crumbs lead back up. The footer has Show on map and Show in Tree view next to Show in Explorer and Copy details, and the name has a button that copies the path.
+
+One file gets a layout of its own, in two panes like About: the icon, the size and the kind at the left, and at the right the path and name over a row each for its share of its folder, its share of the scan and when it was modified.
+
+By type now lists the kinds strictly by size. Other used to be kept last whatever its size, which in a folder of files the app has no kind for put the largest slice behind "n more".
+
+### Accessibility
+
+Settings has a new Accessibility page. Text size draws the whole interface at 110%, 125% or 150%, text and controls together; dialogs grow with their content and the main window keeps the size you gave it. Reading font sets the interface and the map's labels in Atkinson Hyperlegible, which is made for low vision. Reduce motion leaves out the zoom between folders and the flash on a selected item. Stronger contrast brightens the dim text and the lines between rows on every look. Outlined labels, from the Treemap page, is here as well.
+
+Color vision adjusts every palette for red-weak, green-weak or blue-weak vision, your own palettes included. Each palette is taken as a whole: the colors that kind of vision runs together are moved apart, mostly by making one lighter and another darker, and the closest pair is never left closer than it was, so a palette keeps its character. The palette creator still shows and saves the colors as you picked them.
+
+With every palette adjustable, the two Color-blind safe palettes are no longer needed and are gone. Marina (sea blues, rust and rope) takes the place on the dark side and Orchard (blossom, leaf and ripe fruit) on the light. If one of the old two was your palette, the theme goes back to its default palette and Color vision is turned on for green-weak vision, the most common kind; change it under Settings › Accessibility.
+
+What it does not reach yet: menus, dropdown lists and tooltips stay at their normal size, and the reading font covers Latin letters only, so other scripts fall back to the system's font. ACCESSIBILITY.md says this too.
+
+### Dragging the scanning card
+
+The four dashed boxes that showed where the scanning card could be dropped are gone. While you drag the card, the map now divides into four quarters, and the whole quarter is the target: the one the pointer is in is tinted, and an outline in its corner, with the corner's name, shows where the card will sit. There is no small box to aim at any more, and letting go anywhere over the map places the card.
+
+### Toolbar
+
+Color by and Palette color the map, so the toolbar now shows them on the Map view only. On Tree, Insights, Statistics and Changes they step aside, which also leaves the view buttons room to keep their names on a narrow window.
+
+### Under the hood
+
+The app is on Avalonia 12.2.0. The screenshot tools pose every scene with the Accessibility settings at their defaults and without a supporter key, so the pictures do not depend on whose PC rendered them; they have four new scenes (Inspect for one file, the Accessibility page, the map with Color vision on, the Supporter window) and the README tool renders the Tree view. The views' code is easier to find: each view has a folder under `SpaceSharp/Views`, and the five large files are split into smaller ones by what they do. Nothing in them changed.
 
 ### Fixes
 

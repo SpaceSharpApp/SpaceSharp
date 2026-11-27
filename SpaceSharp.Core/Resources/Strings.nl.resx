@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Verandering</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Meer</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Wat hier veranderd is</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>Weergeven in boomweergave</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Uit toekomstige scans weglaten</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Elk bestand en elke map met de naam "{0}" wordt vanaf de volgende scan overgeslagen. De lijst staat onder Instellingen › Scannen › Weglaten.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Weglaten</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>Per type</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>Per leeftijd</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Waar de ruimte zit</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Kaart hierheen zoomen</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Kaart naar deze map zoomen</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Deze maand</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dit jaar</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 tot 3 jaar</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Oudste wijziging {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} van deze map is één ding: {1} met {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} op schijf</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} van {1}, de enige map erin</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} van {1}, het enige bestand erin</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} van {1}, de grootste van de {2} mappen</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} van {1}, het grootste van de {2} bestanden</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} van {1}, nummer {3} van {2} mappen op grootte</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} van {1}, nummer {3} van {2} bestanden op grootte</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Vooral {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Vooral {0} ({1}) en {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Een mix van {0} ({1}), {2} ({3}) en {4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Laatst gewijzigd {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Gewijzigd {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>ongewijzigd sinds de vorige scan</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>{0} gegroeid sinds de vorige scan</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>{0} gekrompen sinds de vorige scan</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Hetzelfde voor het lichte thema: Papier, Linnen, Nevel, Zand of Sneeuw.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Dimmen achter vensters</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Hoeveel de kaart donkerder wordt terwijl Instellingen, Inspecteren, Over of de updatemelding erboven open staat. 0 laat hem zoals hij is.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Toegankelijkheid</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Tekstgrootte</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Tekent de hele interface groter, tekst en bediening samen. Menu's en knopinfo houden hun grootte.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Leeslettertype</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible is gemaakt voor slechtzienden, met letters die moeilijk te verwarren zijn. De labels op de kaart volgen.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Standaard (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Minder beweging</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Laat het zoomen tussen mappen en het oplichten van een geselecteerd item weg.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Sterker contrast</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Maakt de gedimde tekst en de lijnen tussen rijen duidelijker, in elke weergave.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Kleurenzien</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Past elk palet aan zodat kleuren die bij een kleurzwakte in elkaar overlopen, uit elkaar komen.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Uit</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Roodzwak (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Groenzwak (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Blauwzwak (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Zeeblauw, roest en touw</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Bloesem, blad en rijp fruit</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palet, schaduw en tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles over hoe de kaart eruitziet staat op de pagina Treemap, naast een voorbeeld.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Kleuren</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Koper, messing, olijf en roest</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Het spectrum op volle sterkte</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Grijstinten, amber als accent</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito en Tol; voor iedereen te onderscheiden</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Zachte tinten van elke kleur; de standaard in het lichte thema</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Vervaagde tinten op papier</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Zoet en fel</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Klei, zand en roze; warmer dan Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Violet en poederblauw</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Zeven stevige primaire kleuren</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Dezelfde veilige set, opgelicht voor lichte vlakken</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Het palet voor het {0} thema. Elk thema onthoudt zijn eigen palet; de kaart wisselt mee met het thema.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · gemaakt voor het {1} thema</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Wisselen tussen de kaart, Inzichten, Statistieken en Wijzigingen</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Wisselen tussen de kaart, de boom, Inzichten, Statistieken en Wijzigingen</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Per type</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Veilig op te ruimen</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Wanneer gewijzigd</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Naam of patroon, bijv. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Kaart</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>De kaart van de scan (B wisselt tussen de weergaven)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Boom</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Elke map met wat erin zit, niveau voor niveau geopend (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Elke map met wat erin zit. Klik op de pijl bij een map om die te openen.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Aandeel van bovenliggende map</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>Eerste niveau openen</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>Opent de mappen op het eerste niveau. Diepere mappen open je één voor één</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Alles sluiten</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} mappen · {1:N0} bestanden · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Inzichten</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>De scan samengevat: per type, veilig op te ruimen, wanneer gewijzigd, grootste items (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Inzichten</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp is gebouwd op open werk</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Dank aan de mensen erachter.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>De kaart</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>De indeling is de squarified treemap van [Bruls, Huizing en van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), gepubliceerd in 2000. Het idee om een schijf als kaart te tonen komt van [SpaceMonger](https://www.stardock.com/products/spacemonger/) van Sean Werkema, en treemaps zelf van Ben Shneiderman (1991). Het kleurenblindvriendelijke palet gebruikt de acht kleuren van [Okabe en Ito](https://jfly.uni-koeln.de/color/) (2002). Nog vier kleuren erin komen uit het heldere kleurenschema van [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>De indeling is de squarified treemap van [Bruls, Huizing en van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), gepubliceerd in 2000. Het idee om een schijf als kaart te tonen komt van [SpaceMonger](https://www.stardock.com/products/spacemonger/) van Sean Werkema, en treemaps zelf van Ben Shneiderman (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschreven in C# op [.NET 10](https://dotnet.microsoft.com). De interface is [Avalonia UI](https://avaloniaui.net), getekend met [SkiaSharp](https://github.com/mono/SkiaSharp), in het lettertype [Inter](https://rsms.me/inter/) van Rasmus Andersson. De pictogrammen komen van [Lucide](https://lucide.dev), een voortzetting van Feather van Cole Bemis. Het installatieprogramma en de updates op Windows komen van [Velopack](https://velopack.io) van Caelan Sayler. Alles valt onder de MIT-licentie, behalve Lucide (ISC) en Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Talen</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Volg de Windows-instelling, of gebruik altijd licht of donker. Goud is van u: elke prestatie ontgrendeld, en de app bijpassend gekleed, met een eigen kaartpalet.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Twaalf metalen van messing tot roségoud, voor het Goud-thema</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} soorten</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>Een map met {0:N0} bestanden in {1:N0} mappen, {2:N0} daarvan direct erin.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Een map met {0:N0} bestanden, allemaal direct erin.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>Het neemt {0} in, en {1} van {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Het neemt {0} in.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} andere soorten delen {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Mediaan bestand {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} ervan is deze maand gewijzigd; {1} is al meer dan een jaar onaangeroerd.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Map of bestand</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Grootte</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Aandeel</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Bestanden</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Gewijzigd</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Soort</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Bestand</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>In</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>Grootste bestanden</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} van {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>Van {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>in {0:N0} mappen, {1:N0} direct erin</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>allemaal direct erin</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>de grootste van de {0:N0} mappen</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>de grootste van de {0:N0} bestanden</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>de enige map</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>het enige bestand</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>nummer {1:N0} van {0:N0} mappen op grootte</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>nummer {1:N0} van {0:N0} bestanden op grootte</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>van de {0} gescand</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Laatst gewijzigd</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Gewijzigd</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>Inspecteren</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>Alle {0:N0} items weergeven</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Minder weergeven</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>De andere {0:N0} bestanden</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} meer</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>deze {0:N0} zijn {1} van de map</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys en swapfile.sys zijn virtueel geheugen. Hun grootte wordt ingesteld
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Linksboven</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>Midden</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Supporterseditie</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp is gratis en volledig voor iedereen. Een supporterssleutel is een bedankje voor een eenmalige bijdrage. Hij zet uw naam hier neer en ontgrendelt verder niets.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp is gratis en volledig voor iedereen. Een supporterssleutel is een bedankje voor een eenmalige bijdrage. Hij markeert dit exemplaar als dat van een supporter en ontgrendelt verder niets.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>Plak de sleutel uit uw e-mail</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Deze sleutel gebruiken</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Een supporterssleutel halen</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>Dat is geen geldige supporterssleutel. Kopieer de hele sleutel, van SSUP1 tot het laatste teken.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Bedankt, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>Bedankt dat u SpaceSharp steunt.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Supporter sinds {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>De sleutel wordt op deze pc gecontroleerd. Er wordt niets verzonden.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>De sleutel van deze pc verwijderen</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>Geen sleutel op deze pc</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>Een sleutel zet deze kaart aan</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp is gratis en volledig voor iedereen. Uw bijdrage helpt om dat zo te houden.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Supporters</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp is gratis en blijft gratis. Deze mensen hebben bijgedragen met een [supporterssleutel](https://spacesharp.app/supporter/):</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp is gratis en blijft gratis. Een [supporterssleutel](https://spacesharp.app/supporter/) is een manier om bedankt te zeggen, en zet uw naam hier neer.</value></data>

@@ -8,8 +8,11 @@
 # Windows only (the capture is GDI). Run it on a monitor with room for a 1920 x 1080 window, and at least 1200 px tall for the Inspect scenes, where the window grows around the Inspect window; the screen's scaling
 # decides the pixel size of the PNGs, 125% or 150% gives the crisp ones GitHub shows well. Afterwards run
 # tools/make-mobile-shots.py for the small WebP copies the website shows on phones.
+#
+# Every scene is posed with the Accessibility settings at their defaults and without a supporter key, whatever this PC's
+# own settings are, so the pictures come out the same for everyone.
 param(
-    [string[]] $Scenes = @("none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates"),
+    [string[]] $Scenes = @("none", "drawer", "insights", "changes", "inspect", "settings", "menu", "start", "about", "update", "light", "duplicates", "tree"),
     [string] $Size = "1920x1080",
     [string] $Configuration = "Release"
 )
@@ -24,6 +27,7 @@ $files = @{
     none = "screenshot.png"; drawer = "shot-filter.png"; insights = "shot-insights.png"; changes = "shot-changes.png"
     inspect = "shot-inspect.png"; settings = "shot-settings.png"; menu = "shot-menu.png"; start = "shot-start.png"
     about = "shot-about.png"; update = "shot-update.png"; light = "shot-light.png"; duplicates = "shot-duplicates.png"
+    tree = "shot-tree.png"
 }
 
 Write-Host "Building $Configuration..."

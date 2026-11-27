@@ -9,6 +9,9 @@
 #
 # Windows only (the capture is GDI). Run it on a monitor with room for a 1920 x 1080 window, and at least 1200 px tall for the Inspect scenes, where the window grows around the Inspect window; the screen's scaling decides
 # the pixel size of the PNGs. Afterwards commit docs-src\images.
+#
+# Every scene is posed with the Accessibility settings at their defaults and without a supporter key, whatever this PC's
+# own settings are, so the pictures come out the same for everyone.
 param(
     [string[]] $Scenes = @(),
     [string] $Out = "",
@@ -35,7 +38,8 @@ $files = [ordered]@{
     "wiki-settings-text" = "settings-text.png"; "wiki-settings-map" = "settings-map.png"; "wiki-settings-scanning" = "settings-scanning.png"
     "wiki-rtl" = "rtl.png"
     "wiki-achievements" = "achievements.png"; "wiki-achievement-toast" = "achievement-toast.png"
-    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"; "wiki-export" = "export.png"; statistics = "shot-statistics.png"
+    "wiki-empty-folders" = "empty-folders.png"; "wiki-duplicates" = "duplicates.png"; "wiki-export" = "export.png"; statistics = "shot-statistics.png"; tree = "shot-tree.png"
+    "wiki-inspect-file" = "inspect-file.png"; "wiki-settings-accessibility" = "settings-accessibility.png"; "wiki-color-vision" = "color-vision.png"; "wiki-supporter" = "supporter.png"
 }
 if ($Scenes.Count -eq 0) { $Scenes = @($files.Keys) }
 

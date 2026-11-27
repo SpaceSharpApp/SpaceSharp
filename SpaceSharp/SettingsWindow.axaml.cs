@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -19,7 +20,7 @@ public partial class SettingsWindow : Window
     private StackPanel? _card;
 
     private string _tab = "General";
-    private static readonly string[] Tabs = { "General", "Behavior", "Appearance", "Treemap", "Map", "Scanning" };
+    private static readonly string[] Tabs = { "General", "Behavior", "Appearance", "Accessibility", "Treemap", "Map", "Scanning" };
 
     /// <summary>For the XAML previewer only: no owner.</summary>
     public SettingsWindow() : this(null) { }
@@ -90,6 +91,9 @@ public partial class SettingsWindow : Window
                 break;
             case "Appearance":
                 BuildAppearanceTab();
+                break;
+            case "Accessibility":
+                BuildAccessibilityTab();
                 break;
             case "Treemap":
                 BuildTreemapTab();
@@ -246,6 +250,52 @@ public partial class SettingsWindow : Window
         Row(Strings.Get("Settings_DialogDim"), Strings.Get("Settings_DialogDim_Desc"),
             PercentSlider(_settings.DialogDim, percent => _settings.DialogDim = percent, 90));
         Row(Strings.Get("Settings_LookMoved"), Strings.Get("Settings_LookMoved_Desc"), null);
+    }
+
+    /// <summary>What makes the app easier to see and read: the size of the interface, the reading font, less motion, stronger contrast,
+    /// the color vision adjustment and outlined map labels.</summary>
+    private void BuildAccessibilityTab()
+    {
+        Section(Strings.Get("SettingsTab_Accessibility"));
+
+        string[] scaleNames = Accessibility.Scales.Select(percent => (percent / 100.0).ToString("P0", CultureInfo.CurrentCulture)).ToArray();
+        Row(Strings.Get("Settings_TextSize"), Strings.Get("Settings_TextSize_Desc"),
+            Combo(scaleNames, Array.IndexOf(Accessibility.Scales, _settings.TextScale), index =>
+            {
+                _settings.TextScale = Accessibility.Scales[index];
+                // After the dropdown has closed: this window is one of those that change size.
+                Dispatcher.UIThread.Post(Accessibility.Refresh);
+            }));
+
+        string[] fonts = { Accessibility.DefaultFont, Accessibility.Atkinson };
+        string[] fontNames = { Strings.Get("Settings_ReadingFont_Default"), "Atkinson Hyperlegible" };   // the font's own name
+        Row(Strings.Get("Settings_ReadingFont"), Strings.Get("Settings_ReadingFont_Desc"),
+            Combo(fontNames, Math.Max(0, Array.IndexOf(fonts, _settings.ReadingFont)), index =>
+            {
+                _settings.ReadingFont = fonts[index];
+                Dispatcher.UIThread.Post(Accessibility.Refresh);
+            }));
+
+        Row(Strings.Get("Settings_ReduceMotion"), Strings.Get("Settings_ReduceMotion_Desc"),
+            Switch(_settings.ReduceMotion, enabled => _settings.ReduceMotion = enabled));
+        Row(Strings.Get("Settings_HighContrast"), Strings.Get("Settings_HighContrast_Desc"),
+            Switch(_settings.HighContrast, enabled =>
+            {
+                _settings.HighContrast = enabled;
+                App.ApplyTheme();
+            }));
+
+        string[] visions = { "Off", "Protan", "Deutan", "Tritan" };
+        string[] visionNames = { Strings.Get("ColorVision_Off"), Strings.Get("ColorVision_Protan"), Strings.Get("ColorVision_Deutan"), Strings.Get("ColorVision_Tritan") };
+        Row(Strings.Get("Settings_ColorVision"), Strings.Get("Settings_ColorVision_Desc"),
+            Combo(visionNames, Array.FindIndex(visions, vision => string.Equals(vision, _settings.ColorVision, StringComparison.OrdinalIgnoreCase)), index =>
+            {
+                _settings.ColorVision = visions[index];
+                Palette.Reload();   // every palette is built again with its colors adjusted
+            }));
+
+        Row(Strings.Get("Settings_OutlinedLabels"), Strings.Get("Settings_OutlinedLabels_Desc"),
+            Switch(_settings.LabelHalo, enabled => _settings.LabelHalo = enabled));
     }
 
     /// <summary>The map's colors, then the shading, text, grid and layout sections; shown beside the live preview.</summary>

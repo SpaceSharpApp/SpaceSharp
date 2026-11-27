@@ -10,6 +10,7 @@
 - [Reading the map](Reading-the-Map): what the frames, boxes, colors and shading mean
 - [Navigating](Navigating): zoom, pan, the path row, the side panel
 - [The filter](The-Filter): plain words, the drawer, quick filters, Select matches
+- [Tree](Tree): the scan as a table of folders that open in place, each with its share of the folder it is in
 - [Insights](Insights): the numbers behind the map, row by row, and Safe to clear
 - [Statistics](Statistics): the scan as a report: files by size, kind and age, the biggest extensions, the largest files and folders
 - [Duplicates and empty folders](Duplicates-and-Empty-Folders): files kept twice, folders with nothing in them

@@ -47,6 +47,7 @@ Links between pages use the file name without `.md`: `[The filter](The-Filter)`.
 | `palette-picker.png`, `palettes.png`, `palette-editor.png` | `wiki-palette-picker`, `wiki-palettes`, `wiki-palette-editor` | the picker open; the sheet of all 24 palettes (drawn by the app, not a window capture); the palette editor |
 | `shortcuts.png` | `wiki-shortcuts` | the Shortcuts window |
 | `shot-statistics.png` | `statistics` | the Statistics view of the pretend drive |
+| `shot-tree.png` | `tree` | the Tree view of the pretend drive, two folders open |
 | `changes-everything.png` | `wiki-changes-everything` | Changes with Everything shown, sorted by size now, two folders open |
 | `inspect-selection.png` | `wiki-inspect-selection` | Inspect for several selected files |
 | `achievements.png`, `achievement-toast.png` | `wiki-achievements`, `wiki-achievement-toast` | the Achievements window; a toast over the map |

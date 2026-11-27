@@ -37,7 +37,7 @@ About › **Keyboard shortcuts** (or F1 › Shortcuts) draws this list on your o
 | M | Switch between the Classic and Modern map styles |
 | U | Physical or Uniform map |
 | G | Show or hide free space |
-| B | Switch between the map, Insights, Statistics and Changes |
+| B | Switch between the map, the tree, Insights, Statistics and Changes |
 | L | Drives and largest items panel |
 
 ## Scans and windows

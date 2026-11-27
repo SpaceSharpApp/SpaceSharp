@@ -42,13 +42,13 @@ On the left; **L** or the panel button hides and shows it, and its edge drags to
 
 ## The three views
 
-The toolbar switches what fills the map's place: **Map**, **Insights** ([Insights](Insights)), **Statistics** ([Statistics](Statistics)) and **Changes** ([Changes](Changes)); **B** cycles them. Zoom and the path row belong to the map; the other two have their own controls.
+The toolbar switches what fills the map's place: **Map**, **Tree** ([Tree](Tree)), **Insights** ([Insights](Insights)), **Statistics** ([Statistics](Statistics)) and **Changes** ([Changes](Changes)); **B** cycles them. Zoom and the path row belong to the map; the other views have their own controls.
 
 ## The right-click menu
 
 The menu shows only the rows that apply to what you clicked. At the top, the item itself: name, size, file and folder counts, when it last changed, and a bar for its share of its folder, with its share of the drive beside it (for a file, where it ranks among files of its type in that folder). Click that header for **Inspect** (Ctrl+I, [Inspect](Inspect)).
 
-- **Zoom to folder** (on a file: Zoom to its folder, by name), **Open** (Enter), **Show in Explorer**, **Copy path** (Ctrl+C).
+- **Zoom to folder** (on a file: Zoom to its folder, by name), **Show in Tree view**, which switches to the Tree view with the item's line opened up and selected ([Tree](Tree)), **Open** (Enter), **Show in Explorer**, **Copy path** (Ctrl+C).
 - **Select everything in this folder**. On a file also **Show only *.ext files**, **Select all *.ext in this folder**, and **Find copies of this file**, which opens Duplicates with the file picked out ([Duplicates and empty folders](Duplicates-and-Empty-Folders)).
 - **What changed here** (when a compared scan is loaded): opens Changes at this folder ([Changes](Changes)).
 - **Leave out of future scans**: adds the item's name to Settings › Scanning › Leave out, after telling you that every item of that name will be skipped.

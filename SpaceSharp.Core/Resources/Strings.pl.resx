@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Zmiana</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Więcej</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Co się tu zmieniło</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>Pokaż w widoku drzewa</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Pomijaj w przyszłych skanach</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Każdy plik i folder o nazwie „{0}” będzie pomijany od następnego skanu. Lista jest w Ustawienia › Skanowanie › Pomijaj.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Pomijaj</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>Według typu</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>Według wieku</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Gdzie jest miejsce</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Powiększ mapę tutaj</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Powiększ mapę do tego folderu</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>W tym miesiącu</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>W tym roku</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 do 3 lat</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Najstarsza zmiana {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} tego folderu to jedna rzecz: {1} o rozmiarze {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} na dysku</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} z {1}, jego jedyny folder</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} z {1}, jego jedyny plik</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} z {1}, największy z jego {2} folderów</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} z {1}, największy z jego {2} plików</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} z {1}, numer {3} z {2} folderów według rozmiaru</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} z {1}, numer {3} z {2} plików według rozmiaru</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Głównie {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Głównie {0} ({1}) i {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Mieszanka: {0} ({1}), {2} ({3}) i {4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Ostatnia zmiana {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Zmodyfikowano {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>bez zmian od ostatniego skanowania</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>urósł o {0} od ostatniego skanowania</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>zmalał o {0} od ostatniego skanowania</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>To samo dla jasnego motywu: Papier, Len, Mgła, Piasek lub Śnieg.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Przyciemnienie za oknami</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>O ile mapa ciemnieje, gdy nad nią otwarte są Ustawienia, Zbadaj, O programie lub okno aktualizacji. 0 zostawia ją bez zmian.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Ułatwienia dostępu</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Rozmiar tekstu</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Rysuje cały interfejs większy, tekst razem z kontrolkami. Menu i podpowiedzi zachowują swój rozmiar.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Czcionka do czytania</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible powstał dla osób słabowidzących; jego litery trudno ze sobą pomylić. Etykiety na mapie też się zmieniają.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Domyślna (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Ogranicz ruch</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Pomija powiększanie między folderami i błysk na zaznaczonym elemencie.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Mocniejszy kontrast</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Wyostrza przygaszony tekst i linie między wierszami, w każdym wyglądzie.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Widzenie barw</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Dostosowuje każdą paletę tak, aby kolory mylone przy zaburzeniu widzenia barw dały się rozróżnić.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Wyłączone</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Osłabienie czerwieni (protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Osłabienie zieleni (deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Osłabienie niebieskiego (tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Morskie błękity, rdza i lina</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Kwiat, liść i dojrzały owoc</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Paleta, cieniowanie i tekst</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Wszystko, co dotyczy wyglądu mapy, znajduje się na stronie Mapa drzewa, obok podglądu.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Kolory</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Miedź, mosiądz, oliwka i rdza</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Widmo w pełnej mocy</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Szarości, bursztyn jako akcent</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito i Tol; rozróżnialne dla każdego</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Miękkie odcienie każdej barwy; domyślna w jasnym motywie</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Wyblakłe tony na papierze</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Słodkie i jasne</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Glina, piasek i róż; cieplejsza niż Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Fiolety i pudrowe błękity</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Siedem mocnych barw podstawowych</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Ten sam bezpieczny zestaw, rozjaśniony na jasne tła</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Paleta dla motywu {0}. Każdy motyw pamięta swoją; mapa przełącza się wraz z motywem.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · dla motywu {1}</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Przełączanie między mapą, Analizą, Statystykami i Zmianami</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Przełączanie między mapą, drzewem, Analizą, Statystykami i Zmianami</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Według typu</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Bezpieczne do wyczyszczenia</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Kiedy zmieniono</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Nazwa lub wzorzec, np. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Mapa</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>Mapa skanu (B przełącza widoki)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Drzewo</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Każdy folder i jego zawartość, otwierane poziom po poziomie (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Każdy folder z jego zawartością. Kliknij strzałkę przy folderze, aby go otworzyć.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Udział w folderze nadrzędnym</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>Otwórz pierwszy poziom</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>Otwiera foldery pierwszego poziomu. Głębsze foldery otwiera się pojedynczo</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Zamknij wszystkie</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>Foldery: {0:N0} · pliki: {1:N0} · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Analiza</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Podsumowanie skanowania: według typu, bezpieczne do wyczyszczenia, kiedy zmieniono, największe elementy (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Analiza</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp powstał na otwartej pracy</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Dziękujemy ludziom, którzy za nią stoją.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Mapa</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Układ to squarified treemap autorstwa [Brulsa, Huizinga i van Wijka](https://www.win.tue.nl/~vanwijk/stm.pdf), opublikowany w 2000 roku. Pomysł pokazania dysku jako mapy pochodzi z [SpaceMongera](https://www.stardock.com/products/spacemonger/) Seana Werkemy, a same treemapy od Bena Shneidermana (1991). Paleta przyjazna daltonistom używa ośmiu kolorów [Okabe i Ito](https://jfly.uni-koeln.de/color/) (2002). Cztery kolejne kolory pochodzą z jasnego schematu [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Układ to squarified treemap autorstwa [Brulsa, Huizinga i van Wijka](https://www.win.tue.nl/~vanwijk/stm.pdf), opublikowany w 2000 roku. Pomysł pokazania dysku jako mapy pochodzi z [SpaceMongera](https://www.stardock.com/products/spacemonger/) Seana Werkemy, a same treemapy od Bena Shneidermana (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Oprogramowanie</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Napisany w C# na [.NET 10](https://dotnet.microsoft.com). Interfejs to [Avalonia UI](https://avaloniaui.net), rysowany przez [SkiaSharp](https://github.com/mono/SkiaSharp), krojem [Inter](https://rsms.me/inter/) Rasmusa Anderssona. Ikony pochodzą z [Lucide](https://lucide.dev), kontynuacji Feather Cole'a Bemisa. Instalator i aktualizacje w Windows pochodzą z [Velopack](https://velopack.io) Caelana Saylera. Wszystko na licencji MIT, poza Lucide (ISC) i Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Języki</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Zgodnie z ustawieniem Windows albo zawsze jasny lub ciemny. Złoto jest Twoje: wszystkie osiągnięcia odblokowane, a aplikacja ubrana stosownie, z własną paletą mapy.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Dwanaście metali od mosiądzu po różowe złoto, dla motywu Złoto</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} rodzajów</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>Folder z {0:N0} plikami w {1:N0} folderach, {2:N0} z nich bezpośrednio w środku.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Folder z {0:N0} plikami, wszystkie bezpośrednio w środku.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>Zajmuje {0} oraz {1} z {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Zajmuje {0}.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} innych rodzajów dzieli {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Mediana pliku {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} zmieniło się w tym miesiącu; {1} nie było ruszane od ponad roku.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Folder lub plik</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Rozmiar</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Udział</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Pliki</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Zmieniono</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Rodzaj</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Plik</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>W</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>Największe pliki</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} z {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>Z {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>w {0:N0} folderach, {1:N0} bezpośrednio w środku</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>wszystkie bezpośrednio w środku</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>największy z {0:N0} folderów</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>największy z {0:N0} plików</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>jedyny folder</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>jedyny plik</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>numer {1:N0} z {0:N0} folderów według rozmiaru</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>numer {1:N0} z {0:N0} plików według rozmiaru</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>z {0} przeskanowanych</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Ostatnia zmiana</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Zmodyfikowano</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>Sprawdź</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>Pokaż wszystkie elementy ({0:N0})</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Pokaż mniej</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>Pozostałe {0:N0} plików</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} więcej</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>te {0:N0} to {1} folderu</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys i swapfile.sys to pamięć wirtualna. Ich rozmiar ustawia się w Sy
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Lewy górny róg</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>Środek</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Edycja dla wspierających</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp jest darmowy i kompletny dla wszystkich. Klucz wspierającego to podziękowanie za jednorazową wpłatę. Dodaje tutaj Twoje imię i nie odblokowuje niczego więcej.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp jest darmowy i kompletny dla wszystkich. Klucz wspierającego to podziękowanie za jednorazową wpłatę. Oznacza tę kopię jako kopię wspierającego i nie odblokowuje niczego więcej.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>Wklej klucz z wiadomości e-mail</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Użyj tego klucza</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Zdobądź klucz wspierającego</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>To nie jest prawidłowy klucz wspierającego. Skopiuj cały klucz, od SSUP1 do ostatniego znaku.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Dziękujemy, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>Dziękujemy za wspieranie SpaceSharp.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Wspiera od: {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>Klucz jest sprawdzany na tym komputerze. Nic nie jest nigdzie wysyłane.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>Usuń klucz z tego komputera</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>Brak klucza na tym komputerze</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>Klucz włącza tę kartę</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp jest darmowy i kompletny dla wszystkich. Twoja wpłata pomaga to utrzymać.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Wspierający</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp jest darmowy i taki pozostanie. Te osoby dołożyły się, kupując [klucz wspierającego](https://spacesharp.app/supporter/):</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp jest darmowy i taki pozostanie. [Klucz wspierającego](https://spacesharp.app/supporter/) to sposób na podziękowanie, a Twoje imię pojawi się tutaj.</value></data>

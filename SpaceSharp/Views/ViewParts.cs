@@ -7,13 +7,29 @@ using SpaceSharp.Util;
 
 namespace SpaceSharp.Views;
 
-/// <summary>The small building blocks the Insights, Statistics and Changes views share: dim text, color swatches, bars and clickable rows.</summary>
+/// <summary>The small building blocks the Tree, Insights, Statistics and Changes views share: dim text, column labels, color swatches, bars and clickable rows.</summary>
 internal static class ViewParts
 {
     /// <summary>Small dim text that trims with an ellipsis.</summary>
     /// <param name="text">The text to show.</param>
     /// <returns>An 11-point text block.</returns>
     public static TextBlock Small(string text) => new() { Text = text, FontSize = FontSizes.Caption, TextTrimming = TextTrimming.CharacterEllipsis, Classes = { "dim" } };
+
+    /// <summary>A small upper-case column label, for the header row of a table.</summary>
+    /// <param name="text">The label in mixed case; upper-cased with the current culture here.</param>
+    /// <param name="align">Left for a name column, right for numbers, center for a bar.</param>
+    /// <returns>A dim text block that trims with an ellipsis.</returns>
+    public static TextBlock ColumnLabel(string text, TextAlignment align) => new()
+    {
+        Text = text.ToUpper(System.Globalization.CultureInfo.CurrentCulture),
+        FontSize = FontSizes.Caption,
+        FontWeight = FontWeight.SemiBold,
+        LetterSpacing = 0.4,
+        TextAlignment = align,
+        VerticalAlignment = VerticalAlignment.Center,
+        TextTrimming = TextTrimming.CharacterEllipsis,
+        Classes = { "dim" }
+    };
 
     /// <summary>A small rounded color square.</summary>
     /// <param name="fill">The color to show.</param>

@@ -110,4 +110,35 @@ public class MockSystemTests
         store.Unlock(Achievement.Whale);
         Assert.True(store.IsUnlocked(Achievement.Whale));
     }
+
+    [Fact]
+    public void ThePretendPcHasNoSettingsOfItsOwner()
+    {
+        var settings = new AppSettings { TextScale = 150, ReadingFont = "Atkinson", ReduceMotion = true, HighContrast = true, ColorVision = "Tritan", SupporterKey = "SSUP1.x.y" };
+
+        MockSystem.UseNeutralSettings(settings);
+
+        Assert.Equal(100, settings.TextScale);
+        Assert.Equal("Default", settings.ReadingFont);
+        Assert.False(settings.ReduceMotion);
+        Assert.False(settings.HighContrast);
+        Assert.Equal("Off", settings.ColorVision);
+        Assert.Null(settings.SupporterKey);
+    }
+
+    [Theory]
+    [InlineData("Color-blind safe", null, "Off", "Deutan")]
+    [InlineData(null, "Color-blind safe (light)", "Off", "Deutan")]
+    [InlineData("Color-blind safe", null, "Tritan", "Tritan")]
+    [InlineData("Graphite", "Pastel", "Off", "Off")]
+    public void SettingsLeaveTheRetiredColorBlindPalettes(string? dark, string? light, string vision, string expectedVision)
+    {
+        var settings = new AppSettings { PaletteDark = dark, PaletteLight = light, ColorVision = vision };
+
+        settings.LeaveRetiredPalettes();
+
+        Assert.Equal(expectedVision, settings.ColorVision);
+        Assert.Equal(dark == "Graphite" ? "Graphite" : null, settings.PaletteDark);
+        Assert.Equal(light == "Pastel" ? "Pastel" : null, settings.PaletteLight);
+    }
 }

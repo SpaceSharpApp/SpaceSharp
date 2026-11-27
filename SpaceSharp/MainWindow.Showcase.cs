@@ -25,7 +25,8 @@ public partial class MainWindow
         "wiki-shading-sidelight", "wiki-shading-off", "wiki-zoomed", "wiki-free-space", "wiki-physical", "wiki-classic", "wiki-rail", "wiki-filtered", "wiki-palette-picker",
         "wiki-shortcuts", "wiki-changes-everything", "wiki-inspect-selection", "wiki-palettes", "wiki-palette-editor",
         "wiki-settings-general", "wiki-settings-behavior", "wiki-settings-appearance", "wiki-settings-text", "wiki-settings-map", "wiki-settings-scanning", "wiki-rtl",
-        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export", "statistics"
+        "wiki-achievements", "wiki-achievement-toast", "wiki-empty-folders", "wiki-duplicates", "wiki-export", "statistics", "tree",
+        "wiki-inspect-file", "wiki-settings-accessibility", "wiki-color-vision", "wiki-supporter"
     };
 
     /// <summary>Runs one <c>--scene</c>: sizes the window, poses the scene, and with <c>--shot</c> captures it to a PNG and exits.</summary>
@@ -33,6 +34,7 @@ public partial class MainWindow
     private async Task PoseAsync(string scene)
     {
         AppSettings.Frozen = true;
+        PoseDefaults();
         if (App.Args.Size is { } size)
         {
             // The asked size exactly, centered: the fit-to-screen on opening may have shrunk the default window, and must not shrink this.
@@ -76,6 +78,17 @@ public partial class MainWindow
             Console.Error.WriteLine($"Screenshot failed: {ex.Message}");
         }
         (Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+    }
+
+    /// <summary>Puts the settings that would make one person's pictures differ from another's back to their defaults for the pose: the
+    /// Accessibility settings and the supporter key. Nothing is saved, since settings are frozen while a scene is posed.</summary>
+    private void PoseDefaults()
+    {
+        MockSystem.UseNeutralSettings(_settings);
+        Palette.Reload();
+        App.ApplyTheme();
+        Accessibility.Refresh();
+        ApplySettings();
     }
 
     /// <summary>Grows the main window around a dialog taller than it, such as Inspect, so the shot shows the dialog on the app and not on the
@@ -138,6 +151,12 @@ public partial class MainWindow
                 break;
             case "statistics":
                 ShowView(MainView.Statistics);
+                break;
+            case "tree":
+                ShowView(MainView.Tree);
+                await Settle();
+                // Two folders open under the root, so the table shows how the levels nest.
+                FolderTreeView.OpenFirstFolders(2);
                 break;
             case "changes":
                 ShowView(MainView.Changes);
@@ -287,6 +306,30 @@ public partial class MainWindow
                     dialog = LastOwned();
                 }
                 break;
+            case "wiki-inspect-file":
+                // One file, which has a layout of its own: the largest recording.
+                if (_root?.FindDescendant(System.IO.Path.Combine(_root.FullPath, "Users", "User", "Videos", "Recordings")) is { } recordingsFolder
+                    && recordingsFolder.Children.Where(child => child.IsReal && !child.IsDirectory).MaxBy(child => child.Size) is { } largestRecording)
+                {
+                    Treemap.FocusOn(recordingsFolder, animate: false);
+                    await Settle();
+                    Treemap.SelectedNode = largestRecording;
+                    ShowInspect();
+                    dialog = LastOwned();
+                }
+                break;
+            case "wiki-color-vision":
+                // The default palette adjusted for the most common deficiency, colored by type so the kinds' colors show too.
+                _settings.ColorVision = "Deutan";
+                _settings.ColorMode = "ByFileType";
+                Palette.Reload();
+                ApplySettings();
+                ColorCombo.SelectedIndex = 2;
+                break;
+            case "wiki-supporter":
+                dialog = new SupporterWindow();
+                _ = dialog.ShowModal(this);
+                break;
             case "wiki-palettes":
                 await RenderPaletteSheetAsync();
                 return null;
@@ -308,6 +351,9 @@ public partial class MainWindow
                 break;
             case "wiki-settings-appearance":
                 dialog = OpenSettings("Appearance", Strings.Get("Settings_Appearance"));
+                break;
+            case "wiki-settings-accessibility":
+                dialog = OpenSettings("Accessibility", Strings.Get("SettingsTab_Accessibility"));
                 break;
             case "wiki-settings-text":
                 dialog = OpenSettings("Treemap", Strings.Get("Settings_Text"));

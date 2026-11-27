@@ -6,11 +6,15 @@ SpaceSharp is MIT licensed (see LICENSE). This file lists everything it ships, b
 
 ### Velopack
 
-The installer (`Setup.exe`), the updater (`Update.exe`) and the update check inside the app come from Velopack, https://velopack.io, pulled in as the NuGet package `Velopack` (the only package dependency of the app). The MSI is produced by `vpk`, Velopack's command-line tool, which uses the WiX Toolset under the hood.
+The installer (`Setup.exe`), the updater (`Update.exe`) and the update check inside the app come from Velopack, https://velopack.io, pulled in as the NuGet package `Velopack` (1.2.x), the only package dependency of the app besides Avalonia. The MSI is produced by `vpk`, Velopack's command-line tool, which uses the WiX Toolset under the hood.
 
 MIT License. Copyright (c) 2021 Caelan Sayler and Velopack contributors.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### Reading font
+
+Atkinson Hyperlegible, regular and bold, in `SpaceSharp/Assets/Fonts`, can be chosen under Settings › Accessibility › Reading font. Copyright 2020 Braille Institute of America, Inc., https://github.com/googlefonts/atkinson-hyperlegible. It is licensed under the SIL Open Font License, Version 1.1; the license text is `OFL-AtkinsonHyperlegible.txt` beside the font files, and both are unmodified and ship inside the app.
 
 ### Lucide icons
 
@@ -22,7 +26,7 @@ Permission to use, copy, modify, and/or distribute this software for any purpose
 
 ### .NET, Avalonia and SkiaSharp
 
-The app is built on .NET 10, https://github.com/dotnet/runtime, MIT license, Copyright (c) .NET Foundation and Contributors. The interface is Avalonia UI, https://avaloniaui.net (NuGet packages `Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`), MIT license, Copyright (c) AvaloniaUI OÜ and contributors. Avalonia draws through SkiaSharp, https://github.com/mono/SkiaSharp, MIT license, Copyright (c) Microsoft Corporation, which wraps Google's Skia graphics library (BSD 3-Clause license, Copyright (c) Google LLC). The portable and Setup builds carry the runtime inside them (self-contained); the Small build expects the .NET Runtime to be installed.
+The app is built on .NET 10, https://github.com/dotnet/runtime, MIT license, Copyright (c) .NET Foundation and Contributors. The interface is Avalonia UI, https://avaloniaui.net (NuGet packages `Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`, `Avalonia.Fonts.Inter`, all 12.2.0), MIT license, Copyright (c) AvaloniaUI OÜ and contributors. Avalonia draws through SkiaSharp (3.119, the version Avalonia brings with it), https://github.com/mono/SkiaSharp, MIT license, Copyright (c) Microsoft Corporation, which wraps Google's Skia graphics library (BSD 3-Clause license, Copyright (c) Google LLC). The portable and Setup builds carry the runtime inside them (self-contained); the Small build expects the .NET Runtime to be installed.
 
 ### Inter
 
@@ -35,20 +39,23 @@ On Windows the scanner, the Recycle Bin, the title bar colors and the drive dete
 ### Algorithms and data
 
 - The treemap layout is the squarified algorithm from "Squarified Treemaps" by Mark Bruls, Kees Huizing and Jarke J. van Wijk (2000). Algorithms are not copyrightable; the implementation is SpaceSharp's own.
-- The color-blind safe palettes use the eight colors proposed by Masataka Okabe and Kei Ito ("Color Universal Design", 2002, https://jfly.uni-koeln.de/color/) and four from Paul Tol's bright scheme (https://tol-colors.readthedocs.io/en/latest/); both sets are free to use.
+- The color vision adjustment (Settings › Accessibility) simulates color vision deficiencies with the matrices from "A Physiologically-based Model for Simulation of Color Vision Deficiency" by Gustavo Machado, Manuel Oliveira and Leandro Fernandes (2009). The numbers are published results; the code is SpaceSharp's own.
+- The file type table (`SpaceSharp.Core/Resources/FileTypes.txt`), which sorts extensions into categories, is SpaceSharp's own list.
 - The Insights view's "safe to clear" places (Windows.old, caches, the Recycle Bin and so on) are a list SpaceSharp maintains; it is not taken from another tool.
 - The idea of a zoomable treemap of a drive goes back to Ben Shneiderman's work at the University of Maryland (1991) and, as a Windows app, to SpaceMonger by Sean Werkema, now at https://www.stardock.com/products/spacemonger/. SpaceSharp shares no code with it. SpaceMonger, WizTree and WinDirStat are the property of their respective owners and are mentioned only for comparison.
 
 ## Used to build and test, not shipped
 
-- **xUnit** 2.9 (Apache License 2.0), **xunit.runner.visualstudio** (Apache License 2.0) and **Microsoft.NET.Test.Sdk** (MIT): the test project, `SpaceSharp.Tests`.
+- **xUnit** 2.9 (Apache License 2.0), **xunit.runner.visualstudio** 4.0 (Apache License 2.0) and **Microsoft.NET.Test.Sdk** 18 (MIT): the test project, `SpaceSharp.Tests`.
 - **GitHub Actions**: `actions/checkout` and `actions/setup-dotnet` (MIT), in `.github/workflows/tests.yml`.
+- **Velopack's `vpk`** command-line tool (MIT) packs the installers and update packages, called by `installer/release.ps1`; **Chocolatey**'s `choco pack` makes the Chocolatey package.
 - **Windows SDK** `signtool.exe` for code signing (Microsoft Software License Terms), called by `installer/release.ps1`.
 
 ## Used for the website, the screenshots and the brand files, not shipped
 
 - **Bricolage Grotesque** by Mathieu Triay, https://github.com/ateliertriay/bricolage, SIL Open Font License 1.1. The landing page loads it from Google Fonts, and the wordmark in the header, the installer bitmaps and the social preview is set in it. The font is not inside the app or the installers.
 - **Pillow** (MIT-CMU / HPND license): `tools/make-mobile-shots.py` makes the WebP copies of the screenshots.
+- **Polar** (https://polar.sh) takes the payment for a supporter key; `tools/supporter/server` is SpaceSharp's own PHP that answers its webhook. None of it is in the app.
 - **Shields.io** badges in the README are images fetched from https://shields.io (CC0 for the service's output).
 - The landing page is plain HTML, CSS and JavaScript with no frameworks; it loads nothing but the Google Fonts stylesheet above.
 

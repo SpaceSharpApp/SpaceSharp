@@ -41,6 +41,19 @@
 | Light look | The same for the light theme: Paper, Linen, Mist, Sand, GitHub Light or Snow. | Paper |
 | Dim behind windows | How much the map darkens behind Settings, Inspect, About and the update prompt; 0 turns it off. | 45% |
 
+## Accessibility
+
+<p align="center"><img src="images/settings-accessibility.png" width="900" alt="Settings, Accessibility"></p>
+
+| Setting | What it does | Default |
+|---|---|---|
+| Text size | Draws the whole interface larger, text and controls together: 100%, 110%, 125% or 150%. Dialogs grow with their content; the main window keeps its size. Menus and tooltips are not scaled. | 100% |
+| Reading font | The font the interface is set in. Atkinson Hyperlegible is made for low vision, with letters that are hard to mistake for each other. The map's labels follow. It covers Latin letters; other scripts fall back to the system's font. | Default (Inter) |
+| Reduce motion | Leaves out the zoom between folders and the flash on a selected item, whatever Animate zoom says. | Off |
+| Stronger contrast | Brightens the dim text and the lines between rows, on every look. | Off |
+| Color vision | Adjusts every palette for red-weak (protan), green-weak (deutan) or blue-weak (tritan) vision, so the colors that would run together come apart ([Palettes and looks](Palettes-and-Looks)). | Off |
+| Outlined labels | The same switch as under Treemap › Text: a thin contrasting outline around every label on the map. | Off |
+
 ## Treemap
 
 A sample map at the top of the page follows every change. Pick the style first: a setting that only one style uses says so in its description and is dimmed under the other.

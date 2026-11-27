@@ -395,6 +395,7 @@
   <data name="Col_Change" xml:space="preserve"><value>Änderung</value></data>
   <data name="Menu_More" xml:space="preserve"><value>Mehr</value></data>
   <data name="Menu_WhatChangedHere" xml:space="preserve"><value>Was sich hier geändert hat</value></data>
+  <data name="Menu_ShowInTree" xml:space="preserve"><value>In der Baumansicht anzeigen</value></data>
   <data name="Menu_LeaveOut" xml:space="preserve"><value>Aus künftigen Scans auslassen</value></data>
   <data name="Menu_LeaveOutQuestion" xml:space="preserve"><value>Jede Datei und jeder Ordner namens „{0}“ wird ab dem nächsten Scan übersprungen. Die Liste steht unter Einstellungen › Scannen › Auslassen.</value></data>
   <data name="Menu_LeaveOutButton" xml:space="preserve"><value>Auslassen</value></data>
@@ -852,8 +853,6 @@
   <data name="Inspect_ByType" xml:space="preserve"><value>Nach Typ</value></data>
   <data name="Inspect_ByAge" xml:space="preserve"><value>Nach Alter</value></data>
   <data name="Inspect_WhereTheSpaceIs" xml:space="preserve"><value>Wo der Speicher steckt</value></data>
-  <data name="Inspect_CrumbTip" xml:space="preserve"><value>Karte hierhin zoomen</value></data>
-  <data name="Inspect_RowTip" xml:space="preserve"><value>Karte auf diesen Ordner zoomen</value></data>
   <data name="Inspect_Age_ThisMonth" xml:space="preserve"><value>Diesen Monat</value></data>
   <data name="Inspect_Age_ThisYear" xml:space="preserve"><value>Dieses Jahr</value></data>
   <data name="Inspect_Age_OneToThreeYears" xml:space="preserve"><value>1 bis 3 Jahre</value></data>
@@ -861,17 +860,6 @@
   <data name="Inspect_OldestChange" xml:space="preserve"><value>Älteste Änderung {0}</value></data>
   <data name="Inspect_CalloutDominant" xml:space="preserve"><value>{0} dieses Ordners ist eine einzige Sache: {1} mit {2}.</value></data>
   <data name="Inspect_Ctx_OnDisk" xml:space="preserve"><value>{0} auf dem Datenträger</value></data>
-  <data name="Inspect_Ctx_OnlyFolder" xml:space="preserve"><value>{0} von {1}, sein einziger Ordner</value></data>
-  <data name="Inspect_Ctx_OnlyFile" xml:space="preserve"><value>{0} von {1}, seine einzige Datei</value></data>
-  <data name="Inspect_Ctx_LargestFolder" xml:space="preserve"><value>{0} von {1}, der größte seiner {2} Ordner</value></data>
-  <data name="Inspect_Ctx_LargestFile" xml:space="preserve"><value>{0} von {1}, die größte seiner {2} Dateien</value></data>
-  <data name="Inspect_Ctx_RankFolder" xml:space="preserve"><value>{0} von {1}, Nummer {3} von {2} Ordnern nach Größe</value></data>
-  <data name="Inspect_Ctx_RankFile" xml:space="preserve"><value>{0} von {1}, Nummer {3} von {2} Dateien nach Größe</value></data>
-  <data name="Inspect_Ctx_Mostly" xml:space="preserve"><value>Überwiegend {0} ({1})</value></data>
-  <data name="Inspect_Ctx_MostlyAnd" xml:space="preserve"><value>Überwiegend {0} ({1}) und {2} ({3})</value></data>
-  <data name="Inspect_Ctx_Mix" xml:space="preserve"><value>Eine Mischung aus {0} ({1}), {2} ({3}) und {4} ({5})</value></data>
-  <data name="Inspect_Ctx_LastChanged" xml:space="preserve"><value>Zuletzt geändert {0}</value></data>
-  <data name="Inspect_Ctx_Modified" xml:space="preserve"><value>Geändert {0}</value></data>
   <data name="Inspect_Ctx_Unchanged" xml:space="preserve"><value>unverändert seit dem letzten Scan</value></data>
   <data name="Inspect_Ctx_Grew" xml:space="preserve"><value>seit dem letzten Scan um {0} gewachsen</value></data>
   <data name="Inspect_Ctx_Shrank" xml:space="preserve"><value>seit dem letzten Scan um {0} geschrumpft</value></data>
@@ -949,6 +937,24 @@
   <data name="Settings_LookLight_Desc" xml:space="preserve"><value>Dasselbe für das helle Design: Papier, Leinen, Nebel, Sand, GitHub Light oder Schnee.</value></data>
   <data name="Settings_DialogDim" xml:space="preserve"><value>Hinter Fenstern abdunkeln</value></data>
   <data name="Settings_DialogDim_Desc" xml:space="preserve"><value>Wie stark die Karte abgedunkelt wird, solange Einstellungen, Untersuchen, Info oder die Update-Abfrage darüber offen sind. 0 lässt sie, wie sie ist.</value></data>
+  <data name="SettingsTab_Accessibility" xml:space="preserve"><value>Barrierefreiheit</value></data>
+  <data name="Settings_TextSize" xml:space="preserve"><value>Textgröße</value></data>
+  <data name="Settings_TextSize_Desc" xml:space="preserve"><value>Zeichnet die gesamte Oberfläche größer, Text und Bedienelemente zusammen. Menüs und Tooltips behalten ihre Größe.</value></data>
+  <data name="Settings_ReadingFont" xml:space="preserve"><value>Leseschrift</value></data>
+  <data name="Settings_ReadingFont_Desc" xml:space="preserve"><value>Atkinson Hyperlegible ist für Sehschwäche gemacht, mit Buchstaben, die sich schwer verwechseln lassen. Die Beschriftungen der Karte folgen.</value></data>
+  <data name="Settings_ReadingFont_Default" xml:space="preserve"><value>Standard (Inter)</value></data>
+  <data name="Settings_ReduceMotion" xml:space="preserve"><value>Bewegung reduzieren</value></data>
+  <data name="Settings_ReduceMotion_Desc" xml:space="preserve"><value>Lässt den Zoom zwischen Ordnern und das Aufblinken eines ausgewählten Elements weg.</value></data>
+  <data name="Settings_HighContrast" xml:space="preserve"><value>Stärkerer Kontrast</value></data>
+  <data name="Settings_HighContrast_Desc" xml:space="preserve"><value>Macht den gedämpften Text und die Linien zwischen Zeilen deutlicher, in jedem Erscheinungsbild.</value></data>
+  <data name="Settings_ColorVision" xml:space="preserve"><value>Farbsehen</value></data>
+  <data name="Settings_ColorVision_Desc" xml:space="preserve"><value>Passt jede Palette so an, dass Farben, die bei einer Farbsehschwäche verschwimmen, auseinanderrücken.</value></data>
+  <data name="ColorVision_Off" xml:space="preserve"><value>Aus</value></data>
+  <data name="ColorVision_Protan" xml:space="preserve"><value>Rotschwäche (Protan)</value></data>
+  <data name="ColorVision_Deutan" xml:space="preserve"><value>Grünschwäche (Deutan)</value></data>
+  <data name="ColorVision_Tritan" xml:space="preserve"><value>Blauschwäche (Tritan)</value></data>
+  <data name="PaletteAbout_Marina" xml:space="preserve"><value>Meerblau, Rost und Tauwerk</value></data>
+  <data name="PaletteAbout_Orchard" xml:space="preserve"><value>Blüte, Blatt und reife Frucht</value></data>
   <data name="Settings_LookMoved" xml:space="preserve"><value>Palette, Schattierung und Text</value></data>
   <data name="Settings_LookMoved_Desc" xml:space="preserve"><value>Alles zum Aussehen der Karte befindet sich auf der Seite Treemap, neben einer Vorschau.</value></data>
   <data name="Settings_Colors" xml:space="preserve"><value>Farben</value></data>
@@ -984,7 +990,6 @@
   <data name="PaletteAbout_Copper" xml:space="preserve"><value>Kupfer, Messing, Olive und Rost</value></data>
   <data name="PaletteAbout_Prism" xml:space="preserve"><value>Das Spektrum in voller Stärke</value></data>
   <data name="PaletteAbout_Monochrome" xml:space="preserve"><value>Grautöne, Bernstein als Akzent</value></data>
-  <data name="PaletteAbout_Colorblindsafe" xml:space="preserve"><value>Okabe-Ito und Tol; für alle unterscheidbar</value></data>
   <data name="PaletteAbout_Pastel" xml:space="preserve"><value>Weiche Töne in jeder Farbe; die Vorgabe im hellen Design</value></data>
   <data name="PaletteAbout_Paper" xml:space="preserve"><value>Verblasste Töne auf Papier</value></data>
   <data name="PaletteAbout_Candy" xml:space="preserve"><value>Süß und leuchtend</value></data>
@@ -996,10 +1001,9 @@
   <data name="PaletteAbout_Terracotta" xml:space="preserve"><value>Ton, Sand und Rosa; wärmer als Earth</value></data>
   <data name="PaletteAbout_Lilac" xml:space="preserve"><value>Violett und Puderblau</value></data>
   <data name="PaletteAbout_Retro" xml:space="preserve"><value>Sieben kräftige Grundfarben</value></data>
-  <data name="PaletteAbout_Colorblindsafelight" xml:space="preserve"><value>Derselbe sichere Satz, aufgehellt für helle Flächen</value></data>
   <data name="Settings_Palette_ThemeDesc" xml:space="preserve"><value>Die Palette für das Design {0}. Jedes Design merkt sich seine eigene; die Karte wechselt mit dem Design.</value></data>
   <data name="Settings_PaletteOtherTheme" xml:space="preserve"><value>{0} · für das Design {1} gemacht</value></data>
-  <data name="Key_BottomPanel" xml:space="preserve"><value>Zwischen Karte, Einblicke, Statistik und Änderungen wechseln</value></data>
+  <data name="Key_BottomPanel" xml:space="preserve"><value>Zwischen Karte, Baum, Einblicke, Statistik und Änderungen wechseln</value></data>
   <data name="Panel_TabType" xml:space="preserve"><value>Nach Typ</value></data>
   <data name="Panel_TabCleanup" xml:space="preserve"><value>Gefahrlos löschbar</value></data>
   <data name="Panel_TabTimeline" xml:space="preserve"><value>Wann geändert</value></data>
@@ -1083,6 +1087,14 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Rail_NamePlaceholder" xml:space="preserve"><value>Name oder Muster, z. B. *.iso</value></data>
   <data name="Main_ViewMap" xml:space="preserve"><value>Karte</value></data>
   <data name="Main_ViewMapTip" xml:space="preserve"><value>Die Karte des Scans (B wechselt zwischen den Ansichten)</value></data>
+  <data name="Main_ViewTree" xml:space="preserve"><value>Baum</value></data>
+  <data name="Main_ViewTreeTip" xml:space="preserve"><value>Jeder Ordner und sein Inhalt, Ebene für Ebene geöffnet (B)</value></data>
+  <data name="Tree_Sub" xml:space="preserve"><value>Jeder Ordner mit seinem Inhalt. Ein Klick auf den Pfeil öffnet einen Ordner.</value></data>
+  <data name="Tree_ColShare" xml:space="preserve"><value>Anteil am übergeordneten Ordner</value></data>
+  <data name="Tree_OpenLevel" xml:space="preserve"><value>Erste Ebene öffnen</value></data>
+  <data name="Tree_OpenLevelTip" xml:space="preserve"><value>Öffnet die Ordner der ersten Ebene. Tiefere Ordner werden einzeln geöffnet</value></data>
+  <data name="Tree_CloseAll" xml:space="preserve"><value>Alle schließen</value></data>
+  <data name="Tree_Footer" xml:space="preserve"><value>{0:N0} Ordner · {1:N0} Dateien · {2}</value></data>
   <data name="Main_ViewInsights" xml:space="preserve"><value>Einblicke</value></data>
   <data name="Main_ViewInsightsTip" xml:space="preserve"><value>Der Scan zusammengefasst: nach Typ, gefahrlos löschbar, wann geändert, größte Elemente (B)</value></data>
   <data name="Insights_Title" xml:space="preserve"><value>Einblicke</value></data>
@@ -1285,7 +1297,7 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Credits_Title" xml:space="preserve"><value>SpaceSharp baut auf offener Arbeit auf</value></data>
   <data name="Credits_Thanks" xml:space="preserve"><value>Danke an die Menschen dahinter.</value></data>
   <data name="Credits_MapHeading" xml:space="preserve"><value>Die Karte</value></data>
-  <data name="Credits_MapText" xml:space="preserve"><value>Das Layout ist die quadrierte Treemap von [Bruls, Huizing und van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), veröffentlicht im Jahr 2000. Die Idee, ein Laufwerk als Karte zu zeigen, stammt von [SpaceMonger](https://www.stardock.com/products/spacemonger/) von Sean Werkema, Treemaps selbst von Ben Shneiderman (1991). Die farbenblindfreundliche Palette verwendet die acht Farben von [Okabe und Ito](https://jfly.uni-koeln.de/color/) (2002). Vier weitere Farben darin stammen aus dem hellen Farbschema von [Paul Tol](https://tol-colors.readthedocs.io/en/latest/).</value></data>
+  <data name="Credits_MapText" xml:space="preserve"><value>Das Layout ist die quadrierte Treemap von [Bruls, Huizing und van Wijk](https://www.win.tue.nl/~vanwijk/stm.pdf), veröffentlicht im Jahr 2000. Die Idee, ein Laufwerk als Karte zu zeigen, stammt von [SpaceMonger](https://www.stardock.com/products/spacemonger/) von Sean Werkema, Treemaps selbst von Ben Shneiderman (1991).</value></data>
   <data name="Credits_SoftwareHeading" xml:space="preserve"><value>Software</value></data>
   <data name="Credits_SoftwareText" xml:space="preserve"><value>Geschrieben in C# auf [.NET 10](https://dotnet.microsoft.com). Die Oberfläche ist [Avalonia UI](https://avaloniaui.net), gezeichnet mit [SkiaSharp](https://github.com/mono/SkiaSharp), in der Schrift [Inter](https://rsms.me/inter/) von Rasmus Andersson. Die Symbole stammen von [Lucide](https://lucide.dev), der Fortführung von Feather von Cole Bemis. Das Installationsprogramm und die Updates unter Windows kommen von [Velopack](https://velopack.io) von Caelan Sayler. Alle stehen unter MIT-Lizenz, außer Lucide (ISC) und Inter (SIL Open Font License).</value></data>
   <data name="Credits_LanguagesHeading" xml:space="preserve"><value>Sprachen</value></data>
@@ -1377,24 +1389,30 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="Settings_Theme_GoldDesc" xml:space="preserve"><value>Der Windows-Einstellung folgen oder immer Hell bzw. Dunkel verwenden. Gold gehört Ihnen: jeder Erfolg freigeschaltet, und die App passend gekleidet, mit eigener Kartenpalette.</value></data>
   <data name="PaletteAbout_Gold" xml:space="preserve"><value>Zwölf Metalle von Messing bis Roségold, für das Gold-Thema</value></data>
   <data name="Inspect_Strip_Kinds" xml:space="preserve"><value>{0:N0} Arten</value></data>
-  <data name="Inspect_S_Folder" xml:space="preserve"><value>Ein Ordner mit {0:N0} Dateien in {1:N0} Ordnern, {2:N0} davon direkt darin.</value></data>
-  <data name="Inspect_S_FolderFlat" xml:space="preserve"><value>Ein Ordner mit {0:N0} Dateien, alle direkt darin.</value></data>
-  <data name="Inspect_S_Selection" xml:space="preserve"><value>{0}: {1}, {2}.</value></data>
-  <data name="Inspect_S_Takes" xml:space="preserve"><value>Sie belegt {0} und {1} von {2}.</value></data>
-  <data name="Inspect_S_TakesOne" xml:space="preserve"><value>Sie belegt {0}.</value></data>
-  <data name="Inspect_S_OtherKinds" xml:space="preserve"><value>{0:N0} weitere Arten teilen sich {1}.</value></data>
   <data name="Inspect_S_Median" xml:space="preserve"><value>Mittlere Datei {0}.</value></data>
-  <data name="Inspect_S_Age" xml:space="preserve"><value>{0} davon wurden diesen Monat geändert; {1} sind seit über einem Jahr unberührt.</value></data>
   <data name="Inspect_Col_Item" xml:space="preserve"><value>Ordner oder Datei</value></data>
   <data name="Inspect_Col_Size" xml:space="preserve"><value>Größe</value></data>
   <data name="Inspect_Col_Share" xml:space="preserve"><value>Anteil</value></data>
   <data name="Inspect_Col_Files" xml:space="preserve"><value>Dateien</value></data>
   <data name="Inspect_Col_Changed" xml:space="preserve"><value>Geändert</value></data>
   <data name="Inspect_Col_Kind" xml:space="preserve"><value>Art</value></data>
-  <data name="Inspect_Col_File" xml:space="preserve"><value>Datei</value></data>
-  <data name="Inspect_Col_In" xml:space="preserve"><value>In</value></data>
   <data name="Inspect_LargestFiles" xml:space="preserve"><value>Größte Dateien</value></data>
   <data name="Inspect_NOfM" xml:space="preserve"><value>{0:N0} von {1:N0}</value></data>
+  <data name="Inspect_Tile_Of" xml:space="preserve"><value>Von {0}</value></data>
+  <data name="Inspect_Tile_InFolders" xml:space="preserve"><value>in {0:N0} Ordnern, {1:N0} direkt darin</value></data>
+  <data name="Inspect_Tile_AllInside" xml:space="preserve"><value>alle direkt darin</value></data>
+  <data name="Inspect_Tile_LargestFolder" xml:space="preserve"><value>der größte der {0:N0} Ordner</value></data>
+  <data name="Inspect_Tile_LargestFile" xml:space="preserve"><value>die größte der {0:N0} Dateien</value></data>
+  <data name="Inspect_Tile_OnlyFolder" xml:space="preserve"><value>der einzige Ordner</value></data>
+  <data name="Inspect_Tile_OnlyFile" xml:space="preserve"><value>die einzige Datei</value></data>
+  <data name="Inspect_Tile_RankFolder" xml:space="preserve"><value>Nummer {1:N0} von {0:N0} Ordnern nach Größe</value></data>
+  <data name="Inspect_Tile_RankFile" xml:space="preserve"><value>Nummer {1:N0} von {0:N0} Dateien nach Größe</value></data>
+  <data name="Inspect_Tile_OfScanned" xml:space="preserve"><value>von {0} gescannt</value></data>
+  <data name="Inspect_Tile_LastChanged" xml:space="preserve"><value>Zuletzt geändert</value></data>
+  <data name="Inspect_Tile_Modified" xml:space="preserve"><value>Geändert</value></data>
+  <data name="Inspect_InspectIt" xml:space="preserve"><value>Untersuchen</value></data>
+  <data name="Inspect_ShowAll" xml:space="preserve"><value>Alle {0:N0} Elemente anzeigen</value></data>
+  <data name="Inspect_ShowFewer" xml:space="preserve"><value>Weniger anzeigen</value></data>
   <data name="Inspect_OtherFiles" xml:space="preserve"><value>Die anderen {0:N0} Dateien</value></data>
   <data name="Inspect_More" xml:space="preserve"><value>{0:N0} weitere</value></data>
   <data name="Inspect_These" xml:space="preserve"><value>diese {0:N0} sind {1} des Ordners</value></data>
@@ -1519,16 +1537,18 @@ pagefile.sys und swapfile.sys sind virtueller Arbeitsspeicher. Ihre Größe wird
   <data name="ScanCard_TopLeft" xml:space="preserve"><value>Oben links</value></data>
   <data name="ScanCard_Center" xml:space="preserve"><value>Mitte</value></data>
   <data name="Supporter_Title" xml:space="preserve"><value>Unterstützer-Edition</value></data>
-  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp ist kostenlos und für alle vollständig. Ein Unterstützerschlüssel ist ein Dankeschön für einen einmaligen Beitrag. Er setzt Ihren Namen hierher und schaltet sonst nichts frei.</value></data>
+  <data name="Supporter_Lead" xml:space="preserve"><value>SpaceSharp ist kostenlos und für alle vollständig. Ein Unterstützerschlüssel ist ein Dankeschön für einen einmaligen Beitrag. Er kennzeichnet diese Kopie als Unterstützer-Edition und schaltet sonst nichts frei.</value></data>
   <data name="Supporter_Placeholder" xml:space="preserve"><value>Schlüssel aus der E-Mail einfügen</value></data>
   <data name="Supporter_Use" xml:space="preserve"><value>Diesen Schlüssel verwenden</value></data>
   <data name="Supporter_Get" xml:space="preserve"><value>Unterstützerschlüssel holen</value></data>
   <data name="Supporter_Invalid" xml:space="preserve"><value>Das ist kein gültiger Unterstützerschlüssel. Kopieren Sie den ganzen Schlüssel, von SSUP1 bis zum letzten Zeichen.</value></data>
-  <data name="Supporter_Thanks" xml:space="preserve"><value>Vielen Dank, {0}.</value></data>
   <data name="Supporter_ThanksNoName" xml:space="preserve"><value>Vielen Dank, dass Sie SpaceSharp unterstützen.</value></data>
   <data name="Supporter_Since" xml:space="preserve"><value>Unterstützer seit {0}.</value></data>
   <data name="Supporter_Offline" xml:space="preserve"><value>Der Schlüssel wird auf diesem PC geprüft. Es wird nichts gesendet.</value></data>
   <data name="Supporter_Remove" xml:space="preserve"><value>Schlüssel von diesem PC entfernen</value></data>
+  <data name="Supporter_CardNoKey" xml:space="preserve"><value>Kein Schlüssel auf diesem PC</value></data>
+  <data name="Supporter_CardNoKeyHint" xml:space="preserve"><value>Ein Schlüssel aktiviert diese Karte</value></data>
+  <data name="Supporter_KeepsFree" xml:space="preserve"><value>SpaceSharp ist kostenlos und für alle vollständig. Ihr Beitrag hilft, dass es so bleibt.</value></data>
   <data name="Credits_SupportersHeading" xml:space="preserve"><value>Unterstützer</value></data>
   <data name="Credits_SupportersText" xml:space="preserve"><value>SpaceSharp ist kostenlos und bleibt es. Diese Personen haben mit einem [Unterstützerschlüssel](https://spacesharp.app/supporter/) beigetragen:</value></data>
   <data name="Credits_SupportersNone" xml:space="preserve"><value>SpaceSharp ist kostenlos und bleibt es. Ein [Unterstützerschlüssel](https://spacesharp.app/supporter/) ist eine Art, Danke zu sagen, und setzt Ihren Namen hierher.</value></data>

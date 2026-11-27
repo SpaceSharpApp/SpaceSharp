@@ -263,6 +263,29 @@ internal sealed class AppSettings
     {
         get; set;
     }
+    /// <summary>True opens scans in the Tree view instead of the map; <see cref="InsightsView"/> is false while this is true.</summary>
+    public bool TreeView
+    {
+        get; set;
+    }
+    /// <summary>True lists files beside the folders in the Tree view; false lists the folders only.</summary>
+    public bool TreeListFiles { get; set; } = true;
+    /// <summary>How large the interface is drawn, in percent of its normal size; 100 to 150.</summary>
+    public int TextScale { get; set; } = 100;
+    /// <summary>The font the interface is set in: "Default" for Inter, "Atkinson" for Atkinson Hyperlegible; anything else counts as "Default".</summary>
+    public string ReadingFont { get; set; } = "Default";
+    /// <summary>True leaves out movement that is only for show: the zoom between folders and the flash on a selection.</summary>
+    public bool ReduceMotion
+    {
+        get; set;
+    }
+    /// <summary>True brightens the dim text and the hairlines of every look.</summary>
+    public bool HighContrast
+    {
+        get; set;
+    }
+    /// <summary>The color vision deficiency every palette is adjusted for: "Off", "Protan", "Deutan" or "Tritan".</summary>
+    public string ColorVision { get; set; } = "Off";
     /// <summary>The Insights row left open, by its key ("Cleanup", "Type", ...); empty when every row is closed.</summary>
     public string InsightsOpenRow { get; set; } = "Cleanup";
     /// <summary>True shows the hover tooltip over map boxes.</summary>
@@ -337,7 +360,14 @@ internal sealed class AppSettings
         CheckForUpdates = defaults.CheckForUpdates;
         ShowSidePanel = defaults.ShowSidePanel;
         InsightsView = defaults.InsightsView;
+        TreeView = defaults.TreeView;
+        TreeListFiles = defaults.TreeListFiles;
         InsightsOpenRow = defaults.InsightsOpenRow;
+        TextScale = defaults.TextScale;
+        ReadingFont = defaults.ReadingFont;
+        ReduceMotion = defaults.ReduceMotion;
+        HighContrast = defaults.HighContrast;
+        ColorVision = defaults.ColorVision;
         FilterLayout = defaults.FilterLayout;
         ShowFilterRail = defaults.ShowFilterRail;
         ShowTooltips = defaults.ShowTooltips;
@@ -371,6 +401,38 @@ internal sealed class AppSettings
         FileTextColor = defaults.FileTextColor;
     }
 
+    /// <summary>Moves settings off the two Color-blind safe palettes, which 2.11 replaced with a color vision setting that adjusts every
+    /// palette: the theme goes back to its default palette, and the setting is turned on for the most common deficiency unless one is
+    /// already chosen.</summary>
+    public void LeaveRetiredPalettes()
+    {
+        bool hadOne = false;
+        if (IsRetiredPalette(PaletteDark))
+        {
+            PaletteDark = null;
+            hadOne = true;
+        }
+        if (IsRetiredPalette(PaletteLight))
+        {
+            PaletteLight = null;
+            hadOne = true;
+        }
+        if (IsRetiredPalette(Palette))
+        {
+            Palette = null;
+        }
+        if (hadOne && string.Equals(ColorVision, "Off", StringComparison.OrdinalIgnoreCase))
+        {
+            ColorVision = "Deutan";
+        }
+    }
+
+    /// <summary>Whether a palette name is one of the two retired Color-blind safe palettes.</summary>
+    /// <param name="name">A palette name from settings, or null.</param>
+    /// <returns>True for "Color-blind safe" and "Color-blind safe (light)", ignoring case.</returns>
+    private static bool IsRetiredPalette(string? name) =>
+        name is not null && name.StartsWith("Color-blind safe", StringComparison.OrdinalIgnoreCase);
+
     /// <summary>Reads settings.json, migrating values from older versions.</summary>
     /// <returns>The saved settings, or the defaults when the file is missing, unreadable or corrupt.</returns>
     private static AppSettings Load()
@@ -392,6 +454,7 @@ internal sealed class AppSettings
                     loaded.ShadingLook = loaded.CushionEnabled ? "SideLight" : "Off";
                 }
                 loaded.CushionEnabled = false;
+                loaded.LeaveRetiredPalettes();
 
                 return loaded;
             }

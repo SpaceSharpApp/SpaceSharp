@@ -1,6 +1,6 @@
 <p align="center"><img src="images/shot-insights.png" width="900" alt="The Insights view"></p>
 
-**Insights** swaps the map for what you can do about it: space to free, copies to remove, things to fix. The numbers themselves are in [Statistics](Statistics). The Insights button in the toolbar opens it; **B** cycles Map, Insights, Statistics and Changes. Since 2.6 it is four tiles over a single column of rows that open one at a time, so the page can be read without opening anything, and every row is a click back to the map, zoomed or filtered to what the row was about.
+**Insights** swaps the map for what you can do about it: space to free, copies to remove, things to fix. The numbers themselves are in [Statistics](Statistics). The Insights button in the toolbar opens it; **B** cycles Map, Tree, Insights, Statistics and Changes. Since 2.6 it is four tiles over a single column of rows that open one at a time, so the page can be read without opening anything, and every row is a click back to the map, zoomed or filtered to what the row was about.
 
 ## The tiles at the top
 

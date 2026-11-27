@@ -13,17 +13,35 @@ namespace SpaceSharp;
 /// </summary>
 public partial class MainWindow : IInsightsHost
 {
-    /// <summary>What fills the map's place: the map, Insights, Statistics, or the Changes table.</summary>
+    /// <summary>What fills the map's place: the map, the Tree table, Insights, Statistics, or the Changes table.</summary>
     private enum MainView
     {
-        Map, Insights, Statistics, Changes
+        Map, Tree, Insights, Statistics, Changes
     }
 
     private bool _changesShowing;      // the Changes view is open; not remembered between runs, a comparison is not either
     private bool _statisticsShowing;   // the Statistics view is open; not remembered between runs either
 
     /// <summary>The view in the map's place: Changes or Statistics while one is open, otherwise the one remembered in Settings.</summary>
-    private MainView CurrentView => _changesShowing ? MainView.Changes : _statisticsShowing ? MainView.Statistics : _settings.InsightsView ? MainView.Insights : MainView.Map;
+    private MainView CurrentView
+    {
+        get
+        {
+            if (_changesShowing)
+            {
+                return MainView.Changes;
+            }
+            if (_statisticsShowing)
+            {
+                return MainView.Statistics;
+            }
+            if (_settings.TreeView)
+            {
+                return MainView.Tree;
+            }
+            return _settings.InsightsView ? MainView.Insights : MainView.Map;
+        }
+    }
     /// <summary>True when the Insights view is the current one.</summary>
     private bool InsightsShowing => CurrentView == MainView.Insights;
 
@@ -36,6 +54,7 @@ public partial class MainWindow : IInsightsHost
     }
 
     private void MapView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Map);
+    private void TreeView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Tree);
     private void InsightsView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Insights);
     private void StatisticsView_Click(object? sender, RoutedEventArgs e) => ShowView(MainView.Statistics);
 
@@ -44,7 +63,7 @@ public partial class MainWindow : IInsightsHost
     private void ShowView(bool insights) => ShowView(insights ? MainView.Insights : MainView.Map);
 
     /// <summary>Switches the main view and refreshes whichever one came up.</summary>
-    /// <param name="view">The view to show; Map and Insights are remembered in Settings, Statistics and Changes are not. Before the first scan only Map is taken.</param>
+    /// <param name="view">The view to show; Map, Tree and Insights are remembered in Settings, Statistics and Changes are not. Before the first scan only Map is taken.</param>
     private void ShowView(MainView view)
     {
         if (_root is null && view != MainView.Map)
@@ -55,21 +74,23 @@ public partial class MainWindow : IInsightsHost
         NoteViewForAchievements(view);
         _changesShowing = view == MainView.Changes;
         _statisticsShowing = view == MainView.Statistics;
-        if (view is (MainView.Map or MainView.Insights) && _settings.InsightsView != (view == MainView.Insights))
+        if (view is MainView.Map or MainView.Tree or MainView.Insights)
         {
             _settings.InsightsView = view == MainView.Insights;
+            _settings.TreeView = view == MainView.Tree;
         }
         ApplyView();
         RefreshInsights();
         ChangesView.Refresh();
     }
 
-    /// <summary>B cycles the views: the map, Insights, Statistics, and Changes while a scan is compared.</summary>
+    /// <summary>B cycles the views: the map, the tree, Insights, Statistics, and Changes while a scan is compared.</summary>
     private void NextView()
     {
         MainView next = CurrentView switch
         {
-            MainView.Map => MainView.Insights,
+            MainView.Map => MainView.Tree,
+            MainView.Tree => MainView.Insights,
             MainView.Insights => MainView.Statistics,
             MainView.Statistics when HasBaseline => MainView.Changes,
             _ => MainView.Map
@@ -82,14 +103,17 @@ public partial class MainWindow : IInsightsHost
     {
         MainView view = CurrentView;
         bool isIdle = _root is null && _scanCts is null;
-        // Insights needs a finished scan; during the first one the map shows, and Insights comes up when the scan is in.
+        // Tree and Insights need a finished scan; during the first one the map shows, and they come up when the scan is in.
+        bool showsTree = view == MainView.Tree && _root is not null;
         bool showsInsights = view == MainView.Insights && _root is not null;
         bool showsStatistics = view == MainView.Statistics && !isIdle;
         bool showsChanges = view == MainView.Changes && !isIdle;
+        FolderTreeView.IsVisible = showsTree;
         InsightsView.IsVisible = showsInsights;
         StatisticsView.IsVisible = showsStatistics;
         ChangesView.IsVisible = showsChanges;
-        Treemap.IsVisible = !showsInsights && !showsStatistics && !showsChanges;
+        Treemap.IsVisible = !showsTree && !showsInsights && !showsStatistics && !showsChanges;
+        FitToolbar();   // Color by and Palette come and go with the map, which changes what fits
         KeepFilterWithMap();
         UpdateMinimap();
         EmptyHint.IsVisible = isIdle;
@@ -98,6 +122,9 @@ public partial class MainWindow : IInsightsHost
         bool mapMarked = view == MainView.Map || _root is null;
         MapViewButton.Classes.Set("primary", mapMarked);
         MapViewButton.Classes.Set("tool", !mapMarked);
+        TreeButton.Classes.Set("primary", !mapMarked && view == MainView.Tree);
+        TreeButton.Classes.Set("tool", mapMarked || view != MainView.Tree);
+        TreeButton.IsEnabled = _root is not null;
         InsightsButton.Classes.Set("primary", !mapMarked && view == MainView.Insights);
         InsightsButton.Classes.Set("tool", mapMarked || view != MainView.Insights);
         InsightsButton.IsEnabled = _root is not null;
@@ -115,7 +142,7 @@ public partial class MainWindow : IInsightsHost
         ZoomLabel.Opacity = view == MainView.Map ? 1 : 0.4;
     }
 
-    /// <summary>Switches to the map and shows a node: a folder becomes the view, a file is selected inside its parent.</summary>
+    /// <summary>Switches to the map and shows a node: a folder becomes the view; a file is selected, flashed and zoomed in on.</summary>
     /// <param name="node">Any node of the current scan.</param>
     private void ShowOnMap(FsNode node)
     {
@@ -127,8 +154,9 @@ public partial class MainWindow : IInsightsHost
         }
         else
         {
-            Treemap.FocusOn(node.Parent ?? _root!);
             Treemap.SelectMany(new[] { node });
+            Treemap.PulseSelection();   // the file can still be a small box among many: flash it so it is found
+            Treemap.FocusOnFile(node);
         }
     }
 
@@ -182,9 +210,10 @@ public partial class MainWindow : IInsightsHost
     /// <summary>Drops the cached figures when the scan or the size measure changed since they were computed.</summary>
     private void SyncInsightsSource() => InsightsView.Sync();
 
-    /// <summary>Rebuilds whichever of Statistics and Insights is showing; each is a no-op while hidden.</summary>
+    /// <summary>Rebuilds whichever of Tree, Statistics and Insights is showing; each is a no-op while hidden.</summary>
     private void RefreshInsights()
     {
+        FolderTreeView.Refresh();
         StatisticsView.Refresh();
         InsightsView.Refresh();
     }
@@ -212,7 +241,11 @@ public partial class MainWindow : IInsightsHost
 
     (long Total, long Free, string Format)? IInsightsHost.DriveSpace(string path) => DriveSpace(path);
 
-    void IInsightsHost.FiguresDropped() => StatisticsView.DropReport();
+    void IInsightsHost.FiguresDropped()
+    {
+        StatisticsView.DropReport();
+        FolderTreeView.DropCounts();
+    }
 
     void IInsightsHost.ShowOnMap(FsNode node) => ShowOnMap(node);
 
